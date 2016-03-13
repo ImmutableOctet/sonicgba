@@ -17,3 +17,7 @@ A multi-platform port of Sonic Advance (Mobile) - Ported from Java to Monkey
     Most details aren't required here, as long as the code works. At the end of the day, it's a formatting choice.
     
     * Resource paths and similar details will not be changed until the initial structural work is done.
+    
+    * Constant and global variables may use type inference, although this is sometimes not preferable.
+    Local variables follow similar rules. Although, they're more likely to be
+    declared with exact types due to the nature of the original code.
