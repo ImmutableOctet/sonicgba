@@ -48,8 +48,7 @@ Class SeabedVolcanoAsynHurt Extends GimmickObject
 			EndIf
 		End
 		
-		' As mentioned in other files, these two arguments are very likely X and Y coordinates.
-		Method refreshCollisionRect:Void(var1:Int, var2:Int)
+		Method refreshCollisionRect:Void(x:Int, y:Int)
 			Local var3:= SeabedVolcanoAsynPlatform.sPosY
 			
 			If (var3 > 0) Then
@@ -61,6 +60,6 @@ Class SeabedVolcanoAsynHurt Extends GimmickObject
 			EndIf
 			
 			' This probably takes in something akin to: X, Y, W, H
-			collisionRect.setRect((posX - (COLLISION_WIDTH/2)), (var3 + posY), COLLISION_WIDTH, Abs(var3))
+			collisionRect.setRect((x - (COLLISION_WIDTH/2)), (var3 + y), COLLISION_WIDTH, Abs(var3)) ' posX ' posY
 		End
 End

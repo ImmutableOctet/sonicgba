@@ -37,11 +37,10 @@ Class RopeTurn Extends GimmickObject
 			EndIf
 		End
 		
-		' The 'var1' and 'var2' arguments are likely the position of this object.
-		Method refreshCollisionRect:Void(var1:Int, var2:Int)
+		Method refreshCollisionRect:Void(x:Int, y:Int)
 			' Most likely centered with a width of 1024, and a height of 2560.
 			' Not completely sure, but it seems like a safe bet.
-			collisionRect.setRect(var1 - 512, var2, 1024, 2560)
+			collisionRect.setRect(x - 512, y, 1024, 2560)
 			
 			Return
 		End

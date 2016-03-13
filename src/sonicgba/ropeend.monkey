@@ -44,7 +44,7 @@ Class RopeEnd Extends GimmickObject
 			p.railing = False
 		End
 		
-		Method refreshCollisionRect:Void(var1:Int, var2:Int)
-			collisionRect.setRect(var1, var2, 1024, 2560)
+		Method refreshCollisionRect:Void(x:Int, y:Int)
+			collisionRect.setRect(x, y, 1024, 2560)
 		End
 End

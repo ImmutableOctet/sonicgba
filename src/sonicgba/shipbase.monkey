@@ -52,8 +52,7 @@ Class ShipBase Extends PlatformObject
 			Return
 		End
 		
-		' The arguments of this method are likely X and Y coordinates.
-		Method refreshCollisionRect:Void(var1:Int, var2:Int)
-			collisionRect.setRect(var1 - (COLLISION_WIDTH/2), var2 - (COLLISION_HEIGHT/2), COLLISION_WIDTH, COLLISION_HEIGHT)
+		Method refreshCollisionRect:Void(x:Int, y:Int)
+			collisionRect.setRect((x - (COLLISION_WIDTH/2)), (y - (COLLISION_HEIGHT/2)), COLLISION_WIDTH, COLLISION_HEIGHT)
 		End
 End

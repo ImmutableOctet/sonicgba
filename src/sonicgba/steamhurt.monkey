@@ -50,8 +50,7 @@ Class SteamHurt Extends GimmickObject
 			EndIf
 		End
 		
-		' As mentioned in other files, these two arguments are very likely X and Y coordinates.
-		Method refreshCollisionRect:Void(var1:Int, var2:Int)
+		Method refreshCollisionRect:Void(x:Int, y:Int)
 			' Unknown magic number: 768 (May be related to 'COLLISION_OFFSET_Y' or similar variables)
 			Local var3:= 768 + SteamPlatform.sPosY
 			
@@ -64,6 +63,6 @@ Class SteamHurt Extends GimmickObject
 			EndIf
 			
 			' This is probably something like: X, Y, W, H
-			collisionRect.setRect((posX - (COLLISION_WIDTH/2)), (var3 + COLLISION_OFFSET_Y + posY), COLLISION_WIDTH, Abs(var3))
+			collisionRect.setRect((x - (COLLISION_WIDTH/2)), (var3 + COLLISION_OFFSET_Y + y), COLLISION_WIDTH, Abs(var3)) ' posX ' posY
 		End
 End

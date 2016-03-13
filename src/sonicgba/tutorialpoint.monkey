@@ -45,11 +45,7 @@ Class TutorialPoint Extends GimmickObject
 			Return 0
 		End
 		
-		' This seems to be for updating the collision/position of this object.
-		' 'var1' and 'var2' are likely just X and Y coordinates. This means the
-		' 'setRect' call is probably describing the area this object takes up.
-		' Although, that may be incorrect, it's definitely what it looks like.
-		Method refreshCollisionRect:Void(var1:Int, var2:Int)
-			collisionRect.setRect(var1 - 1024, var2 - 1024, 2048, 2048)
+		Method refreshCollisionRect:Void(x:Int, y:Int)
+			collisionRect.setRect(x - 1024, y - 1024, 2048, 2048)
 		End
 End

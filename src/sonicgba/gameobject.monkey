@@ -426,8 +426,34 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			EndIf
 		End
 		
-		Function addGameObject:Void(o:GameObject, x:Int, y:Int)
-			
+		' From what I know, this likely disables the player's input.
+		Function setNoInput:Void()
+			If (player <> Null) Then
+				player.setNoKey()
+			Endif
+		End
+		
+		Function addGameObject:Void(object:GameObject, x:Int, y:Int)
+			If (object <> Null) Then
+				Local roomX:= ((x Shr 6) / ROOM_WIDTH)
+				
+				If (roomX >= objVecWidth) Then
+					roomX = (objVecWidth - 1)
+				EndIf
+				
+				Local roomY:= ((y Shr 6) / ROOM_WIDTH) ' ROOM_HEIGHT
+				
+				If (roomY >= objVecHeight) Then
+					roomY = (objVecHeight - 1)
+				EndIf
+				
+				If (roomX > -1) Then
+					allGameObject[roomX][roomY].addElement(object)
+				EndIf
+				
+				' Let the object know we need it to update its collision.
+				object.refreshCollisionRect(object.posX, object.posY)
+			EndIf
 		End
 		
 		Function addGameObject:Void(o:GameObject)
@@ -460,7 +486,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		
 		' This is used to update the collision bounds of a 'GameObject'.
 		' The two arguments are very likely the X and Y coordinates of the object.
-		Method refreshCollisionRect:Void(var1:Int, var2:Int) Abstract
+		Method refreshCollisionRect:Void(x:Int, y:Int) Abstract
 		
 		' Methods (Implemented):
 		Method getObjectId:Int()
