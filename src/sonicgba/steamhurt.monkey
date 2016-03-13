@@ -3,14 +3,8 @@ Strict
 Public
 
 #Rem
-	From what I understand, this is probably some sort of event-listener
-	that handles details like collision for 'SeabedVolcanoBase' objects.
-	
-	I'm still not quite sure what 'SeabedVolcanoPlatform' is about, though.
-	It's most likely just a hazard, though.
-	
-	Not completely sure, but the point is, it hurts the
-	player when they collide with the collision-rect.
+	This seams to be similar to 'seabedvolcanohurt', where the class's
+	purpose is basically to be a function table, and handle player damage.
 #End
 
 ' Imports:
@@ -18,24 +12,28 @@ Import monkey.math
 
 Import sonicgba.gimmickobject
 Import sonicgba.playerobject
-Import sonicgba.seabedvolcanobase
-Import sonicgba.seabedvolcanoplatform
+Import sonicgba.steambase
+Import sonicgba.steamplatform
 
 ' Classes:
-Class SeabedVolcanoHurt Extends GimmickObject
+Class SteamHurt Extends GimmickObject
 	Private
 		' Constant variable(s):
-		Const COLLISION_WIDTH:= 3072
-		Const COLLISION_HEIGHT:= 1152
+		Const COLLISION_WIDTH:= 128
+		Const COLLISION_HEIGHT:= 1024
+		Const COLLISION_OFFSET_Y:= -1280
 		
 		' Fields:
-		Field sb:SeabedVolcanoBase
+		Field sb:SteamBase
 	Public
 		' Constructor(s):
 		
+		' This constructor is supposed to be protected, but is public
+		' due to understood patterns in other modules:
+		
 		' The 'var1' and 'var2' arguments are likely X and Y coordinates.
 		' The 'var3' argument is held internally as 'sb'.
-		Method New(var1:Int, var2:Int, var3:SeabedVolcanoBase)
+		Method New(var1:Int, var2:Int, var3:SteamBase)
 			Super.New(0, var1, var2, 0, 0, 0, 0)
 			
 			Self.sb = var3
@@ -54,7 +52,8 @@ Class SeabedVolcanoHurt Extends GimmickObject
 		
 		' As mentioned in other files, these two arguments are very likely X and Y coordinates.
 		Method refreshCollisionRect:Void(var1:Int, var2:Int)
-			Local var3:= SeabedVolcanoPlatform.sPosY
+			' Unknown magic number: 768 (May be related to 'COLLISION_OFFSET_Y' or similar variables)
+			Local var3:= 768 + SteamPlatform.sPosY
 			
 			If (var3 > 0) Then
 				var3 = 0
@@ -64,7 +63,7 @@ Class SeabedVolcanoHurt Extends GimmickObject
 				var3 = -COLLISION_HEIGHT
 			EndIf
 			
-			' This probably takes in something akin to: X, Y, W, H
-			collisionRect.setRect((posX - (COLLISION_WIDTH/2)), (var3 + posY), COLLISION_WIDTH, Abs(var3))
+			' This is probably something like: X, Y, W, H
+			collisionRect.setRect((posX - (COLLISION_WIDTH/2)), (var3 + COLLISION_OFFSET_Y + posY), COLLISION_WIDTH, Abs(var3))
 		End
 End

@@ -80,10 +80,10 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\seabedvolcanohurt.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>18</X>
-        <Y>15</Y>
+        <X>57</X>
+        <Y>66</Y>
       </CursorPos>
-      <DocGUID>3d5dcb72-d0c1-4161-bd09-021280fb5df8</DocGUID>
+      <DocGUID>84b01982-1540-4e53-bfd5-59e87a614287</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\sonicdebug.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
@@ -99,6 +99,14 @@
         <Y>27</Y>
       </CursorPos>
       <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\steamhurt.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>15</X>
+        <Y>18</Y>
+      </CursorPos>
+      <DocGUID>a8cad9fa-a716-419c-afc0-40ade16a6c03</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\tutorialpoint.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
