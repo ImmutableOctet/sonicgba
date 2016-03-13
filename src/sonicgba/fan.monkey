@@ -2,13 +2,6 @@ Strict
 
 Public
 
-#Rem
-	This module starts an annoying trend with the codebase:
-	
-	Gimmicks largely handle the same code, but
-	can't take advantage of inheritance easily.
-#End
-
 ' Imports:
 
 ' Traditional gimmick imports:
@@ -20,7 +13,7 @@ Import sonicgba.gimmickobject
 Import com.sega.mobile.framework.device.mfgraphics
 
 ' Classes:
-Class FallFlush Extends GimmickObject
+Class Fan Extends GimmickObject
 	Private
 		' Global variable(s):
 		
@@ -39,7 +32,7 @@ Class FallFlush Extends GimmickObject
 			If (animation = Null) Then
 				' Load the animation for this gimmick.
 				' This will later be destroyed when 'releaseAllResource' is called.
-				animation = New Animation("/animation/fall_flush")
+				animation = New Animation("/animation/bigfan")
 			EndIf
 			
 			If (animation <> Null) Then
@@ -68,6 +61,5 @@ Class FallFlush Extends GimmickObject
 		' The 'var1' argument is likely a "context" object. (Abstracted from other details, anyway)
 		Method draw:Void(var1:MFGraphics)
 			drawInMap(var1, drawer)
-			drawCollisionRect(var1)
 		End
 End

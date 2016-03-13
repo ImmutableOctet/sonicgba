@@ -24,10 +24,18 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\fallflush.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>92</X>
-        <Y>56</Y>
+        <X>25</X>
+        <Y>70</Y>
       </CursorPos>
       <DocGUID>8a5fbf37-54e9-4d15-877d-c358a400bbcb</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\fan.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>31</X>
+        <Y>32</Y>
+      </CursorPos>
+      <DocGUID>2a5ab2df-0c7b-4e16-b447-eec0e6a8ab98</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\focusable.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
