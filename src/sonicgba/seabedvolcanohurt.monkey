@@ -49,7 +49,7 @@ Class SeabedVolcanoHurt Extends GimmickObject
 		Method doWhileCollision:Void(var1:PlayerObject, var2:Int)
 			If (collisionRect.getHeight() <> 0 And Not var1.isFootOnObject(sb.sp))
 				var1.beHurt()
-			Endif
+			EndIf
 		End
 		
 		' As mentioned in other files, these two arguments are very likely X and Y coordinates.

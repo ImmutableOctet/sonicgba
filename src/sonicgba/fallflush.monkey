@@ -44,7 +44,7 @@ Class FallFlush Extends GimmickObject
 			
 			If (animation <> Null) Then
 				Self.drawer = animation.getDrawer(0, true, 0)
-			Endif
+			EndIf
 		End
 	Public
 		' Functions:
