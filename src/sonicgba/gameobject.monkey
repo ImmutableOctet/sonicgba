@@ -2,6 +2,11 @@ Strict
 
 Public
 
+#Rem
+	This file contains shared behavior, storage, and entry points for game logic.
+	In addition to this, the basic behavior of most objects is declared and/or defined here.
+#End
+
 ' Imports:
 Import lib.animation
 Import lib.animationdrawer
@@ -78,6 +83,8 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		
 		' State:
 		Const STATE_NORMAL_MODE:= 0
+		
+		' This may or may not be for time-attack mode.
 		Const STATE_RACE_MODE:= 1
 		
 		' Velocity:
@@ -104,6 +111,11 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		Global iceBreakAnimation:Animation
 		Global platformBreakAnimation:Animation
 		
+		' From what I understand, this is used to draw all rings.
+		' Since it's set up this way, there's the limitation
+		' of having all rings rotate at the same time.
+		' It's not a big deal, but it's an interesting
+		' visual quirk that's different between games.
 		Global ringDrawer:AnimationDrawer
 		
 		' Flags:
@@ -133,6 +145,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		' This acts as our layer container. In other words,
 		' this is used to draw our objects later on. This may be a major point
 		' of optimization later on, but for now, it's being left alone.
+		' The number of array elements corresponds to the number of layers defined above.
 		Global paintVec:Stack<GameObject>[] = New Stack<GameObject>[4]
 		
 		' Rectangles:
@@ -431,6 +444,71 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			If (player <> Null) Then
 				player.setNoKey()
 			Endif
+		End
+		
+		Function drawPlayer:Void(graphics:MFGraphics)
+			camera = MapManager.getCamera()
+			
+			player.draw(graphics)
+		End
+		
+		Function drawObjectBeforeSonic:Void(graphics:MFGraphics)
+			Local backRow:= paintVec[DRAW_BEFORE_BEFORE_SONIC]
+			
+			' Draw everything two layers behind "Sonic":
+			For Local I:= 0 Until backRow.Length
+				backRow[I].draw(graphics)
+			Next
+			
+			Local middleRow:= paintVec[DRAW_BEFORE_SONIC]
+			
+			' Draw everything one layer behind "Sonic":
+			For Local I:= 0 Until middleRow.Length
+				middleRow[I].draw(graphics)
+			Next
+			
+			' Everything from here onward is before the character, but above the back two layers:
+			
+			' Draw animals at this layer if the capsule hasn't been broken:
+			If (Not isUnlockCage) Then
+				SmallAnimal.animalDraw(graphics)
+			EndIf
+		End
+		
+		Method drawObjectAfterEveryThing:Void(graphics:MFGraphics)
+			camera = MapManager.getCamera()
+			
+			Local layer:= paintVec[DRAW_AFTER_MAP]
+			
+			For Local I:= 0 Until layer.Length
+				layer[I].draw(graphics)
+			Next
+			
+			' Everything from here onward is drawn above the actual game world:
+			
+			' Draw the world's rings. (Not sure if this should stay at this layer)
+			RingObject.ringDraw(graphics)
+		End
+		
+		Method drawObjects:Void(graphics:MFGraphics)
+			' Removing the pause-check here may actually be interesting.
+			If (Not (ringDrawer = Null Or IsGamePause)) Then
+				' From what I understand, this is updating the rings' shared animation object.
+				ringDrawer.moveOn()
+			EndIf
+			
+			camera = MapManager.getCamera()
+			
+			Local layer:= paintVec[DRAW_AFTER_SONIC]
+			
+			For Local I:= 0 Until layer.Length
+				layer[I].draw(graphics)
+			Next
+			
+			' Draw animals here if the capsule has been broken:
+			If (isUnlockCage) Then
+				SmallAnimal.animalDraw(graphics)
+			EndIf
 		End
 		
 		Function addGameObject:Void(object:GameObject, x:Int, y:Int)
