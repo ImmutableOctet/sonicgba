@@ -15,3 +15,5 @@ A multi-platform port of Sonic Advance (Mobile) - Ported from Java to Monkey
     * Code style will follow C or Java practices mostly, only following other styles,
     such as the 'regal' Monkey module's comment patterns for clarity and navigation.
     Most details aren't required here, as long as the code works. At the end of the day, it's a formatting choice.
+    
+    * Resource paths and similar details will not be changed until the initial structural work is done.
