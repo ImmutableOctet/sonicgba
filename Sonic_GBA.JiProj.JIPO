@@ -8,6 +8,14 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\mapbehavior.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>30</X>
+        <Y>17</Y>
+      </CursorPos>
+      <DocGUID>3a70a1ed-1b11-4b51-ad4f-5a423798ab03</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\sonicdebug.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>0</X>
@@ -17,10 +25,10 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\uparmbar.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>54</X>
-        <Y>12</Y>
+        <X>0</X>
+        <Y>0</Y>
       </CursorPos>
-      <DocGUID>8a83c3fa-f492-4d37-b3aa-a3fe8ac2420c</DocGUID>
+      <DocGUID>55429299-9ac5-4a44-a3fe-bcff7c2267f4</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\sonic.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
