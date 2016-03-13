@@ -448,7 +448,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 				EndIf
 				
 				If (roomX > -1) Then
-					allGameObject[roomX][roomY].addElement(object)
+					allGameObject[roomX][roomY].Push(object)
 				EndIf
 				
 				' Let the object know we need it to update its collision.
