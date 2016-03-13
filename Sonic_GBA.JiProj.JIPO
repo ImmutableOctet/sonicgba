@@ -81,6 +81,14 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\ropeend.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>8</X>
+        <Y>21</Y>
+      </CursorPos>
+      <DocGUID>5f4566db-6486-4287-852d-68bc26ad2f83</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ropeturn.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>4</X>
@@ -104,8 +112,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\shipbase.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>23</X>
-        <Y>24</Y>
+        <X>30</X>
+        <Y>18</Y>
       </CursorPos>
       <DocGUID>3cca3cdf-854c-451f-8ed9-324c6e5555e3</DocGUID>
       <Bookmarks />
