@@ -28,7 +28,7 @@ Class PlatformObject Extends GimmickObject Abstract
 					Return
 				Case 4
 					If (var1.getMoveDistance().y > 0 And var1.getCollisionRect().y1 < Self.collisionRect.y1) Then
-						var1.beStop(Self.collisionRect.y0, 1, Self);
+						var1.beStop(Self.collisionRect.y0, 1, Self)
 					EndIf
 				Default ' Case 2, 3
 					' Nothing so far.

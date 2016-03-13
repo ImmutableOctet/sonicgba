@@ -111,7 +111,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		Global isBossHalf:Bool
 		Global isDamageSandActive:Bool
 		Global isFirstTouchedSandSlip:Bool
-		Global isFirstTouchedWindow:Bool
+		Global isFirstTouchedWind:Bool
 		Global isGotRings:Bool
 		Global isUnlockCage:Bool
 		
@@ -196,4 +196,39 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		' Sound:
 		Global soundInstance:SoundSystem
 	Public
+		' Functions:
+		Function Initialize:Void()
+			For Local I:= 0 Until 4
+				paintVec[I] = New Stack<GameObject>()
+			Next
+			
+			GRAVITY = 172
+			
+			destroyEffectAnimation = Null
+			iceBreakAnimation = Null
+			platformBreakAnimation = Null
+			soundInstance = Null
+			
+			bossFighting = False
+			isGotRings = False
+			isFirstTouchedWind = False
+			isFirstTouchedSandSlip = False
+			
+			ds = Null
+			
+			loadStep = 0
+			closeStep = 0
+			
+			preCenterX = -1
+			preCenterY = -1
+			
+			screenRect = new CollisionRect()
+			rectH = new CollisionRect()
+			rectV = new CollisionRect()
+			resetRect = new CollisionRect()
+			
+			groundblock = CollisionMap.getInstance().getNewCollisionBlock()
+			
+			Return
+		End
 End

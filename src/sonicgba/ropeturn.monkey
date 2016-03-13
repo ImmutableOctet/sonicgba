@@ -21,7 +21,7 @@ Class RopeTurn Extends GimmickObject
 		End
 		
 		Method doWhileRail:Void(var1:PlayerObject, var2:Int)
-			' Likely a dynamic cast; potential performance hit.
+			' Likely a dynamic cast potential performance hit.
 			' (Potentially unsafe usage if that's true)
 			Local var3:= RopeStart(var1.outOfControlObject)
 			

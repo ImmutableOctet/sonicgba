@@ -3,11 +3,11 @@ Strict
 Public
 
 ' Imports:
-' Nothing so far.
+Import src.sonicgba.gameobject
 
 ' Functions:
 Function Main:Int()
-	Print("Hello world.")
+	GameObject.Initialize()
 	
 	'New Game()
 	

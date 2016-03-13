@@ -21,7 +21,7 @@ Class RopeEnd Extends GimmickObject
 				Return
 			EndIf
 			
-			' Dynamic cast; potential point of optimization.
+			' Dynamic cast potential point of optimization.
 			Local start:= RopeStart(p.outOfControlObject)
 			
 			' If 'start' is available, mark the start point:
