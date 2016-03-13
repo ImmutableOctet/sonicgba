@@ -7,9 +7,18 @@ list of details that could be optimized or fixed later.
 
 
 #### Hurt + Platform + Base
-There seems to be an event-listener system going on with the "steam" base, platform, and "hurt" classes.
-Basically, the three objects (And potentially more) maintain the bahior of one object in the world.
+There seems to be an 'event-listener' system going on with the "steam" base, platform, and "hurt" classes.
+Basically, the three objects (And potentially more) maintain the behavior of one object in the world.
 This may be a weird implementation quirk related to static vs. dynamic object management.
+
+#### Common Collision Behavior
+As may seem obvious, the 'refreshCollisionRect' method seems to take in X and Y coordinates.
+This is usually done to refresh the current collision-rect position for the object.
+This is used for events/callbacks for sure, but may also be connected to collision behavior for dynamic objects.
+
+Something to note when porting code is that most code using 'refreshCollisionRect' tends to have the object centered in the rectangle.
+This is sometimes altered a bit, for example, using an offset based on the width or height of the object's image.
+At any rate, you can observe this behavior with things like 'SteamHurt', and similar classes that care about collision.
 
 #### Animations and GimmickObjects
 Many 'GimmickObject' types use an animation system which allows them to
