@@ -1,6 +1,13 @@
 <?xml version="1.0"?>
 <JiProj xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" EntryPoint=".\sonic.monkey" Name="Sonic_GBA">
   <Files>
+    <Document Filename=".\src\sonicgba\bossobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="150">
+      <DocGUID />
+      <CursorPos>
+        <X>0</X>
+        <Y>0</Y>
+      </CursorPos>
+    </Document>
     <Document Filename=".\src\sonicgba\extraring.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="150">
       <DocGUID />
       <CursorPos>

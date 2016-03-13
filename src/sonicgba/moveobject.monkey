@@ -6,6 +6,9 @@ Public
 Import sonicgba.gameobject
 
 ' Classes:
+
+' Presumed base class for objects with some form of motion.
+' May be for specialized objects; hierarchy unknown.
 Class MoveObject Extends GameObject Abstract
 	Protected
 		' Fields:

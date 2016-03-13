@@ -1,6 +1,13 @@
 <?xml version="1.0"?>
 <JiProjUserOptions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Files>
+    <DocUserOptions Filename=".\src\sonicgba\bossobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>12</X>
+        <Y>19</Y>
+      </CursorPos>
+      <DocGUID />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\extraring.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>3</X>
@@ -24,10 +31,10 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\moveobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
-        <Y>16</Y>
+        <X>51</X>
+        <Y>10</Y>
       </CursorPos>
-      <DocGUID>20be13a4-eeb0-4691-829a-fcf6490f4e74</DocGUID>
+      <DocGUID>381ce16a-82a9-416e-a806-250d7e6a017c</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\sonicdebug.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
