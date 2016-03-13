@@ -59,8 +59,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>502</Y>
+        <X>13</X>
+        <Y>546</Y>
       </CursorPos>
       <DocGUID>352702e5-63d3-4b52-8866-bffffab03d55</DocGUID>
       <Bookmarks />
@@ -86,45 +86,41 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\ropeend.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\ropeend.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>9</X>
         <Y>46</Y>
       </CursorPos>
-      <DocGUID>a8787209-3a87-423b-b3ec-63aceb506e48</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ropeturn.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>6</X>
-        <Y>40</Y>
+        <X>49</X>
+        <Y>25</Y>
       </CursorPos>
       <DocGUID>300e82f6-ce08-4f9b-9acc-463c4b07ddb7</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\seabedvolcanoasynhurt.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\seabedvolcanoasynhurt.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>50</Y>
+        <X>39</X>
+        <Y>34</Y>
       </CursorPos>
-      <DocGUID>893cf917-2707-49f9-8e42-7424fac51078</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\seabedvolcanohurt.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\seabedvolcanohurt.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>31</X>
+        <Y>28</Y>
+      </CursorPos>
+      <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\shipbase.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>9</X>
         <Y>54</Y>
       </CursorPos>
-      <DocGUID>ec0dd76d-4e22-4e8b-beb8-00796c73b1f6</DocGUID>
-      <Bookmarks />
-    </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\shipbase.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
-      <CursorPos>
-        <X>9</X>
-        <Y>54</Y>
-      </CursorPos>
-      <DocGUID>a5bc55ae-83e8-4463-80c9-120b639d9a5f</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\sonicdebug.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -147,21 +143,19 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\steamhurt.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\steamhurt.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>52</Y>
+        <X>41</X>
+        <Y>54</Y>
       </CursorPos>
-      <DocGUID>e657c648-1cdc-4ffa-9801-178b35392983</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\tutorialpoint.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\tutorialpoint.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>9</X>
         <Y>47</Y>
       </CursorPos>
-      <DocGUID>377c7844-edad-44ea-bed8-026675652dc7</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\uparmbar.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>

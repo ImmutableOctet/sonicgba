@@ -538,6 +538,15 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			addGameObject(o, o.posX, o.posY)
 		End
 		
+		Function loadObjectStep:Bool(fileName:String, loadId:Int)
+			Local nextStep:Bool = True
+			
+			Select (loadStep)
+				Case STATE_NORMAL_MODE
+				Case STATE_RACE_MODE
+			End Select
+		End
+		
 		' Constructor(s):
 		Method New()
 			Super.New(CollisionMap.getInstance())
