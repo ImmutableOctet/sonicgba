@@ -5,6 +5,7 @@ This file contains a list of modules known to use external APIs that may or may 
     * "sonicgba.fallflush"
     * "sonicgba.fan"
     * "sonicgba.tutorialpoint"
+    * "sonicgba.backmanagerstagefinal"
 
 ## Notes
 A number of the entries are likely to be perfectly fine.
