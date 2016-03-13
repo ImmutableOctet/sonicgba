@@ -16,6 +16,11 @@ A multi-platform port of Sonic Advance (Mobile) - Ported from Java to Monkey
     such as the 'regal' Monkey module's comment patterns for clarity and navigation.
     Most details aren't required here, as long as the code works. At the end of the day, it's a formatting choice.
     
+    * Unlike the 'regal' modules' code-style, this port will not force usage of 'Return' on 'Void' methods or functions.
+    With that said, however, 'Void' methods/functions must be declared as 'Void'.
+    This is done to resolve conflicts, as Monkey 1 assumes 'Int' as a default return-type, whereas Monkey 2 does not.
+    In addition, strict-conformity is ideal, so it's best to declare functions/methods as accurately to Java as possible.
+    
     * Resource paths and similar details will not be changed until the initial structural work is done.
     
     * Constant and global variables may use type inference, although this is sometimes not preferable.
