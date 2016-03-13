@@ -14,7 +14,7 @@ Class MoveObject Extends GameObject
 		' Methods:
 		
 		' Property potential:
-		Method getValX:Int()
+		Method getVelX:Int()
 			Return velX
 		End
 		

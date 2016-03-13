@@ -24,10 +24,10 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\moveobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
-        <Y>31</Y>
+        <X>14</X>
+        <Y>16</Y>
       </CursorPos>
-      <DocGUID>1bb1d8df-eb23-4d86-8cd7-5c0860c66f87</DocGUID>
+      <DocGUID>20be13a4-eeb0-4691-829a-fcf6490f4e74</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\sonicdebug.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
