@@ -6,7 +6,7 @@ Public
 Import sonicgba.gameobject
 
 ' Classes:
-Class MoveObject Extends GameObject
+Class MoveObject Extends GameObject Abstract
 	Protected
 		' Fields:
 		Field totalVelocity:Int
