@@ -1,14 +1,24 @@
 <?xml version="1.0"?>
 <JiProjUserOptions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Files>
+    <DocUserOptions Filename=".\src\sonicgba\focusable.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>3</X>
+        <Y>9</Y>
+      </CursorPos>
+      <DocGUID />
+    </DocUserOptions>
     <DocUserOptions Filename=".\sonic.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>1</X>
-        <Y>10</Y>
+        <X>3</X>
+        <Y>14</Y>
       </CursorPos>
       <DocGUID>d9edbe2c-01f3-4a8b-a5e6-9654d6056ba0</DocGUID>
       <Bookmarks />
     </DocUserOptions>
   </Files>
-  <Folders />
+  <Folders>
+    <FolderStatus NodePath="Sonic_GBA\src" Expanded="true" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonicgba" Expanded="true" />
+  </Folders>
 </JiProjUserOptions>
