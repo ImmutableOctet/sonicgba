@@ -125,10 +125,10 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		Global paintVec:Stack<GameObject>[] = New Stack<GameObject>[4]
 		
 		' Rectangles:
-		Global screenRect:CollisionRect
+		Global screenRect:= New CollisionRect()
 		
-		Global rectH:CollisionRect
-		Global rectV:CollisionRect
+		Global rectH:= New CollisionRect()
+		Global rectV:= New CollisionRect()
 		
 		Global bossID:Int
 		Global camera:Coordinate
@@ -165,8 +165,8 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		Global cursorX:Int
 		Global cursorY:Int
 		
-		Global preCenterX:Int
-		Global preCenterY:Int
+		Global preCenterX:Int = -1
+		Global preCenterY:Int = -1
 		
 		Global endX:Int
 		Global endY:Int
@@ -174,12 +174,12 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		Global groundBlock:ACBlock
 		
 		' Rectangles:
-		Global resetRect:CollisionRect
+		Global resetRect:= New CollisionRect()
 		
 		' Fields:
 		Field needInit:Bool
 	Protected
-		Global GRAVITY:Int
+		Global GRAVITY:Int = 172
 		
 		' Animations:
 		Global rockBreakAnimation:Animation
@@ -197,37 +197,88 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		Field firstTouch:Bool
 	Public
 		' Functions:
-		Function Initialize:Void()
-			For Local I:= 0 Until 4
-				paintVec[I] = New Stack<GameObject>()
-			Next
+		Function initObject:Void(mapPixelWidth:Int, mapPixelHeight:Int, sameStage:Bool)
+			If (groundblock = Null) Then
+				groundblock = CollisionMap.getInstance().getNewCollisionBlock()
+			Endif
 			
-			GRAVITY = 172
+			' Deinitialize the active context.
+			closeObject(sameStage)
 			
-			destroyEffectAnimation = Null
-			iceBreakAnimation = Null
-			platformBreakAnimation = Null
-			soundInstance = Null
+			' Get a handle of the current player.
+			player = PlayerObject.getPlayer()
 			
-			bossFighting = False
-			isGotRings = False
-			isFirstTouchedWind = False
-			isFirstTouchedSandSlip = False
+			' Clear the boss-object container.
+			bossObjVec.Clear()
 			
-			ds = Null
+			' Calculate the size of 'allGameObject':
+			objVecWidth = (((mapPixelWidth + ROOM_WIDTH) - 1) / ROOM_WIDTH)
+			objVecHeight = (((mapPixelHeight + ROOM_HEIGHT) - 1) / ROOM_HEIGHT)
 			
-			loadStep = 0
-			closeStep = 0
+			' Handle the storage semantics of our containers:
 			
+			' Initialize/reinitialize 'allGameObject' as needed:
+			If (allGameObject.Length > 0) Then
+				For Local I:= 0 Until allGameObject.Length
+					For Local J:= 0 Until allGameObject[I].Length
+						allGameObject[I][J].Clear()
+					Next
+				Next
+			Else
+				For Local X:= 0 Until objVecWidth
+					Local xArray:= New Stack<GameObject>[]
+					
+					For Local Y:= 0 Until objVecHeight
+						xArray[Y] = New Stack<GameObject>()
+					Next
+					
+					allGameObject[X] = xArray
+				Next
+			Endif
+			
+			If (paintVec.Length > 0) Then
+				For Local I:= 0 Until 4
+					paintVec[I].Clear()
+				Next
+			Else
+				For Local I:= 0 Until 4
+					paintVec[I] = New Stack<GameObject>()
+				Next
+			Endif
+			
+			If (destroyEffectAnimation = Null) Then
+				destroyEffectAnimation = New Animation("/animation/destroy_effect")
+			EndIf
+			
+			If (rockBreakAnimation = Null) Then
+				rockBreakAnimation = New Animation("/animation/iwa_patch")
+			EndIf
+			
+			If (iceBreakAnimation = Null) Then
+				iceBreakAnimation = New Animation("/animation/ice_patch")
+			EndIf
+			
+			If (platformBreakAnimation = Null) Then
+				platformBreakAnimation = new Animation("/animation/subehahen_5")
+			EndIf
+			
+			' I'm unsure of what these are for, at the moment.
 			preCenterX = -1
 			preCenterY = -1
 			
-			screenRect = new CollisionRect()
-			rectH = new CollisionRect()
-			rectV = new CollisionRect()
-			resetRect = new CollisionRect()
+			' Make sure the game isn't paused.
+			IsGamePause = False
 			
-			groundblock = CollisionMap.getInstance().getNewCollisionBlock()
+			If (soundInstance = Null) Then
+				soundInstance = SoundSystem.getInstance()
+			EndIf
+			
+			RingObject.ringInit()
+			GimmickObject.gimmickInit()
+			EnemyObject.enemyInit()
+			
+			' Make sure we don't think we're fighting a boss.
+			bossFighting = False
 			
 			Return
 		End
@@ -235,10 +286,14 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		Function ObjectClear:Void()
 			GimmickObject.gimmickInit()
 			
-			bossObjVec.removeAllElements()
+			bossObjVec.Clear()
 		End
 		
 		Function addGameObject:Void(o:GameObject, x:Int, y:Int)
+			If (IsGamePause) Then
+				Return
+			EndIf
+			
 			
 		End
 		
