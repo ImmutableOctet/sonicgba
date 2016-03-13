@@ -59,7 +59,7 @@ Class Fan Extends GimmickObject
 		End
 		
 		' The 'var1' argument is likely a "context" object. (Abstracted from other details, anyway)
-		Method draw:Void(var1:MFGraphics)
-			drawInMap(var1, drawer)
+		Method draw:Void(graphics:MFGraphics)
+			drawInMap(graphics, drawer)
 		End
 End

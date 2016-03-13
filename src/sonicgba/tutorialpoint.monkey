@@ -37,7 +37,7 @@ Class TutorialPoint Extends GimmickObject
 			Self.drawer = Null
 		End
 		
-		Method draw:Void(var1:MFGraphics)
+		Method draw:Void(graphics:MFGraphics)
 			' Empty implementation.
 		End
 		

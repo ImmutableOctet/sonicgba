@@ -38,7 +38,7 @@ Class StarEffect Implements SonicDef
 			Self.drawer = Null
 		End
 		
-		Method draw:Bool(var1:MFGraphics)
+		Method draw:Bool(graphics:MFGraphics)
 			Const DOUBLE_MOVE_POWER:= (MOVE_POWER*2)
 			
 			If (Not GameObject.IsGamePause) Then
@@ -53,7 +53,7 @@ Class StarEffect Implements SonicDef
 			
 			Local camera:= MapManager.getCamera()
 			
-			drawer.draw(var1, (x Shr 6) - camera.x, (y Shr 6) - camera.y)
+			drawer.draw(graphics, (x Shr 6) - camera.x, (y Shr 6) - camera.y)
 			
 			return drawer.checkEnd()
 		End

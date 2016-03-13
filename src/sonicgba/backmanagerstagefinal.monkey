@@ -35,7 +35,7 @@ Class BackManagerStageFinal Extends BackGroundManager
 		End
 		
 		' This method and similar behavior will likely be replaced with Mojo.
-		Method draw:Void(var1:MFGraphics)
+		Method draw:Void(graphics:MFGraphics)
 			' DRAW 'bgImage' HERE.
 			
 			Return
