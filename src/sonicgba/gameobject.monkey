@@ -95,7 +95,9 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		' Global player reference; last resort. (Terrible, but it works)
 		Global player:GameObject
 		
-		Global systemClock:Long ' Int ' Millisecs()
+		' This is used to count updates for game logic.
+		' Think of it as a sort of frame counter.
+		Global systemClock:Int ' Long
 		
 		' Animations:
 		Global destroyEffectAnimation:Animation
@@ -116,12 +118,21 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		Global isUnlockCage:Bool
 		
 		' Object collections:
+		
+		' This manages containers that are piped to 'mainObjectLogicVec' for game logic.
 		Global allGameObject:Stack<GameObject>[][]
 		
-		Global mainObjectLogicVec:= New Stack<GameObject>()
+		' This is a container that's used to pass entries from 'allGameObject'
+		' to the main update routine. There's no allocation needed for sub-containers.
+		Global mainObjectLogicVec:= New Stack<Stack<GameObject>>()
+		
+		' These two containers are undocumented for now:
 		Global bossObjVec:= New Stack<BossObject>() ' GameObject
 		Global playerCheckVec:= New Stack<PlayerObject>() ' GameObject
 		
+		' This acts as our layer container. In other words,
+		' this is used to draw our objects later on. This may be a major point
+		' of optimization later on, but for now, it's being left alone.
 		Global paintVec:Stack<GameObject>[] = New Stack<GameObject>[4]
 		
 		' Rectangles:
@@ -236,7 +247,8 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 				Next
 			Endif
 			
-			If (paintVec.Length > 0) Then
+			' Allocate our layers:
+			If (paintVec.Length > 0 And paintVec[0] <> Null) Then
 				For Local I:= 0 Until 4
 					paintVec[I].Clear()
 				Next
@@ -246,6 +258,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 				Next
 			Endif
 			
+			' Make sure we have our default/generic animations:
 			If (destroyEffectAnimation = Null) Then
 				destroyEffectAnimation = New Animation("/animation/destroy_effect")
 			EndIf
@@ -269,18 +282,18 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			' Make sure the game isn't paused.
 			IsGamePause = False
 			
+			' Make sure to establish a handle to our sound-system:
 			If (soundInstance = Null) Then
 				soundInstance = SoundSystem.getInstance()
 			EndIf
 			
+			' Initialize object behavior:
 			RingObject.ringInit()
 			GimmickObject.gimmickInit()
 			EnemyObject.enemyInit()
 			
 			' Make sure we don't think we're fighting a boss.
 			bossFighting = False
-			
-			Return
 		End
 		
 		Function ObjectClear:Void()
@@ -289,11 +302,131 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			bossObjVec.Clear()
 		End
 		
-		Function addGameObject:Void(o:GameObject, x:Int, y:Int)
+		' This seems to be the main update routine for most 'GameObjects'.
+		Function logicObjects:Void()
 			If (IsGamePause) Then
 				Return
 			EndIf
 			
+			' Update our game's "clock":
+			If (systemClock < INT_MAX) Then
+				systemClock += 1
+			Else
+				systemClock = 0
+			Endif
+			
+			'systemClock = Millisecs()
+			
+			' Clear the layers' contents.
+			For Local I:= 0 Until PAINT_LAYER_NUM
+				paintVec[I].Clear()
+			Next
+			
+			' Update specialized object behavior:
+			GimmickObject.gimmickStaticLogic()
+			EnemyObject.enemyStaticLogic()
+			RingObject.ringLogic()
+			
+			' Update this specific rocket effect. I'm not sure why
+			' this needs to be done here, but whatever, we'll keep it.
+			RocketSeparateEffect.getInstance().logic()
+			
+			' Update the main player object(s):
+			
+			' NOTE: If multiplayer ever gets added to this, this is where
+			' you'd need to change the value of 'player', preferably in a loop.
+			player.logic()
+			
+			' Check if the layer has control of the character:
+			If (player.outOfControl) Then
+				' They don't, let the map manager control the camera.
+				MapManager.cameraLogic() ' <-- Used for automated sections and grinding.
+			EndIf
+			
+			' Handle collision and other related behavior for 'player'.
+			' This may still work if done before the camera-logic, but
+			' for the sake of safety, I'm not going to change it.
+			checkObjWhileMoving(player)
+			
+			' Update our objects:
+			Local currentObj:GameObject
+			
+			Local objIndex:= 0
+			Local vecIndex:= 0
+			
+			getGameObjectVecArray(player, mainObjectLogicVec)
+			
+			' This isn't exactly readable, but I haven't had the time to use enumerators yet:
+			While (vecIndex < mainObjectLogicVec.Length)
+				Local currentVec:= mainObjectLogicVec.Get(vecIndex)
+				
+				' Check if we're still within the bounds of the current container:
+				If (objIndex < currentVec.Length()) Then
+					currentObj = currentVec.Get(objIndex)
+					
+					If (Not player.isControlObject(currentObj)) Then
+						' Update the current object.
+						currentObj.logic()
+						
+						' Check the destruction status of the object:
+						If (currentObj.objectChkDestroy()) Then
+							' Formally close the object.
+							currentObj.close()
+							
+							' Remove the entry at this index, then move back one index.
+							' Doing this ensures we don't miss the newly placed entry:
+							currentVec.Remove(objIndex)
+							
+							objIndex -= 1
+						ElseIf (currentObj.checkInit()) Then
+							' Remove the entry at this index, and try the index again:
+							currentVec.Remove(objIndex)
+							objIndex -= 1
+						EndIf
+					Endif
+					
+					' Check if we need to render this object:
+					If (checkPaintNecessary(currentObj)) Then
+						' Get the object's preferred layer, and add to it.
+						paintVec[currentObj.getPaintLayer()].Push(currentObj)
+					EndIf
+				Else
+					' Go to the next container:
+					objIndex = 0
+					vecIndex += 1
+				EndIf
+			Wend
+			
+			' Check if we have boss objects to work with:
+			If (bossObjVec <> Null) Then
+				' Update all boss objects:
+				For Local boss:= EachIn bossObjVec
+					' Update the boss-object.
+					boss.logic()
+					
+					' Check if we should be rendering this boss.
+					If (Not boss.isFarAwayCamera()) Then
+						' Add this boss-object to its preferred layer.
+						paint[boss.getPaintLayer()].Push(boss)
+					EndIf
+				Next
+			EndIf
+			
+			' Update other specialized objects:
+			
+			' Any remaining bullets will now be updated.
+			BulletObject.bulletLogicAll()
+			
+			' Update any animals, especially the ones from this last update.
+			SmallAnimal.animalLogic()
+			
+			' This may or may not be necessary, considering we already did it:
+			if (player.outOfControl) Then
+				MapManager.cameraLogic()
+			EndIf
+		End
+		
+		Function addGameObject:Void(o:GameObject, x:Int, y:Int)
 			
 		End
 		
