@@ -3,15 +3,15 @@
   <Files>
     <DocUserOptions Filename=".\src\sonicgba\backmanagerstagefinal.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>38</Y>
+        <X>47</X>
+        <Y>11</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bank.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>29</X>
-        <Y>15</Y>
+        <X>5</X>
+        <Y>51</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -59,8 +59,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>41</X>
-        <Y>201</Y>
+        <X>34</X>
+        <Y>227</Y>
       </CursorPos>
       <DocGUID>352702e5-63d3-4b52-8866-bffffab03d55</DocGUID>
       <Bookmarks />

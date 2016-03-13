@@ -130,9 +130,6 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		Global rectH:CollisionRect
 		Global rectV:CollisionRect
 		
-		Global preCollisionRect:= New CollisionRect()
-		Global collisionRect:= New CollisionRect()
-		
 		Global bossID:Int
 		Global camera:Coordinate
 		
@@ -144,10 +141,12 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		
 		Global ds:Stream ' "DataInputStream"
 		
-		Global moveDistance:= New Coordinate()
+		' Fields:
+		Field moveDistance:Coordinate
+		Field preCollisionRect:CollisionRect
+		Field collisionRect:CollisionRect
 	Private
 		' Flags:
-		Global needInit:Bool
 		Global gettingObject:Bool
 		
 		' Meta:
@@ -176,25 +175,26 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		
 		' Rectangles:
 		Global resetRect:CollisionRect
+		
+		' Fields:
+		Field needInit:Bool
 	Protected
 		Global GRAVITY:Int
-		
-		' State:
-		Global objId:Int
-		Global currentLayer:Int
-		
-		' Meta:
-		Global mHeight:Int
-		Global mWidth:Int
-		
-		' Flags:
-		Global firstTouch:Bool = True
 		
 		' Animations:
 		Global rockBreakAnimation:Animation
 		
 		' Sound:
 		Global soundInstance:SoundSystem
+		
+		' Fields:
+		Field objId:Int
+		Field currentLayer:Int
+		
+		Field mHeight:Int
+		Field mWidth:Int
+		
+		Field firstTouch:Bool
 	Public
 		' Functions:
 		Function Initialize:Void()
@@ -230,5 +230,52 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			groundblock = CollisionMap.getInstance().getNewCollisionBlock()
 			
 			Return
+		End
+		
+		Function ObjectClear:Void()
+			GimmickObject.gimmickInit()
+			
+			bossObjVec.removeAllElements()
+		End
+		
+		Function addGameObject:Void(o:GameObject, x:Int, y:Int)
+			
+		End
+		
+		Function addGameObject:Void(o:GameObject)
+			addGameObject(o, o.posX, o.posY)
+		End
+		
+		' Constructor(s):
+		Method New()
+			Super.New(CollisionMap.getInstance())
+			
+			Self.firstTouch = True
+			Self.preCollisionRect = New CollisionRect()
+			Self.collisionRect = New CollisionRect()
+			Self.moveDistance = new Coordinate()
+		End
+		
+		' Methods (Abstract):
+		
+		' This acts as the primary destructor for a 'GameObject'.
+		Method close:Void() Abstract
+		
+		' From what I understand, the second argument is the collision-type.
+		Method doWhileCollision:Void(p:PlayerObject, var2:Int) Abstract
+		
+		' This is very likely the main update routine.
+		Method logic:Void() Abstract
+		
+		' This is definitely the main render routine.
+		Method draw:Void(graphics:MFGraphics) Abstract
+		
+		' This is used to update the collision bounds of a 'GameObject'.
+		' The two arguments are very likely the X and Y coordinates of the object.
+		Method refreshCollisionRect:Void(var1:Int, var2:Int) Abstract
+		
+		' Methods (Implemented):
+		Method getObjectId:Int()
+			Return objId
 		End
 End
