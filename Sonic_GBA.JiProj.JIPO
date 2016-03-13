@@ -1,6 +1,14 @@
 <?xml version="1.0"?>
 <JiProjUserOptions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Files>
+    <DocUserOptions Filename=".\src\sonicgba\bank.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>0</X>
+        <Y>17</Y>
+      </CursorPos>
+      <DocGUID>963d9cd1-1a99-4419-b865-d646132abbea</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bossobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>0</X>
@@ -87,8 +95,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\tutorialpoint.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>61</X>
-        <Y>52</Y>
+        <X>5</X>
+        <Y>32</Y>
       </CursorPos>
       <DocGUID>65fc9b4c-af27-43dd-a671-a2ef146dcbfe</DocGUID>
       <Bookmarks />
