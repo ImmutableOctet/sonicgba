@@ -1,20 +1,28 @@
 <?xml version="1.0"?>
 <JiProjUserOptions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Files>
-    <DocUserOptions Filename=".\src\sonicgba\focusable.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\extraring.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>11</X>
+        <Y>19</Y>
+      </CursorPos>
+      <DocGUID>5dade885-d54f-420a-af91-cc0c207c5f31</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\focusable.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>3</X>
         <Y>9</Y>
       </CursorPos>
-      <DocGUID />
-    </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\mapbehavior.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
-      <CursorPos>
-        <X>30</X>
-        <Y>17</Y>
-      </CursorPos>
-      <DocGUID>3a70a1ed-1b11-4b51-ad4f-5a423798ab03</DocGUID>
+      <DocGUID>5b1b6769-f271-494b-a033-93fb6ddc002f</DocGUID>
       <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\mapbehavior.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>3</X>
+        <Y>18</Y>
+      </CursorPos>
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\sonicdebug.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -25,10 +33,10 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\uparmbar.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>81</X>
+        <Y>11</Y>
       </CursorPos>
-      <DocGUID>55429299-9ac5-4a44-a3fe-bcff7c2267f4</DocGUID>
+      <DocGUID>996e32b8-cd4e-47c9-92e7-9095f934172b</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\sonic.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
