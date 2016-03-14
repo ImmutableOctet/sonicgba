@@ -19,14 +19,15 @@ Class PlatformObject Extends GimmickObject Abstract
 		End
 	Public
 		' Methods:
-		Method doWhileCollision:Void(player:PlayerObject, value:Int)
+		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
 			' Using 'Self' explicitly for code clarity:
-			Select value
-				Case 1
+			Select direction
+				Case DIRECTION_DOWN
+					' Stop the player from falling through.
 					player.beStop(Self.collisionRect.y0, 1, Self)
 					
 					Return
-				Case 4
+				Case DIRECTION_NONE
 					If (player.getMoveDistance().y > 0 And player.getCollisionRect().y1 < Self.collisionRect.y1) Then
 						player.beStop(Self.collisionRect.y0, 1, Self)
 					EndIf

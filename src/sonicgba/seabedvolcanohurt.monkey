@@ -43,7 +43,7 @@ Class SeabedVolcanoHurt Extends GimmickObject
 			Self.sb = Null
 		End
 		
-		Method doWhileCollision:Void(player:PlayerObject, value:Int)
+		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
 			If (collisionRect.getHeight() <> 0 And Not player.isFootOnObject(sb.sp))
 				player.beHurt()
 			EndIf

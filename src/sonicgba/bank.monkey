@@ -9,6 +9,8 @@ Public
 	It seems to be used by multiple object types later on,
 	so I'm going to assume shared behavior at least.
 	
+	Maybe the type determines restriction of left or right movement?
+	
 	Either way, it slows the character down, that's what matters right now.
 #End
 
@@ -30,11 +32,11 @@ Class Bank Extends GimmickObject
 		' Methods:
 		
 		' This object's type seems to determine if 'var1' will be affected.
-		Method doWhileCollision:Void(player:PlayerObject, value:Int)
+		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
 			If (player.onBank) Then
 				player.onBank = False
 				player.bankwalking = False
-			ElseIf ((Self.objId = 28 And value = 3 Or Self.objId = 29 And value = 2) And player.collisionState = 0) Then
+			ElseIf ((Self.objId = 28 And direction = DIRECTION_RIGHT Or Self.objId = 29 And direction = DIRECTION_LEFT) And player.collisionState = 0) Then
 				Self.touching = True
 				player.bankwalking = True
 			EndIf

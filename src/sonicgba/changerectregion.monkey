@@ -18,7 +18,7 @@ Class ChangeRectRegion Extends GimmickObject
 		End
 	Public
 		' Methods:
-		Method doWhileCollision:Void(player:PlayerObject, value:Int)
+		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
 			' Code structured for accuracy, not best practices:
 			If (player.animationID = 4 And player.collisionState = 1) Then
 				player.changeRectHeight = True
