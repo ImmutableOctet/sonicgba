@@ -1231,6 +1231,76 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			Return (Not isInCameraOnlyWidth(MapManager.CAMERA_WIDTH / 2))
 		End
 		
+		Method doWhileNoCollision:Void()
+			' Empty implementation.
+		End
+		
+		' This is used to tell the main update routine to destroy this object.
+		Method objectChkDestroy:Bool()
+			Return False
+		End
+		
+		Method doInitWhileInCamera:Void()
+			' Empty implementation.
+		End
+		
+		Method doWhileBeAttack:Void(player:PlayerObject, direction:Int, animationID:Int)
+			' Empty implementation.
+		End
+		
+		Method doWhileRail:Void(player:PlayerObject, direction:Int)
+			' Empty implementation.
+		End
+		
+		Method canBeInit:Bool()
+			Return True
+		End
+		
+		Method getPaintLayer:Int()
+			Return DRAW_AFTER_SONIC
+		End
+		
+		Method releaseWhileBeHurt:Bool()
+			Return False
+		End
+		
+		Method refreshCollisionRectWrap:Void()
+			refreshCollisionRect(Self.posX, Self.posY)
+			
+			Self.preCollisionRect.setTwoPosition(Self.collisionRect.x0, Self.collisionRect.y0, Self.collisionRect.x1, Self.collisionRect.y1)
+		End
+		
+		Method transportTo:Void(x:Int, y:Int)
+			Self.posX = x
+			Self.posY = y
+			
+			refreshCollisionRectWrap()
+		End
+		
+		Method checkInit:Bool()
+			Local camera:= MapManager.getCamera()
+			
+			updateResetRect(camera)
+			
+			If (Self.needInit) Then
+				If (Not resetRect.collisionChk(Self.collisionRect) And canBeInit()) Then
+					doInitWhileInCamera()
+					
+					refreshCollisionRect(Self.posX, Self.posY)
+					
+					addGameObject(Self)
+					
+					Self.needInit = False
+					
+					Return True
+				Endif
+			ElseIf (resetRect.collisionChk(Self.collisionRect)) Then
+				Self.needInit = True
+			Endif
+			
+			Return False
+		End
+		
 		Method getGroundY:Int(x:Int, y:Int, layer:Int)
 			For Local I:= 0 Until SEARCH_RANGE ' PlayerObject.TERMINAL_COUNT
 				y += worldInstance.getTileHeight() * AVAILABLE_RANGE
@@ -1351,6 +1421,23 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			Return ((((blockY + 1) Shl SEARCH_COUNT) - 1) Shl 6)
 		End
 		
+		Method getQuaParam:Int(x:Int, divide:Int)
+			If (x > 0) Then
+				Return (x / divide)
+			Endif
+			
+			Return ((x - (divide - 1)) / divide)
+		End
+		
+		Method drawCollisionRect:Void(g:MFGraphics)
+			If (SonicDebug.showCollisionRect) Then
+				g.setColor(16711680)
+				
+				g.drawRect((Self.collisionRect.x0 Shr 6) - camera.x, (Self.collisionRect.y0 Shr 6) - camera.y, Self.collisionRect.getWidth() Shr 6, Self.collisionRect.getHeight() Shr 6);
+				g.drawRect(((Self.collisionRect.x0 Shr 6) - camera.x) + 1, ((Self.collisionRect.y0 Shr 6) - camera.y) + 1, (Self.collisionRect.getWidth() Shr 6) - 2, (Self.collisionRect.getHeight() Shr 6) - 2);
+			Endif
+		End
+		
 		Function drawInMap:Void(graphics:MFGraphics, drawer:AnimationDrawer, x:Int, y:Int)
 			drawer.draw(graphics, (x Shr 6) - camera.x, (y Shr 6) - camera.y);
 		End
@@ -1376,11 +1463,29 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		End
 	Private
 		' Methods:
-		' Nothing so far.
+		Method getDownCheckPointY:Int(x:Int, y:Int)
+			refreshCollisionRect(x, y)
+			
+			return Self.collisionRect.y1
+		End
+		
+		Method getUpCheckPointY:Int(x:Int, y:Int)
+			refreshCollisionRect(x, y)
+			
+			Return Self.collisionRect.y0
+		End
+		
+		Method downSideCollisionChk:Int(bodyPositionX:Int, bodyPositionY:Int)
+			Return -1
+		End
 	Protected
 		' Extensions:
 		Method updateScreenRect:Void(camera:Coordinate)
 			screenRect.setRect((camera.x + MapManager.CAMERA_OFFSET_X) Shl 6, (camera.y + MapManager.CAMERA_OFFSET_Y) Shl 6, MapManager.CAMERA_WIDTH Shl 6, MapManager.CAMERA_HEIGHT Shl 6)
+		End
+		
+		Method updateResetRect:Void(camera:Coordinate)
+			resetRect.setRect(((camera.x + (MapManager.CAMERA_WIDTH / 2)) Shl 6) - INIT_DISTANCE, ((camera.y + (MapManager.CAMERA_HEIGHT / 2)) Shl 6) - INIT_DISTANCE, 29440, 29440)
 		End
 		
 		Method updateDirection:Int()
