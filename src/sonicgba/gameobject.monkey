@@ -144,7 +144,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		Global mainObjectLogicVec:= New Stack<Stack<GameObject>>()
 		
 		' These two containers are undocumented for now:
-		Global bossObjVec:= New Stack<BossObject>() ' GameObject
+		Global bossObjVec:= New Stack<GameObject>() ' BossObject
 		Global playerCheckVec:= New Stack<PlayerObject>() ' GameObject
 		
 		' This acts as our layer container. In other words,
@@ -367,7 +367,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			checkObjWhileMoving(player)
 			
 			' Update our objects:
-			Local currentObj:GameObject
+			Local currentObject:GameObject
 			
 			Local objIndex:= 0
 			Local vecIndex:= 0
@@ -380,23 +380,23 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 				
 				' Check if we're still within the bounds of the current container:
 				If (objIndex < currentVec.Length()) Then
-					currentObj = currentVec.Get(objIndex)
+					currentObject = currentVec.Get(objIndex)
 					
-					If (Not player.isControlObject(currentObj)) Then
+					If (Not player.isControlObject(currentObject)) Then
 						' Update the current object.
-						currentObj.logic()
+						currentObject.logic()
 						
 						' Check the destruction status of the object:
-						If (currentObj.objectChkDestroy()) Then
+						If (currentObject.objectChkDestroy()) Then
 							' Formally close the object.
-							currentObj.close()
+							currentObject.close()
 							
 							' Remove the entry at this index, then move back one index.
 							' Doing this ensures we don't miss the newly placed entry:
 							currentVec.Remove(objIndex)
 							
 							objIndex -= 1
-						ElseIf (currentObj.checkInit()) Then
+						ElseIf (currentObject.checkInit()) Then
 							' Remove the entry at this index, and try the index again:
 							currentVec.Remove(objIndex)
 							objIndex -= 1
@@ -404,10 +404,12 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 					Endif
 					
 					' Check if we need to render this object:
-					If (checkPaintNecessary(currentObj)) Then
+					If (checkPaintNecessary(currentObject)) Then
 						' Get the object's preferred layer, and add to it.
-						paintVec[currentObj.getPaintLayer()].Push(currentObj)
+						paintVec[currentObject.getPaintLayer()].Push(currentObject)
 					EndIf
+					
+					objIndex += 1
 				Else
 					' Go to the next container:
 					objIndex = 0
@@ -418,14 +420,14 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			' Check if we have boss objects to work with:
 			If (bossObjVec <> Null) Then
 				' Update all boss objects:
-				For Local boss:= EachIn bossObjVec
-					' Update the boss-object.
-					boss.logic()
+				For currentObject = EachIn bossObjVec
+					' Update the currentObject-object.
+					currentObject.logic()
 					
-					' Check if we should be rendering this boss.
-					If (Not boss.isFarAwayCamera()) Then
-						' Add this boss-object to its preferred layer.
-						paint[boss.getPaintLayer()].Push(boss)
+					' Check if we should be rendering this currentObject.
+					If (Not currentObject.isFarAwayCamera()) Then
+						' Add this currentObject-object to its preferred layer.
+						paint[currentObject.getPaintLayer()].Push(currentObject)
 					EndIf
 				Next
 			EndIf
@@ -702,6 +704,81 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		Function addGameObject:Void(o:GameObject)
 			addGameObject(o, o.posX, o.posY)
 		End
+		
+		' This is a custom routine used to reduce boilerplate.
+		Function collisionChkWithAllGameObject_HandleObject:Void(player:PlayerObject, currentObject:GameObject, attackFlag:Bool)
+			If (attackFlag) Then
+				For Local animRect:= EachIn player.attackRectVec
+					animRect.collisionChkWithObject(currentObject)
+				Next
+			EndIf
+			
+			' Detect if this is a 'RingObject':
+			ring = RingObject(currentObject)
+			
+			' Check if the player is attracting rings (Electric shield, etc):
+			If (ring <> Null And player.isAttracting()) Then
+				' Check this ring is within our collection radius ('attractRing'):
+				If (player.attractRing.collisionChk(ring.getCollisionRect())) Then
+					' Tell the ring to come toward us.
+					ring.beAttract()
+				Endif
+			EndIf
+			
+			If (currentObject.collisionChkWithObject(player)) Then
+				currentObject.doWhileCollisionWrap(player)
+				currentObject.firstTouch = False
+			Else
+				currentObject.doWhileNoCollision()
+				currentObject.firstTouch = True
+			EndIf
+		End
+		
+		' This handles the game's collision, including calls to 'collisionChkWithObject'.
+		Function collisionChkWithAllGameObject:Void(player:PlayerObject)
+			Local I:Int
+			Local ring:RingObject
+			Local attackFlag:Bool = False
+			
+			If (player.attackRectVec.Length > 0) Then
+				attackFlag = True
+			EndIf
+			
+			Local objIndex:= 0
+			Local vecIndex:= 0
+			
+			getGameObjectVecArray(player, mainObjectLogicVec)
+			
+			' This isn't exactly readable, but I haven't had the time to use enumerators yet:
+			While (vecIndex < mainObjectLogicVec.Length)
+				Local currentVec:= mainObjectLogicVec.Get(vecIndex)
+				
+				' Check if we're still within the bounds of the current container:
+				If (objIndex < currentVec.Length()) Then
+					Local currentObject:= currentVec.Get(objIndex)
+					
+					collisionChkWithAllGameObject_HandleObject(player, currentObject, attackFlag)
+					
+					objIndex += 1
+				Else
+					' Go to the next container:
+					objIndex = 0
+					vecIndex += 1
+				EndIf
+			Wend
+			
+			' Check if we have boss objects to work with:
+			If (bossObjVec <> Null) Then
+				' Update all boss objects:
+				For Local O:= EachIn bossObjVec
+					collisionChkWithAllGameObject_HandleObject(player, O, attackFlag)
+				Next
+			EndIf
+			
+			BulletObject.checkWithAllBullet(player)
+		End
+		
+		
 		
 		' Constructor(s):
 		Method New()
