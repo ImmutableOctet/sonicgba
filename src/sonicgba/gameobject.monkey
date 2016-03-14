@@ -1170,7 +1170,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		
 		Method getGroundY:Int(x:Int, y:Int, layer:Int)
 			For Local I:= 0 Until SEARCH_RANGE ' PlayerObject.TERMINAL_COUNT
-				y += worldInstance.getTileHeight() ' * 1
+				y += worldInstance.getTileHeight() * AVAILABLE_RANGE
 				
 				Local re:= worldInstance.getWorldY(x, y, layer, 1)
 				
@@ -1228,4 +1228,61 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			
 			Return thisRect.collisionChk(rectV)
 		End
+		
+		Method doWhileCollisionWrap:Void(player:PlayerObject)
+			Local xFirst:Bool
+			Local direction:= DIRECTION_NONE
+			
+			Local moveDistanceX:= player.getMoveDistance().x
+			Local moveDistanceY:= player.getMoveDistance().y
+			
+			Local colRect:= player.getCollisionRect()
+			Local prevColRect:= player.preCollisionRect
+			
+			xFirst = (Abs(colRect.x0 - prevColRect.x0) >= Abs(colRect.y0 - prevColRect.y0))
+			
+			rectH.setRect(colRect.x0, colRect.y0 + CHECK_OFFSET, colRect.getWidth(), colRect.getHeight() - (CHECK_OFFSET * 1)) ' AVAILABLE_RANGE
+			rectV.setRect(colRect.x0 + CHECK_OFFSET, colRect.y0, colRect.getWidth() - (CHECK_OFFSET * 2), colRect.getHeight()) ' (AVAILABLE_RANGE * 2)
+			
+			Local thisRect:= getCollisionRect() ' Self.collisionRect
+			Local rectH_and_thisRect:Bool = rectH.collisionChk(thisRect)
+			Local rectV_and_thisRect:Bool = rectV.collisionChk(thisRect)
+			
+			If (xFirst And rectH_and_thisRect) Then
+				If ((((colRect.x1 - prevColRect.x1 > 0) And prevColRect.isLeftOf(thisRect, CHECK_OFFSET)) Or (Not rectV_and_thisRect And colRect.x0 < thisRect.x0 And player.getVelX() >= -CHECK_OFFSET))) Then
+					direction = DIRECTION_RIGHT
+				ElseIf ((colRect.x0 - prevColRect.x0 < 0 And prevColRect.isRightOf(thisRect, CHECK_OFFSET)) Or (Not rectV_and_thisRect And colRect.x1 > thisRect.x1 And player.getVelX() <= CHECK_OFFSET)) Then
+					direction = DIRECTION_LEFT
+				Endif
+			EndIf
+			
+			If (direction = DIRECTION_NONE) Then
+				If (rectV_and_thisRect) Then
+					If (colRect.y1 - prevColRect.y1 > 0 And prevColRect.isUpOf(thisRect, CHECK_OFFSET + 5)) Then
+						direction = DIRECTION_DOWN
+					ElseIf (colRect.y0 - prevColRect.y0 < 0 And prevColRect.isDownOf(thisRect, CHECK_OFFSET)) Then
+						direction = DIRECTION_UP
+					EndIf
+				EndIf
+				
+				If (direction = DIRECTION_NONE) Then
+					If (rectH_and_thisRect) Then
+						If ((colRect.x1 - prevColRect.x1 > 0 And prevColRect.isLeftOf(thisRect, CHECK_OFFSET)) Or (Not rectV_and_thisRect And colRect.x0 < thisRect.x0 And player.getVelX() >= -CHECK_OFFSET)) Then
+							direction = DIRECTION_RIGHT
+						ElseIf ((colRect.x0 - prevColRect.x0 < 0 And prevColRect.isRightOf(thisRect, CHECK_OFFSET)) Or (Not rectV_and_thisRect And colRect.x1 > thisRect.x1 And player.getVelX() <= CHECK_OFFSET)) Then
+							direction = DIRECTION_LEFT
+						EndIf
+					EndIf
+				EndIf
+			EndIf
+			
+			If (player.inRailState()) Then
+				doWhileRail(player, direction)
+			Else
+				doWhileCollision(player, direction)
+			EndIf
+		End
+	Private
+		' Methods:
+		' Nothing so far.
 End
