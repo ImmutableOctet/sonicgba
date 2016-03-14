@@ -1230,11 +1230,94 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		End
 		
 		Method doWhileCollisionWrap:Void(player:PlayerObject)
-			Local xFirst:Bool
-			Local direction:= DIRECTION_NONE
+			Local direction:= updateDirection(player)
+			
+			If (player.inRailState()) Then
+				doWhileRail(player, direction)
+			Else
+				doWhileCollision(player, direction)
+			EndIf
+		End
+		
+		Method doWhileCollisionWrapWithPlayer:Void()
+			If (player = Null Or player.isDead) Then
+				Return
+			EndIf
 			
 			Local moveDistanceX:= player.getMoveDistance().x
-			Local moveDistanceY:= player.getMoveDistance().y
+			'Local moveDistanceY:= player.getMoveDistance().y
+			
+			player.refreshCollisionRectWrap()
+			
+			Local direction:= updateDirection(player)
+			
+			If (player.isFootOnObject(Self)) Then
+				Local y:Int
+				
+				If (player.isAntiGravity) Then
+					y = Self.collisionRect.y1
+				Else
+					y = Self.collisionRect.y0
+				EndIf
+				
+				player.moveOnObject(player.footPointX + moveDistanceX, y)
+			ElseIf (collisionChkWithObject(player)) Then
+				If (player.railing) Then
+					doWhileRail(player, direction)
+				Else
+					doWhileCollision(player, direction)
+				EndIf
+			EndIf
+			
+			Self.preCollisionRect.setTwoPosition(Self.collisionRect.x0, Self.collisionRect.y0, Self.collisionRect.x1, Self.collisionRect.y1)
+		End
+		
+		Method getBlockLeftSide:Int(blockX:Int, blockY:Int)
+			Return ((blockX Shl SEARCH_COUNT) Shl 6)
+		End
+		
+		Method getBlockRightSide:Int(blockX:Int, blockY:Int)
+			return ((((blockX + 1) Shl SEARCH_COUNT) - 1) Shl 6);
+		End
+		
+		Method getBlockUpSide:Int(blockX:Int, blockY:Int)
+			return ((blockY Shl SEARCH_COUNT) Shl 6)
+		End
+		
+		Method getBlockDownSide(blockX:Int, blockY:Int)
+			return ((((blockY + 1) Shl SEARCH_COUNT) - 1) Shl 6)
+		End
+		
+		Function drawInMap:Void(graphics:MFGraphics, drawer:AnimationDrawer, x:Int, y:Int)
+			drawer.draw(graphics, (x >> 6) - camera.x, (y >> 6) - camera.y);
+		End
+		
+		Function drawInMap:Void(graphics:MFGraphics, drawer:AnimationDrawer)
+			drawInMap(graphics, drawer, Self.posX, Self.posY);
+		End
+		
+		Function drawInMap:Void(graphics:MFGraphics, image:MFImage, x:Int, y:Int, anchor:Int)
+			MyAPI.drawImage(graphics, image, (x >> 6) - camera.x, (y >> 6) - camera.y, anchor);
+		End
+		
+		Function drawInMap:Void(graphics:MFGraphics, image:MFImage, anchor:Int)
+			drawInMap(graphics, image, Self.posX, Self.posY, anchor);
+		End
+		
+		Function drawInMap:Void(graphics:MFGraphics, image:MFImage, srcX:Int, srcY:Int, width:Int, height:Int, trans:Int, x:Int, y:Int, anchor:Int)
+			MyAPI.drawRegion(graphics, image, srcX, srcY, width, height, trans, (x >> 6) - camera.x, (y >> 6) - camera.y, anchor);
+		End
+		
+		Function drawInMap:Void(graphics:MFGraphics, image:MFImage, srcX:Int, srcY:Int, width:Int, height:Int, trans:Int, anchor:Int)
+			drawInMap(graphics, image, srcX, srcY, width, height, trans, Self.posX, Self.posY, anchor);
+		End
+	Private
+		' Methods:
+		' Nothing so far.
+	Protected
+		' Extensions:
+		Method updateDirection:Int()
+			Local xFirst:Bool
 			
 			Local colRect:= player.getCollisionRect()
 			Local prevColRect:= player.preCollisionRect
@@ -1245,44 +1328,34 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			rectV.setRect(colRect.x0 + CHECK_OFFSET, colRect.y0, colRect.getWidth() - (CHECK_OFFSET * 2), colRect.getHeight()) ' (AVAILABLE_RANGE * 2)
 			
 			Local thisRect:= getCollisionRect() ' Self.collisionRect
+			
 			Local rectH_and_thisRect:Bool = rectH.collisionChk(thisRect)
 			Local rectV_and_thisRect:Bool = rectV.collisionChk(thisRect)
 			
 			If (xFirst And rectH_and_thisRect) Then
 				If ((((colRect.x1 - prevColRect.x1 > 0) And prevColRect.isLeftOf(thisRect, CHECK_OFFSET)) Or (Not rectV_and_thisRect And colRect.x0 < thisRect.x0 And player.getVelX() >= -CHECK_OFFSET))) Then
-					direction = DIRECTION_RIGHT
+					Return DIRECTION_RIGHT
 				ElseIf ((colRect.x0 - prevColRect.x0 < 0 And prevColRect.isRightOf(thisRect, CHECK_OFFSET)) Or (Not rectV_and_thisRect And colRect.x1 > thisRect.x1 And player.getVelX() <= CHECK_OFFSET)) Then
-					direction = DIRECTION_LEFT
+					Return DIRECTION_LEFT
 				Endif
 			EndIf
 			
-			If (direction = DIRECTION_NONE) Then
-				If (rectV_and_thisRect) Then
-					If (colRect.y1 - prevColRect.y1 > 0 And prevColRect.isUpOf(thisRect, CHECK_OFFSET + 5)) Then
-						direction = DIRECTION_DOWN
-					ElseIf (colRect.y0 - prevColRect.y0 < 0 And prevColRect.isDownOf(thisRect, CHECK_OFFSET)) Then
-						direction = DIRECTION_UP
-					EndIf
-				EndIf
-				
-				If (direction = DIRECTION_NONE) Then
-					If (rectH_and_thisRect) Then
-						If ((colRect.x1 - prevColRect.x1 > 0 And prevColRect.isLeftOf(thisRect, CHECK_OFFSET)) Or (Not rectV_and_thisRect And colRect.x0 < thisRect.x0 And player.getVelX() >= -CHECK_OFFSET)) Then
-							direction = DIRECTION_RIGHT
-						ElseIf ((colRect.x0 - prevColRect.x0 < 0 And prevColRect.isRightOf(thisRect, CHECK_OFFSET)) Or (Not rectV_and_thisRect And colRect.x1 > thisRect.x1 And player.getVelX() <= CHECK_OFFSET)) Then
-							direction = DIRECTION_LEFT
-						EndIf
-					EndIf
+			If (rectV_and_thisRect) Then
+				If (colRect.y1 - prevColRect.y1 > 0 And prevColRect.isUpOf(thisRect, CHECK_OFFSET + 5)) Then
+					Return DIRECTION_DOWN
+				ElseIf (colRect.y0 - prevColRect.y0 < 0 And prevColRect.isDownOf(thisRect, CHECK_OFFSET)) Then
+					Return DIRECTION_UP
 				EndIf
 			EndIf
 			
-			If (player.inRailState()) Then
-				doWhileRail(player, direction)
-			Else
-				doWhileCollision(player, direction)
+			If (rectH_and_thisRect) Then
+				If ((colRect.x1 - prevColRect.x1 > 0 And prevColRect.isLeftOf(thisRect, CHECK_OFFSET)) Or (Not rectV_and_thisRect And colRect.x0 < thisRect.x0 And player.getVelX() >= -CHECK_OFFSET)) Then
+					Return DIRECTION_RIGHT
+				ElseIf ((colRect.x0 - prevColRect.x0 < 0 And prevColRect.isRightOf(thisRect, CHECK_OFFSET)) Or (Not rectV_and_thisRect And colRect.x1 > thisRect.x1 And player.getVelX() <= CHECK_OFFSET)) Then
+					Return DIRECTION_LEFT
+				EndIf
 			EndIf
+			
+			Return DIRECTION_NONE
 		End
-	Private
-		' Methods:
-		' Nothing so far.
 End
