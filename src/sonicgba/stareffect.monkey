@@ -55,6 +55,6 @@ Class StarEffect Implements SonicDef
 			
 			drawer.draw(graphics, (x Shr 6) - camera.x, (y Shr 6) - camera.y)
 			
-			return drawer.checkEnd()
+			Return drawer.checkEnd()
 		End
 End

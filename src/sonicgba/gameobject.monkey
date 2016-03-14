@@ -141,7 +141,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		
 		' This is a container that's used to pass entries from 'allGameObject'
 		' to the main update routine. There's no allocation needed for sub-containers.
-		Global mainObjectLogicVec:= New Stack<Stack<GameObject>>()
+		Global mainObjectLogicVec:= New Stack<Stack<GameObjectShr()
 		
 		' These two containers are undocumented for now:
 		Global bossObjVec:= New Stack<GameObject>() ' BossObject
@@ -1026,10 +1026,10 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 				Return
 			EndIf
 			
-			startX = centerX - STATE_RACE_MODE
-			startY = centerY - STATE_RACE_MODE
-			endX = centerX + STATE_RACE_MODE
-			endY = centerY + STATE_RACE_MODE
+			startX = centerX - 1
+			startY = centerY - 1
+			endX = centerX + 1
+			endY = centerY + 1
 			
 			If (startX < 0) Then
 				startX = 0
@@ -1168,6 +1168,69 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			Return Self.moveDistance
 		End
 		
+		Method isInCamera:Bool() ' Property
+			Return isInCamera(PlayerObject.BACKGROUND_WIDTH)
+		End
+		
+		Method isInCameraSmaller:Bool()
+			Return isInCamera(0)
+		End
+		
+		Method isFarAwayCamera:Bool()
+			Return (Not isInCamera(ROOM_WIDTH))
+		End
+		
+		Method isInCamera:Bool(offset:Int)
+			Local camera:= MapManager.getCamera()
+			
+			updateScreenRect(camera)
+			
+			Local screen:= screenRect
+			
+			Local convOffset:= (offset Shl 6)
+			
+			screen.x0 -= convOffset
+			screen.x1 += convOffset
+			screen.y0 -= convOffset
+			screen.y1 += convOffset
+			
+			Return Self.collisionRect.collisionChk(screenRect)
+		End
+		
+		Method isInCamera:Bool(width:Int, height:Int)
+			Local camera:= MapManager.getCamera()
+			
+			updateScreenRect(camera)
+			
+			Local screen:= screenRect
+			
+			Local convWidth:= ((width / 2) Shl 6)
+			Local convHeight:= ((height / 2) Shl 6)
+			
+			screen.x0 -= convWidth
+			screen.x1 += convWidth
+			screen.y0 -= convHeight
+			screen.y1 += convHeight
+			
+			return Self.collisionRect.collisionChk(screenRect)
+		End
+		
+		Method isInCameraOnlyWidth:Bool(width:Int)
+			isInCamera(width, STATE_NORMAL_MODE)
+			
+			Return Self.collisionRect.collisionChkWidth(screenRect)
+		End
+		
+		Method isInCameraOnlyHeight:Bool(height:Int)
+			isInCamera(STATE_NORMAL_MODE, height)
+			
+			Return Self.collisionRect.collisionChkWidth(screenRect)
+		End
+		
+		Method isAwayFromCameraInWidth:Bool()
+			Return (Not isInCameraOnlyWidth(MapManager.CAMERA_WIDTH / 2))
+		End
+		
 		Method getGroundY:Int(x:Int, y:Int, layer:Int)
 			For Local I:= 0 Until SEARCH_RANGE ' PlayerObject.TERMINAL_COUNT
 				y += worldInstance.getTileHeight() * AVAILABLE_RANGE
@@ -1216,7 +1279,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			rectH.setRect(objectRect.x0, objectRect.y0 + CHECK_OFFSET, objectRect.getWidth(), objectRect.getHeight() - PlayerSonic.BACK_JUMP_SPEED_X)
 			rectV.setRect(objectRect.x0 + CHECK_OFFSET, objectRect.y0, objectRect.getWidth() - PlayerSonic.BACK_JUMP_SPEED_Y, objectRect.getHeight()) ' BACK_JUMP_SPEED_X
 			
-			return (thisRect.collisionChk(rectH) Or thisRect.collisionChk(rectV));
+			Return (thisRect.collisionChk(rectH) Or thisRect.collisionChk(rectV));
 		End
 		
 		Method onObjectChk:Bool(player:PlayerObject)
@@ -1277,15 +1340,15 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		End
 		
 		Method getBlockRightSide:Int(blockX:Int, blockY:Int)
-			return ((((blockX + 1) Shl SEARCH_COUNT) - 1) Shl 6);
+			Return ((((blockX + 1) Shl SEARCH_COUNT) - 1) Shl 6);
 		End
 		
 		Method getBlockUpSide:Int(blockX:Int, blockY:Int)
-			return ((blockY Shl SEARCH_COUNT) Shl 6)
+			Return ((blockY Shl SEARCH_COUNT) Shl 6)
 		End
 		
 		Method getBlockDownSide(blockX:Int, blockY:Int)
-			return ((((blockY + 1) Shl SEARCH_COUNT) - 1) Shl 6)
+			Return ((((blockY + 1) Shl SEARCH_COUNT) - 1) Shl 6)
 		End
 		
 		Function drawInMap:Void(graphics:MFGraphics, drawer:AnimationDrawer, x:Int, y:Int)
@@ -1316,6 +1379,10 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		' Nothing so far.
 	Protected
 		' Extensions:
+		Method updateScreenRect:Void(camera:Coordinate)
+			screenRect.setRect((camera.x + MapManager.CAMERA_OFFSET_X) Shl 6, (camera.y + MapManager.CAMERA_OFFSET_Y) Shl 6, MapManager.CAMERA_WIDTH Shl 6, MapManager.CAMERA_HEIGHT Shl 6)
+		End
+		
 		Method updateDirection:Int()
 			Local xFirst:Bool
 			
