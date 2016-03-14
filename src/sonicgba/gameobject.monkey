@@ -1009,6 +1009,15 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			EndIf
 		End
 		
+		Function setPlayerPosition:Void(x:Int, y:Int)
+			If (player <> Null) Then
+				Local playerObject:= player
+				
+				playerObject.posX = (x Shl 6)
+				playerObject.posY = (y Shr 6)
+			EndIf
+		End
+		
 		Function initGetAvailableObject:Void(currentObject:GameObject)
 			objectCursor = 0
 			
