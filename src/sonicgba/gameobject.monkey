@@ -900,7 +900,130 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			SmallAnimal.releaseAllResource()
 			PlayerObject.doWhileQuitGame()
 		End
-		
+	Private
+		Function initGetAvailableObject:Void(currentObject:GameObject)
+			objectCursor = 0
+			
+			Local centerX:= ((currentObject.getCheckPositionX() Shr 6) / ROOM_WIDTH)
+			Local centerY:= ((currentObject.getCheckPositionY() Shr 6) / ROOM_HEIGHT) ' ROOM_WIDTH
+			
+			If (centerX < 0 Or centerX >= objVecWidth Or centerY < 0 Or centerY >= objVecHeight) Then
+				Return
+			EndIf
+			
+			startX = centerX - STATE_RACE_MODE
+			startY = centerY - STATE_RACE_MODE
+			endX = centerX + STATE_RACE_MODE
+			endY = centerY + STATE_RACE_MODE
+			
+			If (startX < 0) Then
+				startX = 0
+			EndIf
+			
+			If (startY < 0) Then
+				startY = 0
+			EndIf
+			
+			If (endX >= objVecWidth) Then
+				endX = (objVecWidth - 1)
+			EndIf
+			
+			If (endY >= objVecHeight) Then
+				endY = (objVecHeight - 1)
+			EndIf
+			
+			cursorX = startX
+			cursorY = startY
+			
+			gettingObject = True
+			
+			If (preCenterX = -1 And preCenterY = -1) Then
+				preCenterX  = centerX
+				preCenterY = centerY
+			ElseIf (Not (preCenterX = centerX And preCenterY = centerY)) Then
+				Local I:Int
+				
+				Local objBlockX:Int
+				Local objBlockY:Int
+				
+				Local xOffset:= (centerX - preCenterX)
+				Local yOffset:= (centerY - preCenterY)
+				
+				If (xOffset <> 0) Then
+					If (xOffset > 0) Then
+						xOffset = -2
+					Else
+						xOffset = 2
+					EndIf
+					
+					xOffset += centerX
+					
+					If (xOffset >= 0 && xOffset < objVecWidth) Then
+						For Local yo:= -2 To 2
+							If (centerY + yo >= 0 And centerY + yo < objVecHeight) Then
+								Local current:= allGameObject[xOffset][centerY + yo]
+								
+								For Local I:= 0 Until current.Length
+									Local obj:= current.Get(I)
+									
+									objBlockX = ((obj.getCheckPositionX() Shr 6) / ROOM_WIDTH)
+									objBlockY = ((obj.getCheckPositionY() Shr 6) / ROOM_HEIGHT) ' ROOM_WIDTH
+									
+									If (objBlockX >= 0 And objBlockX < objVecWidth And objBlockX >= 0 And objBlockX < objVecHeight And (Not (objBlockX = xOffset And objBlockY = (centerY + yo)))) Then
+										current.Remove(I)
+										
+										I -= 1
+										
+										allGameObject[objBlockX][objBlockY].Push(obj)
+									EndIf
+								Next
+							EndIf
+						Next
+					Endif
+				EndIf
+				
+				If (yOffset <> 0) Then
+					If (xOffset > 0) Then
+						xOffset = -2
+					Else
+						xOffset = 2
+					EndIf
+					
+					xOffset += centerY
+					
+					If (xOffset >= 0 And xOffset < objVecHeight) Then
+						yOffset = -2
+						
+						For yOffset = -2 To 2
+							If (centerX + yOffset >= 0 And centerX + yOffset < objVecHeight) Then
+								Local current:= allGameObject[centerX + yOffset][xOffset]
+								
+								For Local I:= 0 Until current.Length
+									Local obj:= current.Get(I)
+									
+									objBlockX = ((obj.getCheckPositionX() Shr 6) / ROOM_WIDTH)
+									objBlockY = ((obj.getCheckPositionY() Shr 6) / ROOM_HEIGHT) ' ROOM_WIDTH
+									
+									If (objBlockX >= 0 And objBlockX < objVecWidth And objBlockX >= 0 And objBlockX < objVecHeight And (Not (objBlockX = (centerX + yOffset) And objBlockY = xOffset))) Then
+										current.Remove(I)
+										
+										I -= 1
+										
+										allGameObject[objBlockX][objBlockY].Push(obj)
+									EndIf
+								Next
+							EndIf
+						Next
+					EndIf
+				EndIf
+				
+				preCenterX = centerX
+				preCenterY = centerY
+			EndIf
+			
+			nextCursor()
+		End
+	Public
 		' Constructor(s):
 		Method New()
 			Super.New(CollisionMap.getInstance())
