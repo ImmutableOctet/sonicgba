@@ -943,11 +943,11 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 				Local xOffset:= (centerX - preCenterX)
 				Local yOffset:= (centerY - preCenterY)
 				
-				realignObjects(xOffset, False)
-				realignObjects(xOffset, False, 1, -1)
+				realignObjects(False, xOffset, centerX, centerY, objVecWidth, objVecHeight, -2, 2)
+				realignObjects(False, xOffset, centerX, centerY, objVecWidth, objVecHeight, -1, 1, False)
 				
-				realignObjects()
-				realignObjects()
+				realignObjects(True, (centerY - preCenterY), centerY, centerX, objVecHeight, objVecWidth, -2, 2)
+				realignObjects(True, (centerY - preCenterY), centerY, centerX, objVecHeight, objVecWidth, -1, 1, False)
 				
 				preCenterX = centerX
 				preCenterY = centerY
@@ -955,7 +955,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		End
 	Private
 		' Extensions:
-		Function realignObjects:Void(arrangement:Bool, position:Int, posOffset:Int, seekOffset:Int, bounds:Int, seekBounds:Int, Low:Int=-2, High:Int=2)
+		Function realignObjects:Void(arrangement:Bool, position:Int, posOffset:Int, seekOffset:Int, bounds:Int, seekBounds:Int, Low:Int=-2, High:Int=2, offsetOnAccess:Bool=True)
 			If (position <> 0) Then
 				If (position > 0) Then
 					position = Low
@@ -963,7 +963,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 					position = High
 				EndIf
 				
-				position += offset
+				position += posOffset
 				
 				If (position >= 0 And (position < bounds)) Then
 					For Local opOffset:= -2 To 2
@@ -972,10 +972,18 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 						If ((opPos >= 0 And opPos < seekBounds)) Then
 							Local current:Stack<GameObject>
 							
-							If (Not arrangement) Then
-								current = allGameObject[position][seekOffset + opOffset]
+							Local accessOffset:Int
+							
+							If (offsetOnAccess) Then
+								accessOffset = seekOffset
 							Else
-								current = allGameObject[seekOffset + opOffset][position]
+								accessOffset = 0
+							Endif
+							
+							If (Not arrangement) Then
+								current = allGameObject[position][accessOffset + opOffset]
+							Else
+								current = allGameObject[accessOffset + opOffset][position]
 							Endif
 							
 							For Local I:= 0 Until current.Length
@@ -1043,12 +1051,11 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			gettingObject = True
 			
 			If (preCenterX = -1 And preCenterY = -1) Then
-				preCenterX  = centerX
+				preCenterX = centerX
 				preCenterY = centerY
 			ElseIf (Not (preCenterX = centerX And preCenterY = centerY)) Then
-				
-				realignObjects((centerX - preCenterX), False)
-				realignObjects((centerY - preCenterY), False)
+				realignObjects(False, (centerX - preCenterX), centerX, centerY, objVecWidth, objVecHeight, -2, 2)
+				realignObjects(True, (centerY - preCenterY), centerY, centerX, objVecHeight, objVecWidth, -2, 2)
 				
 				preCenterX = centerX
 				preCenterY = centerY
