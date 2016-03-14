@@ -1398,7 +1398,6 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			Self.preCollisionRect.setTwoPosition(Self.collisionRect.x0, Self.collisionRect.y0, Self.collisionRect.x1, Self.collisionRect.y1)
 		End
 		
-		' UNFINISHED FUNCTION:
 		Method checkWithMap:Void(preX:Int, preY:Int, posX:Int, posY:Int)
 			Local moveDistanceX:= (posX - preX)
 			Local moveDistanceY:= (posY - preY)
@@ -1413,6 +1412,74 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			
 			Local startPointX = preX
 			Local startPointY = preY
+			
+			If (moveDistanceY2 <= 0) Then
+				Return
+			EndIf
+			
+			Local testVal:Int
+			
+			If (xFirst) Then
+				testVal = quaNumX
+			Else
+				testVal = quaNumY
+			EndIf
+			
+			For Local I:= 0 To testVal
+				Local positionX:Int
+				Local positionY:Int
+				
+				If (xFirst) Then
+					positionX = startPointX
+					
+					If (moveDistanceX2 >= 0) Then
+						positionX += (VELOCITY_DIVIDE * I)
+					Else
+						positionX += (-VELOCITY_DIVIDE * I)
+					Endif
+					
+					positionY = (((startPointY * quaNumX) + (moveDistanceY2 * I)) / quaNumX)
+					
+					' Not the most optimal, but it works:
+					If (moveDistanceX2 > 0) Then
+						If (positionX > startPointX + moveDistanceX2) Then
+							positionX = (startPointX + moveDistanceX2)
+							positionY = (startPointY + moveDistanceY2)
+						Endif
+					ElseIf (moveDistanceX2 >= 0) Then
+						positionX = startPointX
+					ElseIf (positionX < startPointX + moveDistanceX2) Then
+						positionX = (startPointX + moveDistanceX2)
+						positionY = (startPointY + moveDistanceY2)
+					Endif
+				Else
+					positionY = startPointY
+					
+					If (moveDistanceY2 >= 0) Then
+						positionY += (VELOCITY_DIVIDE * I)
+					Else
+						positionY += (-VELOCITY_DIVIDE * I)
+					Endif
+					
+					positionX = (((startPointX * quaNumY) + (moveDistanceX2 * I)) / quaNumY)
+					
+					If (positionY > (startPointY + moveDistanceY2)) Then
+						positionX = (startPointX + moveDistanceX2)
+						positionY = (startPointY + moveDistanceY2)
+					EndIf
+				EndIf
+				
+				Local checkY:= getDownCheckPointY(positionX, positionY)
+				Local checkOffset:= (checkY - positionY)
+				Local newPositionY:= downSideCollisionChk(positionX, checkY)
+				
+				If (newPositionY >= 0) Then
+					Self.posY = (newPositionY - checkOffset)
+					Self.posX = positionX
+					
+					Return ' Exit
+				EndIf
+			Next
 		End
 		
 		Method getBlockLeftSide:Int(blockX:Int, blockY:Int)

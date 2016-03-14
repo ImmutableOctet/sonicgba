@@ -61,8 +61,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>1400</Y>
+        <X>18</X>
+        <Y>1479</Y>
       </CursorPos>
       <DocGUID>352702e5-63d3-4b52-8866-bffffab03d55</DocGUID>
       <Bookmarks />
