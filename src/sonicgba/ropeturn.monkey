@@ -20,20 +20,22 @@ Class RopeTurn Extends GimmickObject
 			Self.used = False
 		End
 		
-		Method doWhileRail:Void(var1:PlayerObject, var2:Int)
+		Method doWhileRail:Void(player:PlayerObject, value:Int)
 			' Likely a dynamic cast potential performance hit.
 			' (Potentially unsafe usage if that's true)
-			Local var3:= RopeStart(var1.outOfControlObject)
+			Local start:= RopeStart(player.outOfControlObject)
 			
-			If (var3.degree > 90) Then
-				var3.posX = Self.posX
-				var3.posY = Self.posY
-				
-				var3.turn()
-				
-				Self.used = True
-				
-				Return
+			If (start <> Null) Then
+				If (start.degree > 90) Then
+					start.posX = Self.posX
+					start.posY = Self.posY
+					
+					start.turn()
+					
+					Self.used = True
+					
+					Return
+				EndIf
 			EndIf
 		End
 		

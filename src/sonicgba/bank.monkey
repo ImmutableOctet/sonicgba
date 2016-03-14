@@ -30,13 +30,13 @@ Class Bank Extends GimmickObject
 		' Methods:
 		
 		' This object's type seems to determine if 'var1' will be affected.
-		Method doWhileCollision:Void(var1:PlayerObject, var2:Int)
-			If (var1.onBank) Then
-				var1.onBank = False
-				var1.bankwalking = False
-			ElseIf ((Self.objId = 28 And var2 = 3 Or Self.objId = 29 And var2 = 2) And var1.collisionState = 0) Then
+		Method doWhileCollision:Void(player:PlayerObject, value:Int)
+			If (player.onBank) Then
+				player.onBank = False
+				player.bankwalking = False
+			ElseIf ((Self.objId = 28 And value = 3 Or Self.objId = 29 And value = 2) And player.collisionState = 0) Then
 				Self.touching = True
-				var1.bankwalking = True ' player
+				player.bankwalking = True
 			EndIf
 		End
 		

@@ -32,13 +32,10 @@ Class SeabedVolcanoHurt Extends GimmickObject
 		Field sb:SeabedVolcanoBase
 	Public
 		' Constructor(s):
-		
-		' The 'var1' and 'var2' arguments are likely X and Y coordinates.
-		' The 'var3' argument is held internally as 'sb'.
-		Method New(var1:Int, var2:Int, var3:SeabedVolcanoBase)
-			Super.New(0, var1, var2, 0, 0, 0, 0)
+		Method New(x:Int, y:Int, sb:SeabedVolcanoBase)
+			Super.New(0, x, y, 0, 0, 0, 0)
 			
-			Self.sb = var3
+			Self.sb = sb
 		End
 		
 		' Methods:
@@ -46,24 +43,24 @@ Class SeabedVolcanoHurt Extends GimmickObject
 			Self.sb = Null
 		End
 		
-		Method doWhileCollision:Void(var1:PlayerObject, var2:Int)
-			If (collisionRect.getHeight() <> 0 And Not var1.isFootOnObject(sb.sp))
-				var1.beHurt()
+		Method doWhileCollision:Void(player:PlayerObject, value:Int)
+			If (collisionRect.getHeight() <> 0 And Not player.isFootOnObject(sb.sp))
+				player.beHurt()
 			EndIf
 		End
 		
 		Method refreshCollisionRect:Void(x:Int, y:Int)
-			Local var3:= SeabedVolcanoPlatform.sPosY
+			Local height:= SeabedVolcanoPlatform.sPosY
 			
-			If (var3 > 0) Then
-				var3 = 0
+			If (height > 0) Then
+				height = 0
 			EndIf
 			
-			If (var3 < -COLLISION_HEIGHT) Then
-				var3 = -COLLISION_HEIGHT
+			If (height < -COLLISION_HEIGHT) Then
+				height = -COLLISION_HEIGHT
 			EndIf
 			
 			' This probably takes in something akin to: X, Y, W, H
-			collisionRect.setRect((x - (COLLISION_WIDTH/2)), (var3 + y), COLLISION_WIDTH, Abs(var3)) ' posX ' posY
+			collisionRect.setRect((x - (COLLISION_WIDTH/2)), (height + y), COLLISION_WIDTH, Abs(height)) ' posX ' posY
 		End
 End

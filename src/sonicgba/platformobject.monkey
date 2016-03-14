@@ -10,8 +10,8 @@ Import sonicgba.playerobject
 Class PlatformObject Extends GimmickObject Abstract
 	Protected
 		' Constructor(s):
-		Method New(var1:Int, var2:Int)
-			Super.New(0, var1, var2, 0, 0, 0, 0)
+		Method New(x:Int, y:Int)
+			Super.New(0, x, y, 0, 0, 0, 0)
 		End
 		
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
@@ -19,16 +19,16 @@ Class PlatformObject Extends GimmickObject Abstract
 		End
 	Public
 		' Methods:
-		Method doWhileCollision:Void(var1:PlayerObject, var2:Int)
+		Method doWhileCollision:Void(player:PlayerObject, value:Int)
 			' Using 'Self' explicitly for code clarity:
-			Select var2
+			Select value
 				Case 1
-					var1.beStop(Self.collisionRect.y0, 1, Self)
+					player.beStop(Self.collisionRect.y0, 1, Self)
 					
 					Return
 				Case 4
-					If (var1.getMoveDistance().y > 0 And var1.getCollisionRect().y1 < Self.collisionRect.y1) Then
-						var1.beStop(Self.collisionRect.y0, 1, Self)
+					If (player.getMoveDistance().y > 0 And player.getCollisionRect().y1 < Self.collisionRect.y1) Then
+						player.beStop(Self.collisionRect.y0, 1, Self)
 					EndIf
 				Default ' Case 2, 3
 					' Nothing so far.

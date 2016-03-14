@@ -21,8 +21,8 @@ Class ShipBase Extends PlatformObject
 		' Constructor(s):
 		
 		' These two arguments are likely X and Y coordinates.
-		Method New(var1:Int, var2:Int)
-			Super.New(var1, var2)
+		Method New(x:Int, y:Int)
+			Super.New(x, y)
 			
 			If (shipBaseImage = Null) Then
 				shipBaseImage = MFImage.createImage("/gimmick/ship_base.png")

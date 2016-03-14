@@ -16,13 +16,13 @@ Class RopeEnd Extends GimmickObject
 		End
 	Public
 		' Methods:
-		Method doWhileRail:Void(p:PlayerObject, var2:Int) ' player:PlayerObject
-			If (Not p.outOfControl) Then
+		Method doWhileRail:Void(player:PlayerObject, value:Int) ' player:PlayerObject
+			If (Not player.outOfControl) Then
 				Return
 			EndIf
 			
 			' Dynamic cast potential point of optimization.
-			Local start:= RopeStart(p.outOfControlObject)
+			Local start:= RopeStart(player.outOfControlObject)
 			
 			' If 'start' is available, mark the start point:
 			If (start <> Null) Then
@@ -31,17 +31,17 @@ Class RopeEnd Extends GimmickObject
 			EndIf
 			
 			' This could probably be optimized, but it works well enough:
-			If (p.getFootPositionX() < Self.posX) Then
-				p.setFootPositionX(Self.posX)
+			If (player.getFootPositionX() < Self.posX) Then
+				player.setFootPositionX(Self.posX)
 			EndIf
 			
-			p.setFootPositionY(Self.collisionRect.y1)
+			player.setFootPositionY(Self.collisionRect.y1)
 			
-			p.outOfControl = False
-			p.setCollisionState(1)
-			p.stopMove()
-			p.collisionChkBreak = True
-			p.railing = False
+			player.outOfControl = False
+			player.setCollisionState(1)
+			player.stopMove()
+			player.collisionChkBreak = True
+			player.railing = False
 		End
 		
 		Method refreshCollisionRect:Void(x:Int, y:Int)

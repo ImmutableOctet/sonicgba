@@ -60,14 +60,19 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		Const INIT_DISTANCE:= 14720
 		
 		' Load:
-		Const LOAD_CONTENT:=					1
-		Const LOAD_END:=						2
-		Const LOAD_INDEX_ENEMY:=				2
-		Const LOAD_INDEX_GIMMICK:=				0
-		Const LOAD_INDEX_ITEM:=					3
-		Const LOAD_INDEX_RING:=					1
-		Const LOAD_NUM_IN_ONE_LOOP:=			20
-		Const LOAD_OPEN_FILE:=					0
+		
+		' Loader steps:
+		Const LOAD_CONTENT:=			1
+		Const LOAD_END:=				2
+		Const LOAD_OPEN_FILE:=			0
+		
+		Const LOAD_NUM_IN_ONE_LOOP:=	20
+		
+		' Loadable object types:
+		Const LOAD_INDEX_GIMMICK:=		0
+		Const LOAD_INDEX_RING:=			1
+		Const LOAD_INDEX_ENEMY:=		2
+		Const LOAD_INDEX_ITEM:=			3
 		
 		' Reactions:
 		Const REACTION_STOP:=		0
@@ -541,10 +546,66 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		Function loadObjectStep:Bool(fileName:String, loadId:Int)
 			Local nextStep:Bool = True
 			
-			Select (loadStep)
-				Case STATE_NORMAL_MODE
-				Case STATE_RACE_MODE
+			'Local ds:Stream = Null
+			
+			Select loadStep
+				Case LOAD_OPEN_FILE
+					ds = FileStream.Open(fileName, "r")
+					
+					If (ds = Null) Then
+						Exit
+					EndIf
+					
+					loadNum = ds.ReadShort()
+					currentLoadIndex = 0
+				Case LOAD_CONTENT
+					If (ds = Null) Then
+						Exit
+					EndIf
+					
+					Try
+						For Local I:= 0 Until loadNum
+							Select loadId
+								Case LOAD_INDEX_GIMMICK
+									loadGimmickByStream(ds)
+								Case LOAD_INDEX_RING
+									loadRingByStream(ds)
+								Case LOAD_INDEX_ENEMY
+									loadEnemyByStream(ds)
+								Case LOAD_INDEX_ITEM
+									loadItemByStream(ds)
+								Default
+									' Nothing so far.
+							End Select
+							
+							currentLoadIndex += 1
+						Next
+						
+						If (currentLoadIndex < loadNum) Then
+							nextStep = False
+							
+							Exit
+						EndIf
+					Catch err:StreamError
+						Exit
+					End Try
+				Case LOAD_END
+					Try
+						ds.Close(); ds = Null
+						
+						loadStep = LOAD_OPEN_FILE
+					Catch err:StreamError
+						'Return False
+					End Try
+					
+					Return True
 			End Select
+			
+			If (nextStep) Then
+				loadStep += 1
+			EndIf
+			
+			Return False
 		End
 		
 		' Constructor(s):
@@ -563,7 +624,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		Method close:Void() Abstract
 		
 		' From what I understand, the second argument is the collision-type.
-		Method doWhileCollision:Void(p:PlayerObject, var2:Int) Abstract
+		Method doWhileCollision:Void(p:PlayerObject, value:Int) Abstract
 		
 		' This is very likely the main update routine.
 		Method logic:Void() Abstract
