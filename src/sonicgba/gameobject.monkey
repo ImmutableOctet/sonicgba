@@ -911,6 +911,10 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			GRAVITY = newParam[10] ' SEARCH_RANGE
 		End
 		
+		Function checkObjWhileMoving_X:Void()
+			
+		End
+		
 		' UNFINISHED FUNCTION:
 		Function checkObjWhileMoving:Void(currentObject:GameObject)
 			Local centerX:Int = ((MapManager.getCamera().x + (MapManager.CAMERA_WIDTH/2)) / 256)
@@ -936,10 +940,105 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 				preCenterX = centerX
 				preCenterY = centerY
 			ElseIf (preCenterX <> centerX Or preCenterY <> centerY) Then
+				Local xOffset:= (centerX - preCenterX)
+				Local yOffset:= (centerY - preCenterY)
 				
+				If (xOffset <> 0) Then
+					Local i:Int
+					
+					If (xOffset > 0) Then
+						-2
+					Else
+						2
+					EndIf
+					
+					i += centerX
+					
+					For Local yo2:= -2 To 2
+						If (centerY + yo2 >= 0 And centerY + yo2 < objVecHeight) Then
+							
+						EndIf
+					Next
+				EndIf
+				
+				If (yOffset <> 0) Then
+					
+				EndIf
+				
+				preCenterX = centerX
+				preCenterY = centerY
 			EndIf
 		End
 	Private
+		Function realignObjects:Void(offset:Int, isVert:Bool)
+			If (offset <> 0) Then
+				If (offset > 0) Then
+					offset = -2
+				Else
+					offset = 2
+				EndIf
+				
+				If (Not isVert) Then
+					offset += centerX
+				Else
+					offset += centerY
+				Endif
+				
+				Local offsetWithinBounds:Bool
+				
+				If (Not isVert) Then
+					offsetWithinBounds = (offset < objVecWidth)
+				Else
+					offsetWithinBounds = (offset < objVecHeight)
+				Endif
+				
+				If (offset >= 0 And offsetWithinBounds) Then
+					For Local opOffset:= -2 To 2
+						Local check:Bool
+						
+						If (Not isVert) Then
+							check = (centerY + opOffset >= 0 And centerY + opOffset < objVecHeight)
+						Else
+							check = (centerX + opOffset >= 0 And centerX + opOffset < objVecWidth)
+						Endif
+						
+						If (check) Then
+							Local current:Stack<GameObject>
+							
+							If (Not isVert) Then
+								current = allGameObject[offset][centerY + opOffset]
+							Else
+								current = allGameObject[centerX + opOffset][offset]
+							Endif
+							
+							For Local I:= 0 Until current.Length
+								Local obj:= current.Get(I)
+								
+								Local objBlockX:= ((obj.getCheckPositionX() Shr 6) / ROOM_WIDTH)
+								Local objBlockY:= ((obj.getCheckPositionY() Shr 6) / ROOM_HEIGHT) ' ROOM_WIDTH
+								
+								Local blockCheck:Bool
+								
+								If (Not isVert) Then
+									blockCheck = (Not (objBlockX = offset And objBlockY = (centerY + opOffset)))
+								Else
+									blockCheck = (Not (objBlockX = (centerX + opOffset) And objBlockY = offset))
+								Endif
+								
+								If (objBlockX >= 0 And objBlockX < objVecWidth And objBlockX >= 0 And objBlockX < objVecHeight And blockCheck) Then
+									current.Remove(I)
+									
+									I -= 1
+									
+									allGameObject[objBlockX][objBlockY].Push(obj)
+								EndIf
+							Next
+						EndIf
+					Next
+				Endif
+			EndIf
+		End
+		
 		Function initGetAvailableObject:Void(currentObject:GameObject)
 			objectCursor = 0
 			
@@ -980,81 +1079,9 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 				preCenterX  = centerX
 				preCenterY = centerY
 			ElseIf (Not (preCenterX = centerX And preCenterY = centerY)) Then
-				Local I:Int
 				
-				Local objBlockX:Int
-				Local objBlockY:Int
-				
-				Local xOffset:= (centerX - preCenterX)
-				Local yOffset:= (centerY - preCenterY)
-				
-				If (xOffset <> 0) Then
-					If (xOffset > 0) Then
-						xOffset = -2
-					Else
-						xOffset = 2
-					EndIf
-					
-					xOffset += centerX
-					
-					If (xOffset >= 0 && xOffset < objVecWidth) Then
-						For Local yo:= -2 To 2
-							If (centerY + yo >= 0 And centerY + yo < objVecHeight) Then
-								Local current:= allGameObject[xOffset][centerY + yo]
-								
-								For Local I:= 0 Until current.Length
-									Local obj:= current.Get(I)
-									
-									objBlockX = ((obj.getCheckPositionX() Shr 6) / ROOM_WIDTH)
-									objBlockY = ((obj.getCheckPositionY() Shr 6) / ROOM_HEIGHT) ' ROOM_WIDTH
-									
-									If (objBlockX >= 0 And objBlockX < objVecWidth And objBlockX >= 0 And objBlockX < objVecHeight And (Not (objBlockX = xOffset And objBlockY = (centerY + yo)))) Then
-										current.Remove(I)
-										
-										I -= 1
-										
-										allGameObject[objBlockX][objBlockY].Push(obj)
-									EndIf
-								Next
-							EndIf
-						Next
-					Endif
-				EndIf
-				
-				If (yOffset <> 0) Then
-					If (xOffset > 0) Then
-						xOffset = -2
-					Else
-						xOffset = 2
-					EndIf
-					
-					xOffset += centerY
-					
-					If (xOffset >= 0 And xOffset < objVecHeight) Then
-						yOffset = -2
-						
-						For yOffset = -2 To 2
-							If (centerX + yOffset >= 0 And centerX + yOffset < objVecHeight) Then
-								Local current:= allGameObject[centerX + yOffset][xOffset]
-								
-								For Local I:= 0 Until current.Length
-									Local obj:= current.Get(I)
-									
-									objBlockX = ((obj.getCheckPositionX() Shr 6) / ROOM_WIDTH)
-									objBlockY = ((obj.getCheckPositionY() Shr 6) / ROOM_HEIGHT) ' ROOM_WIDTH
-									
-									If (objBlockX >= 0 And objBlockX < objVecWidth And objBlockX >= 0 And objBlockX < objVecHeight And (Not (objBlockX = (centerX + yOffset) And objBlockY = xOffset))) Then
-										current.Remove(I)
-										
-										I -= 1
-										
-										allGameObject[objBlockX][objBlockY].Push(obj)
-									EndIf
-								Next
-							EndIf
-						Next
-					EndIf
-				EndIf
+				realignObjects((centerX - preCenterX), False)
+				realignObjects((centerY - preCenterY), False)
 				
 				preCenterX = centerX
 				preCenterY = centerY
