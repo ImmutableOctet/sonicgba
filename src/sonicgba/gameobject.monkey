@@ -943,72 +943,39 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 				Local xOffset:= (centerX - preCenterX)
 				Local yOffset:= (centerY - preCenterY)
 				
-				If (xOffset <> 0) Then
-					Local i:Int
-					
-					If (xOffset > 0) Then
-						-2
-					Else
-						2
-					EndIf
-					
-					i += centerX
-					
-					For Local yo2:= -2 To 2
-						If (centerY + yo2 >= 0 And centerY + yo2 < objVecHeight) Then
-							
-						EndIf
-					Next
-				EndIf
+				realignObjects(xOffset, False)
+				realignObjects(xOffset, False, 1, -1)
 				
-				If (yOffset <> 0) Then
-					
-				EndIf
+				realignObjects()
+				realignObjects()
 				
 				preCenterX = centerX
 				preCenterY = centerY
 			EndIf
 		End
 	Private
-		Function realignObjects:Void(offset:Int, isVert:Bool)
-			If (offset <> 0) Then
-				If (offset > 0) Then
-					offset = -2
+		' Extensions:
+		Function realignObjects:Void(arrangement:Bool, position:Int, posOffset:Int, seekOffset:Int, bounds:Int, seekBounds:Int, Low:Int=-2, High:Int=2)
+			If (position <> 0) Then
+				If (position > 0) Then
+					position = Low
 				Else
-					offset = 2
+					position = High
 				EndIf
 				
-				If (Not isVert) Then
-					offset += centerX
-				Else
-					offset += centerY
-				Endif
+				position += offset
 				
-				Local offsetWithinBounds:Bool
-				
-				If (Not isVert) Then
-					offsetWithinBounds = (offset < objVecWidth)
-				Else
-					offsetWithinBounds = (offset < objVecHeight)
-				Endif
-				
-				If (offset >= 0 And offsetWithinBounds) Then
+				If (position >= 0 And (position < bounds)) Then
 					For Local opOffset:= -2 To 2
-						Local check:Bool
+						Local opPos:= (seekOffset + opOffset)
 						
-						If (Not isVert) Then
-							check = (centerY + opOffset >= 0 And centerY + opOffset < objVecHeight)
-						Else
-							check = (centerX + opOffset >= 0 And centerX + opOffset < objVecWidth)
-						Endif
-						
-						If (check) Then
+						If ((opPos >= 0 And opPos < seekBounds)) Then
 							Local current:Stack<GameObject>
 							
-							If (Not isVert) Then
-								current = allGameObject[offset][centerY + opOffset]
+							If (Not arrangement) Then
+								current = allGameObject[position][seekOffset + opOffset]
 							Else
-								current = allGameObject[centerX + opOffset][offset]
+								current = allGameObject[seekOffset + opOffset][position]
 							Endif
 							
 							For Local I:= 0 Until current.Length
@@ -1019,10 +986,10 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 								
 								Local blockCheck:Bool
 								
-								If (Not isVert) Then
-									blockCheck = (Not (objBlockX = offset And objBlockY = (centerY + opOffset)))
+								If (Not arrangement) Then
+									blockCheck = (Not (objBlockX = position And objBlockY = (seekOffset + opOffset)))
 								Else
-									blockCheck = (Not (objBlockX = (centerX + opOffset) And objBlockY = offset))
+									blockCheck = (Not (objBlockX = (seekOffset + opOffset) And objBlockY = position))
 								Endif
 								
 								If (objBlockX >= 0 And objBlockX < objVecWidth And objBlockX >= 0 And objBlockX < objVecHeight And blockCheck) Then
