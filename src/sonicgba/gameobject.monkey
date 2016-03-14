@@ -516,33 +516,6 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			EndIf
 		End
 		
-		Function addGameObject:Void(object:GameObject, x:Int, y:Int)
-			If (object <> Null) Then
-				Local roomX:= ((x Shr 6) / ROOM_WIDTH)
-				
-				If (roomX >= objVecWidth) Then
-					roomX = (objVecWidth - 1)
-				EndIf
-				
-				Local roomY:= ((y Shr 6) / ROOM_HEIGHT) ' ROOM_WIDTH
-				
-				If (roomY >= objVecHeight) Then
-					roomY = (objVecHeight - 1)
-				EndIf
-				
-				If (roomX > -1) Then
-					allGameObject[roomX][roomY].Push(object)
-				EndIf
-				
-				' Let the object know we need it to update its collision.
-				object.refreshCollisionRect(object.posX, object.posY)
-			EndIf
-		End
-		
-		Function addGameObject:Void(o:GameObject)
-			addGameObject(o, o.posX, o.posY)
-		End
-		
 		Function loadObjectStep:Bool(fileName:String, loadId:Int)
 			Local nextStep:Bool = True
 			
@@ -608,7 +581,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			Return False
 		End
 		
-		Method loadGimmickByStream:Void(ds:Stream)
+		Function loadGimmickByStream:Void(ds:Stream)
 			Try
 				Local x:= ds.ReadShort()
 				Local y:= ds.ReadShort()
@@ -647,7 +620,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			End Try
 		End
 		
-		Method loadRingByStream:Void(ds:Stream)
+		Function loadRingByStream:Void(ds:Stream)
 			Try
 				addGameObject(RingObject.getNewInstance(ds.ReadShort(), ds.ReadShort()))
 			Catch err:StreamError
@@ -655,7 +628,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			End Try
 		End
 		
-		Method loadEnemyByStream:Void(ds:Stream)
+		Function loadEnemyByStream:Void(ds:Stream)
 			Try
 				' Basically the same thing as the 'GimmickObject' version:
 				Local x:= ds.ReadShort()
@@ -695,12 +668,39 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			End Try
 		End
 		
-		Method loadItemByStream:Void(ds:Stream)
+		Function loadItemByStream:Void(ds:Stream)
 			Try
 				addGameObject(ItemObject.getNewInstance(ds.ReadByte(), ds.ReadShort(), ds.ReadShort()))
 			Catch err:StreamError
 				' Nothing so far.
 			End Try
+		End
+		
+		Function addGameObject:Void(object:GameObject, x:Int, y:Int)
+			If (object <> Null) Then
+				Local roomX:= ((x Shr 6) / ROOM_WIDTH)
+				
+				If (roomX >= objVecWidth) Then
+					roomX = (objVecWidth - 1)
+				EndIf
+				
+				Local roomY:= ((y Shr 6) / ROOM_HEIGHT) ' ROOM_WIDTH
+				
+				If (roomY >= objVecHeight) Then
+					roomY = (objVecHeight - 1)
+				EndIf
+				
+				If (roomX > -1) Then
+					allGameObject[roomX][roomY].Push(object)
+				EndIf
+				
+				' Let the object know we need it to update its collision.
+				object.refreshCollisionRect(object.posX, object.posY)
+			EndIf
+		End
+		
+		Function addGameObject:Void(o:GameObject)
+			addGameObject(o, o.posX, o.posY)
 		End
 		
 		' Constructor(s):
