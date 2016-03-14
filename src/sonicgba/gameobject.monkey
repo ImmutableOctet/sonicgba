@@ -524,7 +524,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 					roomX = (objVecWidth - 1)
 				EndIf
 				
-				Local roomY:= ((y Shr 6) / ROOM_WIDTH) ' ROOM_HEIGHT
+				Local roomY:= ((y Shr 6) / ROOM_HEIGHT) ' ROOM_WIDTH
 				
 				If (roomY >= objVecHeight) Then
 					roomY = (objVecHeight - 1)
@@ -610,7 +610,38 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		
 		Method loadGimmickByStream:Void(ds:Stream)
 			Try
+				Local x:= ds.ReadShort()
+				Local y:= ds.ReadShort()
 				
+				Local id:= ds.ReadByte()
+				
+				Local width:= ds.ReadByte()
+				Local height:= ds.ReadByte()
+				
+				Local left:= ds.ReadByte()
+				Local top:= ds.ReadByte()
+				
+				If (x < 0) Then
+					x += ROOM_WIDTH
+				EndIf
+				
+				If (y < 0) Then
+					y += ROOM_HEIGHT ' ROOM_WIDTH
+				EndIf
+				
+				If (width < 0) Then
+					width += ROOM_WIDTH
+				EndIf
+				
+				If (height < 0) Then
+					height += ROOM_HEIGHT ' ROOM_WIDTH
+				EndIf
+				
+				Local gimmick:= GimmickObject.getNewInstance(id, x, y, left, top, width, height)
+				
+				If (gimmick <> Null) Then
+					addGameObject(gimmick)
+				EndIf
 			Catch err:StreamError
 				' Nothing so far.
 			End Try
@@ -618,7 +649,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		
 		Method loadRingByStream:Void(ds:Stream)
 			Try
-				
+				addGameObject(RingObject.getNewInstance(ds.ReadShort(), ds.ReadShort()))
 			Catch err:StreamError
 				' Nothing so far.
 			End Try
@@ -626,7 +657,39 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		
 		Method loadEnemyByStream:Void(ds:Stream)
 			Try
+				' Basically the same thing as the 'GimmickObject' version:
+				Local x:= ds.ReadShort()
+				Local y:= ds.ReadShort()
 				
+				Local id:= ds.ReadByte()
+				
+				Local width:= ds.ReadByte()
+				Local height:= ds.ReadByte()
+				
+				Local left:= ds.ReadByte()
+				Local top:= ds.ReadByte()
+				
+				If (x < 0) Then
+					x += ROOM_WIDTH
+				EndIf
+				
+				If (y < 0) Then
+					y += ROOM_HEIGHT ' ROOM_WIDTH
+				EndIf
+				
+				If (width < 0) Then
+					width += ROOM_WIDTH
+				EndIf
+				
+				If (height < 0) Then
+					height += ROOM_HEIGHT ' ROOM_WIDTH
+				EndIf
+				
+				Local enemy:= EnemyObject.getNewInstance(id, x, y, left, top, width, height)
+				
+				If (enemy <> Null) Then
+					addGameObject(enemy)
+				EndIf
 			Catch err:StreamError
 				' Nothing so far.
 			End Try
@@ -634,7 +697,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		
 		Method loadItemByStream:Void(ds:Stream)
 			Try
-				
+				addGameObject(ItemObject.getNewInstance(ds.ReadByte(), ds.ReadShort(), ds.ReadShort()))
 			Catch err:StreamError
 				' Nothing so far.
 			End Try
