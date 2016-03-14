@@ -917,8 +917,8 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		
 		' UNFINISHED FUNCTION:
 		Function checkObjWhileMoving:Void(currentObject:GameObject)
-			Local centerX:Int = ((MapManager.getCamera().x + (MapManager.CAMERA_WIDTH/2)) / 256)
-			Local centerY:Int = ((MapManager.getCamera().y + (MapManager.CAMERA_HEIGHT/2)) / 256)
+			Local centerX:Int = ((MapManager.getCamera().x + (MapManager.CAMERA_WIDTH/2)) / ROOM_WIDTH)
+			Local centerY:Int = ((MapManager.getCamera().y + (MapManager.CAMERA_HEIGHT/2)) / ROOM_HEIGHT)
 			
 			If (preCenterX = -1 And preCenterY = -1) Then
 				Local xo:= centerX - 1
@@ -955,6 +955,8 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		End
 	Private
 		' Extensions:
+		
+		' This updates which objects are in what segment of the map.
 		Function realignObjects:Void(arrangement:Bool, position:Int, posOffset:Int, seekOffset:Int, bounds:Int, seekBounds:Int, Low:Int=-2, High:Int=2, offsetOnAccess:Bool=True)
 			If (position <> 0) Then
 				If (position > 0) Then
@@ -1092,6 +1094,29 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			nextCursor()
 			
 			Return re
+		End
+		
+		' This locates the map segment 'currentObject' is in, then outputs the area's contents into 'objVec'.
+		Function getGameObjectVecArray:Void(currentObject:GameObject, objVec:Stack<GameObject>)
+			objVec.Clear()
+			
+			Local centerX:Int = ((MapManager.getCamera().x + (MapManager.CAMERA_WIDTH/2)) / ROOM_WIDTH)
+			Local centerY:Int = ((MapManager.getCamera().y + (MapManager.CAMERA_HEIGHT/2)) / ROOM_HEIGHT)
+			
+			If (centerX >= 0 And centerX < objVecWidth And centerY >= 0 And centerY < objVecHeight) Then
+				Local startX:= Max(centerX - 1, 0)
+				Local startY:= Max(centerY - 1, 0)
+				Local endX:= Min(centerX + 1, objVecWidth-1)
+				Local endY:= Min(centerY + 1, objVecHeight-1)
+				
+				If (allGameObject <> Null) Then
+					For Local x:= startX To endX
+						For Local y:= startY To endY
+							objVec.Push(allGameObject[x][y])
+						Next
+					Next
+				EndIf
+			EndIf
 		End
 	Public
 		' Constructor(s):
