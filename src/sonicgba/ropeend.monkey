@@ -16,7 +16,7 @@ Class RopeEnd Extends GimmickObject
 		End
 	Public
 		' Methods:
-		Method doWhileRail:Void(player:PlayerObject, value:Int) ' player:PlayerObject
+		Method doWhileRail:Void(player:PlayerObject, direction:Int) ' player:PlayerObject
 			If (Not player.outOfControl) Then
 				Return
 			EndIf

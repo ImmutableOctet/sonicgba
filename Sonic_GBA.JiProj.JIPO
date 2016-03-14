@@ -25,8 +25,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\changerectregion.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>20</Y>
+        <X>65</X>
+        <Y>22</Y>
       </CursorPos>
       <DocGUID>d79d8980-53da-44f0-9cb5-740c2b48cd4c</DocGUID>
       <Bookmarks />
@@ -89,19 +89,21 @@
       <DocGUID>b704421f-8c69-4b2c-806d-7da22263224c</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\ropeend.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\ropeend.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>48</X>
-        <Y>46</Y>
+        <X>9</X>
+        <Y>18</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>16bcda5e-4125-409b-9bd5-b961a8eecf60</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\ropeturn.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\ropeturn.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>4</X>
-        <Y>29</Y>
+        <X>6</X>
+        <Y>23</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>8e77b4df-b046-40fe-a5f7-27a3aee8f1bd</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\seabedvolcanoasynhurt.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
