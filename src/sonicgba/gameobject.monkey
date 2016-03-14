@@ -62,9 +62,9 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		' Load:
 		
 		' Loader steps:
+		Const LOAD_OPEN_FILE:=			0
 		Const LOAD_CONTENT:=			1
 		Const LOAD_END:=				2
-		Const LOAD_OPEN_FILE:=			0
 		
 		Const LOAD_NUM_IN_ONE_LOOP:=	20
 		
@@ -705,8 +705,54 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			addGameObject(o, o.posX, o.posY)
 		End
 		
+		' This handles the game's collision, including calls to 'collisionChkWithObject'.
+		Function collisionChkWithAllGameObject:Void(player:PlayerObject)
+			Local I:Int
+			Local ring:RingObject
+			Local attackFlag:Bool = False
+			
+			If (player.attackRectVec.Length > 0) Then
+				attackFlag = True
+			EndIf
+			
+			Local objIndex:= 0
+			Local vecIndex:= 0
+			
+			getGameObjectVecArray(player, mainObjectLogicVec)
+			
+			' This isn't exactly readable, but I haven't had the time to use enumerators yet:
+			While (vecIndex < mainObjectLogicVec.Length)
+				Local currentVec:= mainObjectLogicVec.Get(vecIndex)
+				
+				' Check if we're still within the bounds of the current container:
+				If (objIndex < currentVec.Length()) Then
+					Local currentObject:= currentVec.Get(objIndex)
+					
+					CollisionChkWithAllGameObject_HandleObject(player, currentObject, attackFlag)
+					
+					objIndex += 1
+				Else
+					' Go to the next container:
+					objIndex = 0
+					vecIndex += 1
+				EndIf
+			Wend
+			
+			' Check if we have boss objects to work with:
+			If (bossObjVec <> Null) Then
+				' Update all boss objects:
+				For Local O:= EachIn bossObjVec
+					CollisionChkWithAllGameObject_HandleObject(player, O, attackFlag)
+				Next
+			EndIf
+			
+			BulletObject.checkWithAllBullet(player)
+		End
+		
+		' Extensions:
+		
 		' This is a custom routine used to reduce boilerplate.
-		Function collisionChkWithAllGameObject_HandleObject:Void(player:PlayerObject, currentObject:GameObject, attackFlag:Bool)
+		Function CollisionChkWithAllGameObject_HandleObject:Void(player:PlayerObject, currentObject:GameObject, attackFlag:Bool)
 			If (attackFlag) Then
 				For Local animRect:= EachIn player.attackRectVec
 					animRect.collisionChkWithObject(currentObject)
@@ -734,51 +780,126 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			EndIf
 		End
 		
-		' This handles the game's collision, including calls to 'collisionChkWithObject'.
-		Function collisionChkWithAllGameObject:Void(player:PlayerObject)
-			Local I:Int
-			Local ring:RingObject
-			Local attackFlag:Bool = False
-			
-			If (player.attackRectVec.Length > 0) Then
-				attackFlag = True
+		Function closeObject:Void()
+			If (player <> Null) Then
+				player.close()
 			EndIf
 			
-			Local objIndex:= 0
-			Local vecIndex:= 0
-			
-			getGameObjectVecArray(player, mainObjectLogicVec)
-			
-			' This isn't exactly readable, but I haven't had the time to use enumerators yet:
-			While (vecIndex < mainObjectLogicVec.Length)
-				Local currentVec:= mainObjectLogicVec.Get(vecIndex)
-				
-				' Check if we're still within the bounds of the current container:
-				If (objIndex < currentVec.Length()) Then
-					Local currentObject:= currentVec.Get(objIndex)
-					
-					collisionChkWithAllGameObject_HandleObject(player, currentObject, attackFlag)
-					
-					objIndex += 1
-				Else
-					' Go to the next container:
-					objIndex = 0
-					vecIndex += 1
-				EndIf
-			Wend
-			
-			' Check if we have boss objects to work with:
-			If (bossObjVec <> Null) Then
-				' Update all boss objects:
-				For Local O:= EachIn bossObjVec
-					collisionChkWithAllGameObject_HandleObject(player, O, attackFlag)
+			If (allGameObject <> Null) Then
+				' Close every object handle:
+				For Local W:= 0 Until objVecWidth
+					For Local H:= 0 Until objVecHeight
+						Local current:= allGameObject[W][H]
+						
+						For Local O:= EachIn current
+							O.close()
+						Next
+						
+						current.Clear()
+					Next
 				Next
+				
+				' For now, we'll keep the behavior like this.
+				allGameObject = Null
 			EndIf
 			
-			BulletObject.checkWithAllBullet(player)
+			For Local I:= 0 Until paintVec.Length
+				paintVec[I].Clear()
+			Next
+			
+			ReleaseSpecialObjects()
 		End
 		
+		Method closeObject:Void(sameStage:Bool)
+			closeObject()
+			
+			ReleaseStageSpecificResources(sameStage)
+		End
 		
+		Function closeObjectStep:Bool(sameStage:Bool)
+			Local nextStep:Bool = True
+			
+			Select closeStep
+				Case 0 ' LOAD_OPEN_FILE (Release player)
+					If (player <> Null) Then
+						player.close()
+					EndIf
+					
+					currentX = 0
+					currentY = 0
+				Case 1 ' LOAD_CONTENT (Release content)
+					If (allGameObject <> Null) Then
+						nextStep = False
+						
+						For Local J:= 0 Until SEARCH_RANGE
+							Local current:= allGameobject[currentX][currentY]
+							
+							For Local O:= EachIn current
+								O.close()
+							Next
+							
+							current.Clear()
+							
+							currentY += 1
+							
+							If (currentY >= objVecHeight) Then ' objVecWidth
+								currentY = 0
+								currentX += 1
+								
+								If (currentX >= objVecWidth) Then
+									nextStep = True
+									
+									' Not the best strategy, but I'm keeping things accurate.
+									allGameObject = Null
+									
+									Exit
+								EndIf
+							EndIf
+						Next
+					EndIf
+				Case 2 ' LOAD_END (Clear draw-layers)
+					For Local I:= 0 Until paintVec.Length
+						paintVec[I].Clear()
+					Next
+				Case 3 ' <-- Release special objects. (Animals, bullets, etc)
+					ReleaseSpecialObjects()
+				Case 4 ' <-- Release resources.
+					ReleaseStageSpecificResources(sameStage)
+				Case 5 ' <-- Memory cleanup.
+					' INSERT GC CLEANUP CALL HERE.
+				Case 6 ' <-- Final.
+					closeStep = 0 ' LOAD_OPEN_FILE
+					
+					Return True
+			End Select
+			
+			If (nextStep) Then
+				closeStep += 1
+			EndIf
+			
+			Return False
+		End
+		
+		' Extensions:
+		Function ReleaseStageSpecificResources:Void(sameStage:Bool)
+			If (Not sameStage) Then
+				EnemyObject.releaseAllEnemyResource()
+				GimmickObject.releaseAllGimmickResource()
+			EndIf
+		End
+		
+		Function ReleaseSpecialObjects:Void()
+			SmallAnimal.animalClose()
+			BulletObject.bulletClose()
+		End
+		
+		Function quitGameState:Void()
+			closeObject(False)
+			
+			ItemObject.closeItem()
+			SmallAnimal.releaseAllResource()
+			PlayerObject.doWhileQuitGame()
+		End
 		
 		' Constructor(s):
 		Method New()
