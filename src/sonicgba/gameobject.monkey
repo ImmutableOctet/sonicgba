@@ -608,6 +608,38 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			Return False
 		End
 		
+		Method loadGimmickByStream:Void(ds:Stream)
+			Try
+				
+			Catch err:StreamError
+				' Nothing so far.
+			End Try
+		End
+		
+		Method loadRingByStream:Void(ds:Stream)
+			Try
+				
+			Catch err:StreamError
+				' Nothing so far.
+			End Try
+		End
+		
+		Method loadEnemyByStream:Void(ds:Stream)
+			Try
+				
+			Catch err:StreamError
+				' Nothing so far.
+			End Try
+		End
+		
+		Method loadItemByStream:Void(ds:Stream)
+			Try
+				
+			Catch err:StreamError
+				' Nothing so far.
+			End Try
+		End
+		
 		' Constructor(s):
 		Method New()
 			Super.New(CollisionMap.getInstance())
