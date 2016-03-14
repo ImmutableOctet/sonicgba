@@ -900,6 +900,35 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			SmallAnimal.releaseAllResource()
 			PlayerObject.doWhileQuitGame()
 		End
+		
+		' UNFINISHED FUNCTION:
+		Function checkObjWhileMoving:Void(currentObject:GameObject)
+			Local centerX:Int = ((MapManager.getCamera().x + (MapManager.CAMERA_WIDTH/2)) / 256)
+			Local centerY:Int = ((MapManager.getCamera().y + (MapManager.CAMERA_HEIGHT/2)) / 256)
+			
+			If (preCenterX = -1 And preCenterY = -1) Then
+				Local xo:= centerX - 1
+				
+				' From what I understand, this is initializing objects that come into view.
+				' In this case, the loop is accessing the neighboring segments of the map.
+				For Local xo:= (centerX - 1) To (currentX+1)
+					If (xo >= 0 And xo < objVecWidth) Then 
+						For Local yo:= (centerY - 1) To (centerY+1)
+							If (yo >= 0 And yo < objVecHeight) Then 
+								For Local obj:= EachIn allGameObject[xo][yo]
+									obj.doInitWhileInCamera()
+								Next
+							EndIf
+						Next
+					EndIf
+				Next
+				
+				preCenterX = centerX
+				preCenterY = centerY
+			ElseIf (preCenterX <> centerX Or preCenterY <> centerY) Then
+				
+			EndIf
+		End
 	Private
 		Function initGetAvailableObject:Void(currentObject:GameObject)
 			objectCursor = 0
