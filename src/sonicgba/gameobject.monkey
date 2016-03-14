@@ -911,11 +911,6 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			GRAVITY = newParam[10] ' SEARCH_RANGE
 		End
 		
-		Function checkObjWhileMoving_X:Void()
-			
-		End
-		
-		' UNFINISHED FUNCTION:
 		Function checkObjWhileMoving:Void(currentObject:GameObject)
 			Local centerX:Int = ((MapManager.getCamera().x + (MapManager.CAMERA_WIDTH/2)) / ROOM_WIDTH)
 			Local centerY:Int = ((MapManager.getCamera().y + (MapManager.CAMERA_HEIGHT/2)) / ROOM_HEIGHT)
