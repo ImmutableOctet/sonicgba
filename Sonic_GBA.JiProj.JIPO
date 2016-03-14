@@ -59,8 +59,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>903</Y>
+        <X>50</X>
+        <Y>1155</Y>
       </CursorPos>
       <DocGUID>352702e5-63d3-4b52-8866-bffffab03d55</DocGUID>
       <Bookmarks />
@@ -79,12 +79,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\platformobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\platformobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>5</X>
-        <Y>26</Y>
+        <X>16</X>
+        <Y>29</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>b704421f-8c69-4b2c-806d-7da22263224c</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ropeend.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>

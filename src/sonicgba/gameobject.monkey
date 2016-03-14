@@ -901,6 +901,16 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			PlayerObject.doWhileQuitGame()
 		End
 		
+		Function checkPaintNecessary:Bool(obj:GameObject)
+			Return obj.isInCamera()
+		End
+		
+		Function setNewParam:Void(newParam:Int[])
+			PlayerObject.setNewParam(newParam)
+			
+			GRAVITY = newParam[10] ' SEARCH_RANGE
+		End
+		
 		' UNFINISHED FUNCTION:
 		Function checkObjWhileMoving:Void(currentObject:GameObject)
 			Local centerX:Int = ((MapManager.getCamera().x + (MapManager.CAMERA_WIDTH/2)) / 256)
@@ -1052,6 +1062,36 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			
 			nextCursor()
 		End
+		
+		Function nextCursor:Void()
+			While (gettingObject And objectCursor >= allGameObject[cursorX][cursorY].Length)
+				objectCursor = 0
+				cursorX += 1
+				
+				If (cursorX > endX) Then
+					cursorX = startX
+					
+					cursorY += 1
+					
+					If (cursorY > endY) Then
+						gettingObject = False
+					EndIf
+				EndIf
+			Wend
+		End
+		
+		Function getAvailableObject:GameObject()
+			If (Not gettingObject) Then
+				Return Null
+			Endif
+			
+			Local re:= allGameObject[cursorX][cursorY].Get(objectCursor)
+			
+			objectCursor += 1
+			nextCursor()
+			
+			Return re
+		End
 	Public
 		' Constructor(s):
 		Method New()
@@ -1084,5 +1124,82 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		' Methods (Implemented):
 		Method getObjectId:Int()
 			Return objId
+		End
+		
+		Method getCollisionRect:CollisionRect()
+			Return Self.collisionRect
+		End
+		
+		Method getCheckPositionX:Int()
+			Return Self.posX
+		End
+		
+		Method getCheckPositionY:Int()
+			Return Self.posY
+		End
+		
+		Method getMoveDistance:Coordinate()
+			Return Self.moveDistance
+		End
+		
+		Method getGroundY:Int(x:Int, y:Int, layer:Int)
+			For Local I:= 0 Until SEARCH_RANGE ' PlayerObject.TERMINAL_COUNT
+				y += worldInstance.getTileHeight() ' * 1
+				
+				Local re:= worldInstance.getWorldY(x, y, layer, 1)
+				
+				If (re <> ACParam.NO_COLLISION) Then
+					Return re
+				EndIf
+			Next
+			
+			' When in doubt, use our existing Y coordinate.
+			Return y
+		End
+		
+		Method getGroundY:Int(x:Int, y:Int)
+			Local responseA:= getGroundY(x, y, 0)
+			Local responseB:= getGroundY(x, y, 1)
+			
+			' If we're not touching anything, we're obviously still at 'y'.
+			If (responseA = ACParam.NO_COLLISION And responseB = ACParam.NO_COLLISION) Then
+				Return y
+			Endif
+			
+			' If no collision occurred, give the opposite response:
+			If (responseA = ACParam.NO_COLLISION) Then
+				Return responseB
+			EndIf
+			
+			If (responseB = ACParam.NO_COLLISION) Then
+				Return responseA
+			Endif
+			
+			' We've got both responses, check which is lower:
+			If (responseA < responseB) Then
+				Return responseA
+			EndIf
+			
+			Return responseB
+		End
+		
+		Method collisionChkWithObject:Bool(player:PlayerObject)
+			Local objectRect:= player.getCollisionRect()
+			Local thisRect:= getCollisionRect()
+			
+			rectH.setRect(objectRect.x0, objectRect.y0 + CHECK_OFFSET, objectRect.getWidth(), objectRect.getHeight() - PlayerSonic.BACK_JUMP_SPEED_X)
+			rectV.setRect(objectRect.x0 + CHECK_OFFSET, objectRect.y0, objectRect.getWidth() - PlayerSonic.BACK_JUMP_SPEED_Y, objectRect.getHeight()) ' BACK_JUMP_SPEED_X
+			
+			return (thisRect.collisionChk(rectH) Or thisRect.collisionChk(rectV));
+		End
+		
+		Method onObjectChk:Bool(player:PlayerObject)
+			Local objectRect:= player.getCollisionRect()
+			Local thisRect:= getCollisionRect()
+			
+			rectH.setRect(objectRect.x0, objectRect.y0 + CHECK_OFFSET, objectRect.getWidth(), objectRect.getHeight() - PlayerSonic.BACK_JUMP_SPEED_X)
+			rectV.setRect(objectRect.x0 + CHECK_OFFSET, objectRect.y0, objectRect.getWidth() - PlayerSonic.BACK_JUMP_SPEED_X, objectRect.getHeight())
+			
+			Return thisRect.collisionChk(rectV)
 		End
 End
