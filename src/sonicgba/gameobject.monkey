@@ -1398,6 +1398,23 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			Self.preCollisionRect.setTwoPosition(Self.collisionRect.x0, Self.collisionRect.y0, Self.collisionRect.x1, Self.collisionRect.y1)
 		End
 		
+		' UNFINISHED FUNCTION:
+		Method checkWithMap:Void(preX:Int, preY:Int, posX:Int, posY:Int)
+			Local moveDistanceX:= (posX - preX)
+			Local moveDistanceY:= (posY - preY)
+			
+			Local moveDistanceX2:= moveDistanceX
+			Local moveDistanceY2:= moveDistanceY
+			
+			Local quaNumX:= (((Abs(moveDistanceX2) + VELOCITY_DIVIDE) - 1) / VELOCITY_DIVIDE)
+			Local quaNumY:= (((Abs(moveDistanceY2) + VELOCITY_DIVIDE) - 1) / VELOCITY_DIVIDE)
+			
+			Local xFirst:Bool = (quaNumX > quaNumY)
+			
+			Local startPointX = preX
+			Local startPointY = preY
+		End
+		
 		Method getBlockLeftSide:Int(blockX:Int, blockY:Int)
 			Return ((blockX Shl SEARCH_COUNT) Shl 6)
 		End
