@@ -728,7 +728,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 				If (objIndex < currentVec.Length()) Then
 					Local currentObject:= currentVec.Get(objIndex)
 					
-					CollisionChkWithAllGameObject_HandleObject(player, currentObject, attackFlag)
+					collisionChkWithAllGameObject_HandleObject(player, currentObject, attackFlag)
 					
 					objIndex += 1
 				Else
@@ -742,7 +742,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			If (bossObjVec <> Null) Then
 				' Update all boss objects:
 				For Local O:= EachIn bossObjVec
-					CollisionChkWithAllGameObject_HandleObject(player, O, attackFlag)
+					collisionChkWithAllGameObject_HandleObject(player, O, attackFlag)
 				Next
 			EndIf
 			
@@ -750,9 +750,20 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		End
 		
 		' Extensions:
+		Function releaseStageSpecificResources:Void(sameStage:Bool)
+			If (Not sameStage) Then
+				EnemyObject.releaseAllEnemyResource()
+				GimmickObject.releaseAllGimmickResource()
+			EndIf
+		End
+		
+		Function releaseSpecialObjects:Void()
+			SmallAnimal.animalClose()
+			BulletObject.bulletClose()
+		End
 		
 		' This is a custom routine used to reduce boilerplate.
-		Function CollisionChkWithAllGameObject_HandleObject:Void(player:PlayerObject, currentObject:GameObject, attackFlag:Bool)
+		Function collisionChkWithAllGameObject_HandleObject:Void(player:PlayerObject, currentObject:GameObject, attackFlag:Bool)
 			If (attackFlag) Then
 				For Local animRect:= EachIn player.attackRectVec
 					animRect.collisionChkWithObject(currentObject)
@@ -807,13 +818,13 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 				paintVec[I].Clear()
 			Next
 			
-			ReleaseSpecialObjects()
+			releaseSpecialObjects()
 		End
 		
 		Method closeObject:Void(sameStage:Bool)
 			closeObject()
 			
-			ReleaseStageSpecificResources(sameStage)
+			releaseStageSpecificResources(sameStage)
 		End
 		
 		Function closeObjectStep:Bool(sameStage:Bool)
@@ -862,9 +873,9 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 						paintVec[I].Clear()
 					Next
 				Case 3 ' <-- Release special objects. (Animals, bullets, etc)
-					ReleaseSpecialObjects()
+					releaseSpecialObjects()
 				Case 4 ' <-- Release resources.
-					ReleaseStageSpecificResources(sameStage)
+					releaseStageSpecificResources(sameStage)
 				Case 5 ' <-- Memory cleanup.
 					' INSERT GC CLEANUP CALL HERE.
 				Case 6 ' <-- Final.
@@ -878,19 +889,6 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			EndIf
 			
 			Return False
-		End
-		
-		' Extensions:
-		Function ReleaseStageSpecificResources:Void(sameStage:Bool)
-			If (Not sameStage) Then
-				EnemyObject.releaseAllEnemyResource()
-				GimmickObject.releaseAllGimmickResource()
-			EndIf
-		End
-		
-		Function ReleaseSpecialObjects:Void()
-			SmallAnimal.animalClose()
-			BulletObject.bulletClose()
 		End
 		
 		Function quitGameState:Void()
