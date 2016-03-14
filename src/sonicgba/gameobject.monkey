@@ -1289,7 +1289,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		End
 		
 		Function drawInMap:Void(graphics:MFGraphics, drawer:AnimationDrawer, x:Int, y:Int)
-			drawer.draw(graphics, (x >> 6) - camera.x, (y >> 6) - camera.y);
+			drawer.draw(graphics, (x Shr 6) - camera.x, (y Shr 6) - camera.y);
 		End
 		
 		Function drawInMap:Void(graphics:MFGraphics, drawer:AnimationDrawer)
@@ -1297,7 +1297,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		End
 		
 		Function drawInMap:Void(graphics:MFGraphics, image:MFImage, x:Int, y:Int, anchor:Int)
-			MyAPI.drawImage(graphics, image, (x >> 6) - camera.x, (y >> 6) - camera.y, anchor);
+			MyAPI.drawImage(graphics, image, (x Shr 6) - camera.x, (y Shr 6) - camera.y, anchor);
 		End
 		
 		Function drawInMap:Void(graphics:MFGraphics, image:MFImage, anchor:Int)
@@ -1305,7 +1305,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		End
 		
 		Function drawInMap:Void(graphics:MFGraphics, image:MFImage, srcX:Int, srcY:Int, width:Int, height:Int, trans:Int, x:Int, y:Int, anchor:Int)
-			MyAPI.drawRegion(graphics, image, srcX, srcY, width, height, trans, (x >> 6) - camera.x, (y >> 6) - camera.y, anchor);
+			MyAPI.drawRegion(graphics, image, srcX, srcY, width, height, trans, (x Shr 6) - camera.x, (y Shr 6) - camera.y, anchor);
 		End
 		
 		Function drawInMap:Void(graphics:MFGraphics, image:MFImage, srcX:Int, srcY:Int, width:Int, height:Int, trans:Int, anchor:Int)
