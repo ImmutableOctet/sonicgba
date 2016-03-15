@@ -80,13 +80,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>1</X>
-        <Y>12</Y>
+        <X>11</X>
+        <Y>1528</Y>
       </CursorPos>
-      <DocGUID>ae607fcc-d871-4068-950f-9dc06858f472</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\mapbehavior.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -120,27 +119,26 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ropeend.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>1</X>
-        <Y>13</Y>
+        <X>2</X>
+        <Y>18</Y>
       </CursorPos>
       <DocGUID>53ea5c36-28ce-4ad6-9a33-b09b168f1adf</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ropestart.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>48</X>
-        <Y>36</Y>
+        <X>3</X>
+        <Y>114</Y>
       </CursorPos>
       <DocGUID>c90a57c6-58f5-430e-90fc-ebbfb09a136d</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\ropeturn.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\ropeturn.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>41</X>
-        <Y>16</Y>
+        <X>17</X>
+        <Y>37</Y>
       </CursorPos>
-      <DocGUID>07d86ed6-2702-4935-acd9-93b1e7a4218f</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\seabedvolcanoasynhurt.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>

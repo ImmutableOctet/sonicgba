@@ -35,7 +35,7 @@ Class RopeStart Extends GimmickObject
 	    Global hookImage2:MFImage
 		
 		' This variable should be considered constant.
-		Global DEGREE:= crlFP32.actTanDegree(1, 2)
+		Global DEGREE:Int = crlFP32.actTanDegree(1, 2)
 		
 		' Fields:
     	Field controlling:Bool
@@ -45,4 +45,129 @@ Class RopeStart Extends GimmickObject
     	Field posOriginalY:Int
 		
     	Field velocity:Int
+	Protected
+		' Constructor(s):
+		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
+			Super.New(id, x, y, left, top, width, height)
+			
+			Self.initFlag = False
+			
+			If (StageManager.getCurrentZoneId() = 4) Then
+				If (hookImage2 = Null) Then
+					hookImage2 = MFImage.createImage("/gimmick/hook_4.png")
+				Endif
+			ElseIf (hookImage = Null) Then
+				hookImage = MFImage.createImage("/gimmick/hook.png")
+			Endif
+			
+			Self.used = False
+			Self.controlling = False
+			Self.initFlag = False
+			
+			If (Self.iLeft = 0) Then
+				Self.degree = (10 - DEGREE) ' GameState.DEGREE_VELOCITY
+			Else
+				Self.degree = DEGREE
+			Endif
+			
+			Self.posOriginalX = Self.posX
+			Self.posOriginalY = Self.posY
+		End
+	Public
+		' Methods:
+		Method getPaintLayer:Int()
+			Return DEGREE
+		End
+		
+		Method draw:Void(graphics:MFGraphics)
+			If (Not initFlag) Then
+				If (StageManager.getCurrentZoneId() = 4) Then
+					drawInMap(graphics, hookImage2, DEGREE, DEGREE, DRAW_WIDTH, DRAW_HEIGHT, DEGREE, posX, posY, 17)
+					
+					Return
+				EndIf
+				
+				drawInMap(graphics, hookImage, DEGREE, DEGREE, DRAW_WIDTH, DRAW_HEIGHT, DEGREE, posX, posY, 17)
+			EndIf
+		End
+		
+		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
+			If (Not initFlag) Then
+				If (Not used) Then
+					velocity = Abs(player.getVelX())
+					
+					isGotRings = False
+					used = True
+					controlling = True
+					
+					player.setOutOfControl(Self)
+					player.railing = True
+					player.setCollisionState(1)
+					player.faceDirection = True
+					
+					' Magic number: Not sure what this is.
+					player.doPullMotion(Self.posX, Self.posY + 1408)
+				Endif
+			Endif
+		End
+		
+		Method logic:Void()
+			If (Self.initFlag) Then
+				refreshCollisionRect(Self.posX, Self.posY)
+			
+				If (Not screenRect.collisionChk(Self.collisionRect)) Then
+					Self.initFlag = False
+				Endif
+			Else
+				Local sDegree:= Sin(Self.degree)
+			
+				If (player.outOfControl And player.outOfControlObject = Self) Then
+					Self.velocity += ((GRAVITY * sDegree) / 100)
+			
+					If (Self.velocity > 0) Then
+						Self.velocity -= 30
+			
+						If (Self.velocity < 0) Then
+							Self.velocity = DEGREE
+						Endif
+					Endif
+			
+					If (Self.velocity < 0) Then
+						Self.velocity += 30
+			
+						If (Self.velocity > 0) Then
+							Self.velocity = DEGREE
+						Endif
+					Endif
+			
+					Local cDegree:= Cos(Self.degree)
+			
+					Local newVelX:= ((Self.velocity * cDegree) / 100)
+					Local newVelY:= ((Self.velocity * sDegree) / 100)
+			
+					Self.posX += newVelX
+					Self.posY += newVelY
+			
+					refreshCollisionRect(Self.posX, Self.posY)
+			
+					If (player.outOfControl) Then
+						Local preX:= player.getFootPositionX()
+						Local preY:= player.getFootPositionY()
+			
+						' Magic number: Not sure what this is.
+						player.doPullMotion(Self.posX, Self.posY + 1408)
+			
+						player.setVelX(newVelX)
+						player.setVelY(newVelY)
+			
+						player.checkWithObject(preX, preY, player.getFootPositionX(), player.getFootPositionY())
+			
+						If (Not isGotRings) Then
+							' Magic number: Not sure what this is.
+							SoundSystem.getInstance().playSequenceSe(50)
+						Endif
+					Endif
+				Endif
+			Endif
+		End
 End

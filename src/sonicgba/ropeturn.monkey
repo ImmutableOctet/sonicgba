@@ -45,8 +45,6 @@ Class RopeTurn Extends GimmickObject
 		End
 		
 		Method refreshCollisionRect:Void(x:Int, y:Int)
-			' Most likely centered with a width of 1024, and a height of 2560.
-			' Not completely sure, but it seems like a safe bet.
 			collisionRect.setRect(x - (COLLISION_WIDTH/2), y, COLLISION_WIDTH, COLLISION_HEIGHT)
 			
 			Return
