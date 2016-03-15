@@ -13,6 +13,9 @@ Private
 	Import monkey.stack
 	
 	Import sonicgba.moveobject
+	Import sonicgba.playerobject
+	
+	' INSERT BULLET TYPE IMPORTS HERE
 Public
 
 ' Classes:
@@ -49,11 +52,24 @@ Class BulletObject Extends MoveObject Abstract
 		Const BULLET_ROBOT:= 17
 		
 		' Global variable(s):
+		
+		' Animations:
 		Global batbulletAnimation:Animation
 		Global beebulletAnimation:Animation
 		Global boomAnimation:Animation
 		Global boss6bulletAnimation:Animation
 		Global bossf3bombAnimation:Animation
+		
+		Global doublegravityflashbulletAnimation:Animation
+		Global laserAnimation:Animation
+		Global lizardbulletAnimation:Animation
+		Global mirabulletAnimation:Animation
+		Global missileAnimation:Animation
+		Global monkeybulletAnimation:Animation
+		Global pacmanAnimation:Animation
+		Global penguinbulletAnimation:Animation
+		Global robotbulletAnimation:Animation
+		Global stoneAnimation:Animation
 		
 		' Fields:
 		Field drawer:AnimationDrawer
@@ -66,10 +82,10 @@ Class BulletObject Extends MoveObject Abstract
 		' This is used to toggle destruction upon hitting something.
 		Field hitAndDestroy:Bool
 		
-		' Presumably, this is used to detect when the bullet hit something.
-		Field hitted:Bool ' <-- Yes, that's what it's named.
+		' This reflects whether this bullet has hit something.
+		Field hit:Bool
 		
-		Field inCamera:Bool
+		Field hasBeenInCamera:Bool
 	Public
 		' Functions:
 		Function addBullet:Void(Id:Int, x:Int, y:Int, velX:Int, velY:Int)
@@ -118,9 +134,110 @@ Class BulletObject Extends MoveObject Abstract
 			Endif
 		End
 		
+		Function bulletLogicAll:Void()
+			For Local I:= 0 Until bulletVec.Length
+				Local bullet:= bulletVec.Get(I)
+				
+				If (bullet.chkDestroy()) Then
+					bulletVec.Remove(I)
+					
+					I -= 1
+				ElseIf (GameObject.checkPaintNecessary(bullet)) Then
+					paintVec[bullet.getPaintLayer()].Push(bullet)
+				EndIf
+			Next
+		End
+		
+		Function checkWithAllBullet:Void(player:PlayerObject)
+			For Local I:= 0 Until bulletVec.Length
+				Local bullet:= bulletVec.Get(I)
+				
+				If (bullet.collisionChkWithObject(player)) Then
+					bullet.doWhileCollisionWrap(player)
+				Else
+					bullet.doWhileNoCollision()
+				EndIf
+				
+				If (bullet.chkDestroy()) Then
+					bulletVec.Remove(I)
+					
+					I -= 1
+				EndIf
+			Next
+		End
+		
+		Function bulletClose:Void()
+			beebulletAnimation = Null
+			monkeybulletAnimation = Null
+			doublegravityflashbulletAnimation = Null
+			lizardbulletAnimation = Null
+			batbulletAnimation = Null
+			missileAnimation = Null
+			boomAnimation = Null
+			mirabulletAnimation = Null
+			robotbulletAnimation = Null
+			penguinbulletAnimation = Null
+			boss6bulletAnimation = Null
+			bossf3bombAnimation = Null
+			stoneAnimation = Null
+			laserAnimation = Null
+			pacmanAnimation = Null
+			
+			For Local bullet:= EachIn bulletVec
+				bullet.close()
+			Next
+			
+			bulletVec.Clear()
+		End
+	Protected
+		' Constructor(s):
+		Method New(x:Int, y:Int, velX:Int, velY:Int, hitDestroy:Bool)
+			Self.posX = x
+			Self.posY = y
+			
+			Self.velX = velX
+			Self.velY = velY
+			
+			Self.hitAndDestroy = hitAndDestroy
+			
+			refreshCollisionRect(Self.posX, Self.posY) ' x, y
+		End
+	Public
 		' Methods (Abstract):
 		Method bulletLogic:Void() Abstract
 		
 		' Methods (Implemented):
-		' Nothing so far.
+		Method IsHit:Bool() ' Property
+			Return Self.hit
+		End
+		
+		Method logic:Void()
+			If (Not hasBeenInCamera And isInCamera()) Then
+				hasBeenInCamera = True
+			EndIf
+		End
+		
+		Method chkDestroy:Bool()
+			Return ((hasBeenInCamera And Not isInCamera()) Or isFarAwayCamera() Or (hitAndDestroy And IsHit()))
+		End
+		
+		Method doWhileCollision:Void(p:PlayerObject, direction:Int)
+			If (p.canBeHurt()) Then ' p = player
+				p.beHurt()
+				
+				Self.hit = True
+			EndIf
+		End
+		
+		Method close:Void()
+			Self.drawer = Null
+		End
+		
+		Method doBeforeCollisionCheck:Void()
+			' Empty implementation.
+		End
+		
+		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
+			' Empty implementation.
+		End
 End

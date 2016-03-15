@@ -45,8 +45,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bulletobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>18</X>
-        <Y>79</Y>
+        <X>26</X>
+        <Y>240</Y>
       </CursorPos>
       <DocGUID>08613670-768f-4ba1-8faf-f2287ef1c738</DocGUID>
       <Bookmarks />
@@ -88,8 +88,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>1174</Y>
+        <X>2</X>
+        <Y>1141</Y>
       </CursorPos>
       <DocGUID>62e80fbd-a8f5-4396-ba8a-b38d0187c047</DocGUID>
       <Bookmarks />
