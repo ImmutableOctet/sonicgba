@@ -15,10 +15,18 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\basicbullet.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>25</X>
+        <Y>28</Y>
+      </CursorPos>
+      <DocGUID>63eea65c-361d-4815-95f6-7de25d18f7cc</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\beebullet.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>78</X>
-        <Y>41</Y>
+        <X>1</X>
+        <Y>8</Y>
       </CursorPos>
       <DocGUID>8dd404f1-19eb-4de8-a152-35c0409f49f8</DocGUID>
       <Bookmarks />
@@ -81,8 +89,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\mirabullet.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>5</X>
-        <Y>26</Y>
+        <X>3</X>
+        <Y>29</Y>
       </CursorPos>
       <DocGUID>013ce95c-19c2-4265-a890-3b644c239a73</DocGUID>
       <Bookmarks />
