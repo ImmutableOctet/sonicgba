@@ -3,10 +3,12 @@ Strict
 Public
 
 ' Imports:
-Import lib.animation
-Import lib.animationdrawer
-
-Import com.sega.mobile.framework.device.mfgraphics
+Private
+	Import lib.animation
+	Import lib.animationdrawer
+	
+	Import com.sega.mobile.framework.device.mfgraphics
+Public
 
 ' Classes:
 Class TutorialPoint Extends GimmickObject

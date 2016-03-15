@@ -10,12 +10,14 @@ Public
 #End
 
 ' Imports:
-Import monkey.math
-
-Import sonicgba.gimmickobject
-Import sonicgba.playerobject
-Import sonicgba.seabedvolcanoasynbase
-Import sonicgba.seabedvolcanoasynplatform
+Private
+	Import monkey.math
+	
+	Import sonicgba.gimmickobject
+	Import sonicgba.playerobject
+	Import sonicgba.seabedvolcanoasynbase
+	Import sonicgba.seabedvolcanoasynplatform
+Public
 
 ' Classes:
 Class SeabedVolcanoAsynHurt Extends GimmickObject
@@ -56,7 +58,6 @@ Class SeabedVolcanoAsynHurt Extends GimmickObject
 				height = -COLLISION_HEIGHT
 			EndIf
 			
-			' This probably takes in something akin to: X, Y, W, H
 			collisionRect.setRect((x - (COLLISION_WIDTH/2)), (height + y), COLLISION_WIDTH, Abs(height)) ' posX ' posY
 		End
 End

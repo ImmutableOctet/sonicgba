@@ -3,7 +3,9 @@ Strict
 Public
 
 ' Imports:
-Import gameengine.def
+Private
+	Import gameengine.def
+Public
 
 ' Interfaces:
 Interface SonicDef Extends Def

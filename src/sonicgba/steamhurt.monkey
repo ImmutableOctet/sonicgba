@@ -8,12 +8,14 @@ Public
 #End
 
 ' Imports:
-Import monkey.math
-
-Import sonicgba.gimmickobject
-Import sonicgba.playerobject
-Import sonicgba.steambase
-Import sonicgba.steamplatform
+Private
+	Import monkey.math
+	
+	Import sonicgba.gimmickobject
+	Import sonicgba.playerobject
+	Import sonicgba.steambase
+	Import sonicgba.steamplatform
+Public
 
 ' Classes:
 Class SteamHurt Extends GimmickObject

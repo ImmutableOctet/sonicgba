@@ -6,7 +6,6 @@ Public
 Private
 	Import lib.myapi
 	Import lib.soundsystem
-	Import lib.crlfp32
 	
 	Import special.specialmap
 	
@@ -35,7 +34,7 @@ Class RopeStart Extends GimmickObject
 	    Global hookImage2:MFImage
 		
 		' This variable should be considered constant.
-		Global DEGREE:Int = crlFP32.actTanDegree(1, 2)
+		Global DEGREE:Int = ATan2(1, 2)
 		
 		' Fields:
     	Field controlling:Bool

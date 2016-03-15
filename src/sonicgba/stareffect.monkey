@@ -3,14 +3,16 @@ Strict
 Public
 
 ' Imports:
-Import lib.animation
-Import lib.animationdrawer
-
-Import sonicgba.gameobject
-Import sonicgba.mapmanager
-Import sonicgba.sonicdef
-
-Import com.sega.mobile.framework.device.mfgraphics
+Private
+	Import lib.animation
+	Import lib.animationdrawer
+	
+	Import sonicgba.gameobject
+	Import sonicgba.mapmanager
+	Import sonicgba.sonicdef
+	
+	Import com.sega.mobile.framework.device.mfgraphics
+Public
 
 ' Classes:
 Class StarEffect Implements SonicDef

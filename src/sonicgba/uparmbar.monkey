@@ -3,7 +3,9 @@ Strict
 Public
 
 ' Imports:
-Import sonicgba.gimmickobject
+Private
+	Import sonicgba.gimmickobject
+Public
 
 ' Classes:
 Class UpArmBar Extends GimickObject

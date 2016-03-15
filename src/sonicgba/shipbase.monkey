@@ -3,10 +3,12 @@ Strict
 Public
 
 ' Imports:
-Import sonicgba.platformobject
-
-Import com.sega.mobile.framework.device.mfgraphics
-Import com.sega.mobile.framework.device.mfimage
+Private
+	Import sonicgba.platformobject
+	
+	Import com.sega.mobile.framework.device.mfgraphics
+	Import com.sega.mobile.framework.device.mfimage
+Public
 
 ' Classes:
 Class ShipBase Extends PlatformObject
