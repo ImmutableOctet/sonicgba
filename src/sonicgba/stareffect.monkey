@@ -29,7 +29,7 @@ Class StarEffect Implements SonicDef
 	Public
 		' Constructor(s):
 		Method New(animation:Animation, actionId:Int, x:Int, y:Int)
-			Self.drawer = animation.getDrawer(actionId, false, 0)
+			Self.drawer = animation.getDrawer(actionId, False, 0)
 			
 			Self.x = x
 			Self.y = y

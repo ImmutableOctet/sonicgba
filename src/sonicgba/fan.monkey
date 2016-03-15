@@ -26,7 +26,7 @@ Class Fan Extends BasicGimmickObject
 			EndIf
 			
 			If (animation <> Null) Then
-				Self.drawer = animation.getDrawer(0, true, 0)
+				Self.drawer = animation.getDrawer(0, True, 0)
 			EndIf
 		End
 	Public
