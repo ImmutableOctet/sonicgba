@@ -128,8 +128,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ropestart.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>1</Y>
+        <X>48</X>
+        <Y>36</Y>
       </CursorPos>
       <DocGUID>c90a57c6-58f5-430e-90fc-ebbfb09a136d</DocGUID>
       <Bookmarks />
