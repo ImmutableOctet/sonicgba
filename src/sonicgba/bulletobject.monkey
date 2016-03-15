@@ -71,6 +71,53 @@ Class BulletObject Extends MoveObject Abstract
 		
 		Field inCamera:Bool
 	Public
+		' Functions:
+		Function addBullet:Void(Id:Int, x:Int, y:Int, velX:Int, velY:Int)
+			Local element:BulletObject = Null
+			
+			Select Id
+				Case BULLET_NATURE
+					element = New BeeBullet(x, y, velX, velY)
+				Case BULLET_CRAB, BULLET_LADYBUG
+					element = New DoubleGravityFlashBullet(x, y, velX, velY, BULLET_MONKEY)
+				Case BULLET_MAGMA
+					element = New DoubleGravityFlashBullet(x, y, velX, velY, BULLET_NATURE)
+				Default
+					Select Id
+						Case BULLET_MONKEY
+							element = New MonkeyBullet(x, y, velX, velY)
+						Case BULLET_LIZARD
+							element = New LizardBullet(x, y, velX, velY)
+						Case BULLET_BAT
+							element = New BatBullet(x, y, velX, velY)
+						Case BULLET_MIRA
+							element = New MiraBullet(x, y, velX, velY)
+						Case BULLET_BOSS5
+							element = New MissileBullet(x, y, velX, velY)
+						Case BULLET_ROBOT
+							element = New RobotBullet(x, y, velX, velY)
+						Case BULLET_PENGUIN
+							element = New PenguinBullet(x, y, velX, velY)
+						Case BULLET_BOSS6
+							element = New Boss6Bullet(x, y, velX, velY)
+						Case BULLET_BOSSF3BOMB
+							element = New BossF3Bomb(x, y, velX, velY)
+						Case BULLET_BOSSF3RAY
+							element = New BossF3Ray(x, y, velX)
+						Case BULLET_BOSS_EXTRA_PACMAN
+							element = New BossExtraPacman(x, y)
+						Case BULLET_BOSS_EXTRA_LASER
+							element = New LaserDamage(x, y)
+						Case BULLET_BOSS_STONE
+							element = New BossExtraStone(x, y)
+					End Select
+			End Select
+			
+			If (element <> Null) Then
+				bulletVec.Push(element)
+			Endif
+		End
+		
 		' Methods (Abstract):
 		Method bulletLogic:Void() Abstract
 		
