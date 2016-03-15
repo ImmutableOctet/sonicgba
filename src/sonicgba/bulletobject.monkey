@@ -15,7 +15,22 @@ Private
 	Import sonicgba.moveobject
 	Import sonicgba.playerobject
 	
-	' INSERT BULLET TYPE IMPORTS HERE
+	' Bullet types:
+	Import sonicgba.beebullet
+	Import sonicgba.doublegravityflashbullet
+	Import sonicgba.monkeybullet
+	Import sonicgba.lizardbullet
+	Import sonicgba.batbullet
+	Import sonicgba.mirabullet
+	Import sonicgba.missilebullet
+	Import sonicgba.robotbullet
+	Import sonicgba.penguinbullet
+	Import sonicgba.boss6bullet
+	Import sonicgba.bossf3bomb
+	Import sonicgba.bossf3ray
+	Import sonicgba.bossextrapacman
+	Import sonicgba.laserdamage
+	Import sonicgba.bossextrastone
 Public
 
 ' Classes:
@@ -85,6 +100,9 @@ Class BulletObject Extends MoveObject Abstract
 		' This reflects whether this bullet has hit something.
 		Field hit:Bool
 		
+		' This is used to detect if this bullet has been on screen.
+		' In particular, this is 'True' when on screen, meaning it can be checked
+		' during update routines to determine if we should cull the bullet.
 		Field hasBeenInCamera:Bool
 	Public
 		' Functions:
