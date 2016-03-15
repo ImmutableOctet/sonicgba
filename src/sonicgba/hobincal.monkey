@@ -30,7 +30,7 @@ Class HobinCal Implements SonicDef
 				degree += MDPhone.SCREEN_WIDTH
 			Wend
 			
-			Self.degree = (degree Mod MDPhone.SCREEN_HEIGHT)
+			Self.degree = (degree Mod MDPhone.SCREEN_WIDTH)
 			Self.timeCount = 10
 		End
 		

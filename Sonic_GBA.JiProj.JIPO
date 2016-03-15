@@ -97,8 +97,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\hobincal.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>29</X>
-        <Y>9</Y>
+        <X>49</X>
+        <Y>32</Y>
       </CursorPos>
       <DocGUID>dd3af8e2-de99-4e75-aa89-120167a090eb</DocGUID>
       <Bookmarks />
