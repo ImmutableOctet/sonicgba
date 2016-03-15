@@ -95,6 +95,14 @@
       <DocGUID>62e80fbd-a8f5-4396-ba8a-b38d0187c047</DocGUID>
       <Bookmarks />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\hobincal.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>29</X>
+        <Y>9</Y>
+      </CursorPos>
+      <DocGUID>dd3af8e2-de99-4e75-aa89-120167a090eb</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\mapbehavior.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>11</X>
@@ -203,8 +211,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\transpoint.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>66</X>
-        <Y>49</Y>
+        <X>0</X>
+        <Y>0</Y>
       </CursorPos>
       <DocGUID>4495f844-a080-4009-99d8-794c0ee7457b</DocGUID>
       <Bookmarks />
