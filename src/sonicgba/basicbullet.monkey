@@ -27,11 +27,12 @@ Class BasicBullet Extends BulletObject Abstract
 		End
 		
 		Method updateBulletRect:Void(x:Int, y:Int, width:Int, height:Int)
-			Self.collisionRect.setRect(x - (width/2), y - (height/2), width, height)
+			collisionRect.setRect(x - (width/2), y - (height/2), width, height)
 		End
 		
 		Method draw:Void(graphics:MFGraphics)
-			drawInMap(graphics, Self.drawer)
+			drawInMap(graphics, drawer)
+			'collisionRect.draw(graphics, camera)
 		End
 		
 		Method chkDestroy:Bool()
