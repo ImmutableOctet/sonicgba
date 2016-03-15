@@ -89,8 +89,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>1141</Y>
+        <X>25</X>
+        <Y>56</Y>
       </CursorPos>
       <DocGUID>62e80fbd-a8f5-4396-ba8a-b38d0187c047</DocGUID>
       <Bookmarks />
@@ -201,6 +201,14 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\transpoint.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>66</X>
+        <Y>49</Y>
+      </CursorPos>
+      <DocGUID>4495f844-a080-4009-99d8-794c0ee7457b</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\tutorialpoint.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>1</X>
@@ -210,8 +218,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\uparmbar.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>6</Y>
+        <X>2</X>
+        <Y>13</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
