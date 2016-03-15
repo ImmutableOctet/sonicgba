@@ -20,8 +20,8 @@ Public
 Class RopeStart Extends GimmickObject
 	Public
 		' Constant variable(s):
-		Const COLLISION_WIDTH:= 1024
-		Const COLLISION_HEIGHT:= 2560
+		Const COLLISION_WIDTH:= SpecialMap.MAP_LENGTH ' 1024
+		Const COLLISION_HEIGHT:= SpecialMap.MAP_LENGTH ' 2560
 		
 		' Fields:
 		Field degree:Int
@@ -62,10 +62,9 @@ Class RopeStart Extends GimmickObject
 			
 			Self.used = False
 			Self.controlling = False
-			Self.initFlag = False
 			
 			If (Self.iLeft = 0) Then
-				Self.degree = (10 - DEGREE) ' GameState.DEGREE_VELOCITY
+				Self.degree = (10 - DEGREE) ' GameState.DEGREE_VELOCITY - DEGREE
 			Else
 				Self.degree = DEGREE
 			Endif
@@ -74,6 +73,11 @@ Class RopeStart Extends GimmickObject
 			Self.posOriginalY = Self.posY
 		End
 	Public
+		' Functions:
+		Function releaseAllResource:Void()
+			hookImage2 = Null
+		End
+		
 		' Methods:
 		Method getPaintLayer:Int()
 			Return DEGREE
@@ -163,11 +167,44 @@ Class RopeStart Extends GimmickObject
 						player.checkWithObject(preX, preY, player.getFootPositionX(), player.getFootPositionY())
 			
 						If (Not isGotRings) Then
-							' Magic number: Not sure what this is.
+							' Magic number: Not sure what this is. (Likely the sound identifier)
 							SoundSystem.getInstance().playSequenceSe(50)
 						Endif
 					Endif
 				Endif
+			Endif
+		End
+		
+		Method refreshCollisionRect:Void(x:Int, y:Int)
+			collisionRect.setRect(x, y, COLLISION_WIDTH, COLLISION_HEIGHT)
+		End
+		
+		Method turn:Void()
+			Self.degree = (180 - Self.degree)
+			Self.velocity = -Self.velocity
+			
+			If (Abs(Self.velocity) <= MAX_VELOCITY) Then
+				Return
+			Endif
+			
+			If (Self.velocity < 0) Then
+				Self.velocity = -MAX_VELOCITY
+			Else
+				Self.velocity = MAX_VELOCITY
+			Endif
+		End
+		
+		Method doInitWhileInCamera:Void()
+			Self.posX = Self.posOriginalX
+			Self.posY = Self.posOriginalY
+			
+			Self.used = False
+			Self.controlling = False
+			
+			If (Self.iLeft = 0) Then
+				Self.degree = (10 - DEGREE) ' GameState.DEGREE_VELOCITY
+			Else
+				Self.degree = DEGREE
 			Endif
 		End
 End
