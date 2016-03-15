@@ -14,6 +14,13 @@ Class BasicBullet Extends BulletObject Abstract
 		' Constructor(s):
 		Method New(x:Int, y:Int, velX:Int, velY:Int, hitDestroy:Bool=False)
 			Super.New(x, y, velX, velY, hitDestroy)
+			
+			#Rem
+				Self.posX = x
+				Self.posY = y
+				Self.velX = velX
+				Self.velY = velY
+			#End
 		End
 	Public
 		' Methods:
