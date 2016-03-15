@@ -3,12 +3,18 @@ Strict
 Public
 
 ' Imports:
-Import sonicgba.gimmickobject
-Import sonicgba.playerobject
-Import sonicgba.ropestart
+Private
+	Import sonicgba.gimmickobject
+	Import sonicgba.playerobject
+	Import sonicgba.ropestart
+Public
 
 ' Classes:
 Class RopeEnd Extends GimmickObject
+	Private
+		' Constant variable(s):
+		Const COLLISION_WIDTH:= RopeStart.COLLISION_WIDTH
+		Const COLLISION_HEIGHT:= RopeStart.COLLISION_HEIGHT
 	Protected
 		' Constructor(s):
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
@@ -21,7 +27,7 @@ Class RopeEnd Extends GimmickObject
 				Return
 			EndIf
 			
-			' Dynamic cast potential point of optimization.
+			' Dynamic cast; potential point of optimization.
 			Local start:= RopeStart(player.outOfControlObject)
 			
 			' If 'start' is available, mark the start point:
@@ -45,6 +51,6 @@ Class RopeEnd Extends GimmickObject
 		End
 		
 		Method refreshCollisionRect:Void(x:Int, y:Int)
-			collisionRect.setRect(x, y, 1024, 2560)
+			collisionRect.setRect(x, y, COLLISION_WIDTH, COLLISION_HEIGHT) ' width, height
 		End
 End

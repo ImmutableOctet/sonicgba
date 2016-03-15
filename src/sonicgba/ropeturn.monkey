@@ -3,12 +3,18 @@ Strict
 Public
 
 ' Imports:
-Import sonicgba.gimmickobject
-Import sonicgba.playerobject
-Import sonicgba.ropestart
+Private
+	Import sonicgba.gimmickobject
+	Import sonicgba.playerobject
+	Import sonicgba.ropestart
+Public
 
 ' Classes:
 Class RopeTurn Extends GimmickObject
+	Private
+		' Constant variable(s):
+		Const COLLISION_WIDTH:= RopeStart.COLLISION_WIDTH
+		Const COLLISION_HEIGHT:= RopeStart.COLLISION_HEIGHT
 	Protected
 		' Constructor(s):
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
@@ -41,7 +47,7 @@ Class RopeTurn Extends GimmickObject
 		Method refreshCollisionRect:Void(x:Int, y:Int)
 			' Most likely centered with a width of 1024, and a height of 2560.
 			' Not completely sure, but it seems like a safe bet.
-			collisionRect.setRect(x - 512, y, 1024, 2560)
+			collisionRect.setRect(x - (COLLISION_WIDTH/2), y, COLLISION_WIDTH, COLLISION_HEIGHT)
 			
 			Return
 		End

@@ -3,7 +3,9 @@ Strict
 Public
 
 ' Imports:
-Import sonicgba.gameobject
+Private
+	Import sonicgba.gameobject
+Public
 
 ' Classes:
 

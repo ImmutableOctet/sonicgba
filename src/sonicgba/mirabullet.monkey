@@ -3,7 +3,9 @@ Strict
 Public
 
 ' Imports:
-Import sonicgba.basicbullet
+Private
+	Import sonicgba.basicbullet
+Public
 
 ' Classes:
 Class MiraBullet Extends BasicBullet

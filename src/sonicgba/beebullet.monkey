@@ -4,9 +4,6 @@ Public
 
 ' Imports:
 Private
-	Import lib.animation
-	Import com.sega.mobile.framework.device.mfgraphics
-	
 	Import sonicgba.basicbullet
 Public
 

@@ -3,13 +3,15 @@ Strict
 Public
 
 ' Imports:
-Import lib.myapi
-
-Import sonicgba.backgroundmanager
-Import sonicgba.mapmanager
-
-Import com.sega.mobile.framework.device.mfgraphics
-Import com.sega.mobile.framework.device.mfimage
+Private
+	Import lib.myapi
+	
+	Import sonicgba.backgroundmanager
+	Import sonicgba.mapmanager
+	
+	Import com.sega.mobile.framework.device.mfgraphics
+	Import com.sega.mobile.framework.device.mfimage
+Public
 
 ' Classes:
 Class BackManagerStageFinal Extends BackGroundManager

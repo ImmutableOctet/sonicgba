@@ -15,8 +15,10 @@ Public
 #End
 
 ' Imports:
-Import sonicgba.gimmickobject
-Import sonicgba.playerobject
+Private
+	Import sonicgba.gimmickobject
+	Import sonicgba.playerobject
+Public
 
 ' Classes:
 Class Bank Extends GimmickObject

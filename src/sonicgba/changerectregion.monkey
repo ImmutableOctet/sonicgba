@@ -3,8 +3,10 @@ Strict
 Public
 
 ' Imports:
-Import sonicgba.gimmickobject
-Import sonicgba.playerobject
+Private
+	Import sonicgba.gimmickobject
+	Import sonicgba.playerobject
+Public
 
 ' Classes:
 Class ChangeRectRegion Extends GimmickObject

@@ -12,13 +12,18 @@ Public
 #End
 
 ' Imports:
-Import sonicgba.enemyobject
-Import sonicgba.globalresource
+Private
+	Import sonicgba.enemyobject
+	Import sonicgba.globalresource
+Public
 
 ' Classes:
 
 ' Presumed base-class for bosses.
 Class BossObject Extends EnemyObject Abstract
+	Private
+		Const DEFAULT_HP:= 8
+		Const EASY_HP:= 6
 	Protected
 		' Fields:
 		Field HP:Int
@@ -30,10 +35,10 @@ Class BossObject Extends EnemyObject Abstract
 	Public
 		' Methods:
 		Method setBossHP:Void()
-			If (GlobalResource.isEasyMode() And (stageModeState = 0)) Then
-				HP = 6
+			If (GlobalResource.isEasyMode() And (stageModeState = STATE_NORMAL_MODE)) Then
+				HP = EASY_HP
 			Else
-				HP = 8
+				HP = DEFAULT_HP
 			EndIf
 		End
 End

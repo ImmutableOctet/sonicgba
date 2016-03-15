@@ -3,27 +3,17 @@ Strict
 Public
 
 ' Imports:
-
-' Traditional gimmick imports:
-Import lib.animation
-Import lib.animationdrawer
-
-Import sonicgba.gimmickobject
-
-Import com.sega.mobile.framework.device.mfgraphics
+Private
+	Import sonicgba.basicgimmickobject
+Public
 
 ' Classes:
-Class Fan Extends GimmickObject
+Class Fan Extends BasicGimmickObject
 	Private
 		' Global variable(s):
 		
 		' Shared animation for this gimmick. (Atlas descriptor)
 		Global animation:Animation
-		
-		' Fields:
-		
-		' This is used to display the graphic for this gimmick.
-		Field drawer:AnimationDrawer
 	Protected
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
 			Super.New(id, x, y, left, top, width, height)
@@ -49,17 +39,5 @@ Class Fan Extends GimmickObject
 			animation = Null
 			
 			Return
-		End
-		
-		' Methods:
-		Method close:Void()
-			Self.drawer = Null
-			
-			Return
-		End
-		
-		' The 'var1' argument is likely a "context" object. (Abstracted from other details, anyway)
-		Method draw:Void(graphics:MFGraphics)
-			drawInMap(graphics, drawer)
 		End
 End
