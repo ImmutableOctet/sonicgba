@@ -9,21 +9,21 @@ Import com.sega.mobile.framework.device.mfgraphics
 Import sonicgba.bulletobject
 
 ' Classes:
-Class MiraBullet Extends BulletObject
+Class BeeBullet Extends BulletObject
 	Private
 		' Constant variable(s):
-		Const COLLISION_WIDTH:= 640
-		Const COLLISION_HEIGHT:= 640
+		Const COLLISION_WIDTH:= 512
+		Const COLLISION_HEIGHT:= 512
 	Protected
 		' Constructor(s):
 		Method New(x:Int, y:Int, velX:Int, velY:Int)
 			Super.New(x, y, velX, velY, False)
 			
-			If (mirabulletAnimation = Null) Then
-				mirabulletAnimation = new Animation("/animation/mira_bullet")
+			If (beebulletAnimation = Null) Then
+				beebulletAnimation = new Animation("/animation/mira_bullet")
 			Endif
 			
-			Self.drawer = mirabulletAnimation.getDrawer(0, True, 0)
+			Self.drawer = beebulletAnimation.getDrawer(0, True, 0)
 		End
 	Public
 		' Methods:

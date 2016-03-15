@@ -15,6 +15,14 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\beebullet.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>78</X>
+        <Y>41</Y>
+      </CursorPos>
+      <DocGUID>8dd404f1-19eb-4de8-a152-35c0409f49f8</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bossobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>6</X>
@@ -73,10 +81,10 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\mirabullet.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>11</X>
-        <Y>51</Y>
+        <X>5</X>
+        <Y>26</Y>
       </CursorPos>
-      <DocGUID>21631735-b4d6-4cb4-b3af-bd1dbc695d77</DocGUID>
+      <DocGUID>013ce95c-19c2-4265-a890-3b644c239a73</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\moveobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
@@ -93,13 +101,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\ropeend.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\ropeend.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>3</X>
         <Y>38</Y>
       </CursorPos>
-      <DocGUID>100692c9-a7e9-4e8d-bad1-84b94b6a9ae7</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ropeturn.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
