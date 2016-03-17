@@ -49,7 +49,7 @@ Class RailFlipper Extends GimmickObject
 		Method refreshCollisionRect:Void(x:Int, y:Int)
 			Self.collisionRect.setRect(Self.posX, Self.posY - COLLISION_OFFSET, COLLISION_WIDTH, COLLISION_HEIGHT)
 		End
-
+		
 		Method doWhileRail:Void(player:PlayerObject, direction:Int)
 			If (Self.firstTouch) Then
 				player.setRailFlip()

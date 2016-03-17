@@ -161,7 +161,7 @@
     <DocUserOptions Filename=".\src\sonicgba\railflipper.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>2</X>
-        <Y>52</Y>
+        <Y>63</Y>
       </CursorPos>
       <DocGUID>624f240a-b313-4802-92d3-3be45de7b36a</DocGUID>
       <Bookmarks />
