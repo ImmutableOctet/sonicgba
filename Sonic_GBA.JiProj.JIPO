@@ -8,6 +8,14 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\backmanagerstage5.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>22</X>
+        <Y>13</Y>
+      </CursorPos>
+      <DocGUID>e3fe02f0-5e01-4843-bd6e-ea16485b7a70</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\backmanagerstagefinal.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>48</X>
@@ -110,8 +118,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>8</X>
-        <Y>226</Y>
+        <X>3</X>
+        <Y>1530</Y>
       </CursorPos>
       <DocGUID>2498af58-506c-4204-9d5c-f24e783a3cb9</DocGUID>
       <Bookmarks />
