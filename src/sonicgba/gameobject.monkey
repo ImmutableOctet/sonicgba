@@ -46,13 +46,6 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 	Public
 		Const CHECK_OFFSET:= 192
 		
-		' Directions:
-		Const DIRECTION_UP:=		0
-		Const DIRECTION_DOWN:=		1
-		Const DIRECTION_LEFT:=		2
-		Const DIRECTION_RIGHT:=		3
-		Const DIRECTION_NONE:=		4
-		
 		' Layers:
 		Const DRAW_BEFORE_SONIC:= 0
 		Const DRAW_AFTER_SONIC:= 1
