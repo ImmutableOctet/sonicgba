@@ -118,8 +118,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>1530</Y>
+        <X>39</X>
+        <Y>400</Y>
       </CursorPos>
       <DocGUID>2498af58-506c-4204-9d5c-f24e783a3cb9</DocGUID>
       <Bookmarks />
@@ -137,6 +137,14 @@
         <Y>24</Y>
       </CursorPos>
       <DocGUID>6fb68150-f045-4bb8-9d94-dc8462d34c4e</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\leaf.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>2</X>
+        <Y>67</Y>
+      </CursorPos>
+      <DocGUID>eb923092-431f-45cc-9a49-57456b1f816f</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\lizardbullet.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
