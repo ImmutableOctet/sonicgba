@@ -4,8 +4,6 @@ Public
 
 ' Imports:
 Private
-	Import state.stringindex
-	
 	Import com.sega.engine.action.accollision
 	Import com.sega.engine.action.acdegreegetter
 	Import com.sega.engine.action.acdegreegetter.degreereturner
@@ -23,7 +21,7 @@ Class MyDegreeGetter Extends ACDegreeGetter Implements ACParam
 		Method New(world:CollisionMap)
 			Self.world = world
 			
-			Self.block = (CollisionBlock) CollisionMap.getInstance().getNewCollisionBlock()
+			Self.block = CollisionBlock(CollisionMap.getInstance().getNewCollisionBlock())
 		End
 		
 		Method getDegreeFromCollisionByPosition:Void(re:DegreeReturner, obj:ACCollision, currentDegree:Int, x:Int, y:Int, z:Int)
@@ -53,7 +51,7 @@ Class MyDegreeGetter Extends ACDegreeGetter Implements ACParam
 				Return DIRECTION_LEFT
 			End
 			
-			If (degree < StringIndex.FONT_COLON_RED Or degree > 225) Then
+			If (degree < 135 Or degree > 225) Then
 				Return DIRECTION_RIGHT
 			End
 			

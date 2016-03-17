@@ -1,13 +1,12 @@
 <?xml version="1.0"?>
 <JiProjUserOptions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Files>
-    <DocUserOptions Filename=".\src\com\sega\engine\action\acparam.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\engine\action\acparam.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>40</X>
         <Y>12</Y>
       </CursorPos>
-      <DocGUID>9c7fd0a9-554b-40b1-be00-08c5118fa028</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\backmanagerstagefinal.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -146,8 +145,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\mydegreegetter.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>8</X>
-        <Y>18</Y>
+        <X>81</X>
+        <Y>23</Y>
       </CursorPos>
       <DocGUID>f3eb2e8a-e8f7-4dab-810a-3d8a3d60705a</DocGUID>
       <Bookmarks />
