@@ -26,7 +26,7 @@ Class RollHobin Extends BallHobin
 	Public
 
 	Protected
-		Method RollHobin(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
+		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
 			Super.New(id, x, y, left, top, width, height)
 			
 			Self.radius = Max(Self.mWidth, Self.mHeight)
