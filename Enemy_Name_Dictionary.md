@@ -8,3 +8,5 @@ This file contains a dictionary of internal names, and what actual enemy they re
 [![](http://info.sonicretro.org/images/0/0b/Yukimaru-spr.png)](http://info.sonicretro.org/Yukimaru) Yukimaru = Yukimal/Robot
 
 [![](http://info.sonicretro.org/images/e/e0/Oct-spr.png)](http://info.sonicretro.org/Oct) Oct = Heriko
+
+[![](http://info.sonicretro.org/images/e/e5/Hanabii-spr.png)](http://info.sonicretro.org/Hanabii) Hanabii = Lizard
