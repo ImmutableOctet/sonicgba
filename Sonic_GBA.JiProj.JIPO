@@ -119,8 +119,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>10</X>
-        <Y>404</Y>
+        <X>25</X>
+        <Y>49</Y>
       </CursorPos>
       <DocGUID>2498af58-506c-4204-9d5c-f24e783a3cb9</DocGUID>
       <Bookmarks />
@@ -288,6 +288,14 @@
         <Y>12</Y>
       </CursorPos>
       <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\touchfire.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>14</X>
+        <Y>45</Y>
+      </CursorPos>
+      <DocGUID>d89a5311-e985-421c-9fb5-9bc738d651e3</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\transpoint.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
