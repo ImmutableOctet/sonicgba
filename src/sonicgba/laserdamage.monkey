@@ -7,6 +7,8 @@ Private
 	Import lib.animation
 	Import com.sega.mobile.framework.device.mfgraphics
 	
+	Import regal.typetool
+	
 	Import sonicgba.bulletobject
 Public
 
