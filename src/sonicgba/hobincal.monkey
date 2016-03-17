@@ -37,20 +37,20 @@ Class HobinCal Implements SonicDef
 		Method logic:Void()
 			If (Self.timeCount > 0) Then
 				Self.timeCount -= 1
-			Endif
+			EndIf
 			
 			If (Self.timeCount > 0) Then
 				if (Self.timeCount = 9) Then
 					Self.distance = Self.power
 				Else
 					Self.distance = ((-Self.distance) Shr 1) ' / 2
-				Endif
+				EndIf
 				
 				If (Self.timeCount = 1) Then
 					Self.distance = 0
 					Self.power = 0
-				Endif
-			Endif
+				EndIf
+			EndIf
 		End
 		
 		Method getPosOffsetX:Int()

@@ -45,8 +45,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boom.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>36</X>
-        <Y>46</Y>
+        <X>8</X>
+        <Y>35</Y>
       </CursorPos>
       <DocGUID>958b696e-96e8-4ec0-b3c7-44ca027fcdce</DocGUID>
       <Bookmarks />
@@ -102,8 +102,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>56</X>
-        <Y>379</Y>
+        <X>8</X>
+        <Y>226</Y>
       </CursorPos>
       <DocGUID>2498af58-506c-4204-9d5c-f24e783a3cb9</DocGUID>
       <Bookmarks />
@@ -117,8 +117,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\laserdamage.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>39</X>
-        <Y>47</Y>
+        <X>8</X>
+        <Y>24</Y>
       </CursorPos>
       <DocGUID>6fb68150-f045-4bb8-9d94-dc8462d34c4e</DocGUID>
       <Bookmarks />
@@ -146,8 +146,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\movecalculator.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>20</X>
-        <Y>14</Y>
+        <X>5</X>
+        <Y>68</Y>
       </CursorPos>
       <DocGUID>d3ed8b69-28e8-4b6a-8db3-66ac4f214eb9</DocGUID>
       <Bookmarks />
@@ -288,8 +288,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\windparts.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>39</X>
-        <Y>59</Y>
+        <X>8</X>
+        <Y>35</Y>
       </CursorPos>
       <DocGUID>0476d2a2-fdc9-43f7-9c66-aa6b509f283c</DocGUID>
       <Bookmarks />

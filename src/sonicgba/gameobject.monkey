@@ -224,7 +224,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		Function initObject:Void(mapPixelWidth:Int, mapPixelHeight:Int, sameStage:Bool)
 			If (groundblock = Null) Then
 				groundblock = CollisionMap.getInstance().getNewCollisionBlock()
-			Endif
+			EndIf
 			
 			' Deinitialize the active context.
 			closeObject(sameStage)
@@ -258,7 +258,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 					
 					allGameObject[X] = xArray
 				Next
-			Endif
+			EndIf
 			
 			' Allocate our layers:
 			If (paintVec.Length > 0 And paintVec[0] <> Null) Then
@@ -269,7 +269,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 				For Local I:= 0 Until 4
 					paintVec[I] = New Stack<GameObject>()
 				Next
-			Endif
+			EndIf
 			
 			' Make sure we have our default/generic animations:
 			If (destroyEffectAnimation = Null) Then
@@ -326,7 +326,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 				systemClock += 1
 			Else
 				systemClock = 0
-			Endif
+			EndIf
 			
 			'systemClock = Millisecs()
 			
@@ -396,7 +396,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 							currentVec.Remove(objIndex)
 							objIndex -= 1
 						EndIf
-					Endif
+					EndIf
 					
 					' Check if we need to render this object:
 					If (checkPaintNecessary(currentObject)) Then
@@ -445,7 +445,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		Function setNoInput:Void()
 			If (player <> Null) Then
 				player.setNoKey()
-			Endif
+			EndIf
 		End
 		
 		Function drawPlayer:Void(graphics:MFGraphics)
@@ -774,7 +774,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 				If (player.attractRing.collisionChk(ring.getCollisionRect())) Then
 					' Tell the ring to come toward us.
 					ring.beAttract()
-				Endif
+				EndIf
 			EndIf
 			
 			If (currentObject.collisionChkWithObject(player)) Then
@@ -968,13 +968,13 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 								accessOffset = seekOffset
 							Else
 								accessOffset = 0
-							Endif
+							EndIf
 							
 							If (Not arrangement) Then
 								current = allGameObject[position][accessOffset + opOffset]
 							Else
 								current = allGameObject[accessOffset + opOffset][position]
-							Endif
+							EndIf
 							
 							For Local I:= 0 Until current.Length
 								Local obj:= current.Get(I)
@@ -988,7 +988,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 									blockCheck = (Not (objBlockX = position And objBlockY = (seekOffset + opOffset)))
 								Else
 									blockCheck = (Not (objBlockX = (seekOffset + opOffset) And objBlockY = position))
-								Endif
+								EndIf
 								
 								If (objBlockX >= 0 And objBlockX < objVecWidth And objBlockX >= 0 And objBlockX < objVecHeight And blockCheck) Then
 									current.Remove(I)
@@ -1000,7 +1000,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 							Next
 						EndIf
 					Next
-				Endif
+				EndIf
 			EndIf
 		End
 		
@@ -1083,7 +1083,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		Function getAvailableObject:GameObject()
 			If (Not gettingObject) Then
 				Return Null
-			Endif
+			EndIf
 			
 			Local re:= allGameObject[cursorX][cursorY].Get(objectCursor)
 			
@@ -1290,10 +1290,10 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 					Self.needInit = False
 					
 					Return True
-				Endif
+				EndIf
 			ElseIf (resetRect.collisionChk(Self.collisionRect)) Then
 				Self.needInit = True
-			Endif
+			EndIf
 			
 			Return False
 		End
@@ -1320,7 +1320,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			' If we're not touching anything, we're obviously still at 'y'.
 			If (responseA = ACParam.NO_COLLISION And responseB = ACParam.NO_COLLISION) Then
 				Return y
-			Endif
+			EndIf
 			
 			' If no collision occurred, give the opposite response:
 			If (responseA = ACParam.NO_COLLISION) Then
@@ -1329,7 +1329,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			
 			If (responseB = ACParam.NO_COLLISION) Then
 				Return responseA
-			Endif
+			EndIf
 			
 			' We've got both responses, check which is lower:
 			If (responseA < responseB) Then
@@ -1440,7 +1440,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 						positionX += (VELOCITY_DIVIDE * I)
 					Else
 						positionX += (-VELOCITY_DIVIDE * I)
-					Endif
+					EndIf
 					
 					positionY = (((startPointY * quaNumX) + (moveDistanceY2 * I)) / quaNumX)
 					
@@ -1449,13 +1449,13 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 						If (positionX > startPointX + moveDistanceX2) Then
 							positionX = (startPointX + moveDistanceX2)
 							positionY = (startPointY + moveDistanceY2)
-						Endif
+						EndIf
 					ElseIf (moveDistanceX2 >= 0) Then
 						positionX = startPointX
 					ElseIf (positionX < startPointX + moveDistanceX2) Then
 						positionX = (startPointX + moveDistanceX2)
 						positionY = (startPointY + moveDistanceY2)
-					Endif
+					EndIf
 				Else
 					positionY = startPointY
 					
@@ -1463,7 +1463,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 						positionY += (VELOCITY_DIVIDE * I)
 					Else
 						positionY += (-VELOCITY_DIVIDE * I)
-					Endif
+					EndIf
 					
 					positionX = (((startPointX * quaNumY) + (moveDistanceX2 * I)) / quaNumY)
 					
@@ -1505,7 +1505,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		Method getQuaParam:Int(x:Int, divide:Int)
 			If (x > 0) Then
 				Return (x / divide)
-			Endif
+			EndIf
 			
 			Return ((x - (divide - 1)) / divide)
 		End
@@ -1516,7 +1516,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 				
 				g.drawRect((Self.collisionRect.x0 Shr 6) - camera.x, (Self.collisionRect.y0 Shr 6) - camera.y, Self.collisionRect.getWidth() Shr 6, Self.collisionRect.getHeight() Shr 6);
 				g.drawRect(((Self.collisionRect.x0 Shr 6) - camera.x) + 1, ((Self.collisionRect.y0 Shr 6) - camera.y) + 1, (Self.collisionRect.getWidth() Shr 6) - 2, (Self.collisionRect.getHeight() Shr 6) - 2);
-			Endif
+			EndIf
 		End
 		
 		Function drawInMap:Void(graphics:MFGraphics, drawer:AnimationDrawer, x:Int, y:Int)
@@ -1590,7 +1590,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 					Return DIRECTION_RIGHT
 				ElseIf ((colRect.x0 - prevColRect.x0 < 0 And prevColRect.isRightOf(thisRect, CHECK_OFFSET)) Or (Not rectV_and_thisRect And colRect.x1 > thisRect.x1 And player.getVelX() <= CHECK_OFFSET)) Then
 					Return DIRECTION_LEFT
-				Endif
+				EndIf
 			EndIf
 			
 			If (rectV_and_thisRect) Then

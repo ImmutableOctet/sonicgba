@@ -149,7 +149,7 @@ Class BulletObject Extends MoveObject Abstract
 			
 			If (element <> Null) Then
 				bulletVec.Push(element)
-			Endif
+			EndIf
 		End
 		
 		Function bulletLogicAll:Void()

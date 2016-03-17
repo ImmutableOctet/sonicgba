@@ -28,7 +28,7 @@ Class ShipBase Extends PlatformObject
 			
 			If (shipBaseImage = Null) Then
 				shipBaseImage = MFImage.createImage("/gimmick/ship_base.png")
-			Endif
+			EndIf
 			
 			refreshCollisionRect(posX, posY)
 		End

@@ -22,7 +22,7 @@ Class LaserDamage Extends BulletObject
 			
 			If (laserAnimation = Null) Then
 				laserAnimation = New Animation("/animation/boss_extra_bullet")
-			Endif
+			EndIf
 			
 			Self.drawer = laserAnimation.getDrawer(0, False, 0)
 			Self.drawer.setPause(True)
@@ -36,7 +36,7 @@ Class LaserDamage Extends BulletObject
 				Self.isDead = True
 				
 				Return
-			Endif
+			EndIf
 			
 			Self.drawer.moveOn()
 			Self.rect = Self.drawer.getARect()
@@ -52,7 +52,7 @@ Class LaserDamage Extends BulletObject
 		Method refreshCollisionRect:Void(x:Int, y:Int)
 			If (Self.rect <> Null) Then
 				Self.collisionRect.setRect((Self.rect[0] Shl 6) + x, (Self.rect[1] Shl 6) + y, Self.rect[2] Shl 6, Self.rect[3] Shl 6)
-			Endif
+			EndIf
 		End
 
 		Method chkDestroy:Bool()
@@ -62,6 +62,6 @@ Class LaserDamage Extends BulletObject
 		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
 			If (Not player.isAttackingEnemy()) Then
 				player.beHurt()
-			Endif
+			EndIf
 		End
 End

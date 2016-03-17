@@ -54,10 +54,10 @@ Class RopeStart Extends GimmickObject
 			If (StageManager.getCurrentZoneId() = 4) Then
 				If (hookImage2 = Null) Then
 					hookImage2 = MFImage.createImage("/gimmick/hook_4.png")
-				Endif
+				EndIf
 			ElseIf (hookImage = Null) Then
 				hookImage = MFImage.createImage("/gimmick/hook.png")
-			Endif
+			EndIf
 			
 			Self.used = False
 			Self.controlling = False
@@ -66,7 +66,7 @@ Class RopeStart Extends GimmickObject
 				Self.degree = (10 - DEGREE) ' GameState.DEGREE_VELOCITY - DEGREE
 			Else
 				Self.degree = DEGREE
-			Endif
+			EndIf
 			
 			Self.posOriginalX = Self.posX
 			Self.posOriginalY = Self.posY
@@ -110,8 +110,8 @@ Class RopeStart Extends GimmickObject
 					
 					' Magic number: Not sure what this is.
 					player.doPullMotion(Self.posX, Self.posY + 1408)
-				Endif
-			Endif
+				EndIf
+			EndIf
 		End
 		
 		Method logic:Void()
@@ -120,7 +120,7 @@ Class RopeStart Extends GimmickObject
 			
 				If (Not screenRect.collisionChk(Self.collisionRect)) Then
 					Self.initFlag = False
-				Endif
+				EndIf
 			Else
 				Local sDegree:= Sin(Self.degree)
 			
@@ -132,16 +132,16 @@ Class RopeStart Extends GimmickObject
 			
 						If (Self.velocity < 0) Then
 							Self.velocity = DEGREE
-						Endif
-					Endif
+						EndIf
+					EndIf
 			
 					If (Self.velocity < 0) Then
 						Self.velocity += 30
 			
 						If (Self.velocity > 0) Then
 							Self.velocity = DEGREE
-						Endif
-					Endif
+						EndIf
+					EndIf
 			
 					Local cDegree:= Cos(Self.degree)
 			
@@ -168,10 +168,10 @@ Class RopeStart Extends GimmickObject
 						If (Not isGotRings) Then
 							' Magic number: Not sure what this is. (Likely the sound identifier)
 							SoundSystem.getInstance().playSequenceSe(50)
-						Endif
-					Endif
-				Endif
-			Endif
+						EndIf
+					EndIf
+				EndIf
+			EndIf
 		End
 		
 		Method refreshCollisionRect:Void(x:Int, y:Int)
@@ -184,13 +184,13 @@ Class RopeStart Extends GimmickObject
 			
 			If (Abs(Self.velocity) <= MAX_VELOCITY) Then
 				Return
-			Endif
+			EndIf
 			
 			If (Self.velocity < 0) Then
 				Self.velocity = -MAX_VELOCITY
 			Else
 				Self.velocity = MAX_VELOCITY
-			Endif
+			EndIf
 		End
 		
 		Method doInitWhileInCamera:Void()
@@ -204,6 +204,6 @@ Class RopeStart Extends GimmickObject
 				Self.degree = (10 - DEGREE) ' GameState.DEGREE_VELOCITY
 			Else
 				Self.degree = DEGREE
-			Endif
+			EndIf
 		End
 End

@@ -20,7 +20,7 @@ Class BeeBullet Extends BasicBullet
 			
 			If (beebulletAnimation = Null) Then
 				beebulletAnimation = new Animation("/animation/bee_bullet")
-			Endif
+			EndIf
 			
 			Self.drawer = beebulletAnimation.getDrawer(0, True, 0)
 		End

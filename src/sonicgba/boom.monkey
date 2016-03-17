@@ -33,7 +33,7 @@ Class Boom Extends EnemyObject
 			
 			If (BoomAni = Null) Then
 				BoomAni = New Animation("/animation/boom")
-			Endif
+			EndIf
 			
 			Self.boomdrawer = BoomAni.getDrawer(0, False, 0)
 			Self.posX = x
@@ -53,13 +53,13 @@ Class Boom Extends EnemyObject
 			
 			If (Self.boomdrawer.checkEnd()) Then
 				Self.dead = True
-			Endif
+			EndIf
 		End
 
 		Method draw:Void(graphics:MFGraphics)
 			If (Not Self.dead) Then
 				drawInMap(graphics, Self.boomdrawer, Self.posX, Self.posY)
-			Endif
+			EndIf
 		End
 		
 		Method refreshCollisionRect:Void(x:Int, y:Int)

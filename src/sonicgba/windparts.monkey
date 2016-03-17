@@ -33,7 +33,7 @@ Class WindParts Extends GimmickObject
 			
 			If (animation = Null) Then
 				animation = New Animation("/animation/wind_parts")
-			Endif
+			EndIf
 			
 			Self.drawer = animation.getDrawer(2 - Self.iLeft, True, 0)
 			Self.posOriginalY = Self.posY
@@ -48,7 +48,7 @@ Class WindParts Extends GimmickObject
 				Self.posY = Self.posOriginalY
 			Else
 				Self.posY -= VELOCITY
-			Endif
+			EndIf
 			
 			refreshCollisionRect(Self.posX, Self.posY)
 		End

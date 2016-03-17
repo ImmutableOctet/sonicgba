@@ -20,7 +20,7 @@ Class MiraBullet Extends BasicBullet
 			
 			If (mirabulletAnimation = Null) Then
 				mirabulletAnimation = new Animation("/animation/mira_bullet")
-			Endif
+			EndIf
 			
 			Self.drawer = mirabulletAnimation.getDrawer(0, True, 0)
 		End
