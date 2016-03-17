@@ -59,7 +59,7 @@ Class LaserDamage Extends BulletObject
 			Return Self.isDead
 		End
 
-		Method doWhileCollision:Void(object:PlayerObject, direction:Int)
+		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
 			If (Not player.isAttackingEnemy()) Then
 				player.beHurt()
 			Endif

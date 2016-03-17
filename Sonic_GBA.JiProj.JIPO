@@ -108,8 +108,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\laserdamage.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>17</X>
-        <Y>13</Y>
+        <X>37</X>
+        <Y>61</Y>
       </CursorPos>
       <DocGUID>6fb68150-f045-4bb8-9d94-dc8462d34c4e</DocGUID>
       <Bookmarks />
