@@ -57,8 +57,8 @@ Class WindParts Extends GimmickObject
 			Self.collisionRect.setRect(x, y, 1, 1)
 		End
 	
-		Method draw:Void(g:MFGraphics)
-			drawInMap(g, Self.drawer)
+		Method draw:Void(graphics:MFGraphics)
+			drawInMap(graphics, Self.drawer)
 		End
 	
 		Method close:Void()

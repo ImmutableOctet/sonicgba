@@ -45,8 +45,8 @@ Class LaserDamage Extends BulletObject
 			doWhileCollisionWrapWithPlayer()
 		End
 		
-		Method draw:Void(g:MFGraphics)
-			drawInMap(g, Self.drawer)
+		Method draw:Void(graphics:MFGraphics)
+			drawInMap(graphics, Self.drawer)
 		End
 	
 		Method refreshCollisionRect:Void(x:Int, y:Int)

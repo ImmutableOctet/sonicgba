@@ -43,12 +43,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\boom.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\boom.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>6</X>
-        <Y>12</Y>
+        <X>36</X>
+        <Y>46</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>958b696e-96e8-4ec0-b3c7-44ca027fcdce</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bossobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -101,8 +102,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>44</Y>
+        <X>56</X>
+        <Y>379</Y>
       </CursorPos>
       <DocGUID>2498af58-506c-4204-9d5c-f24e783a3cb9</DocGUID>
       <Bookmarks />
@@ -116,8 +117,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\laserdamage.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>37</X>
-        <Y>61</Y>
+        <X>39</X>
+        <Y>47</Y>
       </CursorPos>
       <DocGUID>6fb68150-f045-4bb8-9d94-dc8462d34c4e</DocGUID>
       <Bookmarks />
@@ -143,13 +144,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\mydegreegetter.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\mydegreegetter.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>81</X>
-        <Y>23</Y>
+        <X>10</X>
+        <Y>4</Y>
       </CursorPos>
-      <DocGUID>f3eb2e8a-e8f7-4dab-810a-3d8a3d60705a</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\platformobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -266,8 +266,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\windparts.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>25</X>
-        <Y>17</Y>
+        <X>39</X>
+        <Y>59</Y>
       </CursorPos>
       <DocGUID>0476d2a2-fdc9-43f7-9c66-aa6b509f283c</DocGUID>
       <Bookmarks />

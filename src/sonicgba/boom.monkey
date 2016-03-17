@@ -40,11 +40,11 @@ Class Boom Extends EnemyObject
 			Self.posY = y
 		End
 	Public
-		Method doWhileCollision:Void(object:PlayerObject, direction:Int)
+		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
 			' Empty implementation.
 		End
 		
-		Method doWhileBeAttack:Void(object:PlayerObject, direction:Int, animationID:Int)
+		Method doWhileBeAttack:Void(player:PlayerObject, direction:Int, animationID:Int)
 			' Empty implementation.
 		End
 

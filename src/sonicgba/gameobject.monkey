@@ -673,8 +673,8 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			End Try
 		End
 		
-		Function addGameObject:Void(object:GameObject, x:Int, y:Int)
-			If (object <> Null) Then
+		Function addGameObject:Void(obj:GameObject, x:Int, y:Int)
+			If (obj <> Null) Then
 				Local roomX:= ((x Shr 6) / ROOM_WIDTH)
 				
 				If (roomX >= objVecWidth) Then
@@ -688,11 +688,11 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 				EndIf
 				
 				If (roomX > -1) Then
-					allGameObject[roomX][roomY].Push(object)
+					allGameObject[roomX][roomY].Push(obj)
 				EndIf
 				
-				' Let the object know we need it to update its collision.
-				object.refreshCollisionRect(object.posX, object.posY)
+				' Let the obj know we need it to update its collision.
+				obj.refreshCollisionRect(obj.posX, obj.posY)
 			EndIf
 		End
 		
