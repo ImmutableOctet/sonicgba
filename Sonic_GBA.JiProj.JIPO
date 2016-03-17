@@ -123,6 +123,14 @@
       <DocGUID>6fb68150-f045-4bb8-9d94-dc8462d34c4e</DocGUID>
       <Bookmarks />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\lizardbullet.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>18</X>
+        <Y>14</Y>
+      </CursorPos>
+      <DocGUID>a734cdfb-ced0-4f87-9608-f84b351a843e</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\mapbehavior.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>11</X>
@@ -160,8 +168,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\railflipper.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>63</Y>
+        <X>5</X>
+        <Y>69</Y>
       </CursorPos>
       <DocGUID>624f240a-b313-4802-92d3-3be45de7b36a</DocGUID>
       <Bookmarks />
