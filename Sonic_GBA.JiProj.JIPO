@@ -51,6 +51,14 @@
       <DocGUID>958b696e-96e8-4ec0-b3c7-44ca027fcdce</DocGUID>
       <Bookmarks />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\boss6bullet.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>17</X>
+        <Y>14</Y>
+      </CursorPos>
+      <DocGUID>53687ec5-1b97-408b-a523-c755d4f93359</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bossobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>10</X>
