@@ -12,7 +12,9 @@ Private
 	Import lib.soundsystem
 	
 	Import sonicgba.gimmickobject
+	Import sonicgba.playerobject
 	Import sonicgba.playeramy
+	Import sonicgba.playerknuckles
 Public
 
 ' Classes:

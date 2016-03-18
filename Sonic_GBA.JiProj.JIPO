@@ -52,8 +52,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\banper.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>12</X>
-        <Y>18</Y>
+        <X>1</X>
+        <Y>14</Y>
       </CursorPos>
       <DocGUID>21f1f14f-c967-49dc-88e3-a698df544f21</DocGUID>
       <Bookmarks />
