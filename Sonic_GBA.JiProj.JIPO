@@ -22,12 +22,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\backmanagerstage5.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\backmanagerstage5.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>22</X>
-        <Y>13</Y>
+        <X>26</X>
+        <Y>26</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>6febff53-3475-4d42-b70e-32659779021a</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\backmanagerstagefinal.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -52,8 +53,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\banper.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>71</X>
-        <Y>20</Y>
+        <X>3</X>
+        <Y>35</Y>
       </CursorPos>
       <DocGUID>21f1f14f-c967-49dc-88e3-a698df544f21</DocGUID>
       <Bookmarks />
@@ -208,8 +209,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>4</X>
-        <Y>1016</Y>
+        <X>25</X>
+        <Y>49</Y>
       </CursorPos>
       <DocGUID>9de52c82-cef6-423d-8a3b-636a1822fd5b</DocGUID>
       <Bookmarks />
@@ -398,6 +399,14 @@
         <Y>7</Y>
       </CursorPos>
       <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\shipsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>27</X>
+        <Y>89</Y>
+      </CursorPos>
+      <DocGUID>d2426d24-e537-4ef9-8527-e5c4724ed414</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\sonicdebug.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
