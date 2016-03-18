@@ -2,6 +2,21 @@ Strict
 
 Public
 
+#Rem
+	This file has not been completely ported.
+	
+	Work still needs to be done on replacing incorrect
+	variables and literal values into proper constants.
+	
+	For now, this structure will remain, but later
+	down the road this will need to be resolved.
+	
+	In addition to this issue, there's also no
+	imports to the referenced "gimmick classes".
+	
+	This will need to change before this is considered ready for use.
+#End
+
 ' Imports:
 Private
 	Import gameengine.def
@@ -215,7 +230,6 @@ Class GimmickObject Extends GameObject
 			x Shl= 6
 			y Shl= 6
 			
-			' TODO: Update object IDs to represent actual gimmick IDs.
 			Select (id)
 				Case TitleState.STAGE_SELECT_KEY_RECORD_1
 					reElement = New Terminal(id, x, y, left, top, width, height)
@@ -261,7 +275,8 @@ Class GimmickObject Extends GameObject
 				Case RollPlatformSpeedB.DEGREE_VELOCITY
 					If (stageModeState = 1) Then
 						reElement = Null
-					End
+					EndIf
+					
 					reElement = New SpSpring(id, x, y, left, top, width, height)
 				Case 105
 					reElement = New DamageArea(id, x, y, left, top, width, height)
@@ -283,7 +298,7 @@ Class GimmickObject Extends GameObject
 				Case 124
 					reElement = New ChangeRectRegion(id, x, y, left, top, width, height)
 				default:
-					switch (id) {
+					Select (id)
 						Case PlayerTails.TAILS_ANI_CELEBRATE_1
 							reElement = New WaterFall(id, x, y, left, top, width, height)
 							
@@ -452,38 +467,48 @@ Class GimmickObject Extends GameObject
 		Public Function gimmickStaticLogic:Void()
 			If (furikoEnable) Then
 				Furiko.staticLogic()
-			End
+			EndIf
+			
 			If (damageEnable) Then
 				DamageArea.staticLogic()
-			End
+			EndIf
+			
 			MoveCalculator.staticLogic()
+			
 			If (waterFallEnable) Then
 				WaterFall.staticLogic()
-			End
+			EndIf
+			
 			If (waterSlipEnable) Then
 				WaterSlip.staticLogic()
-			End
+			EndIf
+			
 			If (torchFireEnable) Then
 				TorchFire.staticLogic()
-			End
+			EndIf
+			
 			If (steamEnable) Then
 				SteamBase.staticLogic()
-			End
+			EndIf
+			
 			If (ironBallEnable) Then
 				IronBall.staticLogic()
-			End
+			EndIf
+			
 			If (rollHobinEnable) Then
 				RollHobin.staticLogic()
-			End
+			EndIf
+			
 			If (rollPlatformEnable) Then
 				RollPlatformSpeedA.staticLogic()
 				RollPlatformSpeedB.staticLogic()
 				RollPlatformSpeedC.staticLogic()
-			End
+			EndIf
+			
 			If (seabedvolcanoEnable) Then
 				SeabedVolcanoBase.staticLogic()
 				SeabedVolcanoAsynBase.staticLogic()
-			End
+			EndIf
 		End
 	
 		Public Function releaseGimmickResource:Void()
@@ -582,9 +607,10 @@ Class GimmickObject Extends GameObject
 			drawCollisionRect(graphics)
 		End
 		
-		Method doWhileCollision:Void(object:PlayerObject, direction:Int)
-			If (object = player) Then
-				switch (Self.objId) {
+		Method doWhileCollision:Void(p:PlayerObject, direction:Int)
+			' This behavior may change in the future.
+			If (p = player) Then
+				Select (Self.objId)
 					Case PlayerTails.TAILS_ANI_DEAD_1
 						If (Not Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
 							Self.used = False
@@ -699,13 +725,14 @@ Class GimmickObject Extends GameObject
 							soundSystem.playSe(37)
 							Self.used = True
 						End
-					default:
-				End
-			End
+					Default
+						' Nothing so far.
+				End Select
+			EndIf
 		End
 	
 		Method refreshCollisionRect:Void(x:Int, y:Int)
-			switch (Self.objId) {
+			Select (Self.objId)
 				Case PlayerTails.TAILS_ANI_SPRING_1
 					Self.collisionRect.setRect(((Self.mWidth Shr 1) + x) - MDPhone.SCREEN_HEIGHT, y, 1280, Self.mHeight)
 				Case 66
@@ -719,7 +746,7 @@ Class GimmickObject Extends GameObject
 		End
 	
 		Method doWhileRail:Void(object:PlayerObject, direction:Int)
-			switch (Self.objId) {
+			Select (Self.objId)
 				Case GIMMICK_MOVE
 					If (Not Self.used And player.setRailLine(New Line(Self.posX, Self.posY, Self.posX + Self.iLeft, Self.posY + Self.iTop), Self.posX, Self.posY, Self.iLeft, Self.iTop, Self.iWidth, Self.iHeight, Self)) Then
 						Self.used = True
@@ -766,7 +793,7 @@ Class GimmickObject Extends GameObject
 				Case GIMMICK_WIND
 					If (player.isInGravityCircle) Then
 						player.isInGravityCircle = False
-					Endif
+					EndIf
 				Default
 					' Nothing so far.
 			End Select
