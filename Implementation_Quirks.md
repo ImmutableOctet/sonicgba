@@ -7,7 +7,7 @@ list of details that could be optimized or fixed later.
 
 #### Unit Conversion
 There are several uses of bitwise shifting, where ">> 1" is used for powers of
-two instead of division, and ">> 6" is used instead of converting to a proper metric.
+two instead of division by 2, and ">> 6" is used instead of converting to a proper metric.
 
 This is mainly an issue for 'MAP_WIDTH' and 'MAP_HEIGHT', but the
 lack of a real routine to convert between unit systems is troubling.
