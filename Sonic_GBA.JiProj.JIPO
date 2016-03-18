@@ -255,8 +255,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\railin.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>8</X>
+        <Y>14</Y>
       </CursorPos>
       <DocGUID>37799ec8-380f-4962-a5bd-a01a80b87d18</DocGUID>
       <Bookmarks />
@@ -318,6 +318,14 @@
       <DocGUID>f994df10-b0f9-4812-b13d-c76ac78adf8e</DocGUID>
       <Bookmarks />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\ship.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>44</X>
+        <Y>57</Y>
+      </CursorPos>
+      <DocGUID>3e557f93-9850-460c-83a0-da3431878df8</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\shipbase.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>1</X>
@@ -334,8 +342,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>16</Y>
+        <X>21</X>
+        <Y>17</Y>
       </CursorPos>
       <DocGUID>100c0e59-d7fc-47f9-92be-728211fffe47</DocGUID>
       <Bookmarks />
