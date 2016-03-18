@@ -21,13 +21,20 @@ Class RailIn Extends GimmickObject
 	Public
 		' Global variable(s):
 		Global railInOutImage:MFImage
+		
+		' Functions:
+		Function MakeImage:MFImage()
+			If (railInOutImage = Null) Then
+				railInOutImage = MFImage.createImage("/gimmick/gimmick_67_68.png")
+			EndIf
+			
+			Return railInOutImage
+		End
 	Protected
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
 			Super.New(id, x, y, left, top, width, height)
 			
-			If (railInOutImage = Null) Then
-				railInOutImage = MFImage.createImage("/gimmick/gimmick_67_68.png")
-			EndIf
+			MakeImage()
 		End
 	Public
 		Method refreshCollisionRect:Void(x:Int, y:Int)
