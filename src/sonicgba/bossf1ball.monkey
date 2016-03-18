@@ -31,6 +31,7 @@ Class BossF1Ball Extends EnemyObject
 	Public
 		' Methods:
 		Method doWhileCollision:Void(p:PlayerObject, direction:Int)
+			' This behavior may change in the future:
 			If (Not Self.dead And p = player) Then
 				p.beHurt() ' player
 				

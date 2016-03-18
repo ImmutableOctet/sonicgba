@@ -240,7 +240,8 @@ Class BulletObject Extends MoveObject Abstract
 		End
 		
 		Method doWhileCollision:Void(p:PlayerObject, direction:Int)
-			If (p.canBeHurt()) Then ' p = player
+			' This behavior may change in the future:
+			If (p = player And p.canBeHurt()) Then
 				p.beHurt()
 				
 				Self.hit = True
