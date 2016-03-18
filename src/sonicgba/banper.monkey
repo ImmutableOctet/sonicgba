@@ -18,7 +18,7 @@ Private
 Public
 
 ' Classes:
-Class Banper Extends GimmickObject
+Class Banper Extends GimmickObject ' Class Bumper Extends GimmickObject
 	Private
 		' Fields:
 		Field isActived:Bool
@@ -41,8 +41,10 @@ Class Banper Extends GimmickObject
 		End
 		
 		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
+			Local playerColRect:= player.getCollisionRect()
+			
 			' Magic number: 512 (Height, most likely)
-			If ((player.getCollisionRect().y0 >= Self.collisionRect.y0 And player.getCollisionRect().y1 <= Self.collisionRect.y1 + 512) Or Self.iHeight > Self.iWidth) Then
+			If ((playerColRect.y0 >= Self.collisionRect.y0 And playerColRect.y1 <= Self.collisionRect.y1 + 512) Or Self.iHeight > Self.iWidth) Then
 				' Magic number: Collision state.
 				player.setCollisionState(1)
 				
