@@ -24,7 +24,7 @@ Class UnseenSpring Extends GimmickObject ' Spring
 		Global SPRING_POWER:Int = Spring.SPRING_POWER[0]
 		
 		' Fields:
-		Field AnimationDrawer drawer
+		Field drawer:AnimationDrawer
 	Protected
 		' Constructor(s):
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)

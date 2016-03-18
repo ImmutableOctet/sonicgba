@@ -36,21 +36,22 @@ Public
 Class GimmickObject Extends GameObject
 	Private
 		' Constant variable(s):
-		Const WIND_ACCELERATE:Int
-		Const WIND_VELOCITY:Int
+		Const WIND_ACCELERATE:Int = -516 ' ((-GRAVITY) * 3)
+		Const WIND_VELOCITY:Int = -472 ' (SmallAnimal.FLY_VELOCITY_Y - GRAVITY)
 		
 		' Global variable(s):
-		Global damageEnable:Bool
 		Global framecnt:Int
-		Global furikoEnable:Bool
-		Global ironBallEnable:Bool
-		Global rollHobinEnable:Bool
-		Global rollPlatformEnable:Bool
-		Global seabedvolcanoEnable:Bool
-		Global steamEnable:Bool
-		Global torchFireEnable:Bool
-		Global waterFallEnable:Bool
-		Global waterSlipEnable:Bool
+		
+		Global damageEnable:Bool = False
+		Global furikoEnable:Bool = False
+		Global ironBallEnable:Bool = False
+		Global rollHobinEnable:Bool = False
+		Global rollPlatformEnable:Bool = False
+		Global seabedvolcanoEnable:Bool = False
+		Global steamEnable:Bool = False
+		Global torchFireEnable:Bool = False
+		Global waterFallEnable:Bool = False
+		Global waterSlipEnable:Bool = False
 	Public
 		' Constant variable(s):
 		
@@ -188,6 +189,7 @@ Class GimmickObject Extends GameObject
 		
 		' Global variable(s):
 		Global doorAnimation:Animation
+		
 		Global hookImage:MFImage
 		Global platformImage:MFImage
 		Global rolllinkImage:MFImage
@@ -207,27 +209,11 @@ Class GimmickObject Extends GameObject
 		
 		Field used:Bool
 	Public
-	static {
-		doorAnimation = Null
-		platformImage = Null
-		furikoEnable = False
-		ironBallEnable = False
-		torchFireEnable = False
-		rollPlatformEnable = False
-		steamEnable = False
-		waterFallEnable = False
-		waterSlipEnable = False
-		rollHobinEnable = False
-		damageEnable = False
-		seabedvolcanoEnable = False
-		WIND_VELOCITY = SmallAnimal.FLY_VELOCITY_Y - GRAVITY
-		WIND_ACCELERATE = (-GRAVITY) * 3
-	}
 
 	Public Function getNewInstance:GameObject(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
 		GameObject reElement = Null
-		x <<= 6
-		y <<= 6
+		x Shl= 6
+		y Shl= 6
 		switch (id) {
 			Case TitleState.STAGE_SELECT_KEY_RECORD_1
 				reElement = New Terminal(id, x, y, left, top, width, height)
@@ -500,7 +486,7 @@ Class GimmickObject Extends GameObject
 						reElement = New WindParts(id, x, y, left, top, width, height)
 						break
 					Case 98
-						If (left = 35 Or left = 9 Or left = -21) Then
+						If (left = GIMMICK_AROUND_EXIT Or left = 9 Or left = -21) Then
 							reElement = New SeabedVolcanoAsynBase(id, x, y, left, top, width, height)
 						} Else {
 							reElement = New SeabedVolcanoBase(id, x, y, left, top, width, height)
@@ -527,12 +513,13 @@ Class GimmickObject Extends GameObject
 						break
 				}
 				If (reElement = Null) Then
-					If (id = 90) Then
+					If (id = GIMMICK_WIND) Then
 						isFirstTouchedWind = False
-					}
+					EndIf
+					
 					reElement = New GimmickObject(id, x, y, left, top, width, height)
 					break
-				}
+				Endif
 				break
 		}
 		If (reElement <> Null) Then
@@ -596,7 +583,6 @@ Class GimmickObject Extends GameObject
 		shipRingImage = Null
 		platformImage = Null
 		hookImage = Null
-		
 		Hari.releaseAllResource()
 		Spring.releaseAllResource()
 		Stone.releaseAllResource()
@@ -667,7 +653,7 @@ Class GimmickObject Extends GameObject
 		SpSpring.releaseAllResource()
 		Boss4Ice.releaseAllResource()
 		Boss6Block.releaseAllResource()
-	End
+	}
 
 	Protected Method GimmickObject:protected(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
 		Self.objId = id
@@ -743,7 +729,7 @@ Class GimmickObject Extends GameObject
 						player.setVelX(-1900)
 					}
 				Case PlayerTails.TAILS_ANI_ROLL_V_2
-				Case 65
+				Case GIMMICK_MOVE
 					If (Not Self.used And player.setRailLine(New Line(Self.posX, Self.posY, Self.posX + Self.iLeft, Self.posY + Self.iTop), Self.posX, Self.posY, Self.iLeft, Self.iTop, Self.iWidth, Self.iHeight, Self)) Then
 						Self.used = True
 						soundInstance.playSe(37)
@@ -753,7 +739,7 @@ Class GimmickObject Extends GameObject
 						player.setFall(Self.posX - RollPlatformSpeedC.COLLISION_OFFSET_Y, Self.posY, Self.iLeft, Self.iTop)
 						player.stopMove()
 					}
-				Case 70
+				Case GIMMICK_SEE
 					If (Not Self.used And Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
 						Bool z
 						PlayerObject playerObject = player
@@ -765,7 +751,7 @@ Class GimmickObject Extends GameObject
 						playerObject.changeVisible(z)
 						Self.used = True
 					}
-				Case 90
+				Case GIMMICK_WIND
 					framecnt += 1
 					If (Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
 						If (StageManager.getStageID() = 11) Then
@@ -817,7 +803,7 @@ Class GimmickObject Extends GameObject
 				Self.collisionRect.setRect(((Self.mWidth Shr 1) + x) - MDPhone.SCREEN_HEIGHT, y, 1280, Self.mHeight)
 			Case 66
 				Self.collisionRect.setRect(x - SpecialMap.MAP_LENGTH, y, PlayerObject.HEIGHT, 64)
-			Case 70
+			Case GIMMICK_SEE
 				Self.collisionRect.setRect(x, y, Self.mWidth, Self.mHeight)
 			Case 73
 				Self.collisionRect.setRect(Self.posX, Self.posY - BarHorbinV.COLLISION_OFFSET, BarHorbinV.COLLISION_OFFSET, BarHorbinV.COLLISION_OFFSET)
@@ -827,7 +813,7 @@ Class GimmickObject Extends GameObject
 
 	Public Method doWhileRail:Void(object:PlayerObject, direction:Int)
 		switch (Self.objId) {
-			Case 65
+			Case GIMMICK_MOVE
 				If (Not Self.used And player.setRailLine(New Line(Self.posX, Self.posY, Self.posX + Self.iLeft, Self.posY + Self.iTop), Self.posX, Self.posY, Self.iLeft, Self.iTop, Self.iWidth, Self.iHeight, Self)) Then
 					Self.used = True
 					soundInstance.playSe(37)
@@ -836,7 +822,7 @@ Class GimmickObject Extends GameObject
 				If (Self.firstTouch) Then
 					player.setFall(Self.posX - RollPlatformSpeedC.COLLISION_OFFSET_Y, Self.posY, Self.iLeft, Self.iTop)
 				}
-			Case 70
+			Case GIMMICK_SEE
 				If (Not Self.used And Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
 					player.changeVisible(Self.iLeft = 0)
 					Self.used = True
@@ -853,43 +839,49 @@ Class GimmickObject Extends GameObject
 					soundSystem.playSe(37)
 					Self.used = True
 				}
-			default:
+			Default
+				' Nothing so far.
 		}
 	}
 
 	Public Method doWhileNoCollision:Void()
-		switch (Self.objId) {
-			Case PlayerTails.TAILS_ANI_DEAD_1
-			Case PlayerTails.TAILS_ANI_DEAD_2
-			Case PlayerTails.TAILS_ANI_PUSH_WALL
-			Case PlayerTails.TAILS_ANI_SPRING_1
-			Case PlayerTails.TAILS_ANI_CLIFF_2
-			Case PlayerTails.TAILS_ANI_UP_ARM
-			Case PlayerTails.TAILS_ANI_POLE_V
-			Case 65
-			Case Def.TOUCH_START_GAME_WIDTH
+		Select (Self.objId)
+			Case GIMMICK_CHANGE_LAYER_A
+			Case GIMMICK_CHANGE_LAYER_B
+			Case GIMMICK_SLIP_START
+			Case GIMMICK_SLIP_END
+			Case GIMMICK_INVISIBLE_CAPER
+			Case GIMMICK_AROUND_ENTRANCE
+			Case GIMMICK_AROUND_EXIT
+			Case GIMMICK_SPIN
+			Case GIMMICK_MOVE
 				Self.used = False
-			Case 70
+			Case GIMMICK_SEE
 				If (Self.used) Then
 					Self.used = False
+					
 					If (Self.iLeft = 0) Then
 						player.setFallOver()
-					}
-				}
-			Case 90
+					EndIf
+				EndIf
+			Case GIMMICK_WIND
 				If (player.isInGravityCircle) Then
 					player.isInGravityCircle = False
-				}
-			default:
-		}
-	}
+				Endif
+			Default
+				' Nothing so far.
+		End Select
+	End
 
 	Public Method close:Void()
-	}
+		' Empty implementation.
+	End
 
 	Public Method doBeforeCollisionCheck:Void()
-	}
+		' Empty implementation.
+	End
 
 	Public Method doWhileCollision:Void(arg0:ACObject, arg1:ACCollision, arg2:Int, arg3:Int, arg4:Int, arg5:Int, arg6:Int)
-	}
-}
+		' Empty implementation.
+	End
+End

@@ -126,8 +126,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>29</X>
-        <Y>163</Y>
+        <X>33</X>
+        <Y>87</Y>
       </CursorPos>
       <DocGUID>8f858a42-7fd0-4b76-81a2-aecb5589857a</DocGUID>
       <Bookmarks />
@@ -319,8 +319,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\unseenspring.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>18</X>
-        <Y>16</Y>
+        <X>30</X>
+        <Y>26</Y>
       </CursorPos>
       <DocGUID>f92fc627-6a26-4c38-b4d0-371936eae219</DocGUID>
       <Bookmarks />
@@ -349,6 +349,42 @@
     </DocUserOptions>
   </Files>
   <Folders>
+    <FolderStatus NodePath="Sonic_GBA\etc" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\etc\SAdv" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\etc\SAdv\New folder" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\animation" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\animation\ending" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\animation\opening" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\animation\player" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\animation\special" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\animation\utl_res" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\gimmick" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\img" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\item" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\map" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\map\stage1_1" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\map\stage1_2" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\map\stage1_bg" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\map\stage2_bg_1" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\map\stage3_1" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\map\stage3_2" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\map\stage3_bg" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\map\stage4_1" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\map\stage4_2" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\map\stage5_1" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\map\stage5_2" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\map\stage6_1" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\map\stage6_2" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\map\stage6_bg_3" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\mid" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\se" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\special_res" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\standard" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\tip" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\title" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\tuch" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\sonic.data\water" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega" Expanded="true" />
