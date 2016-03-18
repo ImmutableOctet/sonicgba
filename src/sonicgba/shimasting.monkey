@@ -13,10 +13,10 @@ Public
 Class ShimaSting Extends GimmickObject
 	Private
 		' Constant variable(s):
-		Const ATTACK_HEIGHT:Int = 576
-		
 		Const COLLISION_WIDTH:Int = 3072
-		Const COLLISION_HEIGHT:= ATTACK_HEIGHT
+		Const COLLISION_HEIGHT:Int = 576
+		
+		Const ATTACK_HEIGHT:= COLLISION_HEIGHT
 		Const OFFSET_HEIGHT:Int = 1024
 		
 		Const STATE_NONE:Int = 0
@@ -78,7 +78,7 @@ Class ShimaSting Extends GimmickObject
 					ry += OFFSET_HEIGHT
 				EndIf
 				
-				Self.collisionRect.setRect(rx, ry, COLLISION_WIDTH, ATTACK_HEIGHT)
+				Self.collisionRect.setRect(rx, ry, COLLISION_WIDTH, COLLISION_HEIGHT) ' ATTACK_HEIGHT
 			Else
 				Self.collisionRect.setRect(x, y, 1, 1)
 			EndIf

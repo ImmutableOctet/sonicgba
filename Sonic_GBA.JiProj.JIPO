@@ -80,6 +80,14 @@
       <DocGUID>a3b24112-fc97-4dc4-bfe3-77b4c7ebb480</DocGUID>
       <Bookmarks />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\bossf3ray.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>25</X>
+        <Y>54</Y>
+      </CursorPos>
+      <DocGUID>0ddec5b4-8d22-4893-b96d-0c33d651ba02</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bossobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>10</X>
@@ -87,13 +95,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\bulletobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\bulletobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>44</X>
-        <Y>242</Y>
+        <X>8</X>
+        <Y>247</Y>
       </CursorPos>
-      <DocGUID>fcf7fc08-8b7b-4618-a6c1-9a26e87e2729</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\changerectregion.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -130,13 +137,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>44</X>
-        <Y>388</Y>
+        <X>43</X>
+        <Y>1377</Y>
       </CursorPos>
-      <DocGUID>2a4b140b-b36e-4655-b4ae-ec25756b6570</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -275,8 +281,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\shimasting.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>64</Y>
+        <X>40</X>
+        <Y>18</Y>
       </CursorPos>
       <DocGUID>f994df10-b0f9-4812-b13d-c76ac78adf8e</DocGUID>
       <Bookmarks />
