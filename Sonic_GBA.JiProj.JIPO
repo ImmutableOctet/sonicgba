@@ -24,8 +24,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bank.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>64</X>
-        <Y>11</Y>
+        <X>11</X>
+        <Y>25</Y>
       </CursorPos>
       <DocGUID>93605405-bd81-43dd-b3c5-62e2be9ccaf8</DocGUID>
       <Bookmarks />
@@ -57,6 +57,14 @@
         <Y>47</Y>
       </CursorPos>
       <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\boss3shadow.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>28</X>
+        <Y>8</Y>
+      </CursorPos>
+      <DocGUID>fa8d74db-3fa2-4fd7-8fc8-ee76ce12f177</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss6bullet.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -115,19 +123,20 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>65</X>
-        <Y>217</Y>
+        <X>44</X>
+        <Y>388</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>2a4b140b-b36e-4655-b4ae-ec25756b6570</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>10</X>
-        <Y>20</Y>
+        <X>32</X>
+        <Y>748</Y>
       </CursorPos>
-      <DocGUID>8f858a42-7fd0-4b76-81a2-aecb5589857a</DocGUID>
+      <DocGUID>5f6ca01f-17b8-4654-a100-3d612674b0cd</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\hobincal.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
@@ -229,13 +238,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\ropestart.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\ropestart.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
-        <X>45</X>
-        <Y>130</Y>
+        <X>0</X>
+        <Y>0</Y>
       </CursorPos>
-      <DocGUID>e9386978-69c2-4edf-a9cc-16b43a1a866e</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ropeturn.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>

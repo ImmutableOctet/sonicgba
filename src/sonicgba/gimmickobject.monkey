@@ -746,7 +746,7 @@ Class GimmickObject Extends GameObject
 			End
 		End
 	
-		Method doWhileRail:Void(object:PlayerObject, direction:Int)
+		Method doWhileRail:Void(player:PlayerObject, direction:Int)
 			Select (Self.objId)
 				Case GIMMICK_MOVE
 					If (Not Self.used And player.setRailLine(New Line(Self.posX, Self.posY, Self.posX + Self.iLeft, Self.posY + Self.iTop), Self.posX, Self.posY, Self.iLeft, Self.iTop, Self.iWidth, Self.iHeight, Self)) Then
