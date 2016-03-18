@@ -435,262 +435,308 @@ Class GimmickObject Extends GameObject
 			
 			Return reElement
 		End
-
-	Public Function gimmickInit:Void()
-		furikoEnable = False
-		ironBallEnable = False
-		torchFireEnable = False
-		rollPlatformEnable = False
-		steamEnable = False
-		waterFallEnable = False
-		waterSlipEnable = False
-		rollHobinEnable = False
-		damageEnable = False
-		seabedvolcanoEnable = False
-	End
-
-	Public Function gimmickStaticLogic:Void()
-		If (furikoEnable) Then
-			Furiko.staticLogic()
+		
+		Function gimmickInit:Void()
+			furikoEnable = False
+			ironBallEnable = False
+			torchFireEnable = False
+			rollPlatformEnable = False
+			steamEnable = False
+			waterFallEnable = False
+			waterSlipEnable = False
+			rollHobinEnable = False
+			damageEnable = False
+			seabedvolcanoEnable = False
 		End
-		If (damageEnable) Then
-			DamageArea.staticLogic()
+		
+		Public Function gimmickStaticLogic:Void()
+			If (furikoEnable) Then
+				Furiko.staticLogic()
+			End
+			If (damageEnable) Then
+				DamageArea.staticLogic()
+			End
+			MoveCalculator.staticLogic()
+			If (waterFallEnable) Then
+				WaterFall.staticLogic()
+			End
+			If (waterSlipEnable) Then
+				WaterSlip.staticLogic()
+			End
+			If (torchFireEnable) Then
+				TorchFire.staticLogic()
+			End
+			If (steamEnable) Then
+				SteamBase.staticLogic()
+			End
+			If (ironBallEnable) Then
+				IronBall.staticLogic()
+			End
+			If (rollHobinEnable) Then
+				RollHobin.staticLogic()
+			End
+			If (rollPlatformEnable) Then
+				RollPlatformSpeedA.staticLogic()
+				RollPlatformSpeedB.staticLogic()
+				RollPlatformSpeedC.staticLogic()
+			End
+			If (seabedvolcanoEnable) Then
+				SeabedVolcanoBase.staticLogic()
+				SeabedVolcanoAsynBase.staticLogic()
+			End
 		End
-		MoveCalculator.staticLogic()
-		If (waterFallEnable) Then
-			WaterFall.staticLogic()
+	
+		Public Function releaseGimmickResource:Void()
+			doorAnimation = Null
+			shipRingImage = Null
+			platformImage = Null
+			hookImage = Null
+			Hari.releaseAllResource()
+			Spring.releaseAllResource()
+			Stone.releaseAllResource()
+			Marker.releaseAllResource()
+			BreakPlatform.releaseAllResource()
+			CaperBed.releaseAllResource()
+			CaperBlock.releaseAllResource()
+			Accelerate.releaseAllResource()
+			Poal.releaseAllResource()
+			Furiko.releaseAllResource()
+			Shatter.releaseAllResource()
+			Neji.releaseAllResource()
+			Arm.releaseAllResource()
+			PipeIn.releaseAllResource()
+			Terminal.releaseAllResource()
+			Belt.releaseAllResource()
+			DamageArea.releaseAllResource()
+			GraphicPatch.releaseAllResource()
+			TutorialPoint.releaseAllResource()
+			RopeStart.releaseAllResource()
+			Cage.releaseAllResource()
+			FallFlush.releaseAllResource()
+			WaterSlip.releaseAllResource()
+			TorchFire.releaseAllResource()
+			SteamBase.releaseAllResource()
+			SteamPlatform.releaseAllResource()
+			CageButton.releaseAllResource()
+			IronBall.releaseAllResource()
+			RailFlipper.releaseAllResource()
+			LightFont.releaseAllResource()
+			HexHobin.releaseAllResource()
+			BallHobin.releaseAllResource()
+			RollHobin.releaseAllResource()
+			CornerHobin.releaseAllResource()
+			BarHorbinV.releaseAllResource()
+			BarHorbinH.releaseAllResource()
+			Balloon.releaseAllResource()
+			ShipSystem.releaseAllResource()
+			Ship.releaseAllResource()
+			ShipBase.releaseAllResource()
+			FlipH.releaseAllResource()
+			FlipV.releaseAllResource()
+			TeaCup.releaseAllResource()
+			Door.releaseAllResource()
+			FreeFallSystem.releaseAllResource()
+			FreeFallBar.releaseAllResource()
+			FreeFallPlatform.releaseAllResource()
+			BreakWall.releaseAllResource()
+			SpringPlatform.releaseAllResource()
+			RailIn.releaseAllResource()
+			DekaPlatform.releaseAllResource()
+			Subeyuka.releaseAllResource()
+			HariIsland.releaseAllResource()
+			SpringIsland.releaseAllResource()
+			WindParts.releaseAllResource()
+			StoneBall.releaseAllResource()
+			DownIsland.releaseAllResource()
+			RollIsland.releaseAllResource()
+			TogeShima.releaseAllResource()
+			Bubble.releaseAllResource()
+			Ice.releaseAllResource()
+			SeabedVolcanoBase.releaseAllResource()
+			SeabedVolcanoAsynBase.releaseAllResource()
+			Accelerate.releaseAllResource()
+			Fan.releaseAllResource()
+			FinalShima.releaseAllResource()
+			AirRoot.releaseAllResource()
+			SpSpring.releaseAllResource()
+			Boss4Ice.releaseAllResource()
+			Boss6Block.releaseAllResource()
 		End
-		If (waterSlipEnable) Then
-			WaterSlip.staticLogic()
+	Protected
+		' Constructor(s):
+		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
+			Self.objId = id
+			Self.posX = x
+			Self.posY = y
+			Self.iLeft = left
+			Self.iTop = top
+			Self.iWidth = width
+			Self.iHeight = height
+			Self.mWidth = width * BarHorbinV.COLLISION_OFFSET
+			Self.mHeight = height * BarHorbinV.COLLISION_OFFSET
+			Self.collisionRect.setRect(Self.posX, Self.posY, Self.mWidth, Self.mHeight)
 		End
-		If (torchFireEnable) Then
-			TorchFire.staticLogic()
+	Public
+		' Methods:
+		Method draw:Void(graphics:MFGraphics)
+			drawCollisionRect(graphics)
 		End
-		If (steamEnable) Then
-			SteamBase.staticLogic()
-		End
-		If (ironBallEnable) Then
-			IronBall.staticLogic()
-		End
-		If (rollHobinEnable) Then
-			RollHobin.staticLogic()
-		End
-		If (rollPlatformEnable) Then
-			RollPlatformSpeedA.staticLogic()
-			RollPlatformSpeedB.staticLogic()
-			RollPlatformSpeedC.staticLogic()
-		End
-		If (seabedvolcanoEnable) Then
-			SeabedVolcanoBase.staticLogic()
-			SeabedVolcanoAsynBase.staticLogic()
-		End
-	End
-
-	Public Function releaseGimmickResource:Void()
-		doorAnimation = Null
-		shipRingImage = Null
-		platformImage = Null
-		hookImage = Null
-		Hari.releaseAllResource()
-		Spring.releaseAllResource()
-		Stone.releaseAllResource()
-		Marker.releaseAllResource()
-		BreakPlatform.releaseAllResource()
-		CaperBed.releaseAllResource()
-		CaperBlock.releaseAllResource()
-		Accelerate.releaseAllResource()
-		Poal.releaseAllResource()
-		Furiko.releaseAllResource()
-		Shatter.releaseAllResource()
-		Neji.releaseAllResource()
-		Arm.releaseAllResource()
-		PipeIn.releaseAllResource()
-		Terminal.releaseAllResource()
-		Belt.releaseAllResource()
-		DamageArea.releaseAllResource()
-		GraphicPatch.releaseAllResource()
-		TutorialPoint.releaseAllResource()
-		RopeStart.releaseAllResource()
-		Cage.releaseAllResource()
-		FallFlush.releaseAllResource()
-		WaterSlip.releaseAllResource()
-		TorchFire.releaseAllResource()
-		SteamBase.releaseAllResource()
-		SteamPlatform.releaseAllResource()
-		CageButton.releaseAllResource()
-		IronBall.releaseAllResource()
-		RailFlipper.releaseAllResource()
-		LightFont.releaseAllResource()
-		HexHobin.releaseAllResource()
-		BallHobin.releaseAllResource()
-		RollHobin.releaseAllResource()
-		CornerHobin.releaseAllResource()
-		BarHorbinV.releaseAllResource()
-		BarHorbinH.releaseAllResource()
-		Balloon.releaseAllResource()
-		ShipSystem.releaseAllResource()
-		Ship.releaseAllResource()
-		ShipBase.releaseAllResource()
-		FlipH.releaseAllResource()
-		FlipV.releaseAllResource()
-		TeaCup.releaseAllResource()
-		Door.releaseAllResource()
-		FreeFallSystem.releaseAllResource()
-		FreeFallBar.releaseAllResource()
-		FreeFallPlatform.releaseAllResource()
-		BreakWall.releaseAllResource()
-		SpringPlatform.releaseAllResource()
-		RailIn.releaseAllResource()
-		DekaPlatform.releaseAllResource()
-		Subeyuka.releaseAllResource()
-		HariIsland.releaseAllResource()
-		SpringIsland.releaseAllResource()
-		WindParts.releaseAllResource()
-		StoneBall.releaseAllResource()
-		DownIsland.releaseAllResource()
-		RollIsland.releaseAllResource()
-		TogeShima.releaseAllResource()
-		Bubble.releaseAllResource()
-		Ice.releaseAllResource()
-		SeabedVolcanoBase.releaseAllResource()
-		SeabedVolcanoAsynBase.releaseAllResource()
-		Accelerate.releaseAllResource()
-		Fan.releaseAllResource()
-		FinalShima.releaseAllResource()
-		AirRoot.releaseAllResource()
-		SpSpring.releaseAllResource()
-		Boss4Ice.releaseAllResource()
-		Boss6Block.releaseAllResource()
-	End
-
-	Protected Method GimmickObject:protected(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
-		Self.objId = id
-		Self.posX = x
-		Self.posY = y
-		Self.iLeft = left
-		Self.iTop = top
-		Self.iWidth = width
-		Self.iHeight = height
-		Self.mWidth = width * BarHorbinV.COLLISION_OFFSET
-		Self.mHeight = height * BarHorbinV.COLLISION_OFFSET
-		Self.collisionRect.setRect(Self.posX, Self.posY, Self.mWidth, Self.mHeight)
-	End
-
-	Public Method draw:Void(g:MFGraphics)
-		drawCollisionRect(g)
-	End
-
-	Public Method logic:Void()
-	End
-
-	Public Method doWhileCollision:Void(object:PlayerObject, direction:Int)
-		If (object = player) Then
-			switch (Self.objId) {
-				Case PlayerTails.TAILS_ANI_DEAD_1
-					If (Not Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
-						Self.used = False
-					End ElseIf (Not Self.used) Then
-						player.setCollisionLayer(0)
-						Self.used = True
-					End
-				Case PlayerTails.TAILS_ANI_DEAD_2
-					If (Not Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
-						Self.used = False
-					End ElseIf (Not Self.used) Then
-						player.setCollisionLayer(1)
-						Self.used = True
-					End
-				Case PlayerTails.TAILS_ANI_SPRING_1
-					If (player instanceof PlayerSonic) Then
-						player.slipEnd()
-					End ElseIf (player instanceof PlayerAmy) Then
-						player.slipEnd()
-					End
-				Case PlayerTails.TAILS_ANI_CLIFF_2
-					If (Not Self.used And player.beUnseenPop()) Then
-						Self.used = True
-					End
-				Case PlayerTails.TAILS_ANI_UP_ARM
-					If (Not Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
-						Self.used = False
-					End ElseIf (Not Self.used) Then
-						player.ductIn()
-						Self.used = True
-						If (Not (player instanceof PlayerAmy) And player.getAnimationId() <> 4) Then
-							soundInstance.playSe(4)
+		
+		Method doWhileCollision:Void(object:PlayerObject, direction:Int)
+			If (object = player) Then
+				switch (Self.objId) {
+					Case PlayerTails.TAILS_ANI_DEAD_1
+						If (Not Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
+							Self.used = False
+						End ElseIf (Not Self.used) Then
+							player.setCollisionLayer(0)
+							Self.used = True
 						End
-					End
-				Case PlayerTails.TAILS_ANI_POLE_V
-					If (Not Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
-						Self.used = False
-					End ElseIf (Not Self.used) Then
-						player.velX = 0
-						player.ductOut()
-						Self.used = True
-					End
-				Case PlayerTails.TAILS_ANI_POLE_H
-					If (player.isOnGound() And Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
-						player.setVelX(PlayerObject.HUGE_POWER_SPEED)
-					End
-				Case PlayerTails.TAILS_ANI_ROLL_V_1
-					If (player.isOnGound()) Then
-						player.setVelX(-1900)
-					End
-				Case PlayerTails.TAILS_ANI_ROLL_V_2
+					Case PlayerTails.TAILS_ANI_DEAD_2
+						If (Not Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
+							Self.used = False
+						End ElseIf (Not Self.used) Then
+							player.setCollisionLayer(1)
+							Self.used = True
+						End
+					Case PlayerTails.TAILS_ANI_SPRING_1
+						If (player instanceof PlayerSonic) Then
+							player.slipEnd()
+						End ElseIf (player instanceof PlayerAmy) Then
+							player.slipEnd()
+						End
+					Case PlayerTails.TAILS_ANI_CLIFF_2
+						If (Not Self.used And player.beUnseenPop()) Then
+							Self.used = True
+						End
+					Case PlayerTails.TAILS_ANI_UP_ARM
+						If (Not Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
+							Self.used = False
+						End ElseIf (Not Self.used) Then
+							player.ductIn()
+							Self.used = True
+							If (Not (player instanceof PlayerAmy) And player.getAnimationId() <> 4) Then
+								soundInstance.playSe(4)
+							End
+						End
+					Case PlayerTails.TAILS_ANI_POLE_V
+						If (Not Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
+							Self.used = False
+						End ElseIf (Not Self.used) Then
+							player.velX = 0
+							player.ductOut()
+							Self.used = True
+						End
+					Case PlayerTails.TAILS_ANI_POLE_H
+						If (player.isOnGound() And Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
+							player.setVelX(PlayerObject.HUGE_POWER_SPEED)
+						End
+					Case PlayerTails.TAILS_ANI_ROLL_V_1
+						If (player.isOnGound()) Then
+							player.setVelX(-1900)
+						End
+					Case PlayerTails.TAILS_ANI_ROLL_V_2
+					Case GIMMICK_MOVE
+						If (Not Self.used And player.setRailLine(New Line(Self.posX, Self.posY, Self.posX + Self.iLeft, Self.posY + Self.iTop), Self.posX, Self.posY, Self.iLeft, Self.iTop, Self.iWidth, Self.iHeight, Self)) Then
+							Self.used = True
+							soundInstance.playSe(37)
+						End
+					Case 66
+						If (Self.firstTouch And StageManager.getCurrentZoneId() <> 3) Then
+							player.setFall(Self.posX - RollPlatformSpeedC.COLLISION_OFFSET_Y, Self.posY, Self.iLeft, Self.iTop)
+							player.stopMove()
+						End
+					Case GIMMICK_SEE
+						If (Not Self.used And Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
+							Bool z
+							PlayerObject playerObject = player
+							If (Self.iLeft = 0) Then
+								z = True
+							Else
+								z = False
+							End
+							playerObject.changeVisible(z)
+							Self.used = True
+						End
+					Case GIMMICK_WIND
+						framecnt += 1
+						If (Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
+							If (StageManager.getStageID() = 11) Then
+								player.collisionState = GIMMICK_HARI_UP
+								player.isInGravityCircle = True
+							End
+							If (player.collisionState = GIMMICK_HARI_UP) Then
+								player.collisionState = GIMMICK_HARI_UP
+								If (StageManager.getStageID() = 11) Then
+									player.worldCal.stopMoveY()
+									ACWorldCollisionCalculator aCWorldCollisionCalculator = player.worldCal
+									ACWorldCollisionCalculator aCWorldCollisionCalculator2 = player.worldCal
+									aCWorldCollisionCalculator.actionState = GIMMICK_HARI_UP
+								End
+								If (player.getVelY() > WIND_VELOCITY) Then
+									player.setVelY(player.getVelY() + WIND_ACCELERATE)
+								Else
+									player.setVelY(WIND_VELOCITY)
+								End
+								If (StageManager.getStageID() = 11) Then
+									player.setAnimationId(9)
+									Return
+								Else
+									player.setAnimationId(29)
+									Return
+								End
+							End
+							soundInstance.stopLoopSe()
+							framecnt = 0
+							isFirstTouchedWind = False
+							player.isInGravityCircle = False
+						End
+					Case Def.TOUCH_START_GAME_WIDTH
+						If (Not Self.used) Then
+							player.setAnimationId(4)
+							SoundSystem soundSystem = soundInstance
+							SoundSystem soundSystem2 = soundInstance
+							soundSystem.playSe(37)
+							Self.used = True
+						End
+					default:
+				End
+			End
+		End
+	
+		Method refreshCollisionRect:Void(x:Int, y:Int)
+			switch (Self.objId) {
+				Case PlayerTails.TAILS_ANI_SPRING_1
+					Self.collisionRect.setRect(((Self.mWidth Shr 1) + x) - MDPhone.SCREEN_HEIGHT, y, 1280, Self.mHeight)
+				Case 66
+					Self.collisionRect.setRect(x - SpecialMap.MAP_LENGTH, y, PlayerObject.HEIGHT, 64)
+				Case GIMMICK_SEE
+					Self.collisionRect.setRect(x, y, Self.mWidth, Self.mHeight)
+				Case 73
+					Self.collisionRect.setRect(Self.posX, Self.posY - BarHorbinV.COLLISION_OFFSET, BarHorbinV.COLLISION_OFFSET, BarHorbinV.COLLISION_OFFSET)
+				default:
+			End
+		End
+	
+		Method doWhileRail:Void(object:PlayerObject, direction:Int)
+			switch (Self.objId) {
 				Case GIMMICK_MOVE
 					If (Not Self.used And player.setRailLine(New Line(Self.posX, Self.posY, Self.posX + Self.iLeft, Self.posY + Self.iTop), Self.posX, Self.posY, Self.iLeft, Self.iTop, Self.iWidth, Self.iHeight, Self)) Then
 						Self.used = True
 						soundInstance.playSe(37)
 					End
 				Case 66
-					If (Self.firstTouch And StageManager.getCurrentZoneId() <> 3) Then
+					If (Self.firstTouch) Then
 						player.setFall(Self.posX - RollPlatformSpeedC.COLLISION_OFFSET_Y, Self.posY, Self.iLeft, Self.iTop)
-						player.stopMove()
 					End
 				Case GIMMICK_SEE
 					If (Not Self.used And Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
-						Bool z
-						PlayerObject playerObject = player
-						If (Self.iLeft = 0) Then
-							z = True
-						Else
-							z = False
-						End
-						playerObject.changeVisible(z)
+						player.changeVisible(Self.iLeft = 0)
 						Self.used = True
 					End
-				Case GIMMICK_WIND
-					framecnt += 1
-					If (Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
-						If (StageManager.getStageID() = 11) Then
-							player.collisionState = GIMMICK_HARI_UP
-							player.isInGravityCircle = True
-						End
-						If (player.collisionState = GIMMICK_HARI_UP) Then
-							player.collisionState = GIMMICK_HARI_UP
-							If (StageManager.getStageID() = 11) Then
-								player.worldCal.stopMoveY()
-								ACWorldCollisionCalculator aCWorldCollisionCalculator = player.worldCal
-								ACWorldCollisionCalculator aCWorldCollisionCalculator2 = player.worldCal
-								aCWorldCollisionCalculator.actionState = GIMMICK_HARI_UP
-							End
-							If (player.getVelY() > WIND_VELOCITY) Then
-								player.setVelY(player.getVelY() + WIND_ACCELERATE)
-							Else
-								player.setVelY(WIND_VELOCITY)
-							End
-							If (StageManager.getStageID() = 11) Then
-								player.setAnimationId(9)
-								Return
-							Else
-								player.setAnimationId(29)
-								Return
-							End
-						End
-						soundInstance.stopLoopSe()
-						framecnt = 0
-						isFirstTouchedWind = False
-						player.isInGravityCircle = False
+				Case 73
+					If (Self.firstTouch) Then
+						player.setRailFlip()
 					End
 				Case Def.TOUCH_START_GAME_WIDTH
 					If (Not Self.used) Then
@@ -700,96 +746,45 @@ Class GimmickObject Extends GameObject
 						soundSystem.playSe(37)
 						Self.used = True
 					End
-				default:
+				Default
+					' Nothing so far.
 			End
 		End
-	End
-
-	Public Method refreshCollisionRect:Void(x:Int, y:Int)
-		switch (Self.objId) {
-			Case PlayerTails.TAILS_ANI_SPRING_1
-				Self.collisionRect.setRect(((Self.mWidth Shr 1) + x) - MDPhone.SCREEN_HEIGHT, y, 1280, Self.mHeight)
-			Case 66
-				Self.collisionRect.setRect(x - SpecialMap.MAP_LENGTH, y, PlayerObject.HEIGHT, 64)
-			Case GIMMICK_SEE
-				Self.collisionRect.setRect(x, y, Self.mWidth, Self.mHeight)
-			Case 73
-				Self.collisionRect.setRect(Self.posX, Self.posY - BarHorbinV.COLLISION_OFFSET, BarHorbinV.COLLISION_OFFSET, BarHorbinV.COLLISION_OFFSET)
-			default:
-		End
-	End
-
-	Public Method doWhileRail:Void(object:PlayerObject, direction:Int)
-		switch (Self.objId) {
-			Case GIMMICK_MOVE
-				If (Not Self.used And player.setRailLine(New Line(Self.posX, Self.posY, Self.posX + Self.iLeft, Self.posY + Self.iTop), Self.posX, Self.posY, Self.iLeft, Self.iTop, Self.iWidth, Self.iHeight, Self)) Then
-					Self.used = True
-					soundInstance.playSe(37)
-				End
-			Case 66
-				If (Self.firstTouch) Then
-					player.setFall(Self.posX - RollPlatformSpeedC.COLLISION_OFFSET_Y, Self.posY, Self.iLeft, Self.iTop)
-				End
-			Case GIMMICK_SEE
-				If (Not Self.used And Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
-					player.changeVisible(Self.iLeft = 0)
-					Self.used = True
-				End
-			Case 73
-				If (Self.firstTouch) Then
-					player.setRailFlip()
-				End
-			Case Def.TOUCH_START_GAME_WIDTH
-				If (Not Self.used) Then
-					player.setAnimationId(4)
-					SoundSystem soundSystem = soundInstance
-					SoundSystem soundSystem2 = soundInstance
-					soundSystem.playSe(37)
-					Self.used = True
-				End
-			Default
-				' Nothing so far.
-		End
-	End
-
-	Public Method doWhileNoCollision:Void()
-		Select (Self.objId)
-			Case GIMMICK_CHANGE_LAYER_A
-			Case GIMMICK_CHANGE_LAYER_B
-			Case GIMMICK_SLIP_START
-			Case GIMMICK_SLIP_END
-			Case GIMMICK_INVISIBLE_CAPER
-			Case GIMMICK_AROUND_ENTRANCE
-			Case GIMMICK_AROUND_EXIT
-			Case GIMMICK_SPIN
-			Case GIMMICK_MOVE
-				Self.used = False
-			Case GIMMICK_SEE
-				If (Self.used) Then
+	
+		Method doWhileNoCollision:Void()
+			Select (Self.objId)
+				Case GIMMICK_CHANGE_LAYER_A, GIMMICK_CHANGE_LAYER_B, GIMMICK_SLIP_START, GIMMICK_SLIP_END, GIMMICK_INVISIBLE_CAPER, GIMMICK_AROUND_ENTRANCE, GIMMICK_AROUND_EXIT, GIMMICK_SPIN, GIMMICK_MOVE
 					Self.used = False
-					
-					If (Self.iLeft = 0) Then
-						player.setFallOver()
+				Case GIMMICK_SEE
+					If (Self.used) Then
+						Self.used = False
+						
+						If (Self.iLeft = 0) Then
+							player.setFallOver()
+						EndIf
 					EndIf
-				EndIf
-			Case GIMMICK_WIND
-				If (player.isInGravityCircle) Then
-					player.isInGravityCircle = False
-				Endif
-			Default
-				' Nothing so far.
-		End Select
-	End
-
-	Public Method close:Void()
-		' Empty implementation.
-	End
-
-	Public Method doBeforeCollisionCheck:Void()
-		' Empty implementation.
-	End
-
-	Public Method doWhileCollision:Void(arg0:ACObject, arg1:ACCollision, arg2:Int, arg3:Int, arg4:Int, arg5:Int, arg6:Int)
-		' Empty implementation.
-	End
+				Case GIMMICK_WIND
+					If (player.isInGravityCircle) Then
+						player.isInGravityCircle = False
+					Endif
+				Default
+					' Nothing so far.
+			End Select
+		End
+		
+		Method logic:Void()
+			' Empty implementation.
+		End
+		
+		Method close:Void()
+			' Empty implementation.
+		End
+	
+		Method doBeforeCollisionCheck:Void()
+			' Empty implementation.
+		End
+	
+		Method doWhileCollision:Void(arg0:ACObject, arg1:ACCollision, arg2:Int, arg3:Int, arg4:Int, arg5:Int, arg6:Int)
+			' Empty implementation.
+		End
 End
