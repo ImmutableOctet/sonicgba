@@ -81,9 +81,9 @@ Class DrownBubble Extends EnemyObject
 			Return DRAW_AFTER_SONIC ' DRAW_BEFORE_SONIC
 		End
 		
-		Method draw:Void(g:MFGraphics)
+		Method draw:Void(graphics:MFGraphics)
 			If (Not Self.dead) Then
-				drawInMap(g, Self.bubbledrawer)
+				drawInMap(graphics, Self.bubbledrawer)
 			EndIf
 		End
 		
