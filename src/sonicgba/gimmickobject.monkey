@@ -669,24 +669,26 @@ Class GimmickObject Extends GameObject
 						If (Not Self.used And player.setRailLine(New Line(Self.posX, Self.posY, Self.posX + Self.iLeft, Self.posY + Self.iTop), Self.posX, Self.posY, Self.iLeft, Self.iTop, Self.iWidth, Self.iHeight, Self)) Then
 							Self.used = True
 							soundInstance.playSe(37)
-						End
+						EndIf
 					Case 66
 						If (Self.firstTouch And StageManager.getCurrentZoneId() <> 3) Then
 							player.setFall(Self.posX - RollPlatformSpeedC.COLLISION_OFFSET_Y, Self.posY, Self.iLeft, Self.iTop)
 							player.stopMove()
-						End
+						EndIf
 					Case GIMMICK_SEE
 						If (Not Self.used And Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
-							Bool z
-							PlayerObject playerObject = player
+							Local z:Bool
+							
 							If (Self.iLeft = 0) Then
 								z = True
 							Else
 								z = False
 							End
-							playerObject.changeVisible(z)
+							
+							p.changeVisible(z)
+							
 							Self.used = True
-						End
+						EndIf
 					Case GIMMICK_WIND
 						framecnt += 1
 						If (Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
