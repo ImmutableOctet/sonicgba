@@ -82,8 +82,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bossf3ray.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>25</X>
-        <Y>54</Y>
+        <X>2</X>
+        <Y>18</Y>
       </CursorPos>
       <DocGUID>0ddec5b4-8d22-4893-b96d-0c33d651ba02</DocGUID>
       <Bookmarks />
@@ -108,6 +108,14 @@
         <Y>15</Y>
       </CursorPos>
       <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\damagearea.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>16</X>
+        <Y>17</Y>
+      </CursorPos>
+      <DocGUID>ea98ac55-3c9b-477d-8184-3fef45fd1a26</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\extraring.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -146,8 +154,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>32</X>
-        <Y>748</Y>
+        <X>43</X>
+        <Y>24</Y>
       </CursorPos>
       <DocGUID>5f6ca01f-17b8-4654-a100-3d612674b0cd</DocGUID>
       <Bookmarks />

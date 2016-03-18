@@ -22,6 +22,7 @@ Public
 Private
 	Import gameengine.def
 	
+	' I'm not sure if all of these are needed.
 	Import lib.animation
 	Import lib.line
 	Import lib.soundsystem
@@ -29,6 +30,7 @@ Private
 	
 	Import mflib.mainstate
 	
+	' Questionable imports (Probably automatic; should be removed later):
 	Import special.ssdef
 	Import special.specialmap
 	Import special.specialobject

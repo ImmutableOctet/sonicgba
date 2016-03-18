@@ -25,6 +25,7 @@ Class BossF3Ray Extends BulletObject
 		Field fadevalue:Int
 		Field frame_cn:Int
 	Protected
+		' Constructor(s):
 		Method New(x:Int, y:Int, direct:Int)
 			Super.New(x, y, 0, 0, False)
 			
@@ -36,8 +37,8 @@ Class BossF3Ray Extends BulletObject
 			Self.frame_cn = 0
 			Self.fadevalue = 200
 		End
-	
 	Public
+		' Methods:
 		Method bulletLogic:Void()
 			Self.frame_cn += 1
 			
