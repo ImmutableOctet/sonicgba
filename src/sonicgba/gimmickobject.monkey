@@ -3,18 +3,19 @@ Strict
 Public
 
 #Rem
-	This file has not been completely ported.
-	
-	Work still needs to be done on replacing incorrect
-	variables and literal values into proper constants.
-	
-	For now, this structure will remain, but later
-	down the road this will need to be resolved.
-	
-	In addition to this issue, there's also no
-	imports to the referenced "gimmick classes".
-	
-	This will need to change before this is considered ready for use.
+	Implementation notes:
+		* This file has not been completely ported.
+		
+		Work still needs to be done on replacing incorrect
+		variables and literal values into proper constants.
+		
+		For now, this structure will remain, but later
+		down the road this will need to be resolved.
+		
+		* In addition to the previous issue, there's
+		no imports to the referenced "gimmick classes".
+		
+		This will need to change before this is considered ready for use.
 #End
 
 ' Imports:
@@ -464,7 +465,7 @@ Class GimmickObject Extends GameObject
 			seabedvolcanoEnable = False
 		End
 		
-		Public Function gimmickStaticLogic:Void()
+		Function gimmickStaticLogic:Void()
 			If (furikoEnable) Then
 				Furiko.staticLogic()
 			EndIf
@@ -511,7 +512,7 @@ Class GimmickObject Extends GameObject
 			EndIf
 		End
 	
-		Public Function releaseGimmickResource:Void()
+		Function releaseGimmickResource:Void()
 			doorAnimation = Null
 			shipRingImage = Null
 			platformImage = Null

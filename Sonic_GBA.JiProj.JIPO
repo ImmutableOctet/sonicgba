@@ -115,18 +115,17 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>219</Y>
+        <X>65</X>
+        <Y>217</Y>
       </CursorPos>
-      <DocGUID>2498af58-506c-4204-9d5c-f24e783a3cb9</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>21</X>
-        <Y>740</Y>
+        <X>10</X>
+        <Y>20</Y>
       </CursorPos>
       <DocGUID>8f858a42-7fd0-4b76-81a2-aecb5589857a</DocGUID>
       <Bookmarks />
