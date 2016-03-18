@@ -44,6 +44,14 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\batbullet.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>15</X>
+        <Y>14</Y>
+      </CursorPos>
+      <DocGUID>f5ff3ee6-c4ed-46bd-92b4-0b6c6ba1624b</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\beebullet.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>31</X>
@@ -111,8 +119,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\damagearea.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>16</X>
-        <Y>17</Y>
+        <X>11</X>
+        <Y>22</Y>
       </CursorPos>
       <DocGUID>ea98ac55-3c9b-477d-8184-3fef45fd1a26</DocGUID>
       <Bookmarks />
