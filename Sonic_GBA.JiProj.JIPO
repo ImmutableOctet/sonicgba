@@ -24,8 +24,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\balloon.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>33</X>
-        <Y>59</Y>
+        <X>35</X>
+        <Y>75</Y>
       </CursorPos>
       <DocGUID>a47a603b-5bf9-4478-9937-9ad1a3a05f29</DocGUID>
       <Bookmarks />
@@ -161,16 +161,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>25</X>
-        <Y>49</Y>
+        <X>2</X>
+        <Y>57</Y>
       </CursorPos>
       <DocGUID>9de52c82-cef6-423d-8a3b-636a1822fd5b</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>43</X>
-        <Y>24</Y>
+        <X>37</X>
+        <Y>53</Y>
       </CursorPos>
       <DocGUID>5f6ca01f-17b8-4654-a100-3d612674b0cd</DocGUID>
       <Bookmarks />
@@ -253,6 +253,14 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\railin.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>0</X>
+        <Y>0</Y>
+      </CursorPos>
+      <DocGUID>37799ec8-380f-4962-a5bd-a01a80b87d18</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\robotbullet.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>66</X>
@@ -326,8 +334,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>1</X>
-        <Y>21</Y>
+        <X>0</X>
+        <Y>16</Y>
       </CursorPos>
       <DocGUID>100c0e59-d7fc-47f9-92be-728211fffe47</DocGUID>
       <Bookmarks />
