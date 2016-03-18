@@ -77,11 +77,11 @@ Class Bonus100pts Extends EnemyObject
 			End
 		End
 		
-		Method doWhileCollision:Void(object:PlayerObject, direction:Int)
+		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
 			' Empty implementation.
 		End
 		
-		Method doWhileBeAttack:Void(object:PlayerObject, direction:Int, animationID:Int)
+		Method doWhileBeAttack:Void(player:PlayerObject, direction:Int, animationID:Int)
 			' Empty implementation.
 		End
 		

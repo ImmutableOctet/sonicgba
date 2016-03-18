@@ -41,7 +41,7 @@ Class ShipSystem Extends GimmickObject
 			Self.lineVelocity = 0
 			
 			' Magic number: 11520 (No idea where this would be defined, if anywhere)
-			Self.degree = 11520
+			Self.degree = 11520 ' (RADIUS+128)*2
 			
 			Self.ship = New Ship(id, x, y, Self)
 			
