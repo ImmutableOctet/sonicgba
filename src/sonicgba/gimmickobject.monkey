@@ -209,324 +209,232 @@ Class GimmickObject Extends GameObject
 		
 		Field used:Bool
 	Public
-
-	Public Function getNewInstance:GameObject(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
-		GameObject reElement = Null
-		x Shl= 6
-		y Shl= 6
-		switch (id) {
-			Case TitleState.STAGE_SELECT_KEY_RECORD_1
-				reElement = New Terminal(id, x, y, left, top, width, height)
-				break
-			Case TitleState.STAGE_SELECT_KEY_RECORD_2
-			Case TitleState.STAGE_SELECT_KEY_DIRECT_PLAY
-			Case SpecialObject.Z_ZOOM
-			Case TitleState.CHARACTER_RECORD_BG_SPEED
-			Case SSDef.SSOBJ_BNRU_ID
-			Case SSDef.SSOBJ_BNLD_ID
-				reElement = New Hari(id, x, y, left, top, width, height)
-				break
-			Case SSDef.SSOBJ_BNRD_ID
-				reElement = New Marker(id, x, y, left, top, width, height)
-				break
-			Case SpecialObject.COLLISION_RANGE_Z
-			Case SSDef.SSOBJ_BOMB_ID
-			Case SSDef.SSOBJ_CHECKPT
-			Case SSDef.SSOBJ_GOAL
-			Case SSDef.SSOBJ_NUM
-			Case PlayerTails.TAILS_ANI_FLY_2
-			Case PlayerTails.TAILS_ANI_FLY_3
-			Case PlayerTails.TAILS_ANI_HURT_1
-				reElement = New Spring(id, x, y, left, top, width, height)
-				break
-			Case PlayerTails.TAILS_ANI_HURT_2
-				reElement = New Stone(id, x, y, left, top, width, height)
-				break
-			Case PlayerTails.TAILS_ANI_PUSH_WALL
-				reElement = New SlipStart(id, x, y, left, top, width, height)
-				break
-			Case PlayerTails.TAILS_ANI_SPRING_2
-				reElement = New Platform(id, x, y, left, top, width, height)
-				break
-			Case PlayerTails.TAILS_ANI_SPRING_3
-				reElement = New FallingPlatform(id, x, y, left, top, width, height)
-				break
-			Case PlayerTails.TAILS_ANI_SPRING_4
-				reElement = New CaperBed(id, x, y, left, top, width, height)
-				break
-			Case PlayerTails.TAILS_ANI_SPRING_5
-				reElement = New BreakPlatform(id, x, y, left, top, width, height)
-				break
-			Case PlayerTails.TAILS_ANI_CLIFF_1
-				reElement = New CaperBlock(id, x, y, left, top, width, height)
-				break
-			Case PlayerTails.TAILS_ANI_BANK_1
-			Case PlayerTails.TAILS_ANI_BANK_2
-			Case PlayerTails.TAILS_ANI_BANK_3
-			Case State.COMFIRM_FRAME_ID
-				reElement = New Accelerate(id, x, y, left, top, width, height)
-				break
-			Case PlayerTails.TAILS_ANI_BAR_MOVE
-			Case PlayerTails.TAILS_ANI_RAIL_BODY
-			Case PlayerTails.TAILS_ANI_RAIL_TAIL
-				reElement = New Poal(id, x, y, left, top, width, height)
-				break
-			Case 69
-				reElement = New Belt(id, x, y, left, top, width, height)
-				break
-			Case 71
-				reElement = New Banper(id, x, y, left, top, width, height)
-				break
-			Case 75
-				reElement = New RopeStart(id, x, y, left, top, width, height)
-				break
-			Case 76
-				reElement = New Furiko(id, x, y, left, top, width, height)
-				furikoEnable = True
-				break
-			Case 77
-				reElement = New Shatter(id, x, y, left, top, width, height)
-				break
-			Case 78
-				reElement = New Neji(id, x, y, left, top, width, height)
-				break
-			Case State.BACKGROUND_WIDTH
-				reElement = New Arm(id, x, y, left, top, width, height)
-				break
-			Case RollPlatformSpeedB.DEGREE_VELOCITY
-				If (stageModeState = 1) Then
-					reElement = Null
-					break
-				}
-				reElement = New SpSpring(id, x, y, left, top, width, height)
-				break
-			Case 105
-				reElement = New DamageArea(id, x, y, left, top, width, height)
-				damageEnable = True
-				break
-			Case 106
-				reElement = New PipeSet(id, x, y, left, top, width, height)
-				break
-			Case GIMMICK_NUM
-				reElement = New PipeIn(id, x, y, left, top, width, height)
-				break
-			Case 111
-				reElement = New PipeOut(id, x, y, left, top, width, height)
-				break
-			Case 116
-				reElement = New GraphicPatch(id, x, y, left, top, width, height)
-				break
-			Case 117
-				reElement = New RopeEnd(id, x, y, left, top, width, height)
-				break
-			Case StringIndex.WHITE_BACKGROUND_ID
-				reElement = New RopeTurn(id, x, y, left, top, width, height)
-				break
-			Case 120
-				reElement = New TutorialPoint(id, x, y, left, top, width, height)
-				break
-			Case 124
-				reElement = New ChangeRectRegion(id, x, y, left, top, width, height)
-				break
-			default:
-				switch (id) {
-					Case PlayerTails.TAILS_ANI_CELEBRATE_1
-						reElement = New WaterFall(id, x, y, left, top, width, height)
-						waterFallEnable = True
-						break
-					Case PlayerTails.TAILS_ANI_CELEBRATE_2
-					Case PlayerTails.TAILS_ANI_CELEBRATE_3
-						reElement = New Bank(id, x, y, left, top, width, height)
-						break
-					Case PlayerTails.TAILS_ANI_ROLL_H_2
-						reElement = New Fountain(id, x, y, left, top, width, height)
-						break
-					Case PlayerTails.TAILS_ANI_WIND
-						reElement = New FallFlush(id, x, y, left, top, width, height)
-						break
-					Case PlayerTails.TAILS_ANI_BRAKE
-						reElement = New WaterSlip(id, x, y, left, top, width, height)
-						waterSlipEnable = True
-						break
-					Case TitleState.CHARACTER_RECORD_BG_HEIGHT
-						reElement = New HexHobin(id, x, y, left, top, width, height)
-						break
-					Case PlayerTails.TAILS_ANI_SWIM_2
-						reElement = New BallHobin(id, x, y, left, top, width, height)
-						break
-					Case PlayerTails.TAILS_ANI_VS_KNUCKLE
-						reElement = New RollHobin(id, x, y, left, top, width, height)
-						rollHobinEnable = True
-						break
-					Case PlayerTails.TAILS_ANI_ENTER_SP
-						reElement = New BarHorbinH(id, x, y, left, top, width, height)
-						break
-					Case PlayerTails.TAILS_ANI_BREATHE
-						reElement = New BarHorbinV(id, x, y, left, top, width, height)
-						break
-					Case PlayerTails.TAILS_ANI_WAITING_1
-						reElement = New CornerHobin(id, x, y, left, top, width, height)
-						break
-					Case PlayerTails.TAILS_ANI_WAITING_2
-						reElement = New FlipH(id, x, y, left, top, width, height)
-						break
-					Case PlayerSonic.SONIC_ANI_WAITING_2
-						reElement = New FlipV(id, x, y, left, top, width, height)
-						break
-					Case PlayerSonic.SONIC_ANI_CAUGHT
-						reElement = New SpringPlatform(id, x, y, left, top, width, height)
-						break
-					Case PlayerKnuckles.KNUCKLES_ANI_ENTER_SP
-						reElement = New LightFont(id, x, y, left, top, width, height)
-						break
-					Case PlayerKnuckles.KNUCKLES_ANI_SWIM_EFFECT
-						reElement = New Balloon(id, x, y, left, top, width, height)
-						break
-					Case PlayerKnuckles.KNUCKLES_ANI_CAUGHT
-						reElement = New ShipSystem(id, x, y, left, top, width, height)
-						break
-					Case PlayerKnuckles.KNUCKLES_ANI_WAITING_2
-						reElement = New TeaCup(id, x, y, left, top, width, height)
-						break
-					Case MainState.FRAME_SKIP
-					Case crlFP32.FIXED_1
-						reElement = New Door(id, x, y, left, top, width, height)
-						break
-					Case 67
-						reElement = New RailIn(id, x, y, left, top, width, height)
-						break
-					Case 68
-						reElement = New RailOut(id, x, y, left, top, width, height)
-						break
-					Case PlayerObject.NUM_DISTANCE_BIG
-						reElement = New TransPoint(id, x, y, left, top, width, height)
-						break
-					Case 73
-						reElement = New RailFlipper(id, x, y, left, top, width, height)
-						break
-					Case 74
-						reElement = New FreeFallSystem(id, x, y, left, top, width, height)
-						break
-					Case 79
-						reElement = New SteamBase(id, x, y, left, top, width, height)
-						steamEnable = True
-						break
-					Case MDPhone.KEY_CODE_MENU
-						reElement = New IronBall(id, x, y, left, top, width, height)
-						ironBallEnable = True
-						break
-					Case 83
-						reElement = New IronBar(id, x, y, left, top, width, height)
-						break
-					Case StringIndex.STR_STAGE_NAME_2
-						reElement = New TorchFire(id, x, y, left, top, width, height)
-						torchFireEnable = True
-						break
-					Case StringIndex.FONT_HEAD
-						If (top = 5) Then
-							reElement = New RollPlatformSpeedA(id, x, y, left, top, width, height)
-						} ElseIf (top = 2) Then
-							reElement = New RollPlatformSpeedB(id, x, y, left, top, width, height)
-						} ElseIf (top = 4) Then
-							reElement = New RollPlatformSpeedC(id, x, y, left, top, width, height)
-						}
-						rollPlatformEnable = True
-						break
-					Case 107
-						reElement = New Split(id, x, y, left, top, width, height)
-						break
-					Case 114
-						reElement = New BreakWall(id, x, y, left, top, width, height)
-						break
-				}
-				switch (id) {
-					Case PlayerTails.TAILS_ANI_CELEBRATE_4
-						reElement = New Leaf(id, x, y, left, top, width, height)
-						break
-					Case PlayerTails.TAILS_ANI_CAUGHT
-						reElement = New Accelerate(id, x, y, left, top, width, height)
-						break
-					Case PlayerSonic.SONIC_ANI_WAITING_1
-						reElement = New DekaPlatform(id, x, y, left, top, width, height)
-						break
-					Case PlayerKnuckles.KNUCKLES_ANI_WAITING_1
-						reElement = New HariIsland(id, x, y, left, top, width, height)
-						break
-					Case 81
-						reElement = New SpringIsland(id, x, y, left, top, width, height)
-						break
-					Case 84
-						reElement = New Subeyuka(id, x, y, left, top, width, height)
-						break
-					Case 85
-						reElement = New DownIsland(id, x, y, left, top, width, height)
-						break
-					Case StringIndex.STR_STAGE_NAME_1
-						reElement = New RollIsland(id, x, y, left, top, width, height)
-						break
-					Case StringIndex.STR_STAGE_NAME_3
-						reElement = New UpArm(id, x, y, left, top, width, height)
-						break
-					Case StringIndex.STR_STAGE_NAME_4
-						reElement = New UpPlatform(id, x, y, left, top, width, height)
-						break
-					Case 92
-						reElement = New StoneBall(id, x, y, left, top, width, height)
-						break
-					Case 93
-						reElement = New TogeShima(id, x, y, left, top, width, height)
-						break
-					Case StringIndex.FONT_PAUSE
-						reElement = New Bubble(id, x, y, left, top, width, height)
-						break
-					Case 95
-						reElement = New Ice(id, x, y, left, top, width, height)
-						break
-					Case 97
-						reElement = New WindParts(id, x, y, left, top, width, height)
-						break
-					Case 98
-						If (left = GIMMICK_AROUND_EXIT Or left = 9 Or left = -21) Then
-							reElement = New SeabedVolcanoAsynBase(id, x, y, left, top, width, height)
-						} Else {
-							reElement = New SeabedVolcanoBase(id, x, y, left, top, width, height)
-						}
-						seabedvolcanoEnable = True
-						break
-					Case 99
-						reElement = New Block(id, x, y, left, top, width, height)
-						break
-					Case StringIndex.BLUE_BACKGROUND_ID
-						reElement = New Fan(id, x, y, left, top, width, height)
-						break
-					Case Def.TOUCH_ROTATE_MAIN_MENU_ITEM_WIDTH
-						reElement = New FinalShima(id, x, y, left, top, width, height)
-						break
-					Case Def.TOUCH_SEL_1_W
-						reElement = New UnseenSpring(id, x, y, left, top, width, height)
-						break
-					Case 109
-						reElement = New AntiGravity(id, x, y, left, top, width, height)
-						break
-					Case Def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1
-						reElement = New AirRoot(id, x, y, left, top, width, height)
-						break
-				}
-				If (reElement = Null) Then
-					If (id = GIMMICK_WIND) Then
-						isFirstTouchedWind = False
-					EndIf
+		Function getNewInstance:GameObject(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
+			Local reElement:GameObject = Null
+			
+			x Shl= 6
+			y Shl= 6
+			
+			' TODO: Update object IDs to represent actual gimmick IDs.
+			Select (id)
+				Case TitleState.STAGE_SELECT_KEY_RECORD_1
+					reElement = New Terminal(id, x, y, left, top, width, height)
+				Case TitleState.STAGE_SELECT_KEY_RECORD_2, TitleState.STAGE_SELECT_KEY_DIRECT_PLAY, SpecialObject.Z_ZOOM, TitleState.CHARACTER_RECORD_BG_SPEED, SSDef.SSOBJ_BNRU_ID, SSDef.SSOBJ_BNLD_ID
+					reElement = New Hari(id, x, y, left, top, width, height)
+				Case SSDef.SSOBJ_BNRD_ID
+					reElement = New Marker(id, x, y, left, top, width, height)
+				Case SpecialObject.COLLISION_RANGE_Z, SSDef.SSOBJ_BOMB_ID, SSDef.SSOBJ_CHECKPT, SSDef.SSOBJ_GOAL, SSDef.SSOBJ_NUM, PlayerTails.TAILS_ANI_FLY_2, PlayerTails.TAILS_ANI_FLY_3, PlayerTails.TAILS_ANI_HURT_1
+					reElement = New Spring(id, x, y, left, top, width, height)
+				Case PlayerTails.TAILS_ANI_HURT_2
+					reElement = New Stone(id, x, y, left, top, width, height)
+				Case PlayerTails.TAILS_ANI_PUSH_WALL
+					reElement = New SlipStart(id, x, y, left, top, width, height)
+				Case PlayerTails.TAILS_ANI_SPRING_2
+					reElement = New Platform(id, x, y, left, top, width, height)
+				Case PlayerTails.TAILS_ANI_SPRING_3
+					reElement = New FallingPlatform(id, x, y, left, top, width, height)
+				Case PlayerTails.TAILS_ANI_SPRING_4
+					reElement = New CaperBed(id, x, y, left, top, width, height)
+				Case PlayerTails.TAILS_ANI_SPRING_5
+					reElement = New BreakPlatform(id, x, y, left, top, width, height)
+				Case PlayerTails.TAILS_ANI_CLIFF_1
+					reElement = New CaperBlock(id, x, y, left, top, width, height)
+				Case PlayerTails.TAILS_ANI_BANK_1, PlayerTails.TAILS_ANI_BANK_2, PlayerTails.TAILS_ANI_BANK_3, State.COMFIRM_FRAME_ID
+					reElement = New Accelerate(id, x, y, left, top, width, height)
+				Case PlayerTails.TAILS_ANI_BAR_MOVE, PlayerTails.TAILS_ANI_RAIL_BODY, PlayerTails.TAILS_ANI_RAIL_TAIL
+					reElement = New Poal(id, x, y, left, top, width, height)
+				Case 69
+					reElement = New Belt(id, x, y, left, top, width, height)
+				Case 71
+					reElement = New Banper(id, x, y, left, top, width, height)
+				Case 75
+					reElement = New RopeStart(id, x, y, left, top, width, height)
+				Case 76
+					reElement = New Furiko(id, x, y, left, top, width, height)
+					furikoEnable = True
+				Case 77
+					reElement = New Shatter(id, x, y, left, top, width, height)
+				Case 78
+					reElement = New Neji(id, x, y, left, top, width, height)
+				Case State.BACKGROUND_WIDTH
+					reElement = New Arm(id, x, y, left, top, width, height)
+				Case RollPlatformSpeedB.DEGREE_VELOCITY
+					If (stageModeState = 1) Then
+						reElement = Null
+					End
+					reElement = New SpSpring(id, x, y, left, top, width, height)
+				Case 105
+					reElement = New DamageArea(id, x, y, left, top, width, height)
+					damageEnable = True
+				Case 106
+					reElement = New PipeSet(id, x, y, left, top, width, height)
+				Case GIMMICK_NUM
+					reElement = New PipeIn(id, x, y, left, top, width, height)
+				Case 111
+					reElement = New PipeOut(id, x, y, left, top, width, height)
+				Case 116
+					reElement = New GraphicPatch(id, x, y, left, top, width, height)
+				Case 117
+					reElement = New RopeEnd(id, x, y, left, top, width, height)
+				Case StringIndex.WHITE_BACKGROUND_ID
+					reElement = New RopeTurn(id, x, y, left, top, width, height)
+				Case 120
+					reElement = New TutorialPoint(id, x, y, left, top, width, height)
+				Case 124
+					reElement = New ChangeRectRegion(id, x, y, left, top, width, height)
+				default:
+					switch (id) {
+						Case PlayerTails.TAILS_ANI_CELEBRATE_1
+							reElement = New WaterFall(id, x, y, left, top, width, height)
+							
+							waterFallEnable = True
+						Case PlayerTails.TAILS_ANI_CELEBRATE_2, PlayerTails.TAILS_ANI_CELEBRATE_3
+							reElement = New Bank(id, x, y, left, top, width, height)
+						Case PlayerTails.TAILS_ANI_ROLL_H_2
+							reElement = New Fountain(id, x, y, left, top, width, height)
+						Case PlayerTails.TAILS_ANI_WIND
+							reElement = New FallFlush(id, x, y, left, top, width, height)
+						Case PlayerTails.TAILS_ANI_BRAKE
+							reElement = New WaterSlip(id, x, y, left, top, width, height)
+							waterSlipEnable = True
+						Case TitleState.CHARACTER_RECORD_BG_HEIGHT
+							reElement = New HexHobin(id, x, y, left, top, width, height)
+						Case PlayerTails.TAILS_ANI_SWIM_2
+							reElement = New BallHobin(id, x, y, left, top, width, height)
+						Case PlayerTails.TAILS_ANI_VS_KNUCKLE
+							reElement = New RollHobin(id, x, y, left, top, width, height)
+							
+							rollHobinEnable = True
+						Case PlayerTails.TAILS_ANI_ENTER_SP
+							reElement = New BarHorbinH(id, x, y, left, top, width, height)
+						Case PlayerTails.TAILS_ANI_BREATHE
+							reElement = New BarHorbinV(id, x, y, left, top, width, height)
+						Case PlayerTails.TAILS_ANI_WAITING_1
+							reElement = New CornerHobin(id, x, y, left, top, width, height)
+						Case PlayerTails.TAILS_ANI_WAITING_2
+							reElement = New FlipH(id, x, y, left, top, width, height)
+						Case PlayerSonic.SONIC_ANI_WAITING_2
+							reElement = New FlipV(id, x, y, left, top, width, height)
+						Case PlayerSonic.SONIC_ANI_CAUGHT
+							reElement = New SpringPlatform(id, x, y, left, top, width, height)
+						Case PlayerKnuckles.KNUCKLES_ANI_ENTER_SP
+							reElement = New LightFont(id, x, y, left, top, width, height)
+						Case PlayerKnuckles.KNUCKLES_ANI_SWIM_EFFECT
+							reElement = New Balloon(id, x, y, left, top, width, height)
+						Case PlayerKnuckles.KNUCKLES_ANI_CAUGHT
+							reElement = New ShipSystem(id, x, y, left, top, width, height)
+						Case PlayerKnuckles.KNUCKLES_ANI_WAITING_2
+							reElement = New TeaCup(id, x, y, left, top, width, height)
+						Case MainState.FRAME_SKIP, crlFP32.FIXED_1
+							reElement = New Door(id, x, y, left, top, width, height)
+						Case 67
+							reElement = New RailIn(id, x, y, left, top, width, height)
+						Case 68
+							reElement = New RailOut(id, x, y, left, top, width, height)
+						Case PlayerObject.NUM_DISTANCE_BIG
+							reElement = New TransPoint(id, x, y, left, top, width, height)
+						Case 73
+							reElement = New RailFlipper(id, x, y, left, top, width, height)
+						Case 74
+							reElement = New FreeFallSystem(id, x, y, left, top, width, height)
+						Case 79
+							reElement = New SteamBase(id, x, y, left, top, width, height)
+							
+							steamEnable = True
+						Case MDPhone.KEY_CODE_MENU
+							reElement = New IronBall(id, x, y, left, top, width, height)
+							
+							ironBallEnable = True
+						Case 83
+							reElement = New IronBar(id, x, y, left, top, width, height)
+						Case StringIndex.STR_STAGE_NAME_2
+							reElement = New TorchFire(id, x, y, left, top, width, height)
+							
+							torchFireEnable = True
+						Case StringIndex.FONT_HEAD
+							If (top = 5) Then
+								reElement = New RollPlatformSpeedA(id, x, y, left, top, width, height)
+							ElseIf (top = 2) Then
+								reElement = New RollPlatformSpeedB(id, x, y, left, top, width, height)
+							ElseIf (top = 4) Then
+								reElement = New RollPlatformSpeedC(id, x, y, left, top, width, height)
+							EndIf
+							
+							rollPlatformEnable = True
+						Case 107
+							reElement = New Split(id, x, y, left, top, width, height)
+						Case 114
+							reElement = New BreakWall(id, x, y, left, top, width, height)
+					End
 					
-					reElement = New GimmickObject(id, x, y, left, top, width, height)
-					break
-				Endif
-				break
-		}
-		If (reElement <> Null) Then
-			reElement.refreshCollisionRectWrap()
-		}
-		Return reElement
-	}
+					Select (id)
+						Case PlayerTails.TAILS_ANI_CELEBRATE_4
+							reElement = New Leaf(id, x, y, left, top, width, height)
+						Case PlayerTails.TAILS_ANI_CAUGHT
+							reElement = New Accelerate(id, x, y, left, top, width, height)
+						Case PlayerSonic.SONIC_ANI_WAITING_1
+							reElement = New DekaPlatform(id, x, y, left, top, width, height)
+						Case PlayerKnuckles.KNUCKLES_ANI_WAITING_1
+							reElement = New HariIsland(id, x, y, left, top, width, height)
+						Case 81
+							reElement = New SpringIsland(id, x, y, left, top, width, height)
+						Case 84
+							reElement = New Subeyuka(id, x, y, left, top, width, height)
+						Case 85
+							reElement = New DownIsland(id, x, y, left, top, width, height)
+						Case StringIndex.STR_STAGE_NAME_1
+							reElement = New RollIsland(id, x, y, left, top, width, height)
+						Case StringIndex.STR_STAGE_NAME_3
+							reElement = New UpArm(id, x, y, left, top, width, height)
+						Case StringIndex.STR_STAGE_NAME_4
+							reElement = New UpPlatform(id, x, y, left, top, width, height)
+						Case 92
+							reElement = New StoneBall(id, x, y, left, top, width, height)
+						Case 93
+							reElement = New TogeShima(id, x, y, left, top, width, height)
+						Case StringIndex.FONT_PAUSE
+							reElement = New Bubble(id, x, y, left, top, width, height)
+						Case 95
+							reElement = New Ice(id, x, y, left, top, width, height)
+						Case 97
+							reElement = New WindParts(id, x, y, left, top, width, height)
+						Case 98
+							If (left = GIMMICK_AROUND_EXIT Or left = 9 Or left = -21) Then
+								reElement = New SeabedVolcanoAsynBase(id, x, y, left, top, width, height)
+							Else
+								reElement = New SeabedVolcanoBase(id, x, y, left, top, width, height)
+							EndIf
+							
+							seabedvolcanoEnable = True
+						Case 99
+							reElement = New Block(id, x, y, left, top, width, height)
+						Case StringIndex.BLUE_BACKGROUND_ID
+							reElement = New Fan(id, x, y, left, top, width, height)
+						Case Def.TOUCH_ROTATE_MAIN_MENU_ITEM_WIDTH
+							reElement = New FinalShima(id, x, y, left, top, width, height)
+						Case Def.TOUCH_SEL_1_W
+							reElement = New UnseenSpring(id, x, y, left, top, width, height)
+						Case 109
+							reElement = New AntiGravity(id, x, y, left, top, width, height)
+						Case Def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1
+							reElement = New AirRoot(id, x, y, left, top, width, height)
+					End Select
+					
+					If (reElement = Null) Then
+						If (id = GIMMICK_WIND) Then
+							isFirstTouchedWind = False
+						EndIf
+						
+						reElement = New GimmickObject(id, x, y, left, top, width, height)
+					EndIf
+			End Select
+			
+			If (reElement <> Null) Then
+				reElement.refreshCollisionRectWrap()
+			EndIf
+			
+			Return reElement
+		End
 
 	Public Function gimmickInit:Void()
 		furikoEnable = False
@@ -539,44 +447,44 @@ Class GimmickObject Extends GameObject
 		rollHobinEnable = False
 		damageEnable = False
 		seabedvolcanoEnable = False
-	}
+	End
 
 	Public Function gimmickStaticLogic:Void()
 		If (furikoEnable) Then
 			Furiko.staticLogic()
-		}
+		End
 		If (damageEnable) Then
 			DamageArea.staticLogic()
-		}
+		End
 		MoveCalculator.staticLogic()
 		If (waterFallEnable) Then
 			WaterFall.staticLogic()
-		}
+		End
 		If (waterSlipEnable) Then
 			WaterSlip.staticLogic()
-		}
+		End
 		If (torchFireEnable) Then
 			TorchFire.staticLogic()
-		}
+		End
 		If (steamEnable) Then
 			SteamBase.staticLogic()
-		}
+		End
 		If (ironBallEnable) Then
 			IronBall.staticLogic()
-		}
+		End
 		If (rollHobinEnable) Then
 			RollHobin.staticLogic()
-		}
+		End
 		If (rollPlatformEnable) Then
 			RollPlatformSpeedA.staticLogic()
 			RollPlatformSpeedB.staticLogic()
 			RollPlatformSpeedC.staticLogic()
-		}
+		End
 		If (seabedvolcanoEnable) Then
 			SeabedVolcanoBase.staticLogic()
 			SeabedVolcanoAsynBase.staticLogic()
-		}
-	}
+		End
+	End
 
 	Public Function releaseGimmickResource:Void()
 		doorAnimation = Null
@@ -653,7 +561,7 @@ Class GimmickObject Extends GameObject
 		SpSpring.releaseAllResource()
 		Boss4Ice.releaseAllResource()
 		Boss6Block.releaseAllResource()
-	}
+	End
 
 	Protected Method GimmickObject:protected(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
 		Self.objId = id
@@ -666,14 +574,14 @@ Class GimmickObject Extends GameObject
 		Self.mWidth = width * BarHorbinV.COLLISION_OFFSET
 		Self.mHeight = height * BarHorbinV.COLLISION_OFFSET
 		Self.collisionRect.setRect(Self.posX, Self.posY, Self.mWidth, Self.mHeight)
-	}
+	End
 
 	Public Method draw:Void(g:MFGraphics)
 		drawCollisionRect(g)
-	}
+	End
 
 	Public Method logic:Void()
-	}
+	End
 
 	Public Method doWhileCollision:Void(object:PlayerObject, direction:Int)
 		If (object = player) Then
@@ -681,83 +589,83 @@ Class GimmickObject Extends GameObject
 				Case PlayerTails.TAILS_ANI_DEAD_1
 					If (Not Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
 						Self.used = False
-					} ElseIf (Not Self.used) Then
+					End ElseIf (Not Self.used) Then
 						player.setCollisionLayer(0)
 						Self.used = True
-					}
+					End
 				Case PlayerTails.TAILS_ANI_DEAD_2
 					If (Not Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
 						Self.used = False
-					} ElseIf (Not Self.used) Then
+					End ElseIf (Not Self.used) Then
 						player.setCollisionLayer(1)
 						Self.used = True
-					}
+					End
 				Case PlayerTails.TAILS_ANI_SPRING_1
 					If (player instanceof PlayerSonic) Then
 						player.slipEnd()
-					} ElseIf (player instanceof PlayerAmy) Then
+					End ElseIf (player instanceof PlayerAmy) Then
 						player.slipEnd()
-					}
+					End
 				Case PlayerTails.TAILS_ANI_CLIFF_2
 					If (Not Self.used And player.beUnseenPop()) Then
 						Self.used = True
-					}
+					End
 				Case PlayerTails.TAILS_ANI_UP_ARM
 					If (Not Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
 						Self.used = False
-					} ElseIf (Not Self.used) Then
+					End ElseIf (Not Self.used) Then
 						player.ductIn()
 						Self.used = True
 						If (Not (player instanceof PlayerAmy) And player.getAnimationId() <> 4) Then
 							soundInstance.playSe(4)
-						}
-					}
+						End
+					End
 				Case PlayerTails.TAILS_ANI_POLE_V
 					If (Not Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
 						Self.used = False
-					} ElseIf (Not Self.used) Then
+					End ElseIf (Not Self.used) Then
 						player.velX = 0
 						player.ductOut()
 						Self.used = True
-					}
+					End
 				Case PlayerTails.TAILS_ANI_POLE_H
 					If (player.isOnGound() And Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
 						player.setVelX(PlayerObject.HUGE_POWER_SPEED)
-					}
+					End
 				Case PlayerTails.TAILS_ANI_ROLL_V_1
 					If (player.isOnGound()) Then
 						player.setVelX(-1900)
-					}
+					End
 				Case PlayerTails.TAILS_ANI_ROLL_V_2
 				Case GIMMICK_MOVE
 					If (Not Self.used And player.setRailLine(New Line(Self.posX, Self.posY, Self.posX + Self.iLeft, Self.posY + Self.iTop), Self.posX, Self.posY, Self.iLeft, Self.iTop, Self.iWidth, Self.iHeight, Self)) Then
 						Self.used = True
 						soundInstance.playSe(37)
-					}
+					End
 				Case 66
 					If (Self.firstTouch And StageManager.getCurrentZoneId() <> 3) Then
 						player.setFall(Self.posX - RollPlatformSpeedC.COLLISION_OFFSET_Y, Self.posY, Self.iLeft, Self.iTop)
 						player.stopMove()
-					}
+					End
 				Case GIMMICK_SEE
 					If (Not Self.used And Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
 						Bool z
 						PlayerObject playerObject = player
 						If (Self.iLeft = 0) Then
 							z = True
-						} Else {
+						Else
 							z = False
-						}
+						End
 						playerObject.changeVisible(z)
 						Self.used = True
-					}
+					End
 				Case GIMMICK_WIND
 					framecnt += 1
 					If (Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
 						If (StageManager.getStageID() = 11) Then
 							player.collisionState = GIMMICK_HARI_UP
 							player.isInGravityCircle = True
-						}
+						End
 						If (player.collisionState = GIMMICK_HARI_UP) Then
 							player.collisionState = GIMMICK_HARI_UP
 							If (StageManager.getStageID() = 11) Then
@@ -765,25 +673,25 @@ Class GimmickObject Extends GameObject
 								ACWorldCollisionCalculator aCWorldCollisionCalculator = player.worldCal
 								ACWorldCollisionCalculator aCWorldCollisionCalculator2 = player.worldCal
 								aCWorldCollisionCalculator.actionState = GIMMICK_HARI_UP
-							}
+							End
 							If (player.getVelY() > WIND_VELOCITY) Then
 								player.setVelY(player.getVelY() + WIND_ACCELERATE)
-							} Else {
+							Else
 								player.setVelY(WIND_VELOCITY)
-							}
+							End
 							If (StageManager.getStageID() = 11) Then
 								player.setAnimationId(9)
 								Return
-							} Else {
+							Else
 								player.setAnimationId(29)
 								Return
-							}
-						}
+							End
+						End
 						soundInstance.stopLoopSe()
 						framecnt = 0
 						isFirstTouchedWind = False
 						player.isInGravityCircle = False
-					}
+					End
 				Case Def.TOUCH_START_GAME_WIDTH
 					If (Not Self.used) Then
 						player.setAnimationId(4)
@@ -791,11 +699,11 @@ Class GimmickObject Extends GameObject
 						SoundSystem soundSystem2 = soundInstance
 						soundSystem.playSe(37)
 						Self.used = True
-					}
+					End
 				default:
-			}
-		}
-	}
+			End
+		End
+	End
 
 	Public Method refreshCollisionRect:Void(x:Int, y:Int)
 		switch (Self.objId) {
@@ -808,8 +716,8 @@ Class GimmickObject Extends GameObject
 			Case 73
 				Self.collisionRect.setRect(Self.posX, Self.posY - BarHorbinV.COLLISION_OFFSET, BarHorbinV.COLLISION_OFFSET, BarHorbinV.COLLISION_OFFSET)
 			default:
-		}
-	}
+		End
+	End
 
 	Public Method doWhileRail:Void(object:PlayerObject, direction:Int)
 		switch (Self.objId) {
@@ -817,20 +725,20 @@ Class GimmickObject Extends GameObject
 				If (Not Self.used And player.setRailLine(New Line(Self.posX, Self.posY, Self.posX + Self.iLeft, Self.posY + Self.iTop), Self.posX, Self.posY, Self.iLeft, Self.iTop, Self.iWidth, Self.iHeight, Self)) Then
 					Self.used = True
 					soundInstance.playSe(37)
-				}
+				End
 			Case 66
 				If (Self.firstTouch) Then
 					player.setFall(Self.posX - RollPlatformSpeedC.COLLISION_OFFSET_Y, Self.posY, Self.iLeft, Self.iTop)
-				}
+				End
 			Case GIMMICK_SEE
 				If (Not Self.used And Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
 					player.changeVisible(Self.iLeft = 0)
 					Self.used = True
-				}
+				End
 			Case 73
 				If (Self.firstTouch) Then
 					player.setRailFlip()
-				}
+				End
 			Case Def.TOUCH_START_GAME_WIDTH
 				If (Not Self.used) Then
 					player.setAnimationId(4)
@@ -838,11 +746,11 @@ Class GimmickObject Extends GameObject
 					SoundSystem soundSystem2 = soundInstance
 					soundSystem.playSe(37)
 					Self.used = True
-				}
+				End
 			Default
 				' Nothing so far.
-		}
-	}
+		End
+	End
 
 	Public Method doWhileNoCollision:Void()
 		Select (Self.objId)

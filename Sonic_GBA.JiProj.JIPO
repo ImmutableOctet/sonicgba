@@ -8,13 +8,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\backmanagerstage5.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\backmanagerstage5.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>22</X>
         <Y>13</Y>
       </CursorPos>
-      <DocGUID>e3fe02f0-5e01-4843-bd6e-ea16485b7a70</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\backmanagerstagefinal.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -126,8 +125,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>33</X>
-        <Y>87</Y>
+        <X>7</X>
+        <Y>210</Y>
       </CursorPos>
       <DocGUID>8f858a42-7fd0-4b76-81a2-aecb5589857a</DocGUID>
       <Bookmarks />
@@ -319,8 +318,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\unseenspring.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>30</X>
-        <Y>26</Y>
+        <X>2</X>
+        <Y>21</Y>
       </CursorPos>
       <DocGUID>f92fc627-6a26-4c38-b4d0-371936eae219</DocGUID>
       <Bookmarks />
