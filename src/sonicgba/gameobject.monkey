@@ -212,7 +212,12 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		Global soundInstance:SoundSystem
 		
 		' Fields:
+		
+		' From what I know, this is different for every object type.
+		' Essentially, object identifiers represent literal classes.
+		' They're mainly used for "meta" behavior like deserialization.
 		Field objId:Int
+		
 		Field currentLayer:Int
 		
 		Field mHeight:Int
