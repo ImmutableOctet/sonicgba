@@ -33,6 +33,7 @@ Class BatBullet Extends BulletObject
 			Self.isboom = False
 		End
 	Public
+		' Methods:
 		Method bulletLogic:Void()
 			Local preX:= Self.posX
 			Local preY:= Self.posY
