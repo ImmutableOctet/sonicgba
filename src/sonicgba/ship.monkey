@@ -48,13 +48,14 @@ Class Ship Extends GimmickObject
 	
 		Method draw:Void(graphics:MFGraphics)
 			' Magic numbers: 40, 2, 36
+			' From what I understand, this is what handles the symmetric image mirroring:
 			drawInMap(graphics, shipImage, Self.posX, (Self.posY + COLLISION_OFFSET_Y) + COLLISION_HEIGHT, 40)
 			drawInMap(graphics, shipImage, 0, 0, MyAPI.zoomIn(shipImage.getWidth()), MyAPI.zoomIn(shipImage.getHeight()), 2, Self.posX, (Self.posY + COLLISION_OFFSET_Y) + COLLISION_HEIGHT, 36)
 			
 			drawCollisionRect(graphics)
 		End
 	
-		Public Method doWhileCollision:Void(player:PlayerObject, direction:Int)
+		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
 			If (Not player.isFootOnObject(Self)) Then
 				Select (direction)
 					Case DIRECTION_DOWN
