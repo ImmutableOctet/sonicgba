@@ -64,7 +64,7 @@ Class TorchFire Extends GimmickObject
 		
 		' Methods:
 		Method draw:Void(graphics:MFGraphics)
-			' Not entirely sure about these coordinates:
+			' Magic numbers: Not entirely sure about these coordinates...
 			If (StageManager.getCurrentZoneId() <> 6) Then
 				drawInMap(graphics, drawer)
 			ElseIf (Self.iLeft = 0) Then

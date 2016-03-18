@@ -128,6 +128,7 @@ Class RopeStart Extends GimmickObject
 					Self.velocity += ((GRAVITY * sDegree) / 100)
 			
 					If (Self.velocity > 0) Then
+						' Magic number: Not sure if this value exists somewhere else.
 						Self.velocity -= 30
 			
 						If (Self.velocity < 0) Then
