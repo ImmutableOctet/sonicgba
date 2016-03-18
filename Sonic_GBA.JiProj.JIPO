@@ -10,8 +10,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\antigravity.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>17</X>
-        <Y>10</Y>
+        <X>7</X>
+        <Y>27</Y>
       </CursorPos>
       <DocGUID>a479e6d6-82fa-4030-a814-6585df52a45f</DocGUID>
       <Bookmarks />
@@ -202,6 +202,14 @@
         <Y>32</Y>
       </CursorPos>
       <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\ironbar.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>40</X>
+        <Y>35</Y>
+      </CursorPos>
+      <DocGUID>45b9f93f-077f-4bf7-8b9f-2dce0c9d9ff1</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\laserdamage.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
