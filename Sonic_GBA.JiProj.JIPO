@@ -66,6 +66,14 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\bonus100pts.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>2</X>
+        <Y>9</Y>
+      </CursorPos>
+      <DocGUID>17a0181b-074e-4fcc-905f-f2ed869f3454</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boom.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>26</X>
@@ -321,7 +329,7 @@
     <DocUserOptions Filename=".\src\sonicgba\ship.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>2</X>
-        <Y>57</Y>
+        <Y>28</Y>
       </CursorPos>
       <DocGUID>3e557f93-9850-460c-83a0-da3431878df8</DocGUID>
       <Bookmarks />
