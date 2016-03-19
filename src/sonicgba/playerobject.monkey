@@ -149,55 +149,80 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		' Global variable(s):
 		Global bariaDrawer:AnimationDrawer
 		Global breatheCountImage:MFImage
-		Global characterID:Int
+		
+		Global characterID:Int = CHARACTER_SONIC
+		
 		Global clipendw:Int
 		Global cliph:Int
 		Global clipspeed:Int
 		Global clipstartw:Int
 		Global clipx:Int
 		Global clipy:Int
+		
 		Global collisionBlockGround:ACBlock
 		Global collisionBlockGroundTmp:ACBlock
 		Global collisionBlockSky:ACBlock
+		
 		Global currentPauseMenuItem:Int[]
+		
 		Global fadeAlpha:Int
 		Global fadeFromValue:Int
 		Global fadeRGB:Int[]
 		Global fadeToValue:Int
+		
 		Global fastRunDrawer:AnimationDrawer
 		Global gBariaDrawer:AnimationDrawer
 		Global getLifeDrawer:AnimationDrawer
 		Global headDrawer:AnimationDrawer
+		
 		Global invincibleAnimation:Animation
 		Global invincibleCount:Int
 		Global invincibleDrawer:AnimationDrawer
+		
 		Global isStartStageEndFlag:Bool
+		
 		Global itemOffsetX:Int
 		Global itemVec:Int[][]
+		
 		Global lifeDrawerX:Int
+		
 		Global moonStarDrawer:AnimationDrawer
+		
 		Global movespeedx:Int
 		Global movespeedy:Int
+		
 		Global newRecordCount:Int
+		
 		Global numDrawer:AnimationDrawer
+		
 		Global offsetx:Int
 		Global offsety:Int
+		
 		Global passStageActionID:Int
+		
 		Global PAUSE_MENU_NORMAL_ITEM:Int[]
+		
 		Global preFadeAlpha:Int
 		Global preLifeNum:Int
 		Global preScoreNum:Int
 		Global preTimeCount:Int
+		
 		Global ringRandomNum:Int
+		
 		Global score1:Int
 		Global score2:Int
+		
 		Global shieldType:Int
+		
 		Global stageEndFrameCnt:Int
 		Global stagePassResultOutOffsetX:Int
+		
 		Global totalPlusscore:Int
+		
 		Global uiDrawer:AnimationDrawer
 		Global uiRingImage:MFImage
 		Global uiSonicHeadImage:MFImage
+		
 		Global waterSprayDrawer:AnimationDrawer
 	Protected
 		' Constant variable(s):
