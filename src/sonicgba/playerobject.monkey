@@ -348,7 +348,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const COLLISION_STATE_WALK:= 0
 		
 		' Immutable Arrays (Constant):
-		Global CHARACTER_LIST:Int[]
+		Global CHARACTER_LIST:Int[] = [CHARACTER_SONIC, CHARACTER_TAILS, CHARACTER_KNUCKLES, CHARACTER_AMY]
 		
 		' Global variable(s):
 		Global BANK_BRAKE_SPEED_LIMIT:Int = 0
