@@ -1,14 +1,6 @@
 <?xml version="1.0"?>
 <JiProjUserOptions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Files>
-    <DocUserOptions Filename=".\etc\_tmp.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
-      <CursorPos>
-        <X>132</X>
-        <Y>3</Y>
-      </CursorPos>
-      <DocGUID>dda049f8-5a89-4070-b295-23679affe208</DocGUID>
-      <Bookmarks />
-    </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acparam.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>40</X>
@@ -331,8 +323,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>73</X>
-        <Y>135</Y>
+        <X>35</X>
+        <Y>192</Y>
       </CursorPos>
       <DocGUID>9e5f42a1-f393-44d9-bb0a-778b95a3e775</DocGUID>
       <Bookmarks />
