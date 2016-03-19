@@ -40,6 +40,9 @@ Private
 	Import com.sega.mobile.framework.device.mfimage
 	
 	Import regal.typetool
+	
+	Import sonicgba.moveobject
+	Import sonicgba.focusable
 Public
 
 ' Classes:
@@ -68,10 +71,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const CENTER_Y:Int = 63488
 		Const COUNT_INDEX:Int = 1
 		Const DEBUG_WUDI:Bool = False
-		Const DEGREE_DIVIDE:Int[]
 		Const DIE_DRIP_STATE_JUMP_V0:Int = -800
 		Const DO_POAL_MOTION_SPEED:Int = 600
-		Const EFFECT_LOOP:Bool[]
 		Const ENLARGE_NUM:Int = 1920
 		Const f23A:Int = 3072
 		Const f24C:Int = 3072
@@ -82,7 +83,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const FOCUS_MOVING_NONE:Int = 0
 		Const FONT_NUM:Int = 7
 		Const FOOT_OFFSET:Int = 256
-		Const FOOT_OFFSET_X:Int[]
 		Const HINER_JUMP_LIMIT:Int = 1024
 		Const HINER_JUMP_MAX:Int = 4352
 		Const HINER_JUMP_X_ADD:Int = 1024
@@ -107,21 +107,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const MOON_STAR_FRAMES_2:Int = 120
 		Const MOON_STAR_ORI_X_1:Int
 		Const MOON_STAR_ORI_Y_1:Int = 18
-		Const NUM_ANI_ID:Int[]
 		Const NUM_DISTANCE:Int
 		Const NUM_PIC_HEIGHT:Int
 		Const NUM_PIC_WIDTH:Int
-		Const NUM_SPACE:Int[]
-		Const NUM_SPACE_ANIMATION:Int[]
-		Const NUM_SPACE_FONT:Int[]
-		Const NUM_SPACE_IMAGE:Int[]
-		Const PAUSE_MENU_NORMAL_NOSHOP:Int[]
-		Const PAUSE_MENU_NORMAL_SHOP:Int[]
-		Const PAUSE_MENU_RACE_ITEM:Int[]
 		Const PIPE_SET_POWER:Int = 2880
 		Const RAIL_FLIPPER_V0:Int = -3380
 		Const RAIL_OUT_SPEED_VY0:Int = -1200
-		Const RANDOM_RING_NUM:Int[]
 		Const RIGHT_FOOT_OFFSET_X:Int = 256
 		Const RIGHT_WALK_COLLISION_CHECK_OFFSET_X:Int = 512
 		Const RIGHT_WALK_COLLISION_CHECK_OFFSET_Y:Int = -512
@@ -140,6 +131,20 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const WALK_COLLISION_CHECK_OFFSET_X:Int = 0
 		Const WALK_COLLISION_CHECK_OFFSET_Y:Int = 0
 		Const WHITE_BACKGROUND_ID:Int = 118
+		
+		' Immutable Arrays (Constant):
+		Global DEGREE_DIVIDE:Int[]
+		Global EFFECT_LOOP:Bool[]
+		Global FOOT_OFFSET_X:Int[]
+		Global NUM_ANI_ID:Int[]
+		Global NUM_SPACE:Int[]
+		Global NUM_SPACE_ANIMATION:Int[]
+		Global NUM_SPACE_FONT:Int[]
+		Global NUM_SPACE_IMAGE:Int[]
+		Global PAUSE_MENU_NORMAL_NOSHOP:Int[]
+		Global PAUSE_MENU_NORMAL_SHOP:Int[]
+		Global PAUSE_MENU_RACE_ITEM:Int[]
+		Global RANDOM_RING_NUM:Int[]
 		
 		' Global variable(s):
 		Global bariaDrawer:AnimationDrawer
@@ -178,7 +183,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Global offsetx:Int
 		Global offsety:Int
 		Global passStageActionID:Int
-		Global PAUSE_MENU_NORMAL_ITEM:Int[] = Null
+		Global PAUSE_MENU_NORMAL_ITEM:Int[]
 		Global preFadeAlpha:Int
 		Global preLifeNum:Int
 		Global preScoreNum:Int
@@ -205,7 +210,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const ROTATE_MODE_NEGATIVE:Int = 2
 		Const ROTATE_MODE_NEVER_MIND:Int = 0
 		Const ROTATE_MODE_POSITIVE:Int = 1
-		Const TRANS:Int[]
 		Const WIDTH:Int = 1024
 		
 		Const STATE_PIPE_IN:= 0
@@ -219,6 +223,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const TER_STATE_LOOK_MOON_WAIT:= 3
 		Const TER_STATE_RUN:= 0
 		Const TER_STATE_SHINING_2:= 7
+		
+		' Immutable Arrays (Constant):
+		Global TRANS:Int[]
 		
 		' Global variable(s):
 		Global ringNum:Int
@@ -291,7 +298,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const CAN_BE_SQUEEZE:Bool = True
 		Const CHARACTER_AMY:Int = 3
 		Const CHARACTER_KNUCKLES:Int = 2
-		Const CHARACTER_LIST:Int[]
 		Const CHARACTER_SONIC:Int = 0
 		Const CHARACTER_TAILS:Int = 1
 		Const DETECT_HEIGHT:Int = 2048
@@ -340,6 +346,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const COLLISION_STATE_NUM:= 4
 		Const COLLISION_STATE_ON_OBJECT:= 2
 		Const COLLISION_STATE_WALK:= 0
+		
+		' Immutable Arrays (Constant):
+		Global CHARACTER_LIST:Int[]
 		
 		' Global variable(s):
 		Global BANK_BRAKE_SPEED_LIMIT:Int = 0
