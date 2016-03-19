@@ -908,7 +908,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					
 					If (itemVec[i2][1] = 0) Then
 						getItem(itemVec[i2][0])
-						itemVec[i2][0] = EFFECT_NONE
+						itemVec[i2][0] = -1
 					EndIf
 				EndIf
 				
@@ -1053,8 +1053,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					
 					If (Not Self.isInWater) Then
 						Self.breatheCount = 0
-						Self.breatheNumCount = EFFECT_NONE
-						Self.preBreatheNumCount = EFFECT_NONE
+						Self.breatheNumCount = -1
+						Self.preBreatheNumCount = -1
 						
 						If (getNewPointY(Self.posY, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree) - SIDE_FOOT_FROM_CENTER >= (waterLevel Shl 6)) Then
 							Self.isInWater = True
@@ -1071,7 +1071,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					ElseIf (Not IsGamePause) Then
 						PlayerObject playerObject
 						Self.breatheCount += 63
-						Self.breatheNumCount = EFFECT_NONE
+						Self.breatheNumCount = -1
 						
 						If (characterID = 2 And Self.collisionState = 4) Then
 							If (getNewPointY(Self.posY, 0, -Self.collisionRect.getHeight(), Self.faceDegree) + SIDE_FOOT_FROM_CENTER < (waterLevel Shl 6)) Then
@@ -1228,7 +1228,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 					
 				ElseIf (Self.effectID = 0 Or Self.effectID = 1) Then
-					Self.effectID = EFFECT_NONE
+					Self.effectID = -1
 				EndIf
 				
 				If (Self.railing) Then
@@ -1251,7 +1251,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 							Self.totalVelocity += velocityChange
 							checkWithObject(Self.footPointX, Self.footPointY, Self.footPointX + direction.getValueX(Self.railLine.cos(Self.totalVelocity)), Self.footPointY + direction.getValueY(Self.railLine.sin(Self.totalVelocity)))
 						Else
-							checkWithObject(Self.footPointX, Self.footPointY, Self.footPointX + ((Self.totalVelocity < 0 ? EFFECT_NONE : 1) * Self.railLine.cos(Self.totalVelocity)), Self.footPointY + ((Self.totalVelocity < 0 ? EFFECT_NONE : 1) * Self.railLine.sin(Self.totalVelocity)))
+							checkWithObject(Self.footPointX, Self.footPointY, Self.footPointX + ((Self.totalVelocity < 0 ? -1 : 1) * Self.railLine.cos(Self.totalVelocity)), Self.footPointY + ((Self.totalVelocity < 0 ? -1 : 1) * Self.railLine.sin(Self.totalVelocity)))
 						EndIf
 						
 						If (Not (Self.railOut Or Self.railLine = Null)) Then
@@ -1759,7 +1759,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		If (Not IsGamePause) Then
 			If (Self.isDead) Then
-				Self.velY += (Self.isAntiGravity ? EFFECT_NONE : 1) * getGravity()
+				Self.velY += (Self.isAntiGravity ? -1 : 1) * getGravity()
 				Self.footPointX += Self.velX
 				Self.footPointY += Self.velY
 			EndIf
@@ -1893,12 +1893,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				EndIf
 			EndIf
 			
-			If (Self.effectID > EFFECT_NONE) Then
+			If (Self.effectID > -1) Then
 				Self.effectDrawer.draw(g, Self.effectID, (Self.footPointX Shr 6) - camera.x, (Self.footPointY Shr 6) - camera.y, EFFECT_LOOP[Self.effectID], getTrans())
 				
 				If (Self.effectDrawer.checkEnd()) Then
 					Self.effectDrawer.restart()
-					Self.effectID = EFFECT_NONE
+					Self.effectID = -1
 				EndIf
 			EndIf
 			
@@ -2174,7 +2174,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 		EndIf
 		
-		Return (getNewPointY(Self.footPointY, 0, -768, Self.faceDegree) Shr 6) + ((Self.isAntiGravity ? 1 : EFFECT_NONE) * Self.focusOffsetY)
+		Return (getNewPointY(Self.footPointY, 0, -768, Self.faceDegree) Shr 6) + ((Self.isAntiGravity ? 1 : -1) * Self.focusOffsetY)
 	End
 	
 	Public Method collisionLogicOnObject:Void()
@@ -2258,7 +2258,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Private Method faceSlopeChk:Void()
-		Int slopeVelocity = (Sin(Self.faceDegree) * (getGravity() * (Self.isAntiGravity ? EFFECT_NONE : 1))) / 100
+		Int slopeVelocity = (Sin(Self.faceDegree) * (getGravity() * (Self.isAntiGravity ? -1 : 1))) / 100
 	End
 	
 	Private Method decelerate:Void()
@@ -2293,7 +2293,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.degreeRotateMode = 0
 		
 		If (Self.slipFlag Or Self.totalVelocity <> 0) Then
-			Int fakeGravity = getSlopeGravity() * (Self.isAntiGravity ? EFFECT_NONE : 1)
+			Int fakeGravity = getSlopeGravity() * (Self.isAntiGravity ? -1 : 1)
 			
 			If (Self.slipFlag) Then
 				fakeGravity *= 3
@@ -2325,7 +2325,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 		EndIf
 		
-		If (Not (Self.attackLevel <> 0 Or Key.repeat(Key.gDown) Or Self.animationID = EFFECT_NONE Or Self.animationID = ANI_YELL)) Then
+		If (Not (Self.attackLevel <> 0 Or Key.repeat(Key.gDown) Or Self.animationID = -1 Or Self.animationID = ANI_YELL)) Then
 			Int reversePower
 			
 			If ((Not Self.isAntiGravity And Key.repeat(Key.gLeft)) Or ((Self.isAntiGravity And Key.repeat(Key.gRight)) Or doBrake())) Then
@@ -2398,7 +2398,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						
 						Self.totalVelocity += reversePower
 						
-						If (Self.totalVelocity > EFFECT_NONE) Then
+						If (Self.totalVelocity > -1) Then
 							If (Self.onBank) Then
 								Self.totalVelocity = 0
 								Self.onBank = False
@@ -2432,7 +2432,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 		EndIf
 		
-		If (Self.animationID <> EFFECT_NONE) Then
+		If (Self.animationID <> -1) Then
 			If (Abs(Self.totalVelocity) <= 0) Then
 				If (Not (Self.animationID = ANI_LOOK_UP_1 Or Self.animationID = ANI_LOOK_UP_2 Or Self.animationID = FADE_FILL_WIDTH Or Self.animationID = MAX_ITEM Or Self.collisionState = 1)) Then
 					Self.animationID = 0
@@ -2452,10 +2452,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		EndIf
 		
 		waitingChk()
-		Int slopeVelocity = (Sin(Self.faceDegree) * (getGravity() * (Self.isAntiGravity ? EFFECT_NONE : 1))) / 100
+		Int slopeVelocity = (Sin(Self.faceDegree) * (getGravity() * (Self.isAntiGravity ? -1 : 1))) / 100
 		faceSlopeChk()
 		
-		If (Self.animationID <> EFFECT_NONE And Self.attackLevel = 0 And Self.animationID <> 4 And Abs(Self.totalVelocity) > Abs(slopeVelocity) And Self.fallTime = 0) Then
+		If (Self.animationID <> -1 And Self.attackLevel = 0 And Self.animationID <> 4 And Abs(Self.totalVelocity) > Abs(slopeVelocity) And Self.fallTime = 0) Then
 			If (Not (Key.repeat(Key.gLeft) And Key.repeat(Key.gRight)) And ((((Not Self.isAntiGravity And Key.repeat(Key.gLeft)) Or (Self.isAntiGravity And Key.repeat(Key.gRight))) And Self.totalVelocity > RUN_BRAKE_SPEED_LIMIT) Or (((Not Self.isAntiGravity And Key.repeat(Key.gRight)) Or (Self.isAntiGravity And Key.repeat(Key.gLeft))) And Self.totalVelocity < (-RUN_BRAKE_SPEED_LIMIT)))) Then
 				Bool z
 				Self.animationID = ANI_BRAKE
@@ -2566,7 +2566,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				newPointX = Self.velY
 				
 				If (Self.isAntiGravity) Then
-					i = EFFECT_NONE
+					i = -1
 				Else
 					i = 1
 				EndIf
@@ -2638,7 +2638,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					
 					Self.velX += reversePower
 					
-					If (Self.velX > EFFECT_NONE) Then
+					If (Self.velX > -1) Then
 						Self.velX = reversePower Shr 2
 					Else
 						Self.faceDirection = False
@@ -2658,7 +2658,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 		EndIf
 		
-		If (Self.animationID <> EFFECT_NONE) Then
+		If (Self.animationID <> -1) Then
 			If (Abs(Self.velX) <= 0) Then
 				If (Not (Self.animationID = ANI_LOOK_UP_1 Or Self.animationID = ANI_LOOK_UP_2 Or Self.animationID = FADE_FILL_WIDTH Or Self.animationID = MAX_ITEM)) Then
 					Self.animationID = 0
@@ -2732,7 +2732,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Int i2 = Self.velY
 		
 		If (Self.isAntiGravity) Then
-			i = EFFECT_NONE
+			i = -1
 		Else
 			i = 1
 		EndIf
@@ -2860,7 +2860,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				newPointX = Self.velY
 				
 				If (Self.isAntiGravity) Then
-					i = EFFECT_NONE
+					i = -1
 				Else
 					i = 1
 				EndIf
@@ -2869,7 +2869,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				newPointX = Self.velY
 				
 				If (Self.isAntiGravity) Then
-					i = EFFECT_NONE
+					i = -1
 				Else
 					i = 1
 				EndIf
@@ -2881,7 +2881,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		newPointX = Self.velY
 		
 		If (Self.isAntiGravity) Then
-			i = EFFECT_NONE
+			i = -1
 		Else
 			i = 1
 		EndIf
@@ -2964,7 +2964,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					
 					Self.velX += reversePower
 					
-					If (Self.velX > EFFECT_NONE) Then
+					If (Self.velX > -1) Then
 						Self.velX = reversePower Shr 2
 					Else
 						Self.faceDirection = False
@@ -3026,7 +3026,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 							
 							Self.velX += reversePower
 							
-							If (Self.velX > EFFECT_NONE) Then
+							If (Self.velX > -1) Then
 								Self.velX = reversePower Shr 2
 							Else
 								Self.faceDirection = False
@@ -3074,7 +3074,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 			
 			If (Not spinLogic()) Then
-				If (Not (Key.repeat(Key.gLeft) Or Key.repeat(Key.gRight) Or isTerminalRunRight() Or Self.animationID = EFFECT_NONE)) Then
+				If (Not (Key.repeat(Key.gLeft) Or Key.repeat(Key.gRight) Or isTerminalRunRight() Or Self.animationID = -1)) Then
 					If (Key.repeat(Key.gDown)) Then
 						If (Abs(Self.velX) > 64) Then
 							Self.velX = 0
@@ -3135,7 +3135,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Private Method jumpDirectionX:Int()
-		Return (Self.faceDegree <= 90 Or Self.faceDegree >= 270) ? EFFECT_NONE : 1
+		Return (Self.faceDegree <= 90 Or Self.faceDegree >= 270) ? -1 : 1
 	End
 	
 	Public Method slipJumpOut:Void()
@@ -4145,7 +4145,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.hurtCount = HURT_COUNT
 		
 		If (Self.velX = 0) Then
-			Self.velX = (Self.faceDirection ? EFFECT_NONE : 1) * HURT_POWER_X
+			Self.velX = (Self.faceDirection ? -1 : 1) * HURT_POWER_X
 		ElseIf (Self.velX > 0) Then
 			Self.velX = -HURT_POWER_X
 		Else
@@ -4157,7 +4157,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		EndIf
 		
 		If (Self.isAntiGravity) Then
-			i = EFFECT_NONE
+			i = -1
 		Else
 			i = 1
 		EndIf
@@ -4294,7 +4294,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End Select
 		
 		If (Not Key.repeat(((Key.gDown | Key.B_7) | Key.B_9) | Key.B_SPIN2)) Then
-			Self.effectID = EFFECT_NONE
+			Self.effectID = -1
 			Select (Self.collisionState)
 				Case CHARACTER_SONIC
 					Self.totalVelocity = SPIN_START_SPEED_1
@@ -4334,14 +4334,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						If (Self.isAntiGravity) Then
 							i = 1
 						Else
-							i = EFFECT_NONE
+							i = -1
 						EndIf
 						
 						Self.velX = i * Self.velX
 						break
 					EndIf
 					
-					Self.velX = (Self.isAntiGravity ? EFFECT_NONE : 1) * Self.velX
+					Self.velX = (Self.isAntiGravity ? -1 : 1) * Self.velX
 					break
 			End Select
 			Self.spinCount = 0
@@ -4360,7 +4360,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				i = Self.velY
 				
 				If (Self.isAntiGravity) Then
-					i2 = EFFECT_NONE
+					i2 = -1
 				Else
 					i2 = 1
 				EndIf
@@ -4497,11 +4497,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Int i
 		Self.animationID = ANI_POAL_PULL_2
 		Self.faceDirection = direction
-		Self.footPointX = ((Self.faceDirection ? EFFECT_NONE : 1) * WIDTH) + x
+		Self.footPointX = ((Self.faceDirection ? -1 : 1) * WIDTH) + x
 		setNoKey()
 		
 		If (Self.faceDirection) Then
-			i = EFFECT_NONE
+			i = -1
 		Else
 			i = 1
 		EndIf
@@ -4902,7 +4902,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			If (Self.isAntiGravity) Then
 				i = 1
 			Else
-				i = EFFECT_NONE
+				i = -1
 			EndIf
 			
 			Int newVelY = i * getVelY()
@@ -4918,7 +4918,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 			
 			If (characterID <> 2 Or Self.myAnimationID < ANI_ATTACK_2 Or Self.myAnimationID > ANI_BAR_ROLL_1) Then
-				setVelY((Self.isAntiGravity ? EFFECT_NONE : 1) * newVelY)
+				setVelY((Self.isAntiGravity ? -1 : 1) * newVelY)
 			EndIf
 			
 			If (characterID <> 3) Then
@@ -4941,7 +4941,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Method doAttackPose:Void(object:GameObject, direction:Int)
 		
 		If (Not Self.extraAttackFlag) Then
-			Int newVelY = (Self.isAntiGravity ? 1 : EFFECT_NONE) * getVelY()
+			Int newVelY = (Self.isAntiGravity ? 1 : -1) * getVelY()
 			
 			If (newVelY > 0) Then
 				newVelY = -newVelY
@@ -4954,12 +4954,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 			
 			If (characterID <> 3) Then
-				setVelY((Self.isAntiGravity ? EFFECT_NONE : 1) * newVelY)
+				setVelY((Self.isAntiGravity ? -1 : 1) * newVelY)
 			ElseIf (Not IsInvincibility() Or Self.myAnimationID < ANI_POP_JUMP_UP Or Self.myAnimationID > ANI_BRAKE) Then
 				Int i
 				
 				If (Self.isAntiGravity) Then
-					i = EFFECT_NONE
+					i = -1
 				Else
 					i = 1
 				EndIf
@@ -5056,7 +5056,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.dashRolling = False
 		
 		If (Self.effectID = 0 Or Self.effectID = 1) Then
-			Self.effectID = EFFECT_NONE
+			Self.effectID = -1
 		EndIf
 		
 		Self.drownCnt = 0
@@ -5311,7 +5311,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	
 	Public Method getPreItem:Void(itemId:Int)
 		For (Int i = 0; i < MAX_ITEM; i += 1)
-			If (itemVec[i][0] = EFFECT_NONE) Then
+			If (itemVec[i][0] = -1) Then
 				itemVec[i][0] = itemId
 				itemVec[i][1] = SPIN_KEY_COUNT
 				Return
@@ -5514,7 +5514,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		preScoreNum = scoreNum
 		preLifeNum = lifeNum
 		For (Int i = 0; i < MAX_ITEM; i += 1)
-			itemVec[i][0] = EFFECT_NONE
+			itemVec[i][0] = -1
 		End Select
 		setOverCount(SonicDef.OVER_TIME)
 	End
@@ -6629,7 +6629,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	
 	Protected Method spinLogic:Bool()
 		
-		If (Not (Key.repeat(Key.gLeft) Or Key.repeat(Key.gRight) Or isTerminal Or Self.animationID = EFFECT_NONE Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT)) Then
+		If (Not (Key.repeat(Key.gLeft) Or Key.repeat(Key.gRight) Or isTerminal Or Self.animationID = -1 Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT)) Then
 			If (Key.repeat(Key.gDown)) Then
 				If (Abs(getVelX()) > 64 Or getDegreeDiff(Self.faceDegree, Self.degreeStable) > ANI_DEAD_PRE) Then
 					If (Not (Self.animationID = 4 Or characterID = 3 Or Self.isCrashFallingSand)) Then
@@ -6710,7 +6710,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	
 	Protected Method spinLogic2:Bool()
 		
-		If (Not (Key.repeat(Key.gLeft) Or Key.repeat(Key.gRight) Or isTerminal Or Self.animationID = EFFECT_NONE Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT)) Then
+		If (Not (Key.repeat(Key.gLeft) Or Key.repeat(Key.gRight) Or isTerminal Or Self.animationID = -1 Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT)) Then
 			If (Key.repeat(Key.gDown)) Then
 				If (getDegreeDiff(Self.faceDegree, Self.degreeStable) <= ANI_DEAD_PRE And Self.animationID <> MAX_ITEM) Then
 					Self.animationID = ANI_SQUAT_PROCESS
@@ -6729,7 +6729,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		If (Self.dashRolling) Then
 			dashRollingLogic()
 		ElseIf (Self.effectID = 0 Or Self.effectID = 1) Then
-			Self.effectID = EFFECT_NONE
+			Self.effectID = -1
 		EndIf
 		
 	End
@@ -6771,8 +6771,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	
 	Public Method resetBreatheCount:Void()
 		Self.breatheCount = 0
-		Self.breatheNumCount = EFFECT_NONE
-		Self.preBreatheNumCount = EFFECT_NONE
+		Self.breatheNumCount = -1
+		Self.preBreatheNumCount = -1
 	End
 	
 	Public Method checkBreatheReset:Void()
@@ -6919,7 +6919,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		fadeFromValue = from
 		fadeToValue = to
 		fadeAlpha = fadeFromValue
-		preFadeAlpha = EFFECT_NONE
+		preFadeAlpha = -1
 	End
 	
 	Public Function drawFadeBase:Void(g:MFGraphics, vel2:Int)
