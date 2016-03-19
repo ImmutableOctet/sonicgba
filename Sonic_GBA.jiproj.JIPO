@@ -3,8 +3,8 @@
   <Files>
     <DocUserOptions Filename=".\etc\_tmp.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>41</X>
-        <Y>3</Y>
+        <X>51</X>
+        <Y>4</Y>
       </CursorPos>
       <DocGUID>dda049f8-5a89-4070-b295-23679affe208</DocGUID>
       <Bookmarks />
@@ -331,8 +331,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>23</X>
-        <Y>334</Y>
+        <X>34</X>
+        <Y>108</Y>
       </CursorPos>
       <DocGUID>9e5f42a1-f393-44d9-bb0a-778b95a3e775</DocGUID>
       <Bookmarks />
