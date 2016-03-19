@@ -134,7 +134,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		' Immutable Arrays (Constant):
 		Global DEGREE_DIVIDE:Int[]
-		Global EFFECT_LOOP:Bool[]
+		Global EFFECT_LOOP:Bool[] = [True, True]
 		Global FOOT_OFFSET_X:Int[]
 		Global NUM_ANI_ID:Int[]
 		Global NUM_SPACE:Int[]
@@ -625,7 +625,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Function characterSelectLogic:Bool()
 		
 		If (Key.press(Key.gSelect)) Then
-			Return CAN_BE_SQUEEZE
+			Return True
 		EndIf
 		
 		If (Key.press(Key.gLeft)) Then
@@ -685,20 +685,20 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		If (state) Then
 			z = NEED_RESET_DEDREE
 		Else
-			z = CAN_BE_SQUEEZE
+			z = True
 		EndIf
 		
 		Self.setNoMoving = z
 		Self.noMovingPosition = Self.footPointX
 		Self.worldCal.stopMoveX()
-		Self.collisionChkBreak = CAN_BE_SQUEEZE
+		Self.collisionChkBreak = True
 	End
 
 	Public Method changeRectUpCheck:Bool()
 		For (Int i = HINER_JUMP_Y / Self.worldInstance.getTileHeight(); i >= 0; i += EFFECT_NONE)
 			
 			If (Self.worldInstance.getWorldY(Self.collisionRect.x0 + RIGHT_WALK_COLLISION_CHECK_OFFSET_X, Self.collisionRect.y0 - (Self.worldInstance.getTileHeight() * i), Self.currentLayer, WALK_COLLISION_CHECK_OFFSET_Y) <> SmallAnimal.FLY_VELOCITY_X) Then
-				Return CAN_BE_SQUEEZE
+				Return True
 			EndIf
 			
 		Next
@@ -709,7 +709,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		For (Int i = HINER_JUMP_Y / Self.worldInstance.getTileHeight(); i >= 0; i += EFFECT_NONE)
 			
 			If (Self.worldInstance.getWorldY(Self.collisionRect.x0 + RIGHT_WALK_COLLISION_CHECK_OFFSET_X, Self.collisionRect.y0 + (Self.worldInstance.getTileHeight() * i), Self.currentLayer, TERMINAL_RUN_TO_RIGHT_2) <> SmallAnimal.FLY_VELOCITY_X) Then
-				Return CAN_BE_SQUEEZE
+				Return True
 			EndIf
 			
 		Next
@@ -717,7 +717,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 
 	Public Method needChangeRect:Bool()
-		Return (Self.animationID = YELLOW_NUM And Self.collisionState = TER_STATE_BRAKE And ((Not Self.isAntiGravity And changeRectUpCheck()) Or (Self.isAntiGravity And changeRectDownCheck()))) ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+		Return (Self.animationID = YELLOW_NUM And Self.collisionState = TER_STATE_BRAKE And ((Not Self.isAntiGravity And changeRectUpCheck()) Or (Self.isAntiGravity And changeRectDownCheck()))) ? True : NEED_RESET_DEDREE
 	End
 
 	Public Method getObjHeight:Int()
@@ -749,8 +749,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Method PlayerObject:public()
 		Self.degreeStable = WALK_COLLISION_CHECK_OFFSET_Y
 		Self.faceDegree = WALK_COLLISION_CHECK_OFFSET_Y
-		Self.faceDirection = CAN_BE_SQUEEZE
-		Self.prefaceDirection = CAN_BE_SQUEEZE
+		Self.faceDirection = True
+		Self.prefaceDirection = True
 		Self.extraAttackFlag = NEED_RESET_DEDREE
 		Self.footPointX = WALK_COLLISION_CHECK_OFFSET_Y
 		Self.onGround = NEED_RESET_DEDREE
@@ -767,7 +767,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.dashRolling = NEED_RESET_DEDREE
 		Self.hurtCount = WALK_COLLISION_CHECK_OFFSET_Y
 		Self.hurtNoControl = NEED_RESET_DEDREE
-		Self.visible = CAN_BE_SQUEEZE
+		Self.visible = True
 		Self.outOfControl = NEED_RESET_DEDREE
 		Self.controlObjectLogic = NEED_RESET_DEDREE
 		Self.leavingBar = NEED_RESET_DEDREE
@@ -810,7 +810,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.ducting = NEED_RESET_DEDREE
 		Self.ductingCount = WALK_COLLISION_CHECK_OFFSET_Y
 		Self.pushOnce = NEED_RESET_DEDREE
-		Self.squeezeFlag = CAN_BE_SQUEEZE
+		Self.squeezeFlag = True
 		Self.orgGravity = NEED_RESET_DEDREE
 		Self.footPointX = RIGHT_WALK_COLLISION_CHECK_OFFSET_X
 		Self.footPointY = WALK_COLLISION_CHECK_OFFSET_Y
@@ -823,11 +823,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.currentLayer = TERMINAL_NO_MOVE
 		
 		If (bariaDrawer = Null) Then
-			bariaDrawer = New Animation("/animation/baria").getDrawer(WALK_COLLISION_CHECK_OFFSET_Y, CAN_BE_SQUEEZE, WALK_COLLISION_CHECK_OFFSET_Y)
+			bariaDrawer = New Animation("/animation/baria").getDrawer(WALK_COLLISION_CHECK_OFFSET_Y, True, WALK_COLLISION_CHECK_OFFSET_Y)
 		EndIf
 		
 		If (gBariaDrawer = Null) Then
-			gBariaDrawer = New Animation("/animation/g_baria").getDrawer(WALK_COLLISION_CHECK_OFFSET_Y, CAN_BE_SQUEEZE, WALK_COLLISION_CHECK_OFFSET_Y)
+			gBariaDrawer = New Animation("/animation/g_baria").getDrawer(WALK_COLLISION_CHECK_OFFSET_Y, True, WALK_COLLISION_CHECK_OFFSET_Y)
 		EndIf
 		
 		If (invincibleAnimation = Null) Then
@@ -835,7 +835,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		EndIf
 		
 		If (invincibleDrawer = Null) Then
-			invincibleDrawer = invincibleAnimation.getDrawer(WALK_COLLISION_CHECK_OFFSET_Y, CAN_BE_SQUEEZE, WALK_COLLISION_CHECK_OFFSET_Y)
+			invincibleDrawer = invincibleAnimation.getDrawer(WALK_COLLISION_CHECK_OFFSET_Y, True, WALK_COLLISION_CHECK_OFFSET_Y)
 		EndIf
 		
 		If (breatheCountImage = Null) Then
@@ -977,12 +977,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			If (Self.isAntiGravity) Then
 				If (Self.footPointY < (MapManager.getCamera().y Shl ITEM_RING_5) - f24C) Then
 					Self.footPointY = (MapManager.getCamera().y Shl ITEM_RING_5) - f24C
-					deadOver = CAN_BE_SQUEEZE
+					deadOver = True
 				EndIf
 				
 			ElseIf (Self.velY > 0 And Self.footPointY > ((MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl ITEM_RING_5) + f24C) Then
 				Self.footPointY = ((MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl ITEM_RING_5) + f24C
-				deadOver = CAN_BE_SQUEEZE
+				deadOver = True
 			EndIf
 			
 			If (deadOver And Not Self.finishDeadStuff) Then
@@ -997,7 +997,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 				EndIf
 				
-				Self.finishDeadStuff = CAN_BE_SQUEEZE
+				Self.finishDeadStuff = True
 				Return
 			EndIf
 			
@@ -1021,13 +1021,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.preBreatheNumCount = EFFECT_NONE
 					
 					If (getNewPointY(Self.posY, WALK_COLLISION_CHECK_OFFSET_Y, (-Self.collisionRect.getHeight()) Shr TERMINAL_NO_MOVE, Self.faceDegree) - SIDE_FOOT_FROM_CENTER >= (waterLevel Shl ITEM_RING_5)) Then
-						Self.isInWater = CAN_BE_SQUEEZE
+						Self.isInWater = True
 						
 						If (isNeedPlayWaterSE) Then
 							SoundSystem.getInstance().playSe(58)
 						EndIf
 						
-						Self.waterSprayFlag = CAN_BE_SQUEEZE
+						Self.waterSprayFlag = True
 						Self.waterSprayX = Self.posX
 						waterSprayDrawer.restart()
 					EndIf
@@ -1073,7 +1073,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 								EndIf
 								
 								If (Self.breatheNumCount < ITEM_RING_5 And canBeHurt()) Then
-									setDie(CAN_BE_SQUEEZE)
+									setDie(True)
 									Return
 								ElseIf (Self.breatheNumCount <> Self.preBreatheNumCount) Then
 									Self.breatheNumY = ((Self.posY Shr ITEM_RING_5) - camera.y) - ANI_YELL
@@ -1129,7 +1129,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 							SoundSystem.getInstance().playSe(58)
 						EndIf
 						
-						Self.waterSprayFlag = CAN_BE_SQUEEZE
+						Self.waterSprayFlag = True
 						Self.waterSprayX = Self.posX
 						waterSprayDrawer.restart()
 					EndIf
@@ -1340,7 +1340,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 							EndIf
 						EndIf
 						
-						Self.noKeyFlag = CAN_BE_SQUEEZE
+						Self.noKeyFlag = True
 					EndIf
 					
 					If (Self.isCelebrate) Then
@@ -1353,13 +1353,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 							setVelX(WALK_COLLISION_CHECK_OFFSET_Y)
 						EndIf
 						
-						Self.noKeyFlag = CAN_BE_SQUEEZE
+						Self.noKeyFlag = True
 					EndIf
 					
 					If (StageManager.getStageID() <> ANI_SLIP) Then
 						If (Not isFirstTouchedWind And Self.animationID = ANI_WIND_JUMP) Then
 							soundInstance.playSe(68)
-							isFirstTouchedWind = CAN_BE_SQUEEZE
+							isFirstTouchedWind = True
 							Self.frameCnt = WALK_COLLISION_CHECK_OFFSET_Y
 						EndIf
 						
@@ -1384,7 +1384,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					
 					If (StageManager.getCurrentZoneId() = MAX_ITEM) Then
 						If (Not isFirstTouchedSandSlip And Self.animationID = ANI_YELL) Then
-							isFirstTouchedSandSlip = CAN_BE_SQUEEZE
+							isFirstTouchedSandSlip = True
 							Self.frameCnt = WALK_COLLISION_CHECK_OFFSET_Y
 						EndIf
 						
@@ -1409,7 +1409,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					
 					If (Self.ducting) Then
 						Self.ductingCount += TERMINAL_NO_MOVE
-						Self.noKeyFlag = CAN_BE_SQUEEZE
+						Self.noKeyFlag = True
 						Self.animationID = YELLOW_NUM
 						Self.attackAnimationID = Self.animationID
 						Self.attackCount = WALK_COLLISION_CHECK_OFFSET_Y
@@ -1454,7 +1454,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					End Select
 					
 					If (Self.noKeyFlag) Then
-						Key.setKeyFunction(CAN_BE_SQUEEZE)
+						Key.setKeyFunction(True)
 						Self.noKeyFlag = NEED_RESET_DEDREE
 					EndIf
 					
@@ -1522,7 +1522,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 										
 										setFadeColor(MapManager.END_COLOR)
 										fadeInit(WALK_COLLISION_CHECK_OFFSET_Y, 255)
-										Self.fading = CAN_BE_SQUEEZE
+										Self.fading = True
 										break
 									EndIf
 									
@@ -1613,7 +1613,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 		ElseIf (Self.outOfControlObject <> Null) Then
 			Self.outOfControlObject.logic()
-			Self.controlObjectLogic = CAN_BE_SQUEEZE
+			Self.controlObjectLogic = True
 		EndIf
 		
 	End
@@ -1710,7 +1710,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 
 	Public Method draw2:Void(g:MFGraphics)
-		Bool z = (drawAtFront() And Self.visible) ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+		Bool z = (drawAtFront() And Self.visible) ? True : NEED_RESET_DEDREE
 		draw(g, z)
 		drawCollisionRect(g)
 		
@@ -1755,12 +1755,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			If (terminalState < TERMINAL_RUN_TO_RIGHT_2 Or terminalState >= ITEM_RING_5) Then
 				Self.moonStarFrame1 = WALK_COLLISION_CHECK_OFFSET_Y
 			Else
-				moonStarDrawer.draw(g, WALK_COLLISION_CHECK_OFFSET_Y, (((MOON_STAR_DES_X_1 - MOON_STAR_ORI_X_1) * Self.moonStarFrame1) / MOON_STAR_FRAMES_1) + MOON_STAR_ORI_X_1, ((Self.moonStarFrame1 * ANI_PUSH_WALL) / MOON_STAR_FRAMES_1) + MOON_STAR_ORI_Y_1, CAN_BE_SQUEEZE, WALK_COLLISION_CHECK_OFFSET_Y)
+				moonStarDrawer.draw(g, WALK_COLLISION_CHECK_OFFSET_Y, (((MOON_STAR_DES_X_1 - MOON_STAR_ORI_X_1) * Self.moonStarFrame1) / MOON_STAR_FRAMES_1) + MOON_STAR_ORI_X_1, ((Self.moonStarFrame1 * ANI_PUSH_WALL) / MOON_STAR_FRAMES_1) + MOON_STAR_ORI_Y_1, True, WALK_COLLISION_CHECK_OFFSET_Y)
 				Self.moonStarFrame1 += TERMINAL_NO_MOVE
 			EndIf
 			
 			If (terminalState = ITEM_RING_10) Then
-				moonStarDrawer.draw(g, TERMINAL_NO_MOVE, (((MOON_STAR_DES_X_1 - MOON_STAR_ORI_X_1) * Self.moonStarFrame2) / MOON_STAR_FRAMES_2) + MOON_STAR_ORI_X_1, ((Self.moonStarFrame2 * ANI_PUSH_WALL) / MOON_STAR_FRAMES_2) + MOON_STAR_ORI_Y_1, CAN_BE_SQUEEZE, WALK_COLLISION_CHECK_OFFSET_Y)
+				moonStarDrawer.draw(g, TERMINAL_NO_MOVE, (((MOON_STAR_DES_X_1 - MOON_STAR_ORI_X_1) * Self.moonStarFrame2) / MOON_STAR_FRAMES_2) + MOON_STAR_ORI_X_1, ((Self.moonStarFrame2 * ANI_PUSH_WALL) / MOON_STAR_FRAMES_2) + MOON_STAR_ORI_Y_1, True, WALK_COLLISION_CHECK_OFFSET_Y)
 				Self.moonStarFrame2 += TERMINAL_NO_MOVE
 				Return
 			EndIf
@@ -1771,7 +1771,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 
 	Public Method drawAtFront:Bool()
-		Return (Self.slipping Or Self.isDead) ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+		Return (Self.slipping Or Self.isDead) ? True : NEED_RESET_DEDREE
 	End
 
 	Public Method collisionChk:Void()
@@ -1810,7 +1810,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 
 	Public Method draw:Void(g:MFGraphics)
-		Bool z = (drawAtFront() Or Not Self.visible) ? NEED_RESET_DEDREE : CAN_BE_SQUEEZE
+		Bool z = (drawAtFront() Or Not Self.visible) ? NEED_RESET_DEDREE : True
 		draw(g, z)
 	End
 
@@ -2159,7 +2159,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.onObjectContinue = NEED_RESET_DEDREE
 		ElseIf (Not (Self.checkedObject Or Self.footOnObject = Null Or Not Self.footOnObject.onObjectChk(Self))) Then
 			Self.footOnObject.doWhileCollisionWrap(Self)
-			Self.onObjectContinue = CAN_BE_SQUEEZE
+			Self.onObjectContinue = True
 		EndIf
 		
 		If (Not Self.onObjectContinue) Then
@@ -2205,7 +2205,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Private Method faceDirectionChk:Bool()
 		
 		If (Self.totalVelocity > 0) Then
-			Return CAN_BE_SQUEEZE
+			Return True
 		EndIf
 		
 		If (Self.totalVelocity < 0) Then
@@ -2217,10 +2217,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		EndIf
 		
 		If (Key.press(Key.gRight) Or Key.repeat(Key.gRight)) Then
-			Return CAN_BE_SQUEEZE
+			Return True
 		EndIf
 		
-		Return CAN_BE_SQUEEZE
+		Return True
 	End
 
 	Private Method faceSlopeChk:Void()
@@ -2287,7 +2287,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			If (Self.totalVelocity * preTotalVelocity <= 0 And Self.animationID = YELLOW_NUM) Then
 				Self.animationID = WALK_COLLISION_CHECK_OFFSET_Y
-				Self.faceDirection = preTotalVelocity > 0 ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+				Self.faceDirection = preTotalVelocity > 0 ? True : NEED_RESET_DEDREE
 			EndIf
 		EndIf
 		
@@ -2351,7 +2351,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				EndIf
 				
 				If (Not (Self.animationID = YELLOW_NUM And Self.collisionState = Null)) Then
-					Self.faceDirection = CAN_BE_SQUEEZE
+					Self.faceDirection = True
 				EndIf
 				
 				If (Self.fallTime = 0) Then
@@ -2428,7 +2428,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				soundInstance.playSe(TERMINAL_COUNT)
 				
 				If (Self.totalVelocity > 0) Then
-					z = CAN_BE_SQUEEZE
+					z = True
 				Else
 					z = NEED_RESET_DEDREE
 				EndIf
@@ -2437,7 +2437,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			ElseIf (Self.totalVelocity <> 0 And doBrake()) Then
 				Self.animationID = ANI_BRAKE
 				soundInstance.playSe(TERMINAL_COUNT)
-				Self.faceDirection = Self.totalVelocity > 0 ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+				Self.faceDirection = Self.totalVelocity > 0 ? True : NEED_RESET_DEDREE
 			EndIf
 		EndIf
 		
@@ -2521,7 +2521,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				If (Self.totalVelocity * preTotalVelocity <= 0 And Self.animationID = YELLOW_NUM) Then
 					Self.animationID = WALK_COLLISION_CHECK_OFFSET_Y
-					Self.faceDirection = preTotalVelocity > 0 ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+					Self.faceDirection = preTotalVelocity > 0 ? True : NEED_RESET_DEDREE
 				EndIf
 			EndIf
 			
@@ -2559,7 +2559,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.animationID = WALK_COLLISION_CHECK_OFFSET_Y
 				EndIf
 				
-				Self.faceDirection = Self.isAntiGravity ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+				Self.faceDirection = Self.isAntiGravity ? True : NEED_RESET_DEDREE
 				
 				If (Self.velX > 0) Then
 					If (Self.animationID = YELLOW_NUM) Then
@@ -2573,7 +2573,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					If (Self.velX < 0) Then
 						Self.velX = (WALK_COLLISION_CHECK_OFFSET_Y - reversePower) Shr TERMINAL_RUN_TO_RIGHT_2
 					Else
-						Self.faceDirection = CAN_BE_SQUEEZE
+						Self.faceDirection = True
 					EndIf
 					
 				ElseIf (Self.animationID <> YELLOW_NUM) Then
@@ -2593,7 +2593,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.animationID = WALK_COLLISION_CHECK_OFFSET_Y
 				EndIf
 				
-				Self.faceDirection = Self.isAntiGravity ? NEED_RESET_DEDREE : CAN_BE_SQUEEZE
+				Self.faceDirection = Self.isAntiGravity ? NEED_RESET_DEDREE : True
 				
 				If (Self.velX < 0) Then
 					If (Self.animationID = YELLOW_NUM) Then
@@ -2770,7 +2770,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Bool z
 					
 					If (Self.isAntiGravity) Then
-						z = CAN_BE_SQUEEZE
+						z = True
 					Else
 						z = NEED_RESET_DEDREE
 					EndIf
@@ -2788,7 +2788,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				EndIf
 				
 				If (Self.degreeRotateMode = 0) Then
-					Self.faceDirection = Self.isAntiGravity ? NEED_RESET_DEDREE : CAN_BE_SQUEEZE
+					Self.faceDirection = Self.isAntiGravity ? NEED_RESET_DEDREE : True
 				EndIf
 			EndIf
 		EndIf
@@ -2870,7 +2870,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.degreeRotateMode = WALK_COLLISION_CHECK_OFFSET_Y
 		
 		If (Self.velY > 0 And Not Self.sandStanding) Then
-			Self.sandStanding = CAN_BE_SQUEEZE
+			Self.sandStanding = True
 		EndIf
 		
 		Self.sandFrame += TERMINAL_NO_MOVE
@@ -2903,7 +2903,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					If (Self.velX < 0) Then
 						Self.velX = (WALK_COLLISION_CHECK_OFFSET_Y - reversePower) Shr TERMINAL_RUN_TO_RIGHT_2
 					Else
-						Self.faceDirection = CAN_BE_SQUEEZE
+						Self.faceDirection = True
 					EndIf
 					
 				ElseIf (Self.animationID <> YELLOW_NUM) Then
@@ -2919,7 +2919,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				EndIf
 				
 			ElseIf (Key.repeat(Key.gRight)) Then
-				Self.faceDirection = CAN_BE_SQUEEZE
+				Self.faceDirection = True
 				
 				If (Self.velX < 0) Then
 					If (Self.animationID = YELLOW_NUM) Then
@@ -3022,7 +3022,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						If (Self.velX < 0) Then
 							Self.velX = (WALK_COLLISION_CHECK_OFFSET_Y - reversePower) Shr TERMINAL_RUN_TO_RIGHT_2
 						Else
-							Self.faceDirection = CAN_BE_SQUEEZE
+							Self.faceDirection = True
 						EndIf
 						
 					ElseIf (Self.animationID <> YELLOW_NUM) Then
@@ -3139,7 +3139,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.attackCount = WALK_COLLISION_CHECK_OFFSET_Y
 		Self.attackLevel = WALK_COLLISION_CHECK_OFFSET_Y
 		Self.noVelMinus = NEED_RESET_DEDREE
-		Self.doJumpForwardly = CAN_BE_SQUEEZE
+		Self.doJumpForwardly = True
 		slipJumpOut()
 		
 		If (StageManager.getWaterLevel() > 0 And characterID = TERMINAL_RUN_TO_RIGHT_2) Then
@@ -3173,7 +3173,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.attackCount = WALK_COLLISION_CHECK_OFFSET_Y
 		Self.attackLevel = WALK_COLLISION_CHECK_OFFSET_Y
 		Self.noVelMinus = NEED_RESET_DEDREE
-		Self.doJumpForwardly = CAN_BE_SQUEEZE
+		Self.doJumpForwardly = True
 	End
 
 	Public Method doJumpV:Void()
@@ -3194,7 +3194,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.attackCount = WALK_COLLISION_CHECK_OFFSET_Y
 		Self.attackLevel = WALK_COLLISION_CHECK_OFFSET_Y
 		Self.noVelMinus = NEED_RESET_DEDREE
-		Self.doJumpForwardly = CAN_BE_SQUEEZE
+		Self.doJumpForwardly = True
 		slipJumpOut()
 	End
 
@@ -3210,7 +3210,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.attackCount = WALK_COLLISION_CHECK_OFFSET_Y
 		Self.attackLevel = WALK_COLLISION_CHECK_OFFSET_Y
 		Self.noVelMinus = NEED_RESET_DEDREE
-		Self.doJumpForwardly = CAN_BE_SQUEEZE
+		Self.doJumpForwardly = True
 	End
 
 	Public Method setFurikoOutVelX:Void(degree:Int)
@@ -3370,7 +3370,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 			
 			If (isFootOnObject(object)) Then
-				Self.checkedObject = CAN_BE_SQUEEZE
+				Self.checkedObject = True
 			EndIf
 			
 			setVelY(WALK_COLLISION_CHECK_OFFSET_Y)
@@ -3379,7 +3379,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			If (Not (Self.collisionState = TER_STATE_LOOK_MOON And isFootOnObject(object))) Then
 				Self.footOnObject = object
 				Self.collisionState = TER_STATE_LOOK_MOON
-				Self.collisionChkBreak = CAN_BE_SQUEEZE
+				Self.collisionChkBreak = True
 			EndIf
 			
 		ElseIf (Self.isAntiGravity) Then
@@ -3388,7 +3388,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.footPointY = object.getCollisionRect().y0
 		EndIf
 		
-		Self.onObjectContinue = CAN_BE_SQUEEZE
+		Self.onObjectContinue = True
 		Self.posX = Self.footPointX
 		Self.posY = Self.footPointY
 		setPosition(Self.posX, Self.posY)
@@ -3449,7 +3449,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 					
 					If (isFootOnObject(object)) Then
-						Self.checkedObject = CAN_BE_SQUEEZE
+						Self.checkedObject = True
 					EndIf
 					
 					setVelY(WALK_COLLISION_CHECK_OFFSET_Y)
@@ -3458,7 +3458,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					If (Not (Self.collisionState = TERMINAL_RUN_TO_RIGHT_2 And isFootOnObject(object))) Then
 						Self.footOnObject = object
 						Self.collisionState = TER_STATE_LOOK_MOON
-						Self.collisionChkBreak = CAN_BE_SQUEEZE
+						Self.collisionChkBreak = True
 					EndIf
 					
 					If (Not (Self.isSidePushed = YELLOW_NUM And isDirectionDown)) Then
@@ -3489,7 +3489,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				EndIf
 				
 				Self.movedSpeedY = Self.footPointY - prey
-				Self.onObjectContinue = CAN_BE_SQUEEZE
+				Self.onObjectContinue = True
 				break
 			Case TERMINAL_RUN_TO_RIGHT_2
 			Case TERMINAL_SUPER_SONIC
@@ -3517,7 +3517,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						Self.worldCal.stopMoveX()
 					EndIf
 					
-					Self.rightStopped = CAN_BE_SQUEEZE
+					Self.rightStopped = True
 				Else
 					prex = Self.footPointX
 					Self.footPointX = (object.getCollisionRect().x1 + (Self.collisionRect.getWidth() Shr TERMINAL_NO_MOVE)) - TERMINAL_NO_MOVE
@@ -3539,7 +3539,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						Self.worldCal.stopMoveX()
 					EndIf
 					
-					Self.leftStopped = CAN_BE_SQUEEZE
+					Self.leftStopped = True
 				EndIf
 				
 				If (Self.collisionState = Null And Self.animationID = YELLOW_NUM And (object instanceof Hari)) Then
@@ -3556,7 +3556,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.isStopByObject = NEED_RESET_DEDREE
 					break
 				Else
-					Self.isStopByObject = CAN_BE_SQUEEZE
+					Self.isStopByObject = True
 					break
 				EndIf
 				
@@ -3619,13 +3619,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 					
 					If (isFootOnObject(object)) Then
-						Self.checkedObject = CAN_BE_SQUEEZE
+						Self.checkedObject = True
 					EndIf
 					
 					If (Not (Self.collisionState = TER_STATE_LOOK_MOON And isFootOnObject(object))) Then
 						Self.footOnObject = object
 						Self.collisionState = TER_STATE_LOOK_MOON
-						Self.collisionChkBreak = CAN_BE_SQUEEZE
+						Self.collisionChkBreak = True
 					EndIf
 					
 				ElseIf (Self.isAntiGravity) Then
@@ -3634,7 +3634,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.footPointY = object.getCollisionRect().y0
 				EndIf
 				
-				Self.onObjectContinue = CAN_BE_SQUEEZE
+				Self.onObjectContinue = True
 				break
 			Case TERMINAL_RUN_TO_RIGHT_2
 			Case TERMINAL_SUPER_SONIC
@@ -3660,12 +3660,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						Self.worldCal.stopMoveX()
 					EndIf
 					
-					Self.rightStopped = CAN_BE_SQUEEZE
+					Self.rightStopped = True
 					
 					If (Self.isAntiGravity) Then
 						z = NEED_RESET_DEDREE
 					Else
-						z = CAN_BE_SQUEEZE
+						z = True
 					EndIf
 					
 					Self.faceDirection = z
@@ -3688,8 +3688,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						Self.worldCal.stopMoveX()
 					EndIf
 					
-					Self.leftStopped = CAN_BE_SQUEEZE
-					Self.faceDirection = Self.isAntiGravity ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+					Self.leftStopped = True
+					Self.faceDirection = Self.isAntiGravity ? True : NEED_RESET_DEDREE
 				EndIf
 				
 				If (Self.collisionState = Null And Self.animationID = YELLOW_NUM And (object instanceof Hari)) Then
@@ -3706,7 +3706,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.isStopByObject = NEED_RESET_DEDREE
 					break
 				Else
-					Self.isStopByObject = CAN_BE_SQUEEZE
+					Self.isStopByObject = True
 					break
 				EndIf
 				
@@ -3769,7 +3769,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 					
 					If (isFootOnObject(object)) Then
-						Self.checkedObject = CAN_BE_SQUEEZE
+						Self.checkedObject = True
 					EndIf
 					
 					setVelY(WALK_COLLISION_CHECK_OFFSET_Y)
@@ -3778,7 +3778,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					If (Not (Self.collisionState = TER_STATE_LOOK_MOON And isFootOnObject(object))) Then
 						Self.footOnObject = object
 						Self.collisionState = TER_STATE_LOOK_MOON
-						Self.collisionChkBreak = CAN_BE_SQUEEZE
+						Self.collisionChkBreak = True
 					EndIf
 					
 				ElseIf (Self.isAntiGravity) Then
@@ -3787,7 +3787,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.footPointY = object.getCollisionRect().y0
 				EndIf
 				
-				Self.onObjectContinue = CAN_BE_SQUEEZE
+				Self.onObjectContinue = True
 				break
 			Case TERMINAL_RUN_TO_RIGHT_2
 			Case TERMINAL_SUPER_SONIC
@@ -3812,7 +3812,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						Self.worldCal.stopMoveX()
 					EndIf
 					
-					Self.rightStopped = CAN_BE_SQUEEZE
+					Self.rightStopped = True
 				Else
 					prex = Self.footPointX
 					Self.footPointX = (object.getCollisionRect().x1 + (Self.collisionRect.getWidth() Shr TERMINAL_NO_MOVE)) - TERMINAL_NO_MOVE
@@ -3832,7 +3832,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						Self.worldCal.stopMoveX()
 					EndIf
 					
-					Self.leftStopped = CAN_BE_SQUEEZE
+					Self.leftStopped = True
 				EndIf
 				
 				If (Self.collisionState = Null And Self.animationID = YELLOW_NUM And (object instanceof Hari)) Then
@@ -3849,7 +3849,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.isStopByObject = NEED_RESET_DEDREE
 					break
 				Else
-					Self.isStopByObject = CAN_BE_SQUEEZE
+					Self.isStopByObject = True
 					break
 				EndIf
 				
@@ -3865,22 +3865,22 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		EndIf
 		
 		If ((Self instanceof PlayerAmy) And (getCharacterAnimationID() = MOON_STAR_ORI_Y_1 Or getCharacterAnimationID() = ANI_ATTACK_2 Or getCharacterAnimationID() = SPIN_KEY_COUNT Or getCharacterAnimationID() = ANI_RAIL_ROLL Or getCharacterAnimationID() = ANI_BAR_ROLL_1 Or getCharacterAnimationID() = ITEM_RING_10)) Then
-			Return CAN_BE_SQUEEZE
+			Return True
 		EndIf
 		
 		If ((Self instanceof PlayerSonic) And (getCharacterAnimationID() = ANI_POAL_PULL Or getCharacterAnimationID() = ANI_POP_JUMP_UP Or getCharacterAnimationID() = FOCUS_MOVE_SPEED Or getCharacterAnimationID() = YELLOW_NUM)) Then
-			Return CAN_BE_SQUEEZE
+			Return True
 		EndIf
 		
 		If ((Self instanceof PlayerTails) And getCharacterAnimationID() = ANI_SLIP) Then
-			Return CAN_BE_SQUEEZE
+			Return True
 		EndIf
 		
 		If ((Self instanceof PlayerKnuckles) And (getCharacterAnimationID() = ANI_SLIP Or getCharacterAnimationID() = SPIN_LV2_COUNT Or getCharacterAnimationID() = ANI_POAL_PULL Or getCharacterAnimationID() = ANI_ATTACK_2 Or getCharacterAnimationID() = SPIN_KEY_COUNT Or getCharacterAnimationID() = ANI_RAIL_ROLL Or getCharacterAnimationID() = ANI_BAR_ROLL_1)) Then
-			Return CAN_BE_SQUEEZE
+			Return True
 		EndIf
 		
-		Return (Self.animationID = MOON_STAR_ORI_Y_1 Or Self.animationID = ANI_ATTACK_2 Or Self.animationID = SPIN_KEY_COUNT Or Self.animationID = YELLOW_NUM Or Self.animationID = ITEM_RING_5 Or Self.animationID = ITEM_RING_10 Or invincibleCount > 0) ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+		Return (Self.animationID = MOON_STAR_ORI_Y_1 Or Self.animationID = ANI_ATTACK_2 Or Self.animationID = SPIN_KEY_COUNT Or Self.animationID = YELLOW_NUM Or Self.animationID = ITEM_RING_5 Or Self.animationID = ITEM_RING_10 Or invincibleCount > 0) ? True : NEED_RESET_DEDREE
 	End
 
 	Public Method isAttackingItem:Bool(pFirstTouch:Bool)
@@ -3896,7 +3896,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		If ((Self instanceof PlayerAmy) And (getCharacterAnimationID() = ANI_RAIL_ROLL Or getCharacterAnimationID() = ANI_BAR_ROLL_1)) Then
 			player.setVelY(player.getVelY() - 325)
-			Return CAN_BE_SQUEEZE
+			Return True
 		ElseIf ((Self instanceof PlayerAmy) And getCharacterAnimationID() = ANI_LOOK_UP_2) Then
 			Return NEED_RESET_DEDREE
 		Else
@@ -3905,7 +3905,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Return NEED_RESET_DEDREE
 			EndIf
 			
-			Return (Self.animationID = MOON_STAR_ORI_Y_1 Or Self.animationID = ANI_ATTACK_2 Or Self.animationID = SPIN_KEY_COUNT Or Self.animationID = YELLOW_NUM) ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+			Return (Self.animationID = MOON_STAR_ORI_Y_1 Or Self.animationID = ANI_ATTACK_2 Or Self.animationID = SPIN_KEY_COUNT Or Self.animationID = YELLOW_NUM) ? True : NEED_RESET_DEDREE
 		EndIf
 		
 	End
@@ -4014,7 +4014,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.animationID = ANI_ROTATE_JUMP
 			Self.collisionState = TER_STATE_BRAKE
 			Self.worldCal.actionState = TER_STATE_BRAKE
-			Self.collisionChkBreak = CAN_BE_SQUEEZE
+			Self.collisionChkBreak = True
 			Self.drawer.restart()
 		EndIf
 		
@@ -4131,11 +4131,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.velY = i * HURT_POWER_Y
 		Self.collisionState = TER_STATE_BRAKE
 		Self.worldCal.actionState = TER_STATE_BRAKE
-		Self.collisionChkBreak = CAN_BE_SQUEEZE
+		Self.collisionChkBreak = True
 		Self.worldCal.stopMove()
 		Self.onObjectContinue = NEED_RESET_DEDREE
 		Self.footOnObject = Null
-		Self.hurtNoControl = CAN_BE_SQUEEZE
+		Self.hurtNoControl = True
 		Self.attackAnimationID = WALK_COLLISION_CHECK_OFFSET_Y
 		Self.attackCount = WALK_COLLISION_CHECK_OFFSET_Y
 		Self.attackLevel = WALK_COLLISION_CHECK_OFFSET_Y
@@ -4150,7 +4150,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Return NEED_RESET_DEDREE
 		EndIf
 		
-		Return CAN_BE_SQUEEZE
+		Return True
 	End
 
 	Public Method isFootOnObject:Bool(object:GameObject)
@@ -4163,11 +4163,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Return NEED_RESET_DEDREE
 		EndIf
 		
-		Return Self.footOnObject = object ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+		Return Self.footOnObject = object ? True : NEED_RESET_DEDREE
 	End
 
 	Public Method isFootObjectAndLogic:Bool(object:GameObject)
-		Return (Self.footObjectLogic And Self.footOnObject = object And Self.collisionState = TERMINAL_RUN_TO_RIGHT_2) ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+		Return (Self.footObjectLogic And Self.footOnObject = object And Self.collisionState = TERMINAL_RUN_TO_RIGHT_2) ? True : NEED_RESET_DEDREE
 	End
 
 	Public Method setFootPositionX:Void(x:Int)
@@ -4313,8 +4313,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.spinCount = WALK_COLLISION_CHECK_OFFSET_Y
 			Self.animationID = YELLOW_NUM
 			Self.dashRolling = NEED_RESET_DEDREE
-			Self.ignoreFirstTouch = CAN_BE_SQUEEZE
-			Self.isAfterSpinDash = CAN_BE_SQUEEZE
+			Self.ignoreFirstTouch = True
+			Self.isAfterSpinDash = True
 		EndIf
 		
 		Select (Self.collisionState)
@@ -4336,7 +4336,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 
 	Public Method beWaterFall:Void()
-		Self.waterFalling = CAN_BE_SQUEEZE
+		Self.waterFalling = True
 		Self.velY += GRAVITY / TERMINAL_COUNT
 	End
 
@@ -4354,9 +4354,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 			
 			If (image = Null) Then
-				Self.waterFallDrawer = New Animation("/animation/water_fall").getDrawer(WALK_COLLISION_CHECK_OFFSET_Y, CAN_BE_SQUEEZE, WALK_COLLISION_CHECK_OFFSET_Y)
+				Self.waterFallDrawer = New Animation("/animation/water_fall").getDrawer(WALK_COLLISION_CHECK_OFFSET_Y, True, WALK_COLLISION_CHECK_OFFSET_Y)
 			Else
-				Self.waterFallDrawer = New Animation(image, "/animation/water_fall").getDrawer(WALK_COLLISION_CHECK_OFFSET_Y, CAN_BE_SQUEEZE, WALK_COLLISION_CHECK_OFFSET_Y)
+				Self.waterFallDrawer = New Animation(image, "/animation/water_fall").getDrawer(WALK_COLLISION_CHECK_OFFSET_Y, True, WALK_COLLISION_CHECK_OFFSET_Y)
 			EndIf
 		EndIf
 		
@@ -4382,9 +4382,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 			
 			If (image = Null) Then
-				Self.waterFlushDrawer = New Animation("/animation/water_flush").getDrawer(WALK_COLLISION_CHECK_OFFSET_Y, CAN_BE_SQUEEZE, WALK_COLLISION_CHECK_OFFSET_Y)
+				Self.waterFlushDrawer = New Animation("/animation/water_flush").getDrawer(WALK_COLLISION_CHECK_OFFSET_Y, True, WALK_COLLISION_CHECK_OFFSET_Y)
 			Else
-				Self.waterFlushDrawer = New Animation(image, "/animation/water_flush").getDrawer(WALK_COLLISION_CHECK_OFFSET_Y, CAN_BE_SQUEEZE, WALK_COLLISION_CHECK_OFFSET_Y)
+				Self.waterFlushDrawer = New Animation(image, "/animation/water_flush").getDrawer(WALK_COLLISION_CHECK_OFFSET_Y, True, WALK_COLLISION_CHECK_OFFSET_Y)
 			EndIf
 		EndIf
 		
@@ -4414,8 +4414,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		If (Self.collisionState = Null) Then
 			Self.totalVelocity = power
-			Self.faceDirection = Self.totalVelocity > 0 ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
-			Return CAN_BE_SQUEEZE
+			Self.faceDirection = Self.totalVelocity > 0 ? True : NEED_RESET_DEDREE
+			Return True
 		ElseIf (Self.collisionState <> TERMINAL_RUN_TO_RIGHT_2 Or (sender instanceof Accelerate)) Then
 			Return NEED_RESET_DEDREE
 		Else
@@ -4426,13 +4426,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Self.velY = power
 			EndIf
 			
-			Return CAN_BE_SQUEEZE
+			Return True
 		EndIf
 		
 	End
 
 	Public Method isOnGound:Bool()
-		Return Self.collisionState = Null ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+		Return Self.collisionState = Null ? True : NEED_RESET_DEDREE
 	End
 
 	Public Method doPoalMotion:Bool(x:Int, y:Int, isLeft:Bool)
@@ -4446,12 +4446,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		EndIf
 		
 		Self.animationID = ANI_POAL_PULL
-		Self.faceDirection = isLeft ? NEED_RESET_DEDREE : CAN_BE_SQUEEZE
+		Self.faceDirection = isLeft ? NEED_RESET_DEDREE : True
 		Self.footPointX = x
 		Self.footPointY = y + HINER_JUMP_Y
 		Self.velX = WALK_COLLISION_CHECK_OFFSET_Y
 		Self.velY = WALK_COLLISION_CHECK_OFFSET_Y
-		Return CAN_BE_SQUEEZE
+		Return True
 	End
 
 	Public Method doPoalMotion2:Bool(x:Int, y:Int, direction:Bool)
@@ -4474,7 +4474,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Self.totalVelocity = i * SSDef.PLAYER_MOVE_WIDTH
 		Self.worldCal.stopMoveX()
-		Return CAN_BE_SQUEEZE
+		Return True
 	End
 
 	Public Method doPullMotion:Void(x:Int, y:Int)
@@ -4628,8 +4628,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.velX = WALK_COLLISION_CHECK_OFFSET_Y
 		Self.worldCal.stopMoveX()
 		setFootPositionX(x)
-		Self.collisionChkBreak = CAN_BE_SQUEEZE
-		Self.railing = CAN_BE_SQUEEZE
+		Self.collisionChkBreak = True
+		Self.railing = True
 		Self.railOut = NEED_RESET_DEDREE
 		Self.animationID = ANI_RAIL_ROLL
 		setNoKey()
@@ -4645,21 +4645,21 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Method railOut:Void(x:Int, y:Int)
 		
 		If (Self.railing) Then
-			Self.railOut = CAN_BE_SQUEEZE
+			Self.railOut = True
 			Self.railLine = Null
 			Self.velY = RAIL_OUT_SPEED_VY0
 			Self.velX = WALK_COLLISION_CHECK_OFFSET_Y
 			setVelX(WALK_COLLISION_CHECK_OFFSET_Y)
 			setFootPositionX(x)
 			setFootPositionY(y)
-			Self.collisionChkBreak = CAN_BE_SQUEEZE
+			Self.collisionChkBreak = True
 			Self.animationID = YELLOW_NUM
 		EndIf
 		
 	End
 
 	Public Method pipeIn:Void(x:Int, y:Int, vx:Int, vy:Int)
-		Self.piping = CAN_BE_SQUEEZE
+		Self.piping = True
 		Self.pipeState = TER_STATE_RUN
 		Self.pipeDesX = x
 		Self.pipeDesY = y + BODY_OFFSET
@@ -4667,7 +4667,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.velY = 250
 		Self.nextVelX = (vx Shl ITEM_RING_5) / TERMINAL_NO_MOVE
 		Self.nextVelY = (vy Shl ITEM_RING_5) / TERMINAL_NO_MOVE
-		Self.collisionChkBreak = CAN_BE_SQUEEZE
+		Self.collisionChkBreak = True
 	End
 
 	Public Method pipeSet:Void(x:Int, y:Int, vx:Int, vy:Int)
@@ -4697,7 +4697,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Self.footPointY = Self.pipeDesY
 			EndIf
 			
-			Self.collisionChkBreak = CAN_BE_SQUEEZE
+			Self.collisionChkBreak = True
 			Return
 		EndIf
 		
@@ -4710,8 +4710,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.velX = vx
 		Self.velY = vy
 		Self.pipeState = TER_STATE_BRAKE
-		Self.piping = CAN_BE_SQUEEZE
-		Self.collisionChkBreak = CAN_BE_SQUEEZE
+		Self.piping = True
+		Self.collisionChkBreak = True
 		Self.worldCal.stopMove()
 	End
 
@@ -4731,12 +4731,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			((PlayerTails) Self).stopFly()
 		EndIf
 		
-		Self.railing = CAN_BE_SQUEEZE
+		Self.railing = True
 		setFootPositionX(x)
 		Self.velX = WALK_COLLISION_CHECK_OFFSET_Y
 		Self.velY = WALK_COLLISION_CHECK_OFFSET_Y
 		Self.railLine = Null
-		Self.collisionChkBreak = CAN_BE_SQUEEZE
+		Self.collisionChkBreak = True
 	End
 
 	Public Method setFallOver:Void()
@@ -4747,8 +4747,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.velX = WALK_COLLISION_CHECK_OFFSET_Y
 		Self.velY = RAIL_FLIPPER_V0
 		Self.railLine = Null
-		Self.collisionChkBreak = CAN_BE_SQUEEZE
-		Self.railFlipping = CAN_BE_SQUEEZE
+		Self.collisionChkBreak = True
+		Self.railFlipping = True
 		SoundSystem.getInstance().playSe(54)
 	End
 
@@ -4790,8 +4790,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		calTotalVelocity()
 		Print("~~1velX:" + Self.velX + "|velY:" + Self.velY)
-		Self.collisionChkBreak = CAN_BE_SQUEEZE
-		Return CAN_BE_SQUEEZE
+		Self.collisionChkBreak = True
+		Return True
 	End
 
 	Public Method checkWithObject:Void(preX:Int, preY:Int, currentX:Int, currentY:Int)
@@ -4806,7 +4806,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Int moveDistance
 		
-		If (Abs(moveDistanceX) >= Abs(moveDistanceY) ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE) Then
+		If (Abs(moveDistanceX) >= Abs(moveDistanceY) ? True : NEED_RESET_DEDREE) Then
 			moveDistance = Abs(moveDistanceX)
 		Else
 			moveDistance = Abs(moveDistanceY)
@@ -4966,7 +4966,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 
 	Public Method inRailState:Bool()
-		Return (Self.railing Or Self.railOut) ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+		Return (Self.railing Or Self.railOut) ? True : NEED_RESET_DEDREE
 	End
 
 	Public Method changeVisible:Void(mVisible:Bool)
@@ -4974,13 +4974,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 
 	Public Method setOutOfControl:Void(object:GameObject)
-		Self.outOfControl = CAN_BE_SQUEEZE
+		Self.outOfControl = True
 		Self.outOfControlObject = object
 		Self.piping = NEED_RESET_DEDREE
 	End
 
 	Public Method setOutOfControlInPipe:Void(object:GameObject)
-		Self.outOfControl = CAN_BE_SQUEEZE
+		Self.outOfControl = True
 		Self.outOfControlObject = object
 	End
 
@@ -4990,7 +4990,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 
 	Public Method isControlObject:Bool(object:GameObject)
-		Return (Self.controlObjectLogic And object = Self.outOfControlObject) ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+		Return (Self.controlObjectLogic And object = Self.outOfControlObject) ? True : NEED_RESET_DEDREE
 	End
 
 	Public Method setDieInit:Void(isDrowning:Bool, v0:Int)
@@ -5011,13 +5011,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.degreeForDraw = i
 		Self.collisionState = TER_STATE_BRAKE
 		MapManager.setFocusObj(Null)
-		Self.isDead = CAN_BE_SQUEEZE
+		Self.isDead = True
 		Self.finishDeadStuff = NEED_RESET_DEDREE
 		Self.animationID = ANI_DEAD_PRE
 		Self.drawer.restart()
-		timeStopped = CAN_BE_SQUEEZE
+		timeStopped = True
 		Self.worldCal.stopMove()
-		Self.collisionChkBreak = CAN_BE_SQUEEZE
+		Self.collisionChkBreak = True
 		Self.hurtCount = WALK_COLLISION_CHECK_OFFSET_Y
 		Self.dashRolling = NEED_RESET_DEDREE
 		
@@ -5031,7 +5031,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			RocketSeparateEffect.clearInstance()
 		EndIf
 		
-		GameState.isThroughGame = CAN_BE_SQUEEZE
+		GameState.isThroughGame = True
 		shieldType = WALK_COLLISION_CHECK_OFFSET_Y
 		invincibleCount = WALK_COLLISION_CHECK_OFFSET_Y
 		speedCount = WALK_COLLISION_CHECK_OFFSET_Y
@@ -5096,7 +5096,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 
 	Public Method setNoKey:Void()
-		Self.noKeyFlag = CAN_BE_SQUEEZE
+		Self.noKeyFlag = True
 	End
 
 	Public Method setCollisionState:Void(state:Byte)
@@ -5117,8 +5117,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Method setSlip:Void()
 		
 		If (Self.collisionState = Null) Then
-			Self.slipFlag = CAN_BE_SQUEEZE
-			Self.showWaterFlush = CAN_BE_SQUEEZE
+			Self.slipFlag = True
+			Self.showWaterFlush = True
 			Self.animationID = ANI_YELL
 			setNoKey()
 		EndIf
@@ -5145,11 +5145,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		EndIf
 		
 		SoundSystem.getInstance().playSequenceSe(ANI_SMALL_ZERO_Y)
-		Return CAN_BE_SQUEEZE
+		Return True
 	End
 
 	Public Method setBank:Void()
-		Self.onBank = Self.onBank ? NEED_RESET_DEDREE : CAN_BE_SQUEEZE
+		Self.onBank = Self.onBank ? NEED_RESET_DEDREE : True
 		
 		If (Self.onBank And Self.collisionState = Null) Then
 			calDivideVelocity()
@@ -5211,8 +5211,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.terminalOffset = WALK_COLLISION_CHECK_OFFSET_Y
 		terminalType = type
 		Self.terminalCount = TERMINAL_COUNT
-		isTerminal = CAN_BE_SQUEEZE
-		timeStopped = CAN_BE_SQUEEZE
+		isTerminal = True
+		timeStopped = True
 		Select (terminalType)
 			Case WALK_COLLISION_CHECK_OFFSET_Y
 			Case TERMINAL_RUN_TO_RIGHT_2
@@ -5229,7 +5229,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 			Case TERMINAL_NO_MOVE
 				changeVisible(NEED_RESET_DEDREE)
-				Self.noMoving = CAN_BE_SQUEEZE
+				Self.noMoving = True
 			Case TERMINAL_SUPER_SONIC
 				terminalState = TER_STATE_RUN
 			Default
@@ -5239,22 +5239,22 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Method setTerminalSingle:Void(type:Int)
 		terminalType = type
 		Self.terminalCount = TERMINAL_COUNT
-		isTerminal = CAN_BE_SQUEEZE
-		timeStopped = CAN_BE_SQUEEZE
+		isTerminal = True
+		timeStopped = True
 	End
 
 	Public Method isTerminalRunRight:Bool()
-		Return (isTerminal And (terminalType = 0 Or terminalType = TERMINAL_RUN_TO_RIGHT_2 Or (terminalType = TERMINAL_SUPER_SONIC And terminalState = Null And Self.posX < SUPER_SONIC_STAND_POS_X))) ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+		Return (isTerminal And (terminalType = 0 Or terminalType = TERMINAL_RUN_TO_RIGHT_2 Or (terminalType = TERMINAL_SUPER_SONIC And terminalState = Null And Self.posX < SUPER_SONIC_STAND_POS_X))) ? True : NEED_RESET_DEDREE
 	End
 
 	Public Method doBrake:Bool()
-		Return (isTerminal And terminalType = TERMINAL_SUPER_SONIC And terminalState = TER_STATE_BRAKE And Self.posX > SUPER_SONIC_STAND_POS_X And Self.totalVelocity > 0) ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+		Return (isTerminal And terminalType = TERMINAL_SUPER_SONIC And terminalState = TER_STATE_BRAKE And Self.posX > SUPER_SONIC_STAND_POS_X And Self.totalVelocity > 0) ? True : NEED_RESET_DEDREE
 	End
 
 	Public Method beTrans:Void(desX:Int, desY:Int)
 		Self.animationID = YELLOW_NUM
 		Self.collisionState = TER_STATE_BRAKE
-		Self.transing = CAN_BE_SQUEEZE
+		Self.transing = True
 		setBodyPositionX(desX)
 		setBodyPositionY(desY)
 		MapManager.setCameraMoving()
@@ -5262,8 +5262,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 
 	Public Method setCelebrate:Void()
-		timeStopped = CAN_BE_SQUEEZE
-		Self.isCelebrate = CAN_BE_SQUEEZE
+		timeStopped = True
+		Self.isCelebrate = True
 		MapManager.setCameraLeftLimit(MapManager.getCamera().x)
 		MapManager.setCameraRightLimit(MapManager.getCamera().x + MapManager.CAMERA_WIDTH)
 		
@@ -5361,7 +5361,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 
 	Public Method isAttracting:Bool()
-		Return shieldType = TERMINAL_RUN_TO_RIGHT_2 ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+		Return shieldType = TERMINAL_RUN_TO_RIGHT_2 ? True : NEED_RESET_DEDREE
 	End
 
 	Public Method getEnemyScore:Void()
@@ -5380,8 +5380,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 
 	Public Method ductIn:Void()
-		Self.ducting = CAN_BE_SQUEEZE
-		Self.pushOnce = CAN_BE_SQUEEZE
+		Self.ducting = True
+		Self.pushOnce = True
 		Self.ductingCount = WALK_COLLISION_CHECK_OFFSET_Y
 	End
 
@@ -5401,11 +5401,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Int headBlockY2 = Self.worldInstance.getWorldY(Self.footPointX + WIDTH, Self.footPointY - HEIGHT, TERMINAL_NO_MOVE, TERMINAL_RUN_TO_RIGHT_2)
 		
 		If (headBlockY >= 0) Then
-			collision = CAN_BE_SQUEEZE
+			collision = True
 		EndIf
 		
 		If (headBlockY2 >= 0) Then
-			Return CAN_BE_SQUEEZE
+			Return True
 		EndIf
 		
 		Return collision
@@ -5931,11 +5931,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 
 	Private Function isRaceModeNewRecord:Bool()
-		Return timeCount < StageManager.getTimeModeScore(characterID) ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+		Return timeCount < StageManager.getTimeModeScore(characterID) ? True : NEED_RESET_DEDREE
 	End
 
 	Public Function isHadRaceRecord:Bool()
-		Return StageManager.getTimeModeScore(characterID) < SonicDef.OVER_TIME ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+		Return StageManager.getTimeModeScore(characterID) < SonicDef.OVER_TIME ? True : NEED_RESET_DEDREE
 	End
 
 	Public Function movingBar:Bool()
@@ -5976,7 +5976,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		If (offsety <= (SCREEN_HEIGHT Shr TERMINAL_NO_MOVE) - SPIN_LV2_COUNT_CONF) Then
 			offsety = (SCREEN_HEIGHT Shr TERMINAL_NO_MOVE) - SPIN_LV2_COUNT_CONF
-			Return CAN_BE_SQUEEZE
+			Return True
 		EndIf
 		
 		offsety -= movespeedy
@@ -5999,7 +5999,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		EndIf
 		
 		clipstartw = clipendw
-		Return CAN_BE_SQUEEZE
+		Return True
 	End
 
 	Public Function clipMoveShadow:Void(g:MFGraphics)
@@ -6089,12 +6089,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						drawNum(g, score2, ((SCREEN_WIDTH Shr TERMINAL_NO_MOVE) + NUM_DISTANCE) + stagePassResultOutOffsetX, (SCREEN_HEIGHT Shr TERMINAL_NO_MOVE) + MENU_SPACE, TERMINAL_RUN_TO_RIGHT_2, WALK_COLLISION_CHECK_OFFSET_Y)
 						
 						If (scoreNum = totalPlusscore) Then
-							IsStarttoCnt = CAN_BE_SQUEEZE
+							IsStarttoCnt = True
 							
 							If (StageManager.isOnlyScoreCal) Then
-								isOnlyBarOut = CAN_BE_SQUEEZE
+								isOnlyBarOut = True
 							Else
-								isStartStageEndFlag = CAN_BE_SQUEEZE
+								isStartStageEndFlag = True
 							EndIf
 							
 						Else
@@ -6122,7 +6122,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						EndIf
 						
 						If (stagePassResultOutOffsetX < SmallAnimal.FLY_VELOCITY_X) Then
-							StageManager.isScoreBarOutOfScreen = CAN_BE_SQUEEZE
+							StageManager.isScoreBarOutOfScreen = True
 						EndIf
 					EndIf
 					
@@ -6132,7 +6132,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						drawStagePassInfoScroll(g, (SCREEN_HEIGHT Shr TERMINAL_NO_MOVE) - SPIN_LV2_COUNT_CONF, ANI_PUSH_WALL, SIDE_FOOT_FROM_CENTER)
 						
 						If (clipMoveLogic()) Then
-							IsStarttoCnt = CAN_BE_SQUEEZE
+							IsStarttoCnt = True
 						EndIf
 						
 						clipMoveShadow(g)
@@ -6141,7 +6141,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						MyAPI.setClip(g, WALK_COLLISION_CHECK_OFFSET_Y, WALK_COLLISION_CHECK_OFFSET_Y, SCREEN_WIDTH, SCREEN_HEIGHT)
 						
 						If (isRaceModeNewRecord() And IsStarttoCnt And Not StageManager.isSaveTimeModeScore) Then
-							IsDisplayRaceModeNewRecord = CAN_BE_SQUEEZE
+							IsDisplayRaceModeNewRecord = True
 						EndIf
 						
 						If (IsDisplayRaceModeNewRecord) Then
@@ -6150,7 +6150,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						
 						If (StageManager.isSaveTimeModeScore = Null And IsStarttoCnt) Then
 							StageManager.setTimeModeScore(characterID, timeCount)
-							StageManager.isSaveTimeModeScore = CAN_BE_SQUEEZE
+							StageManager.isSaveTimeModeScore = True
 							Return
 						EndIf
 						
@@ -6199,10 +6199,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			If (cursorIndex = 0) Then
 				State.drawMenuFontById(g, 96, SCREEN_WIDTH Shr TERMINAL_NO_MOVE, ((SCREEN_HEIGHT Shr TERMINAL_NO_MOVE) - PAUSE_FRAME_OFFSET_Y) + (MENU_SPACE Shr TERMINAL_NO_MOVE))
 				GameState.IsSingleUp = NEED_RESET_DEDREE
-				GameState.IsSingleDown = CAN_BE_SQUEEZE
+				GameState.IsSingleDown = True
 			ElseIf (cursorIndex = currentPauseMenuItem.length - YELLOW_NUM) Then
 				State.drawMenuFontById(g, 95, SCREEN_WIDTH Shr TERMINAL_NO_MOVE, ((SCREEN_HEIGHT Shr TERMINAL_NO_MOVE) - PAUSE_FRAME_OFFSET_Y) + (MENU_SPACE Shr TERMINAL_NO_MOVE))
-				GameState.IsSingleUp = CAN_BE_SQUEEZE
+				GameState.IsSingleUp = True
 				GameState.IsSingleDown = NEED_RESET_DEDREE
 			Else
 				State.drawMenuFontById(g, 95, (SCREEN_WIDTH Shr TERMINAL_NO_MOVE) - ANI_BAR_ROLL_2, ((SCREEN_HEIGHT Shr TERMINAL_NO_MOVE) - PAUSE_FRAME_OFFSET_Y) + (MENU_SPACE Shr TERMINAL_NO_MOVE))
@@ -6212,7 +6212,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 		EndIf
 		
-		State.drawSoftKey(g, CAN_BE_SQUEEZE, CAN_BE_SQUEEZE)
+		State.drawSoftKey(g, True, True)
 	End
 
 	Public Method close:Void()
@@ -6239,7 +6239,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Function IsInvincibility:Bool()
 		
 		If (invincibleCount > 0) Then
-			Return CAN_BE_SQUEEZE
+			Return True
 		EndIf
 		
 		Return NEED_RESET_DEDREE
@@ -6248,7 +6248,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Function IsUnderSheild:Bool()
 		
 		If (shieldType = TERMINAL_RUN_TO_RIGHT_2) Then
-			Return CAN_BE_SQUEEZE
+			Return True
 		EndIf
 		
 		Return NEED_RESET_DEDREE
@@ -6257,7 +6257,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Function IsSpeedUp:Bool()
 		
 		If (speedCount > 0) Then
-			Return CAN_BE_SQUEEZE
+			Return True
 		EndIf
 		
 		Return NEED_RESET_DEDREE
@@ -6270,7 +6270,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		If (Self.isAntiGravity) Then
 			z = NEED_RESET_DEDREE
 		Else
-			z = CAN_BE_SQUEEZE
+			z = True
 		EndIf
 		
 		Self.isAntiGravity = z
@@ -6280,7 +6280,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		If (Self.faceDirection) Then
 			z = NEED_RESET_DEDREE
 		Else
-			z = CAN_BE_SQUEEZE
+			z = True
 		EndIf
 		
 		Self.faceDirection = z
@@ -6310,7 +6310,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Int i
 			Self.worldCal.actionState = TER_STATE_BRAKE
 			Self.collisionState = TER_STATE_BRAKE
-			Self.faceDirection = Self.faceDirection ? NEED_RESET_DEDREE : CAN_BE_SQUEEZE
+			Self.faceDirection = Self.faceDirection ? NEED_RESET_DEDREE : True
 			
 			If (Self.isAntiGravity) Then
 				i = RollPlatformSpeedC.DEGREE_VELOCITY
@@ -6337,9 +6337,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Case TERMINAL_NO_MOVE
 					
 					If (Self.isAntiGravity) Then
-						Self.leftStopped = CAN_BE_SQUEEZE
+						Self.leftStopped = True
 					Else
-						Self.rightStopped = CAN_BE_SQUEEZE
+						Self.rightStopped = True
 					EndIf
 					
 					If (Self.leftStopped And Self.rightStopped) Then
@@ -6350,9 +6350,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Case TERMINAL_SUPER_SONIC
 					
 					If (Self.isAntiGravity) Then
-						Self.rightStopped = CAN_BE_SQUEEZE
+						Self.rightStopped = True
 					Else
-						Self.leftStopped = CAN_BE_SQUEEZE
+						Self.leftStopped = True
 					EndIf
 					
 					If (Self.leftStopped And Self.rightStopped) Then
@@ -6378,9 +6378,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 					
 					If (Self.isAntiGravity) Then
-						Self.leftStopped = CAN_BE_SQUEEZE
+						Self.leftStopped = True
 					Else
-						Self.rightStopped = CAN_BE_SQUEEZE
+						Self.rightStopped = True
 					EndIf
 					
 					If (Self.leftStopped And Self.rightStopped) Then
@@ -6398,9 +6398,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 					
 					If (Self.isAntiGravity) Then
-						Self.rightStopped = CAN_BE_SQUEEZE
+						Self.rightStopped = True
 					Else
-						Self.leftStopped = CAN_BE_SQUEEZE
+						Self.leftStopped = True
 					EndIf
 					
 					If (Self.leftStopped And Self.rightStopped) Then
@@ -6611,7 +6611,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					
 					If (Self.collisionState = TER_STATE_LOOK_MOON_WAIT) Then
 						If (Self instanceof PlayerAmy) Then
-							Self.dashRolling = CAN_BE_SQUEEZE
+							Self.dashRolling = True
 							Self.spinDownWaitCount = WALK_COLLISION_CHECK_OFFSET_Y
 							
 							If (characterID <> TERMINAL_SUPER_SONIC) Then
@@ -6620,7 +6620,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						EndIf
 						
 					ElseIf (Key.press(Key.B_HIGH_JUMP | Key.gUp)) Then
-						Self.dashRolling = CAN_BE_SQUEEZE
+						Self.dashRolling = True
 						Self.spinDownWaitCount = WALK_COLLISION_CHECK_OFFSET_Y
 						
 						If (characterID <> TERMINAL_SUPER_SONIC) Then
@@ -6640,7 +6640,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		If (Self.animationID = 0 And getDegreeDiff(Self.faceDegree, Self.degreeStable) <= ANI_DEAD_PRE) Then
 			If (Key.press(Key.B_SPIN2)) Then
-				Self.dashRolling = CAN_BE_SQUEEZE
+				Self.dashRolling = True
 				
 				If (characterID <> TERMINAL_SUPER_SONIC) Then
 					soundInstance.playSe(YELLOW_NUM)
@@ -6650,7 +6650,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Self.spinKeyCount = SPIN_KEY_COUNT
 			ElseIf (Key.press(Key.B_7)) Then
 				Self.faceDirection = NEED_RESET_DEDREE
-				Self.dashRolling = CAN_BE_SQUEEZE
+				Self.dashRolling = True
 				Self.spinKeyCount = SPIN_KEY_COUNT
 				
 				If (characterID <> TERMINAL_SUPER_SONIC) Then
@@ -6659,8 +6659,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				Self.spinCount = SPIN_LV2_COUNT
 			ElseIf (Key.press(Key.B_9)) Then
-				Self.faceDirection = CAN_BE_SQUEEZE
-				Self.dashRolling = CAN_BE_SQUEEZE
+				Self.faceDirection = True
+				Self.dashRolling = True
 				Self.spinKeyCount = SPIN_KEY_COUNT
 				
 				If (characterID <> TERMINAL_SUPER_SONIC) Then
@@ -6732,7 +6732,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Self.velX = WALK_COLLISION_CHECK_OFFSET_Y
 		Self.velY = WALK_COLLISION_CHECK_OFFSET_Y
-		Return CAN_BE_SQUEEZE
+		Return True
 	End
 
 	Public Method resetBreatheCount:Void()
@@ -6754,7 +6754,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		If (Key.repeat(((((Key.gSelect | Key.gLeft) | Key.gRight) | Key.gDown) | Key.gUp) | Key.B_HIGH_JUMP) Or Not (Self.animationID = 0 Or Self.animationID = ANI_WAITING_1 Or Self.animationID = ANI_WAITING_2)) Then
 			Self.waitingCount = WALK_COLLISION_CHECK_OFFSET_Y
 			Self.waitingLevel = WALK_COLLISION_CHECK_OFFSET_Y
-			Self.isResetWaitAni = CAN_BE_SQUEEZE
+			Self.isResetWaitAni = True
 			Return
 		EndIf
 		
@@ -6812,12 +6812,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.animationID = ANI_ROTATE_JUMP
 		Self.collisionState = TER_STATE_BRAKE
 		Self.worldCal.actionState = TER_STATE_BRAKE
-		Self.collisionChkBreak = CAN_BE_SQUEEZE
+		Self.collisionChkBreak = True
 		Self.drawer.restart()
 		MapManager.setFocusObj(Null)
 		setMeetingBoss(NEED_RESET_DEDREE)
 		Self.animationID = ANI_POP_JUMP_UP
-		Self.enteringSP = CAN_BE_SQUEEZE
+		Self.enteringSP = True
 		soundInstance.playSe(ANI_SMALL_ZERO_Y)
 	End
 
@@ -6835,14 +6835,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		stagePassResultOutOffsetX -= 96
 		
 		If (stagePassResultOutOffsetX < SmallAnimal.FLY_VELOCITY_X) Then
-			Return CAN_BE_SQUEEZE
+			Return True
 		EndIf
 		
 		Return NEED_RESET_DEDREE
 	End
 
 	Public Method needRetPower:Bool()
-		Return ((Not Key.repeat(Key.gLeft | Key.gRight) And Not isTerminalRunRight() And Not Self.isCelebrate) Or Self.animationID = YELLOW_NUM Or Self.slipFlag) ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+		Return ((Not Key.repeat(Key.gLeft | Key.gRight) And Not isTerminalRunRight() And Not Self.isCelebrate) Or Self.animationID = YELLOW_NUM Or Self.slipFlag) ? True : NEED_RESET_DEDREE
 	End
 
 	Public Method getRetPower:Int()
@@ -6864,11 +6864,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 
 	Public Method noRotateDraw:Bool()
-		Return (Self.animationID = 0 Or Self.animationID = MAX_ITEM Or Self.animationID = ANI_SQUAT_PROCESS Or Self.animationID = ANI_WAITING_1 Or Self.animationID = ANI_WAITING_2 Or Self.animationID = ITEM_RING_5 Or Self.animationID = ITEM_RING_10 Or Self.animationID = ANI_YELL Or Self.animationID = ANI_PUSH_WALL) ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+		Return (Self.animationID = 0 Or Self.animationID = MAX_ITEM Or Self.animationID = ANI_SQUAT_PROCESS Or Self.animationID = ANI_WAITING_1 Or Self.animationID = ANI_WAITING_2 Or Self.animationID = ITEM_RING_5 Or Self.animationID = ITEM_RING_10 Or Self.animationID = ANI_YELL Or Self.animationID = ANI_PUSH_WALL) ? True : NEED_RESET_DEDREE
 	End
 
 	Public Method canDoJump:Bool()
-		Return Self.animationID <> MAX_ITEM ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+		Return Self.animationID <> MAX_ITEM ? True : NEED_RESET_DEDREE
 	End
 
 	Private Method aspirating:Void()
@@ -6906,7 +6906,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			For (w = WALK_COLLISION_CHECK_OFFSET_Y; w < MyAPI.zoomOut(SCREEN_WIDTH); w += FADE_FILL_WIDTH)
 				For (h = WALK_COLLISION_CHECK_OFFSET_Y; h < MyAPI.zoomOut(SCREEN_HEIGHT); h += FADE_FILL_WIDTH)
-					g.drawRGB(fadeRGB, WALK_COLLISION_CHECK_OFFSET_Y, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_WIDTH, CAN_BE_SQUEEZE)
+					g.drawRGB(fadeRGB, WALK_COLLISION_CHECK_OFFSET_Y, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_WIDTH, True)
 				Next
 			Next
 		EndIf
@@ -6914,7 +6914,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 
 	Public Function fadeChangeOver:Bool()
-		Return fadeAlpha = fadeToValue ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+		Return fadeAlpha = fadeToValue ? True : NEED_RESET_DEDREE
 	End
 
 	Private Function playerLifeUpBGM:Void()
@@ -6928,7 +6928,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 
 	Public Method isBodyCenterOutOfWater:Bool()
-		Return getNewPointY(Self.posY, WALK_COLLISION_CHECK_OFFSET_Y, -Self.collisionRect.getHeight(), Self.faceDegree) < (StageManager.getWaterLevel() Shl ITEM_RING_5) ? CAN_BE_SQUEEZE : NEED_RESET_DEDREE
+		Return getNewPointY(Self.posY, WALK_COLLISION_CHECK_OFFSET_Y, -Self.collisionRect.getHeight(), Self.faceDegree) < (StageManager.getWaterLevel() Shl ITEM_RING_5) ? True : NEED_RESET_DEDREE
 	End
 
 	Public Method dripDownUnderWater:Void()
