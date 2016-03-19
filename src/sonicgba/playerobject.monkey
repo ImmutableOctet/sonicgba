@@ -39,505 +39,533 @@ Private
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
 	
-	'Import java.lang.reflect.array
-	'Import java.util.vector
+	Import regal.typetool
 Public
 
 ' Classes:
 Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstract
-	Private Const ANIMATION_PATH:String = "/animation"
-	Private Const ANI_BIG_ZERO:Int = 67
-	Private Const ANI_SMALL_ZERO:Int = 27
-	Private Const ANI_SMALL_ZERO_Y:Int = 37
-	Private Const ASPIRATE_INTERVAL:Int = 3
-	Private Const ATTRACT_EFFECT_HEIGHT:Int = 9600
-	Private Const ATTRACT_EFFECT_WIDTH:Int = 9600
-	Private Const BACKGROUND_WIDTH:Int = 80
-	Private Const BAR_COLOR:Int = 2
-	Private Const BG_NUM:Int
-	Private Const BODY_OFFSET:Int = 768
-	Private Const BREATHE_IMAGE_HEIGHT:Int = 16
-	Private Const BREATHE_IMAGE_WIDTH:Int = 16
-	Private Const BREATHE_TIME_COUNT:Int = 21000
-	Private Const BREATHE_TO_DIE_PER_COUNT:Int = 1760
-	Private Const B_1:Int = 5760
-	Private Const B_2:Int = 11264
-	Private Const CAMERA_MAX_DISTANCE:Int = 20
-	Private Const CENTER_X:Int = 660480
-	Private Const CENTER_Y:Int = 63488
-	Private Const COUNT_INDEX:Int = 1
-	Private Const DEBUG_WUDI:Bool = False
-	Private Const DEGREE_DIVIDE:Int[]
-	Private Const DIE_DRIP_STATE_JUMP_V0:Int = -800
-	Private Const DO_POAL_MOTION_SPEED:Int = 600
-	Private Const EFFECT_LOOP:Bool[]
-	Private Const ENLARGE_NUM:Int = 1920
-	Private Const f23A:Int = 3072
-	Private Const f24C:Int = 3072
-	Private Const FADE_FILL_HEIGHT:Int = 40
-	Private Const FADE_FILL_WIDTH:Int = 40
-	Private Const FOCUS_MAX_OFFSET:Int
-	Private Const FOCUS_MOVE_SPEED:Int = 15
-	Private Const FOCUS_MOVING_NONE:Int = 0
-	Private Const FONT_NUM:Int = 7
-	Private Const FOOT_OFFSET:Int = 256
-	Private Const FOOT_OFFSET_X:Int[]
-	Private Const HINER_JUMP_LIMIT:Int = 1024
-	Private Const HINER_JUMP_MAX:Int = 4352
-	Private Const HINER_JUMP_X_ADD:Int = 1024
-	Private Const HINER_JUMP_Y:Int = 2048
-	Private Const ICE_SLIP_FLUSH_OFFSET_Y:Int = 512
-	Private Const INVINCIBLE_COUNT:Int = 320
-	Private Const IN_WATER_WALK_SPEED_SCALE1:Float = 5.0f
-	Private Const IN_WATER_WALK_SPEED_SCALE2:Float = 9.0f
-	Private Const ITEM_INDEX:Int = 0
-	Private Const JUMP_EFFECT_HEIGHT:Int = 1920
-	Private Const JUMP_EFFECT_OFFSET_Y:Int = 256
-	Private Const JUMP_EFFECT_WIDTH:Int = 1920
-	Private Const LEFT_FOOT_OFFSET_X:Int = -256
-	Private Const LEFT_WALK_COLLISION_CHECK_OFFSET_X:Int = -512
-	Private Const LEFT_WALK_COLLISION_CHECK_OFFSET_Y:Int = -512
-	Private Const LOOK_COUNT:Int = 32
-	Private Const MAX_ITEM:Int = 5
-	Private Const MAX_ITEM_SHOW_NUM:Int = 4
-	Private Const MOON_STAR_DES_X_1:Int
-	Private Const MOON_STAR_DES_Y_1:Int = 26
-	Private Const MOON_STAR_FRAMES_1:Int = 207
-	Private Const MOON_STAR_FRAMES_2:Int = 120
-	Private Const MOON_STAR_ORI_X_1:Int
-	Private Const MOON_STAR_ORI_Y_1:Int = 18
-	Private Const NUM_ANI_ID:Int[]
-	Private Const NUM_DISTANCE:Int
-	Private Const NUM_PIC_HEIGHT:Int
-	Private Const NUM_PIC_WIDTH:Int
-	Private Const NUM_SPACE:Int[]
-	Private Const NUM_SPACE_ANIMATION:Int[]
-	Private Const NUM_SPACE_FONT:Int[]
-	Private Const NUM_SPACE_IMAGE:Int[]
-	Private Const PAUSE_MENU_NORMAL_NOSHOP:Int[]
-	Private Const PAUSE_MENU_NORMAL_SHOP:Int[]
-	Private Const PAUSE_MENU_RACE_ITEM:Int[]
-	Private Const PIPE_SET_POWER:Int = 2880
-	Private Const RAIL_FLIPPER_V0:Int = -3380
-	Private Const RAIL_OUT_SPEED_VY0:Int = -1200
-	Private Const RANDOM_RING_NUM:Int[]
-	Private Const RIGHT_FOOT_OFFSET_X:Int = 256
-	Private Const RIGHT_WALK_COLLISION_CHECK_OFFSET_X:Int = 512
-	Private Const RIGHT_WALK_COLLISION_CHECK_OFFSET_Y:Int = -512
-	Private Const SIDE_COLLISION_NUM:Int = -2
-	Private Const SIDE_FOOT_FROM_CENTER:Int = 256
-	Private Const SMALL_JUMP_COUNT:Int = 4
-	Private Const SONIC_DRAW_HEIGHT:Int = 1920
-	Private Const SPIN_KEY_COUNT:Int = 20
-	Private Const SPIN_LV2_COUNT:Int = 12
-	Private Const SPIN_LV2_COUNT_CONF:Int = 36
-	Private Const STAGE_PASS_STR_SPACE:Int
-	Private Const STAGE_PASS_STR_SPACE_FONT:Int
-	Private Const SUPER_SONIC_CHANGING_CENTER_Y:Int = 25280
-	Private Const SUPER_SONIC_STAND_POS_X:Int = 235136
-	Private Const TERMINAL_COUNT:Int = 10
-	Private Const WALK_COLLISION_CHECK_OFFSET_X:Int = 0
-	Private Const WALK_COLLISION_CHECK_OFFSET_Y:Int = 0
-	Private Const WHITE_BACKGROUND_ID:Int = 118
-	Private Global bariaDrawer:AnimationDrawer
-	Private Global breatheCountImage:MFImage
-	Private Global characterID:Int
-	Private Global clipendw:Int
-	Private Global cliph:Int
-	Private Global clipspeed:Int
-	Private Global clipstartw:Int
-	Private Global clipx:Int
-	Private Global clipy:Int
-	Private Global collisionBlockGround:ACBlock
-	Private Global collisionBlockGroundTmp:ACBlock
-	Private Global collisionBlockSky:ACBlock
-	Private Global currentPauseMenuItem:Int[]
-	Private Global fadeAlpha:Int
-	Private Global fadeFromValue:Int
-	Private Global fadeRGB:Int[]
-	Private Global fadeToValue:Int
-	Private Global fastRunDrawer:AnimationDrawer
-	Private Global gBariaDrawer:AnimationDrawer
-	Private Global getLifeDrawer:AnimationDrawer
-	Private Global headDrawer:AnimationDrawer
-	Private Global invincibleAnimation:Animation
-	Private Global invincibleCount:Int
-	Private Global invincibleDrawer:AnimationDrawer
-	Private Global isStartStageEndFlag:Bool
-	Private Global itemOffsetX:Int
-	Private Global itemVec:Int[][]
-	Private Global lifeDrawerX:Int
-	Private Global moonStarDrawer:AnimationDrawer
-	Private Global movespeedx:Int
-	Private Global movespeedy:Int
-	Private Global newRecordCount:Int
-	Private Global numDrawer:AnimationDrawer
-	Private Global offsetx:Int
-	Private Global offsety:Int
-	Private Global passStageActionID:Int
-	Private Global PAUSE_MENU_NORMAL_ITEM:Int[] = Null
-	Private Global preFadeAlpha:Int
-	Private Global preLifeNum:Int
-	Private Global preScoreNum:Int
-	Private Global preTimeCount:Int
-	Private Global ringRandomNum:Int
-	Private Global score1:Int
-	Private Global score2:Int
-	Private Global shieldType:Int
-	Private Global stageEndFrameCnt:Int
-	Private Global stagePassResultOutOffsetX:Int
-	Private Global totalPlusscore:Int
-	Private Global uiDrawer:AnimationDrawer
-	Private Global uiRingImage:MFImage
-	Private Global uiSonicHeadImage:MFImage
-	Private Global waterSprayDrawer:AnimationDrawer
-	Protected Const EFFECT_NONE:Int = -1
-	Protected Const EFFECT_SAND_1:Int = 0
-	Protected Const EFFECT_SAND_2:Int = 1
-	Protected Const FOCUS_MOVING_DOWN:Int = 2
-	Protected Const FOCUS_MOVING_UP:Int = 1
-	Protected Const PLAYER_ANIMATION_PATH:String = "/animation/player"
-	Protected Const ROTATE_MODE_NEGATIVE:Int = 2
-	Protected Const ROTATE_MODE_NEVER_MIND:Int = 0
-	Protected Const ROTATE_MODE_POSITIVE:Int = 1
-	Protected Const TRANS:Int[]
-	Protected Const WIDTH:Int = 1024
-	Protected Global ringNum:Int
-	Protected Global ringTmpNum:Int
-	Protected Global speedCount:Int
-	Protected Global terminalState:byte
-	Protected Global terminalType:Int
-	Protected Global timeStopped:Bool
-	protected static Final byte STATE_PIPE_IN = (byte) 0
-	protected static Final byte STATE_PIPE_OVER = (byte) 2
-	protected static Final byte STATE_PIPING = (byte) 1
-	protected static Final byte TER_STATE_BRAKE = (byte) 1
-	protected static Final byte TER_STATE_CHANGE_1 = (byte) 4
-	protected static Final byte TER_STATE_CHANGE_2 = (byte) 5
-	protected static Final byte TER_STATE_GO_AWAY = (byte) 6
-	protected static Final byte TER_STATE_LOOK_MOON = (byte) 2
-	protected static Final byte TER_STATE_LOOK_MOON_WAIT = (byte) 3
-	protected static Final byte TER_STATE_RUN = (byte) 0
-	protected static Final byte TER_STATE_SHINING_2 = (byte) 7
-	Public Const ANI_ATTACK_1:Int = 18
-	Public Const ANI_ATTACK_2:Int = 19
-	Public Const ANI_ATTACK_3:Int = 20
-	Public Const ANI_BANK_1:Int = 32
-	Public Const ANI_BANK_2:Int = 33
-	Public Const ANI_BANK_3:Int = 34
-	Public Const ANI_BAR_ROLL_1:Int = 22
-	Public Const ANI_BAR_ROLL_2:Int = 23
-	Public Const ANI_BRAKE:Int = 17
-	Public Const ANI_BREATHE:Int = 49
-	Public Const ANI_CAUGHT:Int = 52
-	Public Const ANI_CELEBRATE_1:Int = 35
-	Public Const ANI_CELEBRATE_2:Int = 36
-	Public Const ANI_CELEBRATE_3:Int = 37
-	Public Const ANI_CLIFF_1:Int = 47
-	Public Const ANI_CLIFF_2:Int = 48
-	Public Const ANI_DEAD:Int = 41
-	Public Const ANI_DEAD_PRE:Int = 45
-	Public Const ANI_FALLING:Int = 10
-	Public Const ANI_HURT:Int = 12
-	Public Const ANI_HURT_PRE:Int = 44
-	Public Const ANI_JUMP:Int = 4
-	Public Const ANI_JUMP_ROLL:Int = 15
-	Public Const ANI_JUMP_RUSH:Int = 16
-	Public Const ANI_LOOK_UP_1:Int = 38
-	Public Const ANI_LOOK_UP_2:Int = 39
-	Public Const ANI_LOOK_UP_OVER:Int = 40
-	Public Const ANI_NONE:Int = -1
-	Public Const ANI_POAL_PULL:Int = 13
-	Public Const ANI_POAL_PULL_2:Int = 31
-	Public Const ANI_POP_JUMP_DOWN_SLOW:Int = 43
-	Public Const ANI_POP_JUMP_UP:Int = 14
-	Public Const ANI_POP_JUMP_UP_SLOW:Int = 42
-	Public Const ANI_PULL:Int = 24
-	Public Const ANI_PULL_BAR_MOVE:Int = 28
-	Public Const ANI_PULL_BAR_STAY:Int = 27
-	Public Const ANI_PUSH_WALL:Int = 8
-	Public Const ANI_RAIL_ROLL:Int = 21
-	Public Const ANI_ROPE_ROLL_1:Int = 25
-	Public Const ANI_ROPE_ROLL_2:Int = 26
-	Public Const ANI_ROTATE_JUMP:Int = 9
-	Public Const ANI_RUN_1:Int = 1
-	Public Const ANI_RUN_2:Int = 2
-	Public Const ANI_RUN_3:Int = 3
-	Public Const ANI_SLIP:Int = 11
-	Public Const ANI_SPIN_LV1:Int = 6
-	Public Const ANI_SPIN_LV2:Int = 7
-	Public Const ANI_SQUAT:Int = 5
-	Public Const ANI_SQUAT_PROCESS:Int = 46
-	Public Const ANI_STAND:Int = 0
-	Public Const ANI_VS_FAKE_KNUCKLE:Int = 53
-	Public Const ANI_WAITING_1:Int = 50
-	Public Const ANI_WAITING_2:Int = 51
-	Public Const ANI_WIND_JUMP:Int = 29
-	Public Const ANI_YELL:Int = 30
-	Public Const ATTACK_POP_POWER:Int
-	Public Const BALL_HEIGHT_OFFSET:Int = 1024
-	Public Const BANKING_MIN_SPEED:Int = 500
-	Public Const BIG_NUM:Int = 2
-	Public Const CAN_BE_SQUEEZE:Bool = True
-	Public Const CHARACTER_AMY:Int = 3
-	Public Const CHARACTER_KNUCKLES:Int = 2
-	Public Const CHARACTER_LIST:Int[]
-	Public Const CHARACTER_SONIC:Int = 0
-	Public Const CHARACTER_TAILS:Int = 1
-	Public Const DETECT_HEIGHT:Int = 2048
-	Public Const FALL_IN_SAND_SLIP_LEFT:Int = 2
-	Public Const FALL_IN_SAND_SLIP_NONE:Int = 0
-	Public Const FALL_IN_SAND_SLIP_RIGHT:Int = 1
-	Public Const HEIGHT:Int = 1536
-	Public Const HUGE_POWER_SPEED:Int = 1900
-	Public Const HURT_COUNT:Int = 48
-	Public Const IN_BLOCK_CHECK:Bool = False
-	Public Const ITEM_INVINCIBLE:Int = 3
-	Public Const ITEM_LIFE:Int = 0
-	Public Const ITEM_RING_10:Int = 7
-	Public Const ITEM_RING_5:Int = 6
-	Public Const ITEM_RING_RANDOM:Int = 5
-	Public Const ITEM_SHIELD:Int = 1
-	Public Const ITEM_SHIELD_2:Int = 2
-	Public Const ITEM_SPEED:Int = 4
-	Public Const LIFE_NUM_RESET:Int = 2
-	Public Const MIN_ATTACK_JUMP:Int = -900
-	Public Const NEED_RESET_DEDREE:Bool = False
-	Public Const NumberSideX:Int
-	Public Const NUM_CENTER:Int = 0
-	Public Const NUM_DISTANCE_BIG:Int = 72
-	Public Const NUM_LEFT:Int = 1
-	Public Const NUM_RIGHT:Int = 2
-	Public Const PAUSE_FRAME_HEIGHT:Int
-	Public Const PAUSE_FRAME_OFFSET_X:Int
-	Public Const PAUSE_FRAME_OFFSET_Y:Int
-	Public Const RED_NUM:Int = 3
-	Public Const SHOOT_POWER:Int = -1800
-	Public Const SMALL_NUM:Int = 0
-	Public Const SMALL_NUM_Y:Int = 1
-	Public Const SONIC_ATTACK_LEVEL_1_V0:Int = 488
-	Public Const SONIC_ATTACK_LEVEL_2_V0:Int = 672
-	Public Const SONIC_ATTACK_LEVEL_3_V0:Int = 1200
-	Public Const TERMINAL_NO_MOVE:Int = 1
-	Public Const TERMINAL_RUN_TO_RIGHT:Int = 0
-	Public Const TERMINAL_RUN_TO_RIGHT_2:Int = 2
-	Public Const TERMINAL_SUPER_SONIC:Int = 3
-	Public Const YELLOW_NUM:Int = 4
-	Public Global BANK_BRAKE_SPEED_LIMIT:Int = 0
-	Public Global currentMarkId:Int
-	Public Global cursor:Int
-	Public Global cursorIndex:Int
-	Public Global cursorMax:Int
-	Public Global FAKE_GRAVITY_ON_BALL:Int = 0
-	Public Global FAKE_GRAVITY_ON_WALK:Int = 0
-	Public Global HURT_POWER_X:Int = 0
-	Public Global HURT_POWER_Y:Int = 0
-	Public Global isbarOut:Bool
-	Public Global isDeadLineEffect:Bool
-	Public Global IsDisplayRaceModeNewRecord:Bool = False
-	Public Global isNeedPlayWaterSE:Bool
-	Public Global isOnlyBarOut:Bool
-	Public Global IsStarttoCnt:Bool = False
-	Public Global isTerminal:Bool
-	Public Global JUMP_INWATER_START_VELOCITY:Int = 0
-	Public Global JUMP_PROTECT:Int = 0
-	Public Global JUMP_REVERSE_POWER:Int = 0
-	Public Global JUMP_RUSH_SPEED_PLUS:Int = 0
-	Public Global JUMP_START_VELOCITY:Int = 0
-	Public Global lastTimeCount:Int
-	Public Global lifeNum:Int
-	Public Global MAX_VELOCITY:Int = 0
-	Public Global MOVE_POWER:Int = 0
-	Public Global MOVE_POWER_IN_AIR:Int = 0
-	Public Global MOVE_POWER_REVERSE:Int = 0
-	Public Global MOVE_POWER_REVERSE_BALL:Int = 0
-	Public Global numImage:MFImage
-	Public Global onlyBarOutCnt:Int
-	Public Global onlyBarOutCntMax:Int
-	Public Global overTime:Int
-	Public Global PAUSE_FRAME_WIDTH:Int = 0
-	Public Global raceScoreNum:Int
-	Public Global RingBonus:Int = 0
-	Public Global RUN_BRAKE_SPEED_LIMIT:Int = 0
-	Public Global scoreNum:Int
-	Public Global slidingFrame:Int
-	Public Global SPEED_FLOAT_DEVICE:Int = 0
-	Public Global SPEED_LIMIT_LEVEL_1:Int = 0
-	Public Global SPEED_LIMIT_LEVEL_2:Int = 0
-	Public Global SPIN_INWATER_START_SPEED_1:Int = 0
-	Public Global SPIN_INWATER_START_SPEED_2:Int = 0
-	Public Global SPIN_START_SPEED_1:Int = 0
-	Public Global SPIN_START_SPEED_2:Int = 0
-	Public Global TimeBonus:Int = 0
-	Public Global timeCount:Int
-	Public Global uiOffsetX:Int
-	public static Final byte COLLISION_STATE_IN_SAND = (byte) 3
-	public static Final byte COLLISION_STATE_JUMP = (byte) 1
-	public static Final byte COLLISION_STATE_NONE = (byte) 4
-	public static Final byte COLLISION_STATE_NUM = (byte) 4
-	public static Final byte COLLISION_STATE_ON_OBJECT = (byte) 2
-	public static Final byte COLLISION_STATE_WALK = (byte) 0
-	Int footOffsetX
-	private AnimationDrawer effectDrawer
-	private AnimationDrawer waterFallDrawer
-	private AnimationDrawer waterFlushDrawer
-	private Bool checkedObject
-	private Bool ducting
-	private Bool enteringSP
-	private Bool freeMoveDebug
-	private Bool isTouchSandSlip
-	private Bool noKeyFlag
-	private Bool onGround
-	private Bool onObjectContinue
-	private Bool orgGravity
-	private Bool pushOnce
-	private Bool railFlipping
-	private Bool sandStanding
-	private Bool setNoMoving
-	private Bool slipFlag
-	private Bool squeezeFlag
-	private Bool transing
-	private Bool visible
-	private Bool waterFalling
-	private Bool waterSprayFlag
-	private Bool xFirst
-	private CollisionRect aaaAttackRect
-	private CollisionRect jumpAttackRect
-	private Int attackAnimationID
-	private Int attackCount
-	private Int attackLevel
-	private Int breatheNumCount
-	private Int breatheNumY
-	private Int collisionLayer
-	private Int deadPosX
-	private Int deadPosY
-	private Int drownCnt
-	private Int ductingCount
-	private Int focusOffsetY
-	private Int frame
-	private Int frameCnt
-	private Int justLeaveCount
-	private Int justLeaveDegree
-	private Int lookCount
-	private Int moonStarFrame1
-	private Int moonStarFrame2
-	private Int movePower
-	private Int movePowerInAir
-	private Int movePowerReserseBall
-	private Int movePowerReserseBallInSand
-	private Int movePowerReverse
-	private Int movePowerReverseInSand
-	private Int nextVelX
-	private Int nextVelY
-	private Int noMovingPosition
-	private Int pipeDesX
-	private Int pipeDesY
-	private Int preBreatheNumCount
-	private Int preFocusX
-	private Int preFocusY
-	private Int preposY
-	private Int sandFrame
-	private Int sBlockX
-	private Int sBlockY
-	private Int smallJumpCount
-	private Int spinCount
-	private Int spinDownWaitCount
-	private Int spinKeyCount
-	private Int sXPosition
-	private Int sYPosition
-	private Int waitingCount
-	private Int waitingLevel
-	private Int waterSprayX
-	private long count
-	protected ACWorldCollisionCalculator worldCal
-	protected Animation dustEffectAnimation
-	protected AnimationDrawer drawer
-	protected Bool dashRolling
-	protected Bool doJumpForwardly
-	protected Bool fading
-	protected Bool isInWater
-	protected byte pipeState
-	protected Int animationID
-	protected Int breatheCount
-	protected Int breatheFrame
-	protected Int checkPositionX
-	protected Int checkPositionY
-	protected Int degreeForDraw
-	protected Int degreeRotateMode
-	protected Int effectID
-	protected Int faceDegree
-	protected Int focusMovingState
-	protected Int maxVelocity
-	protected Int myAnimationID
-	protected Line railLine
-	public Bool bankwalking
-	public Bool beAttackByHari
-	public Bool canAttackByHari
-	public Bool changeRectHeight
-	public Bool collisionChkBreak
-	public Bool controlObjectLogic
-	public Bool extraAttackFlag
-	public Bool faceDirection
-	public Bool finishDeadStuff
-	public Bool footObjectLogic
-	public Bool hurtNoControl
-	public Bool ignoreFirstTouch
-	public Bool isAfterSpinDash
-	public Bool isAntiGravity
-	public Bool isAttackBoss4
-	public Bool isAttacking
-	public Bool isCelebrate
-	public Bool isCrashFallingSand
-	public Bool isCrashPipe
-	public Bool isDead
-	public Bool isDirectioninSkyChange
-	public Bool isInGravityCircle
-	public Bool isInSnow
-	public Bool isOnBlock
-	public Bool isOnlyJump
-	public Bool isPowerShoot
-	public Bool isResetWaitAni
-	public Bool isSharked
-	public Bool IsStandOnItems
-	public Bool isStopByObject
-	public Bool isUpPipeIn
-	public Bool justLeaveLand
-	public Bool leavingBar
-	public Bool leftStopped
-	public Bool noMoving
-	public Bool noVelMinus
-	public Bool onBank
-	public Bool outOfControl
-	public Bool piping
-	public Bool prefaceDirection
-	public Bool railing
-	public Bool railOut
-	public Bool rightStopped
-	public Bool showWaterFlush
-	public Bool slideSoundStart
-	public Bool slipping
-	public Bool speedLock
-	public byte collisionState
-	public CollisionRect attractRect
-	public CollisionRect preCollisionRect
-	public GameObject footOnObject
-	public GameObject outOfControlObject
-	public Int bePushedFootX
-	public Int degreeStable
-	public Int fallinSandSlipState
-	public Int fallTime
-	public Int footPointX
-	public Int footPointY
-	public Int hurtCount
-	public Int isSidePushed
-	public Int movedSpeedX
-	public Int movedSpeedY
-	public Int moveLimit
-	public Int terminalCount
-	public Int terminalOffset
-	public Vector attackRectVec
-
-	public abstract Void closeImpl()
+	Private
+		' Constant variable(s):
+		Const ANIMATION_PATH:String = "/animation"
+		Const ANI_BIG_ZERO:Int = 67
+		Const ANI_SMALL_ZERO:Int = 27
+		Const ANI_SMALL_ZERO_Y:Int = 37
+		Const ASPIRATE_INTERVAL:Int = 3
+		Const ATTRACT_EFFECT_HEIGHT:Int = 9600
+		Const ATTRACT_EFFECT_WIDTH:Int = 9600
+		Const BACKGROUND_WIDTH:Int = 80
+		Const BAR_COLOR:Int = 2
+		Const BG_NUM:Int
+		Const BODY_OFFSET:Int = 768
+		Const BREATHE_IMAGE_HEIGHT:Int = 16
+		Const BREATHE_IMAGE_WIDTH:Int = 16
+		Const BREATHE_TIME_COUNT:Int = 21000
+		Const BREATHE_TO_DIE_PER_COUNT:Int = 1760
+		Const B_1:Int = 5760
+		Const B_2:Int = 11264
+		Const CAMERA_MAX_DISTANCE:Int = 20
+		Const CENTER_X:Int = 660480
+		Const CENTER_Y:Int = 63488
+		Const COUNT_INDEX:Int = 1
+		Const DEBUG_WUDI:Bool = False
+		Const DEGREE_DIVIDE:Int[]
+		Const DIE_DRIP_STATE_JUMP_V0:Int = -800
+		Const DO_POAL_MOTION_SPEED:Int = 600
+		Const EFFECT_LOOP:Bool[]
+		Const ENLARGE_NUM:Int = 1920
+		Const f23A:Int = 3072
+		Const f24C:Int = 3072
+		Const FADE_FILL_HEIGHT:Int = 40
+		Const FADE_FILL_WIDTH:Int = 40
+		Const FOCUS_MAX_OFFSET:Int
+		Const FOCUS_MOVE_SPEED:Int = 15
+		Const FOCUS_MOVING_NONE:Int = 0
+		Const FONT_NUM:Int = 7
+		Const FOOT_OFFSET:Int = 256
+		Const FOOT_OFFSET_X:Int[]
+		Const HINER_JUMP_LIMIT:Int = 1024
+		Const HINER_JUMP_MAX:Int = 4352
+		Const HINER_JUMP_X_ADD:Int = 1024
+		Const HINER_JUMP_Y:Int = 2048
+		Const ICE_SLIP_FLUSH_OFFSET_Y:Int = 512
+		Const INVINCIBLE_COUNT:Int = 320
+		Const IN_WATER_WALK_SPEED_SCALE1:Float = 5.0f
+		Const IN_WATER_WALK_SPEED_SCALE2:Float = 9.0f
+		Const ITEM_INDEX:Int = 0
+		Const JUMP_EFFECT_HEIGHT:Int = 1920
+		Const JUMP_EFFECT_OFFSET_Y:Int = 256
+		Const JUMP_EFFECT_WIDTH:Int = 1920
+		Const LEFT_FOOT_OFFSET_X:Int = -256
+		Const LEFT_WALK_COLLISION_CHECK_OFFSET_X:Int = -512
+		Const LEFT_WALK_COLLISION_CHECK_OFFSET_Y:Int = -512
+		Const LOOK_COUNT:Int = 32
+		Const MAX_ITEM:Int = 5
+		Const MAX_ITEM_SHOW_NUM:Int = 4
+		Const MOON_STAR_DES_X_1:Int
+		Const MOON_STAR_DES_Y_1:Int = 26
+		Const MOON_STAR_FRAMES_1:Int = 207
+		Const MOON_STAR_FRAMES_2:Int = 120
+		Const MOON_STAR_ORI_X_1:Int
+		Const MOON_STAR_ORI_Y_1:Int = 18
+		Const NUM_ANI_ID:Int[]
+		Const NUM_DISTANCE:Int
+		Const NUM_PIC_HEIGHT:Int
+		Const NUM_PIC_WIDTH:Int
+		Const NUM_SPACE:Int[]
+		Const NUM_SPACE_ANIMATION:Int[]
+		Const NUM_SPACE_FONT:Int[]
+		Const NUM_SPACE_IMAGE:Int[]
+		Const PAUSE_MENU_NORMAL_NOSHOP:Int[]
+		Const PAUSE_MENU_NORMAL_SHOP:Int[]
+		Const PAUSE_MENU_RACE_ITEM:Int[]
+		Const PIPE_SET_POWER:Int = 2880
+		Const RAIL_FLIPPER_V0:Int = -3380
+		Const RAIL_OUT_SPEED_VY0:Int = -1200
+		Const RANDOM_RING_NUM:Int[]
+		Const RIGHT_FOOT_OFFSET_X:Int = 256
+		Const RIGHT_WALK_COLLISION_CHECK_OFFSET_X:Int = 512
+		Const RIGHT_WALK_COLLISION_CHECK_OFFSET_Y:Int = -512
+		Const SIDE_COLLISION_NUM:Int = -2
+		Const SIDE_FOOT_FROM_CENTER:Int = 256
+		Const SMALL_JUMP_COUNT:Int = 4
+		Const SONIC_DRAW_HEIGHT:Int = 1920
+		Const SPIN_KEY_COUNT:Int = 20
+		Const SPIN_LV2_COUNT:Int = 12
+		Const SPIN_LV2_COUNT_CONF:Int = 36
+		Const STAGE_PASS_STR_SPACE:Int
+		Const STAGE_PASS_STR_SPACE_FONT:Int
+		Const SUPER_SONIC_CHANGING_CENTER_Y:Int = 25280
+		Const SUPER_SONIC_STAND_POS_X:Int = 235136
+		Const TERMINAL_COUNT:Int = 10
+		Const WALK_COLLISION_CHECK_OFFSET_X:Int = 0
+		Const WALK_COLLISION_CHECK_OFFSET_Y:Int = 0
+		Const WHITE_BACKGROUND_ID:Int = 118
+		
+		' Global variable(s):
+		Global bariaDrawer:AnimationDrawer
+		Global breatheCountImage:MFImage
+		Global characterID:Int
+		Global clipendw:Int
+		Global cliph:Int
+		Global clipspeed:Int
+		Global clipstartw:Int
+		Global clipx:Int
+		Global clipy:Int
+		Global collisionBlockGround:ACBlock
+		Global collisionBlockGroundTmp:ACBlock
+		Global collisionBlockSky:ACBlock
+		Global currentPauseMenuItem:Int[]
+		Global fadeAlpha:Int
+		Global fadeFromValue:Int
+		Global fadeRGB:Int[]
+		Global fadeToValue:Int
+		Global fastRunDrawer:AnimationDrawer
+		Global gBariaDrawer:AnimationDrawer
+		Global getLifeDrawer:AnimationDrawer
+		Global headDrawer:AnimationDrawer
+		Global invincibleAnimation:Animation
+		Global invincibleCount:Int
+		Global invincibleDrawer:AnimationDrawer
+		Global isStartStageEndFlag:Bool
+		Global itemOffsetX:Int
+		Global itemVec:Int[][]
+		Global lifeDrawerX:Int
+		Global moonStarDrawer:AnimationDrawer
+		Global movespeedx:Int
+		Global movespeedy:Int
+		Global newRecordCount:Int
+		Global numDrawer:AnimationDrawer
+		Global offsetx:Int
+		Global offsety:Int
+		Global passStageActionID:Int
+		Global PAUSE_MENU_NORMAL_ITEM:Int[] = Null
+		Global preFadeAlpha:Int
+		Global preLifeNum:Int
+		Global preScoreNum:Int
+		Global preTimeCount:Int
+		Global ringRandomNum:Int
+		Global score1:Int
+		Global score2:Int
+		Global shieldType:Int
+		Global stageEndFrameCnt:Int
+		Global stagePassResultOutOffsetX:Int
+		Global totalPlusscore:Int
+		Global uiDrawer:AnimationDrawer
+		Global uiRingImage:MFImage
+		Global uiSonicHeadImage:MFImage
+		Global waterSprayDrawer:AnimationDrawer
+	Protected
+		' Constant variable(s):
+		Const EFFECT_NONE:Int = -1
+		Const EFFECT_SAND_1:Int = 0
+		Const EFFECT_SAND_2:Int = 1
+		Const FOCUS_MOVING_DOWN:Int = 2
+		Const FOCUS_MOVING_UP:Int = 1
+		Const PLAYER_ANIMATION_PATH:String = "/animation/player"
+		Const ROTATE_MODE_NEGATIVE:Int = 2
+		Const ROTATE_MODE_NEVER_MIND:Int = 0
+		Const ROTATE_MODE_POSITIVE:Int = 1
+		Const TRANS:Int[]
+		Const WIDTH:Int = 1024
+		
+		Const STATE_PIPE_IN:= 0
+		Const STATE_PIPE_OVER:= 2
+		Const STATE_PIPING:= 1
+		Const TER_STATE_BRAKE:= 1
+		Const TER_STATE_CHANGE_1:= 4
+		Const TER_STATE_CHANGE_2:= 5
+		Const TER_STATE_GO_AWAY:= 6
+		Const TER_STATE_LOOK_MOON:= 2
+		Const TER_STATE_LOOK_MOON_WAIT:= 3
+		Const TER_STATE_RUN:= 0
+		Const TER_STATE_SHINING_2:= 7
+		
+		' Global variable(s):
+		Global ringNum:Int
+		Global ringTmpNum:Int
+		Global speedCount:Int
+		Global terminalState:Byte
+		Global terminalType:Int
+		Global timeStopped:Bool
+	Public
+		' Constant variable(s):
+		Const ANI_ATTACK_1:Int = 18
+		Const ANI_ATTACK_2:Int = 19
+		Const ANI_ATTACK_3:Int = 20
+		Const ANI_BANK_1:Int = 32
+		Const ANI_BANK_2:Int = 33
+		Const ANI_BANK_3:Int = 34
+		Const ANI_BAR_ROLL_1:Int = 22
+		Const ANI_BAR_ROLL_2:Int = 23
+		Const ANI_BRAKE:Int = 17
+		Const ANI_BREATHE:Int = 49
+		Const ANI_CAUGHT:Int = 52
+		Const ANI_CELEBRATE_1:Int = 35
+		Const ANI_CELEBRATE_2:Int = 36
+		Const ANI_CELEBRATE_3:Int = 37
+		Const ANI_CLIFF_1:Int = 47
+		Const ANI_CLIFF_2:Int = 48
+		Const ANI_DEAD:Int = 41
+		Const ANI_DEAD_PRE:Int = 45
+		Const ANI_FALLING:Int = 10
+		Const ANI_HURT:Int = 12
+		Const ANI_HURT_PRE:Int = 44
+		Const ANI_JUMP:Int = 4
+		Const ANI_JUMP_ROLL:Int = 15
+		Const ANI_JUMP_RUSH:Int = 16
+		Const ANI_LOOK_UP_1:Int = 38
+		Const ANI_LOOK_UP_2:Int = 39
+		Const ANI_LOOK_UP_OVER:Int = 40
+		Const ANI_NONE:Int = -1
+		Const ANI_POAL_PULL:Int = 13
+		Const ANI_POAL_PULL_2:Int = 31
+		Const ANI_POP_JUMP_DOWN_SLOW:Int = 43
+		Const ANI_POP_JUMP_UP:Int = 14
+		Const ANI_POP_JUMP_UP_SLOW:Int = 42
+		Const ANI_PULL:Int = 24
+		Const ANI_PULL_BAR_MOVE:Int = 28
+		Const ANI_PULL_BAR_STAY:Int = 27
+		Const ANI_PUSH_WALL:Int = 8
+		Const ANI_RAIL_ROLL:Int = 21
+		Const ANI_ROPE_ROLL_1:Int = 25
+		Const ANI_ROPE_ROLL_2:Int = 26
+		Const ANI_ROTATE_JUMP:Int = 9
+		Const ANI_RUN_1:Int = 1
+		Const ANI_RUN_2:Int = 2
+		Const ANI_RUN_3:Int = 3
+		Const ANI_SLIP:Int = 11
+		Const ANI_SPIN_LV1:Int = 6
+		Const ANI_SPIN_LV2:Int = 7
+		Const ANI_SQUAT:Int = 5
+		Const ANI_SQUAT_PROCESS:Int = 46
+		Const ANI_STAND:Int = 0
+		Const ANI_VS_FAKE_KNUCKLE:Int = 53
+		Const ANI_WAITING_1:Int = 50
+		Const ANI_WAITING_2:Int = 51
+		Const ANI_WIND_JUMP:Int = 29
+		Const ANI_YELL:Int = 30
+		Const ATTACK_POP_POWER:Int
+		Const BALL_HEIGHT_OFFSET:Int = 1024
+		Const BANKING_MIN_SPEED:Int = 500
+		Const BIG_NUM:Int = 2
+		Const CAN_BE_SQUEEZE:Bool = True
+		Const CHARACTER_AMY:Int = 3
+		Const CHARACTER_KNUCKLES:Int = 2
+		Const CHARACTER_LIST:Int[]
+		Const CHARACTER_SONIC:Int = 0
+		Const CHARACTER_TAILS:Int = 1
+		Const DETECT_HEIGHT:Int = 2048
+		Const FALL_IN_SAND_SLIP_LEFT:Int = 2
+		Const FALL_IN_SAND_SLIP_NONE:Int = 0
+		Const FALL_IN_SAND_SLIP_RIGHT:Int = 1
+		Const HEIGHT:Int = 1536
+		Const HUGE_POWER_SPEED:Int = 1900
+		Const HURT_COUNT:Int = 48
+		Const IN_BLOCK_CHECK:Bool = False
+		Const ITEM_INVINCIBLE:Int = 3
+		Const ITEM_LIFE:Int = 0
+		Const ITEM_RING_10:Int = 7
+		Const ITEM_RING_5:Int = 6
+		Const ITEM_RING_RANDOM:Int = 5
+		Const ITEM_SHIELD:Int = 1
+		Const ITEM_SHIELD_2:Int = 2
+		Const ITEM_SPEED:Int = 4
+		Const LIFE_NUM_RESET:Int = 2
+		Const MIN_ATTACK_JUMP:Int = -900
+		Const NEED_RESET_DEDREE:Bool = False
+		Const NumberSideX:Int
+		Const NUM_CENTER:Int = 0
+		Const NUM_DISTANCE_BIG:Int = 72
+		Const NUM_LEFT:Int = 1
+		Const NUM_RIGHT:Int = 2
+		Const PAUSE_FRAME_HEIGHT:Int
+		Const PAUSE_FRAME_OFFSET_X:Int
+		Const PAUSE_FRAME_OFFSET_Y:Int
+		Const RED_NUM:Int = 3
+		Const SHOOT_POWER:Int = -1800
+		Const SMALL_NUM:Int = 0
+		Const SMALL_NUM_Y:Int = 1
+		Const SONIC_ATTACK_LEVEL_1_V0:Int = 488
+		Const SONIC_ATTACK_LEVEL_2_V0:Int = 672
+		Const SONIC_ATTACK_LEVEL_3_V0:Int = 1200
+		Const TERMINAL_NO_MOVE:Int = 1
+		Const TERMINAL_RUN_TO_RIGHT:Int = 0
+		Const TERMINAL_RUN_TO_RIGHT_2:Int = 2
+		Const TERMINAL_SUPER_SONIC:Int = 3
+		Const YELLOW_NUM:Int = 4
+		
+		Const COLLISION_STATE_IN_SAND:= 3
+		Const COLLISION_STATE_JUMP:= 1
+		Const COLLISION_STATE_NONE:= 4
+		Const COLLISION_STATE_NUM:= 4
+		Const COLLISION_STATE_ON_OBJECT:= 2
+		Const COLLISION_STATE_WALK:= 0
+		
+		' Global variable(s):
+		Global BANK_BRAKE_SPEED_LIMIT:Int = 0
+		Global currentMarkId:Int
+		Global cursor:Int
+		Global cursorIndex:Int
+		Global cursorMax:Int
+		Global FAKE_GRAVITY_ON_BALL:Int = 0
+		Global FAKE_GRAVITY_ON_WALK:Int = 0
+		Global HURT_POWER_X:Int = 0
+		Global HURT_POWER_Y:Int = 0
+		Global isbarOut:Bool
+		Global isDeadLineEffect:Bool
+		Global IsDisplayRaceModeNewRecord:Bool = False
+		Global isNeedPlayWaterSE:Bool
+		Global isOnlyBarOut:Bool
+		Global IsStarttoCnt:Bool = False
+		Global isTerminal:Bool
+		Global JUMP_INWATER_START_VELOCITY:Int = 0
+		Global JUMP_PROTECT:Int = 0
+		Global JUMP_REVERSE_POWER:Int = 0
+		Global JUMP_RUSH_SPEED_PLUS:Int = 0
+		Global JUMP_START_VELOCITY:Int = 0
+		Global lastTimeCount:Int
+		Global lifeNum:Int
+		Global MAX_VELOCITY:Int = 0
+		Global MOVE_POWER:Int = 0
+		Global MOVE_POWER_IN_AIR:Int = 0
+		Global MOVE_POWER_REVERSE:Int = 0
+		Global MOVE_POWER_REVERSE_BALL:Int = 0
+		Global numImage:MFImage
+		Global onlyBarOutCnt:Int
+		Global onlyBarOutCntMax:Int
+		Global overTime:Int
+		Global PAUSE_FRAME_WIDTH:Int = 0
+		Global raceScoreNum:Int
+		Global RingBonus:Int = 0
+		Global RUN_BRAKE_SPEED_LIMIT:Int = 0
+		Global scoreNum:Int
+		Global slidingFrame:Int
+		Global SPEED_FLOAT_DEVICE:Int = 0
+		Global SPEED_LIMIT_LEVEL_1:Int = 0
+		Global SPEED_LIMIT_LEVEL_2:Int = 0
+		Global SPIN_INWATER_START_SPEED_1:Int = 0
+		Global SPIN_INWATER_START_SPEED_2:Int = 0
+		Global SPIN_START_SPEED_1:Int = 0
+		Global SPIN_START_SPEED_2:Int = 0
+		Global TimeBonus:Int = 0
+		Global timeCount:Int
+		Global uiOffsetX:Int
+	Private
+		' Fields:
+		Field footOffsetX:Int
+		
+		Field effectDrawer:AnimationDrawer
+		Field waterFallDrawer:AnimationDrawer
+		Field waterFlushDrawer:AnimationDrawer
+		
+		Field checkedObject:Bool
+		Field ducting:Bool
+		Field enteringSP:Bool
+		Field freeMoveDebug:Bool
+		Field isTouchSandSlip:Bool
+		Field noKeyFlag:Bool
+		Field onGround:Bool
+		Field onObjectContinue:Bool
+		Field orgGravity:Bool
+		Field pushOnce:Bool
+		Field railFlipping:Bool
+		Field sandStanding:Bool
+		Field setNoMoving:Bool
+		Field slipFlag:Bool
+		Field squeezeFlag:Bool
+		Field transing:Bool
+		Field visible:Bool
+		Field waterFalling:Bool
+		Field waterSprayFlag:Bool
+		Field xFirst:Bool
+		
+		Field aaaAttackRect:CollisionRect
+		Field jumpAttackRect:CollisionRect
+		
+		Field attackAnimationID:Int
+		Field attackCount:Int
+		Field attackLevel:Int
+		Field breatheNumCount:Int
+		Field breatheNumY:Int
+		Field collisionLayer:Int
+		Field deadPosX:Int
+		Field deadPosY:Int
+		Field drownCnt:Int
+		Field ductingCount:Int
+		Field focusOffsetY:Int
+		Field frame:Int
+		Field frameCnt:Int
+		Field justLeaveCount:Int
+		Field justLeaveDegree:Int
+		Field lookCount:Int
+		Field moonStarFrame1:Int
+		Field moonStarFrame2:Int
+		Field movePower:Int
+		Field movePowerInAir:Int
+		Field movePowerReserseBall:Int
+		Field movePowerReserseBallInSand:Int
+		Field movePowerReverse:Int
+		Field movePowerReverseInSand:Int
+		Field nextVelX:Int
+		Field nextVelY:Int
+		Field noMovingPosition:Int
+		Field pipeDesX:Int
+		Field pipeDesY:Int
+		Field preBreatheNumCount:Int
+		Field preFocusX:Int
+		Field preFocusY:Int
+		Field preposY:Int
+		Field sandFrame:Int
+		Field sBlockX:Int
+		Field sBlockY:Int
+		Field smallJumpCount:Int
+		Field spinCount:Int
+		Field spinDownWaitCount:Int
+		Field spinKeyCount:Int
+		Field sXPosition:Int
+		Field sYPosition:Int
+		Field waitingCount:Int
+		Field waitingLevel:Int
+		Field waterSprayX:Int
+		Field count:Long
+	Protected
+		' Fields:
+		Field worldCal:ACWorldCollisionCalculator
+		Field dustEffectAnimation:Animation
+		Field drawer:AnimationDrawer
+		Field dashRolling:Bool
+		Field doJumpForwardly:Bool
+		Field fading:Bool
+		Field isInWater:Bool
+		Field pipeState:Byte
+		Field animationID:Int
+		Field breatheCount:Int
+		Field breatheFrame:Int
+		Field checkPositionX:Int
+		Field checkPositionY:Int
+		Field degreeForDraw:Int
+		Field degreeRotateMode:Int
+		Field effectID:Int
+		Field faceDegree:Int
+		Field focusMovingState:Int
+		Field maxVelocity:Int
+		Field myAnimationID:Int
+		Field railLine:Line
+	Public
+		' Fields:
+		Field bankwalking:Bool
+		Field beAttackByHari:Bool
+		Field canAttackByHari:Bool
+		Field changeRectHeight:Bool
+		Field collisionChkBreak:Bool
+		Field controlObjectLogic:Bool
+		Field extraAttackFlag:Bool
+		Field faceDirection:Bool
+		Field finishDeadStuff:Bool
+		Field footObjectLogic:Bool
+		Field hurtNoControl:Bool
+		Field ignoreFirstTouch:Bool
+		Field isAfterSpinDash:Bool
+		Field isAntiGravity:Bool
+		Field isAttackBoss4:Bool
+		Field isAttacking:Bool
+		Field isCelebrate:Bool
+		Field isCrashFallingSand:Bool
+		Field isCrashPipe:Bool
+		Field isDead:Bool
+		Field isDirectioninSkyChange:Bool
+		Field isInGravityCircle:Bool
+		Field isInSnow:Bool
+		Field isOnBlock:Bool
+		Field isOnlyJump:Bool
+		Field isPowerShoot:Bool
+		Field isResetWaitAni:Bool
+		Field isSharked:Bool
+		Field IsStandOnItems:Bool
+		Field isStopByObject:Bool
+		Field isUpPipeIn:Bool
+		Field justLeaveLand:Bool
+		Field leavingBar:Bool
+		Field leftStopped:Bool
+		Field noMoving:Bool
+		Field noVelMinus:Bool
+		Field onBank:Bool
+		Field outOfControl:Bool
+		Field piping:Bool
+		Field prefaceDirection:Bool
+		Field railing:Bool
+		Field railOut:Bool
+		Field rightStopped:Bool
+		Field showWaterFlush:Bool
+		Field slideSoundStart:Bool
+		Field slipping:Bool
+		Field speedLock:Bool
+		
+		Field collisionState:Byte
+		
+		Field attractRect:CollisionRect
+		Field preCollisionRect:CollisionRect
+		
+		Field footOnObject:GameObject
+		Field outOfControlObject:GameObject
+		
+		Field bePushedFootX:Int
+		Field degreeStable:Int
+		Field fallinSandSlipState:Int
+		Field fallTime:Int
+		Field footPointX:Int
+		Field footPointY:Int
+		Field hurtCount:Int
+		Field isSidePushed:Int
+		Field movedSpeedX:Int
+		Field movedSpeedY:Int
+		Field moveLimit:Int
+		Field terminalCount:Int
+		Field terminalOffset:Int
+		Field attackRectVec:Stack<CollisionRect>
+	Public
+		' Methods:
+		Method closeImpl:Void() Abstract
 
 	static {
 		Int[] iArr = New Int[YELLOW_NUM]
@@ -5118,7 +5146,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.noKeyFlag = CAN_BE_SQUEEZE
 	End
 
-	Public Method setCollisionState:Void(state:byte)
+	Public Method setCollisionState:Void(state:Byte)
 		
 		If (Self.collisionState = Null) Then
 			calDivideVelocity()
