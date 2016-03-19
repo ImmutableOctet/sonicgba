@@ -1083,8 +1083,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						If (characterID = CHARACTER_KNUCKLES And Self.collisionState = COLLISION_STATE_NONE) Then
 							If (getNewPointY(Self.posY, 0, -Self.collisionRect.getHeight(), Self.faceDegree) + SIDE_FOOT_FROM_CENTER < (waterLevel Shl 6)) Then
 								Self.breatheCount = 0
+								
 								i = SoundSystem.getInstance().getPlayingBGMIndex()
-								SoundSystem.getInstance()
 								
 								If (i = ANI_RAIL_ROLL) Then
 									SoundSystem.getInstance().stopBgm(False)
@@ -1116,6 +1116,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 									
 									If (Self.breatheNumCount < 6 And canBeHurt()) Then
 										setDie(True)
+										
 										Return
 									ElseIf (Self.breatheNumCount <> Self.preBreatheNumCount) Then
 										Self.breatheNumY = ((Self.posY Shr 6) - camera.y) - ANI_YELL
@@ -1127,7 +1128,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 							SoundSystem.getInstance()
 							
 							If (i <> ANI_RAIL_ROLL) Then
-								long startTime = (long) (((Self.breatheCount - BREATHE_TIME_COUNT) * 10000) / 10560)
+								Local startTime:= Long(((Self.breatheCount - BREATHE_TIME_COUNT) * 10000) / 10560)
 								
 								If (Self.isAttackBoss4) Then
 									soundInstance.playBgmFromTime(startTime, ANI_RAIL_ROLL)
@@ -1141,15 +1142,18 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 							EndIf
 							
 							If (Self.breatheNumCount <> Self.preBreatheNumCount) Then
-								Self.breatheNumY = ((Self.posY Shr 6) - camera.y) - ANI_YELL
+								' Magic number: 30
+								Self.breatheNumY = ((Self.posY Shr 6) - camera.y) - 30
 							EndIf
 						EndIf
 						
 						Self.preBreatheNumCount = Self.breatheNumCount
-						Int bodyCenterY = getNewPointY(Self.posY, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
+						
+						Local bodyCenterY:= getNewPointY(Self.posY, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
 						
 						If (characterID = CHARACTER_AMY) Then
-							bodyCenterY = getNewPointY(Self.posY, 0, (((-Self.collisionRect.getHeight()) * 3) / 4) - TitleState.CHARACTER_RECORD_BG_OFFSET, Self.faceDegree)
+							' Magic number: 128
+							bodyCenterY = getNewPointY(Self.posY, 0, (((-Self.collisionRect.getHeight()) * 3) / 4) - 128, Self.faceDegree)
 						EndIf
 						
 						If (bodyCenterY + SIDE_FOOT_FROM_CENTER <= (waterLevel Shl 6)) Then
@@ -1177,16 +1181,25 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						EndIf
 						
 						Self.breatheFrame += 1
-						Self.breatheFrame Mod= ANI_WAITING_2
+						Self.breatheFrame Mod= ANI_WAITING_2 ' 51 ' 50
 						
 						If (Self.breatheFrame = MyRandom.nextInt(1, ANI_PUSH_WALL) * 6) Then
-							GameObject.addGameObject(New AspirateBubble(FADE_FILL_WIDTH, player.getFootPositionX() + (Self.faceDirection ? PlayerSonic.BACK_JUMP_SPEED_X : -384), player.getFootPositionY() - HEIGHT, 0, 0, 0, 0))
+							Local xOff:Int
+							
+							If (Self.faceDirection) Then
+								xOff = HURT_POWER_X
+							Else
+								xOff = -HURT_POWER_X
+							EndIf
+							
+							GameObject.addGameObject(New AspirateBubble(ENEMY_ASPIRATE_BUBBLE, player.getFootPositionX() + xOff, player.getFootPositionY() - HEIGHT, 0, 0, 0, 0))
 						EndIf
 					EndIf
 				EndIf
 				
 				If (speedCount > 0) Then
 					speedCount -= 1
+					
 					Self.movePower = MOVE_POWER / 2
 					Self.movePowerInAir = MOVE_POWER_IN_AIR / 2
 					Self.movePowerReverse = MOVE_POWER_REVERSE / 2
@@ -1200,7 +1213,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 							SoundSystem.getInstance().restartBgm()
 						EndIf
 					EndIf
-					
 				Else
 					Self.movePower = MOVE_POWER
 					Self.movePowerInAir = MOVE_POWER_IN_AIR
@@ -1211,15 +1223,15 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				If (Self.isAntiGravity) Then
 					If (Not Self.isDead And Self.footPointY > (MapManager.getPixelHeight() Shl 6)) Then
-						Self.footPointY = (MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl 6
+						Self.footPointY = ((MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl 6)
 						
 						If (getVelY() < 0) Then
 							setVelY(0)
 						EndIf
 					EndIf
-					
 				ElseIf (Not Self.isDead And Self.footPointY > (MapManager.getPixelHeight() Shl 6)) Then
 					Self.footPointY = ((MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl 6) + f24C
+					
 					setDie(False, -1600)
 				EndIf
 				
@@ -1230,6 +1242,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					
 					If (Self.dashRolling) Then
 						collisionChk()
+						
 						Return
 					EndIf
 					
@@ -1244,20 +1257,30 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						Self.velY += getGravity()
 						checkWithObject(Self.footPointX, Self.footPointY, Self.footPointX + Self.velX, Self.footPointY + Self.velY)
 					Else
-						Int preFootPointX = Self.footPointX
-						Int preFootPointY = Self.footPointY
-						Int velocityChange = Self.railLine.sin(getGravity())
+						Local preFootPointX:= Self.footPointX
+						Local preFootPointY:= Self.footPointY
+						Local velocityChange:= Self.railLine.sin(getGravity())
 						
 						If (Not Self.railLine.directRatio()) Then
 							velocityChange = -velocityChange
 						EndIf
 						
 						If (velocityChange <> 0) Then
-							Direction direction = Self.railLine.getOneDirection()
+							Local direction:= Self.railLine.getOneDirection()
+							
 							Self.totalVelocity += velocityChange
+							
 							checkWithObject(Self.footPointX, Self.footPointY, Self.footPointX + direction.getValueX(Self.railLine.cos(Self.totalVelocity)), Self.footPointY + direction.getValueY(Self.railLine.sin(Self.totalVelocity)))
 						Else
-							checkWithObject(Self.footPointX, Self.footPointY, Self.footPointX + ((Self.totalVelocity < 0 ? -1 : 1) * Self.railLine.cos(Self.totalVelocity)), Self.footPointY + ((Self.totalVelocity < 0 ? -1 : 1) * Self.railLine.sin(Self.totalVelocity)))
+							Local directionScalar:Int
+							
+							If (Self.totalVelocity < 0) Then
+								directionScalar = -1
+							Else
+								directionScalar = 1
+							EndIf
+							
+							checkWithObject(Self.footPointX, Self.footPointY, Self.footPointX + (directionScalar * Self.railLine.cos(Self.totalVelocity)), Self.footPointY + directionScalar * Self.railLine.sin(Self.totalVelocity)))
 						EndIf
 						
 						If (Not (Self.railOut Or Self.railLine = Null)) Then
@@ -1279,13 +1302,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						Self.railing = False
 						Self.collisionState = COLLISION_STATE_JUMP
 					EndIf
-					
 				ElseIf (Self.piping) Then
-					Int preX = Self.footPointX
-					Int preY = Self.footPointY
+					Local preX:= Self.footPointX
+					Local preY:= Self.footPointY
+					
 					Select (Self.pipeState)
 						Case 0
-							
 							If (Self.footPointX < Self.pipeDesX) Then
 								Self.footPointX += 250
 								
@@ -1322,7 +1344,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 								Self.velY = Self.nextVelY
 								break
 							EndIf
-							
 						Case 1
 							Self.footPointX += Self.velX
 							Self.footPointY += Self.velY
@@ -2002,7 +2023,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			offset_y = 0
 		ElseIf (characterID = CHARACTER_AMY And Self.myAnimationID = ANI_LOOK_UP_1) Then
 			offset_x = Def.TOUCH_HELP_LEFT_X
-			offset_y = TitleState.CHARACTER_RECORD_BG_OFFSET
+			offset_y = 128
 		ElseIf (characterID = CHARACTER_AMY And Self.myAnimationID = ANI_SMALL_ZERO_Y) Then
 			offset_x = Def.TOUCH_HELP_LEFT_X
 			offset_y = SIDE_FOOT_FROM_CENTER
@@ -4139,7 +4160,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.animationID = ANI_HURT_PRE
 		
 		If (Self.collisionState = COLLISION_STATE_ON_OBJECT) Then
-			Self.footPointY -= TitleState.CHARACTER_RECORD_BG_OFFSET
+			Self.footPointY -= 128
 			prepareForCollision()
 		EndIf
 		
