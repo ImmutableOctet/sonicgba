@@ -133,7 +133,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const WHITE_BACKGROUND_ID:Int = 118
 		
 		' Immutable Arrays (Constant):
-		Global DEGREE_DIVIDE:Int[]
+		Global DEGREE_DIVIDE:Int[] = [44, 75, 105, 136, 224, 255, 285, 316, 360]
 		Global EFFECT_LOOP:Bool[] = [True, True]
 		Global FOOT_OFFSET_X:Int[]
 		Global NUM_ANI_ID:Int[]
