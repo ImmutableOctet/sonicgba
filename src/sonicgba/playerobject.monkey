@@ -229,17 +229,20 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const EFFECT_NONE:Int = -1
 		Const EFFECT_SAND_1:Int = 0
 		Const EFFECT_SAND_2:Int = 1
+		
 		Const FOCUS_MOVING_DOWN:Int = 2
 		Const FOCUS_MOVING_UP:Int = 1
+		
 		Const PLAYER_ANIMATION_PATH:String = "/animation/player"
+		
 		Const ROTATE_MODE_NEGATIVE:Int = 2
 		Const ROTATE_MODE_NEVER_MIND:Int = 0
 		Const ROTATE_MODE_POSITIVE:Int = 1
-		Const WIDTH:Int = 1024
 		
 		Const STATE_PIPE_IN:= 0
 		Const STATE_PIPE_OVER:= 2
 		Const STATE_PIPING:= 1
+		
 		Const TER_STATE_BRAKE:= 1
 		Const TER_STATE_CHANGE_1:= 4
 		Const TER_STATE_CHANGE_2:= 5
@@ -261,6 +264,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Global timeStopped:Bool
 	Public
 		' Constant variable(s):
+		Const CHARACTER_SONIC:Int = 0
+		Const CHARACTER_TAILS:Int = 1
+		Const CHARACTER_KNUCKLES:Int = 2
+		Const CHARACTER_AMY:Int = 3
+		
+		Const WIDTH:Int = 1024
+		Const HEIGHT:Int = 1536
+		
 		Const ANI_ATTACK_1:Int = 18
 		Const ANI_ATTACK_2:Int = 19
 		Const ANI_ATTACK_3:Int = 20
@@ -316,23 +327,23 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const ANI_WAITING_2:Int = 51
 		Const ANI_WIND_JUMP:Int = 29
 		Const ANI_YELL:Int = 30
-		Const ATTACK_POP_POWER:Int
+		
+		Const ATTACK_POP_POWER:Int = (GRAVITY + 774)
 		Const BALL_HEIGHT_OFFSET:Int = 1024
 		Const BANKING_MIN_SPEED:Int = 500
 		Const BIG_NUM:Int = 2
 		Const CAN_BE_SQUEEZE:Bool = True
-		Const CHARACTER_AMY:Int = 3
-		Const CHARACTER_KNUCKLES:Int = 2
-		Const CHARACTER_SONIC:Int = 0
-		Const CHARACTER_TAILS:Int = 1
 		Const DETECT_HEIGHT:Int = 2048
+		
 		Const FALL_IN_SAND_SLIP_LEFT:Int = 2
 		Const FALL_IN_SAND_SLIP_NONE:Int = 0
 		Const FALL_IN_SAND_SLIP_RIGHT:Int = 1
-		Const HEIGHT:Int = 1536
+		
 		Const HUGE_POWER_SPEED:Int = 1900
 		Const HURT_COUNT:Int = 48
+		
 		Const IN_BLOCK_CHECK:Bool = False
+		
 		Const ITEM_INVINCIBLE:Int = 3
 		Const ITEM_LIFE:Int = 0
 		Const ITEM_RING_10:Int = 7
@@ -341,28 +352,37 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const ITEM_SHIELD:Int = 1
 		Const ITEM_SHIELD_2:Int = 2
 		Const ITEM_SPEED:Int = 4
+		
 		Const LIFE_NUM_RESET:Int = 2
 		Const MIN_ATTACK_JUMP:Int = -900
 		Const NEED_RESET_DEDREE:Bool = False
+		
 		Const NumberSideX:Int
+		
 		Const NUM_CENTER:Int = 0
 		Const NUM_DISTANCE_BIG:Int = 72
 		Const NUM_LEFT:Int = 1
 		Const NUM_RIGHT:Int = 2
+		
 		Const PAUSE_FRAME_HEIGHT:Int
 		Const PAUSE_FRAME_OFFSET_X:Int
 		Const PAUSE_FRAME_OFFSET_Y:Int
+		
 		Const RED_NUM:Int = 3
 		Const SHOOT_POWER:Int = -1800
+		
 		Const SMALL_NUM:Int = 0
 		Const SMALL_NUM_Y:Int = 1
+		
 		Const SONIC_ATTACK_LEVEL_1_V0:Int = 488
 		Const SONIC_ATTACK_LEVEL_2_V0:Int = 672
 		Const SONIC_ATTACK_LEVEL_3_V0:Int = 1200
+		
 		Const TERMINAL_NO_MOVE:Int = 1
 		Const TERMINAL_RUN_TO_RIGHT:Int = 0
 		Const TERMINAL_RUN_TO_RIGHT_2:Int = 2
 		Const TERMINAL_SUPER_SONIC:Int = 3
+		
 		Const YELLOW_NUM:Int = 4
 		
 		Const COLLISION_STATE_IN_SAND:= 3
