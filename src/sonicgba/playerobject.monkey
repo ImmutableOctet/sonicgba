@@ -1764,74 +1764,80 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 		End
 		
-		Public Method drawCharacter:Void(g:MFGraphics)
+		Method drawCharacter:Void(graphics:MFGraphics)
 			' Empty implementation.
 		End
 	
-	Public Method draw2:Void(g:MFGraphics)
-		Bool z = (drawAtFront() And Self.visible) ? True : False
-		draw(g, z)
-		drawCollisionRect(g)
-		
-		If (Self.waterSprayFlag And StageManager.getCurrentZoneId() = 4 And waterSprayDrawer <> Null) Then
-			waterSprayDrawer.draw(g, 0, (Self.waterSprayX Shr 6) - camera.x, StageManager.getWaterLevel() - camera.y, False, 0)
+		Method draw2:Void(g:MFGraphics)
+			draw(g, (drawAtFront() And Self.visible))
+			drawCollisionRect(g)
 			
-			If (waterSprayDrawer.checkEnd()) Then
-				Self.waterSprayFlag = False
-				waterSprayDrawer.restart()
-			EndIf
-		EndIf
-		
-		If (Not IsGamePause) Then
-			If (Self.isDead) Then
-				Self.velY += (Self.isAntiGravity ? -1 : 1) * getGravity()
+			' Magic number: 4 (Zone ID)
+			If (Self.waterSprayFlag And StageManager.getCurrentZoneId() = 4 And waterSprayDrawer <> Null) Then
+				waterSprayDrawer.draw(g, 0, (Self.waterSprayX Shr 6) - camera.x, StageManager.getWaterLevel() - camera.y, False, 0)
 				
-				updateFootPoint()
+				If (waterSprayDrawer.checkEnd()) Then
+					Self.waterSprayFlag = False
+					
+					waterSprayDrawer.restart()
+				EndIf
 			EndIf
 			
-			If (Self.isInWater And Self.breatheNumCount >= 0 And Self.breatheNumCount < 6) Then
-				Int i
-				MFImage mFImage = breatheCountImage
-				Int i2 = Self.breatheNumCount * 16
-				Int i3 = (Self.posX Shr 6) - camera.x
-				
-				If (Self.breatheNumY > 16) Then
-					i = Self.breatheNumY
-				Else
-					i = 16
+			If (Not IsGamePause) Then
+				If (Self.isDead) Then
+					If (Self.isAntiGravity) Then
+						Self.velY -= getGravity()
+					Else
+						Self.velY += getGravity()
+					EndIf
+					
+					updateFootPoint()
 				EndIf
 				
-				MyAPI.drawRegion(g, mFImage, i2, 0, 16, 16, 0, i3, i, ANI_BANK_2)
-				Self.breatheNumY -= 1
-			EndIf
-		EndIf
-		
-		If (Self.fading) Then
-			drawFadeBase(g, SPIN_LV2_COUNT)
-		EndIf
-		
-		If (terminalType = 3) Then
-			If (terminalState < 2 Or terminalState >= 6) Then
-				Self.moonStarFrame1 = 0
-			Else
-				moonStarDrawer.draw(g, 0, (((MOON_STAR_DES_X_1 - MOON_STAR_ORI_X_1) * Self.moonStarFrame1) / MOON_STAR_FRAMES_1) + MOON_STAR_ORI_X_1, ((Self.moonStarFrame1 * ANI_PUSH_WALL) / MOON_STAR_FRAMES_1) + MOON_STAR_ORI_Y_1, True, 0)
-				Self.moonStarFrame1 += 1
-			EndIf
-			
-			If (terminalState = 7) Then
-				moonStarDrawer.draw(g, 1, (((MOON_STAR_DES_X_1 - MOON_STAR_ORI_X_1) * Self.moonStarFrame2) / MOON_STAR_FRAMES_2) + MOON_STAR_ORI_X_1, ((Self.moonStarFrame2 * ANI_PUSH_WALL) / MOON_STAR_FRAMES_2) + MOON_STAR_ORI_Y_1, True, 0)
-				Self.moonStarFrame2 += 1
-				Return
+				If (Self.isInWater And Self.breatheNumCount >= 0 And Self.breatheNumCount < 6) Then
+					Local i:Int
+					Local i2:= Self.breatheNumCount * 16
+					Local i3:= (Self.posX Shr 6) - camera.x
+					
+					Local mFImage:= breatheCountImage
+					
+					If (Self.breatheNumY > 16) Then
+						i = Self.breatheNumY
+					Else
+						i = 16
+					EndIf
+					
+					MyAPI.drawRegion(g, mFImage, i2, 0, 16, 16, 0, i3, i, 33)
+					Self.breatheNumY -= 1
+				EndIf
 			EndIf
 			
-			Self.moonStarFrame2 = 0
-		EndIf
-		
-	End
+			If (Self.fading) Then
+				drawFadeBase(g, SPIN_LV2_COUNT)
+			EndIf
+			
+			If (terminalType = TERMINAL_SUPER_SONIC) Then
+				If (terminalState < 2 Or terminalState >= 6) Then
+					Self.moonStarFrame1 = 0
+				Else
+					moonStarDrawer.draw(g, 0, (((MOON_STAR_DES_X_1 - MOON_STAR_ORI_X_1) * Self.moonStarFrame1) / MOON_STAR_FRAMES_1) + MOON_STAR_ORI_X_1, ((Self.moonStarFrame1 * ANI_PUSH_WALL) / MOON_STAR_FRAMES_1) + MOON_STAR_ORI_Y_1, True, 0)
+					Self.moonStarFrame1 += 1
+				EndIf
+				
+				If (terminalState = TER_STATE_SHINING_2) Then
+					moonStarDrawer.draw(g, 1, (((MOON_STAR_DES_X_1 - MOON_STAR_ORI_X_1) * Self.moonStarFrame2) / MOON_STAR_FRAMES_2) + MOON_STAR_ORI_X_1, ((Self.moonStarFrame2 * ANI_PUSH_WALL) / MOON_STAR_FRAMES_2) + MOON_STAR_ORI_Y_1, True, 0)
+					Self.moonStarFrame2 += 1
+					
+					Return
+				EndIf
+				
+				Self.moonStarFrame2 = 0
+			EndIf
+		End
 	
-	Public Method drawAtFront:Bool()
-		Return (Self.slipping Or Self.isDead) ? True : False
-	End
+		Method drawAtFront:Bool()
+			Return (Self.slipping Or Self.isDead)
+		End
 	
 	Public Method collisionChk:Void()
 		
