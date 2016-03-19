@@ -889,195 +889,266 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			initUIResource()
 		End
-	
-	Private Method initUIResource:Void()
-		' Empty implementation.
-	End
-	
-	Public Method logic:Void()
-		Int i
-		For (Int i2 = CHARACTER_SONIC; i2 < MAX_ITEM; i2 += CHARACTER_TAILS)
-			
-			If (itemVec[i2][CHARACTER_SONIC] >= 0) Then
-				If (itemVec[i2][CHARACTER_TAILS] > 0) Then
-					Int[] iArr = itemVec[i2]
-					iArr[CHARACTER_TAILS] = iArr[CHARACTER_TAILS] - CHARACTER_TAILS
-				EndIf
+	Private
+		' Methods:
+		Method initUIResource:Void()
+			' Empty implementation.
+		End
+	Public
+		' Methods
+		Method logic:Void()
+			Int i
+			For (Int i2 = 0; i2 < MAX_ITEM; i2 += 1)
 				
-				If (itemVec[i2][CHARACTER_TAILS] = 0) Then
-					getItem(itemVec[i2][CHARACTER_SONIC])
-					itemVec[i2][CHARACTER_SONIC] = EFFECT_NONE
-				EndIf
-			EndIf
-			
-		Next
-		
-		If (Self.isAntiGravity) Then
-			i = RollPlatformSpeedC.DEGREE_VELOCITY
-		Else
-			i = CHARACTER_SONIC
-		EndIf
-		
-		Self.degreeStable = i
-		Self.leftStopped = False
-		Self.rightStopped = False
-		
-		If (Self.enteringSP) Then
-			If ((Self.posY Shr 6) < camera.y) Then
-				GameState.enterSpStage(ringNum, currentMarkId, timeCount)
-				Self.enteringSP = False
-			EndIf
-		EndIf
-		
-		If (Self.hurtCount > 0) Then
-			Self.hurtCount -= CHARACTER_TAILS
-		EndIf
-		
-		If (invincibleCount > 0) Then
-			invincibleCount -= CHARACTER_TAILS
-			
-			If (invincibleCount = 0) Then
-				i = SoundSystem.getInstance().getPlayingBGMIndex()
-				SoundSystem.getInstance()
-				
-				If (i = ANI_HURT_PRE) Then
-					SoundSystem.getInstance().stopBgm(False)
+				If (itemVec[i2][0] >= 0) Then
+					If (itemVec[i2][1] > 0) Then
+						Int[] iArr = itemVec[i2]
+						iArr[1] = iArr[1] - 1
+					EndIf
 					
-					If (Not isTerminal) Then
-						SoundSystem.getInstance().playBgm(StageManager.getBgmId())
+					If (itemVec[i2][1] = 0) Then
+						getItem(itemVec[i2][0])
+						itemVec[i2][0] = EFFECT_NONE
 					EndIf
 				EndIf
 				
-				i = SoundSystem.getInstance().getPlayingBGMIndex()
-				SoundSystem.getInstance()
-				
-				If (i = ANI_POP_JUMP_DOWN_SLOW) Then
-					SoundSystem.getInstance().playNextBgm(StageManager.getBgmId())
-				EndIf
-			EndIf
-		EndIf
-		
-		Self.preFocusX = getNewPointX(Self.footPointX, CHARACTER_SONIC, -768, Self.faceDegree) Shr 6
-		Self.preFocusY = getNewPointY(Self.footPointY, CHARACTER_SONIC, -768, Self.faceDegree) Shr 6
-		
-		If (Self.setNoMoving) Then
-			If (Self.collisionState = Null) Then
-				Self.footPointX = Self.noMovingPosition
-				setVelX(CHARACTER_SONIC)
-				setVelY(CHARACTER_SONIC)
-				Self.animationID = CHARACTER_SONIC
-				Return
-			ElseIf (Self.collisionState = CHARACTER_TAILS) Then
-				Self.footPointX = Self.noMovingPosition
-				Self.velX = CHARACTER_SONIC
-				setNoKey()
-			EndIf
-		EndIf
-		
-		If (Self.collisionState = Null) Then
-			Self.deadPosX = Self.footPointX
-			Self.deadPosY = Self.footPointY
-		EndIf
-		
-		If (characterID = CHARACTER_TAILS) Then
-			If (Not (Self.myAnimationID = SPIN_LV2_COUNT Or Self.myAnimationID = HURT_COUNT Or Self.myAnimationID = ANI_BREATHE)) Then
-				If (soundInstance.getPlayingLoopSeIndex() = FOCUS_MOVE_SPEED) Then
-					soundInstance.stopLoopSe()
-				EndIf
-				
-				resetFlyCount()
-			EndIf
-			
-			If (Self.collisionState = Null) Then
-				If (soundInstance.getPlayingLoopSeIndex() = FOCUS_MOVE_SPEED) Then
-					soundInstance.stopLoopSe()
-				EndIf
-				
-				resetFlyCount()
-			EndIf
-		EndIf
-		
-		If (Self.isDead) Then
-			If (Self.isInWater And Self.breatheNumCount >= ITEM_RING_5) Then
-				Self.drownCnt += CHARACTER_TAILS
-				
-				If (Self.drownCnt Mod CHARACTER_KNUCKLES = 0) Then
-					GameObject.addGameObject(New DrownBubble(ANI_DEAD, Self.footPointX, Self.footPointY - HEIGHT, CHARACTER_SONIC, CHARACTER_SONIC, CHARACTER_SONIC, CHARACTER_SONIC))
-				EndIf
-			EndIf
-			
-			Bool deadOver = False
+			Next
 			
 			If (Self.isAntiGravity) Then
-				If (Self.footPointY < (MapManager.getCamera().y Shl 6) - f24C) Then
-					Self.footPointY = (MapManager.getCamera().y Shl 6) - f24C
+				i = RollPlatformSpeedC.DEGREE_VELOCITY
+			Else
+				i = 0
+			EndIf
+			
+			Self.degreeStable = i
+			Self.leftStopped = False
+			Self.rightStopped = False
+			
+			If (Self.enteringSP) Then
+				If ((Self.posY Shr 6) < camera.y) Then
+					GameState.enterSpStage(ringNum, currentMarkId, timeCount)
+					Self.enteringSP = False
+				EndIf
+			EndIf
+			
+			If (Self.hurtCount > 0) Then
+				Self.hurtCount -= 1
+			EndIf
+			
+			If (invincibleCount > 0) Then
+				invincibleCount -= 1
+				
+				If (invincibleCount = 0) Then
+					i = SoundSystem.getInstance().getPlayingBGMIndex()
+					SoundSystem.getInstance()
+					
+					If (i = ANI_HURT_PRE) Then
+						SoundSystem.getInstance().stopBgm(False)
+						
+						If (Not isTerminal) Then
+							SoundSystem.getInstance().playBgm(StageManager.getBgmId())
+						EndIf
+					EndIf
+					
+					i = SoundSystem.getInstance().getPlayingBGMIndex()
+					SoundSystem.getInstance()
+					
+					If (i = ANI_POP_JUMP_DOWN_SLOW) Then
+						SoundSystem.getInstance().playNextBgm(StageManager.getBgmId())
+					EndIf
+				EndIf
+			EndIf
+			
+			Self.preFocusX = getNewPointX(Self.footPointX, 0, -768, Self.faceDegree) Shr 6
+			Self.preFocusY = getNewPointY(Self.footPointY, 0, -768, Self.faceDegree) Shr 6
+			
+			If (Self.setNoMoving) Then
+				If (Self.collisionState = Null) Then
+					Self.footPointX = Self.noMovingPosition
+					setVelX(CHARACTER_SONIC)
+					setVelY(CHARACTER_SONIC)
+					Self.animationID = 0
+					Return
+				ElseIf (Self.collisionState = 1) Then
+					Self.footPointX = Self.noMovingPosition
+					Self.velX = 0
+					setNoKey()
+				EndIf
+			EndIf
+			
+			If (Self.collisionState = Null) Then
+				Self.deadPosX = Self.footPointX
+				Self.deadPosY = Self.footPointY
+			EndIf
+			
+			If (characterID = 1) Then
+				If (Not (Self.myAnimationID = SPIN_LV2_COUNT Or Self.myAnimationID = HURT_COUNT Or Self.myAnimationID = ANI_BREATHE)) Then
+					If (soundInstance.getPlayingLoopSeIndex() = FOCUS_MOVE_SPEED) Then
+						soundInstance.stopLoopSe()
+					EndIf
+					
+					resetFlyCount()
+				EndIf
+				
+				If (Self.collisionState = Null) Then
+					If (soundInstance.getPlayingLoopSeIndex() = FOCUS_MOVE_SPEED) Then
+						soundInstance.stopLoopSe()
+					EndIf
+					
+					resetFlyCount()
+				EndIf
+			EndIf
+			
+			If (Self.isDead) Then
+				If (Self.isInWater And Self.breatheNumCount >= ITEM_RING_5) Then
+					Self.drownCnt += 1
+					
+					If (Self.drownCnt Mod 2 = 0) Then
+						GameObject.addGameObject(New DrownBubble(ANI_DEAD, Self.footPointX, Self.footPointY - HEIGHT, 0, 0, 0, CHARACTER_SONIC))
+					EndIf
+				EndIf
+				
+				Bool deadOver = False
+				
+				If (Self.isAntiGravity) Then
+					If (Self.footPointY < (MapManager.getCamera().y Shl 6) - f24C) Then
+						Self.footPointY = (MapManager.getCamera().y Shl 6) - f24C
+						deadOver = True
+					EndIf
+					
+				ElseIf (Self.velY > 0 And Self.footPointY > ((MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl 6) + f24C) Then
+					Self.footPointY = ((MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl 6) + f24C
 					deadOver = True
 				EndIf
 				
-			ElseIf (Self.velY > 0 And Self.footPointY > ((MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl 6) + f24C) Then
-				Self.footPointY = ((MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl 6) + f24C
-				deadOver = True
-			EndIf
-			
-			If (deadOver And Not Self.finishDeadStuff) Then
-				If (stageModeState = CHARACTER_TAILS) Then
-					StageManager.setStageRestart()
-				ElseIf (Not (timeCount = overTime And GlobalResource.timeIsLimit())) Then
-					If (lifeNum > 0) Then
-						lifeNum -= CHARACTER_TAILS
+				If (deadOver And Not Self.finishDeadStuff) Then
+					If (stageModeState = 1) Then
 						StageManager.setStageRestart()
-					Else
-						StageManager.setStageGameover()
+					ElseIf (Not (timeCount = overTime And GlobalResource.timeIsLimit())) Then
+						If (lifeNum > 0) Then
+							lifeNum -= 1
+							StageManager.setStageRestart()
+						Else
+							StageManager.setStageGameover()
+						EndIf
 					EndIf
+					
+					Self.finishDeadStuff = True
+					Return
 				EndIf
 				
-				Self.finishDeadStuff = True
 				Return
 			EndIf
 			
-			Return
-		EndIf
-		
-		Self.focusMovingState = CHARACTER_SONIC
-		Self.controlObjectLogic = False
-		
-		If (Not Self.outOfControl) Then
-			Int waterLevel = StageManager.getWaterLevel()
+			Self.focusMovingState = 0
+			Self.controlObjectLogic = False
 			
-			If (waterLevel > 0) Then
-				If (characterID = CHARACTER_KNUCKLES) Then
-					((PlayerKnuckles) player).setPreWaterFlag(Self.isInWater)
-				EndIf
+			If (Not Self.outOfControl) Then
+				Int waterLevel = StageManager.getWaterLevel()
 				
-				If (Not Self.isInWater) Then
-					Self.breatheCount = CHARACTER_SONIC
-					Self.breatheNumCount = EFFECT_NONE
-					Self.preBreatheNumCount = EFFECT_NONE
-					
-					If (getNewPointY(Self.posY, CHARACTER_SONIC, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree) - SIDE_FOOT_FROM_CENTER >= (waterLevel Shl 6)) Then
-						Self.isInWater = True
-						
-						If (isNeedPlayWaterSE) Then
-							SoundSystem.getInstance().playSe(58)
-						EndIf
-						
-						Self.waterSprayFlag = True
-						Self.waterSprayX = Self.posX
-						waterSprayDrawer.restart()
+				If (waterLevel > 0) Then
+					If (characterID = 2) Then
+						((PlayerKnuckles) player).setPreWaterFlag(Self.isInWater)
 					EndIf
 					
-				ElseIf (Not IsGamePause) Then
-					PlayerObject playerObject
-					Self.breatheCount += 63
-					Self.breatheNumCount = EFFECT_NONE
-					
-					If (characterID = CHARACTER_KNUCKLES And Self.collisionState = 4) Then
-						If (getNewPointY(Self.posY, CHARACTER_SONIC, -Self.collisionRect.getHeight(), Self.faceDegree) + SIDE_FOOT_FROM_CENTER < (waterLevel Shl 6)) Then
-							Self.breatheCount = CHARACTER_SONIC
+					If (Not Self.isInWater) Then
+						Self.breatheCount = 0
+						Self.breatheNumCount = EFFECT_NONE
+						Self.preBreatheNumCount = EFFECT_NONE
+						
+						If (getNewPointY(Self.posY, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree) - SIDE_FOOT_FROM_CENTER >= (waterLevel Shl 6)) Then
+							Self.isInWater = True
+							
+							If (isNeedPlayWaterSE) Then
+								SoundSystem.getInstance().playSe(58)
+							EndIf
+							
+							Self.waterSprayFlag = True
+							Self.waterSprayX = Self.posX
+							waterSprayDrawer.restart()
+						EndIf
+						
+					ElseIf (Not IsGamePause) Then
+						PlayerObject playerObject
+						Self.breatheCount += 63
+						Self.breatheNumCount = EFFECT_NONE
+						
+						If (characterID = 2 And Self.collisionState = 4) Then
+							If (getNewPointY(Self.posY, 0, -Self.collisionRect.getHeight(), Self.faceDegree) + SIDE_FOOT_FROM_CENTER < (waterLevel Shl 6)) Then
+								Self.breatheCount = 0
+								i = SoundSystem.getInstance().getPlayingBGMIndex()
+								SoundSystem.getInstance()
+								
+								If (i = ANI_RAIL_ROLL) Then
+									SoundSystem.getInstance().stopBgm(False)
+									playerObject = player
+									
+									If (IsInvincibility()) Then
+										SoundSystem.getInstance().playBgm(ANI_HURT_PRE)
+									ElseIf (Self.isAttackBoss4) Then
+										SoundSystem.getInstance().playBgm(ANI_BAR_ROLL_1)
+									Else
+										SoundSystem.getInstance().playBgm(StageManager.getBgmId())
+									EndIf
+								EndIf
+							EndIf
+						EndIf
+						
+						If (Self.breatheCount > BREATHE_TIME_COUNT) Then
+							Self.breatheNumCount = (Self.breatheCount - BREATHE_TIME_COUNT) / BREATHE_TO_DIE_PER_COUNT
+							
+							If (Self.breatheCount = 0) Then
+								i = SoundSystem.getInstance().getPlayingBGMIndex()
+								SoundSystem.getInstance()
+								
+								If (i <> ANI_RAIL_ROLL) Then
+									If (Self.isAttackBoss4) Then
+										soundInstance.playBgm(ANI_RAIL_ROLL)
+									Else
+										soundInstance.playBgm(ANI_RAIL_ROLL)
+									EndIf
+									
+									If (Self.breatheNumCount < ITEM_RING_5 And canBeHurt()) Then
+										setDie(True)
+										Return
+									ElseIf (Self.breatheNumCount <> Self.preBreatheNumCount) Then
+										Self.breatheNumY = ((Self.posY Shr 6) - camera.y) - ANI_YELL
+									EndIf
+								EndIf
+							EndIf
+							
 							i = SoundSystem.getInstance().getPlayingBGMIndex()
 							SoundSystem.getInstance()
 							
-							If (i = ANI_RAIL_ROLL) Then
+							If (i <> ANI_RAIL_ROLL) Then
+								long startTime = (long) (((Self.breatheCount - BREATHE_TIME_COUNT) * 10000) / 10560)
+								
+								If (Self.isAttackBoss4) Then
+									soundInstance.playBgmFromTime(startTime, ANI_RAIL_ROLL)
+								Else
+									soundInstance.playBgmFromTime(startTime, ANI_RAIL_ROLL)
+								EndIf
+							EndIf
+							
+							If (Self.breatheNumCount < ITEM_RING_5) Then
+							EndIf
+							
+							If (Self.breatheNumCount <> Self.preBreatheNumCount) Then
+								Self.breatheNumY = ((Self.posY Shr 6) - camera.y) - ANI_YELL
+							EndIf
+						EndIf
+						
+						Self.preBreatheNumCount = Self.breatheNumCount
+						Int bodyCenterY = getNewPointY(Self.posY, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
+						
+						If (characterID = 3) Then
+							bodyCenterY = getNewPointY(Self.posY, 0, (((-Self.collisionRect.getHeight()) * 3) / 4) - TitleState.CHARACTER_RECORD_BG_OFFSET, Self.faceDegree)
+						EndIf
+						
+						If (bodyCenterY + SIDE_FOOT_FROM_CENTER <= (waterLevel Shl 6)) Then
+							Self.isInWater = False
+							
+							If (Self.breatheNumCount >= 0 And SoundSystem.getInstance().getPlayingBGMIndex() = ANI_RAIL_ROLL) Then
 								SoundSystem.getInstance().stopBgm(False)
 								playerObject = player
 								
@@ -1089,572 +1160,502 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 									SoundSystem.getInstance().playBgm(StageManager.getBgmId())
 								EndIf
 							EndIf
-						EndIf
-					EndIf
-					
-					If (Self.breatheCount > BREATHE_TIME_COUNT) Then
-						Self.breatheNumCount = (Self.breatheCount - BREATHE_TIME_COUNT) / BREATHE_TO_DIE_PER_COUNT
-						
-						If (Self.breatheCount = 0) Then
-							i = SoundSystem.getInstance().getPlayingBGMIndex()
-							SoundSystem.getInstance()
 							
-							If (i <> ANI_RAIL_ROLL) Then
-								If (Self.isAttackBoss4) Then
-									soundInstance.playBgm(ANI_RAIL_ROLL)
-								Else
-									soundInstance.playBgm(ANI_RAIL_ROLL)
-								EndIf
-								
-								If (Self.breatheNumCount < ITEM_RING_5 And canBeHurt()) Then
-									setDie(True)
-									Return
-								ElseIf (Self.breatheNumCount <> Self.preBreatheNumCount) Then
-									Self.breatheNumY = ((Self.posY Shr 6) - camera.y) - ANI_YELL
-								EndIf
+							If (isNeedPlayWaterSE) Then
+								SoundSystem.getInstance().playSe(58)
 							EndIf
-						EndIf
-						
-						i = SoundSystem.getInstance().getPlayingBGMIndex()
-						SoundSystem.getInstance()
-						
-						If (i <> ANI_RAIL_ROLL) Then
-							long startTime = (long) (((Self.breatheCount - BREATHE_TIME_COUNT) * 10000) / 10560)
 							
-							If (Self.isAttackBoss4) Then
-								soundInstance.playBgmFromTime(startTime, ANI_RAIL_ROLL)
-							Else
-								soundInstance.playBgmFromTime(startTime, ANI_RAIL_ROLL)
-							EndIf
+							Self.waterSprayFlag = True
+							Self.waterSprayX = Self.posX
+							waterSprayDrawer.restart()
 						EndIf
 						
-						If (Self.breatheNumCount < ITEM_RING_5) Then
-						EndIf
+						Self.breatheFrame += 1
+						Self.breatheFrame Mod= ANI_WAITING_2
 						
-						If (Self.breatheNumCount <> Self.preBreatheNumCount) Then
-							Self.breatheNumY = ((Self.posY Shr 6) - camera.y) - ANI_YELL
+						If (Self.breatheFrame = MyRandom.nextInt(1, ANI_PUSH_WALL) * ITEM_RING_5) Then
+							GameObject.addGameObject(New AspirateBubble(FADE_FILL_WIDTH, player.getFootPositionX() + (Self.faceDirection ? PlayerSonic.BACK_JUMP_SPEED_X : -384), player.getFootPositionY() - HEIGHT, 0, 0, 0, CHARACTER_SONIC))
 						EndIf
-					EndIf
-					
-					Self.preBreatheNumCount = Self.breatheNumCount
-					Int bodyCenterY = getNewPointY(Self.posY, CHARACTER_SONIC, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
-					
-					If (characterID = CHARACTER_AMY) Then
-						bodyCenterY = getNewPointY(Self.posY, CHARACTER_SONIC, (((-Self.collisionRect.getHeight()) * CHARACTER_AMY) / 4) - TitleState.CHARACTER_RECORD_BG_OFFSET, Self.faceDegree)
-					EndIf
-					
-					If (bodyCenterY + SIDE_FOOT_FROM_CENTER <= (waterLevel Shl 6)) Then
-						Self.isInWater = False
-						
-						If (Self.breatheNumCount >= 0 And SoundSystem.getInstance().getPlayingBGMIndex() = ANI_RAIL_ROLL) Then
-							SoundSystem.getInstance().stopBgm(False)
-							playerObject = player
-							
-							If (IsInvincibility()) Then
-								SoundSystem.getInstance().playBgm(ANI_HURT_PRE)
-							ElseIf (Self.isAttackBoss4) Then
-								SoundSystem.getInstance().playBgm(ANI_BAR_ROLL_1)
-							Else
-								SoundSystem.getInstance().playBgm(StageManager.getBgmId())
-							EndIf
-						EndIf
-						
-						If (isNeedPlayWaterSE) Then
-							SoundSystem.getInstance().playSe(58)
-						EndIf
-						
-						Self.waterSprayFlag = True
-						Self.waterSprayX = Self.posX
-						waterSprayDrawer.restart()
-					EndIf
-					
-					Self.breatheFrame += CHARACTER_TAILS
-					Self.breatheFrame Mod= ANI_WAITING_2
-					
-					If (Self.breatheFrame = MyRandom.nextInt(CHARACTER_TAILS, ANI_PUSH_WALL) * ITEM_RING_5) Then
-						GameObject.addGameObject(New AspirateBubble(FADE_FILL_WIDTH, player.getFootPositionX() + (Self.faceDirection ? PlayerSonic.BACK_JUMP_SPEED_X : -384), player.getFootPositionY() - HEIGHT, CHARACTER_SONIC, CHARACTER_SONIC, CHARACTER_SONIC, CHARACTER_SONIC))
-					EndIf
-				EndIf
-			EndIf
-			
-			If (speedCount > 0) Then
-				speedCount -= CHARACTER_TAILS
-				Self.movePower = MOVE_POWER / 2
-				Self.movePowerInAir = MOVE_POWER_IN_AIR / 2
-				Self.movePowerReverse = MOVE_POWER_REVERSE / 2
-				Self.movePowerReserseBall = MOVE_POWER_REVERSE_BALL / 2
-				Self.maxVelocity = MAX_VELOCITY / 2
-				
-				If (Not (speedCount <> 0 Or SoundSystem.getInstance().getPlayingBGMIndex() = ANI_POP_JUMP_UP_SLOW Or SoundSystem.getInstance().getPlayingBGMIndex() = ANI_DEAD Or SoundSystem.getInstance().getPlayingBGMIndex() = MOON_STAR_DES_Y_1)) Then
-					SoundSystem.getInstance().setSoundSpeed(1.0)
-					
-					If (SoundSystem.getInstance().getPlayingBGMIndex() <> ANI_POP_JUMP_DOWN_SLOW) Then
-						SoundSystem.getInstance().restartBgm()
 					EndIf
 				EndIf
 				
-			Else
-				Self.movePower = MOVE_POWER
-				Self.movePowerInAir = MOVE_POWER_IN_AIR
-				Self.movePowerReverse = MOVE_POWER_REVERSE
-				Self.movePowerReserseBall = MOVE_POWER_REVERSE_BALL
-				Self.maxVelocity = MAX_VELOCITY
-			EndIf
-			
-			If (Self.isAntiGravity) Then
-				If (Not Self.isDead And Self.footPointY > (MapManager.getPixelHeight() Shl 6)) Then
-					Self.footPointY = (MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl 6
+				If (speedCount > 0) Then
+					speedCount -= 1
+					Self.movePower = MOVE_POWER / 2
+					Self.movePowerInAir = MOVE_POWER_IN_AIR / 2
+					Self.movePowerReverse = MOVE_POWER_REVERSE / 2
+					Self.movePowerReserseBall = MOVE_POWER_REVERSE_BALL / 2
+					Self.maxVelocity = MAX_VELOCITY / 2
 					
-					If (getVelY() < 0) Then
-						setVelY(CHARACTER_SONIC)
+					If (Not (speedCount <> 0 Or SoundSystem.getInstance().getPlayingBGMIndex() = ANI_POP_JUMP_UP_SLOW Or SoundSystem.getInstance().getPlayingBGMIndex() = ANI_DEAD Or SoundSystem.getInstance().getPlayingBGMIndex() = MOON_STAR_DES_Y_1)) Then
+						SoundSystem.getInstance().setSoundSpeed(1.0)
+						
+						If (SoundSystem.getInstance().getPlayingBGMIndex() <> ANI_POP_JUMP_DOWN_SLOW) Then
+							SoundSystem.getInstance().restartBgm()
+						EndIf
 					EndIf
+					
+				Else
+					Self.movePower = MOVE_POWER
+					Self.movePowerInAir = MOVE_POWER_IN_AIR
+					Self.movePowerReverse = MOVE_POWER_REVERSE
+					Self.movePowerReserseBall = MOVE_POWER_REVERSE_BALL
+					Self.maxVelocity = MAX_VELOCITY
 				EndIf
 				
-			ElseIf (Not Self.isDead And Self.footPointY > (MapManager.getPixelHeight() Shl 6)) Then
-				Self.footPointY = ((MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl 6) + f24C
-				setDie(False, -1600)
-			EndIf
-			
-			Self.ignoreFirstTouch = False
-			
-			If (Self.dashRolling) Then
-				dashRollingLogic()
+				If (Self.isAntiGravity) Then
+					If (Not Self.isDead And Self.footPointY > (MapManager.getPixelHeight() Shl 6)) Then
+						Self.footPointY = (MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl 6
+						
+						If (getVelY() < 0) Then
+							setVelY(CHARACTER_SONIC)
+						EndIf
+					EndIf
+					
+				ElseIf (Not Self.isDead And Self.footPointY > (MapManager.getPixelHeight() Shl 6)) Then
+					Self.footPointY = ((MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl 6) + f24C
+					setDie(False, -1600)
+				EndIf
+				
+				Self.ignoreFirstTouch = False
 				
 				If (Self.dashRolling) Then
-					collisionChk()
-					Return
+					dashRollingLogic()
+					
+					If (Self.dashRolling) Then
+						collisionChk()
+						Return
+					EndIf
+					
+				ElseIf (Self.effectID = 0 Or Self.effectID = 1) Then
+					Self.effectID = EFFECT_NONE
 				EndIf
 				
-			ElseIf (Self.effectID = 0 Or Self.effectID = CHARACTER_TAILS) Then
-				Self.effectID = EFFECT_NONE
-			EndIf
-			
-			If (Self.railing) Then
-				setNoKey()
-				
-				If (Self.railLine = Null) Then
-					Self.velY += getGravity()
-					checkWithObject(Self.footPointX, Self.footPointY, Self.footPointX + Self.velX, Self.footPointY + Self.velY)
+				If (Self.railing) Then
+					setNoKey()
+					
+					If (Self.railLine = Null) Then
+						Self.velY += getGravity()
+						checkWithObject(Self.footPointX, Self.footPointY, Self.footPointX + Self.velX, Self.footPointY + Self.velY)
+					Else
+						Int preFootPointX = Self.footPointX
+						Int preFootPointY = Self.footPointY
+						Int velocityChange = Self.railLine.sin(getGravity())
+						
+						If (Not Self.railLine.directRatio()) Then
+							velocityChange = -velocityChange
+						EndIf
+						
+						If (velocityChange <> 0) Then
+							Direction direction = Self.railLine.getOneDirection()
+							Self.totalVelocity += velocityChange
+							checkWithObject(Self.footPointX, Self.footPointY, Self.footPointX + direction.getValueX(Self.railLine.cos(Self.totalVelocity)), Self.footPointY + direction.getValueY(Self.railLine.sin(Self.totalVelocity)))
+						Else
+							checkWithObject(Self.footPointX, Self.footPointY, Self.footPointX + ((Self.totalVelocity < 0 ? EFFECT_NONE : 1) * Self.railLine.cos(Self.totalVelocity)), Self.footPointY + ((Self.totalVelocity < 0 ? EFFECT_NONE : 1) * Self.railLine.sin(Self.totalVelocity)))
+						EndIf
+						
+						If (Not (Self.railOut Or Self.railLine = Null)) Then
+							Self.velX = Self.footPointX - preFootPointX
+							Self.velY = Self.footPointY - preFootPointY
+						EndIf
+					EndIf
+					
+					If (Self.railOut And Self.velY = getGravity() + RAIL_OUT_SPEED_VY0) Then
+						If (characterID = 3) Then
+							soundInstance.playSe(ANI_ROPE_ROLL_1)
+						Else
+							soundInstance.playSe(ANI_SMALL_ZERO_Y)
+						EndIf
+					EndIf
+					
+					If (Self.railOut And Self.velY > 0) Then
+						Self.railOut = False
+						Self.railing = False
+						Self.collisionState = 1
+					EndIf
+					
+				ElseIf (Self.piping) Then
+					Int preX = Self.footPointX
+					Int preY = Self.footPointY
+					Select (Self.pipeState)
+						Case CHARACTER_SONIC
+							
+							If (Self.footPointX < Self.pipeDesX) Then
+								Self.footPointX += 250
+								
+								If (Self.footPointX >= Self.pipeDesX) Then
+									Self.footPointX = Self.pipeDesX
+								EndIf
+								
+							ElseIf (Self.footPointX > Self.pipeDesX) Then
+								Self.footPointX -= 250
+								
+								If (Self.footPointX <= Self.pipeDesX) Then
+									Self.footPointX = Self.pipeDesX
+								EndIf
+							EndIf
+							
+							If (Self.footPointY < Self.pipeDesY) Then
+								Self.footPointY += 250
+								
+								If (Self.footPointY >= Self.pipeDesY) Then
+									Self.footPointY = Self.pipeDesY
+								EndIf
+								
+							ElseIf (Self.footPointY > Self.pipeDesY) Then
+								Self.footPointY -= 250
+								
+								If (Self.footPointY <= Self.pipeDesY) Then
+									Self.footPointY = Self.pipeDesY
+								EndIf
+							EndIf
+							
+							If (Self.footPointX = Self.pipeDesX And Self.footPointY = Self.pipeDesY) Then
+								Self.pipeState = 1
+								Self.velX = Self.nextVelX
+								Self.velY = Self.nextVelY
+								break
+							EndIf
+							
+						Case 1
+							Self.footPointX += Self.velX
+							Self.footPointY += Self.velY
+							break
+						Case 2
+							Self.footPointX += Self.velX
+							Self.footPointY += Self.velY
+							
+							If (Self.velX <> 0) Then
+								If (Self.velX > 0 And Self.footPointX > Self.pipeDesX) Then
+									Self.footPointX = Self.pipeDesX
+								ElseIf (Self.velX < 0 And Self.footPointX < Self.pipeDesX) Then
+									Self.footPointX = Self.pipeDesX
+								EndIf
+							EndIf
+							
+							If (Self.velY <> 0) Then
+								If (Self.velY > 0 And Self.footPointY > Self.pipeDesY) Then
+									Self.footPointY = Self.pipeDesY
+								ElseIf (Self.velY < 0 And Self.footPointY < Self.pipeDesY) Then
+									Self.footPointY = Self.pipeDesY
+								EndIf
+							EndIf
+							
+							If ((Self.velX = 0 Or Self.footPointX = Self.pipeDesX Or Self.nextVelX <> 0) And (Self.velY = 0 Or Self.footPointY = Self.pipeDesY Or Self.nextVelY <> 0)) Then
+								Self.velX = Self.nextVelX
+								Self.velY = Self.nextVelY
+								Self.pipeState = 1
+								break
+							EndIf
+							
+							break
+					End Select
+					checkWithObject(preX, preY, Self.footPointX, Self.footPointY)
+					Self.animationID = 4
 				Else
-					Int preFootPointX = Self.footPointX
-					Int preFootPointY = Self.footPointY
-					Int velocityChange = Self.railLine.sin(getGravity())
+					bankLogic()
 					
-					If (Not Self.railLine.directRatio()) Then
-						velocityChange = -velocityChange
-					EndIf
-					
-					If (velocityChange <> 0) Then
-						Direction direction = Self.railLine.getOneDirection()
-						Self.totalVelocity += velocityChange
-						checkWithObject(Self.footPointX, Self.footPointY, Self.footPointX + direction.getValueX(Self.railLine.cos(Self.totalVelocity)), Self.footPointY + direction.getValueY(Self.railLine.sin(Self.totalVelocity)))
-					Else
-						checkWithObject(Self.footPointX, Self.footPointY, Self.footPointX + ((Self.totalVelocity < 0 ? EFFECT_NONE : CHARACTER_TAILS) * Self.railLine.cos(Self.totalVelocity)), Self.footPointY + ((Self.totalVelocity < 0 ? EFFECT_NONE : CHARACTER_TAILS) * Self.railLine.sin(Self.totalVelocity)))
-					EndIf
-					
-					If (Not (Self.railOut Or Self.railLine = Null)) Then
-						Self.velX = Self.footPointX - preFootPointX
-						Self.velY = Self.footPointY - preFootPointY
-					EndIf
-				EndIf
-				
-				If (Self.railOut And Self.velY = getGravity() + RAIL_OUT_SPEED_VY0) Then
-					If (characterID = CHARACTER_AMY) Then
-						soundInstance.playSe(ANI_ROPE_ROLL_1)
-					Else
-						soundInstance.playSe(ANI_SMALL_ZERO_Y)
-					EndIf
-				EndIf
-				
-				If (Self.railOut And Self.velY > 0) Then
-					Self.railOut = False
-					Self.railing = False
-					Self.collisionState = 1
-				EndIf
-				
-			ElseIf (Self.piping) Then
-				Int preX = Self.footPointX
-				Int preY = Self.footPointY
-				Select (Self.pipeState)
-					Case CHARACTER_SONIC
-						
-						If (Self.footPointX < Self.pipeDesX) Then
-							Self.footPointX += 250
-							
-							If (Self.footPointX >= Self.pipeDesX) Then
-								Self.footPointX = Self.pipeDesX
+					If (Not Self.onBank) Then
+						If (isTerminal) Then
+							If (Self.terminalCount > 0) Then
+								Self.terminalCount -= 1
 							EndIf
 							
-						ElseIf (Self.footPointX > Self.pipeDesX) Then
-							Self.footPointX -= 250
-							
-							If (Self.footPointX <= Self.pipeDesX) Then
-								Self.footPointX = Self.pipeDesX
-							EndIf
-						EndIf
-						
-						If (Self.footPointY < Self.pipeDesY) Then
-							Self.footPointY += 250
-							
-							If (Self.footPointY >= Self.pipeDesY) Then
-								Self.footPointY = Self.pipeDesY
-							EndIf
-							
-						ElseIf (Self.footPointY > Self.pipeDesY) Then
-							Self.footPointY -= 250
-							
-							If (Self.footPointY <= Self.pipeDesY) Then
-								Self.footPointY = Self.pipeDesY
-							EndIf
-						EndIf
-						
-						If (Self.footPointX = Self.pipeDesX And Self.footPointY = Self.pipeDesY) Then
-							Self.pipeState = 1
-							Self.velX = Self.nextVelX
-							Self.velY = Self.nextVelY
-							break
-						EndIf
-						
-					Case CHARACTER_TAILS
-						Self.footPointX += Self.velX
-						Self.footPointY += Self.velY
-						break
-					Case CHARACTER_KNUCKLES
-						Self.footPointX += Self.velX
-						Self.footPointY += Self.velY
-						
-						If (Self.velX <> 0) Then
-							If (Self.velX > 0 And Self.footPointX > Self.pipeDesX) Then
-								Self.footPointX = Self.pipeDesX
-							ElseIf (Self.velX < 0 And Self.footPointX < Self.pipeDesX) Then
-								Self.footPointX = Self.pipeDesX
-							EndIf
-						EndIf
-						
-						If (Self.velY <> 0) Then
-							If (Self.velY > 0 And Self.footPointY > Self.pipeDesY) Then
-								Self.footPointY = Self.pipeDesY
-							ElseIf (Self.velY < 0 And Self.footPointY < Self.pipeDesY) Then
-								Self.footPointY = Self.pipeDesY
-							EndIf
-						EndIf
-						
-						If ((Self.velX = 0 Or Self.footPointX = Self.pipeDesX Or Self.nextVelX <> 0) And (Self.velY = 0 Or Self.footPointY = Self.pipeDesY Or Self.nextVelY <> 0)) Then
-							Self.velX = Self.nextVelX
-							Self.velY = Self.nextVelY
-							Self.pipeState = 1
-							break
-						EndIf
-						
-						break
-				End Select
-				checkWithObject(preX, preY, Self.footPointX, Self.footPointY)
-				Self.animationID = 4
-			Else
-				bankLogic()
-				
-				If (Not Self.onBank) Then
-					If (isTerminal) Then
-						If (Self.terminalCount > 0) Then
-							Self.terminalCount -= CHARACTER_TAILS
-						EndIf
-						
-						If (Self.animationID = 4) Then
-							Self.totalVelocity -= MOVE_POWER_REVERSE_BALL
-							
-							If (Self.totalVelocity < 0) Then
-								Self.totalVelocity = CHARACTER_SONIC
+							If (Self.animationID = 4) Then
+								Self.totalVelocity -= MOVE_POWER_REVERSE_BALL
+								
+								If (Self.totalVelocity < 0) Then
+									Self.totalVelocity = 0
+								EndIf
+								
+							ElseIf (Self.totalVelocity > MAX_VELOCITY) Then
+								Self.totalVelocity -= MOVE_POWER_REVERSE_BALL
+								
+								If (Self.totalVelocity <= MAX_VELOCITY) Then
+									Self.totalVelocity = MAX_VELOCITY
+								EndIf
 							EndIf
 							
-						ElseIf (Self.totalVelocity > MAX_VELOCITY) Then
-							Self.totalVelocity -= MOVE_POWER_REVERSE_BALL
-							
-							If (Self.totalVelocity <= MAX_VELOCITY) Then
-								Self.totalVelocity = MAX_VELOCITY
-							EndIf
+							Self.noKeyFlag = True
 						EndIf
 						
-						Self.noKeyFlag = True
-					EndIf
-					
-					If (Self.isCelebrate) Then
-						If (Self.faceDirection) Then
-							If (Self.collisionState = Null) Then
+						If (Self.isCelebrate) Then
+							If (Self.faceDirection) Then
+								If (Self.collisionState = Null) Then
+									setVelX(CHARACTER_SONIC)
+								EndIf
+								
+							ElseIf (Self.collisionState = Null) Then
 								setVelX(CHARACTER_SONIC)
 							EndIf
 							
-						ElseIf (Self.collisionState = Null) Then
-							setVelX(CHARACTER_SONIC)
+							Self.noKeyFlag = True
 						EndIf
 						
-						Self.noKeyFlag = True
-					EndIf
-					
-					If (StageManager.getStageID() <> ANI_SLIP) Then
-						If (Not isFirstTouchedWind And Self.animationID = ANI_WIND_JUMP) Then
-							soundInstance.playSe(68)
-							isFirstTouchedWind = True
-							Self.frameCnt = CHARACTER_SONIC
+						If (StageManager.getStageID() <> ANI_SLIP) Then
+							If (Not isFirstTouchedWind And Self.animationID = ANI_WIND_JUMP) Then
+								soundInstance.playSe(68)
+								isFirstTouchedWind = True
+								Self.frameCnt = 0
+							EndIf
+							
+							If (isFirstTouchedWind) Then
+								If (Self.animationID = ANI_WIND_JUMP) Then
+									Self.frameCnt += 1
+									
+									If (Self.frameCnt > 4 And Not IsGamePause) Then
+										soundInstance.playLoopSe(69)
+									EndIf
+									
+								Else
+									
+									If (soundInstance.getPlayingLoopSeIndex() = 69) Then
+										soundInstance.stopLoopSe()
+									EndIf
+									
+									isFirstTouchedWind = False
+								EndIf
+							EndIf
 						EndIf
 						
-						If (isFirstTouchedWind) Then
-							If (Self.animationID = ANI_WIND_JUMP) Then
-								Self.frameCnt += CHARACTER_TAILS
-								
-								If (Self.frameCnt > 4 And Not IsGamePause) Then
-									soundInstance.playLoopSe(69)
-								EndIf
-								
-							Else
-								
-								If (soundInstance.getPlayingLoopSeIndex() = 69) Then
-									soundInstance.stopLoopSe()
-								EndIf
-								
-								isFirstTouchedWind = False
-							EndIf
-						EndIf
-					EndIf
-					
-					If (StageManager.getCurrentZoneId() = MAX_ITEM) Then
-						If (Not isFirstTouchedSandSlip And Self.animationID = ANI_YELL) Then
-							isFirstTouchedSandSlip = True
-							Self.frameCnt = CHARACTER_SONIC
-						EndIf
-						
-						If (isFirstTouchedSandSlip) Then
-							If (Self.animationID = ANI_YELL And Self.collisionState = Null) Then
-								Self.frameCnt += CHARACTER_TAILS
-								
-								If (Self.frameCnt > CHARACTER_KNUCKLES And Not IsGamePause) Then
-									soundInstance.playLoopSe(71)
-								EndIf
-								
-							Else
-								
-								If (soundInstance.getPlayingLoopSeIndex() = 71) Then
-									soundInstance.stopLoopSe()
-								EndIf
-								
-								isFirstTouchedSandSlip = False
-							EndIf
-						EndIf
-					EndIf
-					
-					If (Self.ducting) Then
-						Self.ductingCount += CHARACTER_TAILS
-						Self.noKeyFlag = True
-						Self.animationID = 4
-						Self.attackAnimationID = Self.animationID
-						Self.attackCount = CHARACTER_SONIC
-						Self.attackLevel = CHARACTER_SONIC
-					EndIf
-					
-					If (Self.noKeyFlag) Then
-						Key.setKeyFunction(False)
-					EndIf
-					
-					If (Not (Not Self.hurtNoControl Or Self.animationID = SPIN_LV2_COUNT Or Self.animationID = ANI_HURT_PRE)) Then
-						Self.hurtNoControl = False
-					EndIf
-					
-					Select (Self.collisionState)
-						Case CHARACTER_SONIC
-							inputLogicWalk()
-							break
-						Case CHARACTER_TAILS
-							inputLogicJump()
-							
-							If (Self.transing) Then
-								Self.velX = CHARACTER_SONIC
-								Self.velY = CHARACTER_SONIC
-								
-								If (MapManager.isCameraStop()) Then
-									Self.transing = False
-									break
-								EndIf
+						If (StageManager.getCurrentZoneId() = MAX_ITEM) Then
+							If (Not isFirstTouchedSandSlip And Self.animationID = ANI_YELL) Then
+								isFirstTouchedSandSlip = True
+								Self.frameCnt = 0
 							EndIf
 							
-							break
-						Case CHARACTER_KNUCKLES
-							inputLogicOnObject()
-							break
-						Case CHARACTER_AMY
-							inputLogicSand()
-							break
-						Default
-							extraInputLogic()
-							break
-					End Select
-					
-					If (Self.noKeyFlag) Then
-						Key.setKeyFunction(True)
-						Self.noKeyFlag = False
-					EndIf
-					
-					If (Self.slipFlag) Then
-						If (Self.collisionState = Null) Then
-							Self.animationID = ANI_YELL
+							If (isFirstTouchedSandSlip) Then
+								If (Self.animationID = ANI_YELL And Self.collisionState = Null) Then
+									Self.frameCnt += 1
+									
+									If (Self.frameCnt > 2 And Not IsGamePause) Then
+										soundInstance.playLoopSe(71)
+									EndIf
+									
+								Else
+									
+									If (soundInstance.getPlayingLoopSeIndex() = 71) Then
+										soundInstance.stopLoopSe()
+									EndIf
+									
+									isFirstTouchedSandSlip = False
+								EndIf
+							EndIf
 						EndIf
 						
-						Self.slipFlag = False
-					EndIf
-					
-					calPreCollisionRect()
-					collisionChk()
-					
-					If (Self.animationID = ANI_BRAKE) Then
-						Effect.showEffect(Self.dustEffectAnimation, CHARACTER_KNUCKLES, Self.posX Shr 6, Self.posY Shr 6, CHARACTER_SONIC)
-					EndIf
-					
-					Select (Self.collisionState)
-						Case CHARACTER_SONIC
-							fallChk()
-							Self.degreeForDraw = Self.faceDegree
-							
-							If (noRotateDraw()) Then
-								Self.degreeForDraw = Self.degreeStable
+						If (Self.ducting) Then
+							Self.ductingCount += 1
+							Self.noKeyFlag = True
+							Self.animationID = 4
+							Self.attackAnimationID = Self.animationID
+							Self.attackCount = 0
+							Self.attackLevel = 0
+						EndIf
+						
+						If (Self.noKeyFlag) Then
+							Key.setKeyFunction(False)
+						EndIf
+						
+						If (Not (Not Self.hurtNoControl Or Self.animationID = SPIN_LV2_COUNT Or Self.animationID = ANI_HURT_PRE)) Then
+							Self.hurtNoControl = False
+						EndIf
+						
+						Select (Self.collisionState)
+							Case CHARACTER_SONIC
+								inputLogicWalk()
+								break
+							Case 1
+								inputLogicJump()
+								
+								If (Self.transing) Then
+									Self.velX = 0
+									Self.velY = 0
+									
+									If (MapManager.isCameraStop()) Then
+										Self.transing = False
+										break
+									EndIf
+								EndIf
+								
+								break
+							Case 2
+								inputLogicOnObject()
+								break
+							Case 3
+								inputLogicSand()
+								break
+							Default
+								extraInputLogic()
+								break
+						End Select
+						
+						If (Self.noKeyFlag) Then
+							Key.setKeyFunction(True)
+							Self.noKeyFlag = False
+						EndIf
+						
+						If (Self.slipFlag) Then
+							If (Self.collisionState = Null) Then
+								Self.animationID = ANI_YELL
 							EndIf
 							
-							If (isTerminal) Then
-								MapManager.setCameraDownLimit((Self.posY Shr 6) + ANI_PULL)
-							EndIf
-							
-							If (Not isTerminal Or Self.terminalCount <> 0 Or Self.totalVelocity < MAX_VELOCITY) Then
+							Self.slipFlag = False
+						EndIf
+						
+						calPreCollisionRect()
+						collisionChk()
+						
+						If (Self.animationID = ANI_BRAKE) Then
+							Effect.showEffect(Self.dustEffectAnimation, 2, Self.posX Shr 6, Self.posY Shr 6, CHARACTER_SONIC)
+						EndIf
+						
+						Select (Self.collisionState)
+							Case CHARACTER_SONIC
+								fallChk()
+								Self.degreeForDraw = Self.faceDegree
+								
+								If (noRotateDraw()) Then
+									Self.degreeForDraw = Self.degreeStable
+								EndIf
+								
+								If (isTerminal) Then
+									MapManager.setCameraDownLimit((Self.posY Shr 6) + ANI_PULL)
+								EndIf
+								
+								If (Not isTerminal Or Self.terminalCount <> 0 Or Self.totalVelocity < MAX_VELOCITY) Then
+									Select (terminalType)
+										Case 3
+											terminalLogic()
+											break
+										Default
+											break
+									End Select
+								EndIf
+								
 								Select (terminalType)
-									Case CHARACTER_AMY
-										terminalLogic()
-										break
-									Default
-										break
-								End Select
-							EndIf
-							
-							Select (terminalType)
-								Case CHARACTER_SONIC
-									
-									If (Self.animationID = ANI_CELEBRATE_1) Then
-										If (Self.drawer.checkEnd()) Then
-											Self.animationID = SPIN_LV2_COUNT_CONF
-										EndIf
-									EndIf
-									
-									If (Not (Self.animationID = 4 Or Self.animationID = ANI_CELEBRATE_1 Or Self.animationID = SPIN_LV2_COUNT_CONF)) Then
-										Self.animationID = ANI_CELEBRATE_1
-										break
-									EndIf
-									
-								Case CHARACTER_KNUCKLES
-									
-									If (StageManager.getCurrentZoneId() <> ITEM_RING_5) Then
-										If (Self.fading) Then
-											If (fadeChangeOver()) Then
-												StageManager.setStagePass()
-												break
+									Case CHARACTER_SONIC
+										
+										If (Self.animationID = ANI_CELEBRATE_1) Then
+											If (Self.drawer.checkEnd()) Then
+												Self.animationID = SPIN_LV2_COUNT_CONF
 											EndIf
 										EndIf
 										
-										setFadeColor(MapManager.END_COLOR)
-										fadeInit(CHARACTER_SONIC, 255)
-										Self.fading = True
+										If (Not (Self.animationID = 4 Or Self.animationID = ANI_CELEBRATE_1 Or Self.animationID = SPIN_LV2_COUNT_CONF)) Then
+											Self.animationID = ANI_CELEBRATE_1
+											break
+										EndIf
+										
+									Case 2
+										
+										If (StageManager.getCurrentZoneId() <> ITEM_RING_5) Then
+											If (Self.fading) Then
+												If (fadeChangeOver()) Then
+													StageManager.setStagePass()
+													break
+												EndIf
+											EndIf
+											
+											setFadeColor(MapManager.END_COLOR)
+											fadeInit(0, 255)
+											Self.fading = True
+											break
+										EndIf
+										
+										StageManager.setStagePass()
 										break
-									EndIf
-									
+										break
+									Case 3
+										terminalLogic()
+										break
+								End Select
+								
+								If (Self.isCelebrate) Then
+									Self.animationID = ANI_SMALL_ZERO_Y
+									break
+								EndIf
+								
+								break
+							Case 1
+								
+								If (noRotateDraw()) Then
+									Self.degreeForDraw = Self.degreeStable
+								EndIf
+								
+								terminalLogic()
+								
+								If (isTerminal And Self.terminalCount = 0 And terminalType = 1) Then
 									StageManager.setStagePass()
 									break
-									break
-								Case CHARACTER_AMY
-									terminalLogic()
-									break
-							End Select
-							
-							If (Self.isCelebrate) Then
-								Self.animationID = ANI_SMALL_ZERO_Y
+								EndIf
+								
+							Case 2
+							Case 3
+								Self.degreeForDraw = Self.faceDegree
 								break
-							EndIf
-							
-							break
-						Case CHARACTER_TAILS
-							
-							If (noRotateDraw()) Then
-								Self.degreeForDraw = Self.degreeStable
-							EndIf
-							
-							terminalLogic()
-							
-							If (isTerminal And Self.terminalCount = 0 And terminalType = CHARACTER_TAILS) Then
-								StageManager.setStagePass()
+							Case 4
+								terminalLogic()
 								break
-							EndIf
-							
-						Case CHARACTER_KNUCKLES
-						Case CHARACTER_AMY
-							Self.degreeForDraw = Self.faceDegree
-							break
-						Case 4
-							terminalLogic()
-							break
-					End Select
-					
-					If (Self.footPointX - RIGHT_WALK_COLLISION_CHECK_OFFSET_X < (MapManager.actualLeftCameraLimit Shl 6)) Then
-						Self.footPointX = (MapManager.actualLeftCameraLimit Shl 6) + RIGHT_WALK_COLLISION_CHECK_OFFSET_X
+						End Select
 						
-						If (getVelX() < 0) Then
-							setVelX(CHARACTER_SONIC)
-						EndIf
-					EndIf
-					
-					If (MapManager.actualRightCameraLimit <> MapManager.getPixelWidth()) Then
-						If (Self.footPointX + RIGHT_WALK_COLLISION_CHECK_OFFSET_X > (MapManager.actualRightCameraLimit Shl 6)) Then
-							Self.footPointX = (MapManager.actualRightCameraLimit Shl 6) - RIGHT_WALK_COLLISION_CHECK_OFFSET_X
+						If (Self.footPointX - RIGHT_WALK_COLLISION_CHECK_OFFSET_X < (MapManager.actualLeftCameraLimit Shl 6)) Then
+							Self.footPointX = (MapManager.actualLeftCameraLimit Shl 6) + RIGHT_WALK_COLLISION_CHECK_OFFSET_X
 							
-							If (getVelX() > 0) Then
+							If (getVelX() < 0) Then
 								setVelX(CHARACTER_SONIC)
 							EndIf
 						EndIf
-					EndIf
-					
-					If (EnemyObject.isBossEnter) Then
-						If ((Self.footPointY - HEIGHT) + WIDTH < (MapManager.actualUpCameraLimit Shl 6)) Then
-							Self.footPointY = ((MapManager.actualUpCameraLimit Shl 6) + HEIGHT) - WIDTH
-							
-							If (getVelY() < 0) Then
-								setVelY(CHARACTER_SONIC)
+						
+						If (MapManager.actualRightCameraLimit <> MapManager.getPixelWidth()) Then
+							If (Self.footPointX + RIGHT_WALK_COLLISION_CHECK_OFFSET_X > (MapManager.actualRightCameraLimit Shl 6)) Then
+								Self.footPointX = (MapManager.actualRightCameraLimit Shl 6) - RIGHT_WALK_COLLISION_CHECK_OFFSET_X
+								
+								If (getVelX() > 0) Then
+									setVelX(CHARACTER_SONIC)
+								EndIf
 							EndIf
 						EndIf
 						
-					Else
-						
-						If (Self.footPointY - HEIGHT < (MapManager.actualUpCameraLimit Shl 6)) Then
-							Self.footPointY = (MapManager.actualUpCameraLimit Shl 6) + HEIGHT
+						If (EnemyObject.isBossEnter) Then
+							If ((Self.footPointY - HEIGHT) + WIDTH < (MapManager.actualUpCameraLimit Shl 6)) Then
+								Self.footPointY = ((MapManager.actualUpCameraLimit Shl 6) + HEIGHT) - WIDTH
+								
+								If (getVelY() < 0) Then
+									setVelY(CHARACTER_SONIC)
+								EndIf
+							EndIf
 							
-							If (getVelY() < 0) Then
-								setVelY(CHARACTER_SONIC)
+						Else
+							
+							If (Self.footPointY - HEIGHT < (MapManager.actualUpCameraLimit Shl 6)) Then
+								Self.footPointY = (MapManager.actualUpCameraLimit Shl 6) + HEIGHT
+								
+								If (getVelY() < 0) Then
+									setVelY(CHARACTER_SONIC)
+								EndIf
 							EndIf
 						EndIf
-					EndIf
-					
-					If (isDeadLineEffect And Not Self.isDead And Self.footPointY > (MapManager.actualDownCameraLimit Shl 6)) Then
-						Self.footPointY = ((MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl 6) + f24C
-						setDie(False, -1600)
-					EndIf
-					
-					If (Self.leftStopped And Self.rightStopped) Then
-						setDie(False)
+						
+						If (isDeadLineEffect And Not Self.isDead And Self.footPointY > (MapManager.actualDownCameraLimit Shl 6)) Then
+							Self.footPointY = ((MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl 6) + f24C
+							setDie(False, -1600)
+						EndIf
+						
+						If (Self.leftStopped And Self.rightStopped) Then
+							setDie(False)
+						EndIf
 					EndIf
 				EndIf
+				
+			ElseIf (Self.outOfControlObject <> Null) Then
+				Self.outOfControlObject.logic()
+				Self.controlObjectLogic = True
 			EndIf
-			
-		ElseIf (Self.outOfControlObject <> Null) Then
-			Self.outOfControlObject.logic()
-			Self.controlObjectLogic = True
-		EndIf
-		
-	End
+		End
 	
 	Public Method terminalLogic:Void()
 		
-		If (terminalType = CHARACTER_AMY) Then
+		If (terminalType = 3) Then
 			Select (terminalState)
 				Case CHARACTER_SONIC
 					
@@ -1662,14 +1663,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						terminalState = 1
 					EndIf
 					
-				Case CHARACTER_TAILS
+				Case 1
 					
 					If (Self.totalVelocity = 0 And Self.animationID = 0) Then
 						terminalState = TER_STATE_LOOK_MOON
 						Self.terminalCount = TERMINAL_COUNT
 					EndIf
 					
-				Case CHARACTER_KNUCKLES
+				Case 2
 					
 					If (Self.terminalCount = 0) Then
 						StageManager.setOnlyScoreCal()
@@ -1677,13 +1678,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						terminalState = TER_STATE_LOOK_MOON_WAIT
 					EndIf
 					
-				Case CHARACTER_AMY
+				Case 3
 					
 					If (Self.terminalCount = 0 And StageManager.isScoreBarOut()) Then
 						terminalState = TER_STATE_CHANGE_1
 						Self.collisionState = TER_STATE_CHANGE_1
 						Self.velY = Self.isInWater ? JUMP_INWATER_START_VELOCITY : JUMP_START_VELOCITY
-						Self.velX = CHARACTER_SONIC
+						Self.velX = 0
 						Self.worldCal.actionState = 1
 						MapManager.setCameraUpLimit(MapManager.getCamera().y)
 					EndIf
@@ -1708,8 +1709,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 					
 					If (Self.terminalCount = 0) Then
-						Self.velY = CHARACTER_SONIC
-						Self.velX = CHARACTER_SONIC
+						Self.velY = 0
+						Self.velX = 0
 						MapManager.setCameraRightLimit(MapManager.getPixelWidth())
 						MapManager.setFocusObj(Null)
 						Self.terminalCount = ANI_YELL
@@ -1736,7 +1737,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Default
 			End Select
 		EndIf
-		
 	End
 	
 	Public Method drawCharacter:Void(g:MFGraphics)
@@ -1749,7 +1749,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		drawCollisionRect(g)
 		
 		If (Self.waterSprayFlag And StageManager.getCurrentZoneId() = 4 And waterSprayDrawer <> Null) Then
-			waterSprayDrawer.draw(g, CHARACTER_SONIC, (Self.waterSprayX Shr 6) - camera.x, StageManager.getWaterLevel() - camera.y, False, CHARACTER_SONIC)
+			waterSprayDrawer.draw(g, 0, (Self.waterSprayX Shr 6) - camera.x, StageManager.getWaterLevel() - camera.y, False, CHARACTER_SONIC)
 			
 			If (waterSprayDrawer.checkEnd()) Then
 				Self.waterSprayFlag = False
@@ -1759,7 +1759,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		If (Not IsGamePause) Then
 			If (Self.isDead) Then
-				Self.velY += (Self.isAntiGravity ? EFFECT_NONE : CHARACTER_TAILS) * getGravity()
+				Self.velY += (Self.isAntiGravity ? EFFECT_NONE : 1) * getGravity()
 				Self.footPointX += Self.velX
 				Self.footPointY += Self.velY
 			EndIf
@@ -1776,8 +1776,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					i = 16
 				EndIf
 				
-				MyAPI.drawRegion(g, mFImage, i2, CHARACTER_SONIC, 16, 16, CHARACTER_SONIC, i3, i, ANI_BANK_2)
-				Self.breatheNumY -= CHARACTER_TAILS
+				MyAPI.drawRegion(g, mFImage, i2, 0, 16, 16, 0, i3, i, ANI_BANK_2)
+				Self.breatheNumY -= 1
 			EndIf
 		EndIf
 		
@@ -1785,21 +1785,21 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			drawFadeBase(g, SPIN_LV2_COUNT)
 		EndIf
 		
-		If (terminalType = CHARACTER_AMY) Then
-			If (terminalState < CHARACTER_KNUCKLES Or terminalState >= ITEM_RING_5) Then
-				Self.moonStarFrame1 = CHARACTER_SONIC
+		If (terminalType = 3) Then
+			If (terminalState < 2 Or terminalState >= ITEM_RING_5) Then
+				Self.moonStarFrame1 = 0
 			Else
-				moonStarDrawer.draw(g, CHARACTER_SONIC, (((MOON_STAR_DES_X_1 - MOON_STAR_ORI_X_1) * Self.moonStarFrame1) / MOON_STAR_FRAMES_1) + MOON_STAR_ORI_X_1, ((Self.moonStarFrame1 * ANI_PUSH_WALL) / MOON_STAR_FRAMES_1) + MOON_STAR_ORI_Y_1, True, CHARACTER_SONIC)
-				Self.moonStarFrame1 += CHARACTER_TAILS
+				moonStarDrawer.draw(g, 0, (((MOON_STAR_DES_X_1 - MOON_STAR_ORI_X_1) * Self.moonStarFrame1) / MOON_STAR_FRAMES_1) + MOON_STAR_ORI_X_1, ((Self.moonStarFrame1 * ANI_PUSH_WALL) / MOON_STAR_FRAMES_1) + MOON_STAR_ORI_Y_1, True, CHARACTER_SONIC)
+				Self.moonStarFrame1 += 1
 			EndIf
 			
 			If (terminalState = ITEM_RING_10) Then
-				moonStarDrawer.draw(g, CHARACTER_TAILS, (((MOON_STAR_DES_X_1 - MOON_STAR_ORI_X_1) * Self.moonStarFrame2) / MOON_STAR_FRAMES_2) + MOON_STAR_ORI_X_1, ((Self.moonStarFrame2 * ANI_PUSH_WALL) / MOON_STAR_FRAMES_2) + MOON_STAR_ORI_Y_1, True, CHARACTER_SONIC)
-				Self.moonStarFrame2 += CHARACTER_TAILS
+				moonStarDrawer.draw(g, 1, (((MOON_STAR_DES_X_1 - MOON_STAR_ORI_X_1) * Self.moonStarFrame2) / MOON_STAR_FRAMES_2) + MOON_STAR_ORI_X_1, ((Self.moonStarFrame2 * ANI_PUSH_WALL) / MOON_STAR_FRAMES_2) + MOON_STAR_ORI_Y_1, True, CHARACTER_SONIC)
+				Self.moonStarFrame2 += 1
 				Return
 			EndIf
 			
-			Self.moonStarFrame2 = CHARACTER_SONIC
+			Self.moonStarFrame2 = 0
 		EndIf
 		
 	End
@@ -1821,7 +1821,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.posX = Self.footPointX
 			Self.posY = Self.footPointY
 			
-			If (Self.collisionState = CHARACTER_KNUCKLES) Then
+			If (Self.collisionState = 2) Then
 				collisionLogicOnObject()
 			ElseIf (Self.isInWater) Then
 				Self.worldCal.actionLogic(Self.velX / 2, Self.velY / 2, (Int) ((((Float) Self.totalVelocity) * IN_WATER_WALK_SPEED_SCALE1) / IN_WATER_WALK_SPEED_SCALE2))
@@ -1863,26 +1863,26 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			End Select
 			
 			If (Self.isInWater) Then
-				Self.drawer.setSpeed(CHARACTER_TAILS, CHARACTER_KNUCKLES)
+				Self.drawer.setSpeed(1, 2)
 			Else
-				Self.drawer.setSpeed(CHARACTER_TAILS, CHARACTER_TAILS)
+				Self.drawer.setSpeed(1, 1)
 			EndIf
 			
-			If (Self.animationID = CHARACTER_TAILS) Then
+			If (Self.animationID = 1) Then
 				If (Self.isInSnow) Then
-					Self.drawer.setSpeed(CHARACTER_TAILS, CHARACTER_KNUCKLES)
+					Self.drawer.setSpeed(1, 2)
 				Else
-					Self.drawer.setSpeed(CHARACTER_TAILS, CHARACTER_TAILS)
+					Self.drawer.setSpeed(1, 1)
 				EndIf
 			EndIf
 			
 			drawCharacter(g)
 			
-			If (characterID = CHARACTER_AMY) Then
+			If (characterID = 3) Then
 				If (Self.animationID = 4 And Not IsGamePause) Then
 					If (Not Self.ducting) Then
 						soundInstance.playLoopSe(ANI_ROPE_ROLL_1)
-					ElseIf (Self.ductingCount Mod CHARACTER_KNUCKLES = 0) Then
+					ElseIf (Self.ductingCount Mod 2 = 0) Then
 						soundInstance.stopLoopSe()
 						soundInstance.playLoopSe(ANI_ROPE_ROLL_1)
 					EndIf
@@ -1927,7 +1927,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Case MOON_STAR_DES_Y_1
 						Self.animationID = ANI_ROPE_ROLL_1
 					Case ANI_POAL_PULL_2
-						Self.animationID = CHARACTER_TAILS
+						Self.animationID = 1
 					Case ANI_CELEBRATE_1
 					Case ANI_SMALL_ZERO_Y
 						StageManager.setStagePass()
@@ -1944,13 +1944,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						If (Key.repeat(Key.gDown)) Then
 							Self.animationID = MAX_ITEM
 						Else
-							Self.animationID = CHARACTER_SONIC
+							Self.animationID = 0
 						EndIf
 						
 					Case ANI_BREATHE
-						Self.animationID = CHARACTER_TAILS
+						Self.animationID = 1
 					Case ANI_VS_FAKE_KNUCKLE
-						Self.animationID = CHARACTER_SONIC
+						Self.animationID = 0
 					Default
 				End Select
 			EndIf
@@ -1980,29 +1980,29 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Int drawDegree = Self.faceDegree
 		Int offset = (-(getCollisionRectHeight() + PlayerSonic.BACK_JUMP_SPEED_X)) / 2
 		
-		If (characterID = CHARACTER_KNUCKLES And Self.myAnimationID >= ANI_ATTACK_2 And Self.myAnimationID <= ANI_BAR_ROLL_1) Then
+		If (characterID = 2 And Self.myAnimationID >= ANI_ATTACK_2 And Self.myAnimationID <= ANI_BAR_ROLL_1) Then
 			offset = -384
-		ElseIf (Self.animationID = ANI_SLIP And getAnimationOffset() = CHARACTER_TAILS) Then
-			drawDegree = CHARACTER_SONIC
+		ElseIf (Self.animationID = ANI_SLIP And getAnimationOffset() = 1) Then
+			drawDegree = 0
 			offset = -1408
 		ElseIf (Self.animationID = 4 Or Self.animationID = MAX_ITEM Or Self.animationID = ANI_SQUAT_PROCESS Or Self.animationID = ITEM_RING_5 Or Self.animationID = ITEM_RING_10 Or Self.animationID = MOON_STAR_ORI_Y_1 Or Self.animationID = ANI_ATTACK_2 Or Self.animationID = SPIN_KEY_COUNT) Then
 			offset = -640
 		ElseIf (Self.animationID = ANI_ROPE_ROLL_1 Or Self.animationID = MOON_STAR_DES_Y_1) Then
-			offset = CHARACTER_SONIC
+			offset = 0
 		EndIf
 		
 		If (characterID = 0 And Self.myAnimationID = ANI_ROPE_ROLL_1) Then
 			offset_x = Def.TOUCH_HELP_LEFT_X
-			offset_y = CHARACTER_SONIC
-		ElseIf (characterID = CHARACTER_AMY And Self.myAnimationID = ANI_LOOK_UP_1) Then
+			offset_y = 0
+		ElseIf (characterID = 3 And Self.myAnimationID = ANI_LOOK_UP_1) Then
 			offset_x = Def.TOUCH_HELP_LEFT_X
 			offset_y = TitleState.CHARACTER_RECORD_BG_OFFSET
-		ElseIf (characterID = CHARACTER_AMY And Self.myAnimationID = ANI_SMALL_ZERO_Y) Then
+		ElseIf (characterID = 3 And Self.myAnimationID = ANI_SMALL_ZERO_Y) Then
 			offset_x = Def.TOUCH_HELP_LEFT_X
 			offset_y = SIDE_FOOT_FROM_CENTER
-		ElseIf (characterID <> CHARACTER_KNUCKLES Or Self.myAnimationID < ANI_WIND_JUMP Or Self.myAnimationID > LOOK_COUNT) Then
-			offset_x = CHARACTER_SONIC
-			offset_y = CHARACTER_SONIC
+		ElseIf (characterID <> 2 Or Self.myAnimationID < ANI_WIND_JUMP Or Self.myAnimationID > LOOK_COUNT) Then
+			offset_x = 0
+			offset_y = 0
 		ElseIf (player.isAntiGravity) Then
 			If (Self.faceDirection) Then
 				offset_x = SIDE_FOOT_FROM_CENTER
@@ -2020,8 +2020,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			offset_y = SIDE_FOOT_FROM_CENTER
 		EndIf
 		
-		Int bodyCenterX = getNewPointX(Self.footPointX, CHARACTER_SONIC, offset, drawDegree)
-		Int bodyCenterY = getNewPointY(Self.footPointY, CHARACTER_SONIC, offset, drawDegree)
+		Int bodyCenterX = getNewPointX(Self.footPointX, 0, offset, drawDegree)
+		Int bodyCenterY = getNewPointY(Self.footPointY, 0, offset, drawDegree)
 		
 		If (invincibleCount > 0) Then
 			If (invincibleDrawer <> Null) Then
@@ -2029,13 +2029,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 			
 			If (systemClock Mod 2 = 0) Then
-				Effect.showEffect(invincibleAnimation, CHARACTER_TAILS, (bodyCenterX Shr 6) + MyRandom.nextInt(-3, CHARACTER_AMY), (bodyCenterY Shr 6) + MyRandom.nextInt(-3, CHARACTER_AMY), CHARACTER_SONIC)
+				Effect.showEffect(invincibleAnimation, 1, (bodyCenterX Shr 6) + MyRandom.nextInt(-3, 3), (bodyCenterY Shr 6) + MyRandom.nextInt(-3, 3), CHARACTER_SONIC)
 			EndIf
 			
 		ElseIf (shieldType <= 0) Then
 		Else
 			
-			If (shieldType = CHARACTER_TAILS) Then
+			If (shieldType = 1) Then
 				drawInMap(g, bariaDrawer, bodyCenterX + offset_x, bodyCenterY + offset_y)
 			ElseIf (isAttracting()) Then
 				drawInMap(g, gBariaDrawer, bodyCenterX + offset_x, bodyCenterY + offset_y)
@@ -2049,10 +2049,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Protected Method getAnimationOffset:Int(degree:Int)
-		For (Int resault = CHARACTER_SONIC; resault < DEGREE_DIVIDE.length; resault += CHARACTER_TAILS)
+		For (Int resault = 0; resault < DEGREE_DIVIDE.length; resault += 1)
 			
 			If (degree < DEGREE_DIVIDE[resault]) Then
-				Return resault Mod CHARACTER_KNUCKLES
+				Return resault Mod 2
 			EndIf
 			
 		Next
@@ -2060,7 +2060,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Protected Method getTransId:Int(degree:Int)
-		Int resault = CHARACTER_SONIC
+		Int resault = 0
 		While (resault < DEGREE_DIVIDE.length) {
 			
 			If (degree < DEGREE_DIVIDE[resault]) Then
@@ -2068,9 +2068,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				break
 			EndIf
 			
-			resault += CHARACTER_TAILS
+			resault += 1
 		End
-		Return ((resault + CHARACTER_TAILS) / CHARACTER_KNUCKLES) Mod 4
+		Return ((resault + 1) / 2) Mod 4
 	End
 	
 	Protected Method getTrans:Int(degree:Int)
@@ -2086,14 +2086,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Case CHARACTER_SONIC
 					re = 4
 					break
-				Case CHARACTER_AMY
+				Case 3
 					re = ITEM_RING_10
 					break
 				Case MAX_ITEM
-					re = CHARACTER_KNUCKLES
+					re = 2
 					break
 				Case ITEM_RING_5
-					re = CHARACTER_TAILS
+					re = 1
 					break
 				Default
 					break
@@ -2102,10 +2102,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Select (re)
 			Case CHARACTER_SONIC
-			Case CHARACTER_AMY
+			Case 3
 			Case MAX_ITEM
 			Case ITEM_RING_5
-				re ^= CHARACTER_KNUCKLES
+				re ^= 2
 				break
 		End Select
 		Return re
@@ -2116,7 +2116,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Public Method getFocusX:Int()
-		Return getNewPointX(Self.footPointX, CHARACTER_SONIC, -768, Self.faceDegree) Shr 6
+		Return getNewPointX(Self.footPointX, 0, -768, Self.faceDegree) Shr 6
 	End
 	
 	Public Method getFocusY:Int()
@@ -2128,7 +2128,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			If (Self.lookCount = 0) Then
 				Select (Self.focusMovingState)
-					Case CHARACTER_TAILS
+					Case 1
 						
 						If (Self.focusOffsetY < FOCUS_MAX_OFFSET) Then
 							Self.focusOffsetY += FOCUS_MOVE_SPEED
@@ -2140,7 +2140,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						EndIf
 						
 						break
-					Case CHARACTER_KNUCKLES
+					Case 2
 						
 						If (Self.focusOffsetY > (-FOCUS_MAX_OFFSET)) Then
 							Self.focusOffsetY -= FOCUS_MOVE_SPEED
@@ -2155,13 +2155,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				End Select
 			EndIf
 			
-			Self.lookCount -= CHARACTER_TAILS
+			Self.lookCount -= 1
 			
 			If (Self.focusOffsetY > 0) Then
 				Self.focusOffsetY -= FOCUS_MOVE_SPEED
 				
 				If (Self.focusOffsetY < 0) Then
-					Self.focusOffsetY = CHARACTER_SONIC
+					Self.focusOffsetY = 0
 				EndIf
 			EndIf
 			
@@ -2169,12 +2169,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Self.focusOffsetY += FOCUS_MOVE_SPEED
 				
 				If (Self.focusOffsetY > 0) Then
-					Self.focusOffsetY = CHARACTER_SONIC
+					Self.focusOffsetY = 0
 				EndIf
 			EndIf
 		EndIf
 		
-		Return (getNewPointY(Self.footPointY, CHARACTER_SONIC, -768, Self.faceDegree) Shr 6) + ((Self.isAntiGravity ? CHARACTER_TAILS : EFFECT_NONE) * Self.focusOffsetY)
+		Return (getNewPointY(Self.footPointY, 0, -768, Self.faceDegree) Shr 6) + ((Self.isAntiGravity ? 1 : EFFECT_NONE) * Self.focusOffsetY)
 	End
 	
 	Public Method collisionLogicOnObject:Void()
@@ -2206,7 +2206,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 			
 		ElseIf (Self.collisionState = TER_STATE_LOOK_MOON And Not Self.piping) Then
-			Self.velY = CHARACTER_SONIC
+			Self.velY = 0
 		EndIf
 		
 	End
@@ -2258,7 +2258,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Private Method faceSlopeChk:Void()
-		Int slopeVelocity = (Sin(Self.faceDegree) * (getGravity() * (Self.isAntiGravity ? EFFECT_NONE : CHARACTER_TAILS))) / 100
+		Int slopeVelocity = (Sin(Self.faceDegree) * (getGravity() * (Self.isAntiGravity ? EFFECT_NONE : 1))) / 100
 	End
 	
 	Private Method decelerate:Void()
@@ -2269,19 +2269,19 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.totalVelocity -= resistance
 			
 			If (Self.totalVelocity < 0) Then
-				Self.totalVelocity = CHARACTER_SONIC
+				Self.totalVelocity = 0
 			EndIf
 			
 		ElseIf (Self.totalVelocity < 0) Then
 			Self.totalVelocity += resistance
 			
 			If (Self.totalVelocity > 0) Then
-				Self.totalVelocity = CHARACTER_SONIC
+				Self.totalVelocity = 0
 			EndIf
 		EndIf
 		
 		If (Self.totalVelocity * preTotalVelocity <= 0 And Self.animationID = 4) Then
-			Self.animationID = CHARACTER_SONIC
+			Self.animationID = 0
 		EndIf
 		
 	End
@@ -2290,13 +2290,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Int preTotalVelocity
 		Self.leavingBar = False
 		Self.doJumpForwardly = False
-		Self.degreeRotateMode = CHARACTER_SONIC
+		Self.degreeRotateMode = 0
 		
 		If (Self.slipFlag Or Self.totalVelocity <> 0) Then
-			Int fakeGravity = getSlopeGravity() * (Self.isAntiGravity ? EFFECT_NONE : CHARACTER_TAILS)
+			Int fakeGravity = getSlopeGravity() * (Self.isAntiGravity ? EFFECT_NONE : 1)
 			
 			If (Self.slipFlag) Then
-				fakeGravity *= CHARACTER_AMY
+				fakeGravity *= 3
 			EndIf
 			
 			Int velChange = (Sin(Self.faceDegree) * fakeGravity) / 100
@@ -2309,18 +2309,18 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			If (Self.animationID = 4) Then
 				If (Self.totalVelocity >= 0) Then
 					If (velChange < 0) Then
-						velChange Shr= CHARACTER_KNUCKLES
+						velChange Shr= 2
 					EndIf
 					
 				ElseIf (velChange > 0) Then
-					velChange Shr= CHARACTER_KNUCKLES
+					velChange Shr= 2
 				EndIf
 			EndIf
 			
 			Self.totalVelocity += velChange
 			
 			If (Self.totalVelocity * preTotalVelocity <= 0 And Self.animationID = 4) Then
-				Self.animationID = CHARACTER_SONIC
+				Self.animationID = 0
 				Self.faceDirection = preTotalVelocity > 0 ? True : False
 			EndIf
 		EndIf
@@ -2330,7 +2330,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			If ((Not Self.isAntiGravity And Key.repeat(Key.gLeft)) Or ((Self.isAntiGravity And Key.repeat(Key.gRight)) Or doBrake())) Then
 				If (Self.animationID = MAX_ITEM) Then
-					Self.animationID = CHARACTER_SONIC
+					Self.animationID = 0
 				EndIf
 				
 				If (Not ((Self.animationID = 4 And Self.collisionState = Null) Or doBrake())) Then
@@ -2349,11 +2349,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						
 						If (Self.totalVelocity < 0) Then
 							If (Self.onBank) Then
-								Self.totalVelocity = CHARACTER_SONIC
+								Self.totalVelocity = 0
 								Self.onBank = False
 								Self.bankwalking = False
 							Else
-								Self.totalVelocity = (CHARACTER_SONIC - reversePower) Shr CHARACTER_KNUCKLES
+								Self.totalVelocity = (CHARACTER_SONIC - reversePower) Shr 2
 							EndIf
 						EndIf
 						
@@ -2381,7 +2381,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 			ElseIf ((Not Self.isAntiGravity And Key.repeat(Key.gRight)) Or ((Self.isAntiGravity And Key.repeat(Key.gLeft)) Or isTerminalRunRight())) Then
 				If (Self.animationID = MAX_ITEM) Then
-					Self.animationID = CHARACTER_SONIC
+					Self.animationID = 0
 				EndIf
 				
 				If (Not (Self.animationID = 4 And Self.collisionState = Null)) Then
@@ -2400,11 +2400,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						
 						If (Self.totalVelocity > EFFECT_NONE) Then
 							If (Self.onBank) Then
-								Self.totalVelocity = CHARACTER_SONIC
+								Self.totalVelocity = 0
 								Self.onBank = False
 								Self.bankwalking = False
 							Else
-								Self.totalVelocity = reversePower Shr CHARACTER_KNUCKLES
+								Self.totalVelocity = reversePower Shr 2
 							EndIf
 						EndIf
 						
@@ -2434,25 +2434,25 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		If (Self.animationID <> EFFECT_NONE) Then
 			If (Abs(Self.totalVelocity) <= 0) Then
-				If (Not (Self.animationID = ANI_LOOK_UP_1 Or Self.animationID = ANI_LOOK_UP_2 Or Self.animationID = FADE_FILL_WIDTH Or Self.animationID = MAX_ITEM Or Self.collisionState = CHARACTER_TAILS)) Then
-					Self.animationID = CHARACTER_SONIC
+				If (Not (Self.animationID = ANI_LOOK_UP_1 Or Self.animationID = ANI_LOOK_UP_2 Or Self.animationID = FADE_FILL_WIDTH Or Self.animationID = MAX_ITEM Or Self.collisionState = 1)) Then
+					Self.animationID = 0
 					Self.bankwalking = False
 					checkCliffAnimation()
 				EndIf
 				
 			ElseIf (Not (Self.animationID = 4 Or Self.animationID = ANI_CELEBRATE_1 Or Self.animationID = SPIN_LV2_COUNT_CONF Or Self.animationID = MAX_ITEM Or Self.animationID = ANI_POAL_PULL_2)) Then
 				If (Abs(Self.totalVelocity) < SPEED_LIMIT_LEVEL_1) Then
-					Self.animationID = CHARACTER_TAILS
+					Self.animationID = 1
 				ElseIf (Abs(Self.totalVelocity) < SPEED_LIMIT_LEVEL_2) Then
-					Self.animationID = CHARACTER_KNUCKLES
+					Self.animationID = 2
 				ElseIf (Not Self.slipping) Then
-					Self.animationID = CHARACTER_AMY
+					Self.animationID = 3
 				EndIf
 			EndIf
 		EndIf
 		
 		waitingChk()
-		Int slopeVelocity = (Sin(Self.faceDegree) * (getGravity() * (Self.isAntiGravity ? EFFECT_NONE : CHARACTER_TAILS))) / 100
+		Int slopeVelocity = (Sin(Self.faceDegree) * (getGravity() * (Self.isAntiGravity ? EFFECT_NONE : 1))) / 100
 		faceSlopeChk()
 		
 		If (Self.animationID <> EFFECT_NONE And Self.attackLevel = 0 And Self.animationID <> 4 And Abs(Self.totalVelocity) > Abs(slopeVelocity) And Self.fallTime = 0) Then
@@ -2489,7 +2489,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		If (Not spinLogic()) Then
 			If (canDoJump() And Key.press(Key.gUp | Key.B_HIGH_JUMP)) Then
-				If ((characterID <> CHARACTER_AMY Or PlayerAmy.isCanJump) And Not (characterID = CHARACTER_AMY And (getCharacterAnimationID() = MOON_STAR_ORI_Y_1 Or getCharacterAnimationID() = ANI_ATTACK_2))) Then
+				If ((characterID <> 3 Or PlayerAmy.isCanJump) And Not (characterID = 3 And (getCharacterAnimationID() = MOON_STAR_ORI_Y_1 Or getCharacterAnimationID() = ANI_ATTACK_2))) Then
 					doJump()
 				EndIf
 				
@@ -2503,13 +2503,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				EndIf
 				
 				If (Self.animationID = ANI_LOOK_UP_2) Then
-					Self.focusMovingState = CHARACTER_TAILS
+					Self.focusMovingState = 1
 				EndIf
 				
 			Else
 				
 				If (Self.animationID = FADE_FILL_WIDTH And Self.drawer.checkEnd()) Then
-					Self.animationID = CHARACTER_SONIC
+					Self.animationID = 0
 				EndIf
 				
 				If (Self.animationID = ANI_LOOK_UP_1 Or Self.animationID = ANI_LOOK_UP_2) Then
@@ -2523,12 +2523,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		If (((Not Self.isAntiGravity And Self.faceDegree >= 90 And Self.faceDegree <= 270) Or (Self.isAntiGravity And (Self.faceDegree <= 90 Or Self.faceDegree >= 270))) And ((Abs((FAKE_GRAVITY_ON_WALK * Cos(Self.faceDegree)) / 100) >= (Self.totalVelocity * Self.totalVelocity) / 4864 And Not Self.ducting) Or Self.animationID = ANI_BRAKE)) Then
 			calDivideVelocity()
-			Int bodyCenterX = getNewPointX(Self.posX, CHARACTER_SONIC, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
-			Int bodyCenterY = getNewPointY(Self.posY, CHARACTER_SONIC, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
-			newPointX = getNewPointX(bodyCenterX, CHARACTER_SONIC, Self.collisionRect.getHeight() / 2, Self.faceDegree)
+			Int bodyCenterX = getNewPointX(Self.posX, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
+			Int bodyCenterY = getNewPointY(Self.posY, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
+			newPointX = getNewPointX(bodyCenterX, 0, Self.collisionRect.getHeight() / 2, Self.faceDegree)
 			Self.footPointX = newPointX
 			Self.posX = newPointX
-			newPointX = getNewPointY(bodyCenterY, CHARACTER_SONIC, Self.collisionRect.getHeight() / 2, Self.faceDegree)
+			newPointX = getNewPointY(bodyCenterY, 0, Self.collisionRect.getHeight() / 2, Self.faceDegree)
 			Self.footPointY = newPointX
 			Self.posY = newPointX
 			Self.collisionState = 1
@@ -2542,33 +2542,33 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.totalVelocity -= resistance
 					
 					If (Self.totalVelocity < 0) Then
-						Self.totalVelocity = CHARACTER_SONIC
+						Self.totalVelocity = 0
 					EndIf
 					
 				ElseIf (Self.totalVelocity < 0) Then
 					Self.totalVelocity += resistance
 					
 					If (Self.totalVelocity > 0) Then
-						Self.totalVelocity = CHARACTER_SONIC
+						Self.totalVelocity = 0
 					EndIf
 				EndIf
 				
 				If (Self.totalVelocity * preTotalVelocity <= 0 And Self.animationID = 4) Then
-					Self.animationID = CHARACTER_SONIC
+					Self.animationID = 0
 					Self.faceDirection = preTotalVelocity > 0 ? True : False
 				EndIf
 			EndIf
 			
 			Print(BPDef.gameID)
 			
-			If (Self.collisionState = CHARACTER_TAILS) Then
+			If (Self.collisionState = 1) Then
 				Int i
 				newPointX = Self.velY
 				
 				If (Self.isAntiGravity) Then
 					i = EFFECT_NONE
 				Else
-					i = CHARACTER_TAILS
+					i = 1
 				EndIf
 				
 				Self.velY = newPointX + (i * getGravity())
@@ -2581,16 +2581,16 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Int i
 		Self.leavingBar = False
 		Self.doJumpForwardly = False
-		Self.degreeRotateMode = CHARACTER_SONIC
+		Self.degreeRotateMode = 0
 		Int tmpPower = Self.movePower
 		Int tmpMaxVel = Self.maxVelocity
 		
 		If (Self.animationID <> MAX_ITEM) Then
 			Int reversePower
 			
-			If (((Key.repeat(Key.gLeft) And (Self.animationID = 0 Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT Or Self.animationID = CHARACTER_TAILS Or Self.animationID = CHARACTER_KNUCKLES Or Self.animationID = CHARACTER_AMY)) Or (Self.isCelebrate And Not Self.faceDirection)) And Not isOnSlip0()) Then
+			If (((Key.repeat(Key.gLeft) And (Self.animationID = 0 Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT Or Self.animationID = 1 Or Self.animationID = 2 Or Self.animationID = 3)) Or (Self.isCelebrate And Not Self.faceDirection)) And Not isOnSlip0()) Then
 				If (Self.animationID = MAX_ITEM) Then
-					Self.animationID = CHARACTER_SONIC
+					Self.animationID = 0
 				EndIf
 				
 				Self.faceDirection = Self.isAntiGravity ? True : False
@@ -2605,7 +2605,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.velX -= reversePower
 					
 					If (Self.velX < 0) Then
-						Self.velX = (CHARACTER_SONIC - reversePower) Shr CHARACTER_KNUCKLES
+						Self.velX = (CHARACTER_SONIC - reversePower) Shr 2
 					Else
 						Self.faceDirection = True
 					EndIf
@@ -2622,9 +2622,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 				EndIf
 				
-			ElseIf ((Key.repeat(Key.gRight) And (Self.animationID = 0 Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT Or Self.animationID = CHARACTER_TAILS Or Self.animationID = CHARACTER_KNUCKLES Or Self.animationID = CHARACTER_AMY)) Or (Self.isCelebrate And Self.faceDirection)) Then
+			ElseIf ((Key.repeat(Key.gRight) And (Self.animationID = 0 Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT Or Self.animationID = 1 Or Self.animationID = 2 Or Self.animationID = 3)) Or (Self.isCelebrate And Self.faceDirection)) Then
 				If (Self.animationID = MAX_ITEM) Then
-					Self.animationID = CHARACTER_SONIC
+					Self.animationID = 0
 				EndIf
 				
 				Self.faceDirection = Self.isAntiGravity ? False : True
@@ -2639,7 +2639,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.velX += reversePower
 					
 					If (Self.velX > EFFECT_NONE) Then
-						Self.velX = reversePower Shr CHARACTER_KNUCKLES
+						Self.velX = reversePower Shr 2
 					Else
 						Self.faceDirection = False
 					EndIf
@@ -2661,17 +2661,17 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		If (Self.animationID <> EFFECT_NONE) Then
 			If (Abs(Self.velX) <= 0) Then
 				If (Not (Self.animationID = ANI_LOOK_UP_1 Or Self.animationID = ANI_LOOK_UP_2 Or Self.animationID = FADE_FILL_WIDTH Or Self.animationID = MAX_ITEM)) Then
-					Self.animationID = CHARACTER_SONIC
+					Self.animationID = 0
 					checkCliffAnimation()
 				EndIf
 				
 			ElseIf (Self.animationID <> 4) Then
 				If (Abs(Self.velX) < SPEED_LIMIT_LEVEL_1) Then
-					Self.animationID = CHARACTER_TAILS
+					Self.animationID = 1
 				ElseIf (Abs(Self.velX) < SPEED_LIMIT_LEVEL_2) Then
-					Self.animationID = CHARACTER_KNUCKLES
+					Self.animationID = 2
 				Else
-					Self.animationID = CHARACTER_AMY
+					Self.animationID = 3
 				EndIf
 			EndIf
 		EndIf
@@ -2681,7 +2681,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		If (Not spinLogic()) Then
 			If (canDoJump() And Not Self.dashRolling And Key.press(Key.gUp | Key.B_HIGH_JUMP)) Then
-				If (characterID <> CHARACTER_AMY Or PlayerAmy.isCanJump) Then
+				If (characterID <> 3 Or PlayerAmy.isCanJump) Then
 					doJump()
 				EndIf
 				
@@ -2695,13 +2695,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				EndIf
 				
 				If (Self.animationID = ANI_LOOK_UP_2) Then
-					Self.focusMovingState = CHARACTER_TAILS
+					Self.focusMovingState = 1
 				EndIf
 				
 			Else
 				
 				If (Self.animationID = FADE_FILL_WIDTH And Self.drawer.checkEnd()) Then
-					Self.animationID = CHARACTER_SONIC
+					Self.animationID = 0
 				EndIf
 				
 				If (Self.animationID = ANI_LOOK_UP_1 Or Self.animationID = ANI_LOOK_UP_2) Then
@@ -2710,21 +2710,21 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 		EndIf
 		
-		If (needRetPower() And Self.collisionState = CHARACTER_KNUCKLES) Then
+		If (needRetPower() And Self.collisionState = 2) Then
 			Int resistance = getRetPower()
 			
 			If (Self.velX > 0) Then
 				Self.velX -= resistance
 				
 				If (Self.velX < 0) Then
-					Self.velX = CHARACTER_SONIC
+					Self.velX = 0
 				EndIf
 				
 			ElseIf (Self.velX < 0) Then
 				Self.velX += resistance
 				
 				If (Self.velX > 0) Then
-					Self.velX = CHARACTER_SONIC
+					Self.velX = 0
 				EndIf
 			EndIf
 		EndIf
@@ -2734,7 +2734,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		If (Self.isAntiGravity) Then
 			i = EFFECT_NONE
 		Else
-			i = CHARACTER_TAILS
+			i = 1
 		EndIf
 		
 		Self.velY = i2 + (i * getGravity())
@@ -2746,13 +2746,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Int i
 		
 		If (Self.faceDegree <> Self.degreeStable) Then
-			Int bodyCenterX = getNewPointX(Self.posX, CHARACTER_SONIC, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
-			Int bodyCenterY = getNewPointY(Self.posY, CHARACTER_SONIC, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
+			Int bodyCenterX = getNewPointX(Self.posX, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
+			Int bodyCenterY = getNewPointY(Self.posY, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
 			Self.faceDegree = Self.degreeStable
-			newPointX = getNewPointX(bodyCenterX, CHARACTER_SONIC, Self.collisionRect.getHeight() / 2, Self.faceDegree)
+			newPointX = getNewPointX(bodyCenterX, 0, Self.collisionRect.getHeight() / 2, Self.faceDegree)
 			Self.footPointX = newPointX
 			Self.posX = newPointX
-			newPointX = getNewPointY(bodyCenterY, CHARACTER_SONIC, Self.collisionRect.getHeight() / 2, Self.faceDegree)
+			newPointX = getNewPointY(bodyCenterY, 0, Self.collisionRect.getHeight() / 2, Self.faceDegree)
 			Self.footPointY = newPointX
 			Self.posY = newPointX
 		EndIf
@@ -2771,12 +2771,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						EndIf
 					EndIf
 					
-					Self.degreeForDraw = MyAPI.calNextPosition((double) Self.degreeForDraw, (double) degreeDes, CHARACTER_TAILS, CHARACTER_AMY)
+					Self.degreeForDraw = MyAPI.calNextPosition((double) Self.degreeForDraw, (double) degreeDes, 1, 3)
 					break
-				Case CHARACTER_TAILS
+				Case 1
 					Self.degreeForDraw += ANI_PULL
 					break
-				Case CHARACTER_KNUCKLES
+				Case 2
 					Self.degreeForDraw -= ANI_PULL
 					break
 			End Select
@@ -2790,7 +2790,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			doWalkPoseInAir()
 		EndIf
 		
-		If (Not (Self.hurtNoControl Or Self.animationID = ANI_YELL Or (characterID = CHARACTER_AMY And Self.myAnimationID >= MAX_ITEM And Self.myAnimationID <= ITEM_RING_10))) Then
+		If (Not (Self.hurtNoControl Or Self.animationID = ANI_YELL Or (characterID = 3 And Self.myAnimationID >= MAX_ITEM And Self.myAnimationID <= ITEM_RING_10))) Then
 			If ((Key.repeat(Key.gLeft) Or (Self.isCelebrate And Not Self.faceDirection)) And Not Self.ducting) Then
 				If (Self.velX > (-Self.maxVelocity)) Then
 					Self.velX -= Self.movePowerInAir
@@ -2833,20 +2833,20 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		If (Self.velY >= -768 - getGravity()) Then
 			Int velX2 = Self.velX Shl MAX_ITEM
-			Int resistance = (velX2 * CHARACTER_AMY) / JUMP_REVERSE_POWER
+			Int resistance = (velX2 * 3) / JUMP_REVERSE_POWER
 			
 			If (velX2 > 0) Then
 				velX2 -= resistance
 				
 				If (velX2 < 0) Then
-					velX2 = CHARACTER_SONIC
+					velX2 = 0
 				EndIf
 				
 			ElseIf (velX2 < 0) Then
 				velX2 -= resistance
 				
 				If (velX2 > 0) Then
-					velX2 = CHARACTER_SONIC
+					velX2 = 0
 				EndIf
 			EndIf
 			
@@ -2854,7 +2854,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		EndIf
 		
 		If (Self.smallJumpCount > 0) Then
-			Self.smallJumpCount -= CHARACTER_TAILS
+			Self.smallJumpCount -= 1
 			
 			If (Not (Self.noVelMinus Or Key.repeat(Key.gUp | Key.B_HIGH_JUMP))) Then
 				newPointX = Self.velY
@@ -2862,7 +2862,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				If (Self.isAntiGravity) Then
 					i = EFFECT_NONE
 				Else
-					i = CHARACTER_TAILS
+					i = 1
 				EndIf
 				
 				Self.velY = newPointX + (i * (getGravity() / 2))
@@ -2871,10 +2871,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				If (Self.isAntiGravity) Then
 					i = EFFECT_NONE
 				Else
-					i = CHARACTER_TAILS
+					i = 1
 				EndIf
 				
-				Self.velY = newPointX + (i * (getGravity() Shr CHARACTER_KNUCKLES))
+				Self.velY = newPointX + (i * (getGravity() Shr 2))
 			EndIf
 		EndIf
 		
@@ -2883,7 +2883,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		If (Self.isAntiGravity) Then
 			i = EFFECT_NONE
 		Else
-			i = CHARACTER_TAILS
+			i = 1
 		EndIf
 		
 		Self.velY = newPointX + (i * getGravity())
@@ -2901,19 +2901,19 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Private Method inputLogicSand:Void()
 		Self.leavingBar = False
 		Self.doJumpForwardly = False
-		Self.degreeRotateMode = CHARACTER_SONIC
+		Self.degreeRotateMode = 0
 		
 		If (Self.velY > 0 And Not Self.sandStanding) Then
 			Self.sandStanding = True
 		EndIf
 		
-		Self.sandFrame += CHARACTER_TAILS
+		Self.sandFrame += 1
 		
 		If (Self.velX = 0) Then
-			Self.sandFrame = CHARACTER_SONIC
-		ElseIf (Self.sandFrame = CHARACTER_TAILS) Then
+			Self.sandFrame = 0
+		ElseIf (Self.sandFrame = 1) Then
 			soundInstance.playSe(70)
-		ElseIf (Self.sandFrame > CHARACTER_KNUCKLES) Then
+		ElseIf (Self.sandFrame > 2) Then
 			soundInstance.playSequenceSe(71)
 		EndIf
 		
@@ -2935,7 +2935,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.velX -= reversePower
 					
 					If (Self.velX < 0) Then
-						Self.velX = (CHARACTER_SONIC - reversePower) Shr CHARACTER_KNUCKLES
+						Self.velX = (CHARACTER_SONIC - reversePower) Shr 2
 					Else
 						Self.faceDirection = True
 					EndIf
@@ -2965,7 +2965,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.velX += reversePower
 					
 					If (Self.velX > EFFECT_NONE) Then
-						Self.velX = reversePower Shr CHARACTER_KNUCKLES
+						Self.velX = reversePower Shr 2
 					Else
 						Self.faceDirection = False
 					EndIf
@@ -2983,27 +2983,27 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				EndIf
 				
 			Else
-				Self.velX = CHARACTER_SONIC
+				Self.velX = 0
 			EndIf
 			
 			If (Abs(Self.velX) <= 64) Then
 				If (Not (((Self instanceof PlayerAmy) And getCharacterAnimationID() = ANI_POAL_PULL And getVelY() < 0) Or Self.animationID = ANI_LOOK_UP_1 Or Self.animationID = ANI_LOOK_UP_2 Or Self.animationID = FADE_FILL_WIDTH)) Then
-					Self.animationID = CHARACTER_SONIC
+					Self.animationID = 0
 				EndIf
 				
-			ElseIf (characterID <> CHARACTER_TAILS Or ((PlayerTails) player).flyCount <= 0) Then
-				If ((Not (Self instanceof PlayerAmy) Or (getCharacterAnimationID() <> 4 And (getCharacterAnimationID() <> MAX_ITEM Or Self.drawer.getCurrentFrame() >= CHARACTER_KNUCKLES))) And Not ((Self instanceof PlayerAmy) And getCharacterAnimationID() = ANI_POAL_PULL And getVelY() < 0)) Then
+			ElseIf (characterID <> 1 Or ((PlayerTails) player).flyCount <= 0) Then
+				If ((Not (Self instanceof PlayerAmy) Or (getCharacterAnimationID() <> 4 And (getCharacterAnimationID() <> MAX_ITEM Or Self.drawer.getCurrentFrame() >= 2))) And Not ((Self instanceof PlayerAmy) And getCharacterAnimationID() = ANI_POAL_PULL And getVelY() < 0)) Then
 					If (Abs(Self.velX) < SPEED_LIMIT_LEVEL_1) Then
-						Self.animationID = CHARACTER_TAILS
+						Self.animationID = 1
 					ElseIf (Abs(Self.velX) < SPEED_LIMIT_LEVEL_2) Then
-						Self.animationID = CHARACTER_KNUCKLES
+						Self.animationID = 2
 					Else
-						Self.animationID = CHARACTER_AMY
+						Self.animationID = 3
 					EndIf
 				EndIf
 				
 			ElseIf (Not (Self.myAnimationID = SPIN_LV2_COUNT Or Self.myAnimationID = HURT_COUNT Or Self.myAnimationID = ANI_BREATHE)) Then
-				((PlayerTails) player).flyCount = CHARACTER_SONIC
+				((PlayerTails) player).flyCount = 0
 			EndIf
 			
 			If (Not ((Self instanceof PlayerAmy) And getCharacterAnimationID() = ANI_POAL_PULL And getVelY() < 0)) Then
@@ -3011,7 +3011,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 			
 			If (characterID = 0) Then
-				Int sandDash = SPEED_LIMIT_LEVEL_1 Shr CHARACTER_KNUCKLES
+				Int sandDash = SPEED_LIMIT_LEVEL_1 Shr 2
 				
 				If (Key.press(Key.gSelect)) Then
 					soundInstance.playSe(4)
@@ -3027,7 +3027,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 							Self.velX += reversePower
 							
 							If (Self.velX > EFFECT_NONE) Then
-								Self.velX = reversePower Shr CHARACTER_KNUCKLES
+								Self.velX = reversePower Shr 2
 							Else
 								Self.faceDirection = False
 							EndIf
@@ -3054,7 +3054,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						Self.velX -= reversePower
 						
 						If (Self.velX < 0) Then
-							Self.velX = (CHARACTER_SONIC - reversePower) Shr CHARACTER_KNUCKLES
+							Self.velX = (CHARACTER_SONIC - reversePower) Shr 2
 						Else
 							Self.faceDirection = True
 						EndIf
@@ -3077,7 +3077,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				If (Not (Key.repeat(Key.gLeft) Or Key.repeat(Key.gRight) Or isTerminalRunRight() Or Self.animationID = EFFECT_NONE)) Then
 					If (Key.repeat(Key.gDown)) Then
 						If (Abs(Self.velX) > 64) Then
-							Self.velX = CHARACTER_SONIC
+							Self.velX = 0
 						ElseIf (Self.animationID <> MAX_ITEM) Then
 							Self.animationID = ANI_SQUAT_PROCESS
 						EndIf
@@ -3089,7 +3089,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				If (Self.animationID <> MAX_ITEM And Key.press(Key.gUp | Key.B_HIGH_JUMP)) Then
 					If ((Self instanceof PlayerTails) And ((PlayerTails) player).flyCount > 0) Then
-						((PlayerTails) player).flyCount = CHARACTER_SONIC
+						((PlayerTails) player).flyCount = 0
 					EndIf
 					
 					doJump()
@@ -3111,14 +3111,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.velX -= resistance
 					
 					If (Self.velX < 0) Then
-						Self.velX = CHARACTER_SONIC
+						Self.velX = 0
 					EndIf
 					
 				ElseIf (Self.velX < 0) Then
 					Self.velX += resistance
 					
 					If (Self.velX > 0) Then
-						Self.velX = CHARACTER_SONIC
+						Self.velX = 0
 					EndIf
 				EndIf
 			EndIf
@@ -3135,7 +3135,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Private Method jumpDirectionX:Int()
-		Return (Self.faceDegree <= 90 Or Self.faceDegree >= 270) ? EFFECT_NONE : CHARACTER_TAILS
+		Return (Self.faceDegree <= 90 Or Self.faceDegree >= 270) ? EFFECT_NONE : 1
 	End
 	
 	Public Method slipJumpOut:Void()
@@ -3169,14 +3169,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		soundInstance.playSe(ANI_SLIP)
 		Self.smallJumpCount = 4
 		Self.onBank = False
-		Self.attackAnimationID = CHARACTER_SONIC
-		Self.attackCount = CHARACTER_SONIC
-		Self.attackLevel = CHARACTER_SONIC
+		Self.attackAnimationID = 0
+		Self.attackCount = 0
+		Self.attackLevel = 0
 		Self.noVelMinus = False
 		Self.doJumpForwardly = True
 		slipJumpOut()
 		
-		If (StageManager.getWaterLevel() > 0 And characterID = CHARACTER_KNUCKLES) Then
+		If (StageManager.getWaterLevel() > 0 And characterID = 2) Then
 			((PlayerKnuckles) player).Floatchk()
 		EndIf
 		
@@ -3203,9 +3203,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		soundInstance.playSe(ANI_SLIP)
 		Self.smallJumpCount = 4
 		Self.onBank = False
-		Self.attackAnimationID = CHARACTER_SONIC
-		Self.attackCount = CHARACTER_SONIC
-		Self.attackLevel = CHARACTER_SONIC
+		Self.attackAnimationID = 0
+		Self.attackCount = 0
+		Self.attackLevel = 0
 		Self.noVelMinus = False
 		Self.doJumpForwardly = True
 	End
@@ -3224,9 +3224,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		soundInstance.playSe(ANI_SLIP)
 		Self.smallJumpCount = 4
 		Self.onBank = False
-		Self.attackAnimationID = CHARACTER_SONIC
-		Self.attackCount = CHARACTER_SONIC
-		Self.attackLevel = CHARACTER_SONIC
+		Self.attackAnimationID = 0
+		Self.attackCount = 0
+		Self.attackLevel = 0
 		Self.noVelMinus = False
 		Self.doJumpForwardly = True
 		slipJumpOut()
@@ -3240,9 +3240,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		soundInstance.playSe(ANI_SLIP)
 		Self.smallJumpCount = 4
 		Self.onBank = False
-		Self.attackAnimationID = CHARACTER_SONIC
-		Self.attackCount = CHARACTER_SONIC
-		Self.attackLevel = CHARACTER_SONIC
+		Self.attackAnimationID = 0
+		Self.attackCount = 0
+		Self.attackLevel = 0
 		Self.noVelMinus = False
 		Self.doJumpForwardly = True
 	End
@@ -3268,11 +3268,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Public Method getHeadPositionY:Int()
-		Return getNewPointY(Self.footPointY, CHARACTER_SONIC, -1536, Self.faceDegree)
+		Return getNewPointY(Self.footPointY, 0, -1536, Self.faceDegree)
 	End
 	
 	Public Method setHeadPositionY:Void(y:Int)
-		Self.footPointY = getNewPointY(y, CHARACTER_SONIC, HEIGHT, Self.faceDegree)
+		Self.footPointY = getNewPointY(y, 0, HEIGHT, Self.faceDegree)
 	End
 	
 	Public Method doWhileCollision:Void(player:PlayerObject, direction:Int)
@@ -3281,7 +3281,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	
 	Public Method setCollisionLayer:Void(layer:Int)
 		
-		If (layer >= 0 And layer <= CHARACTER_TAILS) Then
+		If (layer >= 0 And layer <= 1) Then
 			Self.currentLayer = layer
 		EndIf
 		
@@ -3298,13 +3298,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		If (Self.animationID <> ANI_DEAD_PRE) Then
 			If (Abs(Self.totalVelocity) = 0) Then
-				Self.animationID = CHARACTER_SONIC
+				Self.animationID = 0
 			ElseIf (Abs(Self.totalVelocity) < SPEED_LIMIT_LEVEL_1) Then
-				Self.animationID = CHARACTER_TAILS
+				Self.animationID = 1
 			ElseIf (Abs(Self.totalVelocity) < SPEED_LIMIT_LEVEL_2) Then
-				Self.animationID = CHARACTER_KNUCKLES
+				Self.animationID = 2
 			ElseIf (Not Self.slipping) Then
-				Self.animationID = CHARACTER_AMY
+				Self.animationID = 3
 			EndIf
 		EndIf
 		
@@ -3340,8 +3340,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	
 	Public Method calPreCollisionRect:Void()
 		Int RECT_HEIGHT = getCollisionRectHeight()
-		Self.checkPositionX = getNewPointX(Self.footPointX, CHARACTER_SONIC, (-RECT_HEIGHT) / 2, Self.faceDegree)
-		Self.checkPositionY = getNewPointY(Self.footPointY, CHARACTER_SONIC, (-RECT_HEIGHT) / 2, Self.faceDegree)
+		Self.checkPositionX = getNewPointX(Self.footPointX, 0, (-RECT_HEIGHT) / 2, Self.faceDegree)
+		Self.checkPositionY = getNewPointY(Self.footPointY, 0, (-RECT_HEIGHT) / 2, Self.faceDegree)
 		Self.preCollisionRect.setTwoPosition(Self.checkPositionX - RIGHT_WALK_COLLISION_CHECK_OFFSET_X, Self.checkPositionY - (RECT_HEIGHT / 2), Self.checkPositionX + RIGHT_WALK_COLLISION_CHECK_OFFSET_X, Self.checkPositionY + (RECT_HEIGHT / 2))
 	End
 	
@@ -3388,7 +3388,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			calDivideVelocity()
 		EndIf
 		
-		Self.degreeRotateMode = CHARACTER_SONIC
+		Self.degreeRotateMode = 0
 		
 		If (Not Self.hurtNoControl Or Self.collisionState <> 1 Or ((Self.velY >= 0 Or Self.isAntiGravity) And (Self.velY <= 0 Or Not Self.isAntiGravity))) Then
 			If (Self.collisionState <> TER_STATE_LOOK_MOON) Then
@@ -3431,10 +3431,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Method beStop:Void(newPosition:Int, direction:Int, object:GameObject, isDirectionDown:Bool)
 		
 		If (Self.isAntiGravity) Then
-			If (direction = CHARACTER_TAILS) Then
-				direction = CHARACTER_SONIC
+			If (direction = 1) Then
+				direction = 0
 			ElseIf (direction = 0) Then
-				direction = CHARACTER_TAILS
+				direction = 1
 			EndIf
 		EndIf
 		
@@ -3457,22 +3457,22 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.footPointY = object.getCollisionRect().y1 + Self.collisionRect.getHeight()
 				EndIf
 				
-				If ((Self.collisionState = Null Or Self.collisionState = CHARACTER_KNUCKLES) And Self.faceDegree = 0 And Not (object instanceof ItemObject)) Then
+				If ((Self.collisionState = Null Or Self.collisionState = 2) And Self.faceDegree = 0 And Not (object instanceof ItemObject)) Then
 					setDie(False)
 					break
 				EndIf
 				
-			Case CHARACTER_TAILS
+			Case 1
 				
 				If (Self.collisionState = Null) Then
 					calDivideVelocity()
 				EndIf
 				
-				Self.degreeRotateMode = CHARACTER_SONIC
+				Self.degreeRotateMode = 0
 				Int prey = Self.footPointY
 				
-				If (Not Self.hurtNoControl Or Self.collisionState <> CHARACTER_TAILS Or ((Self.velY >= 0 Or Self.isAntiGravity) And (Self.velY <= 0 Or Not Self.isAntiGravity))) Then
-					If (Not (Self.collisionState = CHARACTER_KNUCKLES Or (object instanceof Spring))) Then
+				If (Not Self.hurtNoControl Or Self.collisionState <> 1 Or ((Self.velY >= 0 Or Self.isAntiGravity) And (Self.velY <= 0 Or Not Self.isAntiGravity))) Then
+					If (Not (Self.collisionState = 2 Or (object instanceof Spring))) Then
 						land()
 					EndIf
 					
@@ -3489,14 +3489,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					setVelY(CHARACTER_SONIC)
 					Self.worldCal.stopMoveY()
 					
-					If (Not (Self.collisionState = CHARACTER_KNUCKLES And isFootOnObject(object))) Then
+					If (Not (Self.collisionState = 2 And isFootOnObject(object))) Then
 						Self.footOnObject = object
 						Self.collisionState = TER_STATE_LOOK_MOON
 						Self.collisionChkBreak = True
 					EndIf
 					
 					If (Not (Self.isSidePushed = 4 And isDirectionDown)) Then
-						If (Self.isSidePushed = CHARACTER_AMY) Then
+						If (Self.isSidePushed = 3) Then
 							Self.footPointX = Self.bePushedFootX
 							Print("~~RIGHT footPointX:" + Self.footPointX)
 							
@@ -3505,7 +3505,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 								Self.worldCal.stopMoveX()
 							EndIf
 							
-						ElseIf (Self.isSidePushed = CHARACTER_KNUCKLES) Then
+						ElseIf (Self.isSidePushed = 2) Then
 							Self.footPointX = Self.bePushedFootX
 							Print("~~LEFT footPointX:" + Self.footPointX)
 							
@@ -3525,24 +3525,24 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Self.movedSpeedY = Self.footPointY - prey
 				Self.onObjectContinue = True
 				break
-			Case CHARACTER_KNUCKLES
-			Case CHARACTER_AMY
+			Case 2
+			Case 3
 				Int prex
 				Int curx
 				
-				If (direction = CHARACTER_AMY) Then
+				If (direction = 3) Then
 					prex = Self.footPointX
-					Self.footPointX = (object.getCollisionRect().x0 - (Self.collisionRect.getWidth() / 2)) + CHARACTER_TAILS
-					Self.footPointX = getNewPointX(Self.footPointX, CHARACTER_SONIC, getCurrentHeight() / 2, Self.faceDegree)
+					Self.footPointX = (object.getCollisionRect().x0 - (Self.collisionRect.getWidth() / 2)) + 1
+					Self.footPointX = getNewPointX(Self.footPointX, 0, getCurrentHeight() / 2, Self.faceDegree)
 					curx = Self.footPointX
 					Self.bePushedFootX = Self.footPointX - RIGHT_WALK_COLLISION_CHECK_OFFSET_X
 					Self.movedSpeedX = curx - prex
 					
 					If (Not (object instanceof DekaPlatform)) Then
-						Self.movedSpeedX = CHARACTER_SONIC
+						Self.movedSpeedX = 0
 					EndIf
 					
-					If (Key.repeat(Key.gRight) And ((Self.collisionState = Null Or Self.collisionState = CHARACTER_KNUCKLES Or Self.collisionState = CHARACTER_AMY) And Not Self.isAttacking)) Then
+					If (Key.repeat(Key.gRight) And ((Self.collisionState = Null Or Self.collisionState = 2 Or Self.collisionState = 3) And Not Self.isAttacking)) Then
 						Self.animationID = ANI_PUSH_WALL
 					EndIf
 					
@@ -3554,17 +3554,17 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.rightStopped = True
 				Else
 					prex = Self.footPointX
-					Self.footPointX = (object.getCollisionRect().x1 + (Self.collisionRect.getWidth() / 2)) - CHARACTER_TAILS
-					Self.footPointX = getNewPointX(Self.footPointX, CHARACTER_SONIC, getCurrentHeight() / 2, Self.faceDegree)
+					Self.footPointX = (object.getCollisionRect().x1 + (Self.collisionRect.getWidth() / 2)) - 1
+					Self.footPointX = getNewPointX(Self.footPointX, 0, getCurrentHeight() / 2, Self.faceDegree)
 					curx = Self.footPointX
 					Self.bePushedFootX = Self.footPointX
 					Self.movedSpeedX = curx - prex
 					
 					If (Not (object instanceof DekaPlatform)) Then
-						Self.movedSpeedX = CHARACTER_SONIC
+						Self.movedSpeedX = 0
 					EndIf
 					
-					If (Key.repeat(Key.gLeft) And ((Self.collisionState = Null Or Self.collisionState = CHARACTER_KNUCKLES Or Self.collisionState = CHARACTER_AMY) And Not Self.isAttacking)) Then
+					If (Key.repeat(Key.gLeft) And ((Self.collisionState = Null Or Self.collisionState = 2 Or Self.collisionState = 3) And Not Self.isAttacking)) Then
 						Self.animationID = ANI_PUSH_WALL
 					EndIf
 					
@@ -3577,11 +3577,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				EndIf
 				
 				If (Self.collisionState = Null And Self.animationID = 4 And (object instanceof Hari)) Then
-					Self.animationID = CHARACTER_SONIC
+					Self.animationID = 0
 				EndIf
 				
 				Select (Self.collisionState)
-					Case CHARACTER_TAILS
+					Case 1
 						Self.xFirst = False
 						break
 				End Select
@@ -3602,10 +3602,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Method beStopbyDoor:Void(newPosition:Int, direction:Int, object:GameObject)
 		
 		If (Self.isAntiGravity) Then
-			If (direction = CHARACTER_TAILS) Then
-				direction = CHARACTER_SONIC
+			If (direction = 1) Then
+				direction = 0
 			ElseIf (direction = 0) Then
-				direction = CHARACTER_TAILS
+				direction = 1
 			EndIf
 		EndIf
 		
@@ -3633,13 +3633,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					break
 				EndIf
 				
-			Case CHARACTER_TAILS
+			Case 1
 				
 				If (Self.collisionState = Null) Then
 					calDivideVelocity()
 				EndIf
 				
-				Self.degreeRotateMode = CHARACTER_SONIC
+				Self.degreeRotateMode = 0
 				
 				If (Not Self.hurtNoControl Or Self.collisionState <> 1 Or ((Self.velY >= 0 Or Self.isAntiGravity) And (Self.velY <= 0 Or Not Self.isAntiGravity))) Then
 					If (Not (Self.collisionState = TER_STATE_LOOK_MOON Or (object instanceof Spring))) Then
@@ -3670,19 +3670,19 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				Self.onObjectContinue = True
 				break
-			Case CHARACTER_KNUCKLES
-			Case CHARACTER_AMY
+			Case 2
+			Case 3
 				Int prex
 				
-				If (direction = CHARACTER_AMY) Then
+				If (direction = 3) Then
 					Bool z
 					prex = Self.footPointX
-					Self.footPointX = (object.getCollisionRect().x0 - (Self.collisionRect.getWidth() / 2)) + CHARACTER_TAILS
-					Self.footPointX = getNewPointX(Self.footPointX, CHARACTER_SONIC, getCurrentHeight() / 2, Self.faceDegree)
+					Self.footPointX = (object.getCollisionRect().x0 - (Self.collisionRect.getWidth() / 2)) + 1
+					Self.footPointX = getNewPointX(Self.footPointX, 0, getCurrentHeight() / 2, Self.faceDegree)
 					Self.movedSpeedX = Self.footPointX - prex
 					
 					If (Not (object instanceof DekaPlatform)) Then
-						Self.movedSpeedX = CHARACTER_SONIC
+						Self.movedSpeedX = 0
 					EndIf
 					
 					If (Key.repeat(Key.gRight) And ((Self.collisionState = Null Or Self.collisionState = TER_STATE_LOOK_MOON Or Self.collisionState = TER_STATE_LOOK_MOON_WAIT) And Not Self.isAttacking)) Then
@@ -3705,12 +3705,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.faceDirection = z
 				Else
 					prex = Self.footPointX
-					Self.footPointX = (object.getCollisionRect().x1 + (Self.collisionRect.getWidth() / 2)) - CHARACTER_TAILS
-					Self.footPointX = getNewPointX(Self.footPointX, CHARACTER_SONIC, getCurrentHeight() / 2, Self.faceDegree)
+					Self.footPointX = (object.getCollisionRect().x1 + (Self.collisionRect.getWidth() / 2)) - 1
+					Self.footPointX = getNewPointX(Self.footPointX, 0, getCurrentHeight() / 2, Self.faceDegree)
 					Self.movedSpeedX = Self.footPointX - prex
 					
 					If (Not (object instanceof DekaPlatform)) Then
-						Self.movedSpeedX = CHARACTER_SONIC
+						Self.movedSpeedX = 0
 					EndIf
 					
 					If (Key.repeat(Key.gLeft) And ((Self.collisionState = Null Or Self.collisionState = TER_STATE_LOOK_MOON Or Self.collisionState = TER_STATE_LOOK_MOON_WAIT) And Not Self.isAttacking)) Then
@@ -3727,11 +3727,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				EndIf
 				
 				If (Self.collisionState = Null And Self.animationID = 4 And (object instanceof Hari)) Then
-					Self.animationID = CHARACTER_SONIC
+					Self.animationID = 0
 				EndIf
 				
 				Select (Self.collisionState)
-					Case CHARACTER_TAILS
+					Case 1
 						Self.xFirst = False
 						break
 				End Select
@@ -3752,10 +3752,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Method beStop:Void(newPosition:Int, direction:Int, object:GameObject)
 		
 		If (Self.isAntiGravity) Then
-			If (direction = CHARACTER_TAILS) Then
-				direction = CHARACTER_SONIC
+			If (direction = 1) Then
+				direction = 0
 			ElseIf (direction = 0) Then
-				direction = CHARACTER_TAILS
+				direction = 1
 			EndIf
 		EndIf
 		
@@ -3783,13 +3783,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					break
 				EndIf
 				
-			Case CHARACTER_TAILS
+			Case 1
 				
 				If (Self.collisionState = Null) Then
 					calDivideVelocity()
 				EndIf
 				
-				Self.degreeRotateMode = CHARACTER_SONIC
+				Self.degreeRotateMode = 0
 				
 				If (Not Self.hurtNoControl Or Self.collisionState <> 1 Or ((Self.velY >= 0 Or Self.isAntiGravity) And (Self.velY <= 0 Or Not Self.isAntiGravity))) Then
 					If (Not (Self.collisionState = TER_STATE_LOOK_MOON Or (object instanceof Spring))) Then
@@ -3823,25 +3823,25 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				Self.onObjectContinue = True
 				break
-			Case CHARACTER_KNUCKLES
-			Case CHARACTER_AMY
+			Case 2
+			Case 3
 				Int prex
 				
-				If (direction = CHARACTER_AMY) Then
+				If (direction = 3) Then
 					prex = Self.footPointX
-					Self.footPointX = (object.getCollisionRect().x0 - (Self.collisionRect.getWidth() / 2)) + CHARACTER_TAILS
-					Self.footPointX = getNewPointX(Self.footPointX, CHARACTER_SONIC, getCurrentHeight() / 2, Self.faceDegree)
+					Self.footPointX = (object.getCollisionRect().x0 - (Self.collisionRect.getWidth() / 2)) + 1
+					Self.footPointX = getNewPointX(Self.footPointX, 0, getCurrentHeight() / 2, Self.faceDegree)
 					Self.movedSpeedX = Self.footPointX - prex
 					
 					If (Not (object instanceof DekaPlatform)) Then
-						Self.movedSpeedX = CHARACTER_SONIC
+						Self.movedSpeedX = 0
 					EndIf
 					
-					If (Key.repeat(Key.gRight) And ((Self.animationID = 0 Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT Or Self.animationID = CHARACTER_TAILS Or Self.animationID = CHARACTER_KNUCKLES Or Self.animationID = CHARACTER_AMY) And Not ((object instanceof Hari) And object.objId = CHARACTER_AMY And canBeHurt()))) Then
+					If (Key.repeat(Key.gRight) And ((Self.animationID = 0 Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT Or Self.animationID = 1 Or Self.animationID = 2 Or Self.animationID = 3) And Not ((object instanceof Hari) And object.objId = 3 And canBeHurt()))) Then
 						Self.animationID = ANI_PUSH_WALL
 					EndIf
 					
-					If (Not ((object instanceof Hari) And object.objId = CHARACTER_AMY And canBeHurt()) And getVelX() > 0) Then
+					If (Not ((object instanceof Hari) And object.objId = 3 And canBeHurt()) And getVelX() > 0) Then
 						setVelX(CHARACTER_SONIC)
 						Self.worldCal.stopMoveX()
 					EndIf
@@ -3849,15 +3849,15 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.rightStopped = True
 				Else
 					prex = Self.footPointX
-					Self.footPointX = (object.getCollisionRect().x1 + (Self.collisionRect.getWidth() / 2)) - CHARACTER_TAILS
-					Self.footPointX = getNewPointX(Self.footPointX, CHARACTER_SONIC, getCurrentHeight() / 2, Self.faceDegree)
+					Self.footPointX = (object.getCollisionRect().x1 + (Self.collisionRect.getWidth() / 2)) - 1
+					Self.footPointX = getNewPointX(Self.footPointX, 0, getCurrentHeight() / 2, Self.faceDegree)
 					Self.movedSpeedX = Self.footPointX - prex
 					
 					If (Not (object instanceof DekaPlatform)) Then
-						Self.movedSpeedX = CHARACTER_SONIC
+						Self.movedSpeedX = 0
 					EndIf
 					
-					If (Key.repeat(Key.gLeft) And ((Self.animationID = 0 Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT Or Self.animationID = CHARACTER_TAILS Or Self.animationID = CHARACTER_KNUCKLES Or Self.animationID = CHARACTER_AMY) And Not ((object instanceof Hari) And object.objId = 4 And canBeHurt()))) Then
+					If (Key.repeat(Key.gLeft) And ((Self.animationID = 0 Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT Or Self.animationID = 1 Or Self.animationID = 2 Or Self.animationID = 3) And Not ((object instanceof Hari) And object.objId = 4 And canBeHurt()))) Then
 						Self.animationID = ANI_PUSH_WALL
 					EndIf
 					
@@ -3870,11 +3870,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				EndIf
 				
 				If (Self.collisionState = Null And Self.animationID = 4 And (object instanceof Hari)) Then
-					Self.animationID = CHARACTER_SONIC
+					Self.animationID = 0
 				EndIf
 				
 				Select (Self.collisionState)
-					Case CHARACTER_TAILS
+					Case 1
 						Self.xFirst = False
 						break
 				End Select
@@ -4023,15 +4023,15 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Self.velY = springPower
 				Self.worldCal.stopMoveY()
 				break
-			Case CHARACTER_TAILS
+			Case 1
 				Self.velY = -springPower
 				Self.worldCal.stopMoveY()
 				break
-			Case CHARACTER_KNUCKLES
+			Case 2
 				Self.velX = springPower
 				Self.worldCal.stopMoveX()
 				break
-			Case CHARACTER_AMY
+			Case 3
 				Self.velX = -springPower
 				Self.worldCal.stopMoveX()
 				break
@@ -4041,7 +4041,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			calTotalVelocity()
 		EndIf
 		
-		If ((Not Self.isAntiGravity And direction = CHARACTER_TAILS) Or (Self.isAntiGravity And direction = 0)) Then
+		If ((Not Self.isAntiGravity And direction = 1) Or (Self.isAntiGravity And direction = 0)) Then
 			Int i = Self.degreeStable
 			Self.faceDegree = i
 			Self.degreeForDraw = i
@@ -4061,7 +4061,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Method bePop:Void(springPower:Int, direction:Int)
 		beSpring(springPower, direction)
 		
-		If ((Not Self.isAntiGravity And direction = CHARACTER_TAILS) Or (Self.isAntiGravity And direction = 0)) Then
+		If ((Not Self.isAntiGravity And direction = 1) Or (Self.isAntiGravity And direction = 0)) Then
 			Self.animationID = ANI_POP_JUMP_UP
 			Self.collisionState = 1
 			Self.worldCal.actionState = 1
@@ -4073,14 +4073,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		If (player.canBeHurt()) Then
 			doHurt()
-			Int bodyCenterX = getNewPointX(Self.footPointX, CHARACTER_SONIC, -768, Self.faceDegree)
-			Int bodyCenterY = getNewPointY(Self.footPointY, CHARACTER_SONIC, -768, Self.faceDegree)
+			Int bodyCenterX = getNewPointX(Self.footPointX, 0, -768, Self.faceDegree)
+			Int bodyCenterY = getNewPointY(Self.footPointY, 0, -768, Self.faceDegree)
 			Self.faceDegree = Self.degreeStable
-			Self.footPointX = getNewPointX(bodyCenterX, CHARACTER_SONIC, BODY_OFFSET, Self.faceDegree)
-			Self.footPointY = getNewPointY(bodyCenterY, CHARACTER_SONIC, BODY_OFFSET, Self.faceDegree)
+			Self.footPointX = getNewPointX(bodyCenterX, 0, BODY_OFFSET, Self.faceDegree)
+			Self.footPointY = getNewPointY(bodyCenterY, 0, BODY_OFFSET, Self.faceDegree)
 			
 			If (shieldType <> 0) Then
-				shieldType = CHARACTER_SONIC
+				shieldType = 0
 				
 				If (Not Self.beAttackByHari) Then
 					soundInstance.playSe(ANI_POP_JUMP_UP)
@@ -4092,8 +4092,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 			ElseIf (ringNum + ringTmpNum > 0) Then
 				RingObject.hurtRingExplosion(ringNum + ringTmpNum, getBodyPositionX(), getBodyPositionY(), Self.currentLayer, Self.isAntiGravity)
-				ringNum = CHARACTER_SONIC
-				ringTmpNum = CHARACTER_SONIC
+				ringNum = 0
+				ringTmpNum = 0
 			ElseIf (ringNum = 0 And ringTmpNum = 0) Then
 				setDie(False)
 			EndIf
@@ -4105,14 +4105,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		If (player.canBeHurt()) Then
 			doHurt()
-			Int bodyCenterX = getNewPointX(Self.footPointX, CHARACTER_SONIC, -768, Self.faceDegree)
-			Int bodyCenterY = getNewPointY(Self.footPointY, CHARACTER_SONIC, -768, Self.faceDegree)
+			Int bodyCenterX = getNewPointX(Self.footPointX, 0, -768, Self.faceDegree)
+			Int bodyCenterY = getNewPointY(Self.footPointY, 0, -768, Self.faceDegree)
 			Self.faceDegree = Self.degreeStable
-			Self.footPointX = getNewPointX(bodyCenterX, CHARACTER_SONIC, BODY_OFFSET, Self.faceDegree)
-			Self.footPointY = getNewPointY(bodyCenterY, CHARACTER_SONIC, BODY_OFFSET, Self.faceDegree)
+			Self.footPointX = getNewPointX(bodyCenterX, 0, BODY_OFFSET, Self.faceDegree)
+			Self.footPointY = getNewPointY(bodyCenterY, 0, BODY_OFFSET, Self.faceDegree)
 			
 			If (shieldType <> 0) Then
-				shieldType = CHARACTER_SONIC
+				shieldType = 0
 			EndIf
 		EndIf
 		
@@ -4122,8 +4122,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		If (Self.hurtCount = 0) Then
 			doHurt()
-			Self.velX = (Self.velX * CHARACTER_AMY) / CHARACTER_KNUCKLES
-			Self.velY = (Self.velY * CHARACTER_AMY) / CHARACTER_KNUCKLES
+			Self.velX = (Self.velX * 3) / 2
+			Self.velY = (Self.velY * 3) / 2
 		EndIf
 		
 	End
@@ -4132,7 +4132,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Int i
 		Self.animationID = ANI_HURT_PRE
 		
-		If (Self.collisionState = CHARACTER_KNUCKLES) Then
+		If (Self.collisionState = 2) Then
 			Self.footPointY -= TitleState.CHARACTER_RECORD_BG_OFFSET
 			prepareForCollision()
 		EndIf
@@ -4145,7 +4145,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.hurtCount = HURT_COUNT
 		
 		If (Self.velX = 0) Then
-			Self.velX = (Self.faceDirection ? EFFECT_NONE : CHARACTER_TAILS) * HURT_POWER_X
+			Self.velX = (Self.faceDirection ? EFFECT_NONE : 1) * HURT_POWER_X
 		ElseIf (Self.velX > 0) Then
 			Self.velX = -HURT_POWER_X
 		Else
@@ -4159,7 +4159,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		If (Self.isAntiGravity) Then
 			i = EFFECT_NONE
 		Else
-			i = CHARACTER_TAILS
+			i = 1
 		EndIf
 		
 		Self.velY = i * HURT_POWER_Y
@@ -4170,12 +4170,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.onObjectContinue = False
 		Self.footOnObject = Null
 		Self.hurtNoControl = True
-		Self.attackAnimationID = CHARACTER_SONIC
-		Self.attackCount = CHARACTER_SONIC
-		Self.attackLevel = CHARACTER_SONIC
+		Self.attackAnimationID = 0
+		Self.attackCount = 0
+		Self.attackLevel = 0
 		Self.dashRolling = False
 		MyAPI.vibrate()
-		Self.degreeRotateMode = CHARACTER_SONIC
+		Self.degreeRotateMode = 0
 	End
 	
 	Public Method canBeHurt:Bool()
@@ -4193,7 +4193,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Return False
 		EndIf
 		
-		If (Self.collisionState <> CHARACTER_KNUCKLES) Then
+		If (Self.collisionState <> 2) Then
 			Return False
 		EndIf
 		
@@ -4201,7 +4201,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Public Method isFootObjectAndLogic:Bool(object:GameObject)
-		Return (Self.footObjectLogic And Self.footOnObject = object And Self.collisionState = CHARACTER_KNUCKLES) ? True : False
+		Return (Self.footObjectLogic And Self.footOnObject = object And Self.collisionState = 2) ? True : False
 	End
 	
 	Public Method setFootPositionX:Void(x:Int)
@@ -4243,13 +4243,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Else
 			
 			If (Key.press(Key.B_HIGH_JUMP | Key.gUp)) Then
-				Self.spinDownWaitCount = CHARACTER_SONIC
+				Self.spinDownWaitCount = 0
 				Self.spinCount = SPIN_LV2_COUNT
 				Self.animationID = ITEM_RING_10
 				Self.spinKeyCount = SPIN_KEY_COUNT
 				Self.drawer.restart()
 				
-				If (characterID <> CHARACTER_AMY) Then
+				If (characterID <> 3) Then
 					soundInstance.playSe(4)
 				EndIf
 				
@@ -4259,37 +4259,37 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Self.spinKeyCount = SPIN_KEY_COUNT
 				Self.drawer.restart()
 				
-				If (characterID <> CHARACTER_AMY) Then
+				If (characterID <> 3) Then
 					soundInstance.playSe(4)
 				EndIf
 			EndIf
 			
 			If (Self.spinCount = 0 And Self.spinKeyCount > 0) Then
-				Self.spinKeyCount -= CHARACTER_TAILS
+				Self.spinKeyCount -= 1
 			EndIf
 		EndIf
 		
 		If (Self.spinCount > 0) Then
 			If (Self.spinDownWaitCount < SPIN_LV2_COUNT) Then
-				Self.spinDownWaitCount += CHARACTER_TAILS
+				Self.spinDownWaitCount += 1
 			Else
 				Self.spinDownWaitCount = SPIN_LV2_COUNT
 			EndIf
 		EndIf
 		
 		If (Self.spinCount > 0) Then
-			Self.spinCount -= CHARACTER_TAILS
-			Self.effectID = CHARACTER_TAILS
+			Self.spinCount -= 1
+			Self.effectID = 1
 		Else
-			Self.effectID = CHARACTER_SONIC
+			Self.effectID = 0
 		EndIf
 		
 		Select (Self.collisionState)
 			Case CHARACTER_SONIC
-				Self.totalVelocity = CHARACTER_SONIC
+				Self.totalVelocity = 0
 				break
 			Default
-				Self.velX = CHARACTER_SONIC
+				Self.velX = 0
 				break
 		End Select
 		
@@ -4332,7 +4332,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					
 					If (Not Self.faceDirection) Then
 						If (Self.isAntiGravity) Then
-							i = CHARACTER_TAILS
+							i = 1
 						Else
 							i = EFFECT_NONE
 						EndIf
@@ -4341,10 +4341,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						break
 					EndIf
 					
-					Self.velX = (Self.isAntiGravity ? EFFECT_NONE : CHARACTER_TAILS) * Self.velX
+					Self.velX = (Self.isAntiGravity ? EFFECT_NONE : 1) * Self.velX
 					break
 			End Select
-			Self.spinCount = CHARACTER_SONIC
+			Self.spinCount = 0
 			Self.animationID = 4
 			Self.dashRolling = False
 			Self.ignoreFirstTouch = True
@@ -4353,7 +4353,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Select (Self.collisionState)
 			Case CHARACTER_SONIC
-			Case CHARACTER_AMY
+			Case 3
 				Self.velY = 100
 			Default
 				Int i2
@@ -4362,7 +4362,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				If (Self.isAntiGravity) Then
 					i2 = EFFECT_NONE
 				Else
-					i2 = CHARACTER_TAILS
+					i2 = 1
 				EndIf
 				
 				Self.velY = i + (i2 * getGravity())
@@ -4388,9 +4388,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 			
 			If (image = Null) Then
-				Self.waterFallDrawer = New Animation("/animation/water_fall").getDrawer(CHARACTER_SONIC, True, CHARACTER_SONIC)
+				Self.waterFallDrawer = New Animation("/animation/water_fall").getDrawer(0, True, CHARACTER_SONIC)
 			Else
-				Self.waterFallDrawer = New Animation(image, "/animation/water_fall").getDrawer(CHARACTER_SONIC, True, CHARACTER_SONIC)
+				Self.waterFallDrawer = New Animation(image, "/animation/water_fall").getDrawer(0, True, CHARACTER_SONIC)
 			EndIf
 		EndIf
 		
@@ -4399,7 +4399,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Private Method waterFallDraw:Void(g:MFGraphics, camera:Coordinate)
 		
 		If (Self.waterFalling) Then
-			Int offset_y = (characterID = CHARACTER_KNUCKLES And Self.myAnimationID = ANI_BAR_ROLL_1) ? INVINCIBLE_COUNT : -320
+			Int offset_y = (characterID = 2 And Self.myAnimationID = ANI_BAR_ROLL_1) ? INVINCIBLE_COUNT : -320
 			drawInMap(g, Self.waterFallDrawer, (Self.collisionRect.x0 + Self.collisionRect.x1) / 2, Self.collisionRect.y0 + offset_y)
 			Self.waterFalling = False
 		EndIf
@@ -4416,9 +4416,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 			
 			If (image = Null) Then
-				Self.waterFlushDrawer = New Animation("/animation/water_flush").getDrawer(CHARACTER_SONIC, True, CHARACTER_SONIC)
+				Self.waterFlushDrawer = New Animation("/animation/water_flush").getDrawer(0, True, CHARACTER_SONIC)
 			Else
-				Self.waterFlushDrawer = New Animation(image, "/animation/water_flush").getDrawer(CHARACTER_SONIC, True, CHARACTER_SONIC)
+				Self.waterFlushDrawer = New Animation(image, "/animation/water_flush").getDrawer(0, True, CHARACTER_SONIC)
 			EndIf
 		EndIf
 		
@@ -4450,7 +4450,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.totalVelocity = power
 			Self.faceDirection = Self.totalVelocity > 0 ? True : False
 			Return True
-		ElseIf (Self.collisionState <> CHARACTER_KNUCKLES Or (sender instanceof Accelerate)) Then
+		ElseIf (Self.collisionState <> 2 Or (sender instanceof Accelerate)) Then
 			Return False
 		Else
 			
@@ -4483,8 +4483,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.faceDirection = isLeft ? False : True
 		Self.footPointX = x
 		Self.footPointY = y + DETECT_HEIGHT
-		Self.velX = CHARACTER_SONIC
-		Self.velY = CHARACTER_SONIC
+		Self.velX = 0
+		Self.velY = 0
 		Return True
 	End
 	
@@ -4497,13 +4497,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Int i
 		Self.animationID = ANI_POAL_PULL_2
 		Self.faceDirection = direction
-		Self.footPointX = ((Self.faceDirection ? EFFECT_NONE : CHARACTER_TAILS) * WIDTH) + x
+		Self.footPointX = ((Self.faceDirection ? EFFECT_NONE : 1) * WIDTH) + x
 		setNoKey()
 		
 		If (Self.faceDirection) Then
 			i = EFFECT_NONE
 		Else
-			i = CHARACTER_TAILS
+			i = 1
 		EndIf
 		
 		Self.totalVelocity = i * SSDef.PLAYER_MOVE_WIDTH
@@ -4515,8 +4515,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.animationID = ANI_PULL
 		Self.footPointX = x
 		Self.footPointY = y + DETECT_HEIGHT
-		Self.velX = CHARACTER_SONIC
-		Self.velY = CHARACTER_SONIC
+		Self.velX = 0
+		Self.velY = 0
 		
 		If (Self.faceDirection) Then
 			Self.footPointX -= SIDE_FOOT_FROM_CENTER
@@ -4529,8 +4529,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Method doPullBarMotion:Void(y:Int)
 		Self.animationID = ANI_SMALL_ZERO
 		Self.footPointY = y + 1792
-		Self.velX = CHARACTER_SONIC
-		Self.velY = CHARACTER_SONIC
+		Self.velX = 0
+		Self.velY = 0
 	End
 	
 	Public Method doWalkPoseInAir:Void()
@@ -4540,11 +4540,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		EndIf
 		
 		If (Abs(Self.velX) < SPEED_LIMIT_LEVEL_1) Then
-			Self.animationID = CHARACTER_TAILS
+			Self.animationID = 1
 		ElseIf (Abs(Self.velX) < SPEED_LIMIT_LEVEL_2) Then
-			Self.animationID = CHARACTER_KNUCKLES
+			Self.animationID = 2
 		Else
-			Self.animationID = CHARACTER_AMY
+			Self.animationID = 3
 		EndIf
 		
 	End
@@ -4555,11 +4555,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			If (Self.animationID = 4) Then
 				Self.animationID = 4
 			ElseIf (Abs(Self.velX) < SPEED_LIMIT_LEVEL_1) Then
-				Self.animationID = CHARACTER_TAILS
+				Self.animationID = 1
 			ElseIf (Abs(Self.velX) < SPEED_LIMIT_LEVEL_2) Then
-				Self.animationID = CHARACTER_KNUCKLES
+				Self.animationID = 2
 			Else
-				Self.animationID = CHARACTER_AMY
+				Self.animationID = 3
 			EndIf
 		EndIf
 		
@@ -4582,20 +4582,20 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Int RECT_HEIGHT = getCollisionRectHeight()
 		Int RECT_WIDTH = getCollisionRectWidth()
 		Int switchDegree = Self.faceDegree
-		Int yOffset = CHARACTER_SONIC
+		Int yOffset = 0
 		
 		If (Self.animationID = ANI_SLIP) Then
-			If (getAnimationOffset() = CHARACTER_TAILS) Then
+			If (getAnimationOffset() = 1) Then
 				yOffset = -960
 			Else
 				yOffset = -320
 			EndIf
 			
-			switchDegree = CHARACTER_SONIC
+			switchDegree = 0
 		EndIf
 		
-		Self.checkPositionX = getNewPointX(Self.footPointX, CHARACTER_SONIC, (-RECT_HEIGHT) / 2, switchDegree) + CHARACTER_SONIC
-		Self.checkPositionY = getNewPointY(Self.footPointY, CHARACTER_SONIC, (-RECT_HEIGHT) / 2, switchDegree) + yOffset
+		Self.checkPositionX = getNewPointX(Self.footPointX, 0, (-RECT_HEIGHT) / 2, switchDegree) + CHARACTER_SONIC
+		Self.checkPositionY = getNewPointY(Self.footPointY, 0, (-RECT_HEIGHT) / 2, switchDegree) + yOffset
 		Self.collisionRect.setTwoPosition(Self.checkPositionX - (RECT_WIDTH / 2), Self.checkPositionY - (RECT_HEIGHT / 2), Self.checkPositionX + (RECT_WIDTH / 2), Self.checkPositionY + (RECT_HEIGHT / 2))
 	End
 	
@@ -4624,10 +4624,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Method fallChk:Void()
 		
 		If (Self.fallTime > 0) Then
-			Self.fallTime -= CHARACTER_TAILS
+			Self.fallTime -= 1
 			
 			If (Self.animationID = 0) Then
-				Self.animationID = CHARACTER_TAILS
+				Self.animationID = 1
 				Return
 			EndIf
 			
@@ -4658,8 +4658,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	
 	Public Method railIn:Void(x:Int, y:Int)
 		Self.railLine = Null
-		Self.velY = CHARACTER_SONIC
-		Self.velX = CHARACTER_SONIC
+		Self.velY = 0
+		Self.velX = 0
 		Self.worldCal.stopMoveX()
 		setFootPositionX(x)
 		Self.collisionChkBreak = True
@@ -4668,7 +4668,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.animationID = ANI_RAIL_ROLL
 		setNoKey()
 		
-		If (characterID = CHARACTER_AMY) Then
+		If (characterID = 3) Then
 			soundInstance.playSe(ANI_ROPE_ROLL_1)
 		Else
 			soundInstance.playSe(ANI_SMALL_ZERO_Y)
@@ -4682,7 +4682,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.railOut = True
 			Self.railLine = Null
 			Self.velY = RAIL_OUT_SPEED_VY0
-			Self.velX = CHARACTER_SONIC
+			Self.velX = 0
 			setVelX(CHARACTER_SONIC)
 			setFootPositionX(x)
 			setFootPositionY(y)
@@ -4699,8 +4699,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.pipeDesY = y + BODY_OFFSET
 		Self.velX = 250
 		Self.velY = 250
-		Self.nextVelX = (vx Shl 6) / CHARACTER_TAILS
-		Self.nextVelY = (vy Shl 6) / CHARACTER_TAILS
+		Self.nextVelX = (vx Shl 6) / 1
+		Self.nextVelY = (vy Shl 6) / 1
 		Self.collisionChkBreak = True
 	End
 	
@@ -4767,8 +4767,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Self.railing = True
 		setFootPositionX(x)
-		Self.velX = CHARACTER_SONIC
-		Self.velY = CHARACTER_SONIC
+		Self.velX = 0
+		Self.velY = 0
 		Self.railLine = Null
 		Self.collisionChkBreak = True
 	End
@@ -4778,7 +4778,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Public Method setRailFlip:Void()
-		Self.velX = CHARACTER_SONIC
+		Self.velX = 0
 		Self.velY = RAIL_FLIPPER_V0
 		Self.railLine = Null
 		Self.collisionChkBreak = True
@@ -4797,7 +4797,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		EndIf
 		
 		If (Self.railLine = Null) Then
-			Self.totalVelocity = CHARACTER_SONIC
+			Self.totalVelocity = 0
 		EndIf
 		
 		Self.railLine = line
@@ -4805,9 +4805,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.posX = startX
 		Self.posY = startY
 		
-		If (Abs(railDivY) <= CHARACTER_TAILS) Then
+		If (Abs(railDivY) <= 1) Then
 			Self.velX = (railDivX * SONIC_DRAW_HEIGHT) / railDevX
-			Self.velY = CHARACTER_SONIC
+			Self.velY = 0
 			
 			If (Self.railFlipping) Then
 				Self.railFlipping = False
@@ -4848,7 +4848,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Int preCheckX = preX
 		Int preCheckY = preY
-		Int i = CHARACTER_SONIC
+		Int i = 0
 		While (i <= moveDistance And i < moveDistance) {
 			i += RIGHT_WALK_COLLISION_CHECK_OFFSET_X
 			
@@ -4876,7 +4876,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	
 	Public Method cancelFootObject:Void(object:GameObject)
 		
-		If (Self.collisionState = CHARACTER_KNUCKLES And isFootOnObject(object)) Then
+		If (Self.collisionState = 2 And isFootOnObject(object)) Then
 			player.collisionState = 1
 			player.footOnObject = Null
 			Self.onObjectContinue = False
@@ -4886,7 +4886,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	
 	Public Method cancelFootObject:Void()
 		
-		If (Self.collisionState = CHARACTER_KNUCKLES) Then
+		If (Self.collisionState = 2) Then
 			player.footOnObject = Null
 			Self.onObjectContinue = False
 		EndIf
@@ -4900,7 +4900,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Int maxPower = Self.isPowerShoot ? SHOOT_POWER : MIN_ATTACK_JUMP
 			
 			If (Self.isAntiGravity) Then
-				i = CHARACTER_TAILS
+				i = 1
 			Else
 				i = EFFECT_NONE
 			EndIf
@@ -4917,13 +4917,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				newVelY = maxPower
 			EndIf
 			
-			If (characterID <> CHARACTER_KNUCKLES Or Self.myAnimationID < ANI_ATTACK_2 Or Self.myAnimationID > ANI_BAR_ROLL_1) Then
-				setVelY((Self.isAntiGravity ? EFFECT_NONE : CHARACTER_TAILS) * newVelY)
+			If (characterID <> 2 Or Self.myAnimationID < ANI_ATTACK_2 Or Self.myAnimationID > ANI_BAR_ROLL_1) Then
+				setVelY((Self.isAntiGravity ? EFFECT_NONE : 1) * newVelY)
 			EndIf
 			
-			If (characterID <> CHARACTER_AMY) Then
+			If (characterID <> 3) Then
 				Select (direction)
-					Case CHARACTER_TAILS
+					Case 1
 						cancelFootObject(Self)
 						Self.collisionState = 1
 						Self.animationID = 4
@@ -4941,7 +4941,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Method doAttackPose:Void(object:GameObject, direction:Int)
 		
 		If (Not Self.extraAttackFlag) Then
-			Int newVelY = (Self.isAntiGravity ? CHARACTER_TAILS : EFFECT_NONE) * getVelY()
+			Int newVelY = (Self.isAntiGravity ? 1 : EFFECT_NONE) * getVelY()
 			
 			If (newVelY > 0) Then
 				newVelY = -newVelY
@@ -4953,23 +4953,23 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				newVelY = MIN_ATTACK_JUMP
 			EndIf
 			
-			If (characterID <> CHARACTER_AMY) Then
-				setVelY((Self.isAntiGravity ? EFFECT_NONE : CHARACTER_TAILS) * newVelY)
+			If (characterID <> 3) Then
+				setVelY((Self.isAntiGravity ? EFFECT_NONE : 1) * newVelY)
 			ElseIf (Not IsInvincibility() Or Self.myAnimationID < ANI_POP_JUMP_UP Or Self.myAnimationID > ANI_BRAKE) Then
 				Int i
 				
 				If (Self.isAntiGravity) Then
 					i = EFFECT_NONE
 				Else
-					i = CHARACTER_TAILS
+					i = 1
 				EndIf
 				
 				setVelY(i * newVelY)
 			EndIf
 			
-			If (characterID <> CHARACTER_AMY) Then
+			If (characterID <> 3) Then
 				Select (direction)
-					Case CHARACTER_TAILS
+					Case 1
 						cancelFootObject(Self)
 						Self.collisionState = 1
 					Default
@@ -4981,14 +4981,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	
 	Public Method doBossAttackPose:Void(object:GameObject, direction:Int)
 		
-		If (Self.collisionState = CHARACTER_TAILS) Then
-			If (characterID <> CHARACTER_AMY) Then
+		If (Self.collisionState = 1) Then
+			If (characterID <> 3) Then
 				setVelX(-Self.velX)
 			EndIf
 			
 			If ((-Self.velY) < (-ATTACK_POP_POWER)) Then
 				setVelY(-ATTACK_POP_POWER)
-			ElseIf (characterID <> CHARACTER_KNUCKLES) Then
+			ElseIf (characterID <> 2) Then
 				setVelY(-Self.velY)
 			ElseIf (getCharacterAnimationID() = ANI_ATTACK_2 Or getCharacterAnimationID() = SPIN_KEY_COUNT Or getCharacterAnimationID() = ANI_RAIL_ROLL Or getCharacterAnimationID() = ANI_BAR_ROLL_1) Then
 				setVelY((-Self.velY) - 325)
@@ -5028,12 +5028,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Public Method setDieInit:Void(isDrowning:Bool, v0:Int)
-		Self.velX = CHARACTER_SONIC
+		Self.velX = 0
 		
 		If (Not isDrowning Or Self.breatheNumCount < ITEM_RING_5) Then
 			Self.velY = v0
 		Else
-			Self.velY = CHARACTER_SONIC
+			Self.velY = 0
 		EndIf
 		
 		If (Self.isAntiGravity) Then
@@ -5052,28 +5052,28 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		timeStopped = True
 		Self.worldCal.stopMove()
 		Self.collisionChkBreak = True
-		Self.hurtCount = CHARACTER_SONIC
+		Self.hurtCount = 0
 		Self.dashRolling = False
 		
-		If (Self.effectID = 0 Or Self.effectID = CHARACTER_TAILS) Then
+		If (Self.effectID = 0 Or Self.effectID = 1) Then
 			Self.effectID = EFFECT_NONE
 		EndIf
 		
-		Self.drownCnt = CHARACTER_SONIC
+		Self.drownCnt = 0
 		
-		If (stageModeState = CHARACTER_TAILS And StageManager.getStageID() = TERMINAL_COUNT) Then
+		If (stageModeState = 1 And StageManager.getStageID() = TERMINAL_COUNT) Then
 			RocketSeparateEffect.clearInstance()
 		EndIf
 		
 		GameState.isThroughGame = True
-		shieldType = CHARACTER_SONIC
-		invincibleCount = CHARACTER_SONIC
-		speedCount = CHARACTER_SONIC
+		shieldType = 0
+		invincibleCount = 0
+		speedCount = 0
 		
 		If (Self.currentLayer = 0) Then
-			Self.currentLayer = CHARACTER_TAILS
-		ElseIf (Self.currentLayer = CHARACTER_TAILS) Then
-			Self.currentLayer = CHARACTER_SONIC
+			Self.currentLayer = 1
+		ElseIf (Self.currentLayer = 1) Then
+			Self.currentLayer = 0
 		EndIf
 		
 		resetFlyCount()
@@ -5140,7 +5140,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		EndIf
 		
 		Select (state)
-			Case CHARACTER_TAILS
+			Case 1
 				Self.faceDegree = Self.degreeStable
 				Self.worldCal.actionState = 1
 				break
@@ -5165,7 +5165,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Return False
 		EndIf
 		
-		beSpring(getGravity() + DETECT_HEIGHT, CHARACTER_TAILS)
+		beSpring(getGravity() + DETECT_HEIGHT, 1)
 		Int nextVelX = DETECT_HEIGHT
 		
 		If (DETECT_HEIGHT > HINER_JUMP_MAX) Then
@@ -5173,9 +5173,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		EndIf
 		
 		If (getVelX() > 0) Then
-			beSpring(nextVelX, CHARACTER_KNUCKLES)
+			beSpring(nextVelX, 2)
 		Else
-			beSpring(nextVelX, CHARACTER_AMY)
+			beSpring(nextVelX, 3)
 		EndIf
 		
 		SoundSystem.getInstance().playSequenceSe(ANI_SMALL_ZERO_Y)
@@ -5194,12 +5194,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Method bankLogic:Void()
 		
 		If (Self.onBank) Then
-			Self.faceDegree = CHARACTER_SONIC
+			Self.faceDegree = 0
 			inputLogicWalk()
 			
 			If (Self.onBank) Then
 				calDivideVelocity()
-				Self.velY = CHARACTER_SONIC
+				Self.velY = 0
 				Int preX = player.getFootPositionX()
 				Int preY = player.getFootPositionY()
 				Self.footPointX += Self.velX
@@ -5242,14 +5242,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Public Method setTerminal:Void(type:Int)
-		Self.terminalOffset = CHARACTER_SONIC
+		Self.terminalOffset = 0
 		terminalType = type
 		Self.terminalCount = TERMINAL_COUNT
 		isTerminal = True
 		timeStopped = True
 		Select (terminalType)
 			Case CHARACTER_SONIC
-			Case CHARACTER_KNUCKLES
+			Case 2
 				
 				If (Self.collisionState = Null) Then
 					If (Self.animationID = 4) Then
@@ -5261,10 +5261,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 				EndIf
 				
-			Case CHARACTER_TAILS
+			Case 1
 				changeVisible(False)
 				Self.noMoving = True
-			Case CHARACTER_AMY
+			Case 3
 				terminalState = TER_STATE_RUN
 			Default
 		EndIf
@@ -5278,11 +5278,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Public Method isTerminalRunRight:Bool()
-		Return (isTerminal And (terminalType = 0 Or terminalType = CHARACTER_KNUCKLES Or (terminalType = CHARACTER_AMY And terminalState = Null And Self.posX < SUPER_SONIC_STAND_POS_X))) ? True : False
+		Return (isTerminal And (terminalType = 0 Or terminalType = 2 Or (terminalType = 3 And terminalState = Null And Self.posX < SUPER_SONIC_STAND_POS_X))) ? True : False
 	End
 	
 	Public Method doBrake:Bool()
-		Return (isTerminal And terminalType = CHARACTER_AMY And terminalState = 1 And Self.posX > SUPER_SONIC_STAND_POS_X And Self.totalVelocity > 0) ? True : False
+		Return (isTerminal And terminalType = 3 And terminalState = 1 And Self.posX > SUPER_SONIC_STAND_POS_X And Self.totalVelocity > 0) ? True : False
 	End
 	
 	Public Method beTrans:Void(desX:Int, desY:Int)
@@ -5310,10 +5310,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Public Method getPreItem:Void(itemId:Int)
-		For (Int i = CHARACTER_SONIC; i < MAX_ITEM; i += CHARACTER_TAILS)
-			If (itemVec[i][CHARACTER_SONIC] = EFFECT_NONE) Then
-				itemVec[i][CHARACTER_SONIC] = itemId
-				itemVec[i][CHARACTER_TAILS] = SPIN_KEY_COUNT
+		For (Int i = 0; i < MAX_ITEM; i += 1)
+			If (itemVec[i][0] = EFFECT_NONE) Then
+				itemVec[i][0] = itemId
+				itemVec[i][1] = SPIN_KEY_COUNT
 				Return
 			EndIf
 		Next
@@ -5324,13 +5324,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Case CHARACTER_SONIC
 				addLife()
 				playerLifeUpBGM()
-			Case CHARACTER_TAILS
-				shieldType = CHARACTER_TAILS
+			Case 1
+				shieldType = 1
 				soundInstance.playSe(ANI_DEAD)
-			Case CHARACTER_KNUCKLES
-				shieldType = CHARACTER_KNUCKLES
+			Case 2
+				shieldType = 2
 				soundInstance.playSe(ANI_DEAD)
-			Case CHARACTER_AMY
+			Case 3
 				invincibleCount = INVINCIBLE_COUNT
 				SoundSystem.getInstance().stopBgm(False)
 				SoundSystem.getInstance().playBgm(ANI_HURT_PRE)
@@ -5381,21 +5381,21 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Int preRingNum = ringNum
 		ringNum += num
 		
-		If (stageModeState <> CHARACTER_TAILS And StageManager.getCurrentZoneId() <> ANI_PUSH_WALL) Then
+		If (stageModeState <> 1 And StageManager.getCurrentZoneId() <> ANI_PUSH_WALL) Then
 			If (preRingNum / 100 <> ringNum / 100) Then
 				addLife()
 				playerLifeUpBGM()
 			EndIf
 			
 			If (ringTmpNum <> 0) Then
-				ringTmpNum = CHARACTER_SONIC
+				ringTmpNum = 0
 			EndIf
 		EndIf
 		
 	End
 	
 	Public Method isAttracting:Bool()
-		Return shieldType = CHARACTER_KNUCKLES ? True : False
+		Return shieldType = 2 ? True : False
 	End
 	
 	Public Method getEnemyScore:Void()
@@ -5416,13 +5416,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Method ductIn:Void()
 		Self.ducting = True
 		Self.pushOnce = True
-		Self.ductingCount = CHARACTER_SONIC
+		Self.ductingCount = 0
 	End
 	
 	Public Method ductOut:Void()
 		Self.ducting = False
 		Self.pushOnce = False
-		Self.ductingCount = CHARACTER_SONIC
+		Self.ductingCount = 0
 	End
 	
 	Public Method setSqueezeEnable:Void(enable:Bool)
@@ -5431,8 +5431,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	
 	Protected Method isHeadCollision:Bool()
 		Bool collision = False
-		Int headBlockY = Self.worldInstance.getWorldY(Self.footPointX, Self.footPointY - HEIGHT, CHARACTER_TAILS, CHARACTER_KNUCKLES)
-		Int headBlockY2 = Self.worldInstance.getWorldY(Self.footPointX + WIDTH, Self.footPointY - HEIGHT, CHARACTER_TAILS, CHARACTER_KNUCKLES)
+		Int headBlockY = Self.worldInstance.getWorldY(Self.footPointX, Self.footPointY - HEIGHT, 1, 2)
+		Int headBlockY2 = Self.worldInstance.getWorldY(Self.footPointX + WIDTH, Self.footPointY - HEIGHT, 1, 2)
 		
 		If (headBlockY >= 0) Then
 			collision = True
@@ -5446,11 +5446,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Public Function addLife:Void()
-		lifeNum += CHARACTER_TAILS
+		lifeNum += 1
 	End
 	
 	Public Function minusLife:Void()
-		lifeNum -= CHARACTER_TAILS
+		lifeNum -= 1
 	End
 	
 	Public Function getLife:Int()
@@ -5470,8 +5470,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Public Function resetGameParam:Void()
-		scoreNum = CHARACTER_SONIC
-		lifeNum = CHARACTER_KNUCKLES
+		scoreNum = 0
+		lifeNum = 2
 	End
 	
 	Public Method resetPlayer:Void()
@@ -5479,42 +5479,42 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.footPointY = Self.deadPosY
 		Self.worldCal.stopMove()
 		StageManager.resetStageGameover()
-		Self.velX = CHARACTER_SONIC
-		Self.velY = CHARACTER_SONIC
+		Self.velX = 0
+		Self.velY = 0
 		setVelX(Self.velX)
 		setVelY(Self.velY)
-		Self.totalVelocity = CHARACTER_SONIC
+		Self.totalVelocity = 0
 		Self.collisionState = TER_STATE_RUN
 		MapManager.setFocusObj(Self)
 		MapManager.focusQuickLocation()
 		Self.isDead = False
-		Self.animationID = CHARACTER_SONIC
+		Self.animationID = 0
 		timeStopped = False
 		invincibleCount = SSDef.PLAYER_MOVE_HEIGHT
 		preScoreNum = scoreNum
 		preLifeNum = lifeNum
-		timeCount = CHARACTER_SONIC
+		timeCount = 0
 		lastTimeCount = timeCount
 	End
 	
 	Public Function doInitInNewStage:Void()
-		currentMarkId = CHARACTER_SONIC
+		currentMarkId = 0
 	End
 	
 	Public Function initStageParam:Void()
-		ringNum = CHARACTER_SONIC
-		invincibleCount = CHARACTER_SONIC
-		speedCount = CHARACTER_SONIC
+		ringNum = 0
+		invincibleCount = 0
+		speedCount = 0
 		SoundSystem.getInstance().setSoundSpeed(1.0)
-		shieldType = CHARACTER_SONIC
-		timeCount = CHARACTER_SONIC
+		shieldType = 0
+		timeCount = 0
 		lastTimeCount = timeCount
 		timeStopped = False
-		raceScoreNum = CHARACTER_SONIC
+		raceScoreNum = 0
 		preScoreNum = scoreNum
 		preLifeNum = lifeNum
-		For (Int i = CHARACTER_SONIC; i < MAX_ITEM; i += CHARACTER_TAILS)
-			itemVec[i][CHARACTER_SONIC] = EFFECT_NONE
+		For (Int i = 0; i < MAX_ITEM; i += 1)
+			itemVec[i][0] = EFFECT_NONE
 		End Select
 		setOverCount(SonicDef.OVER_TIME)
 	End
@@ -5548,16 +5548,16 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	
 	Public Function drawGameUI:Void(g:MFGraphics)
 		
-		If (Not isTerminal Or terminalType <> CHARACTER_AMY Or terminalState <= TER_STATE_LOOK_MOON_WAIT) Then
-			GameState.guiAniDrawer.draw(g, MAX_ITEM, uiOffsetX + CHARACTER_SONIC, CHARACTER_SONIC, False, CHARACTER_SONIC)
+		If (Not isTerminal Or terminalType <> 3 Or terminalState <= TER_STATE_LOOK_MOON_WAIT) Then
+			GameState.guiAniDrawer.draw(g, MAX_ITEM, uiOffsetX + 0, 0, False, CHARACTER_SONIC)
 			Int i = ringNum
 			Int i2 = uiOffsetX + SPIN_LV2_COUNT
-			Int i3 = (ringNum = 0 And (timeCount / SSDef.PLAYER_MOVE_HEIGHT) Mod CHARACTER_KNUCKLES = 0) ? CHARACTER_AMY : CHARACTER_SONIC
-			drawNum(g, i, i2, FOCUS_MOVE_SPEED, CHARACTER_SONIC, i3)
-			drawNum(g, stageModeState = CHARACTER_TAILS ? raceScoreNum : scoreNum, NumberSideX + uiOffsetX, ANI_PUSH_WALL, CHARACTER_KNUCKLES, CHARACTER_SONIC)
+			Int i3 = (ringNum = 0 And (timeCount / SSDef.PLAYER_MOVE_HEIGHT) Mod 2 = 0) ? 3 : CHARACTER_SONIC
+			drawNum(g, i, i2, FOCUS_MOVE_SPEED, 0, i3)
+			drawNum(g, stageModeState = 1 ? raceScoreNum : scoreNum, NumberSideX + uiOffsetX, ANI_PUSH_WALL, 2, CHARACTER_SONIC)
 			timeDraw(g, NumberSideX + uiOffsetX, ANI_BAR_ROLL_1)
 			
-			If (stageModeState <> CHARACTER_TAILS) Then
+			If (stageModeState <> 1) Then
 				If (StageManager.getCurrentZoneId() = ANI_PUSH_WALL) Then
 					If (player.isDead) Then
 						headDrawer.setActionId(CHARACTER_SONIC)
@@ -5575,42 +5575,42 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	
 	Public Function drawNum:Void(g:MFGraphics, num:Int, x:Int, y:Int, anchor:Int, type:Int)
 		Int divideNum = TERMINAL_COUNT
-		Int blockNum = CHARACTER_TAILS
-		Int i = CHARACTER_SONIC
+		Int blockNum = 1
+		Int i = 0
 		While (num / divideNum <> 0) {
-			blockNum += CHARACTER_TAILS
+			blockNum += 1
 			divideNum *= TERMINAL_COUNT
-			i += CHARACTER_TAILS
+			i += 1
 		End Select
 		divideNum /= TERMINAL_COUNT
-		Int localanchor = CHARACTER_SONIC
+		Int localanchor = 0
 		Select (anchor)
 			Case CHARACTER_SONIC
 				localanchor = ANI_BANK_3
 				break
-			Case CHARACTER_TAILS
+			Case 1
 				localanchor = ANI_BANK_2
 				break
-			Case CHARACTER_KNUCKLES
+			Case 2
 				localanchor = SPIN_LV2_COUNT_CONF
 				break
 		End Select
-		Int localtype = CHARACTER_SONIC
+		Int localtype = 0
 		Select (type)
 			Case CHARACTER_SONIC
-				localtype = CHARACTER_SONIC
+				localtype = 0
 				break
-			Case CHARACTER_TAILS
-				localtype = CHARACTER_TAILS
+			Case 1
+				localtype = 1
 				break
-			Case CHARACTER_KNUCKLES
-				localtype = CHARACTER_AMY
+			Case 2
+				localtype = 3
 				break
-			Case CHARACTER_AMY
-				localtype = CHARACTER_KNUCKLES
+			Case 3
+				localtype = 2
 				break
 			Case 4
-				localtype = CHARACTER_TAILS
+				localtype = 1
 				break
 		End Select
 		NumberDrawer.drawNum(g, localtype, num, x, y, localanchor)
@@ -5620,30 +5620,30 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Int i
 		
 		If (numDrawer = Null) Then
-			numDrawer = GlobalResource.statusAnimation.getDrawer(CHARACTER_SONIC, False, CHARACTER_SONIC)
+			numDrawer = GlobalResource.statusAnimation.getDrawer(0, False, CHARACTER_SONIC)
 		EndIf
 		
-		Int divideNum = CHARACTER_TAILS
-		For (i = CHARACTER_TAILS; i < blockNum; i += CHARACTER_TAILS)
+		Int divideNum = 1
+		For (i = 1; i < blockNum; i += 1)
 			divideNum *= TERMINAL_COUNT
 		Next
-		Int leftPosition = CHARACTER_SONIC
+		Int leftPosition = 0
 		Select (anchor)
 			Case CHARACTER_SONIC
-				leftPosition = x - ((NUM_SPACE[type] * (blockNum - CHARACTER_TAILS)) / 2)
+				leftPosition = x - ((NUM_SPACE[type] * (blockNum - 1)) / 2)
 				break
-			Case CHARACTER_TAILS
+			Case 1
 				leftPosition = x
 				break
-			Case CHARACTER_KNUCKLES
-				leftPosition = x - (NUM_SPACE[type] * (blockNum - CHARACTER_TAILS))
+			Case 2
+				leftPosition = x - (NUM_SPACE[type] * (blockNum - 1))
 				break
 		End Select
-		For (i = CHARACTER_SONIC; i < blockNum; i += CHARACTER_TAILS)
+		For (i = 0; i < blockNum; i += 1)
 			Int tmpNum = Abs(num / divideNum) Mod TERMINAL_COUNT
 			divideNum /= TERMINAL_COUNT
 			
-			If (type = CHARACTER_AMY And tmpNum = 0) Then
+			If (type = 3 And tmpNum = 0) Then
 				numDrawer.setActionId(MOON_STAR_DES_Y_1)
 			Else
 				numDrawer.setActionId(NUM_ANI_ID[type] + tmpNum)
@@ -5673,14 +5673,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 					
 					If (timeCount = overTime And player <> Null) Then
-						If (stageModeState = CHARACTER_TAILS) Then
+						If (stageModeState = 1) Then
 							player.setDie(False)
 							StageManager.setStageTimeover()
-							StageManager.checkPointTime = CHARACTER_SONIC
+							StageManager.checkPointTime = 0
 						ElseIf (lifeNum > 0) Then
 							player.setDie(False)
 							StageManager.setStageTimeover()
-							StageManager.checkPointTime = CHARACTER_SONIC
+							StageManager.checkPointTime = 0
 							minusLife()
 						Else
 							player.setDie(False)
@@ -5688,7 +5688,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						EndIf
 					EndIf
 					
-				ElseIf (stageModeState = CHARACTER_TAILS) Then
+				ElseIf (stageModeState = 1) Then
 					If (overTime - timeCount <= BREATHE_TIME_COUNT) Then
 						If (timeCount / 1000 <> preTimeCount) Then
 							SoundSystem.getInstance().playSe(ANI_YELL)
@@ -5698,14 +5698,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 					
 					If (timeCount = overTime And player <> Null) Then
-						If (stageModeState = CHARACTER_TAILS) Then
+						If (stageModeState = 1) Then
 							player.setDie(False)
 							StageManager.setStageTimeover()
-							StageManager.checkPointTime = CHARACTER_SONIC
+							StageManager.checkPointTime = 0
 						ElseIf (lifeNum > 0) Then
 							player.setDie(False)
 							StageManager.setStageTimeover()
-							StageManager.checkPointTime = CHARACTER_SONIC
+							StageManager.checkPointTime = 0
 							minusLife()
 						Else
 							player.setDie(False)
@@ -5731,14 +5731,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 					
 					If (timeCount = overTime And player <> Null) Then
-						If (stageModeState = CHARACTER_TAILS) Then
+						If (stageModeState = 1) Then
 							player.setDie(False)
 							StageManager.setStageTimeover()
-							StageManager.checkPointTime = CHARACTER_SONIC
+							StageManager.checkPointTime = 0
 						ElseIf (lifeNum > 0) Then
 							player.setDie(False)
 							StageManager.setStageTimeover()
-							StageManager.checkPointTime = CHARACTER_SONIC
+							StageManager.checkPointTime = 0
 							minusLife()
 						Else
 							player.setDie(False)
@@ -5746,7 +5746,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						EndIf
 					EndIf
 					
-				ElseIf (stageModeState = CHARACTER_TAILS) Then
+				ElseIf (stageModeState = 1) Then
 					If (timeCount <= BREATHE_TIME_COUNT) Then
 						If (timeCount / 1000 <> preTimeCount) Then
 							SoundSystem.getInstance().playSe(ANI_YELL)
@@ -5756,14 +5756,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 					
 					If (timeCount = overTime And player <> Null) Then
-						If (stageModeState = CHARACTER_TAILS) Then
+						If (stageModeState = 1) Then
 							player.setDie(False)
 							StageManager.setStageTimeover()
-							StageManager.checkPointTime = CHARACTER_SONIC
+							StageManager.checkPointTime = 0
 						ElseIf (lifeNum > 0) Then
 							player.setDie(False)
 							StageManager.setStageTimeover()
-							StageManager.checkPointTime = CHARACTER_SONIC
+							StageManager.checkPointTime = 0
 							minusLife()
 						Else
 							player.setDie(False)
@@ -5802,26 +5802,26 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Int min = timeCount / 60000
 		Int sec = (timeCount Mod 60000) / 1000
 		Int msec = ((timeCount Mod 60000) Mod 1000) / TERMINAL_COUNT
-		Int numType = CHARACTER_SONIC
+		Int numType = 0
 		
-		If ((GlobalResource.timeIsLimit() Or stageModeState = CHARACTER_TAILS) And (((overTime > timeCount And timeCount > 540000) Or (overTime < timeCount And timeCount < 60000)) And (timeCount / SSDef.PLAYER_MOVE_HEIGHT) Mod CHARACTER_KNUCKLES = 0)) Then
-			numType = CHARACTER_AMY
+		If ((GlobalResource.timeIsLimit() Or stageModeState = 1) And (((overTime > timeCount And timeCount > 540000) Or (overTime < timeCount And timeCount < 60000)) And (timeCount / SSDef.PLAYER_MOVE_HEIGHT) Mod 2 = 0)) Then
+			numType = 3
 		EndIf
 		
 		If (msec < TERMINAL_COUNT) Then
-			drawNum(g, CHARACTER_SONIC, x - NUM_SPACE[numType], y, CHARACTER_KNUCKLES, numType)
+			drawNum(g, 0, x - NUM_SPACE[numType], y, 2, numType)
 		EndIf
 		
-		drawNum(g, msec, x, y, CHARACTER_KNUCKLES, numType)
-		NumberDrawer.drawColon(g, numType = CHARACTER_AMY ? CHARACTER_KNUCKLES : CHARACTER_SONIC, (x - (NUM_SPACE[numType] * CHARACTER_KNUCKLES)) - (NUM_SPACE[numType] / 2), y, ANI_BANK_3)
+		drawNum(g, msec, x, y, 2, numType)
+		NumberDrawer.drawColon(g, numType = 3 ? 2 : 0, (x - (NUM_SPACE[numType] * 2)) - (NUM_SPACE[numType] / 2), y, ANI_BANK_3)
 		
 		If (sec < TERMINAL_COUNT) Then
-			drawNum(g, CHARACTER_SONIC, x - (NUM_SPACE[numType] * 4), y, CHARACTER_KNUCKLES, numType)
+			drawNum(g, 0, x - (NUM_SPACE[numType] * 4), y, 2, numType)
 		EndIf
 		
-		drawNum(g, sec, x - (NUM_SPACE[numType] * CHARACTER_AMY), y, CHARACTER_KNUCKLES, numType)
-		NumberDrawer.drawColon(g, numType = CHARACTER_AMY ? CHARACTER_KNUCKLES : CHARACTER_SONIC, (x - (NUM_SPACE[numType] * MAX_ITEM)) - (NUM_SPACE[numType] / 2), y, ANI_BANK_3)
-		drawNum(g, min, x - (NUM_SPACE[numType] * ITEM_RING_5), y, CHARACTER_KNUCKLES, numType)
+		drawNum(g, sec, x - (NUM_SPACE[numType] * 3), y, 2, numType)
+		NumberDrawer.drawColon(g, numType = 3 ? 2 : 0, (x - (NUM_SPACE[numType] * MAX_ITEM)) - (NUM_SPACE[numType] / 2), y, ANI_BANK_3)
+		drawNum(g, min, x - (NUM_SPACE[numType] * ITEM_RING_5), y, 2, numType)
 	End
 	
 	Public Function drawRecordTime:Void(g:MFGraphics, timeCount:Int, x:Int, y:Int, numType:Int, anchor:Int)
@@ -5832,25 +5832,25 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Case CHARACTER_SONIC
 				x += (NUM_SPACE[numType] * ITEM_RING_10) / 2
 				break
-			Case CHARACTER_TAILS
+			Case 1
 				x += NUM_SPACE[numType] * ITEM_RING_10
 				break
 		End Select
 		
 		If (timeCount < TERMINAL_COUNT) Then
-			drawNum(g, CHARACTER_SONIC, x - NUM_SPACE[numType], y, CHARACTER_KNUCKLES, numType)
+			drawNum(g, 0, x - NUM_SPACE[numType], y, 2, numType)
 		EndIf
 		
-		drawNum(g, timeCount, x, y, CHARACTER_KNUCKLES, numType)
-		NumberDrawer.drawColon(g, CHARACTER_AMY, (x - (NUM_SPACE[numType] * CHARACTER_KNUCKLES)) - (NUM_SPACE[numType] / 2), y, ANI_BANK_3)
+		drawNum(g, timeCount, x, y, 2, numType)
+		NumberDrawer.drawColon(g, 3, (x - (NUM_SPACE[numType] * 2)) - (NUM_SPACE[numType] / 2), y, ANI_BANK_3)
 		
 		If (sec < TERMINAL_COUNT) Then
-			drawNum(g, CHARACTER_SONIC, x - (NUM_SPACE[numType] * 4), y, CHARACTER_KNUCKLES, numType)
+			drawNum(g, 0, x - (NUM_SPACE[numType] * 4), y, 2, numType)
 		EndIf
 		
-		drawNum(g, sec, x - (NUM_SPACE[numType] * CHARACTER_AMY), y, CHARACTER_KNUCKLES, numType)
-		NumberDrawer.drawColon(g, CHARACTER_AMY, (x - (NUM_SPACE[numType] * MAX_ITEM)) - (NUM_SPACE[numType] / 2), y, ANI_BANK_3)
-		drawNum(g, min, x - (NUM_SPACE[numType] * ITEM_RING_5), y, CHARACTER_KNUCKLES, numType)
+		drawNum(g, sec, x - (NUM_SPACE[numType] * 3), y, 2, numType)
+		NumberDrawer.drawColon(g, 3, (x - (NUM_SPACE[numType] * MAX_ITEM)) - (NUM_SPACE[numType] / 2), y, ANI_BANK_3)
+		drawNum(g, min, x - (NUM_SPACE[numType] * ITEM_RING_5), y, 2, numType)
 	End
 	
 	Public Function drawRecordTimeTotalYellow:Void(g:MFGraphics, timeCount:Int, x:Int, y:Int, numType:Int, anchor:Int)
@@ -5861,29 +5861,29 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Case CHARACTER_SONIC
 				x += (NUM_SPACE[numType] * ITEM_RING_10) / 2
 				break
-			Case CHARACTER_TAILS
+			Case 1
 				x += NUM_SPACE[numType] * ITEM_RING_10
 				break
 		End Select
 		
 		If (timeCount < TERMINAL_COUNT) Then
-			drawNum(g, CHARACTER_SONIC, x - NUM_SPACE[numType], y, CHARACTER_KNUCKLES, numType)
+			drawNum(g, 0, x - NUM_SPACE[numType], y, 2, numType)
 		EndIf
 		
-		drawNum(g, timeCount, x, y, CHARACTER_KNUCKLES, numType)
-		NumberDrawer.drawColon(g, CHARACTER_SONIC, (x - (NUM_SPACE[numType] * CHARACTER_KNUCKLES)) - (NUM_SPACE[numType] / 2), y, ANI_BANK_3)
+		drawNum(g, timeCount, x, y, 2, numType)
+		NumberDrawer.drawColon(g, 0, (x - (NUM_SPACE[numType] * 2)) - (NUM_SPACE[numType] / 2), y, ANI_BANK_3)
 		
 		If (sec < TERMINAL_COUNT) Then
-			drawNum(g, CHARACTER_SONIC, x - (NUM_SPACE[numType] * 4), y, CHARACTER_KNUCKLES, numType)
+			drawNum(g, 0, x - (NUM_SPACE[numType] * 4), y, 2, numType)
 		EndIf
 		
-		drawNum(g, sec, x - (NUM_SPACE[numType] * CHARACTER_AMY), y, CHARACTER_KNUCKLES, numType)
-		NumberDrawer.drawColon(g, CHARACTER_SONIC, (x - (NUM_SPACE[numType] * MAX_ITEM)) - (NUM_SPACE[numType] / 2), y, ANI_BANK_3)
-		drawNum(g, min, x - (NUM_SPACE[numType] * ITEM_RING_5), y, CHARACTER_KNUCKLES, numType)
+		drawNum(g, sec, x - (NUM_SPACE[numType] * 3), y, 2, numType)
+		NumberDrawer.drawColon(g, 0, (x - (NUM_SPACE[numType] * MAX_ITEM)) - (NUM_SPACE[numType] / 2), y, ANI_BANK_3)
+		drawNum(g, min, x - (NUM_SPACE[numType] * ITEM_RING_5), y, 2, numType)
 	End
 	
 	Public Function drawRecordTimeLeft:Void(g:MFGraphics, timeCount:Int, x:Int, y:Int)
-		drawRecordTimeTotalYellow(g, timeCount, x, y, CHARACTER_SONIC, CHARACTER_TAILS)
+		drawRecordTimeTotalYellow(g, timeCount, x, y, 0, 1)
 		MyAPI.setBmfColor(CHARACTER_SONIC)
 	End
 	
@@ -5893,15 +5893,15 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Private Function drawStagePassInfoScroll:Void(g:MFGraphics, y:Int, speed:Int, space:Int)
-		State.drawBar(g, CHARACTER_KNUCKLES, y)
+		State.drawBar(g, 2, y)
 		itemOffsetX -= speed
 		itemOffsetX Mod= space
 		Int x1 = itemOffsetX - 294
-		While (x1 < SCREEN_WIDTH * CHARACTER_KNUCKLES) {
-			GameState.stageInfoAniDrawer.draw(g, getCharacterID() + ANI_WIND_JUMP, x1, (y - TERMINAL_COUNT) + CHARACTER_KNUCKLES, False, CHARACTER_SONIC)
-			GameState.stageInfoAniDrawer.draw(g, ANI_BANK_2, x1, (y - TERMINAL_COUNT) + CHARACTER_KNUCKLES, False, CHARACTER_SONIC)
+		While (x1 < SCREEN_WIDTH * 2) {
+			GameState.stageInfoAniDrawer.draw(g, getCharacterID() + ANI_WIND_JUMP, x1, (y - TERMINAL_COUNT) + 2, False, CHARACTER_SONIC)
+			GameState.stageInfoAniDrawer.draw(g, ANI_BANK_2, x1, (y - TERMINAL_COUNT) + 2, False, CHARACTER_SONIC)
 			MFGraphics mFGraphics = g
-			GameState.stageInfoAniDrawer.draw(mFGraphics, passStageActionID, x1, (y - TERMINAL_COUNT) + CHARACTER_KNUCKLES, False, CHARACTER_SONIC)
+			GameState.stageInfoAniDrawer.draw(mFGraphics, passStageActionID, x1, (y - TERMINAL_COUNT) + 2, False, CHARACTER_SONIC)
 			x1 += space
 		Next
 	End
@@ -5909,11 +5909,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Private Function drawStagePassInfoScroll:Void(g:MFGraphics, offset_x:Int, y:Int, speed:Int, space:Int)
 		
 		If (isbarOut) Then
-			State.drawBar(g, CHARACTER_KNUCKLES, offset_x, y)
-			State.drawBar(g, CHARACTER_KNUCKLES, SCREEN_WIDTH + offset_x, y)
-			State.drawBar(g, CHARACTER_KNUCKLES, (SCREEN_WIDTH * CHARACTER_KNUCKLES) + offset_x, y)
+			State.drawBar(g, 2, offset_x, y)
+			State.drawBar(g, 2, SCREEN_WIDTH + offset_x, y)
+			State.drawBar(g, 2, (SCREEN_WIDTH * 2) + offset_x, y)
 		Else
-			State.drawBar(g, CHARACTER_KNUCKLES, y)
+			State.drawBar(g, 2, y)
 		EndIf
 		
 		If (offset_x = 0) Then
@@ -5922,13 +5922,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		EndIf
 		
 		Int x1 = itemOffsetX - 294
-		While (x1 < SCREEN_WIDTH * CHARACTER_KNUCKLES) {
+		While (x1 < SCREEN_WIDTH * 2) {
 			MFGraphics mFGraphics = g
-			GameState.stageInfoAniDrawer.draw(mFGraphics, getCharacterID() + ANI_WIND_JUMP, x1 + offset_x, (y - TERMINAL_COUNT) + CHARACTER_KNUCKLES, False, CHARACTER_SONIC)
+			GameState.stageInfoAniDrawer.draw(mFGraphics, getCharacterID() + ANI_WIND_JUMP, x1 + offset_x, (y - TERMINAL_COUNT) + 2, False, CHARACTER_SONIC)
 			mFGraphics = g
-			GameState.stageInfoAniDrawer.draw(mFGraphics, ANI_BANK_2, x1 + offset_x, (y - TERMINAL_COUNT) + CHARACTER_KNUCKLES, False, CHARACTER_SONIC)
+			GameState.stageInfoAniDrawer.draw(mFGraphics, ANI_BANK_2, x1 + offset_x, (y - TERMINAL_COUNT) + 2, False, CHARACTER_SONIC)
 			mFGraphics = g
-			GameState.stageInfoAniDrawer.draw(mFGraphics, passStageActionID, x1 + offset_x, (y - TERMINAL_COUNT) + CHARACTER_KNUCKLES, False, CHARACTER_SONIC)
+			GameState.stageInfoAniDrawer.draw(mFGraphics, passStageActionID, x1 + offset_x, (y - TERMINAL_COUNT) + 2, False, CHARACTER_SONIC)
 			x1 += space
 		Next
 	End
@@ -5939,23 +5939,23 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		If (StageManager.getStageID() >= SPIN_LV2_COUNT) Then
 			passStageActionID = (StageManager.getStageID() - SPIN_LV2_COUNT) + SPIN_LV2_COUNT_CONF
-		ElseIf (StageManager.getStageID() Mod CHARACTER_KNUCKLES = 0) Then
+		ElseIf (StageManager.getStageID() Mod 2 = 0) Then
 			passStageActionID = ANI_BANK_3
-		ElseIf (StageManager.getStageID() Mod CHARACTER_KNUCKLES = CHARACTER_TAILS) Then
+		ElseIf (StageManager.getStageID() Mod 2 = 1) Then
 			passStageActionID = ANI_CELEBRATE_1
 		EndIf
 		
 	End
 	
 	Private Function drawMovingbar:Void(g:MFGraphics, space:Int)
-		State.drawBar(g, CHARACTER_KNUCKLES, offsetx - BACKGROUND_WIDTH, offsety)
-		State.drawBar(g, CHARACTER_KNUCKLES, (offsetx - BACKGROUND_WIDTH) + SCREEN_WIDTH, offsety)
-		Int drawNum = (((SCREEN_WIDTH + space) - CHARACTER_TAILS) / space) + CHARACTER_KNUCKLES
-		For (Int i = CHARACTER_SONIC; i < drawNum; i += CHARACTER_TAILS)
+		State.drawBar(g, 2, offsetx - BACKGROUND_WIDTH, offsety)
+		State.drawBar(g, 2, (offsetx - BACKGROUND_WIDTH) + SCREEN_WIDTH, offsety)
+		Int drawNum = (((SCREEN_WIDTH + space) - 1) / space) + 2
+		For (Int i = 0; i < drawNum; i += 1)
 			Int x2 = offsetx + (i * space)
-			GameState.stageInfoAniDrawer.draw(g, getCharacterID() + ANI_WIND_JUMP, x2, (offsety - TERMINAL_COUNT) + CHARACTER_KNUCKLES, False, CHARACTER_SONIC)
-			GameState.stageInfoAniDrawer.draw(g, ANI_BANK_2, x2, (offsety - TERMINAL_COUNT) + CHARACTER_KNUCKLES, False, CHARACTER_SONIC)
-			GameState.stageInfoAniDrawer.draw(g, passStageActionID, x2, (offsety - TERMINAL_COUNT) + CHARACTER_KNUCKLES, False, CHARACTER_SONIC)
+			GameState.stageInfoAniDrawer.draw(g, getCharacterID() + ANI_WIND_JUMP, x2, (offsety - TERMINAL_COUNT) + 2, False, CHARACTER_SONIC)
+			GameState.stageInfoAniDrawer.draw(g, ANI_BANK_2, x2, (offsety - TERMINAL_COUNT) + 2, False, CHARACTER_SONIC)
+			GameState.stageInfoAniDrawer.draw(g, passStageActionID, x2, (offsety - TERMINAL_COUNT) + 2, False, CHARACTER_SONIC)
 		Next
 	End
 	
@@ -5975,12 +5975,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Function movingBar:Bool()
 		
 		If (offsetx <= 0) Then
-			offsetx = CHARACTER_SONIC
+			offsetx = 0
 		Else
 			offsetx -= movespeedx
 			
 			If (offsetx = SCREEN_WIDTH - movespeedx) Then
-				If (stageModeState = CHARACTER_TAILS) Then
+				If (stageModeState = 1) Then
 					If (isRaceModeNewRecord()) Then
 						SoundSystem.getInstance().playBgm(ANI_DEAD, False)
 					Else
@@ -5993,11 +5993,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					SoundSystem.getInstance().playBgm(ANI_WIND_JUMP, False)
 				Else
 					
-					If (StageManager.getStageID() Mod CHARACTER_KNUCKLES = 0) Then
+					If (StageManager.getStageID() Mod 2 = 0) Then
 						SoundSystem.getInstance().playBgm(MOON_STAR_DES_Y_1, False)
 					EndIf
 					
-					If (StageManager.getStageID() Mod CHARACTER_KNUCKLES = CHARACTER_TAILS) Then
+					If (StageManager.getStageID() Mod 2 = 1) Then
 						SoundSystem.getInstance().playBgm(ANI_SMALL_ZERO, False)
 					EndIf
 				EndIf
@@ -6037,7 +6037,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Public Function clipMoveShadow:Void(g:MFGraphics)
-		MyAPI.setClip(g, clipx, CHARACTER_SONIC, clipstartw, SCREEN_HEIGHT)
+		MyAPI.setClip(g, clipx, 0, clipstartw, SCREEN_HEIGHT)
 	End
 	
 	Public Function calculateScore:Void()
@@ -6048,7 +6048,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			If (timeCount > 192000) Then
 				score1 = 1000
 			ElseIf (timeCount > 192000 Or timeCount <= 132000) Then
-				score1 = CHARACTER_SONIC
+				score1 = 0
 			Else
 				score1 = BANKING_MIN_SPEED
 			EndIf
@@ -6072,7 +6072,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		ElseIf (timeCount >= 240000 And timeCount < 300000) Then
 			score1 = 1000
 		ElseIf (timeCount < 300000 Or timeCount >= 360000) Then
-			score1 = CHARACTER_SONIC
+			score1 = 0
 		Else
 			score1 = BANKING_MIN_SPEED
 		EndIf
@@ -6093,17 +6093,17 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 							clipMoveShadow(g)
 							GameState.guiAniDrawer.draw(g, ITEM_RING_5, (SCREEN_WIDTH / 2) - 70, (SCREEN_HEIGHT / 2) - ITEM_RING_5, False, CHARACTER_SONIC)
 							GameState.guiAniDrawer.draw(g, ITEM_RING_10, (SCREEN_WIDTH / 2) - 70, ((SCREEN_HEIGHT / 2) + MENU_SPACE) - ITEM_RING_5, False, CHARACTER_SONIC)
-							drawNum(g, score1, (SCREEN_WIDTH / 2) + NUM_DISTANCE, SCREEN_HEIGHT / 2, CHARACTER_KNUCKLES, CHARACTER_SONIC)
-							drawNum(g, score2, (SCREEN_WIDTH / 2) + NUM_DISTANCE, (SCREEN_HEIGHT / 2) + MENU_SPACE, CHARACTER_KNUCKLES, CHARACTER_SONIC)
-							MyAPI.setClip(g, CHARACTER_SONIC, CHARACTER_SONIC, SCREEN_WIDTH, SCREEN_HEIGHT)
+							drawNum(g, score1, (SCREEN_WIDTH / 2) + NUM_DISTANCE, SCREEN_HEIGHT / 2, 2, CHARACTER_SONIC)
+							drawNum(g, score2, (SCREEN_WIDTH / 2) + NUM_DISTANCE, (SCREEN_HEIGHT / 2) + MENU_SPACE, 2, CHARACTER_SONIC)
+							MyAPI.setClip(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 							totalPlusscore = (score1 + score2) + scoreNum
 						EndIf
 						
 					Else
 						drawMovingbar(g, STAGE_PASS_STR_SPACE)
-						stagePassResultOutOffsetX = CHARACTER_SONIC
+						stagePassResultOutOffsetX = 0
 						isStartStageEndFlag = False
-						stageEndFrameCnt = CHARACTER_SONIC
+						stageEndFrameCnt = 0
 						isOnlyBarOut = False
 					EndIf
 					
@@ -6111,16 +6111,16 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						GameState.guiAniDrawer.draw(g, ITEM_RING_5, stagePassResultOutOffsetX + ((SCREEN_WIDTH / 2) - 70), (SCREEN_HEIGHT / 2) - ITEM_RING_5, False, CHARACTER_SONIC)
 						GameState.guiAniDrawer.draw(g, ITEM_RING_10, stagePassResultOutOffsetX + ((SCREEN_WIDTH / 2) - 70), ((SCREEN_HEIGHT / 2) + MENU_SPACE) - ITEM_RING_5, False, CHARACTER_SONIC)
 						
-						If (stageModeState = CHARACTER_TAILS) Then
-							raceScoreNum = MyAPI.calNextPosition((double) raceScoreNum, (double) totalPlusscore, CHARACTER_TAILS, MAX_ITEM)
+						If (stageModeState = 1) Then
+							raceScoreNum = MyAPI.calNextPosition((double) raceScoreNum, (double) totalPlusscore, 1, MAX_ITEM)
 						Else
-							scoreNum = MyAPI.calNextPosition((double) scoreNum, (double) totalPlusscore, CHARACTER_TAILS, MAX_ITEM)
+							scoreNum = MyAPI.calNextPosition((double) scoreNum, (double) totalPlusscore, 1, MAX_ITEM)
 						EndIf
 						
-						score1 = MyAPI.calNextPosition((double) score1, 0.0d, CHARACTER_TAILS, MAX_ITEM)
-						score2 = MyAPI.calNextPosition((double) score2, 0.0d, CHARACTER_TAILS, MAX_ITEM)
-						drawNum(g, score1, ((SCREEN_WIDTH / 2) + NUM_DISTANCE) + stagePassResultOutOffsetX, SCREEN_HEIGHT / 2, CHARACTER_KNUCKLES, CHARACTER_SONIC)
-						drawNum(g, score2, ((SCREEN_WIDTH / 2) + NUM_DISTANCE) + stagePassResultOutOffsetX, (SCREEN_HEIGHT / 2) + MENU_SPACE, CHARACTER_KNUCKLES, CHARACTER_SONIC)
+						score1 = MyAPI.calNextPosition((double) score1, 0.0d, 1, MAX_ITEM)
+						score2 = MyAPI.calNextPosition((double) score2, 0.0d, 1, MAX_ITEM)
+						drawNum(g, score1, ((SCREEN_WIDTH / 2) + NUM_DISTANCE) + stagePassResultOutOffsetX, SCREEN_HEIGHT / 2, 2, CHARACTER_SONIC)
+						drawNum(g, score2, ((SCREEN_WIDTH / 2) + NUM_DISTANCE) + stagePassResultOutOffsetX, (SCREEN_HEIGHT / 2) + MENU_SPACE, 2, CHARACTER_SONIC)
 						
 						If (scoreNum = totalPlusscore) Then
 							IsStarttoCnt = True
@@ -6137,17 +6137,17 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 					
 					If (isStartStageEndFlag) Then
-						stageEndFrameCnt += CHARACTER_TAILS
+						stageEndFrameCnt += 1
 						
-						If (stageEndFrameCnt = CHARACTER_KNUCKLES) Then
+						If (stageEndFrameCnt = 2) Then
 							SoundSystem.getInstance().playSe(LOOK_COUNT)
 						EndIf
 					EndIf
 					
 					If (isOnlyBarOut) Then
-						onlyBarOutCnt += CHARACTER_TAILS
+						onlyBarOutCnt += 1
 						
-						If (onlyBarOutCnt = CHARACTER_KNUCKLES) Then
+						If (onlyBarOutCnt = 2) Then
 							SoundSystem.getInstance().playSe(LOOK_COUNT)
 						EndIf
 						
@@ -6160,7 +6160,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						EndIf
 					EndIf
 					
-				Case CHARACTER_TAILS
+				Case 1
 					
 					If (movingBar()) Then
 						drawStagePassInfoScroll(g, (SCREEN_HEIGHT / 2) - SPIN_LV2_COUNT_CONF, ANI_PUSH_WALL, SIDE_FOOT_FROM_CENTER)
@@ -6171,8 +6171,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						
 						clipMoveShadow(g)
 						GameState.guiAniDrawer.draw(g, ANI_PUSH_WALL, (SCREEN_WIDTH / 2) - BACKGROUND_WIDTH, SCREEN_HEIGHT / 2, False, CHARACTER_SONIC)
-						drawRecordTime(g, timeCount, (SCREEN_WIDTH / 2) + NUM_DISTANCE_BIG, (SCREEN_HEIGHT / 2) + ITEM_RING_10, CHARACTER_KNUCKLES, CHARACTER_KNUCKLES)
-						MyAPI.setClip(g, CHARACTER_SONIC, CHARACTER_SONIC, SCREEN_WIDTH, SCREEN_HEIGHT)
+						drawRecordTime(g, timeCount, (SCREEN_WIDTH / 2) + NUM_DISTANCE_BIG, (SCREEN_HEIGHT / 2) + ITEM_RING_10, 2, 2)
+						MyAPI.setClip(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 						
 						If (isRaceModeNewRecord() And IsStarttoCnt And Not StageManager.isSaveTimeModeScore) Then
 							IsDisplayRaceModeNewRecord = True
@@ -6199,8 +6199,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Public Function gamepauseInit:Void()
-		cursor = CHARACTER_SONIC
-		cursorIndex = CHARACTER_SONIC
+		cursor = 0
+		cursorIndex = 0
 		Key.touchkeygameboardClose()
 	End
 	
@@ -6216,16 +6216,16 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		EndIf
 		
 		If (currentPauseMenuItem.length <= 4) Then
-			cursorIndex = CHARACTER_SONIC
+			cursorIndex = 0
 		ElseIf (cursorIndex > cursor) Then
 			cursorIndex = cursor
-		ElseIf ((cursorIndex + 4) - CHARACTER_TAILS < cursor) Then
-			cursorIndex = (cursor - 4) + CHARACTER_TAILS
+		ElseIf ((cursorIndex + 4) - 1 < cursor) Then
+			cursorIndex = (cursor - 4) + 1
 		EndIf
 		
 		State.drawMenuFontById(g, 119, SCREEN_WIDTH / 2, (((((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + TERMINAL_COUNT) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * (cursor - cursorIndex)))
-		State.drawMenuFontById(g, StringIndex.STR_RIGHT_ARROW, ((SCREEN_WIDTH / 2) - 56) - CHARACTER_SONIC, (((((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + TERMINAL_COUNT) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * (cursor - cursorIndex)))
-		For (Int i = cursorIndex; i < cursorIndex + 4; i += CHARACTER_TAILS)
+		State.drawMenuFontById(g, StringIndex.STR_RIGHT_ARROW, ((SCREEN_WIDTH / 2) - 56) - 0, (((((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + TERMINAL_COUNT) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * (cursor - cursorIndex)))
+		For (Int i = cursorIndex; i < cursorIndex + 4; i += 1)
 			State.drawMenuFontById(g, currentPauseMenuItem[i], SCREEN_WIDTH / 2, (((((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + TERMINAL_COUNT) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * (i - cursorIndex)))
 		Next
 		
@@ -6281,7 +6281,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	
 	Public Function IsUnderSheild:Bool()
 		
-		If (shieldType = CHARACTER_KNUCKLES) Then
+		If (shieldType = 2) Then
 			Return True
 		EndIf
 		
@@ -6318,20 +6318,20 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		EndIf
 		
 		Self.faceDirection = z
-		Int bodyCenterX = getNewPointX(Self.posX, CHARACTER_SONIC, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
-		Int bodyCenterY = getNewPointY(Self.posY, CHARACTER_SONIC, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
+		Int bodyCenterX = getNewPointX(Self.posX, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
+		Int bodyCenterY = getNewPointY(Self.posY, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
 		
 		If (Self.isAntiGravity) Then
 			i = RollPlatformSpeedC.DEGREE_VELOCITY
 		Else
-			i = CHARACTER_SONIC
+			i = 0
 		EndIf
 		
 		Self.faceDegree = i
-		i = getNewPointX(bodyCenterX, CHARACTER_SONIC, Self.collisionRect.getHeight() / 2, Self.faceDegree)
+		i = getNewPointX(bodyCenterX, 0, Self.collisionRect.getHeight() / 2, Self.faceDegree)
 		Self.footPointX = i
 		Self.posX = i
-		i = getNewPointY(bodyCenterY, CHARACTER_SONIC, Self.collisionRect.getHeight() / 2, Self.faceDegree)
+		i = getNewPointY(bodyCenterY, 0, Self.collisionRect.getHeight() / 2, Self.faceDegree)
 		Self.footPointY = i
 		Self.posY = i
 	End
@@ -6349,7 +6349,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			If (Self.isAntiGravity) Then
 				i = RollPlatformSpeedC.DEGREE_VELOCITY
 			Else
-				i = CHARACTER_SONIC
+				i = 0
 			EndIf
 			
 			Self.faceDegree = i
@@ -6368,7 +6368,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						break
 					EndIf
 					
-				Case CHARACTER_TAILS
+				Case 1
 					
 					If (Self.isAntiGravity) Then
 						Self.leftStopped = True
@@ -6381,7 +6381,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						Return
 					EndIf
 					
-				Case CHARACTER_AMY
+				Case 3
 					
 					If (Self.isAntiGravity) Then
 						Self.rightStopped = True
@@ -6405,10 +6405,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						setDie(False)
 					EndIf
 					
-				Case CHARACTER_TAILS
+				Case 1
 					
 					If (Not Self.speedLock) Then
-						Self.totalVelocity = CHARACTER_SONIC
+						Self.totalVelocity = 0
 					EndIf
 					
 					If (Self.isAntiGravity) Then
@@ -6420,15 +6420,15 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					If (Self.leftStopped And Self.rightStopped) Then
 						setDie(False)
 					ElseIf ((Key.repeat(Key.gRight) And Not Self.isAntiGravity) Or (Key.repeat(Key.gLeft) And Self.isAntiGravity)) Then
-						If (Self.animationID = 0 Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT Or Self.animationID = CHARACTER_TAILS Or Self.animationID = CHARACTER_KNUCKLES Or Self.animationID = CHARACTER_AMY) Then
+						If (Self.animationID = 0 Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT Or Self.animationID = 1 Or Self.animationID = 2 Or Self.animationID = 3) Then
 							Self.animationID = ANI_PUSH_WALL
 						EndIf
 					EndIf
 					
-				Case CHARACTER_AMY
+				Case 3
 					
 					If (Not Self.speedLock) Then
-						Self.totalVelocity = CHARACTER_SONIC
+						Self.totalVelocity = 0
 					EndIf
 					
 					If (Self.isAntiGravity) Then
@@ -6440,7 +6440,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					If (Self.leftStopped And Self.rightStopped) Then
 						setDie(False)
 					ElseIf ((Key.repeat(Key.gLeft) And Not Self.isAntiGravity) Or (Key.repeat(Key.gRight) And Self.isAntiGravity)) Then
-						If (Self.animationID = 0 Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT Or Self.animationID = CHARACTER_TAILS Or Self.animationID = CHARACTER_KNUCKLES Or Self.animationID = CHARACTER_AMY) Then
+						If (Self.animationID = 0 Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT Or Self.animationID = 1 Or Self.animationID = 2 Or Self.animationID = 3) Then
 							Self.animationID = ANI_PUSH_WALL
 						EndIf
 					EndIf
@@ -6559,11 +6559,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Private Method checkCliffAnimation:Void()
-		Int footLeftX = ACUtilities.getRelativePointX(Self.posX, LEFT_FOOT_OFFSET_X, CHARACTER_SONIC, Self.faceDegree)
+		Int footLeftX = ACUtilities.getRelativePointX(Self.posX, LEFT_FOOT_OFFSET_X, 0, Self.faceDegree)
 		Int footLeftY = ACUtilities.getRelativePointY(Self.posY, LEFT_FOOT_OFFSET_X, Self.worldInstance.getTileHeight(), Self.faceDegree)
-		Int footCenterX = ACUtilities.getRelativePointX(Self.posX, CHARACTER_SONIC, CHARACTER_SONIC, Self.faceDegree)
-		Int footCenterY = ACUtilities.getRelativePointY(Self.posY, CHARACTER_SONIC, Self.worldInstance.getTileHeight(), Self.faceDegree)
-		Int footRightX = ACUtilities.getRelativePointX(Self.posX, SIDE_FOOT_FROM_CENTER, CHARACTER_SONIC, Self.faceDegree)
+		Int footCenterX = ACUtilities.getRelativePointX(Self.posX, 0, 0, Self.faceDegree)
+		Int footCenterY = ACUtilities.getRelativePointY(Self.posY, 0, Self.worldInstance.getTileHeight(), Self.faceDegree)
+		Int footRightX = ACUtilities.getRelativePointX(Self.posX, SIDE_FOOT_FROM_CENTER, 0, Self.faceDegree)
 		Int footRightY = ACUtilities.getRelativePointY(Self.posY, SIDE_FOOT_FROM_CENTER, Self.worldInstance.getTileHeight(), Self.faceDegree)
 		Select (Self.collisionState)
 			Case CHARACTER_SONIC
@@ -6589,7 +6589,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 				EndIf
 				
-			Case CHARACTER_KNUCKLES
+			Case 2
 				
 				If (Self.footOnObject = Null) Then
 					Return
@@ -6632,7 +6632,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		If (Not (Key.repeat(Key.gLeft) Or Key.repeat(Key.gRight) Or isTerminal Or Self.animationID = EFFECT_NONE Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT)) Then
 			If (Key.repeat(Key.gDown)) Then
 				If (Abs(getVelX()) > 64 Or getDegreeDiff(Self.faceDegree, Self.degreeStable) > ANI_DEAD_PRE) Then
-					If (Not (Self.animationID = 4 Or characterID = CHARACTER_AMY Or Self.isCrashFallingSand)) Then
+					If (Not (Self.animationID = 4 Or characterID = 3 Or Self.isCrashFallingSand)) Then
 						soundInstance.playSe(4)
 					EndIf
 					
@@ -6646,24 +6646,24 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					If (Self.collisionState = TER_STATE_LOOK_MOON_WAIT) Then
 						If (Self instanceof PlayerAmy) Then
 							Self.dashRolling = True
-							Self.spinDownWaitCount = CHARACTER_SONIC
+							Self.spinDownWaitCount = 0
 							
-							If (characterID <> CHARACTER_AMY) Then
+							If (characterID <> 3) Then
 								soundInstance.playSe(4)
 							EndIf
 						EndIf
 						
 					ElseIf (Key.press(Key.B_HIGH_JUMP | Key.gUp)) Then
 						Self.dashRolling = True
-						Self.spinDownWaitCount = CHARACTER_SONIC
+						Self.spinDownWaitCount = 0
 						
-						If (characterID <> CHARACTER_AMY) Then
+						If (characterID <> 3) Then
 							soundInstance.playSe(4)
 						EndIf
 					EndIf
 					
 					If (Not Self.dashRolling) Then
-						Self.focusMovingState = CHARACTER_KNUCKLES
+						Self.focusMovingState = 2
 					EndIf
 				EndIf
 				
@@ -6676,7 +6676,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			If (Key.press(Key.B_SPIN2)) Then
 				Self.dashRolling = True
 				
-				If (characterID <> CHARACTER_AMY) Then
+				If (characterID <> 3) Then
 					soundInstance.playSe(4)
 				EndIf
 				
@@ -6687,7 +6687,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Self.dashRolling = True
 				Self.spinKeyCount = SPIN_KEY_COUNT
 				
-				If (characterID <> CHARACTER_AMY) Then
+				If (characterID <> 3) Then
 					soundInstance.playSe(4)
 				EndIf
 				
@@ -6697,7 +6697,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Self.dashRolling = True
 				Self.spinKeyCount = SPIN_KEY_COUNT
 				
-				If (characterID <> CHARACTER_AMY) Then
+				If (characterID <> 3) Then
 					soundInstance.playSe(4)
 				EndIf
 				
@@ -6728,7 +6728,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		If (Self.dashRolling) Then
 			dashRollingLogic()
-		ElseIf (Self.effectID = 0 Or Self.effectID = CHARACTER_TAILS) Then
+		ElseIf (Self.effectID = 0 Or Self.effectID = 1) Then
 			Self.effectID = EFFECT_NONE
 		EndIf
 		
@@ -6745,7 +6745,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Method getGravity:Int()
 		
 		If (Self.isInWater) Then
-			Return (GRAVITY * CHARACTER_AMY) / MAX_ITEM
+			Return (GRAVITY * 3) / MAX_ITEM
 		EndIf
 		
 		Return GRAVITY
@@ -6760,24 +6760,24 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		resetBreatheCount()
 		Self.animationID = ANI_BREATHE
 		
-		If (characterID = CHARACTER_TAILS) Then
-			((PlayerTails) player).flyCount = CHARACTER_SONIC
+		If (characterID = 1) Then
+			((PlayerTails) player).flyCount = 0
 		EndIf
 		
-		Self.velX = CHARACTER_SONIC
-		Self.velY = CHARACTER_SONIC
+		Self.velX = 0
+		Self.velY = 0
 		Return True
 	End
 	
 	Public Method resetBreatheCount:Void()
-		Self.breatheCount = CHARACTER_SONIC
+		Self.breatheCount = 0
 		Self.breatheNumCount = EFFECT_NONE
 		Self.preBreatheNumCount = EFFECT_NONE
 	End
 	
 	Public Method checkBreatheReset:Void()
 		
-		If (getNewPointY(Self.posY, CHARACTER_SONIC, -Self.collisionRect.getHeight(), Self.faceDegree) + SIDE_FOOT_FROM_CENTER < (StageManager.getWaterLevel() Shl 6)) Then
+		If (getNewPointY(Self.posY, 0, -Self.collisionRect.getHeight(), Self.faceDegree) + SIDE_FOOT_FROM_CENTER < (StageManager.getWaterLevel() Shl 6)) Then
 			resetBreatheCount()
 		EndIf
 		
@@ -6786,21 +6786,21 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Method waitingChk:Void()
 		
 		If (Key.repeat(((((Key.gSelect | Key.gLeft) | Key.gRight) | Key.gDown) | Key.gUp) | Key.B_HIGH_JUMP) Or Not (Self.animationID = 0 Or Self.animationID = ANI_WAITING_1 Or Self.animationID = ANI_WAITING_2)) Then
-			Self.waitingCount = CHARACTER_SONIC
-			Self.waitingLevel = CHARACTER_SONIC
+			Self.waitingCount = 0
+			Self.waitingLevel = 0
 			Self.isResetWaitAni = True
 			Return
 		EndIf
 		
-		Self.waitingCount += CHARACTER_TAILS
+		Self.waitingCount += 1
 		
 		If (Self.waitingCount > 96) Then
 			If (Self.waitingLevel = 0) Then
 				Self.animationID = ANI_WAITING_1
 			EndIf
 			
-			If ((Self.drawer.checkEnd() And Self.waitingLevel = 0) Or Self.waitingLevel = CHARACTER_TAILS) Then
-				Self.waitingLevel = CHARACTER_TAILS
+			If ((Self.drawer.checkEnd() And Self.waitingLevel = 0) Or Self.waitingLevel = 1) Then
+				Self.waitingLevel = 1
 				Self.animationID = ANI_WAITING_2
 			EndIf
 		EndIf
@@ -6811,7 +6811,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		g.saveCanvas()
 		g.translateCanvas(x, y)
 		g.rotateCanvas((Float) degree)
-		drawer.draw(g, aniID, CHARACTER_SONIC, CHARACTER_SONIC, loop, Not mirror ? CHARACTER_SONIC : CHARACTER_KNUCKLES)
+		drawer.draw(g, aniID, 0, 0, loop, Not mirror ? CHARACTER_SONIC : 2)
 		g.restoreCanvas()
 	End
 	
@@ -6857,7 +6857,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	
 	Public Method setStagePassRunOutofScreen:Void()
 		MapManager.setFocusObj(Null)
-		Self.animationID = CHARACTER_AMY
+		Self.animationID = 3
 	End
 	
 	Public Method stagePassRunOutofScreenLogic:Bool()
@@ -6906,11 +6906,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Private Method aspirating:Void()
-		Int i = Self.breatheCount Mod CHARACTER_AMY
+		Int i = Self.breatheCount Mod 3
 	End
 	
 	Public Function setFadeColor:Void(color:Int)
-		For (Int i = CHARACTER_SONIC; i < fadeRGB.length; i += CHARACTER_TAILS)
+		For (Int i = 0; i < fadeRGB.length; i += 1)
 			fadeRGB[i] = color
 		Next
 	End
@@ -6923,24 +6923,24 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Public Function drawFadeBase:Void(g:MFGraphics, vel2:Int)
-		fadeAlpha = MyAPI.calNextPosition((double) fadeAlpha, (double) fadeToValue, CHARACTER_TAILS, vel2, 3.0d)
+		fadeAlpha = MyAPI.calNextPosition((double) fadeAlpha, (double) fadeToValue, 1, vel2, 3.0d)
 		
 		If (fadeAlpha <> 0) Then
 			Int w
 			Int h
 			
 			If (preFadeAlpha <> fadeAlpha) Then
-				For (w = CHARACTER_SONIC; w < FADE_FILL_WIDTH; w += CHARACTER_TAILS)
-					For (h = CHARACTER_SONIC; h < FADE_FILL_WIDTH; h += CHARACTER_TAILS)
+				For (w = 0; w < FADE_FILL_WIDTH; w += 1)
+					For (h = 0; h < FADE_FILL_WIDTH; h += 1)
 						fadeRGB[(h * FADE_FILL_WIDTH) + w] = ((fadeAlpha Shl ANI_PULL) & -16777216) | (fadeRGB[(h * FADE_FILL_WIDTH) + w] & MapManager.END_COLOR)
 					Next
 				Next
 				preFadeAlpha = fadeAlpha
 			EndIf
 			
-			For (w = CHARACTER_SONIC; w < MyAPI.zoomOut(SCREEN_WIDTH); w += FADE_FILL_WIDTH)
-				For (h = CHARACTER_SONIC; h < MyAPI.zoomOut(SCREEN_HEIGHT); h += FADE_FILL_WIDTH)
-					g.drawRGB(fadeRGB, CHARACTER_SONIC, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_WIDTH, True)
+			For (w = 0; w < MyAPI.zoomOut(SCREEN_WIDTH); w += FADE_FILL_WIDTH)
+				For (h = 0; h < MyAPI.zoomOut(SCREEN_HEIGHT); h += FADE_FILL_WIDTH)
+					g.drawRGB(fadeRGB, 0, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_WIDTH, True)
 				Next
 			Next
 		EndIf
@@ -6962,7 +6962,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Public Method isBodyCenterOutOfWater:Bool()
-		Return getNewPointY(Self.posY, CHARACTER_SONIC, -Self.collisionRect.getHeight(), Self.faceDegree) < (StageManager.getWaterLevel() Shl 6) ? True : False
+		Return getNewPointY(Self.posY, 0, -Self.collisionRect.getHeight(), Self.faceDegree) < (StageManager.getWaterLevel() Shl 6) ? True : False
 	End
 	
 	Public Method dripDownUnderWater:Void()
@@ -6994,7 +6994,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 			
 			If (Self.animationID = ANI_LOOK_UP_2) Then
-				Self.focusMovingState = CHARACTER_TAILS
+				Self.focusMovingState = 1
 				Return
 			EndIf
 			
@@ -7002,7 +7002,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		EndIf
 		
 		If (Self.animationID = FADE_FILL_WIDTH And Self.drawer.checkEnd()) Then
-			Self.animationID = CHARACTER_SONIC
+			Self.animationID = 0
 		EndIf
 		
 		If (Self.animationID = ANI_LOOK_UP_1 Or Self.animationID = ANI_LOOK_UP_2) Then
