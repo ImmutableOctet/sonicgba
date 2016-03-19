@@ -647,10 +647,27 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Field terminalOffset:Int
 		Field attackRectVec:Stack<CollisionRect>
 	Public
-		' Methods:
+		' Methods (Abstract):
 		Method closeImpl:Void() Abstract
 		
 		' Functions:
+		Function setNewParam:Void(newParam:Int[])
+			MOVE_POWER = newParam[0]
+			MOVE_POWER_IN_AIR = MOVE_POWER / 2
+			MOVE_POWER_REVERSE = newParam[1]
+			MAX_VELOCITY = newParam[2]
+			MOVE_POWER_REVERSE_BALL = newParam[3]
+			SPIN_START_SPEED_1 = newParam[4]
+			SPIN_START_SPEED_2 = newParam[5]
+			JUMP_START_VELOCITY = newParam[6]
+			HURT_POWER_X = newParam[7]
+			HURT_POWER_Y = newParam[8]
+			JUMP_RUSH_SPEED_PLUS = newParam[9]
+			JUMP_REVERSE_POWER = newParam[10]
+			FAKE_GRAVITY_ON_WALK = newParam[11]
+			FAKE_GRAVITY_ON_BALL = newParam[12]
+		End
+		
 		Function characterSelectLogic:Bool()
 			If (Key.press(Key.gSelect)) Then
 				Return True
@@ -702,7 +719,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			Return re
 		End
-	
+		
+		' Methods (Implemented):
 		Method setMeetingBoss:Void(state:Bool)
 			Self.setNoMoving = state
 			Self.noMovingPosition = Self.footPointX
@@ -739,141 +757,138 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Return ((Self.animationID = ANI_JUMP) And Self.collisionState = COLLISION_STATE_JUMP And ((Not Self.isAntiGravity And changeRectUpCheck()) Or (Self.isAntiGravity And changeRectDownCheck())))
 		End
 	
-	Public Method getObjHeight:Int()
+		Method getObjHeight:Int()
+			If (needChangeRect()) Then
+				Return Self.collisionRect.getHeight()
+			EndIf
+			
+			Return HEIGHT
+		End
 		
-		If (needChangeRect()) Then
-			Return Self.collisionRect.getHeight()
-		EndIf
-		
-		Return HEIGHT
-	End
-	
-	Public Function setNewParam:Void(newParam:Int[])
-		MOVE_POWER = newParam[CHARACTER_SONIC]
-		MOVE_POWER_IN_AIR = MOVE_POWER Shl CHARACTER_TAILS
-		MOVE_POWER_REVERSE = newParam[CHARACTER_TAILS]
-		MAX_VELOCITY = newParam[CHARACTER_KNUCKLES]
-		MOVE_POWER_REVERSE_BALL = newParam[CHARACTER_AMY]
-		SPIN_START_SPEED_1 = newParam[4]
-		SPIN_START_SPEED_2 = newParam[MAX_ITEM]
-		JUMP_START_VELOCITY = newParam[ITEM_RING_5]
-		HURT_POWER_X = newParam[ITEM_RING_10]
-		HURT_POWER_Y = newParam[ANI_PUSH_WALL]
-		JUMP_RUSH_SPEED_PLUS = newParam[TERMINAL_COUNT]
-		JUMP_REVERSE_POWER = newParam[ANI_SLIP]
-		FAKE_GRAVITY_ON_WALK = newParam[SPIN_LV2_COUNT]
-		FAKE_GRAVITY_ON_BALL = newParam[ANI_POAL_PULL]
-	End
-	
-	Public Method PlayerObject:public()
-		Self.degreeStable = CHARACTER_SONIC
-		Self.faceDegree = CHARACTER_SONIC
-		Self.faceDirection = True
-		Self.prefaceDirection = True
-		Self.extraAttackFlag = False
-		Self.footPointX = CHARACTER_SONIC
-		Self.onGround = False
-		Self.spinCount = CHARACTER_SONIC
-		Self.movePower = MOVE_POWER
-		Self.movePowerInAir = MOVE_POWER_IN_AIR
-		Self.movePowerReverse = MOVE_POWER_REVERSE
-		Self.movePowerReserseBall = MOVE_POWER_REVERSE_BALL
-		Self.movePowerReverseInSand = MOVE_POWER_REVERSE Shl CHARACTER_TAILS
-		Self.movePowerReserseBallInSand = MOVE_POWER_REVERSE Shl CHARACTER_TAILS
-		Self.maxVelocity = MAX_VELOCITY
-		Self.effectID = EFFECT_NONE
-		Self.collisionLayer = CHARACTER_SONIC
-		Self.dashRolling = False
-		Self.hurtCount = CHARACTER_SONIC
-		Self.hurtNoControl = False
-		Self.visible = True
-		Self.outOfControl = False
-		Self.controlObjectLogic = False
-		Self.leavingBar = False
-		Self.footObjectLogic = False
-		Self.outOfControlObject = Null
-		Self.attackRectVec = New Vector()
-		Self.jumpAttackRect = New CollisionRect()
-		Self.attractRect = New CollisionRect()
-		Self.aaaAttackRect = New CollisionRect()
-		Self.fallinSandSlipState = CHARACTER_SONIC
-		Self.isAttacking = False
-		Self.canAttackByHari = False
-		Self.beAttackByHari = False
-		Self.setNoMoving = False
-		Self.leftStopped = False
-		Self.rightStopped = False
-		Self.focusMovingState = CHARACTER_SONIC
-		Self.lookCount = LOOK_COUNT
-		Self.footOffsetX = CHARACTER_SONIC
-		Self.justLeaveLand = False
-		Self.justLeaveCount = CHARACTER_KNUCKLES
-		Self.IsStandOnItems = False
-		Self.degreeRotateMode = CHARACTER_SONIC
-		Self.slipping = False
-		Self.doJumpForwardly = False
-		Self.preCollisionRect = New CollisionRect()
-		Self.ignoreFirstTouch = False
-		Self.waterFallDrawer = Null
-		Self.waterFlushDrawer = Null
-		Self.railFlipping = False
-		Self.isPowerShoot = False
-		Self.isDead = False
-		Self.isSharked = False
-		Self.finishDeadStuff = False
-		Self.deadPosX = CHARACTER_SONIC
-		Self.deadPosY = CHARACTER_SONIC
-		Self.noKeyFlag = False
-		Self.bankwalking = False
-		Self.transing = False
-		Self.ducting = False
-		Self.ductingCount = CHARACTER_SONIC
-		Self.pushOnce = False
-		Self.squeezeFlag = True
-		Self.orgGravity = False
-		Self.footPointX = RIGHT_WALK_COLLISION_CHECK_OFFSET_X
-		Self.footPointY = CHARACTER_SONIC
-		MapManager.setFocusObj(Self)
-		MapManager.focusQuickLocation()
-		Self.dustEffectAnimation = New Animation("/animation/effect_dust")
-		Self.effectDrawer = Self.dustEffectAnimation.getDrawer()
-		Self.animationID = CHARACTER_TAILS
-		Self.collisionState = 1
-		Self.currentLayer = CHARACTER_TAILS
-		
-		If (bariaDrawer = Null) Then
-			bariaDrawer = New Animation("/animation/baria").getDrawer(CHARACTER_SONIC, True, CHARACTER_SONIC)
-		EndIf
-		
-		If (gBariaDrawer = Null) Then
-			gBariaDrawer = New Animation("/animation/g_baria").getDrawer(CHARACTER_SONIC, True, CHARACTER_SONIC)
-		EndIf
-		
-		If (invincibleAnimation = Null) Then
-			invincibleAnimation = New Animation("/animation/muteki")
-		EndIf
-		
-		If (invincibleDrawer = Null) Then
-			invincibleDrawer = invincibleAnimation.getDrawer(CHARACTER_SONIC, True, CHARACTER_SONIC)
-		EndIf
-		
-		If (breatheCountImage = Null) Then
-			breatheCountImage = MFImage.createImage("/animation/player/breathe_count.png")
-		EndIf
-		
-		If (waterSprayDrawer = Null And StageManager.getCurrentZoneId() = 4) Then
-			waterSprayDrawer = New Animation("/animation/stage6_water_spray").getDrawer()
-		EndIf
-		
-		If (moonStarDrawer = Null And StageManager.isGoingToExtraStage()) Then
-			moonStarDrawer = New Animation("/animation/moon_star").getDrawer()
-		EndIf
-		
-		Self.width = WIDTH
-		Self.height = HEIGHT
-		Self.worldCal = New ACWorldCollisionCalculator(Self, Self)
-		initUIResource()
-	End
+		' Constructor(s):
+		Method New()
+			Self.degreeStable = 0
+			Self.faceDegree = 0
+			Self.faceDirection = True
+			Self.prefaceDirection = True
+			Self.extraAttackFlag = False
+			Self.footPointX = 0
+			Self.onGround = False
+			Self.spinCount = 0
+			
+			Self.movePower = MOVE_POWER
+			Self.movePowerInAir = MOVE_POWER_IN_AIR
+			Self.movePowerReverse = MOVE_POWER_REVERSE
+			Self.movePowerReserseBall = MOVE_POWER_REVERSE_BALL
+			Self.movePowerReverseInSand = (MOVE_POWER_REVERSE / 2)
+			Self.movePowerReserseBallInSand = (MOVE_POWER_REVERSE / 2)
+			
+			Self.maxVelocity = MAX_VELOCITY
+			
+			Self.effectID = EFFECT_NONE
+			Self.collisionLayer = 0
+			Self.dashRolling = False
+			Self.hurtCount = 0
+			Self.hurtNoControl = False
+			Self.visible = True
+			Self.outOfControl = False
+			Self.controlObjectLogic = False
+			Self.leavingBar = False
+			Self.footObjectLogic = False
+			Self.outOfControlObject = Null
+			
+			Self.attackRectVec = New Stack<CollisionRect>()
+			
+			Self.jumpAttackRect = New CollisionRect()
+			Self.attractRect = New CollisionRect()
+			Self.aaaAttackRect = New CollisionRect()
+			
+			Self.fallinSandSlipState = 0
+			Self.isAttacking = False
+			Self.canAttackByHari = False
+			Self.beAttackByHari = False
+			Self.setNoMoving = False
+			Self.leftStopped = False
+			Self.rightStopped = False
+			Self.focusMovingState = 0
+			Self.lookCount = LOOK_COUNT
+			Self.footOffsetX = 0
+			Self.justLeaveLand = False
+			Self.justLeaveCount = 2
+			Self.IsStandOnItems = False
+			Self.degreeRotateMode = 0
+			Self.slipping = False
+			Self.doJumpForwardly = False
+			
+			Self.preCollisionRect = New CollisionRect()
+			
+			Self.ignoreFirstTouch = False
+			Self.waterFallDrawer = Null
+			Self.waterFlushDrawer = Null
+			Self.railFlipping = False
+			Self.isPowerShoot = False
+			Self.isDead = False
+			Self.isSharked = False
+			Self.finishDeadStuff = False
+			Self.deadPosX = 0
+			Self.deadPosY = 0
+			Self.noKeyFlag = False
+			Self.bankwalking = False
+			Self.transing = False
+			Self.ducting = False
+			Self.ductingCount = 0
+			Self.pushOnce = False
+			Self.squeezeFlag = True
+			Self.orgGravity = False
+			Self.footPointX = RIGHT_WALK_COLLISION_CHECK_OFFSET_X
+			Self.footPointY = 0
+			
+			MapManager.setFocusObj(Self)
+			MapManager.focusQuickLocation()
+			
+			Self.dustEffectAnimation = New Animation("/animation/effect_dust")
+			Self.effectDrawer = Self.dustEffectAnimation.getDrawer()
+			
+			Self.animationID = ANI_RUN_1
+			Self.collisionState = COLLISION_STATE_JUMP ' COLLISION_STATE_WALK
+			Self.currentLayer = 1 ' DRAW_AFTER_SONIC
+			
+			If (bariaDrawer = Null) Then
+				bariaDrawer = New Animation("/animation/baria").getDrawer(0, True, 0)
+			EndIf
+			
+			If (gBariaDrawer = Null) Then
+				gBariaDrawer = New Animation("/animation/g_baria").getDrawer(0, True, 0)
+			EndIf
+			
+			If (invincibleAnimation = Null) Then
+				invincibleAnimation = New Animation("/animation/muteki")
+			EndIf
+			
+			If (invincibleDrawer = Null) Then
+				invincibleDrawer = invincibleAnimation.getDrawer(0, True, 0)
+			EndIf
+			
+			If (breatheCountImage = Null) Then
+				breatheCountImage = MFImage.createImage("/animation/player/breathe_count.png")
+			EndIf
+			
+			' Magic number: 4 (Zone ID)
+			If (waterSprayDrawer = Null And StageManager.getCurrentZoneId() = 4) Then
+				waterSprayDrawer = New Animation("/animation/stage6_water_spray").getDrawer()
+			EndIf
+			
+			If (moonStarDrawer = Null And StageManager.isGoingToExtraStage()) Then
+				moonStarDrawer = New Animation("/animation/moon_star").getDrawer()
+			EndIf
+			
+			Self.width = WIDTH
+			Self.height = HEIGHT
+			
+			Self.worldCal = New ACWorldCollisionCalculator(Self, Self)
+			
+			initUIResource()
+		End
 	
 	Private Method initUIResource:Void()
 		' Empty implementation.
@@ -1164,11 +1179,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			If (speedCount > 0) Then
 				speedCount -= CHARACTER_TAILS
-				Self.movePower = MOVE_POWER Shl CHARACTER_TAILS
-				Self.movePowerInAir = MOVE_POWER_IN_AIR Shl CHARACTER_TAILS
-				Self.movePowerReverse = MOVE_POWER_REVERSE Shl CHARACTER_TAILS
-				Self.movePowerReserseBall = MOVE_POWER_REVERSE_BALL Shl CHARACTER_TAILS
-				Self.maxVelocity = MAX_VELOCITY Shl CHARACTER_TAILS
+				Self.movePower = MOVE_POWER / 2
+				Self.movePowerInAir = MOVE_POWER_IN_AIR / 2
+				Self.movePowerReverse = MOVE_POWER_REVERSE / 2
+				Self.movePowerReserseBall = MOVE_POWER_REVERSE_BALL / 2
+				Self.maxVelocity = MAX_VELOCITY / 2
 				
 				If (Not (speedCount <> 0 Or SoundSystem.getInstance().getPlayingBGMIndex() = ANI_POP_JUMP_UP_SLOW Or SoundSystem.getInstance().getPlayingBGMIndex() = ANI_DEAD Or SoundSystem.getInstance().getPlayingBGMIndex() = MOON_STAR_DES_Y_1)) Then
 					SoundSystem.getInstance().setSoundSpeed(1.0)
@@ -6457,7 +6472,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Public Method getPressToGround:Int()
-		Return GRAVITY Shl CHARACTER_TAILS
+		Return GRAVITY / 2
 	End
 	
 	Public Method didAfterEveryMove:Void(arg0:Int, arg1:Int)
