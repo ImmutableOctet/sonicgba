@@ -406,12 +406,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Const YELLOW_NUM:Int = 4
 		
-		Const COLLISION_STATE_IN_SAND:= 3
-		Const COLLISION_STATE_JUMP:= 1
-		Const COLLISION_STATE_NONE:= 4
 		Const COLLISION_STATE_NUM:= 4
-		Const COLLISION_STATE_ON_OBJECT:= 2
 		Const COLLISION_STATE_WALK:= 0
+		Const COLLISION_STATE_JUMP:= 1
+		Const COLLISION_STATE_IN_SAND:= 3
+		Const COLLISION_STATE_ON_OBJECT:= 2
+		Const COLLISION_STATE_NONE:= 4 ' COLLISION_STATE_NUM
 		
 		' Immutable Arrays (Constant):
 		Global CHARACTER_LIST:Int[] = [CHARACTER_SONIC, CHARACTER_TAILS, CHARACTER_KNUCKLES, CHARACTER_AMY]
@@ -1349,23 +1349,25 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 							Self.noKeyFlag = True
 						EndIf
 						
-						If (StageManager.getStageID() <> ANI_SLIP) Then
+						' Magic number: 11 (Stage ID)
+						If (StageManager.getStageID() <> 11) Then
 							If (Not isFirstTouchedWind And Self.animationID = ANI_WIND_JUMP) Then
+								' Magic number: 68 (Sound-effect ID)
 								soundInstance.playSe(68)
+								
 								isFirstTouchedWind = True
 								Self.frameCnt = 0
 							EndIf
 							
 							If (isFirstTouchedWind) Then
+								' Magic number: 69 (Sound-effect ID):
 								If (Self.animationID = ANI_WIND_JUMP) Then
 									Self.frameCnt += 1
 									
 									If (Self.frameCnt > 4 And Not IsGamePause) Then
 										soundInstance.playLoopSe(69)
 									EndIf
-									
 								Else
-									
 									If (soundInstance.getPlayingLoopSeIndex() = 69) Then
 										soundInstance.stopLoopSe()
 									EndIf
@@ -1375,7 +1377,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 							EndIf
 						EndIf
 						
-						If (StageManager.getCurrentZoneId() = MAX_ITEM) Then
+						' Magic number: 5 (Zone ID)
+						If (StageManager.getCurrentZoneId() = 5) Then
 							If (Not isFirstTouchedSandSlip And Self.animationID = ANI_YELL) Then
 								isFirstTouchedSandSlip = True
 								Self.frameCnt = 0
@@ -1388,9 +1391,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 									If (Self.frameCnt > 2 And Not IsGamePause) Then
 										soundInstance.playLoopSe(71)
 									EndIf
-									
 								Else
-									
 									If (soundInstance.getPlayingLoopSeIndex() = 71) Then
 										soundInstance.stopLoopSe()
 									EndIf
@@ -1413,15 +1414,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 							Key.setKeyFunction(False)
 						EndIf
 						
-						If (Not (Not Self.hurtNoControl Or Self.animationID = SPIN_LV2_COUNT Or Self.animationID = ANI_HURT_PRE)) Then
+						If (Not (Not Self.hurtNoControl Or Self.animationID = ANI_HURT Or Self.animationID = ANI_HURT_PRE)) Then
 							Self.hurtNoControl = False
 						EndIf
 						
 						Select (Self.collisionState)
-							Case 0
+							Case COLLISION_STATE_WALK
 								inputLogicWalk()
-								break
-							Case 1
+							Case COLLISION_STATE_JUMP
 								inputLogicJump()
 								
 								If (Self.transing) Then
@@ -1430,24 +1430,19 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 									
 									If (MapManager.isCameraStop()) Then
 										Self.transing = False
-										break
 									EndIf
 								EndIf
-								
-								break
-							Case 2
+							Case COLLISION_STATE_ON_OBJECT
 								inputLogicOnObject()
-								break
-							Case 3
+							Case COLLISION_STATE_IN_SAND
 								inputLogicSand()
-								break
 							Default
 								extraInputLogic()
-								break
 						End Select
 						
 						If (Self.noKeyFlag) Then
 							Key.setKeyFunction(True)
+							
 							Self.noKeyFlag = False
 						EndIf
 						
@@ -1463,12 +1458,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						collisionChk()
 						
 						If (Self.animationID = ANI_BRAKE) Then
-							Effect.showEffect(Self.dustEffectAnimation, 2, Self.posX Shr 6, Self.posY Shr 6, 0)
+							Effect.showEffect(Self.dustEffectAnimation, 2, (Self.posX Shr 6), (Self.posY Shr 6), 0)
 						EndIf
 						
 						Select (Self.collisionState)
-							Case 0
+							Case COLLISION_STATE_WALK
 								fallChk()
+								
 								Self.degreeForDraw = Self.faceDegree
 								
 								If (noRotateDraw()) Then
@@ -1476,65 +1472,57 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 								EndIf
 								
 								If (isTerminal) Then
-									MapManager.setCameraDownLimit((Self.posY Shr 6) + ANI_PULL)
+									MapManager.setCameraDownLimit((Self.posY Shr 6) + 24)
 								EndIf
 								
 								If (Not isTerminal Or Self.terminalCount <> 0 Or Self.totalVelocity < MAX_VELOCITY) Then
 									Select (terminalType)
-										Case 3
+										Case TERMINAL_SUPER_SONIC
 											terminalLogic()
-											break
 										Default
-											break
+											' Nothing so far.
 									End Select
 								EndIf
 								
-								Select (terminalType)
-									Case 0
-										
-										If (Self.animationID = ANI_CELEBRATE_1) Then
-											If (Self.drawer.checkEnd()) Then
-												Self.animationID = SPIN_LV2_COUNT_CONF
-											EndIf
+								Local extraBehavior:Bool = False
+								
+								If (terminalType = TERMINAL_RUN_TO_RIGHT) Then
+									If (Self.animationID = ANI_CELEBRATE_1) Then
+										If (Self.drawer.checkEnd()) Then
+											Self.animationID = ANI_HURT_CONF
 										EndIf
-										
-										If (Not (Self.animationID = ANI_JUMP Or Self.animationID = ANI_CELEBRATE_1 Or Self.animationID = SPIN_LV2_COUNT_CONF)) Then
-											Self.animationID = ANI_CELEBRATE_1
-											break
-										EndIf
-										
-									Case 2
-										
-										If (StageManager.getCurrentZoneId() <> 6) Then
-											If (Self.fading) Then
-												If (fadeChangeOver()) Then
-													StageManager.setStagePass()
-													break
-												EndIf
-											EndIf
-											
+									EndIf
+									
+									If (Not (Self.animationID = ANI_JUMP Or Self.animationID = ANI_CELEBRATE_1 Or Self.animationID = ANI_HURT_CONF)) Then
+										Self.animationID = ANI_CELEBRATE_1
+									Else
+										extraBehavior = True
+									EndIf
+								ElseIf (terminalType = TERMINAL_RUN_TO_RIGHT_2) Then
+									extraBehavior = True
+								EndIf
+								
+								If (extraBehavior) Then
+									If (StageManager.getCurrentZoneId() <> 6) Then
+										If (Self.fading And fadeChangeOver()) Then
+											StageManager.setStagePass()
+										Else
 											setFadeColor(MapManager.END_COLOR)
 											fadeInit(0, 255)
+											
 											Self.fading = True
-											break
 										EndIf
-										
+									Else
 										StageManager.setStagePass()
-										break
-										break
-									Case 3
-										terminalLogic()
-										break
-								End Select
+									EndIf
+								ElseIf (terminalType = TERMINAL_SUPER_SONIC) Then
+									terminalLogic()
+								EndIf
 								
 								If (Self.isCelebrate) Then
 									Self.animationID = ANI_SMALL_ZERO_Y
-									break
 								EndIf
-								
-								break
-							Case 1
-								
+							Case COLLISION_STATE_JUMP
 								If (noRotateDraw()) Then
 									Self.degreeForDraw = Self.degreeStable
 								EndIf
@@ -1543,16 +1531,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 								
 								If (isTerminal And Self.terminalCount = 0 And terminalType = 1) Then
 									StageManager.setStagePass()
-									break
+								Else
+									Self.degreeForDraw = Self.faceDegree
 								EndIf
-								
-							Case 2
-							Case 3
+							Case COLLISION_STATE_ON_OBJECT, COLLISION_STATE_IN_SAND
 								Self.degreeForDraw = Self.faceDegree
-								break
-							Case 4
+							Case COLLISION_STATE_NONE
 								terminalLogic()
-								break
 						End Select
 						
 						If (Self.footPointX - RIGHT_WALK_COLLISION_CHECK_OFFSET_X < (MapManager.actualLeftCameraLimit Shl 6)) Then
@@ -1581,9 +1566,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 									setVelY(0)
 								EndIf
 							EndIf
-							
 						Else
-							
 							If (Self.footPointY - HEIGHT < (MapManager.actualUpCameraLimit Shl 6)) Then
 								Self.footPointY = (MapManager.actualUpCameraLimit Shl 6) + HEIGHT
 								
@@ -1603,7 +1586,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						EndIf
 					EndIf
 				EndIf
-				
 			ElseIf (Self.outOfControlObject <> Null) Then
 				Self.outOfControlObject.logic()
 				Self.controlObjectLogic = True
@@ -1967,7 +1949,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Case ANI_POP_JUMP_DOWN_SLOW
 						Self.animationID = TERMINAL_COUNT
 					Case ANI_HURT_PRE
-						Self.animationID = SPIN_LV2_COUNT
+						Self.animationID = ANI_HURT
 					Case ANI_DEAD_PRE
 						Self.animationID = ANI_DEAD
 					Case ANI_SQUAT_PROCESS
@@ -2471,7 +2453,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					checkCliffAnimation()
 				EndIf
 				
-			ElseIf (Not (Self.animationID = ANI_JUMP Or Self.animationID = ANI_CELEBRATE_1 Or Self.animationID = SPIN_LV2_COUNT_CONF Or Self.animationID = MAX_ITEM Or Self.animationID = ANI_POAL_PULL_2)) Then
+			ElseIf (Not (Self.animationID = ANI_JUMP Or Self.animationID = ANI_CELEBRATE_1 Or Self.animationID = ANI_HURT_CONF Or Self.animationID = MAX_ITEM Or Self.animationID = ANI_POAL_PULL_2)) Then
 				If (Abs(Self.totalVelocity) < SPEED_LIMIT_LEVEL_1) Then
 					Self.animationID = 1
 				ElseIf (Abs(Self.totalVelocity) < SPEED_LIMIT_LEVEL_2) Then
@@ -3033,7 +3015,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 				EndIf
 				
-			ElseIf (Not (Self.myAnimationID = SPIN_LV2_COUNT Or Self.myAnimationID = HURT_COUNT Or Self.myAnimationID = ANI_BREATHE)) Then
+			ElseIf (Not (Self.myanimationID = ANI_HURT Or Self.myAnimationID = HURT_COUNT Or Self.myAnimationID = ANI_BREATHE)) Then
 				((PlayerTails) player).flyCount = 0
 			EndIf
 			
