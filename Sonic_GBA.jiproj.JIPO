@@ -10,24 +10,11 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animation.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>244</Y>
+        <X>25</X>
+        <Y>16</Y>
       </CursorPos>
       <DocGUID>1ee23869-2aab-47b8-b3b2-eb805042c0d5</DocGUID>
-      <Bookmarks>
-        <Point>
-          <X>0</X>
-          <Y>243</Y>
-        </Point>
-        <Point>
-          <X>0</X>
-          <Y>295</Y>
-        </Point>
-        <Point>
-          <X>0</X>
-          <Y>332</Y>
-        </Point>
-      </Bookmarks>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationaction.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -35,53 +22,15 @@
         <Y>78</Y>
       </CursorPos>
       <DocGUID>4b6b7754-e03d-42cf-905e-3b598c9f9876</DocGUID>
-      <Bookmarks>
-        <Point>
-          <X>0</X>
-          <Y>78</Y>
-        </Point>
-        <Point>
-          <X>0</X>
-          <Y>123</Y>
-        </Point>
-        <Point>
-          <X>0</X>
-          <Y>139</Y>
-        </Point>
-        <Point>
-          <X>0</X>
-          <Y>190</Y>
-        </Point>
-        <Point>
-          <X>0</X>
-          <Y>221</Y>
-        </Point>
-      </Bookmarks>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationframe.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>38</X>
-        <Y>222</Y>
+        <X>10</X>
+        <Y>293</Y>
       </CursorPos>
       <DocGUID>ce0adb72-d17b-4263-b0fc-1eac3ad12e19</DocGUID>
-      <Bookmarks>
-        <Point>
-          <X>0</X>
-          <Y>118</Y>
-        </Point>
-        <Point>
-          <X>0</X>
-          <Y>191</Y>
-        </Point>
-        <Point>
-          <X>0</X>
-          <Y>195</Y>
-        </Point>
-        <Point>
-          <X>0</X>
-          <Y>234</Y>
-        </Point>
-      </Bookmarks>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationimageinfo.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>

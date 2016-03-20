@@ -241,73 +241,73 @@ Class Frame
 			Next
 		End
 
-		Public Method getWidth:Int()
-			
-			If (Self.m_nClips <= Null) Then
+		Method getWidth:Int()
+			If (Self.m_nClips <= 0) Then
 				Return 0
 			EndIf
 			
-			Local xLeft:= crlFP32.MAX_VALUE
-			Local xRight:= Integer.MIN_VALUE
-			For (Byte i = (Byte) 0; i < Self.m_nClips; i += 1)
-				
+			Local xLeft:Int = INT_MAX
+			Local xRight:Int = -INT_MAX_POSITIVE_NUMBERS
+			
+			For Local i:= 0 Until Self.m_nClips
 				If (Self.m_ClipInfo[i][0] < xLeft) Then
 					xLeft = Self.m_ClipInfo[i][0]
 				EndIf
 				
-				Short[][] clipArray = m_Ani.imageInfo[Self.m_ClipInfo[i][4]].getClips()
-				Int widthId = 2
+				Local clipArray:= m_Ani.imageInfo[Self.m_ClipInfo[i][4]].getClips()
+				Local widthId:= 2
 				
-				If ((((Short) (Self.m_ClipInfo[i][3] Shl 8)) & MFGamePad.KEY_NUM_6) <> 0) Then
+				If (((Short(Self.m_ClipInfo[i][3] Shl 8)) & 4096) <> 0) Then
 					widthId = 3
 				EndIf
 				
 				If (clipArray[Self.m_ClipInfo[i][2]][widthId] + Self.m_ClipInfo[i][0] > xRight) Then
 					xRight = clipArray[Self.m_ClipInfo[i][2]][widthId] + Self.m_ClipInfo[i][0]
 				EndIf
-			EndIf
-			Self.frameWidth = (Short) Abs(xRight - xLeft)
+			Next
+			
+			Self.frameWidth = Abs(xRight - xLeft)
 			
 			If (m_Ani.isDoubleScale) Then
-				Self.frameWidth = (Short) (Self.frameWidth Shl 1)
+				Self.frameWidth = Short(Self.frameWidth Shl 1)
 			EndIf
 			
 			Return Self.frameWidth
 		End
 
-	Public Method getHeight:Int()
-		
-		If (Self.m_nClips <= Null) Then
-			Return 0
-		EndIf
-		
-		Int yTop = crlFP32.MAX_VALUE
-		Int yBottom = Integer.MIN_VALUE
-		For (Byte i = (Byte) 0; i < Self.m_nClips; i += 1)
-			
-			If (Self.m_ClipInfo[i][1] < yTop) Then
-				yTop = Self.m_ClipInfo[i][1]
+		Method getHeight:Int()
+			If (Self.m_nClips <= 0) Then
+				Return 0
 			EndIf
 			
-			Short[][] clipArray = m_Ani.imageInfo[Self.m_ClipInfo[i][4]].getClips()
-			Int heightId = 3
+			Local yTop:Int = INT_MAX
+			Local yBottom:Int = -INT_MAX_POSITIVE_NUMBERS
 			
-			If ((((Short) (Self.m_ClipInfo[i][3] Shl 8)) & MFGamePad.KEY_NUM_6) <> 0) Then
-				heightId = 2
+			For Local i:= 0 Until Self.m_nClips
+				If (Self.m_ClipInfo[i][1] < yTop) Then
+					yTop = Self.m_ClipInfo[i][1]
+				EndIf
+				
+				Local clipArray:= m_Ani.imageInfo[Self.m_ClipInfo[i][4]].getClips()
+				Local heightId:= 3
+				
+				If (((Short(Self.m_ClipInfo[i][3] Shl 8)) & 4096) <> 0) Then
+					heightId = 2
+				EndIf
+				
+				If (clipArray[Self.m_ClipInfo[i][2]][heightId] + Self.m_ClipInfo[i][1] > yBottom) Then
+					yBottom = clipArray[Self.m_ClipInfo[i][2]][heightId] + Self.m_ClipInfo[i][1]
+				EndIf
 			EndIf
 			
-			If (clipArray[Self.m_ClipInfo[i][2]][heightId] + Self.m_ClipInfo[i][1] > yBottom) Then
-				yBottom = clipArray[Self.m_ClipInfo[i][2]][heightId] + Self.m_ClipInfo[i][1]
+			Self.frameHeight = Abs(yBottom - yTop)
+			
+			If (m_Ani.isDoubleScale) Then
+				Self.frameHeight = (Self.frameHeight Shl 1)
 			EndIf
-		EndIf
-		Self.frameHeight = (Short) Abs(yBottom - yTop)
-		
-		If (m_Ani.isDoubleScale) Then
-			Self.frameHeight = (Short) (Self.frameHeight Shl 1)
-		EndIf
-		
-		Return Self.frameHeight
-	End
+			
+			Return Self.frameHeight
+		End
 
 	Public Method SetClips:Void(clip:Short[][])
 	End
