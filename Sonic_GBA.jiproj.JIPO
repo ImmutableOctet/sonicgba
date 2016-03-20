@@ -18,16 +18,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationaction.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>239</Y>
+        <X>0</X>
+        <Y>0</Y>
       </CursorPos>
       <DocGUID>4b6b7754-e03d-42cf-905e-3b598c9f9876</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationframe.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>1</X>
-        <Y>23</Y>
+        <X>0</X>
+        <Y>163</Y>
       </CursorPos>
       <DocGUID>ce0adb72-d17b-4263-b0fc-1eac3ad12e19</DocGUID>
       <Bookmarks />

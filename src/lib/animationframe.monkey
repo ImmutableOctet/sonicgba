@@ -34,124 +34,133 @@ Private
 Public
 
 ' Classes:
-private Class Frame
-	private Int color
-	private Short frameHeight
-	private Short frameWidth
-	private Int[] functionID
-	private Animation m_Ani
-	private Short[][] m_ClipInfo
-	private Short m_img_cx
-	private Short m_img_cy
-	private Byte m_nClips
-	private Byte[] rect1
-	private Byte[] rect2
-	private Byte[] tmp_rect1
-	private Byte[] tmp_rect2
+Class Frame
+	Private
+		' Fields:
+		Field color:Int
+		Field frameHeight:Short
+		Field frameWidth:Short
+		Field functionID:Int[]
+		Field m_Ani:Animation
+		Field m_ClipInfo:Short[][]
+		Field m_img_cx:Short
+		Field m_img_cy:Short
+		Field m_nClips:Byte
+		Field rect1:Byte[]
+		Field rect2:Byte[]
+		Field tmp_rect1:Byte[]
+		Field tmp_rect2:Byte[]
+	Public
+		' Constructor(s):
+		Method New(ani:Animation)
+			Self.m_Ani = ani
+			
+			Self.rect1 = New Byte[4]
+			Self.rect2 = New Byte[4]
+			
+			Self.tmp_rect1 = New Byte[4]
+			Self.tmp_rect2 = New Byte[4]
+			
+			Self.frameWidth = -1
+			Self.frameHeight = -1
+		End
 
-	Public Method Frame:public(ani:Animation)
-		Self.m_Ani = ani
-		Self.rect1 = New Byte[4]
-		Self.rect2 = New Byte[4]
-		Self.tmp_rect1 = New Byte[4]
-		Self.tmp_rect2 = New Byte[4]
-		Self.frameWidth = (Short) -1
-		Self.frameHeight = (Short) -1
-	End
+		Method GetARect:Byte[]()
+			If (Self.rect1[0] = Null And Self.rect1[1] = Null And Self.rect1[2] = 1 And Self.rect1[3] = 1) Then
+				Return Null
+			EndIf
+			
+			For Local i:= 0 Until Self.rect1.Length ' 4
+				Self.tmp_rect1[i] = Self.rect1[i]
+			Next
+			
+			Return Self.tmp_rect1
+		End
 
-	Public Method GetARect:Byte[]()
+		Method GetCRect:Byte[]()
+			If (Self.rect2[0] = Null And Self.rect2[1] = Null And Self.rect2[2] = 1 And Self.rect2[3] = 1) Then
+				Return Null
+			EndIf
+			
+			For Local i:= 0 Until Self.rect1.Length ' 4
+				Self.tmp_rect2[i] = Self.rect2[i]
+			EndIf
+			
+			Return Self.tmp_rect2
+		End
 		
-		If (Self.rect1[0] = Null And Self.rect1[1] = Null And Self.rect1[2] = (Byte) 1 And Self.rect1[3] = (Byte) 1) Then
-			Return Null
-		EndIf
-		
-		For (Int i = 0; i < 4; i += 1)
-			Self.tmp_rect1[i] = Self.rect1[i]
-		EndIf
-		Return Self.tmp_rect1
-	End
-
-	Public Method GetCRect:Byte[]()
-		
-		If (Self.rect2[0] = Null And Self.rect2[1] = Null And Self.rect2[2] = (Byte) 1 And Self.rect2[3] = (Byte) 1) Then
-			Return Null
-		EndIf
-		
-		For (Int i = 0; i < 4; i += 1)
-			Self.tmp_rect2[i] = Self.rect2[i]
-		EndIf
-		Return Self.tmp_rect2
-	End
-
-	Public Method LoadFrame:Void(in:InputStream)
-		
-		If (in <> Null) Then
-			try {
-				in.read(Self.rect1, 0, 4)
-				in.read(Self.rect2, 0, 4)
+		Method LoadFrame:Void(in:Stream)
+			If (in <> Null) Then
+				For Local i:= 0 Until Self.rect1.Length
+					Self.rect1[i] = in.ReadByte()
+				Next
+				
+				For Local i:= 0 Until Self.rect1.Length
+					Self.rect2[i] = in.ReadByte()
+				Next
+				
 				Self.m_nClips = in.ReadByte()
-				Self.m_ClipInfo = (Short[][]) Array.newInstance(Short.TYPE, New Int[]{Self.m_nClips, 5})
+				
+				
+				Self.m_ClipInfo = New Short[Self.m_nClips[]
+				
+				For Local i:= 0 Until 5
+					Self.m_ClipInfo[i] = New Short[5]
+				Next
+				
 				Self.functionID = New Int[Self.m_nClips]
-				Byte i = (Byte) 0
-				While (i < Self.m_nClips) {
-					Short[] sArr
-					Int j = 0
-					While (j < 4) {
-						Self.m_ClipInfo[i][j] = in.ReadByte()
+				
+				For Local i:= 0 Until Self.m_nClips
+					Local sArr:= Self.m_ClipInfo[i]
+					
+					For Local j:= 0 Until 4
+						sArr[j] = in.ReadByte()
 						
-						If (j > 1 And Self.m_ClipInfo[i][j] < (Short) 0) Then
-							sArr = Self.m_ClipInfo[i]
-							sArr[j] = (Short) (sArr[j] + 256)
+						If (j > 1 And sArr[j] < 0) Then
+							sArr[j] = Short(sArr[j] + 256)
 						EndIf
-						
-						j += 1
-					EndIf
-					Self.m_ClipInfo[i][4] = (Short) 0
-					Int tmp_attr = (Short) (Self.m_ClipInfo[i][3] Shl 8)
+					Next
 					
-					If (tmp_attr = MFGamePad.KEY_NUM_7 Or tmp_attr = 28672) Then
-						sArr = Self.m_ClipInfo[i]
-						sArr[0] = (Short) (sArr[0] - 1)
-					ElseIf (tmp_attr = MFGamePad.KEY_NUM_8 Or tmp_attr = MFGamePad.KEY_NUM_6) Then
-						sArr = Self.m_ClipInfo[i]
-						sArr[1] = (Short) (sArr[1] - 1)
+					sArr[4] = 0
+					
+					Local tmp_attr:= (sArr[3] Shl 8)
+					
+					' Magic numbers:
+					If (tmp_attr = 8192 Or tmp_attr = 28672) Then
+						sArr[0] = Short(sArr[0] - 1)
+					ElseIf (tmp_attr = 16384 Or tmp_attr = 4096) Then
+						sArr[1] = Short(sArr[1] - 1)
 					ElseIf (tmp_attr = 24576) Then
-						sArr = Self.m_ClipInfo[i]
-						sArr[0] = (Short) (sArr[0] - 1)
-						sArr = Self.m_ClipInfo[i]
-						sArr[1] = (Short) (sArr[1] - 1)
+						sArr[0] = Short(sArr[0] - 1)
+						sArr[1] = Short(sArr[1] - 1)
 					ElseIf (tmp_attr = 12288 Or tmp_attr = 12288) Then
-						sArr = Self.m_ClipInfo[i]
-						sArr[0] = (Short) (sArr[0] - 1)
-						sArr = Self.m_ClipInfo[i]
-						sArr[1] = (Short) (sArr[1] - 1)
+						sArr[0] = Short(sArr[0] - 1)
+						sArr[1] = Short(sArr[1] - 1)
 					EndIf
 					
-					If (Animation.Self.isDoubleScale) Then
-						Self.m_ClipInfo[i][0] = (Short) (Self.m_ClipInfo[i][0] Shl 1)
-						Self.m_ClipInfo[i][1] = (Short) (Self.m_ClipInfo[i][1] Shl 1)
-					} Else {
+					If (m_Ani.isDoubleScale) Then
+						Self.m_ClipInfo[i][0] = Short(Self.m_ClipInfo[i][0] Shl 1)
+						Self.m_ClipInfo[i][1] = Short(Self.m_ClipInfo[i][1] Shl 1)
+					Else
 						Self.m_ClipInfo[i][0] = Self.m_ClipInfo[i][0]
 						Self.m_ClipInfo[i][1] = Self.m_ClipInfo[i][1]
 					EndIf
-					
-					i += 1
-				EndIf
-				Return
-			} catch (Exception e) {
-				e.printStackTrace()
+				Next
+				
 				Return
 			EndIf
-		EndIf
+			
+			Self.m_nClips = 1
+			
+			Self.m_ClipInfo = New Short[1][] ' Self.m_nClips
+			Self.m_ClipInfo[0] = New Short[4] ' For ...
+			
+			Self.m_ClipInfo[0][0] = 0
+			Self.m_ClipInfo[0][1] = 0
+			Self.m_ClipInfo[0][2] = 0
+			Self.m_ClipInfo[0][3] = 0
+		End
 		
-		Self.m_nClips = (Byte) 1
-		Self.m_ClipInfo = (Short[][]) Array.newInstance(Short.TYPE, New Int[]{1, 4})
-		Self.m_ClipInfo[0][0] = (Short) 0
-		Self.m_ClipInfo[0][1] = (Short) 0
-		Self.m_ClipInfo[0][2] = (Short) 0
-		Self.m_ClipInfo[0][3] = (Short) 0
-	End
-
 	Public Method loadFrameG2:Void(ds:Stream)
 		Self.m_nClips = ds.ReadByte()
 		Self.m_ClipInfo = (Short[][]) Array.newInstance(Short.TYPE, New Int[]{Self.m_nClips, 5})
@@ -250,7 +259,7 @@ private Class Frame
 				xLeft = Self.m_ClipInfo[i][0]
 			EndIf
 			
-			Short[][] clipArray = Animation.Self.imageInfo[Self.m_ClipInfo[i][4]].getClips()
+			Short[][] clipArray = m_Ani.imageInfo[Self.m_ClipInfo[i][4]].getClips()
 			Int widthId = 2
 			
 			If ((((Short) (Self.m_ClipInfo[i][3] Shl 8)) & MFGamePad.KEY_NUM_6) <> 0) Then
@@ -263,7 +272,7 @@ private Class Frame
 		EndIf
 		Self.frameWidth = (Short) Abs(xRight - xLeft)
 		
-		If (Animation.Self.isDoubleScale) Then
+		If (m_Ani.isDoubleScale) Then
 			Self.frameWidth = (Short) (Self.frameWidth Shl 1)
 		EndIf
 		
@@ -284,7 +293,7 @@ private Class Frame
 				yTop = Self.m_ClipInfo[i][1]
 			EndIf
 			
-			Short[][] clipArray = Animation.Self.imageInfo[Self.m_ClipInfo[i][4]].getClips()
+			Short[][] clipArray = m_Ani.imageInfo[Self.m_ClipInfo[i][4]].getClips()
 			Int heightId = 3
 			
 			If ((((Short) (Self.m_ClipInfo[i][3] Shl 8)) & MFGamePad.KEY_NUM_6) <> 0) Then
@@ -297,7 +306,7 @@ private Class Frame
 		EndIf
 		Self.frameHeight = (Short) Abs(yBottom - yTop)
 		
-		If (Animation.Self.isDoubleScale) Then
+		If (m_Ani.isDoubleScale) Then
 			Self.frameHeight = (Short) (Self.frameHeight Shl 1)
 		EndIf
 		
@@ -314,7 +323,7 @@ private Class Frame
 				Select (Self.functionID[i])
 					Case TitleState.STAGE_SELECT_KEY_RECORD_1
 						
-						If (Not Animation.Self.isDoubleScale) Then
+						If (Not m_Ani.isDoubleScale) Then
 							DrawImage(g, i, x, y, attr)
 							break
 						EndIf
@@ -336,15 +345,15 @@ private Class Frame
 							Int tmp_x = Self.m_ClipInfo[i][0]
 							Int tmp_y = Self.m_ClipInfo[i][1]
 							
-							If (Not Animation.Self.isDoubleScale) Then
-								Animation.Self.qiAnimationArray[Self.m_ClipInfo[i][2]].m_Frames[Self.m_ClipInfo[i][3]].Draw(g, x + tmp_x, y + tmp_y, attr)
+							If (Not m_Ani.isDoubleScale) Then
+								m_Ani.qiAnimationArray[Self.m_ClipInfo[i][2]].m_Frames[Self.m_ClipInfo[i][3]].Draw(g, x + tmp_x, y + tmp_y, attr)
 								break
 							EndIf
 							
 							g.saveCanvas()
 							g.translateCanvas(x + tmp_x, y + tmp_y)
 							g.scaleCanvas(0.5f, 0.5f)
-							Animation.Self.qiAnimationArray[Self.m_ClipInfo[i][2]].m_Frames[Self.m_ClipInfo[i][3]].Draw(g, 0, 0, attr)
+							m_Ani.qiAnimationArray[Self.m_ClipInfo[i][2]].m_Frames[Self.m_ClipInfo[i][3]].Draw(g, 0, 0, attr)
 							g.restoreCanvas()
 							break
 						} catch (Exception e) {
@@ -362,8 +371,8 @@ private Class Frame
 	Public Method DrawImage:Void(g:MFGraphics, i:Int, x:Int, y:Int, attr:Short)
 		
 		If (Self.m_nClips <> Null) Then
-			MFImage image = Animation.Self.imageInfo[Self.m_ClipInfo[i][4]].getImage()
-			Short[] m_Clips_2 = Animation.Self.imageInfo[Self.m_ClipInfo[i][4]].getClips()[Self.m_ClipInfo[i][2]]
+			MFImage image = m_Ani.imageInfo[Self.m_ClipInfo[i][4]].getImage()
+			Short[] m_Clips_2 = m_Ani.imageInfo[Self.m_ClipInfo[i][4]].getClips()[Self.m_ClipInfo[i][2]]
 			Short draw_attr = attr
 			Int tmp_attr = (Short) (Self.m_ClipInfo[i][3] Shl 8)
 			Int tmp_x = Self.m_ClipInfo[i][0]
