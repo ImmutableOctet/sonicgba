@@ -3283,80 +3283,80 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.doJumpForwardly = True
 		End
 		
-	Public Method setFurikoOutVelX:Void(degree:Int)
-		Self.velX = ((-JUMP_PROTECT) * Cos(degree)) / 100
-	End
-	
-	Public Method getCheckPositionX:Int()
-		Return (Self.collisionRect.x0 + Self.collisionRect.x1) / 2
-	End
-	
-	Public Method getCheckPositionY:Int()
-		Return (Self.collisionRect.y0 + Self.collisionRect.y1) / 2
-	End
-	
-	Public Method getFootPositionX:Int()
-		Return Self.footPointX
-	End
-	
-	Public Method getFootPositionY:Int()
-		Return Self.footPointY
-	End
-	
-	Public Method getHeadPositionY:Int()
-		Return getNewPointY(Self.footPointY, 0, -1536, Self.faceDegree)
-	End
-	
-	Public Method setHeadPositionY:Void(y:Int)
-		Self.footPointY = getNewPointY(y, 0, HEIGHT, Self.faceDegree)
-	End
-	
-	Public Method doWhileCollision:Void(player:PlayerObject, direction:Int)
-		' Empty implementation.
-	End
-	
-	Public Method setCollisionLayer:Void(layer:Int)
+		Method setFurikoOutVelX:Void(degree:Int)
+			Self.velX = ((-JUMP_PROTECT) * Cos(degree)) / 100
+		End
 		
-		If (layer >= 0 And layer <= 1) Then
-			Self.currentLayer = layer
-		EndIf
+		Method getCheckPositionX:Int()
+			Return (Self.collisionRect.x0 + Self.collisionRect.x1) / 2
+		End
 		
-	End
-	
-	Private Method land:Void()
-		calTotalVelocity()
-		Int playingLoopSeIndex = soundInstance.getPlayingLoopSeIndex()
-		SoundSystem soundSystem = soundInstance
+		Method getCheckPositionY:Int()
+			Return (Self.collisionRect.y0 + Self.collisionRect.y1) / 2
+		End
 		
-		If (playingLoopSeIndex = MOON_STAR_ORI_Y_1) Then
-			soundInstance.stopLoopSe()
-		EndIf
+		Method getFootPositionX:Int()
+			Return Self.footPointX
+		End
 		
-		If (Self.animationID <> ANI_DEAD_PRE) Then
-			If (Abs(Self.totalVelocity) = 0) Then
-				Self.animationID = ANI_STAND
-			ElseIf (Abs(Self.totalVelocity) < SPEED_LIMIT_LEVEL_1) Then
-				Self.animationID = ANI_RUN_1
-			ElseIf (Abs(Self.totalVelocity) < SPEED_LIMIT_LEVEL_2) Then
-				Self.animationID = ANI_RUN_2
-			ElseIf (Not Self.slipping) Then
-				Self.animationID = ANI_RUN_3
+		Method getFootPositionY:Int()
+			Return Self.footPointY
+		End
+		
+		Method getHeadPositionY:Int()
+			Return getNewPointY(Self.footPointY, 0, -1536, Self.faceDegree)
+		End
+		
+		Method setHeadPositionY:Void(y:Int)
+			Self.footPointY = getNewPointY(y, 0, HEIGHT, Self.faceDegree)
+		End
+		
+		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
+			' Empty implementation.
+		End
+		
+		Method setCollisionLayer:Void(layer:Int)
+			If (layer >= 0 And layer <= 1) Then
+				Self.currentLayer = layer
 			EndIf
-		EndIf
-		
-		If (Self.ducting) Then
-			If (Self.totalVelocity > 0 And Self.totalVelocity < MDPhone.SCREEN_HEIGHT And Self.pushOnce) Then
-				Self.totalVelocity += MDPhone.SCREEN_HEIGHT
-				Self.pushOnce = False
+		End
+	Private
+		Method land:Void()
+			calTotalVelocity()
+			
+			Local playingLoopSeIndex:= soundInstance.getPlayingLoopSeIndex()
+			Local soundSystem:= soundInstance
+			
+			' Magic number: 18 (Sound-effect ID)
+			If (playingLoopSeIndex = 18) Then
+				soundInstance.stopLoopSe()
 			EndIf
 			
-			If (Self.totalVelocity < 0 And Self.totalVelocity > -640 And Self.pushOnce) Then
-				Self.totalVelocity -= MDPhone.SCREEN_HEIGHT
-				Self.pushOnce = False
+			If (Self.animationID <> ANI_DEAD_PRE) Then
+				If (Abs(Self.totalVelocity) = 0) Then
+					Self.animationID = ANI_STAND
+				ElseIf (Abs(Self.totalVelocity) < SPEED_LIMIT_LEVEL_1) Then
+					Self.animationID = ANI_RUN_1
+				ElseIf (Abs(Self.totalVelocity) < SPEED_LIMIT_LEVEL_2) Then
+					Self.animationID = ANI_RUN_2
+				ElseIf (Not Self.slipping) Then
+					Self.animationID = ANI_RUN_3
+				EndIf
 			EndIf
-		EndIf
-		
-	End
+			
+			' Magic number: 640 (Velocity)
+			If (Self.ducting) Then
+				If (Self.totalVelocity > 0 And Self.totalVelocity < 640 And Self.pushOnce) Then
+					Self.totalVelocity += 640
+					Self.pushOnce = False
+				EndIf
+				
+				If (Self.totalVelocity < 0 And Self.totalVelocity > -640 And Self.pushOnce) Then
+					Self.totalVelocity -= 640
+					Self.pushOnce = False
+				EndIf
+			EndIf
+		End
 	
 	Public Method collisionCheckWithGameObject:Void(footX:Int, footY:Int)
 		Self.collisionChkBreak = False
