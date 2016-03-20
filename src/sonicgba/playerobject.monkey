@@ -17,7 +17,7 @@ Private
 	Import lib.myapi
 	Import lib.myrandom
 	Import lib.soundsystem
-	Import lib.crlfp32
+	'Import lib.crlfp32
 	
 	Import mflib.bpdef
 	
@@ -4405,187 +4405,212 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Return Self.animationID
 		End
 		
-	Public Method refreshCollisionRectWrap:Void()
-		Int RECT_HEIGHT = getCollisionRectHeight()
-		Int RECT_WIDTH = getCollisionRectWidth()
-		Int switchDegree = Self.faceDegree
-		Int yOffset = 0
-		
-		If (Self.animationID = ANI_SLIP) Then
-			If (getAnimationOffset() = 1) Then
-				yOffset = -960
-			Else
-				yOffset = -320
+		Method refreshCollisionRectWrap:Void()
+			Local RECT_HEIGHT:= getCollisionRectHeight()
+			Local RECT_WIDTH:= getCollisionRectWidth()
+			
+			Local switchDegree:= Self.faceDegree
+			Local yOffset:= 0
+			
+			' Magic numbers: -960, -320
+			If (Self.animationID = ANI_SLIP) Then
+				If (getAnimationOffset() = 1) Then
+					yOffset = -960
+				Else
+					yOffset = -320
+				EndIf
+				
+				switchDegree = 0
 			EndIf
 			
-			switchDegree = 0
-		EndIf
+			Self.checkPositionX = getNewPointX(Self.footPointX, 0, (-RECT_HEIGHT) / 2, switchDegree) + 0
+			Self.checkPositionY = getNewPointY(Self.footPointY, 0, (-RECT_HEIGHT) / 2, switchDegree) + yOffset
+			
+			Self.collisionRect.setTwoPosition(Self.checkPositionX - (RECT_WIDTH / 2), Self.checkPositionY - (RECT_HEIGHT / 2), Self.checkPositionX + (RECT_WIDTH / 2), Self.checkPositionY + (RECT_HEIGHT / 2))
+		End
 		
-		Self.checkPositionX = getNewPointX(Self.footPointX, 0, (-RECT_HEIGHT) / 2, switchDegree) + 0
-		Self.checkPositionY = getNewPointY(Self.footPointY, 0, (-RECT_HEIGHT) / 2, switchDegree) + yOffset
-		Self.collisionRect.setTwoPosition(Self.checkPositionX - (RECT_WIDTH / 2), Self.checkPositionY - (RECT_HEIGHT / 2), Self.checkPositionX + (RECT_WIDTH / 2), Self.checkPositionY + (RECT_HEIGHT / 2))
-	End
-	
-	Public Method getCollisionRectWidth:Int()
+		Method getCollisionRectWidth:Int()
+			If (Self.animationID = ANI_RAIL_ROLL) Then
+				Return HEIGHT
+			EndIf
+			
+			Return WIDTH
+		End
 		
-		If (Self.animationID = ANI_RAIL_ROLL) Then
+		Method getCollisionRectHeight:Int()
+			If (Self.animationID = ANI_JUMP Or Self.animationID = ANI_SQUAT Or Self.animationID = ANI_SQUAT_PROCESS Or Self.animationID = ANI_SPIN_LV1 Or Self.animationID = ANI_SPIN_LV2 Or Self.animationID = ANI_ATTACK_1 Or Self.animationID = ANI_ATTACK_2 Or Self.animationID = ANI_ATTACK_3) Then
+				Return WIDTH ' 1152
+			EndIf
+			
 			Return HEIGHT
-		EndIf
+		End
 		
-		Return WIDTH
-	End
-	
-	Public Method getCollisionRectHeight:Int()
+		Method refreshCollisionRect:Void(x:Int, y:Int)
+			' Empty implementation.
+		End
 		
-		If (Self.animationID = ANI_JUMP Or Self.animationID = ANI_SQUAT Or Self.animationID = ANI_SQUAT_PROCESS Or Self.animationID = ANI_SPIN_LV1 Or Self.animationID = ANI_SPIN_LV2 Or Self.animationID = ANI_ATTACK_1 Or Self.animationID = ANI_ATTACK_2 Or Self.animationID = ANI_ATTACK_3) Then
-			Return BarHorbinV.HOBIN_POWER
-		EndIf
-		
-		Return HEIGHT
-	End
-	
-	Public Method refreshCollisionRect:Void(x:Int, y:Int)
-		' Empty implementation.
-	End
-	
-	Public Method fallChk:Void()
-		
-		If (Self.fallTime > 0) Then
-			Self.fallTime -= 1
-			
-			If (Self.animationID = ANI_STAND) Then
-				Self.animationID = ANI_RUN_1
+		Method fallChk:Void()
+			If (Self.fallTime > 0) Then
+				Self.fallTime -= 1
+				
+				If (Self.animationID = ANI_STAND) Then
+					Self.animationID = ANI_RUN_1
+					
+					Return
+				EndIf
+				
 				Return
 			EndIf
 			
-			Return
-		EndIf
-		
-		If (Self.isAntiGravity Or Self.faceDegree < ANI_DEAD_PRE Or Self.faceDegree > 315) Then
-			If (Not Self.isAntiGravity) Then
-				Return
+			If (Self.isAntiGravity Or Self.faceDegree < ANI_DEAD_PRE Or Self.faceDegree > 315) Then
+				If (Not Self.isAntiGravity) Then
+					Return
+				EndIf
+				
+				If (Self.faceDegree > StringIndex.FONT_COLON_RED And Self.faceDegree < 225) Then
+					Return
+				EndIf
 			EndIf
 			
-			If (Self.faceDegree > StringIndex.FONT_COLON_RED And Self.faceDegree < 225) Then
-				Return
+			' Magic number: 474
+			If (Abs(Self.totalVelocity) < 474) Then
+				If (Self.totalVelocity = 0) Then
+					calDivideVelocity()
+					Self.velY += getGravity()
+					calTotalVelocity()
+				EndIf
+				
+				' Magic number: 7
+				Self.fallTime = 7
 			EndIf
-		EndIf
-		
-		If (Abs(Self.totalVelocity) < 474) Then
-			If (Self.totalVelocity = 0) Then
-				calDivideVelocity()
-				Self.velY += getGravity()
-				calTotalVelocity()
-			EndIf
-			
-			Self.fallTime = 7
-		EndIf
-		
-	End
+		End
 	
-	Public Method railIn:Void(x:Int, y:Int)
-		Self.railLine = Null
-		Self.velY = 0
-		Self.velX = 0
-		Self.worldCal.stopMoveX()
-		setFootPositionX(x)
-		Self.collisionChkBreak = True
-		Self.railing = True
-		Self.railOut = False
-		Self.animationID = ANI_RAIL_ROLL
-		setNoKey()
-		
-		If (characterID = CHARACTER_AMY) Then
-			soundInstance.playSe(ANI_ROPE_ROLL_1)
-		Else
-			soundInstance.playSe(ANI_SMALL_ZERO_Y)
-		EndIf
-		
-	End
-	
-	Public Method railOut:Void(x:Int, y:Int)
-		
-		If (Self.railing) Then
-			Self.railOut = True
+		Method railIn:Void(x:Int, y:Int)
 			Self.railLine = Null
-			Self.velY = RAIL_OUT_SPEED_VY0
+			
+			Self.velY = 0
 			Self.velX = 0
-			setVelX(0)
+			
+			Self.worldCal.stopMoveX()
+			
 			setFootPositionX(x)
-			setFootPositionY(y)
+			
 			Self.collisionChkBreak = True
-			Self.animationID = ANI_JUMP
-		EndIf
+			Self.railing = True
+			Self.railOut = False
+			
+			Self.animationID = ANI_RAIL_ROLL
+			
+			setNoKey()
+			
+			' Magic numbers: 25, 37 (Sound-effect IDs):
+			If (characterID = CHARACTER_AMY) Then
+				soundInstance.playSe(25)
+			Else
+				soundInstance.playSe(37)
+			EndIf
+		End
 		
-	End
+		Method railOut:Void(x:Int, y:Int)
+			If (Self.railing) Then
+				Self.railOut = True
+				Self.railLine = Null
+				
+				Self.velY = RAIL_OUT_SPEED_VY0
+				Self.velX = 0
+				
+				setVelX(0)
+				
+				setFootPositionX(x)
+				setFootPositionY(y)
+				
+				Self.collisionChkBreak = True
+				
+				Self.animationID = ANI_JUMP
+			EndIf
+		End
 	
-	Public Method pipeIn:Void(x:Int, y:Int, vx:Int, vy:Int)
-		Self.piping = True
-		Self.pipeState = TER_STATE_RUN
-		Self.pipeDesX = x
-		Self.pipeDesY = y + BODY_OFFSET
-		Self.velX = 250
-		Self.velY = 250
-		Self.nextVelX = (vx Shl 6) / 1
-		Self.nextVelY = (vy Shl 6) / 1
-		Self.collisionChkBreak = True
-	End
-	
-	Public Method pipeSet:Void(x:Int, y:Int, vx:Int, vy:Int)
-		
-		If (Self.piping) Then
+		Method pipeIn:Void(x:Int, y:Int, vx:Int, vy:Int)
+			Self.piping = True
+			
+			Self.pipeState = TER_STATE_RUN
 			Self.pipeDesX = x
 			Self.pipeDesY = y + BODY_OFFSET
-			Int degree = crlFP32.actTanDegree(vy, vx)
-			Int sourceSpeed = crlFP32.sqrt((vy * vy) + (vx * vx)) Shr 6
-			Self.nextVelX = vx
-			Self.nextVelY = vy
-			Self.pipeState = TER_STATE_LOOK_MOON
 			
-			If (Self.velX > 0 And Self.footPointX > Self.pipeDesX) Then
-				Self.footPointX = Self.pipeDesX
-			EndIf
+			Self.velX = 250
+			Self.velY = 250
 			
-			If (Self.velX < 0 And Self.footPointX < Self.pipeDesX) Then
-				Self.footPointX = Self.pipeDesX
-			EndIf
-			
-			If (Self.velY > 0 And Self.footPointY > Self.pipeDesY) Then
-				Self.footPointY = Self.pipeDesY
-			EndIf
-			
-			If (Self.velY < 0 And Self.footPointY < Self.pipeDesY) Then
-				Self.footPointY = Self.pipeDesY
-			EndIf
+			Self.nextVelX = (vx Shl 6)
+			Self.nextVelY = (vy Shl 6)
 			
 			Self.collisionChkBreak = True
-			Return
-		EndIf
+		End
 		
-		Self.footPointX = x
-		Self.footPointY = y
-		degree = crlFP32.actTanDegree(vy, vx)
-		sourceSpeed = crlFP32.sqrt((vy * vy) + (vx * vx)) Shr 6
-		Self.nextVelX = vx
-		Self.nextVelY = vy
-		Self.velX = vx
-		Self.velY = vy
-		Self.pipeState = STATE_PIPING
-		Self.piping = True
-		Self.collisionChkBreak = True
-		Self.worldCal.stopMove()
-	End
-	
-	Public Method pipeOut:Void()
+		Method pipeSet:Void(x:Int, y:Int, vx:Int, vy:Int)
+			If (Self.piping) Then
+				Self.pipeDesX = x
+				Self.pipeDesY = (y + BODY_OFFSET)
+				
+				Local degree:= ATan2(vy, vx)
+				Local sourceSpeed:= (Sqrt((vy * vy) + (vx * vx)) Shr 6)
+				
+				Self.nextVelX = vx
+				Self.nextVelY = vy
+				
+				Self.pipeState = STATE_PIPE_OVER
+				
+				If (Self.velX > 0 And Self.footPointX > Self.pipeDesX) Then
+					Self.footPointX = Self.pipeDesX
+				EndIf
+				
+				If (Self.velX < 0 And Self.footPointX < Self.pipeDesX) Then
+					Self.footPointX = Self.pipeDesX
+				EndIf
+				
+				If (Self.velY > 0 And Self.footPointY > Self.pipeDesY) Then
+					Self.footPointY = Self.pipeDesY
+				EndIf
+				
+				If (Self.velY < 0 And Self.footPointY < Self.pipeDesY) Then
+					Self.footPointY = Self.pipeDesY
+				EndIf
+				
+				Self.collisionChkBreak = True
+				
+				Return
+			EndIf
+			
+			Self.footPointX = x
+			Self.footPointY = y
+			
+			degree = ATan2(vy, vx)
+			sourceSpeed = (Sqrt((vy * vy) + (vx * vx)) Shr 6)
+			
+			Self.nextVelX = vx
+			Self.nextVelY = vy
+			
+			Self.velX = vx
+			Self.velY = vy
+			
+			Self.pipeState = STATE_PIPING
+			Self.piping = True
+			
+			Self.collisionChkBreak = True
+			
+			Self.worldCal.stopMove()
+		End
 		
-		If (Self.piping) Then
-			Self.piping = False
-			Self.collisionState = COLLISION_STATE_JUMP
-			Self.worldCal.actionState = 1
-		EndIf
+		Method pipeOut:Void()
+			If (Self.piping) Then
+				Self.piping = False
+				
+				Self.collisionState = COLLISION_STATE_JUMP
+				
+				' Magic number: 1 (Action-state)
+				Self.worldCal.actionState = 1
+			EndIf
+		End
 		
-	End
-	
 	Public Method setFall:Void(x:Int, y:Int, left:Int, top:Int)
 		
 		If (Self instanceof PlayerTails) Then
