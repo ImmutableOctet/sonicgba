@@ -71,7 +71,7 @@ Class ImageInfo
 		Self.m_nClips = ds.ReadByte()
 		
 		If (Self.m_nClips < (Short) 0) Then
-			Self.m_nClips = (Short) (Self.m_nClips + 256)
+			Self.m_nClips = (Short) (Self.m_nClips + UOCTET_MAX_POSITIVE_NUMBERS)
 		EndIf
 		
 		Self.m_Clips = (Short[][]) Array.newInstance(Short.TYPE, New Int[]{Self.m_nClips, 4})
@@ -99,8 +99,8 @@ Class ImageInfo
 			For (i = (Short) 0; i < Self.m_nClips; i += 1)
 				Self.m_Clips[i][0] = (Short) 0
 				Self.m_Clips[i][1] = (Short) 0
-				Self.m_Clips[i][2] = (Short) (Self.img_clip.getWidth() & 65535)
-				Self.m_Clips[i][3] = (Short) (Self.img_clip.getHeight() & 65535)
+				Self.m_Clips[i][2] = (Short) (Self.img_clip.getWidth() & USHORT_MAX)
+				Self.m_Clips[i][3] = (Short) (Self.img_clip.getHeight() & USHORT_MAX)
 			EndIf
 			Return
 		EndIf
@@ -108,7 +108,7 @@ Class ImageInfo
 		Self.m_nClips = (Byte) ds.ReadByte()
 		
 		If (Self.m_nClips < (Short) 0) Then
-			Self.m_nClips = (Short) (Self.m_nClips + 256)
+			Self.m_nClips = (Short) (Self.m_nClips + UOCTET_MAX_POSITIVE_NUMBERS)
 		EndIf
 		
 		Self.m_Clips = (Short[][]) Array.newInstance(Short.TYPE, New Int[]{Self.m_nClips, 4})

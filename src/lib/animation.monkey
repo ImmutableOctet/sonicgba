@@ -224,7 +224,7 @@ Class Animation
 				Self.m_nFrames = in.ReadByte()
 				
 				If (Self.m_nFrames < 0) Then
-					Self.m_nFrames += 256
+					Self.m_nFrames += UOCTET_MAX_POSITIVE_NUMBERS
 				EndIf
 				
 				Self.m_Frames = New Frame[Self.m_nFrames]
@@ -241,7 +241,7 @@ Class Animation
 				Self.m_nActions = in.ReadByte()
 				
 				If (Self.m_nActions < 0) Then
-					Self.m_nActions += 256
+					Self.m_nActions += UOCTET_MAX_POSITIVE_NUMBERS
 				EndIf
 				
 				Self.m_Actions = New Action[Self.m_nActions]
@@ -293,7 +293,7 @@ Class Animation
 			Self.m_nFrames = ds.ReadByte()
 			
 			If (Self.m_nFrames < 0) Then
-				Self.m_nFrames += 256
+				Self.m_nFrames += UOCTET_MAX_POSITIVE_NUMBERS
 			EndIf
 			
 			Self.m_Frames = New Frame[Self.m_nFrames]
@@ -330,7 +330,7 @@ Class Animation
 			Self.m_nActions = ds.ReadByte()
 			
 			If (Self.m_nActions < 0) Then
-				Self.m_nActions += 256
+				Self.m_nActions += UOCTET_MAX_POSITIVE_NUMBERS
 			EndIf
 			
 			Self.m_Actions = New Action[Self.m_nActions]

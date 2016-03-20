@@ -101,7 +101,6 @@ Class Frame
 				
 				Self.m_nClips = in.ReadByte()
 				
-				
 				Self.m_ClipInfo = New Short[Self.m_nClips]
 				
 				For Local i:= 0 Until Self.m_nClips
@@ -117,7 +116,7 @@ Class Frame
 						sArr[j] = in.ReadByte()
 						
 						If (j > 1 And sArr[j] < 0) Then
-							sArr[j] = Short(sArr[j] + 256)
+							sArr[j] = Short(sArr[j] + UOCTET_MAX_POSITIVE_NUMBERS)
 						EndIf
 					Next
 					
@@ -190,11 +189,11 @@ Class Frame
 						sArr[3] = Short(sArr[3] Shl 4)
 						
 						If (sArr[4] < 0) Then
-							sArr[4] = Short(sArr[4] + 256)
+							sArr[4] = Short(sArr[4] + UOCTET_MAX_POSITIVE_NUMBERS)
 						EndIf
 						
 						If (sArr[2] < 0) Then
-							sArr[2] = Short(sArr[2] + 256)
+							sArr[2] = Short(sArr[2] + UOCTET_MAX_POSITIVE_NUMBERS)
 						EndIf
 						
 						sArr[0] = ds.ReadShort()
@@ -220,6 +219,8 @@ Class Frame
 						sArr[3] = ds.ReadShort()
 						
 						Self.color = 0
+						
+						' These values may be incorrect:
 						Self.color |= ((ds.ReadByte() Shl 16) & 16711680)
 						Self.color |= ((ds.ReadByte() Shl 8) & 65280)
 						Self.color |= ((ds.ReadByte() Shl 0) & 255)
@@ -231,7 +232,7 @@ Class Frame
 						sArr[3] = ds.ReadByte()
 						
 						If (sArr[3] < 0) Then
-							sArr[3] = Short(sArr[3] + 256)
+							sArr[3] = Short(sArr[3] + UOCTET_MAX_POSITIVE_NUMBERS)
 						EndIf
 						
 						sArr[0] = ds.ReadShort()
@@ -240,39 +241,39 @@ Class Frame
 			Next
 		End
 
-	Public Method getWidth:Int()
-		
-		If (Self.m_nClips <= Null) Then
-			Return 0
-		EndIf
-		
-		Int xLeft = crlFP32.MAX_VALUE
-		Int xRight = Integer.MIN_VALUE
-		For (Byte i = (Byte) 0; i < Self.m_nClips; i += 1)
+		Public Method getWidth:Int()
 			
-			If (Self.m_ClipInfo[i][0] < xLeft) Then
-				xLeft = Self.m_ClipInfo[i][0]
+			If (Self.m_nClips <= Null) Then
+				Return 0
 			EndIf
 			
-			Short[][] clipArray = m_Ani.imageInfo[Self.m_ClipInfo[i][4]].getClips()
-			Int widthId = 2
+			Local xLeft:= crlFP32.MAX_VALUE
+			Local xRight:= Integer.MIN_VALUE
+			For (Byte i = (Byte) 0; i < Self.m_nClips; i += 1)
+				
+				If (Self.m_ClipInfo[i][0] < xLeft) Then
+					xLeft = Self.m_ClipInfo[i][0]
+				EndIf
+				
+				Short[][] clipArray = m_Ani.imageInfo[Self.m_ClipInfo[i][4]].getClips()
+				Int widthId = 2
+				
+				If ((((Short) (Self.m_ClipInfo[i][3] Shl 8)) & MFGamePad.KEY_NUM_6) <> 0) Then
+					widthId = 3
+				EndIf
+				
+				If (clipArray[Self.m_ClipInfo[i][2]][widthId] + Self.m_ClipInfo[i][0] > xRight) Then
+					xRight = clipArray[Self.m_ClipInfo[i][2]][widthId] + Self.m_ClipInfo[i][0]
+				EndIf
+			EndIf
+			Self.frameWidth = (Short) Abs(xRight - xLeft)
 			
-			If ((((Short) (Self.m_ClipInfo[i][3] Shl 8)) & MFGamePad.KEY_NUM_6) <> 0) Then
-				widthId = 3
+			If (m_Ani.isDoubleScale) Then
+				Self.frameWidth = (Short) (Self.frameWidth Shl 1)
 			EndIf
 			
-			If (clipArray[Self.m_ClipInfo[i][2]][widthId] + Self.m_ClipInfo[i][0] > xRight) Then
-				xRight = clipArray[Self.m_ClipInfo[i][2]][widthId] + Self.m_ClipInfo[i][0]
-			EndIf
-		EndIf
-		Self.frameWidth = (Short) Abs(xRight - xLeft)
-		
-		If (m_Ani.isDoubleScale) Then
-			Self.frameWidth = (Short) (Self.frameWidth Shl 1)
-		EndIf
-		
-		Return Self.frameWidth
-	End
+			Return Self.frameWidth
+		End
 
 	Public Method getHeight:Int()
 		

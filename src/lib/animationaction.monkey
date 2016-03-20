@@ -76,7 +76,7 @@ Class Action
 			Local tmpFrame:= Self.m_FrameInfo[Self.m_CurFrame][0]
 			
 			If (tmpFrame < 0) Then
-				tmpFrame += 256
+				tmpFrame += UOCTET_MAX_POSITIVE_NUMBERS
 			EndIf
 			
 			Return tmpFrame
@@ -121,7 +121,7 @@ Class Action
 			Self.m_nFrames = in.ReadByte()
 			
 			If (Self.m_nFrames < 0) Then
-				Self.m_nFrames = (Self.m_nFrames + 256)
+				Self.m_nFrames = (Self.m_nFrames + UOCTET_MAX_POSITIVE_NUMBERS)
 			EndIf
 			
 			InitializeFrameInfo(Self.m_nFrames)
@@ -137,7 +137,7 @@ Class Action
 			Self.m_nFrames = ds.ReadByte()
 			
 			If (Self.m_nFrames < 0) Then
-				Self.m_nFrames = (Self.m_nFrames + 256)
+				Self.m_nFrames = (Self.m_nFrames + UOCTET_MAX_POSITIVE_NUMBERS)
 			EndIf
 			
 			InitializeFrameInfo(Self.m_nFrames)
@@ -188,7 +188,7 @@ Class Action
 				Local tmpFrame:= Self.m_FrameInfo[Self.m_CurFrame][0]
 				
 				If (tmpFrame < 0) Then
-					tmpFrame += 256
+					tmpFrame += UOCTET_MAX_POSITIVE_NUMBERS
 				EndIf
 				
 				Self.m_Ani.m_Frames[tmpFrame].Draw(g, x, y, attr)
@@ -219,7 +219,7 @@ Class Action
 				Local tmpFrame:= Self.m_FrameInfo[frame][0]
 				
 				If (tmpFrame < 0) Then
-					tmpFrame += 256
+					tmpFrame += UOCTET_MAX_POSITIVE_NUMBERS
 				EndIf
 				
 				Self.m_Ani.m_Frames[tmpFrame].Draw(g, x, y, attr)
