@@ -2680,7 +2680,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						Else
 							Self.faceDirection = True
 						EndIf
-						
 					ElseIf (Self.animationID <> ANI_JUMP) Then
 						Self.velX -= tmpPower
 						
@@ -2692,7 +2691,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 							EndIf
 						EndIf
 					EndIf
-					
 				ElseIf ((Key.repeat(Key.gRight) And (Self.animationID = ANI_STAND Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = ANI_CLIFF_2 Or Self.animationID = ANI_RUN_1 Or Self.animationID = ANI_RUN_2 Or Self.animationID = ANI_RUN_3)) Or (Self.isCelebrate And Self.faceDirection)) Then
 					If (Self.animationID = ANI_SQUAT) Then
 						Self.animationID = ANI_STAND
@@ -2714,7 +2712,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						Else
 							Self.faceDirection = False
 						EndIf
-						
 					ElseIf (Self.animationID <> ANI_JUMP) Then
 						Self.velX += tmpPower
 						
@@ -2838,7 +2835,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 							EndIf
 						EndIf
 						
-						Self.degreeForDraw = MyAPI.calNextPosition((double) Self.degreeForDraw, (double) degreeDes, 1, 3)
+						Self.degreeForDraw = MyAPI.calNextPosition(Double(Self.degreeForDraw), Double(degreeDes), 1, 3)
 					Case 1
 						Self.degreeForDraw += 24
 					Case 2
@@ -2938,158 +2935,41 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Return
 			EndIf
 			
+			' Magic number: -200 (Velocity; Y)
 			If ((Self.velY > -200 And Not Self.isAntiGravity) Or (Self.velY < BPDef.PRICE_REVIVE And Self.isAntiGravity)) Then
 				Self.animationID = ANI_POP_JUMP_UP_SLOW
 			EndIf
-			
 		End
 	
-	Private Method inputLogicSand:Void()
-		Self.leavingBar = False
-		Self.doJumpForwardly = False
-		Self.degreeRotateMode = 0
-		
-		If (Self.velY > 0 And Not Self.sandStanding) Then
-			Self.sandStanding = True
-		EndIf
-		
-		Self.sandFrame += 1
-		
-		If (Self.velX = 0) Then
-			Self.sandFrame = 0
-		ElseIf (Self.sandFrame = 1) Then
-			soundInstance.playSe(70)
-		ElseIf (Self.sandFrame > 2) Then
-			soundInstance.playSequenceSe(71)
-		EndIf
-		
-		If (Self.sandStanding) Then
-			Int reversePower
-			Int tmpPower = Self.movePower / 2
-			Int tmpMaxVel = Self.maxVelocity / 2
+		Method inputLogicSand:Void()
+			Self.leavingBar = False
+			Self.doJumpForwardly = False
+			Self.degreeRotateMode = 0
 			
-			If (Key.repeat(Key.gLeft)) Then
-				Self.faceDirection = False
-				
-				If (Self.velX > 0) Then
-					If (Self.animationID = ANI_JUMP) Then
-						reversePower = Self.movePowerReserseBallInSand
-					Else
-						reversePower = Self.movePowerReverseInSand
-					EndIf
-					
-					Self.velX -= reversePower
-					
-					If (Self.velX < 0) Then
-						Self.velX = (0 - reversePower) Shr 2
-					Else
-						Self.faceDirection = True
-					EndIf
-					
-				ElseIf (Self.animationID <> ANI_JUMP) Then
-					Self.velX -= tmpPower
-					
-					If (Self.velX < (-tmpMaxVel)) Then
-						Self.velX += tmpPower
-						
-						If (Self.velX > (-tmpMaxVel)) Then
-							Self.velX = -tmpMaxVel
-						EndIf
-					EndIf
-				EndIf
-				
-			ElseIf (Key.repeat(Key.gRight)) Then
-				Self.faceDirection = True
-				
-				If (Self.velX < 0) Then
-					If (Self.animationID = ANI_JUMP) Then
-						reversePower = Self.movePowerReserseBallInSand
-					Else
-						reversePower = Self.movePowerReverseInSand
-					EndIf
-					
-					Self.velX += reversePower
-					
-					If (Self.velX > -1) Then
-						Self.velX = reversePower Shr 2
-					Else
-						Self.faceDirection = False
-					EndIf
-					
-				ElseIf (Self.animationID <> ANI_JUMP) Then
-					Self.velX += tmpPower
-					
-					If (Self.velX > tmpMaxVel) Then
-						Self.velX -= tmpPower
-						
-						If (Self.velX < tmpMaxVel) Then
-							Self.velX = tmpMaxVel
-						EndIf
-					EndIf
-				EndIf
-				
-			Else
-				Self.velX = 0
+			If (Self.velY > 0 And Not Self.sandStanding) Then
+				Self.sandStanding = True
 			EndIf
 			
-			If (Abs(Self.velX) <= 64) Then
-				If (Not (((Self instanceof PlayerAmy) And getCharacterAnimationID() = ANI_POAL_PULL And getVelY() < 0) Or Self.animationID = ANI_LOOK_UP_1 Or Self.animationID = ANI_LOOK_UP_2 Or Self.animationID = ANI_LOOK_UP_OVER)) Then
-					Self.animationID = ANI_STAND
-				EndIf
-			ElseIf (characterID <> CHARACTER_TAILS Or ((PlayerTails) player).flyCount <= 0) Then
-				If ((Not (Self instanceof PlayerAmy) Or (getCharacterAnimationID() <> 4 And (getCharacterAnimationID() <> 5 Or Self.drawer.getCurrentFrame() >= 2))) And Not ((Self instanceof PlayerAmy) And getCharacterAnimationID() = ANI_POAL_PULL And getVelY() < 0)) Then
-					If (Abs(Self.velX) < SPEED_LIMIT_LEVEL_1) Then
-						Self.animationID = ANI_RUN_1
-					ElseIf (Abs(Self.velX) < SPEED_LIMIT_LEVEL_2) Then
-						Self.animationID = ANI_RUN_2
-					Else
-						Self.animationID = ANI_RUN_3
-					EndIf
-				EndIf
-				
-			ElseIf (Not (Self.myAnimationID = ANI_HURT Or Self.myanimationID = ANI_CLIFF_2 Or Self.myAnimationID = ANI_BREATHE)) Then
-				((PlayerTails) player).flyCount = 0
+			Self.sandFrame += 1
+			
+			' Magic numbers: 70, 71 (Sound-effect IDs):
+			If (Self.velX = 0) Then
+				Self.sandFrame = 0
+			ElseIf (Self.sandFrame = 1) Then
+				soundInstance.playSe(70)
+			ElseIf (Self.sandFrame > 2) Then
+				soundInstance.playSequenceSe(71)
 			EndIf
 			
-			If (Not ((Self instanceof PlayerAmy) And getCharacterAnimationID() = ANI_POAL_PULL And getVelY() < 0)) Then
-				Self.velY = 100
-			EndIf
-			
-			If (characterID = CHARACTER_SONIC) Then
-				Int sandDash = SPEED_LIMIT_LEVEL_1 Shr 2
+			If (Self.sandStanding) Then
+				Local reversePower:Int
+				Local tmpPower:= (Self.movePower / 2)
+				Local tmpMaxVel:= (Self.maxVelocity / 2)
 				
-				If (Key.press(Key.gSelect)) Then
-					soundInstance.playSe(4)
+				If (Key.repeat(Key.gLeft)) Then
+					Self.faceDirection = False
 					
-					If (Self.faceDirection) Then
-						If (Self.velX < 0) Then
-							If (Self.animationID = ANI_JUMP) Then
-								reversePower = Self.movePowerReserseBallInSand
-							Else
-								reversePower = Self.movePowerReverseInSand
-							EndIf
-							
-							Self.velX += reversePower
-							
-							If (Self.velX > -1) Then
-								Self.velX = reversePower Shr 2
-							Else
-								Self.faceDirection = False
-							EndIf
-							
-						ElseIf (Self.animationID <> ANI_JUMP) Then
-							Self.velX += sandDash
-							
-							If (Self.velX > tmpMaxVel) Then
-								Self.velX -= sandDash
-								
-								If (Self.velX < tmpMaxVel) Then
-									Self.velX = tmpMaxVel
-								EndIf
-							EndIf
-						EndIf
-						
-					ElseIf (Self.velX > 0) Then
+					If (Self.velX > 0) Then
 						If (Self.animationID = ANI_JUMP) Then
 							reversePower = Self.movePowerReserseBallInSand
 						Else
@@ -3099,80 +2979,206 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						Self.velX -= reversePower
 						
 						If (Self.velX < 0) Then
-							Self.velX = (0 - reversePower) Shr 2
+							Self.velX = ((-reversePower) Shr 2)
 						Else
 							Self.faceDirection = True
 						EndIf
-						
 					ElseIf (Self.animationID <> ANI_JUMP) Then
-						Self.velX -= sandDash
+						Self.velX -= tmpPower
 						
 						If (Self.velX < (-tmpMaxVel)) Then
-							Self.velX += sandDash
+							Self.velX += tmpPower
 							
 							If (Self.velX > (-tmpMaxVel)) Then
 								Self.velX = -tmpMaxVel
 							EndIf
 						EndIf
 					EndIf
-				EndIf
-			EndIf
-			
-			If (Not spinLogic()) Then
-				If (Not (Key.repeat(Key.gLeft) Or Key.repeat(Key.gRight) Or isTerminalRunRight() Or Self.animationID = ANI_NONE)) Then
-					If (Key.repeat(Key.gDown)) Then
-						If (Abs(Self.velX) > 64) Then
-							Self.velX = 0
-						ElseIf (Self.animationID <> ANI_SQUAT) Then
-							Self.animationID = ANI_SQUAT_PROCESS
-						EndIf
-						
-					ElseIf (Self.animationID = ANI_SQUAT) Then
-						Self.animationID = ANI_SQUAT_PROCESS
-					EndIf
-				EndIf
-				
-				If (Self.animationID <> ANI_SQUAT And Key.press(Key.gUp | Key.B_HIGH_JUMP)) Then
-					If ((Self instanceof PlayerTails) And ((PlayerTails) player).flyCount > 0) Then
-						((PlayerTails) player).flyCount = 0
-					EndIf
-					
-					doJump()
-					Self.velY -= getGravity()
-					Self.sandStanding = False
-				EndIf
-			EndIf
-			
-			If (Not Key.repeat(Key.gLeft | Key.gRight) And Self.sandStanding) Then
-				Int resistance
-				
-				If (Self.animationID <> ANI_JUMP) Then
-					resistance = tmpPower
-				Else
-					resistance = (tmpPower / 2)
-				EndIf
-				
-				If (Self.velX > 0) Then
-					Self.velX -= resistance
+				ElseIf (Key.repeat(Key.gRight)) Then
+					Self.faceDirection = True
 					
 					If (Self.velX < 0) Then
-						Self.velX = 0
+						If (Self.animationID = ANI_JUMP) Then
+							reversePower = Self.movePowerReserseBallInSand
+						Else
+							reversePower = Self.movePowerReverseInSand
+						EndIf
+						
+						Self.velX += reversePower
+						
+						If (Self.velX > -1) Then
+							Self.velX = (reversePower Shr 2)
+						Else
+							Self.faceDirection = False
+						EndIf
+					ElseIf (Self.animationID <> ANI_JUMP) Then
+						Self.velX += tmpPower
+						
+						If (Self.velX > tmpMaxVel) Then
+							Self.velX -= tmpPower
+							
+							If (Self.velX < tmpMaxVel) Then
+								Self.velX = tmpMaxVel
+							EndIf
+						EndIf
 					EndIf
+				Else
+					Self.velX = 0
+				EndIf
+				
+				' Magic number: 64 (Velocity; X)
+				If (Abs(Self.velX) <= 64) Then
+					If (Not (((characterID = CHARACTER_AMY) And getCharacterAnimationID() = ANI_POAL_PULL And getVelY() < 0) Or Self.animationID = ANI_LOOK_UP_1 Or Self.animationID = ANI_LOOK_UP_2 Or Self.animationID = ANI_LOOK_UP_OVER)) Then
+						Self.animationID = ANI_STAND
+					EndIf
+				ElseIf (characterID <> CHARACTER_TAILS Or PlayerTails(player).flyCount <= 0) Then ' <-- Not safe, but it works.
+					If ((Not ((characterID = CHARACTER_AMY)) Or (getCharacterAnimationID() <> ANI_JUMP And (getCharacterAnimationID() <> ANI_SQUAT Or Self.drawer.getCurrentFrame() >= ANI_RUN_2))) And Not ((characterID = CHARACTER_AMY) And getCharacterAnimationID() = ANI_POAL_PULL And getVelY() < 0)) Then
+						If (Abs(Self.velX) < SPEED_LIMIT_LEVEL_1) Then
+							Self.animationID = ANI_RUN_1
+						ElseIf (Abs(Self.velX) < SPEED_LIMIT_LEVEL_2) Then
+							Self.animationID = ANI_RUN_2
+						Else
+							Self.animationID = ANI_RUN_3
+						EndIf
+					EndIf
+				ElseIf (Not (Self.myAnimationID = ANI_HURT Or Self.myanimationID = ANI_CLIFF_2 Or Self.myAnimationID = ANI_BREATHE)) Then
+					' Optimization potential; dynamic cast.
+					Local tails:= PlayerTails(Self)
 					
-				ElseIf (Self.velX < 0) Then
-					Self.velX += resistance
+					If (tails <> Null) Then
+						tails.flyCount = 0
+					Endif
+				EndIf
+				
+				'Local amy:= PlayerAmy(Self)
+				
+				'If (Not (amy <> Null And getCharacterAnimationID() = ANI_POAL_PULL And getVelY() < 0)) Then
+				If (Not ((characterID = CHARACTER_AMY) And getCharacterAnimationID() = ANI_POAL_PULL And getVelY() < 0)) Then
+					' Magic number: 100 (Velocity; Y)
+					Self.velY = 100
+				EndIf
+				
+				If (characterID = CHARACTER_SONIC) Then
+					Local sandDash:= (SPEED_LIMIT_LEVEL_1 Shr 2)
 					
-					If (Self.velX > 0) Then
-						Self.velX = 0
+					If (Key.press(Key.gSelect)) Then
+						' Magic number: 4 (Sound-effect ID)
+						soundInstance.playSe(4)
+						
+						If (Self.faceDirection) Then
+							If (Self.velX < 0) Then
+								If (Self.animationID = ANI_JUMP) Then
+									reversePower = Self.movePowerReserseBallInSand
+								Else
+									reversePower = Self.movePowerReverseInSand
+								EndIf
+								
+								Self.velX += reversePower
+								
+								If (Self.velX > -1) Then
+									Self.velX = (reversePower Shr 2)
+								Else
+									Self.faceDirection = False
+								EndIf
+							ElseIf (Self.animationID <> ANI_JUMP) Then
+								Self.velX += sandDash
+								
+								If (Self.velX > tmpMaxVel) Then
+									Self.velX -= sandDash
+									
+									If (Self.velX < tmpMaxVel) Then
+										Self.velX = tmpMaxVel
+									EndIf
+								EndIf
+							EndIf
+						ElseIf (Self.velX > 0) Then
+							If (Self.animationID = ANI_JUMP) Then
+								reversePower = Self.movePowerReserseBallInSand
+							Else
+								reversePower = Self.movePowerReverseInSand
+							EndIf
+							
+							Self.velX -= reversePower
+							
+							If (Self.velX < 0) Then
+								Self.velX = ((-reversePower) Shr 2)
+							Else
+								Self.faceDirection = True
+							EndIf
+						ElseIf (Self.animationID <> ANI_JUMP) Then
+							Self.velX -= sandDash
+							
+							If (Self.velX < (-tmpMaxVel)) Then
+								Self.velX += sandDash
+								
+								If (Self.velX > (-tmpMaxVel)) Then
+									Self.velX = -tmpMaxVel
+								EndIf
+							EndIf
+						EndIf
 					EndIf
 				EndIf
+				
+				If (Not spinLogic()) Then
+					If (Not (Key.repeat(Key.gLeft) Or Key.repeat(Key.gRight) Or isTerminalRunRight() Or Self.animationID = ANI_NONE)) Then
+						If (Key.repeat(Key.gDown)) Then
+							' Magic number: 64
+							If (Abs(Self.velX) > 64) Then
+								Self.velX = 0
+							ElseIf (Self.animationID <> ANI_SQUAT) Then
+								Self.animationID = ANI_SQUAT_PROCESS
+							EndIf
+						ElseIf (Self.animationID = ANI_SQUAT) Then
+							Self.animationID = ANI_SQUAT_PROCESS
+						EndIf
+					EndIf
+					
+					If (Self.animationID <> ANI_SQUAT And Key.press(Key.gUp | Key.B_HIGH_JUMP)) Then
+						' Optimization potential; dynamic cast.
+						Local tails:= PlayerTails(player)
+						
+						If (tails <> Null And tails.flyCount > 0) Then
+							tails.flyCount = 0
+						EndIf
+						
+						doJump()
+						
+						Self.velY -= getGravity()
+						
+						Self.sandStanding = False
+					EndIf
+				EndIf
+				
+				If (Not Key.repeat(Key.gLeft | Key.gRight) And Self.sandStanding) Then
+					Local resistance:Int
+					
+					If (Self.animationID <> ANI_JUMP) Then
+						resistance = tmpPower
+					Else
+						resistance = (tmpPower / 2)
+					EndIf
+					
+					If (Self.velX > 0) Then
+						Self.velX -= resistance
+						
+						If (Self.velX < 0) Then
+							Self.velX = 0
+						EndIf
+						
+					ElseIf (Self.velX < 0) Then
+						Self.velX += resistance
+						
+						If (Self.velX > 0) Then
+							Self.velX = 0
+						EndIf
+					EndIf
+				EndIf
+			Else
+				inputLogicJump()
 			EndIf
-		Else
-			inputLogicJump()
-		EndIf
-		
-		Self.collisionState = COLLISION_STATE_JUMP
-	End
+			
+			Self.collisionState = COLLISION_STATE_JUMP
+		End
 	
 	Private Method faceDegreeChk:Int()
 		Return Self.faceDegree
