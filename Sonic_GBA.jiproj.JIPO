@@ -26,8 +26,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationframe.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>163</Y>
+        <X>8</X>
+        <Y>166</Y>
       </CursorPos>
       <DocGUID>ce0adb72-d17b-4263-b0fc-1eac3ad12e19</DocGUID>
       <Bookmarks />
@@ -348,10 +348,10 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>3</X>
+        <Y>6901</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -575,6 +575,6 @@
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\action" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonicgba" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonicgba" Expanded="true" />
   </Folders>
 </JiProjUserOptions>

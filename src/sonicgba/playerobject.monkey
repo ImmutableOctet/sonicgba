@@ -3054,7 +3054,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					
 					If (tails <> Null) Then
 						tails.flyCount = 0
-					Endif
+					EndIf
 				EndIf
 				
 				'Local amy:= PlayerAmy(Self)
@@ -3538,7 +3538,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					setVelY(0)
 					
 					Self.worldCal.stopMoveY()
-				Endif
+				EndIf
 				
 				If (Not (Self.collisionState = COLLISION_STATE_ON_OBJECT And isFootOnObject(obj))) Then
 					Self.footOnObject = obj
@@ -3579,7 +3579,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			If (Not alt) Then
 				Self.movedSpeedY = Self.footPointY - prey
-			Endif
+			EndIf
 			
 			Self.onObjectContinue = True
 		End
@@ -3600,7 +3600,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				If (Not alt) Then
 					Self.bePushedFootX = Self.footPointX - RIGHT_WALK_COLLISION_CHECK_OFFSET_X
-				Endif
+				EndIf
 				
 				Self.movedSpeedX = (curx - prex)
 				
@@ -3625,7 +3625,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				If (alt) Then
 					Self.faceDirection = Not Self.isAntiGravity
-				Endif
+				EndIf
 			Else
 				prex = Self.footPointX
 				
@@ -3636,7 +3636,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				If (alt) Then
 					Self.bePushedFootX = Self.footPointX
-				Endif
+				EndIf
 				
 				Self.movedSpeedX = curx - prex
 				
@@ -3660,7 +3660,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				If (alt) Then
 					Self.faceDirection = Self.isAntiGravity
-				Endif
+				EndIf
 			EndIf
 			
 			' Optimization potential; dynamic cast.
@@ -4193,7 +4193,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			' This behavior may change in the future:
 			If (Self.collisionState = COLLISION_STATE_WALK Or Self.collisionState = COLLISION_STATE_IN_SAND) Thne
 				Self.velY = 100
-			Endif
+			EndIf
 			
 			Self.velY += (DSgn(Not Self.isAntiGravity) * getGravity())
 		End

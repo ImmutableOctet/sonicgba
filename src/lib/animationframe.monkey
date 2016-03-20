@@ -102,9 +102,9 @@ Class Frame
 				Self.m_nClips = in.ReadByte()
 				
 				
-				Self.m_ClipInfo = New Short[Self.m_nClips[]
+				Self.m_ClipInfo = New Short[Self.m_nClips]
 				
-				For Local i:= 0 Until 5
+				For Local i:= 0 Until Self.m_nClips
 					Self.m_ClipInfo[i] = New Short[5]
 				Next
 				
@@ -161,89 +161,84 @@ Class Frame
 			Self.m_ClipInfo[0][3] = 0
 		End
 		
-	Public Method loadFrameG2:Void(ds:Stream)
-		Self.m_nClips = ds.ReadByte()
-		Self.m_ClipInfo = (Short[][]) Array.newInstance(Short.TYPE, New Int[]{Self.m_nClips, 5})
-		Self.functionID = New Int[Self.m_nClips]
-		For (Byte i = (Byte) 0; i < Self.m_nClips; i += 1)
-			Self.functionID[i] = ds.ReadByte()
-			Short[] sArr
-			Select (Self.functionID[i])
-				Case TitleState.STAGE_SELECT_KEY_RECORD_1
-					Self.m_ClipInfo[i][4] = ds.ReadByte()
-					Self.m_ClipInfo[i][2] = ds.ReadByte()
-					Self.m_ClipInfo[i][3] = ds.ReadByte()
-					Self.m_ClipInfo[i][3] = (Short) (Self.m_ClipInfo[i][3] Shl 4)
-					
-					If (Self.m_ClipInfo[i][4] < (Short) 0) Then
-						sArr = Self.m_ClipInfo[i]
-						sArr[4] = (Short) (sArr[4] + 256)
-					EndIf
-					
-					If (Self.m_ClipInfo[i][2] < (Short) 0) Then
-						sArr = Self.m_ClipInfo[i]
-						sArr[2] = (Short) (sArr[2] + 256)
-					EndIf
-					
-					Self.m_ClipInfo[i][0] = ds.ReadShort()
-					Self.m_ClipInfo[i][1] = ds.ReadShort()
-					
-					If (Not Animation.isFrameWanted) Then
-						break
-					EndIf
-					
-					Int j = 0
-					While (j < Animation.imageIdArray.Length) {
-						
-						If (Animation.imageIdArray[j] <> -1) Then
-							If (Animation.imageIdArray[j] = Self.m_ClipInfo[i][4]) Then
-								break
-							EndIf
-							
-							j += 1
-						} Else {
-							Animation.imageIdArray[j] = Self.m_ClipInfo[i][4]
-							break
-						EndIf
-					EndIf
-					break
-				Case TitleState.STAGE_SELECT_KEY_RECORD_2
-					Self.m_ClipInfo[i][2] = ds.ReadShort()
-					Self.m_ClipInfo[i][3] = ds.ReadShort()
-					Self.color = 0
-					Self.color |= (ds.ReadByte() Shl 16) & 16711680
-					Self.color |= (ds.ReadByte() Shl 8) & 65280
-					Self.color |= (ds.ReadByte() Shl 0) & 255
-					Self.m_ClipInfo[i][0] = ds.ReadShort()
-					Self.m_ClipInfo[i][1] = ds.ReadShort()
-					break
-				Case TitleState.STAGE_SELECT_KEY_DIRECT_PLAY
-					Self.m_ClipInfo[i][2] = ds.ReadShort()
-					Self.m_ClipInfo[i][3] = ds.ReadShort()
-					Self.color = 0
-					Self.color |= (ds.ReadByte() Shl 16) & 16711680
-					Self.color |= (ds.ReadByte() Shl 8) & 65280
-					Self.color |= (ds.ReadByte() Shl 0) & 255
-					Self.m_ClipInfo[i][0] = ds.ReadShort()
-					Self.m_ClipInfo[i][1] = ds.ReadShort()
-					break
-				Case SSDef.SSOBJ_BNLD_ID
-					Self.m_ClipInfo[i][2] = ds.ReadByte()
-					Self.m_ClipInfo[i][3] = ds.ReadByte()
-					
-					If (Self.m_ClipInfo[i][3] < (Short) 0) Then
-						sArr = Self.m_ClipInfo[i]
-						sArr[3] = (Short) (sArr[3] + 256)
-					EndIf
-					
-					Self.m_ClipInfo[i][0] = ds.ReadShort()
-					Self.m_ClipInfo[i][1] = ds.ReadShort()
-					break
-				Default
-					break
+		Method loadFrameG2:Void(ds:Stream)
+			If (in <> Null) Then
+				Return
 			EndIf
-		EndIf
-	End
+			
+			Self.m_nClips = in.ReadByte()
+			
+			Self.m_ClipInfo = New Short[Self.m_nClips]
+			
+			For Local i:= 0 Until Self.m_nClips
+				Self.m_ClipInfo[i] = New Short[5]
+			Next
+			
+			Self.functionID = New Int[Self.m_nClips]
+			
+			For Local i:= 0 Until Self.m_nClips
+				Self.functionID[i] = ds.ReadByte()
+				
+				sArr = Self.m_ClipInfo[i]
+				
+				Select Self.functionID[i]
+					Case 0
+						sArr[4] = ds.ReadByte()
+						sArr[2] = ds.ReadByte()
+						sArr[3] = ds.ReadByte()
+						
+						sArr[3] = Short(sArr[3] Shl 4)
+						
+						If (sArr[4] < 0) Then
+							sArr[4] = Short(sArr[4] + 256)
+						EndIf
+						
+						If (sArr[2] < 0) Then
+							sArr[2] = Short(sArr[2] + 256)
+						EndIf
+						
+						sArr[0] = ds.ReadShort()
+						sArr[1] = ds.ReadShort()
+						
+						If (Animation.isFrameWanted) Then
+							Continue
+						EndIf
+						
+						For Local j:= 0 Until Animation.imageIdArray.Length
+							If (Animation.imageIdArray[j] <> -1) Then
+								If (Animation.imageIdArray[j] = sArr[4]) Then
+									Exit
+								EndIf
+							Else
+								Animation.imageIdArray[j] = sArr[4]
+								
+								Exit
+							EndIf
+						Next
+					Case 1, 2
+						sArr[2] = ds.ReadShort()
+						sArr[3] = ds.ReadShort()
+						
+						Self.color = 0
+						Self.color |= ((ds.ReadByte() Shl 16) & 16711680)
+						Self.color |= ((ds.ReadByte() Shl 8) & 65280)
+						Self.color |= ((ds.ReadByte() Shl 0) & 255)
+						
+						sArr[0] = ds.ReadShort()
+						sArr[1] = ds.ReadShort()
+					Case 3
+						sArr[2] = ds.ReadByte()
+						sArr[3] = ds.ReadByte()
+						
+						If (sArr[3] < 0) Then
+							sArr[3] = Short(sArr[3] + 256)
+						EndIf
+						
+						sArr[0] = ds.ReadShort()
+						sArr[1] = ds.ReadShort()
+				End Select
+			Next
+		End
 
 	Public Method getWidth:Int()
 		
