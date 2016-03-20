@@ -3748,147 +3748,152 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Return (Self.animationID = ANI_ATTACK_1 Or Self.animationID = ANI_ATTACK_2 Or Self.animationID = ANI_ATTACK_3 Or Self.animationID = ANI_JUMP Or Self.animationID = ANI_SPIN_LV1 Or Self.animationID = ANI_SPIN_LV2 Or invincibleCount > 0)
 		End
 		
-	Public Method isAttackingItem:Bool(pFirstTouch:Bool)
-		
-		If (Self.ignoreFirstTouch Or pFirstTouch) Then
-			Return isAttackingItem()
-		EndIf
-		
-		Return False
-	End
-	
-	Public Method isAttackingItem:Bool()
-		
-		If ((Self instanceof PlayerAmy) And (getCharacterAnimationID() = ANI_RAIL_ROLL Or getCharacterAnimationID() = ANI_BAR_ROLL_1)) Then
-			player.setVelY(player.getVelY() - 325)
-			Return True
-		ElseIf ((Self instanceof PlayerAmy) And getCharacterAnimationID() = ANI_LOOK_UP_2) Then
-			Return False
-		Else
+		Method isAttackingItem:Bool(pFirstTouch:Bool)
+			If (Self.ignoreFirstTouch Or pFirstTouch) Then
+				Return isAttackingItem()
+			EndIf
 			
-			If ((Self instanceof PlayerAmy) And getCharacterAnimationID() = ANI_BRAKE) Then
+			Return False
+		End
+		
+		Method isAttackingItem:Bool()
+			If ((characterID = CHARACTER_AMY) And (getCharacterAnimationID() = ANI_RAIL_ROLL Or getCharacterAnimationID() = ANI_BAR_ROLL_1)) Then
+				' Magic number: 325
+				player.setVelY(player.getVelY() - 325)
+				
+				Return True
+			ElseIf ((characterID = CHARACTER_AMY) And getCharacterAnimationID() = ANI_LOOK_UP_2) Then
+				Return False
+			EndIf
+			
+			If ((characterID = CHARACTER_AMY) And getCharacterAnimationID() = ANI_BRAKE) Then
 				Return False
 			EndIf
 			
 			Return (Self.animationID = ANI_ATTACK_1 Or Self.animationID = ANI_ATTACK_2 Or Self.animationID = ANI_ATTACK_3 Or Self.animationID = ANI_JUMP)
-		EndIf
+		End
 		
-	End
-	
-	Public Method getVelX:Int()
+		Method getVelX:Int()
+			If (Self.collisionState = COLLISION_STATE_NONE) Then
+				Return ((Self.totalVelocity * Cos(Self.faceDegree)) / 100)
+			EndIf
+			
+			Return Self.velX
+		End
 		
-		If (Self.collisionState = COLLISION_STATE_NONE) Then
-			Return (Self.totalVelocity * Cos(Self.faceDegree)) / 100
-		EndIf
+		Method getVelY:Int()
+			If (Self.collisionState = COLLISION_STATE_NONE) Then
+				Return ((Self.totalVelocity * Sin(Self.faceDegree)) / 100)
+			EndIf
+			
+			Return Self.velY
+		End
 		
-		Return Self.velX
-	End
-	
-	Public Method getVelY:Int()
+		Method setVelX:Void(mVelX:Int)
+			If (Self.collisionState = COLLISION_STATE_NONE) Then
+				Local tmpVelX:= ((Self.totalVelocity * Cos(Self.faceDegree)) / 100)
+				
+				tmpVelX = mVelX
+				
+				Self.totalVelocity = (((Cos(Self.faceDegree) * tmpVelX) + (Sin(Self.faceDegree) * ((Self.totalVelocity * Sin(Self.faceDegree)) / 100))) / 100)
+				
+				Return
+			EndIf
+			
+			Super.setVelX(mVelX)
+		End
 		
-		If (Self.collisionState = COLLISION_STATE_NONE) Then
-			Return (Self.totalVelocity * Sin(Self.faceDegree)) / 100
-		EndIf
+		Method setVelY:Void(mVelY:Int)
+			If (Self.collisionState = COLLISION_STATE_NONE) Then
+				Local dSin:= ((Self.totalVelocity * Sin(Self.faceDegree)) / 100)
+				
+				Self.totalVelocity = (((Cos(Self.faceDegree) * ((Self.totalVelocity * Cos(Self.faceDegree)) / 100)) + (Sin(Self.faceDegree) * mVelY)) / 100)
+				
+				Return
+			EndIf
+			
+			Super.setVelY(mVelY)
+		End
 		
-		Return Self.velY
-	End
-	
-	Public Method setVelX:Void(mVelX:Int)
+		Method setVelXPercent:Void(percentage:Int)
+			If (Self.collisionState = COLLISION_STATE_NONE) Then
+				Local tmpVelX:= ((Self.totalVelocity * Cos(Self.faceDegree)) / 100)
+				
+				tmpVelX = ((Self.totalVelocity * percentage) / 100)
+				
+				Self.totalVelocity = (((Cos(Self.faceDegree) * tmpVelX) + (Sin(Self.faceDegree) * ((Self.totalVelocity * Sin(Self.faceDegree)) / 100))) / 100)
+				
+				Return
+			EndIf
+			
+			Super.setVelX((Self.totalVelocity * percentage) / 100)
+		End
 		
-		If (Self.collisionState = COLLISION_STATE_NONE) Then
-			Int tmpVelX = (Self.totalVelocity * Cos(Self.faceDegree)) / 100
-			tmpVelX = mVelX
-			Self.totalVelocity = ((Cos(Self.faceDegree) * tmpVelX) + (Sin(Self.faceDegree) * ((Self.totalVelocity * Sin(Self.faceDegree)) / 100))) / 100
-			Return
-		EndIf
+		Method setVelYPercent:Void(percentage:Int)
+			If (Self.collisionState = COLLISION_STATE_NONE) Then
+				Local tmpVelY:= ((Self.totalVelocity * Sin(Self.faceDegree)) / 100)
+				
+				Self.totalVelocity = (((Cos(Self.faceDegree) * ((Self.totalVelocity * Cos(Self.faceDegree)) / 100)) + (Sin(Self.faceDegree) * ((Self.totalVelocity * percentage) / 100))) / 100)
+				
+				Return
+			EndIf
+			
+			Super.setVelY((Self.totalVelocity * percentage) / 100)
+		End
 		
-		Super.setVelX(mVelX)
-	End
-	
-	Public Method setVelY:Void(mVelY:Int)
+		Method beSpring:Void(springPower:Int, direction:Int)
+			If (Self.collisionState = COLLISION_STATE_NONE) Then
+				calDivideVelocity()
+			EndIf
+			
+			If (Self.isInWater) Then
+				' Magic number: 185
+				springPower = ((springPower * 185) / 100)
+			EndIf
+			
+			' This behavior may change in the future:
+			Select (direction)
+				Case DIRECTION_UP
+					Self.velY = springPower
+					Self.worldCal.stopMoveY()
+				Case DIRECTION_DOWN
+					Self.velY = -springPower
+					Self.worldCal.stopMoveY()
+				Case DIRECTION_LEFT
+					Self.velX = springPower
+					Self.worldCal.stopMoveX()
+				Case DIRECTION_RIGHT
+					Self.velX = -springPower
+					Self.worldCal.stopMoveX()
+			End Select
+			
+			If (Self.collisionState = COLLISION_STATE_NONE) Then
+				calTotalVelocity()
+			EndIf
+			
+			If ((Not Self.isAntiGravity And direction = DIRECTION_DOWN) Or (Self.isAntiGravity And direction = DIRECTION_UP)) Then
+				Self.faceDegree = Self.degreeStable
+				Self.degreeForDraw = Self.degreeStable
+				
+				Self.animationID = ANI_ROTATE_JUMP
+				Self.collisionState = COLLISION_STATE_JUMP
+				
+				' Magic number: 1
+				Self.worldCal.actionState = 1
+				
+				Self.collisionChkBreak = True
+				
+				Self.drawer.restart()
+			EndIf
+			
+			If (characterID = CHARACTER_TAILS) Then
+				' Not safe, but it works:
+				Local tails:= PlayerTails(player)
+				
+				tails.resetFlyCount()
+			EndIf
+		End
 		
-		If (Self.collisionState = COLLISION_STATE_NONE) Then
-			Int dSin = (Self.totalVelocity * Sin(Self.faceDegree)) / 100
-			Self.totalVelocity = ((Cos(Self.faceDegree) * ((Self.totalVelocity * Cos(Self.faceDegree)) / 100)) + (Sin(Self.faceDegree) * mVelY)) / 100
-			Return
-		EndIf
-		
-		Super.setVelY(mVelY)
-	End
-	
-	Public Method setVelXPercent:Void(percentage:Int)
-		
-		If (Self.collisionState = COLLISION_STATE_NONE) Then
-			Int tmpVelX = (Self.totalVelocity * Cos(Self.faceDegree)) / 100
-			tmpVelX = (Self.totalVelocity * percentage) / 100
-			Self.totalVelocity = ((Cos(Self.faceDegree) * tmpVelX) + (Sin(Self.faceDegree) * ((Self.totalVelocity * Sin(Self.faceDegree)) / 100))) / 100
-			Return
-		EndIf
-		
-		Super.setVelX((Self.totalVelocity * percentage) / 100)
-	End
-	
-	Public Method setVelYPercent:Void(percentage:Int)
-		
-		If (Self.collisionState = COLLISION_STATE_NONE) Then
-			Int tmpVelY = (Self.totalVelocity * Sin(Self.faceDegree)) / 100
-			Self.totalVelocity = ((Cos(Self.faceDegree) * ((Self.totalVelocity * Cos(Self.faceDegree)) / 100)) + (Sin(Self.faceDegree) * ((Self.totalVelocity * percentage) / 100))) / 100
-			Return
-		EndIf
-		
-		Super.setVelY((Self.totalVelocity * percentage) / 100)
-	End
-	
-	Public Method beSpring:Void(springPower:Int, direction:Int)
-		
-		If (Self.collisionState = COLLISION_STATE_NONE) Then
-			calDivideVelocity()
-		EndIf
-		
-		If (Self.isInWater) Then
-			springPower = (springPower * 185) / 100
-		EndIf
-		
-		Select (direction)
-			Case 0
-				Self.velY = springPower
-				Self.worldCal.stopMoveY()
-				break
-			Case 1
-				Self.velY = -springPower
-				Self.worldCal.stopMoveY()
-				break
-			Case 2
-				Self.velX = springPower
-				Self.worldCal.stopMoveX()
-				break
-			Case 3
-				Self.velX = -springPower
-				Self.worldCal.stopMoveX()
-				break
-		End Select
-		
-		If (Self.collisionState = COLLISION_STATE_NONE) Then
-			calTotalVelocity()
-		EndIf
-		
-		If ((Not Self.isAntiGravity And direction = 1) Or (Self.isAntiGravity And direction = 0)) Then
-			Int i = Self.degreeStable
-			Self.faceDegree = i
-			Self.degreeForDraw = i
-			Self.animationID = ANI_ROTATE_JUMP
-			Self.collisionState = COLLISION_STATE_JUMP
-			Self.worldCal.actionState = 1
-			Self.collisionChkBreak = True
-			Self.drawer.restart()
-		EndIf
-		
-		If (player instanceof PlayerTails) Then
-			((PlayerTails) player).resetFlyCount()
-		EndIf
-		
-	End
-	
 	Public Method bePop:Void(springPower:Int, direction:Int)
 		beSpring(springPower, direction)
 		
@@ -6478,7 +6483,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 					
 					If (Self.collisionState = TER_STATE_LOOK_MOON_WAIT) Then
-						If (Self instanceof PlayerAmy) Then
+						If (characterID = CHARACTER_AMY) Then
 							Self.dashRolling = True
 							Self.spinDownWaitCount = 0
 							
