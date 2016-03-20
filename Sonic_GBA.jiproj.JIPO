@@ -52,8 +52,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\banper.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>35</Y>
+        <X>9</X>
+        <Y>57</Y>
       </CursorPos>
       <DocGUID>21f1f14f-c967-49dc-88e3-a698df544f21</DocGUID>
       <Bookmarks />
@@ -137,8 +137,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bossf3ray.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>18</Y>
+        <X>8</X>
+        <Y>61</Y>
       </CursorPos>
       <DocGUID>0ddec5b4-8d22-4893-b96d-0c33d651ba02</DocGUID>
       <Bookmarks />
@@ -215,16 +215,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>50</Y>
+        <X>8</X>
+        <Y>231</Y>
       </CursorPos>
       <DocGUID>9de52c82-cef6-423d-8a3b-636a1822fd5b</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>23</X>
-        <Y>669</Y>
+        <X>10</X>
+        <Y>280</Y>
       </CursorPos>
       <DocGUID>5f6ca01f-17b8-4654-a100-3d612674b0cd</DocGUID>
       <Bookmarks />
@@ -281,7 +281,7 @@
     <DocUserOptions Filename=".\src\sonicgba\movecalculator.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>9</X>
-        <Y>61</Y>
+        <Y>50</Y>
       </CursorPos>
       <DocGUID>d3ed8b69-28e8-4b6a-8db3-66ac4f214eb9</DocGUID>
       <Bookmarks />
@@ -323,8 +323,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>124</X>
-        <Y>7033</Y>
+        <X>14</X>
+        <Y>49</Y>
       </CursorPos>
       <DocGUID>9e5f42a1-f393-44d9-bb0a-778b95a3e775</DocGUID>
       <Bookmarks />
@@ -401,8 +401,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\shimasting.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>40</X>
-        <Y>18</Y>
+        <X>9</X>
+        <Y>78</Y>
       </CursorPos>
       <DocGUID>f994df10-b0f9-4812-b13d-c76ac78adf8e</DocGUID>
       <Bookmarks />
@@ -480,8 +480,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\unseenspring.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>21</Y>
+        <X>8</X>
+        <Y>45</Y>
       </CursorPos>
       <DocGUID>f92fc627-6a26-4c38-b4d0-371936eae219</DocGUID>
       <Bookmarks />

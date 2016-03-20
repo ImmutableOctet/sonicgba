@@ -48,14 +48,6 @@ Public
 ' Functions:
 Private
 	' Extensions:
-	Function __Resolve_NUM_DISTANCE:Int(X:Int, Y:Int, A:Int, B:Int)
-		If (X > Y) Then
-			Return A
-		EndIf
-		
-		Return B
-	End
-	
 	Function DSgn:Int(value:Int)
 		If (value > 0) Then
 			Return 1
@@ -168,7 +160,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const MOON_STAR_DES_X_1:Int = (MOON_STAR_ORI_X_1 - 22)
 		Const MOON_STAR_DES_Y_1:Int = 26
 		
-		Global NUM_DISTANCE:Int = __Resolve_NUM_DISTANCE(NUM_SPACE[0] * 8, 60, NUM_SPACE[0] * 7, 60)
+		Global NUM_DISTANCE:Int = PickValue(((NUM_SPACE[0] * 8) > 60), NUM_SPACE[0] * 7, 60)
 		
 		' Sizes of numbers found in "number.png":
 		Const NUM_PIC_WIDTH:Int = 7
