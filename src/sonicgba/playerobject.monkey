@@ -4031,188 +4031,170 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Return True
 		End
 		
-	Public Method isFootOnObject:Bool(obj:GameObject)
-		
-		If (Self.outOfControl) Then
-			Return False
-		EndIf
-		
-		If (Self.collisionState <> COLLISION_STATE_ON_OBJECT) Then
-			Return False
-		EndIf
-		
-		Return Self.footOnObject = obj
-	End
-	
-	Public Method isFootObjectAndLogic:Bool(obj:GameObject)
-		Return (Self.footObjectLogic And Self.footOnObject = obj And Self.collisionState = COLLISION_STATE_ON_OBJECT)
-	End
-	
-	Public Method setFootPositionX:Void(x:Int)
-		Self.footPointX = x
-		Self.posX = x
-	End
-	
-	Public Method setFootPositionY:Void(y:Int)
-		Self.footPointY = y
-		Self.posY = y
-	End
-	
-	Public Method setBodyPositionX:Void(x:Int)
-		setFootPositionX(x)
-	End
-	
-	Public Method setBodyPositionY:Void(y:Int)
-		setFootPositionY(y + BODY_OFFSET)
-	End
-	
-	Public Method getBodyPositionX:Int()
-		Return getFootPositionX()
-	End
-	
-	Public Method getBodyPositionY:Int()
-		Return getFootPositionY() + (BODY_OFFSET * DSgn(Self.isAntiGravity))
-	End
-	
-	Private Method spinLv2Calc:Int()
-		Return ((PickValue(Self.isInWater, SPIN_INWATER_START_SPEED_2, SPIN_START_SPEED_2) * (SONIC_ATTACK_LEVEL_3_V0 - (Self.spinDownWaitCount * SPIN_LV2_COUNT_CONF))) / SPIN_LV2_COUNT) / 100
-	End
-	
-	Public Method dashRollingLogic:Void()
-		Int i
-		Self.animationID = ANI_SPIN_LV1
-		
-		If (Self.spinCount > ANI_ROTATE_JUMP) Then
-			Self.animationID = ANI_SPIN_LV2
-		Else
-			
-			If (Key.press(Key.B_HIGH_JUMP | Key.gUp)) Then
-				Self.spinDownWaitCount = 0
-				Self.spinCount = SPIN_LV2_COUNT
-				Self.animationID = ANI_SPIN_LV2
-				Self.spinKeyCount = SPIN_KEY_COUNT
-				Self.drawer.restart()
-				
-				If (characterID <> CHARACTER_AMY) Then
-					soundInstance.playSe(4)
-				EndIf
-				
-			ElseIf (Key.repeat((Key.B_SPIN2 | Key.B_7) | Key.B_9) And Self.spinKeyCount = 0) Then
-				Self.spinCount = SPIN_LV2_COUNT
-				Self.animationID = ANI_SPIN_LV2
-				Self.spinKeyCount = SPIN_KEY_COUNT
-				Self.drawer.restart()
-				
-				If (characterID <> CHARACTER_AMY) Then
-					soundInstance.playSe(4)
-				EndIf
+		Method isFootOnObject:Bool(obj:GameObject)
+			If (Self.outOfControl) Then
+				Return False
 			EndIf
 			
-			If (Self.spinCount = 0 And Self.spinKeyCount > 0) Then
-				Self.spinKeyCount -= 1
+			If (Self.collisionState <> COLLISION_STATE_ON_OBJECT) Then
+				Return False
 			EndIf
-		EndIf
+			
+			Return Self.footOnObject = obj
+		End
 		
-		If (Self.spinCount > 0) Then
-			If (Self.spinDownWaitCount < SPIN_LV2_COUNT) Then
-				Self.spinDownWaitCount += 1
+		Method isFootObjectAndLogic:Bool(obj:GameObject)
+			Return (Self.footObjectLogic And Self.footOnObject = obj And Self.collisionState = COLLISION_STATE_ON_OBJECT)
+		End
+		
+		Method setFootPositionX:Void(x:Int)
+			Self.footPointX = x
+			Self.posX = x
+		End
+		
+		Method setFootPositionY:Void(y:Int)
+			Self.footPointY = y
+			Self.posY = y
+		End
+		
+		Method setBodyPositionX:Void(x:Int)
+			setFootPositionX(x)
+		End
+		
+		Method setBodyPositionY:Void(y:Int)
+			setFootPositionY(y + BODY_OFFSET)
+		End
+		
+		Method getBodyPositionX:Int()
+			Return getFootPositionX()
+		End
+		
+		Method getBodyPositionY:Int()
+			Return getFootPositionY() + (BODY_OFFSET * DSgn(Self.isAntiGravity))
+		End
+		
+		Method spinLv2Calc:Int()
+			Return (((PickValue(Self.isInWater, SPIN_INWATER_START_SPEED_2, SPIN_START_SPEED_2) * (SONIC_ATTACK_LEVEL_3_V0 - (Self.spinDownWaitCount * SPIN_LV2_COUNT_CONF))) / SPIN_LV2_COUNT) / 100)
+		End
+		
+		Method dashRollingLogic:Void()
+			Self.animationID = ANI_SPIN_LV1
+			
+			If (Self.spinCount > ANI_ROTATE_JUMP) Then
+				Self.animationID = ANI_SPIN_LV2
 			Else
-				Self.spinDownWaitCount = SPIN_LV2_COUNT
+				If (Key.press(Key.B_HIGH_JUMP | Key.gUp)) Then
+					Self.spinDownWaitCount = 0
+					Self.spinCount = SPIN_LV2_COUNT
+					Self.animationID = ANI_SPIN_LV2
+					
+					Self.spinKeyCount = SPIN_KEY_COUNT
+					
+					Self.drawer.restart()
+					
+					If (characterID <> CHARACTER_AMY) Then
+						soundInstance.playSe(4)
+					EndIf
+					
+				ElseIf (Key.repeat((Key.B_SPIN2 | Key.B_7) | Key.B_9) And Self.spinKeyCount = 0) Then
+					Self.spinCount = SPIN_LV2_COUNT
+					Self.animationID = ANI_SPIN_LV2
+					
+					Self.spinKeyCount = SPIN_KEY_COUNT
+					
+					Self.drawer.restart()
+					
+					If (characterID <> CHARACTER_AMY) Then
+						soundInstance.playSe(4)
+					EndIf
+				EndIf
+				
+				If (Self.spinCount = 0 And Self.spinKeyCount > 0) Then
+					Self.spinKeyCount -= 1
+				EndIf
 			EndIf
-		EndIf
-		
-		If (Self.spinCount > 0) Then
-			Self.spinCount -= 1
-			Self.effectID = 1
-		Else
-			Self.effectID = 0
-		EndIf
-		
-		Select (Self.collisionState)
-			Case 0
-				Self.totalVelocity = 0
-				break
-			Default
-				Self.velX = 0
-				break
-		End Select
-		
-		If (Not Key.repeat(((Key.gDown | Key.B_7) | Key.B_9) | Key.B_SPIN2)) Then
-			Self.effectID = -1
+			
+			If (Self.spinCount > 0) Then
+				If (Self.spinDownWaitCount < SPIN_LV2_COUNT) Then
+					Self.spinDownWaitCount += 1
+				Else
+					Self.spinDownWaitCount = SPIN_LV2_COUNT
+				EndIf
+			EndIf
+			
+			If (Self.spinCount > 0) Then
+				Self.spinCount -= 1
+				Self.effectID = 1
+			Else
+				Self.effectID = 0
+			EndIf
+			
 			Select (Self.collisionState)
-				Case 0
-					Self.totalVelocity = SPIN_START_SPEED_1
-					
-					If (Self.isInWater) Then
-						Self.totalVelocity = SPIN_INWATER_START_SPEED_1
-					EndIf
-					
-					If (Self.spinCount > 0) Then
-						Self.totalVelocity = spinLv2Calc()
-						SoundSystem.getInstance().playSe(5)
-					Else
-						SoundSystem.getInstance().playSe(5)
-					EndIf
-					
-					If (Not Self.faceDirection) Then
-						Self.totalVelocity = -Self.totalVelocity
-						break
-					EndIf
-					
-					break
+				Case COLLISION_STATE_WALK
+					Self.totalVelocity = 0
 				Default
-					Self.velX = SPIN_START_SPEED_1
-					
-					If (Self.isInWater) Then
-						Self.totalVelocity = SPIN_INWATER_START_SPEED_1
-					EndIf
-					
-					If (Self.spinCount > 0) Then
-						Self.velX = spinLv2Calc()
-						SoundSystem.getInstance().playSe(5)
-					Else
-						SoundSystem.getInstance().playSe(5)
-					EndIf
-					
-					If (Not Self.faceDirection) Then
-						If (Self.isAntiGravity) Then
-							i = 1
-						Else
-							i = -1
+					Self.velX = 0
+			End Select
+			
+			If (Not Key.repeat(((Key.gDown | Key.B_7) | Key.B_9) | Key.B_SPIN2)) Then
+				Self.effectID = -1
+				
+				Select (Self.collisionState)
+					Case COLLISION_STATE_WALK
+						Self.totalVelocity = SPIN_START_SPEED_1
+						
+						If (Self.isInWater) Then
+							Self.totalVelocity = SPIN_INWATER_START_SPEED_1
 						EndIf
 						
-						Self.velX = i * Self.velX
-						break
-					EndIf
-					
-					Self.velX = DSgn(Not Self.isAntiGravity) * Self.velX
-					break
-			End Select
-			Self.spinCount = 0
-			Self.animationID = ANI_JUMP
-			Self.dashRolling = False
-			Self.ignoreFirstTouch = True
-			Self.isAfterSpinDash = True
-		EndIf
-		
-		Select (Self.collisionState)
-			Case 0
-			Case 3
+						If (Self.spinCount > 0) Then
+							Self.totalVelocity = spinLv2Calc()
+						EndIf
+						
+						' Magic number: 5 (Sound-effect ID)
+						SoundSystem.getInstance().playSe(5)
+						
+						If (Not Self.faceDirection) Then
+							Self.totalVelocity = -Self.totalVelocity
+						EndIf
+					Default
+						Self.velX = SPIN_START_SPEED_1
+						
+						If (Self.isInWater) Then
+							Self.totalVelocity = SPIN_INWATER_START_SPEED_1
+						EndIf
+						
+						If (Self.spinCount > 0) Then
+							Self.velX = spinLv2Calc()
+						EndIf
+						
+						' Magic number: 5 (Sound-effect ID)
+						SoundSystem.getInstance().playSe(5)
+						
+						If (Not Self.faceDirection) Then
+							Self.velX = DSgn(Self.isAntiGravity) * Self.velX
+						Else
+							Self.velX = DSgn(Not Self.isAntiGravity) * Self.velX
+						EndIf
+				End Select
+				
+				Self.spinCount = 0
+				
+				Self.animationID = ANI_JUMP
+				
+				Self.dashRolling = False
+				Self.ignoreFirstTouch = True
+				Self.isAfterSpinDash = True
+			EndIf
+			
+			' This behavior may change in the future:
+			If (Self.collisionState = COLLISION_STATE_WALK Or Self.collisionState = COLLISION_STATE_IN_SAND) Thne
 				Self.velY = 100
-			Default
-				Int i2
-				i = Self.velY
-				
-				If (Self.isAntiGravity) Then
-					i2 = -1
-				Else
-					i2 = 1
-				EndIf
-				
-				Self.velY = i + (i2 * getGravity())
-		End Select
-	End
-	
+			Endif
+			
+			Self.velY += (DSgn(Not Self.isAntiGravity) * getGravity())
+		End
+		
 	Public Method beWaterFall:Void()
 		Self.waterFalling = True
 		Self.velY += GRAVITY / TERMINAL_COUNT
