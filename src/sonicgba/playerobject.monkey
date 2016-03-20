@@ -4195,214 +4195,216 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.velY += (DSgn(Not Self.isAntiGravity) * getGravity())
 		End
 		
-	Public Method beWaterFall:Void()
-		Self.waterFalling = True
-		Self.velY += GRAVITY / TERMINAL_COUNT
-	End
-	
-	Public Method getWaterFallState:Bool()
-		Return Self.waterFalling
-	End
-	
-	Public Method initWaterFall:Void()
-		
-		If (Self.waterFallDrawer = Null) Then
-			MFImage image = Null
+		Method beWaterFall:Void()
+			Self.waterFalling = True
 			
-			If (StageManager.getCurrentZoneId() = 5) Then
-				image = MFImage.createImage("/animation/water_fall_5.png")
+			Self.velY += (GRAVITY / TERMINAL_COUNT)
+		End
+		
+		Method getWaterFallState:Bool()
+			Return Self.waterFalling
+		End
+		
+		Method initWaterFall:Void()
+			If (Self.waterFallDrawer = Null) Then
+				Local image:MFImage = Null
+				
+				' Magic number: 5 (Zone ID)
+				If (StageManager.getCurrentZoneId() = 5) Then
+					image = MFImage.createImage("/animation/water_fall_5.png")
+				EndIf
+				
+				If (image = Null) Then
+					Self.waterFallDrawer = New Animation("/animation/water_fall").getDrawer(0, True, 0)
+				Else
+					Self.waterFallDrawer = New Animation(image, "/animation/water_fall").getDrawer(0, True, 0)
+				EndIf
+			EndIf
+		End
+		
+		Method waterFallDraw:Void(g:MFGraphics, camera:Coordinate)
+			If (Self.waterFalling) Then
+				' Magic numbers: 320, -320 (Offset; Y)
+				Local offset_y:= PickValue((characterID = CHARACTER_KNUCKLES And Self.myAnimationID = ANI_BAR_ROLL_1), 320, -320)
+				
+				drawInMap(g, Self.waterFallDrawer, (Self.collisionRect.x0 + Self.collisionRect.x1) / 2, Self.collisionRect.y0 + offset_y)
+				
+				Self.waterFalling = False
+			EndIf
+		End
+		
+		Method initWaterFlush:Void()
+			If (Self.waterFlushDrawer = Null) Then
+				Local image:MFImage = Null
+				
+				' Magic number: 5 (Zone ID)
+				If (StageManager.getCurrentZoneId() = 5) Then
+					image = MFImage.createImage("/animation/water_flush_5.png")
+				EndIf
+				
+				If (image = Null) Then
+					Self.waterFlushDrawer = New Animation("/animation/water_flush").getDrawer(0, True, 0)
+				Else
+					Self.waterFlushDrawer = New Animation(image, "/animation/water_flush").getDrawer(0, True, 0)
+				EndIf
 			EndIf
 			
-			If (image = Null) Then
-				Self.waterFallDrawer = New Animation("/animation/water_fall").getDrawer(0, True, 0)
+		End
+	Private
+		' Methods:
+		Method waterFlushDraw:Void(g:MFGraphics)
+			If (Self.showWaterFlush) Then
+				initWaterFlush()
+				
+				Local animationDrawer:= Self.waterFlushDrawer
+				Local x:Int = Self.footPointX
+				Local y:Int
+				
+				' Magic numbers: 4, 5 (Zone IDs)
+				If (StageManager.getCurrentZoneId() = 4 Or StageManager.getCurrentZoneId() = 5) Then
+					y = (Self.collisionRect.y1 - RIGHT_WALK_COLLISION_CHECK_OFFSET_X)
+				Else
+					y = Self.collisionRect.y1
+				EndIf
+				
+				drawInMap(g, animationDrawer, x, y)
+				
+				Self.showWaterFlush = False
+			EndIf
+		End
+	Public
+		' Methods:
+		Method beAccelerate:Bool(power:Int, IsX:Bool, sender:GameObject)
+			If (Self.collisionState = COLLISION_STATE_NONE) Then
+				Self.totalVelocity = power
+				Self.faceDirection = (Self.totalVelocity > 0)
+				
+				Return True
+			ElseIf (Self.collisionState <> COLLISION_STATE_ON_OBJECT Or (Accelerate(sender) <> Null)) Then
+				Return False
 			Else
-				Self.waterFallDrawer = New Animation(image, "/animation/water_fall").getDrawer(0, True, 0)
+				If (IsX) Then
+					Self.velX = power
+				Else
+					Self.velY = power
+				EndIf
+				
+				Return True
 			EndIf
-		EndIf
+		End
 		
-	End
-	
-	Private Method waterFallDraw:Void(g:MFGraphics, camera:Coordinate)
-		If (Self.waterFalling) Then
-			Local offset_y:= PickValue((characterID = CHARACTER_KNUCKLES And Self.myAnimationID = ANI_BAR_ROLL_1), 320, -320)
-			
-			drawInMap(g, Self.waterFallDrawer, (Self.collisionRect.x0 + Self.collisionRect.x1) / 2, Self.collisionRect.y0 + offset_y)
-			
-			Self.waterFalling = False
-		EndIf
-	End
-	
-	Public Method initWaterFlush:Void()
+		Method isOnGound:Bool() ' Property
+			Return (Self.collisionState = COLLISION_STATE_NONE) ' <> Null
+		End
 		
-		If (Self.waterFlushDrawer = Null) Then
-			MFImage image = Null
-			
-			If (StageManager.getCurrentZoneId() = 5) Then
-				image = MFImage.createImage("/animation/water_flush_5.png")
+		Method doPoalMotion:Bool(x:Int, y:Int, isLeft:Bool)
+			If (Self.collisionState = COLLISION_STATE_NONE) Then
+				Self.collisionState = COLLISION_STATE_JUMP
 			EndIf
 			
-			If (image = Null) Then
-				Self.waterFlushDrawer = New Animation("/animation/water_flush").getDrawer(0, True, 0)
-			Else
-				Self.waterFlushDrawer = New Animation(image, "/animation/water_flush").getDrawer(0, True, 0)
-			EndIf
-		EndIf
-		
-	End
-	
-	Private Method waterFlushDraw:Void(g:MFGraphics)
-		
-		If (Self.showWaterFlush) Then
-			Int i
-			initWaterFlush()
-			AnimationDrawer animationDrawer = Self.waterFlushDrawer
-			Int i2 = Self.footPointX
-			
-			If (StageManager.getCurrentZoneId() = 4 Or StageManager.getCurrentZoneId() = 5) Then
-				i = Self.collisionRect.y1 - RIGHT_WALK_COLLISION_CHECK_OFFSET_X
-			Else
-				i = Self.collisionRect.y1
+			If (Self.collisionState <> COLLISION_STATE_JUMP) Then
+				Return False
 			EndIf
 			
-			drawInMap(g, animationDrawer, i2, i)
-			Self.showWaterFlush = False
-		EndIf
-		
-	End
-	
-	Public Method beAccelerate:Bool(power:Int, IsX:Bool, sender:GameObject)
-		
-		If (Self.collisionState = COLLISION_STATE_NONE) Then
-			Self.totalVelocity = power
-			Self.faceDirection = (Self.totalVelocity > 0)
+			Self.animationID = ANI_POAL_PULL
+			Self.faceDirection = (Not isLeft)
+			
+			Self.footPointX = x
+			Self.footPointY = y + DETECT_HEIGHT
+			
+			Self.velX = 0
+			Self.velY = 0
+			
 			Return True
-		ElseIf (Self.collisionState <> COLLISION_STATE_ON_OBJECT Or (sender instanceof Accelerate)) Then
-			Return False
-		Else
-			If (IsX) Then
-				Self.velX = power
-			Else
-				Self.velY = power
+		End
+		
+		Method doPoalMotion2:Bool(x:Int, y:Int, direction:Bool)
+			If (Self.collisionState <> Null Or ((Not Self.faceDirection Or Not direction Or Self.totalVelocity < DO_POAL_MOTION_SPEED) And (Self.faceDirection Or direction Or Self.totalVelocity > -DO_POAL_MOTION_SPEED))) Then
+				Return False
 			EndIf
 			
+			Self.animationID = ANI_POAL_PULL_2
+			Self.faceDirection = direction
+			
+			Self.footPointX = ((DSgn(Not Self.faceDirection) * WIDTH) + x)
+			
+			setNoKey()
+			
+			Self.totalVelocity = DSgn(Not Self.faceDirection) * SSDef.PLAYER_MOVE_WIDTH
+			
+			Self.worldCal.stopMoveX()
+			
 			Return True
-		EndIf
+		End
 		
-	End
-	
-	Public Method isOnGound:Bool()
-		Return (Self.collisionState = COLLISION_STATE_NONE) ' <> Null
-	End
-	
-	Public Method doPoalMotion:Bool(x:Int, y:Int, isLeft:Bool)
+		Method doPullMotion:Void(x:Int, y:Int)
+			Self.animationID = ANI_PULL
+			
+			Self.footPointX = x
+			Self.footPointY = (y + DETECT_HEIGHT)
+			
+			Self.velX = 0
+			Self.velY = 0
+			
+			If (Self.faceDirection) Then
+				Self.footPointX -= SIDE_FOOT_FROM_CENTER
+			Else
+				Self.footPointX += SIDE_FOOT_FROM_CENTER
+			EndIf
+		End
 		
-		If (Self.collisionState = COLLISION_STATE_NONE) Then
-			Self.collisionState = COLLISION_STATE_JUMP
-		EndIf
+		Method doPullBarMotion:Void(y:Int)
+			Self.animationID = ANI_SMALL_ZERO
+			
+			' Magic number: 1792
+			Self.footPointY = y + 1792
+			
+			Self.velX = 0
+			Self.velY = 0
+		End
 		
-		If (Self.collisionState <> COLLISION_STATE_JUMP) Then
-			Return False
-		EndIf
-		
-		Self.animationID = ANI_POAL_PULL
-		Self.faceDirection = Not isLeft
-		Self.footPointX = x
-		Self.footPointY = y + DETECT_HEIGHT
-		Self.velX = 0
-		Self.velY = 0
-		Return True
-	End
-	
-	Public Method doPoalMotion2:Bool(x:Int, y:Int, direction:Bool)
-		
-		If (Self.collisionState <> Null Or ((Not Self.faceDirection Or Not direction Or Self.totalVelocity < DO_POAL_MOTION_SPEED) And (Self.faceDirection Or direction Or Self.totalVelocity > -600))) Then
-			Return False
-		EndIf
-		
-		Int i
-		Self.animationID = ANI_POAL_PULL_2
-		Self.faceDirection = direction
-		Self.footPointX = (DSgn(Not Self.faceDirection) * WIDTH) + x
-		setNoKey()
-		
-		If (Self.faceDirection) Then
-			i = -1
-		Else
-			i = 1
-		EndIf
-		
-		Self.totalVelocity = i * SSDef.PLAYER_MOVE_WIDTH
-		Self.worldCal.stopMoveX()
-		Return True
-	End
-	
-	Public Method doPullMotion:Void(x:Int, y:Int)
-		Self.animationID = ANI_PULL
-		Self.footPointX = x
-		Self.footPointY = y + DETECT_HEIGHT
-		Self.velX = 0
-		Self.velY = 0
-		
-		If (Self.faceDirection) Then
-			Self.footPointX -= SIDE_FOOT_FROM_CENTER
-		Else
-			Self.footPointX += SIDE_FOOT_FROM_CENTER
-		EndIf
-		
-	End
-	
-	Public Method doPullBarMotion:Void(y:Int)
-		Self.animationID = ANI_SMALL_ZERO
-		Self.footPointY = y + 1792
-		Self.velX = 0
-		Self.velY = 0
-	End
-	
-	Public Method doWalkPoseInAir:Void()
-		
-		If (Self.collisionState <> COLLISION_STATE_JUMP) Then
-			Return
-		EndIf
-		
-		If (Abs(Self.velX) < SPEED_LIMIT_LEVEL_1) Then
-			Self.animationID = ANI_RUN_1
-		ElseIf (Abs(Self.velX) < SPEED_LIMIT_LEVEL_2) Then
-			Self.animationID = ANI_RUN_2
-		Else
-			Self.animationID = ANI_RUN_3
-		EndIf
-		
-	End
-	
-	Public Method doDripInAir:Void()
-		
-		If (Self.collisionState = COLLISION_STATE_JUMP) Then
-			If (Self.animationID = ANI_JUMP) Then
-				Self.animationID = ANI_JUMP
-			ElseIf (Abs(Self.velX) < SPEED_LIMIT_LEVEL_1) Then
+		Method doWalkPoseInAir:Void()
+			If (Self.collisionState <> COLLISION_STATE_JUMP) Then
+				Return
+			EndIf
+			
+			If (Abs(Self.velX) < SPEED_LIMIT_LEVEL_1) Then
 				Self.animationID = ANI_RUN_1
 			ElseIf (Abs(Self.velX) < SPEED_LIMIT_LEVEL_2) Then
 				Self.animationID = ANI_RUN_2
 			Else
 				Self.animationID = ANI_RUN_3
 			EndIf
-		EndIf
+		End
 		
-		Self.bankwalking = False
-	End
-	
-	Public Method setAnimationId:Void(id:Int)
-		Self.animationID = id
-	End
-	
-	Public Method restartAniDrawer:Void()
-		Self.drawer.restart()
-	End
-	
-	Public Method getAnimationId:Int()
-		Return Self.animationID
-	End
-	
+		Method doDripInAir:Void()
+			If (Self.collisionState = COLLISION_STATE_JUMP) Then
+				If (Self.animationID = ANI_JUMP) Then
+					Self.animationID = ANI_JUMP
+				ElseIf (Abs(Self.velX) < SPEED_LIMIT_LEVEL_1) Then
+					Self.animationID = ANI_RUN_1
+				ElseIf (Abs(Self.velX) < SPEED_LIMIT_LEVEL_2) Then
+					Self.animationID = ANI_RUN_2
+				Else
+					Self.animationID = ANI_RUN_3
+				EndIf
+			EndIf
+			
+			Self.bankwalking = False
+		End
+		
+		Method setAnimationId:Void(id:Int)
+			Self.animationID = id
+		End
+		
+		Method restartAniDrawer:Void()
+			Self.drawer.restart()
+		End
+		
+		Method getAnimationId:Int()
+			Return Self.animationID
+		End
+		
 	Public Method refreshCollisionRectWrap:Void()
 		Int RECT_HEIGHT = getCollisionRectHeight()
 		Int RECT_WIDTH = getCollisionRectWidth()
