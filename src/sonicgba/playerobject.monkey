@@ -62,63 +62,87 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Private
 		' Constant variable(s):
 		Const ANIMATION_PATH:String = "/animation"
-		Const ANI_BIG_ZERO:Int = 67
-		Const ANI_SMALL_ZERO:Int = 27
-		Const ANI_SMALL_ZERO_Y:Int = 37
+		
 		Const ASPIRATE_INTERVAL:Int = 3
+		
 		Const ATTRACT_EFFECT_HEIGHT:Int = 9600
 		Const ATTRACT_EFFECT_WIDTH:Int = 9600
-		Const BACKGROUND_WIDTH:Int = 80
+		
 		Const BAR_COLOR:Int = 2
+		
+		Const BACKGROUND_WIDTH:Int = 80
 		Const BG_NUM:Int = (((SCREEN_WIDTH + BACKGROUND_WIDTH) - 1) / BACKGROUND_WIDTH)
+		
 		Const BODY_OFFSET:Int = 768
+		
 		Const BREATHE_IMAGE_HEIGHT:Int = 16
 		Const BREATHE_IMAGE_WIDTH:Int = 16
 		Const BREATHE_TIME_COUNT:Int = 21000
 		Const BREATHE_TO_DIE_PER_COUNT:Int = 1760
+		
 		Const B_1:Int = 5760
 		Const B_2:Int = 11264
+		
 		Const CAMERA_MAX_DISTANCE:Int = 20
+		
 		Const CENTER_X:Int = 660480
 		Const CENTER_Y:Int = 63488
+		
 		Const COUNT_INDEX:Int = 1
+		
 		Const DEBUG_WUDI:Bool = False
 		Const DIE_DRIP_STATE_JUMP_V0:Int = -800
 		Const DO_POAL_MOTION_SPEED:Int = 600
 		Const ENLARGE_NUM:Int = 1920
+		
+		' Not sure about these two:
 		Const f23A:Int = 3072
 		Const f24C:Int = 3072
+		
 		Const FADE_FILL_HEIGHT:Int = 40
 		Const FADE_FILL_WIDTH:Int = 40
+		
 		Const FOCUS_MAX_OFFSET:Int = (MapManager.CAMERA_HEIGHT / 2) - 16
 		Const FOCUS_MOVE_SPEED:Int = 15
 		Const FOCUS_MOVING_NONE:Int = 0
+		
 		Const FONT_NUM:Int = 7
+		
 		Const FOOT_OFFSET:Int = 256
+		
 		Const HINER_JUMP_LIMIT:Int = 1024
 		Const HINER_JUMP_MAX:Int = 4352
 		Const HINER_JUMP_X_ADD:Int = 1024
 		Const HINER_JUMP_Y:Int = 2048
+		
 		Const ICE_SLIP_FLUSH_OFFSET_Y:Int = 512
 		Const INVINCIBLE_COUNT:Int = 320
+		
 		Const IN_WATER_WALK_SPEED_SCALE1:Float = 5.0
 		Const IN_WATER_WALK_SPEED_SCALE2:Float = 9.0
+		
 		Const ITEM_INDEX:Int = 0
+		
 		Const JUMP_EFFECT_HEIGHT:Int = 1920
 		Const JUMP_EFFECT_OFFSET_Y:Int = 256
 		Const JUMP_EFFECT_WIDTH:Int = 1920
+		
 		Const LEFT_FOOT_OFFSET_X:Int = -256
 		Const LEFT_WALK_COLLISION_CHECK_OFFSET_X:Int = -512
 		Const LEFT_WALK_COLLISION_CHECK_OFFSET_Y:Int = -512
+		
 		Const LOOK_COUNT:Int = 32
+		
 		Const MAX_ITEM:Int = 5
 		Const MAX_ITEM_SHOW_NUM:Int = 4
+		
 		Const MOON_STAR_FRAMES_1:Int = 207
 		Const MOON_STAR_FRAMES_2:Int = 120
 		Const MOON_STAR_ORI_X_1:Int = 360
 		Const MOON_STAR_ORI_Y_1:Int = 18
 		Const MOON_STAR_DES_X_1:Int = (MOON_STAR_ORI_X_1 - 22)
 		Const MOON_STAR_DES_Y_1:Int = 26
+		
 		Global NUM_DISTANCE:Int = __Resolve_NUM_DISTANCE(NUM_SPACE[0] * 8, 60, NUM_SPACE[0] * 7, 60)
 		
 		' Sizes of numbers found in "number.png":
@@ -127,26 +151,41 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const NUM_PIC_SPACE_WIDTH:= (NUM_PIC_WIDTH+1)
 		
 		Const PIPE_SET_POWER:Int = 2880
+		
 		Const RAIL_FLIPPER_V0:Int = -3380
 		Const RAIL_OUT_SPEED_VY0:Int = -1200
+		
 		Const RIGHT_FOOT_OFFSET_X:Int = 256
 		Const RIGHT_WALK_COLLISION_CHECK_OFFSET_X:Int = 512
 		Const RIGHT_WALK_COLLISION_CHECK_OFFSET_Y:Int = -512
+		
 		Const SIDE_COLLISION_NUM:Int = -2
 		Const SIDE_FOOT_FROM_CENTER:Int = 256
+		
 		Const SMALL_JUMP_COUNT:Int = 4
+		
 		Const SONIC_DRAW_HEIGHT:Int = 1920
+		
 		Const SPIN_KEY_COUNT:Int = 20
 		Const SPIN_LV2_COUNT:Int = 12
 		Const SPIN_LV2_COUNT_CONF:Int = 36
+		
 		Const STAGE_PASS_STR_SPACE:Int = 182
 		Const STAGE_PASS_STR_SPACE_FONT:Int = MyAPI.zoomIn(MFGraphics.stringWidth(14, "索尼克完成行行")) + 20
+		
 		Const SUPER_SONIC_CHANGING_CENTER_Y:Int = 25280
 		Const SUPER_SONIC_STAND_POS_X:Int = 235136
+		
 		Const TERMINAL_COUNT:Int = 10
+		
 		Const WALK_COLLISION_CHECK_OFFSET_X:Int = 0
 		Const WALK_COLLISION_CHECK_OFFSET_Y:Int = 0
+		
 		Const WHITE_BACKGROUND_ID:Int = 118
+		
+		Const ANI_BIG_ZERO:Int = 67
+		Const ANI_SMALL_ZERO:Int = 27
+		Const ANI_SMALL_ZERO_Y:Int = 37
 		
 		' Immutable Arrays (Constant):
 		Global DEGREE_DIVIDE:Int[] = [44, 75, 105, 136, 224, 255, 285, 316, 360]
@@ -2741,162 +2780,165 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			waitingChk()
 		End
 		
-	Private Method inputLogicJump:Void()
-		Int newPointX
-		Int i
-		
-		If (Self.faceDegree <> Self.degreeStable) Then
-			Int bodyCenterX = getNewPointX(Self.posX, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
-			Int bodyCenterY = getNewPointY(Self.posY, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
-			Self.faceDegree = Self.degreeStable
-			newPointX = getNewPointX(bodyCenterX, 0, Self.collisionRect.getHeight() / 2, Self.faceDegree)
-			Self.footPointX = newPointX
-			Self.posX = newPointX
-			newPointX = getNewPointY(bodyCenterY, 0, Self.collisionRect.getHeight() / 2, Self.faceDegree)
-			Self.footPointY = newPointX
-			Self.posY = newPointX
-		EndIf
-		
-		If (Self.degreeForDraw <> Self.faceDegree) Then
-			Int degreeDiff = Self.faceDegree - Self.degreeForDraw
-			Int degreeDes = Self.faceDegree
-			Select (Self.degreeRotateMode)
-				Case 0
-					
-					If (Abs(degreeDiff) > 180) Then
-						If (degreeDes > Self.degreeForDraw) Then
-							degreeDes -= 360
-						Else
-							degreeDes += MDPhone.SCREEN_WIDTH
+		Method inputLogicJump:Void()
+			Local newPointX:Int
+			Local i:Int
+			
+			If (Self.faceDegree <> Self.degreeStable) Then
+				Local bodyCenterX:= getNewPointX(Self.posX, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
+				Local bodyCenterY:= getNewPointY(Self.posY, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
+				
+				Self.faceDegree = Self.degreeStable
+				
+				newPointX = getNewPointX(bodyCenterX, 0, Self.collisionRect.getHeight() / 2, Self.faceDegree)
+				
+				Self.footPointX = newPointX
+				Self.posX = newPointX
+				
+				newPointX = getNewPointY(bodyCenterY, 0, Self.collisionRect.getHeight() / 2, Self.faceDegree)
+				
+				Self.footPointY = newPointX
+				Self.posY = newPointX
+			EndIf
+			
+			If (Self.degreeForDraw <> Self.faceDegree) Then
+				Int degreeDiff = Self.faceDegree - Self.degreeForDraw
+				Int degreeDes = Self.faceDegree
+				Select (Self.degreeRotateMode)
+					Case 0
+						If (Abs(degreeDiff) > 180) Then
+							If (degreeDes > Self.degreeForDraw) Then
+								degreeDes -= 360
+							Else
+								degreeDes += 360
+							EndIf
+						EndIf
+						
+						Self.degreeForDraw = MyAPI.calNextPosition((double) Self.degreeForDraw, (double) degreeDes, 1, 3)
+					Case 1
+						Self.degreeForDraw += 24
+					Case 2
+						Self.degreeForDraw -= 24
+				End Select
+				
+				While (Self.degreeForDraw < 0)
+					Self.degreeForDraw += 360
+				End
+				
+				Self.degreeForDraw Mod= 360
+			EndIf
+			
+			If (Self.animationID = ANI_PUSH_WALL) Then
+				doWalkPoseInAir()
+			EndIf
+			
+			If (Not (Self.hurtNoControl Or Self.animationID = ANI_YELL Or (characterID = CHARACTER_AMY And Self.myAnimationID >= 5 And Self.myAnimationID <= 7))) Then
+				If ((Key.repeat(Key.gLeft) Or (Self.isCelebrate And Not Self.faceDirection)) And Not Self.ducting) Then
+					If (Self.velX > (-Self.maxVelocity)) Then
+						Self.velX -= Self.movePowerInAir
+						
+						If (Self.velX < (-Self.maxVelocity)) Then
+							Self.velX = -Self.maxVelocity
 						EndIf
 					EndIf
 					
-					Self.degreeForDraw = MyAPI.calNextPosition((double) Self.degreeForDraw, (double) degreeDes, 1, 3)
-					break
-				Case 1
-					Self.degreeForDraw += ANI_PULL
-					break
-				Case 2
-					Self.degreeForDraw -= ANI_PULL
-					break
-			End Select
-			While (Self.degreeForDraw < 0)
-				Self.degreeForDraw += MDPhone.SCREEN_WIDTH
-			End
-			Self.degreeForDraw Mod= MDPhone.SCREEN_WIDTH
-		EndIf
-		
-		If (Self.animationID = ANI_PUSH_WALL) Then
-			doWalkPoseInAir()
-		EndIf
-		
-		If (Not (Self.hurtNoControl Or Self.animationID = ANI_YELL Or (characterID = CHARACTER_AMY And Self.myAnimationID >= 5 And Self.myAnimationID <= 7))) Then
-			If ((Key.repeat(Key.gLeft) Or (Self.isCelebrate And Not Self.faceDirection)) And Not Self.ducting) Then
-				If (Self.velX > (-Self.maxVelocity)) Then
-					Self.velX -= Self.movePowerInAir
-					
-					If (Self.velX < (-Self.maxVelocity)) Then
-						Self.velX = -Self.maxVelocity
-					EndIf
-				EndIf
-				
-				If (Self.degreeRotateMode = 0) Then
-					Bool z
-					
-					If (Self.isAntiGravity) Then
-						z = True
-					Else
-						z = False
+					If (Self.degreeRotateMode = 0) Then
+						Bool z
+						
+						If (Self.isAntiGravity) Then
+							z = True
+						Else
+							z = False
+						EndIf
+						
+						Self.faceDirection = z
 					EndIf
 					
-					Self.faceDirection = z
-				EndIf
-				
-			ElseIf ((Key.repeat(Key.gRight) Or isTerminal Or (Self.isCelebrate And Self.faceDirection)) And Not Self.ducting) Then
-				If (Self.velX < Self.maxVelocity) Then
-					Self.velX += Self.movePowerInAir
-					
-					If (Self.velX > Self.maxVelocity) Then
-						Self.velX = Self.maxVelocity
+				ElseIf ((Key.repeat(Key.gRight) Or isTerminal Or (Self.isCelebrate And Self.faceDirection)) And Not Self.ducting) Then
+					If (Self.velX < Self.maxVelocity) Then
+						Self.velX += Self.movePowerInAir
+						
+						If (Self.velX > Self.maxVelocity) Then
+							Self.velX = Self.maxVelocity
+						EndIf
 					EndIf
-				EndIf
-				
-				If (Self.degreeRotateMode = 0) Then
-					Self.faceDirection = Self.isAntiGravity ? False : True
+					
+					If (Self.degreeRotateMode = 0) Then
+						Self.faceDirection = Self.isAntiGravity ? False : True
+					EndIf
 				EndIf
 			EndIf
-		EndIf
-		
-		If (Not Self.isOnlyJump) Then
-			extraLogicJump()
-		EndIf
-		
-		If (Self.velY >= -768 - getGravity()) Then
-			Int velX2 = Self.velX Shl 5
-			Int resistance = (velX2 * 3) / JUMP_REVERSE_POWER
 			
-			If (velX2 > 0) Then
-				velX2 -= resistance
-				
-				If (velX2 < 0) Then
-					velX2 = 0
-				EndIf
-				
-			ElseIf (velX2 < 0) Then
-				velX2 -= resistance
+			If (Not Self.isOnlyJump) Then
+				extraLogicJump()
+			EndIf
+			
+			If (Self.velY >= -768 - getGravity()) Then
+				Int velX2 = Self.velX Shl 5
+				Int resistance = (velX2 * 3) / JUMP_REVERSE_POWER
 				
 				If (velX2 > 0) Then
-					velX2 = 0
+					velX2 -= resistance
+					
+					If (velX2 < 0) Then
+						velX2 = 0
+					EndIf
+					
+				ElseIf (velX2 < 0) Then
+					velX2 -= resistance
+					
+					If (velX2 > 0) Then
+						velX2 = 0
+					EndIf
+				EndIf
+				
+				Self.velX = velX2 Shr 5
+			EndIf
+			
+			If (Self.smallJumpCount > 0) Then
+				Self.smallJumpCount -= 1
+				
+				If (Not (Self.noVelMinus Or Key.repeat(Key.gUp | Key.B_HIGH_JUMP))) Then
+					newPointX = Self.velY
+					
+					If (Self.isAntiGravity) Then
+						i = -1
+					Else
+						i = 1
+					EndIf
+					
+					Self.velY = newPointX + (i * (getGravity() / 2))
+					newPointX = Self.velY
+					
+					If (Self.isAntiGravity) Then
+						i = -1
+					Else
+						i = 1
+					EndIf
+					
+					Self.velY = newPointX + (i * (getGravity() Shr 2))
 				EndIf
 			EndIf
 			
-			Self.velX = velX2 Shr 5
-		EndIf
-		
-		If (Self.smallJumpCount > 0) Then
-			Self.smallJumpCount -= 1
+			newPointX = Self.velY
 			
-			If (Not (Self.noVelMinus Or Key.repeat(Key.gUp | Key.B_HIGH_JUMP))) Then
-				newPointX = Self.velY
-				
-				If (Self.isAntiGravity) Then
-					i = -1
-				Else
-					i = 1
-				EndIf
-				
-				Self.velY = newPointX + (i * (getGravity() / 2))
-				newPointX = Self.velY
-				
-				If (Self.isAntiGravity) Then
-					i = -1
-				Else
-					i = 1
-				EndIf
-				
-				Self.velY = newPointX + (i * (getGravity() Shr 2))
+			If (Self.isAntiGravity) Then
+				i = -1
+			Else
+				i = 1
 			EndIf
-		EndIf
-		
-		newPointX = Self.velY
-		
-		If (Self.isAntiGravity) Then
-			i = -1
-		Else
-			i = 1
-		EndIf
-		
-		Self.velY = newPointX + (i * getGravity())
-		
-		If (Self.animationID <> ANI_POP_JUMP_UP) Then
-			Return
-		EndIf
-		
-		If ((Self.velY > -200 And Not Self.isAntiGravity) Or (Self.velY < BPDef.PRICE_REVIVE And Self.isAntiGravity)) Then
-			Self.animationID = ANI_POP_JUMP_UP_SLOW
-		EndIf
-		
-	End
+			
+			Self.velY = newPointX + (i * getGravity())
+			
+			If (Self.animationID <> ANI_POP_JUMP_UP) Then
+				Return
+			EndIf
+			
+			If ((Self.velY > -200 And Not Self.isAntiGravity) Or (Self.velY < BPDef.PRICE_REVIVE And Self.isAntiGravity)) Then
+				Self.animationID = ANI_POP_JUMP_UP_SLOW
+			EndIf
+			
+		End
 	
 	Private Method inputLogicSand:Void()
 		Self.leavingBar = False
@@ -6533,7 +6575,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Int re = Abs(degree1 - degree2)
 		
 		If (re > 180) Then
-			re = MDPhone.SCREEN_WIDTH - re
+			re = 360 - re
 		EndIf
 		
 		If (re > 90) Then
