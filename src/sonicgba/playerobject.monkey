@@ -4755,114 +4755,89 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 		End
 		
-	Public Method doItemAttackPose:Void(obj:GameObject, direction:Int)
-		
-		If (Not Self.extraAttackFlag) Then
-			Local i:Int
-			Local maxPower:= PickValue(Self.isPowerShoot, SHOOT_POWER, MIN_ATTACK_JUMP)
-			
-			If (Self.isAntiGravity) Then
-				i = 1
-			Else
-				i = -1
-			EndIf
-			
-			Int newVelY = i * getVelY()
-			
-			If (newVelY > 0) Then
-				newVelY = -newVelY
-			ElseIf (newVelY > maxPower) Then
-				newVelY = maxPower
-			EndIf
-			
-			If (Self.doJumpForwardly) Then
-				newVelY = maxPower
-			EndIf
-			
-			If (characterID <> CHARACTER_KNUCKLES Or Self.myAnimationID < ANI_ATTACK_2 Or Self.myAnimationID > ANI_BAR_ROLL_1) Then
-				setVelY(DSgn(Not Self.isAntiGravity) * newVelY)
-			EndIf
-			
-			If (characterID <> CHARACTER_AMY) Then
-				Select (direction)
-					Case 1
-						cancelFootObject(Self)
-						
-						Self.collisionState = COLLISION_STATE_JUMP
-						Self.animationID = ANI_JUMP
-						
-						break
-				End Select
-			EndIf
-			
-			If (Self.isPowerShoot) Then
-				Self.isPowerShoot = False
-			EndIf
-		EndIf
-		
-	End
-	
-	Public Method doAttackPose:Void(obj:GameObject, direction:Int)
-		
-		If (Not Self.extraAttackFlag) Then
-			Local gravMultiplier:= DSgn(Not Self.isAntiGravity)
-			Local newVelY:= gravMultiplier * getVelY()
-			
-			If (newVelY > 0) Then
-				newVelY = -newVelY
-			ElseIf (newVelY > MIN_ATTACK_JUMP) Then
-				newVelY = MIN_ATTACK_JUMP
-			EndIf
-			
-			If (Self.doJumpForwardly) Then
-				newVelY = MIN_ATTACK_JUMP
-			EndIf
-			
-			If (characterID <> CHARACTER_AMY) Then
-				setVelY(gravMultiplier * newVelY)
-			ElseIf (Not IsInvincibility() Or Self.myAnimationID < ANI_POP_JUMP_UP Or Self.myAnimationID > ANI_BRAKE) Then
-				Int i
+		Method doItemAttackPose:Void(obj:GameObject, direction:Int)
+			If (Not Self.extraAttackFlag) Then
+				Local maxPower:= PickValue(Self.isPowerShoot, SHOOT_POWER, MIN_ATTACK_JUMP)
+				Local newVelY:= DSgn(Self.isAntiGravity) * getVelY()
 				
-				If (Self.isAntiGravity) Then
-					i = -1
-				Else
-					i = 1
+				If (newVelY > 0) Then
+					newVelY = -newVelY
+				ElseIf (newVelY > maxPower) Then
+					newVelY = maxPower
 				EndIf
 				
-				setVelY(i * newVelY)
+				If (Self.doJumpForwardly) Then
+					newVelY = maxPower
+				EndIf
+				
+				If (characterID <> CHARACTER_KNUCKLES Or Self.myAnimationID < ANI_ATTACK_2 Or Self.myAnimationID > ANI_BAR_ROLL_1) Then
+					setVelY(DSgn(Not Self.isAntiGravity) * newVelY)
+				EndIf
+				
+				If (characterID <> CHARACTER_AMY) Then
+					Select (direction)
+						Case DIRECTION_DOWN
+							cancelFootObject(Self)
+							
+							Self.collisionState = COLLISION_STATE_JUMP
+							Self.animationID = ANI_JUMP
+					End Select
+				EndIf
+				
+				If (Self.isPowerShoot) Then
+					Self.isPowerShoot = False
+				EndIf
 			EndIf
-			
-			If (characterID <> CHARACTER_AMY) Then
-				Select (direction)
-					Case 1
-						cancelFootObject(Self)
-						Self.collisionState = COLLISION_STATE_JUMP
-					Default
-				End Select
-			EndIf
-		EndIf
+		End
 		
-	End
-	
-	Public Method doBossAttackPose:Void(obj:GameObject, direction:Int)
-		
-		If (Self.collisionState = COLLISION_STATE_JUMP) Then
-			If (characterID <> CHARACTER_AMY) Then
-				setVelX(-Self.velX)
+		Method doAttackPose:Void(obj:GameObject, direction:Int)
+			If (Not Self.extraAttackFlag) Then
+				Local gravMultiplier:= DSgn(Not Self.isAntiGravity)
+				Local newVelY:= gravMultiplier * getVelY()
+				
+				If (newVelY > 0) Then
+					newVelY = -newVelY
+				ElseIf (newVelY > MIN_ATTACK_JUMP) Then
+					newVelY = MIN_ATTACK_JUMP
+				EndIf
+				
+				If (Self.doJumpForwardly) Then
+					newVelY = MIN_ATTACK_JUMP
+				EndIf
+				
+				If (characterID <> CHARACTER_AMY Or Not IsInvincibility() Or Self.myAnimationID < ANI_POP_JUMP_UP Or Self.myAnimationID > ANI_BRAKE) Then
+					setVelY(gravMultiplier * newVelY)
+				EndIf
+				
+				If (characterID <> CHARACTER_AMY) Then
+					Select (direction)
+						Case DIRECTION_DOWN
+							cancelFootObject(Self)
+							
+							Self.collisionState = COLLISION_STATE_JUMP
+					End Select
+				EndIf
 			EndIf
-			
-			If ((-Self.velY) < (-ATTACK_POP_POWER)) Then
-				setVelY(-ATTACK_POP_POWER)
-			ElseIf (characterID <> CHARACTER_KNUCKLES) Then
-				setVelY(-Self.velY)
-			ElseIf (getCharacterAnimationID() = ANI_ATTACK_2 Or getCharacterAnimationID() = ANI_ATTACK_3 Or getCharacterAnimationID() = ANI_RAIL_ROLL Or getCharacterAnimationID() = ANI_BAR_ROLL_1) Then
-				setVelY((-Self.velY) - 325)
-			Else
-				setVelY(-Self.velY)
-			EndIf
-		EndIf
+		End
 		
-	End
+		Method doBossAttackPose:Void(obj:GameObject, direction:Int)
+			If (Self.collisionState = COLLISION_STATE_JUMP) Then
+				If (characterID <> CHARACTER_AMY) Then
+					setVelX(-Self.velX)
+				EndIf
+				
+				If ((-Self.velY) < (-ATTACK_POP_POWER)) Then
+					setVelY(-ATTACK_POP_POWER)
+				ElseIf (characterID <> CHARACTER_KNUCKLES) Then
+					setVelY(-Self.velY)
+				ElseIf (getCharacterAnimationID() = ANI_ATTACK_2 Or getCharacterAnimationID() = ANI_ATTACK_3 Or getCharacterAnimationID() = ANI_RAIL_ROLL Or getCharacterAnimationID() = ANI_BAR_ROLL_1) Then
+					' Magic number: 325
+					setVelY((-Self.velY) - 325)
+				Else
+					setVelY(-Self.velY)
+				EndIf
+			EndIf
+		End
 	
 	Public Method inRailState:Bool()
 		Return (Self.railing Or Self.railOut)
