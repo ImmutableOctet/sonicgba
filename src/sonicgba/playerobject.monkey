@@ -5861,6 +5861,17 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Return (timeCount < StageManager.getTimeModeScore(characterID))
 		End
 		
+		Function playerLifeUpBGM:Void()
+			SoundSystem.getInstance().stopBgm(False)
+			
+			' Magic numbers: 43, 44
+			If (invincibleCount > 0) Then
+				SoundSystem.getInstance().playBgmSequence(43, 44)
+			Else
+				SoundSystem.getInstance().playBgmSequence(43, StageManager.getBgmId())
+			EndIf
+		End
+		
 		' Methods:
 		Method checkCliffAnimation:Void()
 			Local footLeftX:= ACUtilities.getRelativePointX(Self.posX, LEFT_FOOT_OFFSET_X, 0, Self.faceDegree)
@@ -5917,6 +5928,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Default
 					' Nothing so far.
 			End Select
+		End
+		
+		Method aspirating:Void()
+			'Local i:= (Self.breatheCount Mod 3)
 		End
 	Public
 		' Functions:
@@ -6598,6 +6613,49 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			ringNum = rNum
 		End
 		
+		Function setFadeColor:Void(color:Int)
+			For Local I:= 0 Until fadeRGB.Length
+				fadeRGB[i] = color
+			Next
+		End
+		
+		Function fadeInit:Void(from:Int, dest:Int)
+			fadeFromValue = from
+			fadeAlpha = fadeFromValue
+			fadeToValue = dest
+			
+			preFadeAlpha = -1
+		End
+		
+		' This needs to be reimplemented.
+		Function drawFadeBase:Void(g:MFGraphics, vel2:Int)
+			fadeAlpha = MyAPI.calNextPosition(Double(fadeAlpha), Double(fadeToValue), 1, vel2, 3.0)
+			
+			If (fadeAlpha <> 0) Then
+				Local w:Int, h:Int
+				
+				If (preFadeAlpha <> fadeAlpha) Then
+					For (w = 0; w < FADE_FILL_WIDTH; w += 1)
+						For (h = 0; h < FADE_FILL_WIDTH; h += 1)
+							fadeRGB[(h * FADE_FILL_WIDTH) + w] = ((fadeAlpha Shl ANI_PULL) & -16777216) | (fadeRGB[(h * FADE_FILL_WIDTH) + w] & MapManager.END_COLOR)
+						Next
+					Next
+					
+					preFadeAlpha = fadeAlpha
+				EndIf
+				
+				For (w = 0; w < MyAPI.zoomOut(SCREEN_WIDTH); w += FADE_FILL_WIDTH)
+					For (h = 0; h < MyAPI.zoomOut(SCREEN_HEIGHT); h += FADE_FILL_WIDTH)
+						g.drawRGB(fadeRGB, 0, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_WIDTH, True)
+					Next
+				Next
+			EndIf
+		End
+		
+		Function fadeChangeOver:Bool()
+			Return (fadeAlpha = fadeToValue)
+		End
+		
 		' Methods:
 		Method setCliffAnimation:Void()
 			If (Self.faceDirection) Then
@@ -6742,159 +6800,103 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			soundInstance.playSe(37)
 		End
 		
-	Public Method setStagePassRunOutofScreen:Void()
-		MapManager.setFocusObj(Null)
-		Self.animationID = ANI_RUN_3
-	End
-	
-	Public Method stagePassRunOutofScreenLogic:Bool()
+		Method setStagePassRunOutofScreen:Void()
+			MapManager.setFocusObj(Null)
+			
+			Self.animationID = ANI_RUN_3
+		End
 		
-		If ((StageManager.isOnlyScoreCal Or Self.footPointX + RIGHT_WALK_COLLISION_CHECK_OFFSET_X <= (((camera.x + SCREEN_WIDTH) + 800) Shl 6)) And (Not isStartStageEndFlag Or stageEndFrameCnt <= BACKGROUND_WIDTH)) Then
+		Method stagePassRunOutofScreenLogic:Bool()
+			' Magic number: 800
+			If ((StageManager.isOnlyScoreCal Or Self.footPointX + RIGHT_WALK_COLLISION_CHECK_OFFSET_X <= (((camera.x + SCREEN_WIDTH) + 800) Shl 6)) And (Not isStartStageEndFlag Or stageEndFrameCnt <= BACKGROUND_WIDTH)) Then
+				Return False
+			EndIf
+			
+			' Magic number: 96
+			stagePassResultOutOffsetX -= 96
+			
+			If (stagePassResultOutOffsetX < ACParam.NO_COLLISION) Then
+				Return True
+			EndIf
+			
 			Return False
-		EndIf
+		End
 		
-		stagePassResultOutOffsetX -= 96
+		Method needRetPower:Bool()
+			Return ((Not Key.repeat(Key.gLeft | Key.gRight) And Not isTerminalRunRight() And Not Self.isCelebrate) Or Self.animationID = ANI_JUMP Or Self.slipFlag)
+		End
 		
-		If (stagePassResultOutOffsetX < ACParam.NO_COLLISION) Then
-			Return True
-		EndIf
-		
-		Return False
-	End
-	
-	Public Method needRetPower:Bool()
-		Return ((Not Key.repeat(Key.gLeft | Key.gRight) And Not isTerminalRunRight() And Not Self.isCelebrate) Or Self.animationID = ANI_JUMP Or Self.slipFlag)
-	End
-	
-	Public Method getRetPower:Int()
-		
-		If (Self.animationID <> ANI_JUMP) Then
-			Return Self.movePower
-		EndIf
-		
-		Return Self.movePower / 2
-	End
-	
-	Public Method getSlopeGravity:Int()
-		
-		If (Self.animationID <> ANI_JUMP) Then
-			Return FAKE_GRAVITY_ON_WALK
-		EndIf
-		
-		Return FAKE_GRAVITY_ON_BALL
-	End
-	
-	Public Method noRotateDraw:Bool()
-		Return (Self.animationID = ANI_STAND Or Self.animationID = ANI_SQUAT Or Self.animationID = ANI_SQUAT_PROCESS Or Self.animationID = ANI_WAITING_1 Or Self.animationID = ANI_WAITING_2 Or Self.animationID = ANI_SPIN_LV1 Or Self.animationID = ANI_SPIN_LV2 Or Self.animationID = ANI_YELL Or Self.animationID = ANI_PUSH_WALL)
-	End
-	
-	Public Method canDoJump:Bool()
-		' This behavior may change in the future. (Currently related to spin-dashing)
-		Return (Self.animationID <> ANI_SQUAT)
-	End
-	
-	Private Method aspirating:Void()
-		'Local i:= (Self.breatheCount Mod 3)
-	End
-	
-	Public Function setFadeColor:Void(color:Int)
-		For Local I:= 0 Until fadeRGB.Length
-			fadeRGB[i] = color
-		Next
-	End
-	
-	Public Function fadeInit:Void(from:Int, to:Int)
-		fadeFromValue = from
-		fadeToValue = to
-		fadeAlpha = fadeFromValue
-		preFadeAlpha = -1
-	End
-	
-	Public Function drawFadeBase:Void(g:MFGraphics, vel2:Int)
-		fadeAlpha = MyAPI.calNextPosition((double) fadeAlpha, (double) fadeToValue, 1, vel2, 3.0d)
-		
-		If (fadeAlpha <> 0) Then
-			Int w
-			Int h
-			
-			If (preFadeAlpha <> fadeAlpha) Then
-				For (w = 0; w < FADE_FILL_WIDTH; w += 1)
-					For (h = 0; h < FADE_FILL_WIDTH; h += 1)
-						fadeRGB[(h * FADE_FILL_WIDTH) + w] = ((fadeAlpha Shl ANI_PULL) & -16777216) | (fadeRGB[(h * FADE_FILL_WIDTH) + w] & MapManager.END_COLOR)
-					Next
-				Next
-				preFadeAlpha = fadeAlpha
+		Method getRetPower:Int()
+			If (Self.animationID <> ANI_JUMP) Then
+				Return Self.movePower
 			EndIf
 			
-			For (w = 0; w < MyAPI.zoomOut(SCREEN_WIDTH); w += FADE_FILL_WIDTH)
-				For (h = 0; h < MyAPI.zoomOut(SCREEN_HEIGHT); h += FADE_FILL_WIDTH)
-					g.drawRGB(fadeRGB, 0, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_WIDTH, True)
-				Next
-			Next
-		EndIf
+			Return (Self.movePower / 2)
+		End
 		
-	End
-	
-	Public Function fadeChangeOver:Bool()
-		Return (fadeAlpha = fadeToValue)
-	End
-	
-	Private Function playerLifeUpBGM:Void()
-		SoundSystem.getInstance().stopBgm(False)
-		
-		If (invincibleCount > 0) Then
-			SoundSystem.getInstance().playBgmSequence(ANI_POP_JUMP_DOWN_SLOW, ANI_HURT_PRE)
-		Else
-			SoundSystem.getInstance().playBgmSequence(ANI_POP_JUMP_DOWN_SLOW, StageManager.getBgmId())
-		EndIf
-	End
-	
-	Public Method isBodyCenterOutOfWater:Bool()
-		Return getNewPointY(Self.posY, 0, -Self.collisionRect.getHeight(), Self.faceDegree) < (StageManager.getWaterLevel() Shl 6)
-	End
-	
-	Public Method dripDownUnderWater:Void()
-		' Empty implementation.
-	End
-	
-	Public Method resetPlayerDegree:Void()
-		Int i = Self.degreeStable
-		Self.faceDegree = i
-		Self.degreeForDraw = i
-	End
-	
-	Public Method isOnSlip0:Bool()
-		Return False
-	End
-	
-	Public Method setSlip0:Void()
-		' Empty implementation.
-	End
-	
-	Public Method lookUpCheck:Void()
-		If (Key.repeat(Key.gUp | Key.B_LOOK)) Then
-			If (Self.animationID = ANI_LOOK_UP_1 And Self.drawer.checkEnd()) Then
-				Self.animationID = ANI_LOOK_UP_2
+		Method getSlopeGravity:Int()
+			If (Self.animationID <> ANI_JUMP) Then
+				Return FAKE_GRAVITY_ON_WALK
 			EndIf
 			
-			If (Not (Self.animationID = ANI_LOOK_UP_1 Or Self.animationID = ANI_LOOK_UP_2 Or Self.animationID <> ANI_STAND)) Then
-				Self.animationID = ANI_LOOK_UP_1
-			EndIf
-			
-			If (Self.animationID = ANI_LOOK_UP_2) Then
-				Self.focusMovingState = 1
+			Return FAKE_GRAVITY_ON_BALL
+		End
+		
+		Method noRotateDraw:Bool()
+			Return (Self.animationID = ANI_STAND Or Self.animationID = ANI_SQUAT Or Self.animationID = ANI_SQUAT_PROCESS Or Self.animationID = ANI_WAITING_1 Or Self.animationID = ANI_WAITING_2 Or Self.animationID = ANI_SPIN_LV1 Or Self.animationID = ANI_SPIN_LV2 Or Self.animationID = ANI_YELL Or Self.animationID = ANI_PUSH_WALL)
+		End
+		
+		Method canDoJump:Bool()
+			' This behavior may change in the future. (Currently related to spin-dashing)
+			Return (Self.animationID <> ANI_SQUAT)
+		End
+
+		Method isBodyCenterOutOfWater:Bool()
+			Return (getNewPointY(Self.posY, 0, -Self.collisionRect.getHeight(), Self.faceDegree) < (StageManager.getWaterLevel() Shl 6))
+		End
+		
+		Method dripDownUnderWater:Void()
+			' Empty implementation.
+		End
+		
+		Method resetPlayerDegree:Void()
+			Self.faceDegree = Self.degreeStable
+			Self.degreeForDraw = Self.degreeStable
+		End
+		
+		Method isOnSlip0:Bool()
+			Return False
+		End
+		
+		Method setSlip0:Void()
+			' Empty implementation.
+		End
+		
+		Method lookUpCheck:Void()
+			If (Key.repeat(Key.gUp | Key.B_LOOK)) Then
+				If (Self.animationID = ANI_LOOK_UP_1 And Self.drawer.checkEnd()) Then
+					Self.animationID = ANI_LOOK_UP_2
+				EndIf
+				
+				If (Not (Self.animationID = ANI_LOOK_UP_1 Or Self.animationID = ANI_LOOK_UP_2 Or Self.animationID <> ANI_STAND)) Then
+					Self.animationID = ANI_LOOK_UP_1
+				EndIf
+				
+				If (Self.animationID = ANI_LOOK_UP_2) Then
+					Self.focusMovingState = FOCUS_MOVING_UP
+					
+					Return
+				EndIf
+				
 				Return
 			EndIf
 			
-			Return
-		EndIf
-		
-		If (Self.animationID = ANI_LOOK_UP_OVER And Self.drawer.checkEnd()) Then
-			Self.animationID = ANI_STAND
-		EndIf
-		
-		If (Self.animationID = ANI_LOOK_UP_1 Or Self.animationID = ANI_LOOK_UP_2) Then
-			Self.animationID = ANI_LOOK_UP_OVER
-		EndIf
-	End
+			If (Self.animationID = ANI_LOOK_UP_OVER And Self.drawer.checkEnd()) Then
+				Self.animationID = ANI_STAND
+			EndIf
+			
+			If (Self.animationID = ANI_LOOK_UP_1 Or Self.animationID = ANI_LOOK_UP_2) Then
+				Self.animationID = ANI_LOOK_UP_OVER
+			EndIf
+		End
 End
