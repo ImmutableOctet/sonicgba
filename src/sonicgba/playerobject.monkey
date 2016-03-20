@@ -4611,140 +4611,150 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 		End
 		
-	Public Method setFall:Void(x:Int, y:Int, left:Int, top:Int)
-		
-		If (Self instanceof PlayerTails) Then
-			((PlayerTails) Self).stopFly()
-		EndIf
-		
-		Self.railing = True
-		setFootPositionX(x)
-		Self.velX = 0
-		Self.velY = 0
-		Self.railLine = Null
-		Self.collisionChkBreak = True
-	End
-	
-	Public Method setFallOver:Void()
-		Self.railing = False
-	End
-	
-	Public Method setRailFlip:Void()
-		Self.velX = 0
-		Self.velY = RAIL_FLIPPER_V0
-		Self.railLine = Null
-		Self.collisionChkBreak = True
-		Self.railFlipping = True
-		SoundSystem.getInstance().playSe(54)
-	End
-	
-	Public Method setRailLine:Bool(line:Line, startX:Int, startY:Int, railDivX:Int, railDivY:Int, railDevX:Int, railDevY:Int, obj:GameObject)
-		
-		If (Not obj.getCollisionRect().collisionChk(Self.footPointX, Self.footPointY)) Then
-			Return False
-		EndIf
-		
-		If (Not Self.railing Or Self.velY < 0) Then
-			Return False
-		EndIf
-		
-		If (Self.railLine = Null) Then
-			Self.totalVelocity = 0
-		EndIf
-		
-		Self.railLine = line
-		calDivideVelocity()
-		Self.posX = startX
-		Self.posY = startY
-		
-		If (Abs(railDivY) <= 1) Then
-			Self.velX = (railDivX * SONIC_DRAW_HEIGHT) / railDevX
+		Method setFall:Void(x:Int, y:Int, left:Int, top:Int)
+			If (characterID = CHARACTER_TAILS) Then
+				' Not exactly safe, but it works:
+				Local tails:= PlayerTails(Self)
+				
+				tails.stopFly()
+			EndIf
+			
+			Self.railing = True
+			
+			setFootPositionX(x)
+			
+			Self.velX = 0
 			Self.velY = 0
 			
-			If (Self.railFlipping) Then
-				Self.railFlipping = False
+			Self.railLine = Null
+			
+			Self.collisionChkBreak = True
+		End
+		
+		Method setFallOver:Void()
+			Self.railing = False
+		End
+		
+		Method setRailFlip:Void()
+			Self.velX = 0
+			Self.velY = RAIL_FLIPPER_V0
+			
+			Self.railLine = Null
+			
+			Self.collisionChkBreak = True
+			Self.railFlipping = True
+			
+			' Magic number: 54 (Sound-effect ID)
+			SoundSystem.getInstance().playSe(54)
+		End
+		
+		Method setRailLine:Bool(line:Line, startX:Int, startY:Int, railDivX:Int, railDivY:Int, railDevX:Int, railDevY:Int, obj:GameObject)
+			If (Not obj.getCollisionRect().collisionChk(Self.footPointX, Self.footPointY)) Then
+				Return False
+			EndIf
+			
+			If (Not Self.railing Or Self.velY < 0) Then
+				Return False
+			EndIf
+			
+			If (Self.railLine = Null) Then
+				Self.totalVelocity = 0
+			EndIf
+			
+			Self.railLine = line
+			
+			calDivideVelocity()
+			
+			Self.posX = startX
+			Self.posY = startY
+			
+			If (Abs(railDivY) <= 1) Then
+				Self.velX = ((railDivX * SONIC_DRAW_HEIGHT) / railDevX)
+				Self.velY = 0
+				
+				If (Self.railFlipping) Then
+					Self.railFlipping = False
+					
+					setFootPositionY(Self.railLine.getY(Self.footPointX) + BODY_OFFSET)
+				Else
+					setFootPositionY((Self.railLine.getY(Self.footPointX) - RIGHT_WALK_COLLISION_CHECK_OFFSET_X) + BODY_OFFSET)
+				EndIf
+				
+			Else
+				Self.velX = ((railDivX * SONIC_DRAW_HEIGHT) / railDevX)
+				Self.velY = ((railDivY * SONIC_DRAW_HEIGHT) / railDevY)
+				
 				setFootPositionY(Self.railLine.getY(Self.footPointX) + BODY_OFFSET)
-			Else
-				setFootPositionY((Self.railLine.getY(Self.footPointX) - RIGHT_WALK_COLLISION_CHECK_OFFSET_X) + BODY_OFFSET)
 			EndIf
 			
-		Else
-			Self.velX = (railDivX * SONIC_DRAW_HEIGHT) / railDevX
-			Self.velY = (railDivY * SONIC_DRAW_HEIGHT) / railDevY
-			setFootPositionY(Self.railLine.getY(Self.footPointX) + BODY_OFFSET)
-		EndIf
-		
-		calTotalVelocity()
-		Print("~~1velX:" + Self.velX + "|velY:" + Self.velY)
-		Self.collisionChkBreak = True
-		Return True
-	End
-	
-	Public Method checkWithObject:Void(preX:Int, preY:Int, currentX:Int, currentY:Int)
-		Int moveDistanceX = currentX - preX
-		Int moveDistanceY = currentY - preY
-		
-		If (moveDistanceX = 0 And moveDistanceY = 0) Then
-			Self.footPointX = currentX
-			Self.footPointY = currentY
-			Return
-		EndIf
-		
-		Int moveDistance
-		
-		If (Abs(moveDistanceX) >= Abs(moveDistanceY)) Then
-			moveDistance = Abs(moveDistanceX)
-		Else
-			moveDistance = Abs(moveDistanceY)
-		EndIf
-		
-		Int preCheckX = preX
-		Int preCheckY = preY
-		Int i = 0
-		While (i <= moveDistance And i < moveDistance) {
-			i += RIGHT_WALK_COLLISION_CHECK_OFFSET_X
+			calTotalVelocity()
 			
-			If (i >= moveDistance) Then
-				i = moveDistance
-			EndIf
+			Print("~~~~1velX:" + Self.velX + "|velY:" + Self.velY)
 			
-			Int tmpCurrentX = preX + ((moveDistanceX * i) / moveDistance)
-			Int tmpCurrentY = preY + ((moveDistanceY * i) / moveDistance)
-			player.moveDistance.x = (tmpCurrentX Shr 6) - (preCheckX Shr 6)
-			player.moveDistance.y = (tmpCurrentY Shr 6) - (preCheckY Shr 6)
-			Self.footPointX = tmpCurrentX
-			Self.footPointY = tmpCurrentY
-			collisionCheckWithGameObject(tmpCurrentX, tmpCurrentY)
+			Self.collisionChkBreak = True
 			
-			If (Not Self.collisionChkBreak) Then
-				preCheckX = tmpCurrentX
-				preCheckY = tmpCurrentY
-			Else
+			Return True
+		End
+		
+		Method checkWithObject:Void(preX:Int, preY:Int, currentX:Int, currentY:Int)
+			Local moveDistanceX:= (currentX - preX)
+			Local moveDistanceY:= (currentY - preY)
+			
+			If (moveDistanceX = 0 And moveDistanceY = 0) Then
+				Self.footPointX = currentX
+				Self.footPointY = currentY
+				
 				Return
 			EndIf
 			
+			Local moveDistance:Int
+			
+			If (Abs(moveDistanceX) >= Abs(moveDistanceY)) Then
+				moveDistance = Abs(moveDistanceX)
+			Else
+				moveDistance = Abs(moveDistanceY)
+			EndIf
+			
+			Local preCheckX:= preX
+			Local preCheckY:= preY
+			
+			For Local I:= 0 To moveDistance Step RIGHT_WALK_COLLISION_CHECK_OFFSET_X ' Until moveDistance
+				Local tmpCurrentX:= (preX + ((moveDistanceX * I) / moveDistance))
+				Local tmpCurrentY:= (preY + ((moveDistanceY * I) / moveDistance))
+				
+				player.moveDistance.x = (tmpCurrentX Shr 6) - (preCheckX Shr 6)
+				player.moveDistance.y = (tmpCurrentY Shr 6) - (preCheckY Shr 6)
+				
+				Self.footPointX = tmpCurrentX
+				Self.footPointY = tmpCurrentY
+				
+				collisionCheckWithGameObject(tmpCurrentX, tmpCurrentY)
+				
+				If (Not Self.collisionChkBreak) Then
+					preCheckX = tmpCurrentX
+					preCheckY = tmpCurrentY
+				Else
+					Return
+				EndIf
+			Wend
 		End
-	End
-	
-	Public Method cancelFootObject:Void(obj:GameObject)
 		
-		If (Self.collisionState = COLLISION_STATE_ON_OBJECT And isFootOnObject(obj)) Then
-			player.collisionState = COLLISION_STATE_JUMP
-			player.footOnObject = Null
-			Self.onObjectContinue = False
-		EndIf
+		Method cancelFootObject:Void(obj:GameObject)
+			If (Self.collisionState = COLLISION_STATE_ON_OBJECT And isFootOnObject(obj)) Then
+				Self.collisionState = COLLISION_STATE_JUMP
+				Self.footOnObject = Null
+				
+				Self.onObjectContinue = False
+			EndIf
+		End
 		
-	End
-	
-	Public Method cancelFootObject:Void()
+		Method cancelFootObject:Void()
+			If (Self.collisionState = COLLISION_STATE_ON_OBJECT) Then
+				Self.footOnObject = Null
+				Self.onObjectContinue = False
+			EndIf
+		End
 		
-		If (Self.collisionState = COLLISION_STATE_ON_OBJECT) Then
-			player.footOnObject = Null
-			Self.onObjectContinue = False
-		EndIf
-		
-	End
-	
 	Public Method doItemAttackPose:Void(obj:GameObject, direction:Int)
 		
 		If (Not Self.extraAttackFlag) Then
