@@ -276,7 +276,7 @@ Class GimmickObject Extends GameObject
 				Case State.BACKGROUND_WIDTH
 					reElement = New Arm(id, x, y, left, top, width, height)
 				Case RollPlatformSpeedB.DEGREE_VELOCITY
-					If (stageModeState = 1) Then
+					If (stageModeState = STATE_RACE_MODE) Then
 						reElement = Null
 					EndIf
 					

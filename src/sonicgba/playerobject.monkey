@@ -257,8 +257,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Global itemOffsetX:Int
 		
-		' Not sure if this is correct.
-		Global itemVec:Int[][] = [[5, 2]]
+		Global itemVec:Int[][] = [[0,0], [0,0], [0,0], [0,0], [0,0]]
 		
 		Global lifeDrawerX:Int = 0
 		
@@ -998,7 +997,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				If (invincibleCount = 0) Then
 					i = SoundSystem.getInstance().getPlayingBGMIndex()
-					SoundSystem.getInstance()
 					
 					If (i = ANI_HURT_PRE) Then
 						SoundSystem.getInstance().stopBgm(False)
@@ -1009,7 +1007,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 					
 					i = SoundSystem.getInstance().getPlayingBGMIndex()
-					SoundSystem.getInstance()
 					
 					If (i = ANI_POP_JUMP_DOWN_SLOW) Then
 						SoundSystem.getInstance().playNextBgm(StageManager.getBgmId())
@@ -1085,7 +1082,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				EndIf
 				
 				If (deadOver And Not Self.finishDeadStuff) Then
-					If (stageModeState = 1) Then
+					If (stageModeState = STATE_RACE_MODE) Then
 						StageManager.setStageRestart()
 					ElseIf (Not (timeCount = overTime And GlobalResource.timeIsLimit())) Then
 						If (lifeNum > 0) Then
@@ -1584,7 +1581,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 								
 								terminalLogic()
 								
-								If (isTerminal And Self.terminalCount = 0 And terminalType = 1) Then
+								If (isTerminal And Self.terminalCount = 0 And terminalType = TERMINAL_NO_MOVE) Then
 									StageManager.setStagePass()
 								Else
 									Self.degreeForDraw = Self.faceDegree
@@ -1724,7 +1721,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		' Extensions:
 		Method terminalLogic_SS_Run:Void()
 			If (Self.posX > SUPER_SONIC_STAND_POS_X) Then
-				terminalState = 1
+				terminalState = TER_STATE_BRAKE
 			EndIf
 		End
 		
@@ -4911,7 +4908,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.drownCnt = 0
 			
 			' Magic numbers: 1, 10 (State, ID):
-			If (stageModeState = 1 And StageManager.getStageID() = 10) Then
+			If (stageModeState = STATE_RACE_MODE And StageManager.getStageID() = 10) Then
 				RocketSeparateEffect.clearInstance()
 			EndIf
 			
@@ -4941,530 +4938,579 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			setDie(isDrowning, DIE_DRIP_STATE_JUMP_V0)
 		End
 		
-	Public Method setNoKey:Void()
-		Self.noKeyFlag = True
-	End
+		Method setNoKey:Void()
+			Self.noKeyFlag = True
+		End
 	
-	Public Method setCollisionState:Void(state:Byte)
-		
-		If (Self.collisionState = COLLISION_STATE_NONE) Then
-			calDivideVelocity()
-		EndIf
-		
-		Select (state)
-			Case 1
-				Self.faceDegree = Self.degreeStable
-				Self.worldCal.actionState = 1
-				break
-		EndIf
-		Self.collisionState = state
-	End
-	
-	Public Method setSlip:Void()
-		
-		If (Self.collisionState = COLLISION_STATE_NONE) Then
-			Self.slipFlag = True
-			Self.showWaterFlush = True
-			Self.animationID = ANI_YELL
-			setNoKey()
-		EndIf
-		
-	End
-	
-	Public Method beUnseenPop:Bool()
-		
-		If (Self.collisionState <> Null Or Abs(getVelX()) <= WIDTH) Then
-			Return False
-		EndIf
-		
-		beSpring(getGravity() + DETECT_HEIGHT, 1)
-		Int nextVelX = DETECT_HEIGHT
-		
-		If (DETECT_HEIGHT > HINER_JUMP_MAX) Then
-			nextVelX = HINER_JUMP_MAX
-		EndIf
-		
-		If (getVelX() > 0) Then
-			beSpring(nextVelX, 2)
-		Else
-			beSpring(nextVelX, 3)
-		EndIf
-		
-		SoundSystem.getInstance().playSequenceSe(ANI_SMALL_ZERO_Y)
-		Return True
-	End
-	
-	Public Method setBank:Void()
-		Self.onBank = Not Self.onBank
-		
-		If (Self.onBank And Self.collisionState = COLLISION_STATE_NONE) Then
-			calDivideVelocity()
-		EndIf
-		
-	End
-	
-	Public Method bankLogic:Void()
-		
-		If (Self.onBank) Then
-			Self.faceDegree = 0
-			inputLogicWalk()
-			
-			If (Self.onBank) Then
+		Method setCollisionState:Void(state:Byte)
+			If (Self.collisionState = COLLISION_STATE_NONE) Then
 				calDivideVelocity()
-				Self.velY = 0
-				Int preX = player.getFootPositionX()
-				Int preY = player.getFootPositionY()
-				Self.footPointX += Self.velX
-				Int yLimit = CENTER_Y - (((Cos((((Self.footPointX - CENTER_X) * B_1) / B_2) Shr 6) * f24C) / 100) + f24C)
-				decelerate()
-				Int velX = player.getVelX()
-				
-				If (Abs(velX) > BANKING_MIN_SPEED) Then
-					player.setFootPositionY(Max(yLimit, player.getFootPositionY() - ((Abs(velX) * TitleState.RETURN_PRESSED) / BANKING_MIN_SPEED)))
-				Else
-					player.setFootPositionY(Min(CENTER_Y, player.getFootPositionY() + BPDef.PRICE_REVIVE))
+			EndIf
+			
+			Select (state)
+				Case COLLISION_STATE_JUMP
+					Self.faceDegree = Self.degreeStable
 					
-					If (Self.footPointY >= CENTER_Y) Then
-						Self.onBank = False
-						Self.collisionState = COLLISION_STATE_JUMP
-						Self.worldCal.actionState = 1
-						Self.bankwalking = False
-					EndIf
-				EndIf
+					' Magic number: 1 (Action-state)
+					Self.worldCal.actionState = 1
+			End Select
+			
+			Self.collisionState = state
+		End
+		
+		Method setSlip:Void()
+			If (Self.collisionState = COLLISION_STATE_NONE) Then
+				Self.slipFlag = True
+				Self.showWaterFlush = True
 				
-				If (Self.animationID <> ANI_JUMP) Then
-					If (Abs(velX) <= BANKING_MIN_SPEED) Then
-						Self.onBank = False
-						Self.collisionState = COLLISION_STATE_JUMP
-						Self.worldCal.actionState = 1
-						doDripInAir()
-					ElseIf (Self.footPointY < 61184) Then
-						Self.animationID = ANI_BANK_3
-					ElseIf (Self.footPointY < 61952) Then
-						Self.animationID = ANI_BANK_2
-					ElseIf (Self.footPointY < 62720) Then
-						Self.animationID = LOOK_COUNT
-					EndIf
-				EndIf
+				Self.animationID = ANI_YELL
 				
-				checkWithObject(preX, preY, Self.footPointX, Self.footPointY)
+				setNoKey()
 			EndIf
-		EndIf
+		End
 		
-	End
-	
-	Public Method setTerminal:Void(type:Int)
-		Self.terminalOffset = 0
-		terminalType = type
-		Self.terminalCount = TERMINAL_COUNT
-		isTerminal = True
-		timeStopped = True
-		Select (terminalType)
-			Case 0
-			Case 2
-				
-				If (Self.collisionState = COLLISION_STATE_NONE) Then
-					If (Self.animationID = ANI_JUMP) Then
-						land()
-					EndIf
-					
-					If (Self.totalVelocity > MAX_VELOCITY) Then
-						Self.totalVelocity = MAX_VELOCITY
-					EndIf
-				EndIf
-				
-			Case 1
-				changeVisible(False)
-				Self.noMoving = True
-			Case 3
-				terminalState = TER_STATE_RUN
-			Default
-		EndIf
-	End
-	
-	Public Method setTerminalSingle:Void(type:Int)
-		terminalType = type
-		Self.terminalCount = TERMINAL_COUNT
-		isTerminal = True
-		timeStopped = True
-	End
-	
-	Public Method isTerminalRunRight:Bool()
-		Return (isTerminal And (terminalType = 0 Or terminalType = 2 Or (terminalType = 3 And terminalState = Null And Self.posX < SUPER_SONIC_STAND_POS_X)))
-	End
-	
-	Public Method doBrake:Bool()
-		Return (isTerminal And terminalType = 3 And terminalState = 1 And Self.posX > SUPER_SONIC_STAND_POS_X And Self.totalVelocity > 0)
-	End
-	
-	Public Method beTrans:Void(desX:Int, desY:Int)
-		Self.animationID = ANI_JUMP
-		Self.collisionState = COLLISION_STATE_JUMP
-		Self.transing = True
-		setBodyPositionX(desX)
-		setBodyPositionY(desY)
-		MapManager.setCameraMoving()
-		calPreCollisionRect()
-	End
-	
-	Public Method setCelebrate:Void()
-		timeStopped = True
-		Self.isCelebrate = True
-		MapManager.setCameraLeftLimit(MapManager.getCamera().x)
-		MapManager.setCameraRightLimit(MapManager.getCamera().x + MapManager.CAMERA_WIDTH)
-		
-		If (Self.faceDirection) Then
-			Self.moveLimit = Self.posX + 3840
-		Else
-			Self.moveLimit = Self.posX - 3840
-		EndIf
-		
-	End
-	
-	Public Method getPreItem:Void(itemId:Int)
-		For (Int i = 0; i < 5; i += 1)
-			If (itemVec[i][0] = -1) Then
-				itemVec[i][0] = itemId
-				itemVec[i][1] = 20 ' SPIN_KEY_COUNT
-				Return
-			EndIf
-		Next
-	End
-	
-	Public Method getItem:Void(itemId:Int)
-		Select (itemId)
-			Case 0
-				addLife()
-				playerLifeUpBGM()
-			Case 1
-				shieldType = 1
-				soundInstance.playSe(ANI_DEAD)
-			Case 2
-				shieldType = 2
-				soundInstance.playSe(ANI_DEAD)
-			Case 3
-				invincibleCount = INVINCIBLE_COUNT
-				SoundSystem.getInstance().stopBgm(False)
-				SoundSystem.getInstance().playBgm(ANI_HURT_PRE)
-			Case 4
-				speedCount = INVINCIBLE_COUNT
-				SoundSystem.getInstance().setSoundSpeed(2.0)
-				
-				If (SoundSystem.getInstance().getPlayingBGMIndex() <> ANI_POP_JUMP_DOWN_SLOW) Then
-					SoundSystem.getInstance().restartBgm()
-				EndIf
-				
-			Case 5
-				
-				If (Self.hurtCount = 0) Then
-					getRing(ringRandomNum)
-				EndIf
-				
-			Case 6
-				
-				If (Self.hurtCount = 0) Then
-					getRing(5)
-				EndIf
-				
-			Case 7
-				
-				If (Self.hurtCount = 0) Then
-					getRing(TERMINAL_COUNT)
-				EndIf
-				
-			Default
-		End Select
-	End
-	
-	Public Function getTmpRing:Void(itemId:Int)
-		Select (itemId)
-			Case 5
-				ringTmpNum = RANDOM_RING_NUM[MyRandom.nextInt(RANDOM_RING_NUM.length)]
-				ringRandomNum = ringTmpNum
-			Case 6
-				ringTmpNum = 5
-			Case 7
-				ringTmpNum = TERMINAL_COUNT
-			Default
-		End Select
-	End
-	
-	Public Function getRing:Void(num:Int)
-		Int preRingNum = ringNum
-		ringNum += num
-		
-		If (stageModeState <> 1 And StageManager.getCurrentZoneId() <> ANI_PUSH_WALL) Then
-			If (preRingNum / 100 <> ringNum / 100) Then
-				addLife()
-				playerLifeUpBGM()
+		Method beUnseenPop:Bool()
+			If (Self.collisionState <> Null Or Abs(getVelX()) <= WIDTH) Then
+				Return False
 			EndIf
 			
-			If (ringTmpNum <> 0) Then
-				ringTmpNum = 0
+			beSpring(getGravity() + DETECT_HEIGHT, 1)
+			
+			Local nextVelX:= DETECT_HEIGHT
+			
+			If (DETECT_HEIGHT > HINER_JUMP_MAX) Then
+				nextVelX = HINER_JUMP_MAX
 			EndIf
-		EndIf
-		
-	End
-	
-	Public Method isAttracting:Bool()
-		Return (shieldType = 2)
-	End
-	
-	Public Method getEnemyScore:Void()
-		scoreNum += 100
-		raceScoreNum += 100
-	End
-	
-	Public Method getBossScore:Void()
-		scoreNum += 1000
-		raceScoreNum += 1000
-	End
-	
-	Public Method getBallHobinScore:Void()
-		scoreNum += TERMINAL_COUNT
-		raceScoreNum += TERMINAL_COUNT
-	End
-	
-	Public Method ductIn:Void()
-		Self.ducting = True
-		Self.pushOnce = True
-		Self.ductingCount = 0
-	End
-	
-	Public Method ductOut:Void()
-		Self.ducting = False
-		Self.pushOnce = False
-		Self.ductingCount = 0
-	End
-	
-	Public Method setSqueezeEnable:Void(enable:Bool)
-		Self.squeezeFlag = enable
-	End
-	
-	Protected Method isHeadCollision:Bool()
-		Bool collision = False
-		Int headBlockY = Self.worldInstance.getWorldY(Self.footPointX, Self.footPointY - HEIGHT, 1, 2)
-		Int headBlockY2 = Self.worldInstance.getWorldY(Self.footPointX + WIDTH, Self.footPointY - HEIGHT, 1, 2)
-		
-		If (headBlockY >= 0) Then
-			collision = True
-		EndIf
-		
-		If (headBlockY2 >= 0) Then
-			Return True
-		EndIf
-		
-		Return collision
-	End
-	
-	Public Function addLife:Void()
-		lifeNum += 1
-	End
-	
-	Public Function minusLife:Void()
-		lifeNum -= 1
-	End
-	
-	Public Function getLife:Int()
-		Return lifeNum
-	End
-	
-	Public Function setLife:Void(num:Int)
-		lifeNum = num
-	End
-	
-	Public Function setScore:Void(num:Int)
-		scoreNum = num
-	End
-	
-	Public Function getScore:Int()
-		Return scoreNum
-	End
-	
-	Public Function resetGameParam:Void()
-		scoreNum = 0
-		lifeNum = 2
-	End
-	
-	Public Method resetPlayer:Void()
-		Self.footPointX = Self.deadPosX
-		Self.footPointY = Self.deadPosY
-		Self.worldCal.stopMove()
-		StageManager.resetStageGameover()
-		Self.velX = 0
-		Self.velY = 0
-		setVelX(Self.velX)
-		setVelY(Self.velY)
-		Self.totalVelocity = 0
-		Self.collisionState = TER_STATE_RUN
-		MapManager.setFocusObj(Self)
-		MapManager.focusQuickLocation()
-		Self.isDead = False
-		Self.animationID = ANI_STAND
-		timeStopped = False
-		invincibleCount = SSDef.PLAYER_MOVE_HEIGHT
-		preScoreNum = scoreNum
-		preLifeNum = lifeNum
-		timeCount = 0
-		lastTimeCount = timeCount
-	End
-	
-	Public Function doInitInNewStage:Void()
-		currentMarkId = 0
-	End
-	
-	Public Function initStageParam:Void()
-		ringNum = 0
-		invincibleCount = 0
-		speedCount = 0
-		SoundSystem.getInstance().setSoundSpeed(1.0)
-		shieldType = 0
-		timeCount = 0
-		lastTimeCount = timeCount
-		timeStopped = False
-		raceScoreNum = 0
-		preScoreNum = scoreNum
-		preLifeNum = lifeNum
-		For (Int i = 0; i < 5; i += 1)
-			itemVec[i][0] = -1
-		End Select
-		setOverCount(SonicDef.OVER_TIME)
-	End
-	
-	Public Function initSpParam:Void(param_ringNum:Int, checkPointID:Int, param_timeCount:Int)
-		
-		If (player <> Null) Then
-			currentMarkId = checkPointID
-		EndIf
-		
-		ringNum = param_ringNum
-		timeCount = param_timeCount
-		lastTimeCount = timeCount
-	End
-	
-	Public Function doPauseLeaveGame:Void()
-		scoreNum = preScoreNum
-		lifeNum = preLifeNum
-	End
-	
-	Public Method headInit:Void()
-		
-		If (GameState.guiAnimation = Null) Then
-			GameState.guiAnimation = New Animation("/animation/gui")
-		EndIf
-		
-		headDrawer = GameState.guiAnimation.getDrawer(characterID, False, 0)
-		Self.isAttackBoss4 = False
-	End
-	
-	Public Function drawGameUI:Void(g:MFGraphics)
-		
-		If (Not isTerminal Or terminalType <> 3 Or terminalState <= TER_STATE_LOOK_MOON_WAIT) Then
-			GameState.guiAniDrawer.draw(g, 5, uiOffsetX + 0, 0, False, 0)
 			
-			Int i = ringNum
-			Int i2 = uiOffsetX + SPIN_LV2_COUNT
-			Int i3 = PickValue((ringNum = 0 And (timeCount / SSDef.PLAYER_MOVE_HEIGHT) Mod 2 = 0), 3, 0)
-			
-			drawNum(g, i, i2, 15, 0, i3)
-			drawNum(g, PickValue((stageModeState = 1), raceScoreNum, scoreNum), NumberSideX + uiOffsetX, ANI_PUSH_WALL, 2, 0)
-			timeDraw(g, NumberSideX + uiOffsetX, ANI_BAR_ROLL_1)
-			
-			If (stageModeState <> 1) Then
-				If (StageManager.getCurrentZoneId() = ANI_PUSH_WALL) Then
-					If (player.isDead) Then
-						headDrawer.setActionId(0)
-					Else
-						headDrawer.setActionId(4)
-					EndIf
-				EndIf
-				
-				headDrawer.draw(g, SCREEN_WIDTH, 0)
-				drawNum(g, PickValue((lifeNum >= ANI_ROTATE_JUMP), ANI_ROTATE_JUMP, lifeNum), SCREEN_WIDTH - ANI_ROTATE_JUMP, 4, SPIN_LV2_COUNT, 0)
-			EndIf
-		EndIf
-		
-	End
-	
-	Public Function drawNum:Void(g:MFGraphics, num:Int, x:Int, y:Int, anchor:Int, type:Int)
-		Int divideNum = TERMINAL_COUNT
-		Int blockNum = 1
-		Int i = 0
-		While (num / divideNum <> 0) {
-			blockNum += 1
-			divideNum *= TERMINAL_COUNT
-			i += 1
-		End Select
-		divideNum /= TERMINAL_COUNT
-		Int localanchor = 0
-		Select (anchor)
-			Case 0
-				localanchor = ANI_BANK_3
-				break
-			Case 1
-				localanchor = ANI_BANK_2
-				break
-			Case 2
-				localanchor = SPIN_LV2_COUNT_CONF
-				break
-		End Select
-		Int localtype = 0
-		Select (type)
-			Case 0
-				localtype = 0
-				break
-			Case 1
-				localtype = 1
-				break
-			Case 2
-				localtype = 3
-				break
-			Case 3
-				localtype = 2
-				break
-			Case 4
-				localtype = 1
-				break
-		End Select
-		NumberDrawer.drawNum(g, localtype, num, x, y, localanchor)
-	End
-	
-	Public Function drawNum:Void(g:MFGraphics, num:Int, x:Int, y:Int, anchor:Int, type:Int, blockNum:Int)
-		Int i
-		
-		If (numDrawer = Null) Then
-			numDrawer = GlobalResource.statusAnimation.getDrawer(0, False, 0)
-		EndIf
-		
-		Int divideNum = 1
-		For (i = 1; i < blockNum; i += 1)
-			divideNum *= TERMINAL_COUNT
-		Next
-		Int leftPosition = 0
-		Select (anchor)
-			Case 0
-				leftPosition = x - ((NUM_SPACE[type] * (blockNum - 1)) / 2)
-				break
-			Case 1
-				leftPosition = x
-				break
-			Case 2
-				leftPosition = x - (NUM_SPACE[type] * (blockNum - 1))
-				break
-		End Select
-		For (i = 0; i < blockNum; i += 1)
-			Int tmpNum = Abs(num / divideNum) Mod TERMINAL_COUNT
-			divideNum /= TERMINAL_COUNT
-			
-			If (type = 3 And tmpNum = 0) Then
-				numDrawer.setActionId(MOON_STAR_DES_Y_1)
+			If (getVelX() > 0) Then
+				beSpring(nextVelX, 2)
 			Else
-				numDrawer.setActionId(NUM_ANI_ID[type] + tmpNum)
+				beSpring(nextVelX, 3)
 			EndIf
 			
-			numDrawer.draw(g, (NUM_SPACE[type] * i) + leftPosition, y)
-		Next
-	End
+			' Magic number: 37 (Sound-effect ID)
+			SoundSystem.getInstance().playSequenceSe(37)
+			
+			Return True
+		End
+		
+		Method setBank:Void()
+			Self.onBank = Not Self.onBank
+			
+			If (Self.onBank And Self.collisionState = COLLISION_STATE_NONE) Then
+				calDivideVelocity()
+			EndIf
+		End
+		
+		Method bankLogic:Void()
+			If (Self.onBank) Then
+				Self.faceDegree = 0
+				
+				inputLogicWalk()
+				
+				If (Self.onBank) Then
+					calDivideVelocity()
+					
+					Self.velY = 0
+					
+					Local preX:= Self.getFootPositionX()
+					Local preY:= Self.getFootPositionY()
+					
+					Self.footPointX += Self.velX
+					
+					Local yLimit:= (CENTER_Y - (((Cos((((Self.footPointX - CENTER_X) * B_1) / B_2) Shr 6) * f24C) / 100) + f24C))
+					
+					decelerate()
+					
+					Local velX:= Self.getVelX()
+					
+					' Magic numbers: 400, 200, 1 (Action-state):
+					If (Abs(velX) > BANKING_MIN_SPEED) Then
+						Self.setFootPositionY(Max(yLimit, Self.getFootPositionY() - ((Abs(velX) * 400) / BANKING_MIN_SPEED)))
+					Else
+						Self.setFootPositionY(Min(CENTER_Y, Self.getFootPositionY() + 200))
+						
+						If (Self.footPointY >= CENTER_Y) Then
+							Self.onBank = False
+							Self.collisionState = COLLISION_STATE_JUMP
+							
+							Self.worldCal.actionState = 1
+							Self.bankwalking = False
+						EndIf
+					EndIf
+					
+					If (Self.animationID <> ANI_JUMP) Then
+						If (Abs(velX) <= BANKING_MIN_SPEED) Then
+							Self.onBank = False
+							Self.collisionState = COLLISION_STATE_JUMP
+							Self.worldCal.actionState = 1
+							
+							doDripInAir()
+						ElseIf (Self.footPointY < 61184) Then ' BANK_BRAKE_SPEED_LIMIT
+							Self.animationID = ANI_BANK_3
+						ElseIf (Self.footPointY < 61952) Then ' BANK_BRAKE_SPEED_LIMIT
+							Self.animationID = ANI_BANK_2
+						ElseIf (Self.footPointY < 62720) Then ' BANK_BRAKE_SPEED_LIMIT
+							Self.animationID = ANI_BANK_1
+						EndIf
+					EndIf
+					
+					checkWithObject(preX, preY, Self.footPointX, Self.footPointY)
+				EndIf
+			EndIf
+		End
+		
+		Method setTerminal:Void(type:Int)
+			terminalType = type
+			
+			Self.terminalOffset = 0
+			Self.terminalCount = TERMINAL_COUNT
+			
+			isTerminal = True
+			timeStopped = True
+			
+			Select (terminalType)
+				Case TERMINAL_RUN_TO_RIGHT, TERMINAL_RUN_TO_RIGHT_2
+					If (Self.collisionState = COLLISION_STATE_NONE) Then
+						If (Self.animationID = ANI_JUMP) Then
+							land()
+						EndIf
+						
+						If (Self.totalVelocity > MAX_VELOCITY) Then
+							Self.totalVelocity = MAX_VELOCITY
+						EndIf
+					EndIf
+					
+					changeVisible(False)
+					
+					Self.noMoving = True
+					
+					terminalState = TER_STATE_RUN
+				Case TERMINAL_NO_MOVE
+					changeVisible(False)
+					
+					Self.noMoving = True
+					
+					terminalState = TER_STATE_RUN
+				Case TERMINAL_SUPER_SONIC
+					terminalState = TER_STATE_RUN
+				Default
+					' Nothing so far.
+			EndIf
+		End
+		
+		Method setTerminalSingle:Void(type:Int)
+			terminalType = type
+			
+			Self.terminalCount = TERMINAL_COUNT
+			
+			isTerminal = True
+			timeStopped = True
+		End
+		
+		Method isTerminalRunRight:Bool()
+			Return (isTerminal And (terminalType = TERMINAL_RUN_TO_RIGHT Or terminalType = TERMINAL_RUN_TO_RIGHT_2 Or (terminalType = TERMINAL_SUPER_SONIC And terminalState = Null And Self.posX < SUPER_SONIC_STAND_POS_X)))
+		End
+		
+		Method doBrake:Bool()
+			Return (isTerminal And terminalType = TERMINAL_SUPER_SONIC And terminalState = TER_STATE_BRAKE And Self.posX > SUPER_SONIC_STAND_POS_X And Self.totalVelocity > 0)
+		End
+		
+		Method beTrans:Void(desX:Int, desY:Int)
+			Self.animationID = ANI_JUMP
+			Self.collisionState = COLLISION_STATE_JUMP
+			
+			Self.transing = True
+			
+			setBodyPositionX(desX)
+			setBodyPositionY(desY)
+			
+			MapManager.setCameraMoving()
+			
+			calPreCollisionRect()
+		End
+		
+		Method setCelebrate:Void()
+			Self.isCelebrate = True
+			
+			timeStopped = True
+			
+			MapManager.setCameraLeftLimit(MapManager.getCamera().x)
+			MapManager.setCameraRightLimit(MapManager.getCamera().x + MapManager.CAMERA_WIDTH)
+			
+			' Magic number: 3840
+			If (Self.faceDirection) Then
+				Self.moveLimit = Self.posX + 3840
+			Else
+				Self.moveLimit = Self.posX - 3840
+			EndIf
+		End
+	
+		Method getPreItem:Void(itemId:Int)
+			For Local i:= 0 Until itemVec.Length
+				If (itemVec[i][0] = -1) Then
+					itemVec[i][0] = itemId
+					itemVec[i][1] = 20 ' SPIN_KEY_COUNT
+					
+					Return
+				EndIf
+			Next
+		End
+		
+		Method getItem:Void(itemId:Int)
+			Select (itemId)
+				Case 0
+					addLife()
+					playerLifeUpBGM()
+				Case 1
+					shieldType = 1
+					soundInstance.playSe(ANI_DEAD)
+				Case 2
+					shieldType = 2
+					soundInstance.playSe(ANI_DEAD)
+				Case 3
+					invincibleCount = INVINCIBLE_COUNT
+					SoundSystem.getInstance().stopBgm(False)
+					SoundSystem.getInstance().playBgm(ANI_HURT_PRE)
+				Case 4
+					speedCount = INVINCIBLE_COUNT
+					SoundSystem.getInstance().setSoundSpeed(2.0)
+					
+					If (SoundSystem.getInstance().getPlayingBGMIndex() <> ANI_POP_JUMP_DOWN_SLOW) Then
+						SoundSystem.getInstance().restartBgm()
+					EndIf
+				Case 5
+					If (Self.hurtCount = 0) Then
+						getRing(ringRandomNum)
+					EndIf
+				Case 6
+					If (Self.hurtCount = 0) Then
+						getRing(5)
+					EndIf
+				Case 7
+					If (Self.hurtCount = 0) Then
+						getRing(TERMINAL_COUNT)
+					EndIf
+				Default
+					' Nothing so far.
+			End Select
+		End
+		
+		' Functions:
+		Function getTmpRing:Void(itemId:Int)
+			Select (itemId)
+				Case 5
+					ringTmpNum = RANDOM_RING_NUM[MyRandom.nextInt(RANDOM_RING_NUM.length)]
+					ringRandomNum = ringTmpNum
+				Case 6
+					ringTmpNum = 5
+				Case 7
+					ringTmpNum = TERMINAL_COUNT
+			End Select
+		End
+		
+		Function getRing:Void(num:Int)
+			Local preRingNum:= ringNum
+			
+			ringNum += num
+			
+			' Magic numbers: 1, 8 (Stage-mode-state, Zone ID):
+			If (stageModeState <> STATE_RACE_MODE And StageManager.getCurrentZoneId() <> 8) Then
+				If (preRingNum / 100 <> ringNum / 100) Then
+					addLife()
+					playerLifeUpBGM()
+				EndIf
+				
+				If (ringTmpNum <> 0) Then
+					ringTmpNum = 0
+				EndIf
+			EndIf
+		End
+		
+		' Methods:
+		Method isAttracting:Bool()
+			Return (shieldType = 2)
+		End
+		
+		Method getEnemyScore:Void()
+			scoreNum += 100
+			raceScoreNum += 100
+		End
+		
+		Method getBossScore:Void()
+			scoreNum += 1000
+			raceScoreNum += 1000
+		End
+	
+		Method getBallHobinScore:Void()
+			scoreNum += 10
+			raceScoreNum += 10
+		End
+	
+		Method ductIn:Void()
+			Self.ducting = True
+			Self.pushOnce = True
+			
+			Self.ductingCount = 0
+		End
+		
+		Method ductOut:Void()
+			Self.ducting = False
+			Self.pushOnce = False
+			
+			Self.ductingCount = 0
+		End
+		
+		Method setSqueezeEnable:Void(enable:Bool)
+			Self.squeezeFlag = enable
+		End
+	Protected
+		' Methods:
+		Method isHeadCollision:Bool()
+			Local collision:Bool = False
+			
+			Local headBlockY:= Self.worldInstance.getWorldY(Self.footPointX, Self.footPointY - HEIGHT, 1, 2)
+			Local headBlockY2:= Self.worldInstance.getWorldY(Self.footPointX + WIDTH, Self.footPointY - HEIGHT, 1, 2)
+			
+			If (headBlockY >= 0) Then
+				collision = True
+			EndIf
+			
+			If (headBlockY2 >= 0) Then
+				Return True
+			EndIf
+			
+			Return collision
+		End
+		
+		Method resetPlayer:Void()
+			Self.footPointX = Self.deadPosX
+			Self.footPointY = Self.deadPosY
+			
+			Self.worldCal.stopMove()
+			
+			StageManager.resetStageGameover()
+			
+			Self.velX = 0
+			Self.velY = 0
+			
+			setVelX(Self.velX)
+			setVelY(Self.velY)
+			
+			Self.totalVelocity = 0
+			Self.collisionState = COLLISION_STATE_WALK
+			
+			MapManager.setFocusObj(Self)
+			MapManager.focusQuickLocation()
+			
+			Self.isDead = False
+			Self.animationID = ANI_STAND
+			
+			timeStopped = False
+			
+			invincibleCount = 240 ' INVINCIBLE_COUNT
+			
+			preScoreNum = scoreNum
+			preLifeNum = lifeNum
+			
+			timeCount = 0
+			lastTimeCount = timeCount
+		End
+		
+		Method headInit:Void()
+			If (GameState.guiAnimation = Null) Then
+				GameState.guiAnimation = New Animation("/animation/gui")
+			EndIf
+			
+			headDrawer = GameState.guiAnimation.getDrawer(characterID, False, 0)
+			
+			Self.isAttackBoss4 = False
+		End
+	Public
+		' Functions:
+		Function addLife:Void()
+			lifeNum += 1
+		End
+		
+		Function minusLife:Void()
+			lifeNum -= 1
+		End
+		
+		Function getLife:Int()
+			Return lifeNum
+		End
+		
+		Function setLife:Void(num:Int)
+			lifeNum = num
+		End
+		
+		Function setScore:Void(num:Int)
+			scoreNum = num
+		End
+		
+		Function getScore:Int()
+			Return scoreNum
+		End
+		
+		Function resetGameParam:Void()
+			scoreNum = 0
+			lifeNum = 2
+		End
+		
+		Function doInitInNewStage:Void()
+			currentMarkId = 0
+		End
+		
+		Function initStageParam:Void()
+			ringNum = 0
+			invincibleCount = 0
+			speedCount = 0
+			SoundSystem.getInstance().setSoundSpeed(1.0)
+			shieldType = 0
+			timeCount = 0
+			lastTimeCount = timeCount
+			timeStopped = False
+			raceScoreNum = 0
+			preScoreNum = scoreNum
+			preLifeNum = lifeNum
+			
+			For Local I:= 0 Until itemVec.Length
+				itemVec[I][0] = -1
+			End Select
+			
+			setOverCount(SonicDef.OVER_TIME)
+		End
+		
+		Function initSpParam:Void(param_ringNum:Int, checkPointID:Int, param_timeCount:Int)
+			If (player <> Null) Then
+				currentMarkId = checkPointID
+			EndIf
+			
+			ringNum = param_ringNum
+			
+			timeCount = param_timeCount
+			lastTimeCount = timeCount
+		End
+		
+		Function doPauseLeaveGame:Void()
+			scoreNum = preScoreNum
+			lifeNum = preLifeNum
+		End
+		
+		Function drawGameUI:Void(g:MFGraphics)
+			If (Not isTerminal Or terminalType <> TERMINAL_SUPER_SONIC Or terminalState <= TER_STATE_LOOK_MOON_WAIT) Then
+				' Magic number: 5
+				GameState.guiAniDrawer.draw(g, 5, uiOffsetX + 0, 0, False, 0)
+				
+				' Rings.
+				drawNum(g, ringNum, (uiOffsetX + 12), 15, 0, PickValue((ringNum = 0 And (timeCount / SSDef.PLAYER_MOVE_HEIGHT) Mod 2 = 0), 3, 0))
+				
+				' Score.
+				drawNum(g, PickValue((stageModeState = STATE_RACE_MODE), raceScoreNum, scoreNum), NumberSideX + uiOffsetX, 8, 2, 0)
+				
+				' Time.
+				timeDraw(g, NumberSideX + uiOffsetX, ANI_BAR_ROLL_1)
+				
+				If (stageModeState <> STATE_RACE_MODE) Then
+					' Magic number: 8 (Zone ID)
+					If (StageManager.getCurrentZoneId() = 8) Then
+						If (player.isDead) Then
+							headDrawer.setActionId(0)
+						Else
+							headDrawer.setActionId(4)
+						EndIf
+					EndIf
+					
+					' Life icon.
+					headDrawer.draw(g, SCREEN_WIDTH, 0)
+					
+					' Life count.
+					drawNum(g, PickValue((lifeNum >= ANI_ROTATE_JUMP), ANI_ROTATE_JUMP, lifeNum), SCREEN_WIDTH - ANI_ROTATE_JUMP, 4, SPIN_LV2_COUNT, 0)
+				EndIf
+			EndIf
+		End
+	
+		Function drawNum:Void(g:MFGraphics, num:Int, x:Int, y:Int, anchor:Int, type:Int)
+			Local divideNum:= 10
+			Local blockNum:= 1
+			Local i:= 0
+			
+			While ((num / divideNum) <> 0)
+				blockNum += 1
+				divideNum *= 10
+				
+				i += 1
+			Wend
+			
+			divideNum /= 10
+			
+			Local localanchor:= 0
+			
+			Select (anchor)
+				Case 0
+					localanchor = 34
+				Case 1
+					localanchor = 33
+				Case 2
+					localanchor = 36
+			End Select
+			
+			Local localtype:= 0
+			
+			Select (type)
+				Case 0
+					localtype = 0
+				Case 1
+					localtype = 1
+				Case 2
+					localtype = 3
+				Case 3
+					localtype = 2
+				Case 4
+					localtype = 1
+			End Select
+			
+			NumberDrawer.drawNum(g, localtype, num, x, y, localanchor)
+		End
+		
+		Function drawNum:Void(g:MFGraphics, num:Int, x:Int, y:Int, anchor:Int, type:Int, blockNum:Int)
+			If (numDrawer = Null) Then
+				numDrawer = GlobalResource.statusAnimation.getDrawer(0, False, 0)
+			EndIf
+			
+			Local divideNum:= 1
+			
+			For Local I:= 1 Until blockNum
+				divideNum *= 10
+			Next
+			
+			Local leftPosition:= 0
+			
+			Select (anchor)
+				Case 0
+					leftPosition = x - ((NUM_SPACE[type] * (blockNum - 1)) / 2)
+				Case 1
+					leftPosition = x
+				Case 2
+					leftPosition = x - (NUM_SPACE[type] * (blockNum - 1))
+			End Select
+			
+			For Local I:= 0 Until blockNum
+				Local tmpNum:= (Abs(num / divideNum) Mod 10)
+				
+				divideNum /= 10
+				
+				' Magic numbers: 3, 0
+				If (type = 3 And tmpNum = 0) Then
+					' Magic number: 26 (Action ID)
+					numDrawer.setActionId(26)
+				Else
+					numDrawer.setActionId(NUM_ANI_ID[type] + tmpNum)
+				EndIf
+				
+				numDrawer.draw(g, (NUM_SPACE[type] * I) + leftPosition, y)
+			Next
+		End
 	
 	Public Function timeLogic:Void()
 		
@@ -5486,7 +5532,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 					
 					If (timeCount = overTime And player <> Null) Then
-						If (stageModeState = 1) Then
+						If (stageModeState = STATE_RACE_MODE) Then
 							player.setDie(False)
 							StageManager.setStageTimeover()
 							StageManager.checkPointTime = 0
@@ -5501,7 +5547,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						EndIf
 					EndIf
 					
-				ElseIf (stageModeState = 1) Then
+				ElseIf (stageModeState = STATE_RACE_MODE) Then
 					If (overTime - timeCount <= BREATHE_TIME_COUNT) Then
 						If (timeCount / 1000 <> preTimeCount) Then
 							SoundSystem.getInstance().playSe(ANI_YELL)
@@ -5511,7 +5557,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 					
 					If (timeCount = overTime And player <> Null) Then
-						If (stageModeState = 1) Then
+						If (stageModeState = STATE_RACE_MODE) Then
 							player.setDie(False)
 							StageManager.setStageTimeover()
 							StageManager.checkPointTime = 0
@@ -5544,7 +5590,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 					
 					If (timeCount = overTime And player <> Null) Then
-						If (stageModeState = 1) Then
+						If (stageModeState = STATE_RACE_MODE) Then
 							player.setDie(False)
 							StageManager.setStageTimeover()
 							StageManager.checkPointTime = 0
@@ -5559,7 +5605,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						EndIf
 					EndIf
 					
-				ElseIf (stageModeState = 1) Then
+				ElseIf (stageModeState = STATE_RACE_MODE) Then
 					If (timeCount <= BREATHE_TIME_COUNT) Then
 						If (timeCount / 1000 <> preTimeCount) Then
 							SoundSystem.getInstance().playSe(ANI_YELL)
@@ -5569,7 +5615,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 					
 					If (timeCount = overTime And player <> Null) Then
-						If (stageModeState = 1) Then
+						If (stageModeState = STATE_RACE_MODE) Then
 							player.setDie(False)
 							StageManager.setStageTimeover()
 							StageManager.checkPointTime = 0
@@ -5617,7 +5663,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Int msec = ((timeCount Mod 60000) Mod 1000) / TERMINAL_COUNT
 		Int numType = 0
 		
-		If ((GlobalResource.timeIsLimit() Or stageModeState = 1) And (((overTime > timeCount And timeCount > 540000) Or (overTime < timeCount And timeCount < 60000)) And (timeCount / SSDef.PLAYER_MOVE_HEIGHT) Mod 2 = 0)) Then
+		If ((GlobalResource.timeIsLimit() Or stageModeState = STATE_RACE_MODE) And (((overTime > timeCount And timeCount > 540000) Or (overTime < timeCount And timeCount < 60000)) And (timeCount / SSDef.PLAYER_MOVE_HEIGHT) Mod 2 = 0)) Then
 			numType = 3
 		EndIf
 		
@@ -5793,7 +5839,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			offsetx -= movespeedx
 			
 			If (offsetx = SCREEN_WIDTH - movespeedx) Then
-				If (stageModeState = 1) Then
+				If (stageModeState = STATE_RACE_MODE) Then
 					If (isRaceModeNewRecord()) Then
 						SoundSystem.getInstance().playBgm(ANI_DEAD, False)
 					Else
@@ -5894,7 +5940,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Public Function stagePassDraw:Void(g:MFGraphics)
-		
 		If (Not StageManager.isOnlyStagePass) Then
 			Select (stageModeState)
 				Case 0
@@ -5924,7 +5969,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						GameState.guiAniDrawer.draw(g, 6, stagePassResultOutOffsetX + ((SCREEN_WIDTH / 2) - 70), (SCREEN_HEIGHT / 2) - 6, False, 0)
 						GameState.guiAniDrawer.draw(g, 7, stagePassResultOutOffsetX + ((SCREEN_WIDTH / 2) - 70), ((SCREEN_HEIGHT / 2) + MENU_SPACE) - 6, False, 0)
 						
-						If (stageModeState = 1) Then
+						If (stageModeState = STATE_RACE_MODE) Then
 							raceScoreNum = MyAPI.calNextPosition((double) raceScoreNum, (double) totalPlusscore, 1, 5)
 						Else
 							scoreNum = MyAPI.calNextPosition((double) scoreNum, (double) totalPlusscore, 1, 5)
@@ -6004,11 +6049,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						Return
 					EndIf
 					
-					drawMovingbar(g, STAGE_PASS_STR_SPACE)
+					drawMovingbar(g, STAGE_PASS_STR_SPACE) ' 182
 				Default
 			End Select
 		EndIf
-		
 	End
 	
 	Public Function gamepauseInit:Void()
@@ -6022,7 +6066,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		State.fillMenuRect(g, (SCREEN_WIDTH / 2) + PAUSE_FRAME_OFFSET_X, (SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y, PAUSE_FRAME_WIDTH, PAUSE_FRAME_HEIGHT)
 		State.drawMenuFontById(g, BACKGROUND_WIDTH, SCREEN_WIDTH / 2, (((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + (MENU_SPACE / 2)) + TERMINAL_COUNT)
 		
-		If (stageModeState = 0) Then
+		If (stageModeState = STATE_NORMAL_MODE) Then
 			currentPauseMenuItem = PAUSE_MENU_NORMAL_ITEM
 		Else
 			currentPauseMenuItem = PAUSE_MENU_RACE_ITEM
