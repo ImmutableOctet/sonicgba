@@ -3179,99 +3179,106 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			Self.collisionState = COLLISION_STATE_JUMP
 		End
-	
-	Private Method faceDegreeChk:Int()
-		Return Self.faceDegree
-	End
-	
-	Private Method jumpDirectionX:Int()
-		Return DSgn(Not (Self.faceDegree <= 90 Or Self.faceDegree >= 270))
-	End
-	
-	Public Method slipJumpOut:Void()
-		' Empty implementation.
-	End
-	
-	Public Method resetFlyCount:Void()
-		' Empty implementation.
-	End
-	
-	Public Method doJump:Void()
 		
-		If (Self.collisionState = Null) Then
-			calDivideVelocity()
-		EndIf
+		Method faceDegreeChk:Int()
+			Return Self.faceDegree
+		End
 		
-		Self.collisionState = COLLISION_STATE_JUMP
-		Self.worldCal.actionState = 1
+		Method jumpDirectionX:Int()
+			Return DSgn(Not (Self.faceDegree <= 90 Or Self.faceDegree >= 270))
+		End
+	Public
+		' Methods:
+		Public Method slipJumpOut:Void()
+			' Empty implementation.
+		End
 		
-		Local jumpVel:Int
+		Public Method resetFlyCount:Void()
+			' Empty implementation.
+		End
 		
-		If (Self.isInWater) Then
-			jumpVel = JUMP_INWATER_START_VELOCITY
-		Else
-			jumpVel = JUMP_START_VELOCITY
-		EndIf
-		
-		Self.velY += (jumpVel * Cos(faceDegreeChk())) / 100
-		Self.velX += (jumpVel * (-Sin(faceDegreeChk()))) / 100
-		
-		If (Self.faceDegree >= 0 And Self.faceDegree <= 90) Then
-			If (Self.isAntiGravity) Then
-				Self.velY = Math.max(Self.velY, -JUMP_PROTECT)
-			Else
-				Self.velY = Math.min(Self.velY, JUMP_PROTECT)
+		Method doJump:Void()
+			If (Self.collisionState = Null) Then
+				calDivideVelocity()
 			EndIf
-		EndIf
+			
+			Self.collisionState = COLLISION_STATE_JUMP
+			Self.worldCal.actionState = 1
+			
+			Local jumpVel:Int
+			
+			If (Self.isInWater) Then
+				jumpVel = JUMP_INWATER_START_VELOCITY
+			Else
+				jumpVel = JUMP_START_VELOCITY
+			EndIf
+			
+			Self.velY += ((jumpVel * Cos(faceDegreeChk())) / 100)
+			Self.velX += ((jumpVel * (-Sin(faceDegreeChk()))) / 100)
+			
+			If (Self.faceDegree >= 0 And Self.faceDegree <= 90) Then
+				If (Self.isAntiGravity) Then
+					Self.velY = Max(Self.velY, -JUMP_PROTECT)
+				Else
+					Self.velY = Min(Self.velY, JUMP_PROTECT)
+				EndIf
+			EndIf
+			
+			Self.animationID = ANI_JUMP
+			
+			' Magic number: 11 (Sound-effect ID)
+			soundInstance.playSe(11)
+			
+			Self.smallJumpCount = 4
+			Self.onBank = False
+			Self.attackanimationID = ANI_STAND
+			Self.attackCount = 0
+			Self.attackLevel = 0
+			Self.noVelMinus = False
+			Self.doJumpForwardly = True
+			
+			slipJumpOut()
+			
+			If (StageManager.getWaterLevel() > 0 And characterID = CHARACTER_KNUCKLES) Then
+				' Unsafe, but it works.
+				Local knuckles:= PlayerKnuckles(player)
+				
+				knuckles.Floatchk()
+			EndIf
+		End
 		
-		Self.animationID = ANI_JUMP
-		
-		' Magic number: 11 (Sound-effect ID)
-		soundInstance.playSe(11)
-		
-		Self.smallJumpCount = 4
-		Self.onBank = False
-		Self.attackanimationID = ANI_STAND
-		Self.attackCount = 0
-		Self.attackLevel = 0
-		Self.noVelMinus = False
-		Self.doJumpForwardly = True
-		
-		slipJumpOut()
-		
-		If (StageManager.getWaterLevel() > 0 And characterID = CHARACTER_KNUCKLES) Then
-			((PlayerKnuckles) player).Floatchk()
-		EndIf
-		
-	End
-	
-	Public Method doJump:Void(v0:Int)
-		
-		If (Self.collisionState = Null) Then
-			calDivideVelocity()
-		EndIf
-		
-		Self.collisionState = COLLISION_STATE_JUMP
-		Self.worldCal.actionState = 1
-		Self.velY += (Cos(faceDegreeChk()) * v0) / 100
-		Self.velX += ((-Sin(faceDegreeChk())) * v0) / 100
-		
-		If (Self.isAntiGravity) Then
-			Self.velY = Math.max(Self.velY, -JUMP_PROTECT)
-		Else
-			Self.velY = Math.min(Self.velY, JUMP_PROTECT)
-		EndIf
-		
-		Self.animationID = ANI_JUMP
-		soundInstance.playSe(ANI_SLIP)
-		Self.smallJumpCount = 4
-		Self.onBank = False
-		Self.attackanimationID = ANI_STAND
-		Self.attackCount = 0
-		Self.attackLevel = 0
-		Self.noVelMinus = False
-		Self.doJumpForwardly = True
-	End
+		Method doJump:Void(v0:Int)
+			If (Self.collisionState = Null) Then
+				calDivideVelocity()
+			EndIf
+			
+			Self.collisionState = COLLISION_STATE_JUMP
+			Self.worldCal.actionState = 1
+			Self.velY += (Cos(faceDegreeChk()) * v0) / 100
+			Self.velX += ((-Sin(faceDegreeChk())) * v0) / 100
+			
+			If (Self.isAntiGravity) Then
+				Self.velY = Max(Self.velY, -JUMP_PROTECT)
+			Else
+				Self.velY = Min(Self.velY, JUMP_PROTECT)
+			EndIf
+			
+			Self.animationID = ANI_JUMP
+			
+			' Magic number: 11 (Sound-effect ID)
+			soundInstance.playSe(11)
+			
+			' Magic number: 4
+			Self.smallJumpCount = 4
+			
+			Self.attackanimationID = ANI_STAND
+			Self.attackCount = 0
+			Self.attackLevel = 0
+			
+			Self.onBank = False
+			Self.noVelMinus = False
+			Self.doJumpForwardly = True
+		End
 	
 	Public Method doJumpV:Void()
 		
@@ -3284,7 +3291,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		setVelX(0)
 		setVelY(PickValue(Self.isInWater, JUMP_INWATER_START_VELOCITY, JUMP_START_VELOCITY))
 		Self.animationID = ANI_JUMP
-		soundInstance.playSe(ANI_SLIP)
+		soundInstance.playSe(11)
 		Self.smallJumpCount = 4
 		Self.onBank = False
 		Self.attackanimationID = ANI_STAND
@@ -3300,7 +3307,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Self.worldCal.actionState = 1
 		setVelY(v0)
 		Self.animationID = ANI_JUMP
-		soundInstance.playSe(ANI_SLIP)
+		soundInstance.playSe(11)
 		Self.smallJumpCount = 4
 		Self.onBank = False
 		Self.attackanimationID = ANI_STAND
@@ -5273,9 +5280,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Int velX = player.getVelX()
 				
 				If (Abs(velX) > BANKING_MIN_SPEED) Then
-					player.setFootPositionY(Math.max(yLimit, player.getFootPositionY() - ((Abs(velX) * TitleState.RETURN_PRESSED) / BANKING_MIN_SPEED)))
+					player.setFootPositionY(Max(yLimit, player.getFootPositionY() - ((Abs(velX) * TitleState.RETURN_PRESSED) / BANKING_MIN_SPEED)))
 				Else
-					player.setFootPositionY(Math.min(CENTER_Y, player.getFootPositionY() + BPDef.PRICE_REVIVE))
+					player.setFootPositionY(Min(CENTER_Y, player.getFootPositionY() + BPDef.PRICE_REVIVE))
 					
 					If (Self.footPointY >= CENTER_Y) Then
 						Self.onBank = False
