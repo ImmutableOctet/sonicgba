@@ -5332,6 +5332,25 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			Self.isAttackBoss4 = False
 		End
+		
+		Method close:Void()
+			Animation.closeAnimationDrawer(Self.waterFallDrawer)
+			Self.waterFallDrawer = Null
+			
+			Animation.closeAnimationDrawer(Self.waterFlushDrawer)
+			Self.waterFlushDrawer = Null
+			
+			Animation.closeAnimationDrawer(Self.drawer)
+			Self.drawer = Null
+			
+			Animation.closeAnimationDrawer(Self.effectDrawer)
+			Self.effectDrawer = Null
+			
+			Animation.closeAnimation(Self.dustEffectAnimation)
+			Self.dustEffectAnimation = Null
+			
+			closeImpl()
+		End
 	Public
 		' Functions:
 		Function addLife:Void()
@@ -5838,8 +5857,66 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Next
 		End
 		
-		Private Function isRaceModeNewRecord:Bool()
+		Function isRaceModeNewRecord:Bool()
 			Return (timeCount < StageManager.getTimeModeScore(characterID))
+		End
+		
+		' Methods:
+		Method checkCliffAnimation:Void()
+			Local footLeftX:= ACUtilities.getRelativePointX(Self.posX, LEFT_FOOT_OFFSET_X, 0, Self.faceDegree)
+			Local footLeftY:= ACUtilities.getRelativePointY(Self.posY, LEFT_FOOT_OFFSET_X, Self.worldInstance.getTileHeight(), Self.faceDegree)
+			
+			Local footCenterX:= ACUtilities.getRelativePointX(Self.posX, 0, 0, Self.faceDegree)
+			Local footCenterY:= ACUtilities.getRelativePointY(Self.posY, 0, Self.worldInstance.getTileHeight(), Self.faceDegree)
+			
+			Local footRightX:= ACUtilities.getRelativePointX(Self.posX, SIDE_FOOT_FROM_CENTER, 0, Self.faceDegree)
+			Local footRightY:= ACUtilities.getRelativePointY(Self.posY, SIDE_FOOT_FROM_CENTER, Self.worldInstance.getTileHeight(), Self.faceDegree)
+			
+			Select (Self.collisionState)
+				Case COLLISION_STATE_WALK
+					If (Self.worldInstance.getWorldY(footCenterX, footCenterY, Self.currentLayer, Self.worldCal.getDirectionByDegree(Self.faceDegree)) <> ACParam.NO_COLLISION) Then
+						Return
+					EndIf
+					
+					If (Self.worldInstance.getWorldY(footLeftX, footLeftY, Self.currentLayer, Self.worldCal.getDirectionByDegree(Self.faceDegree)) <> ACParam.NO_COLLISION) Then
+						If (Self.faceDirection) Then
+							Self.animationID = ANI_CLIFF_1
+						Else
+							Self.animationID = ANI_CLIFF_2
+						EndIf
+					ElseIf (Self.worldInstance.getWorldY(footRightX, footRightY, Self.currentLayer, Self.worldCal.getDirectionByDegree(Self.faceDegree)) = ACParam.NO_COLLISION) Then
+						' Nothing so far.
+					Else
+						If (Self.faceDirection) Then
+							Self.animationID = ANI_CLIFF_2
+						Else
+							Self.animationID = ANI_CLIFF_1
+						EndIf
+					EndIf
+				Case COLLISION_STATE_ON_OBJECT
+					If (Self.footOnObject = Null) Then
+						Return
+					EndIf
+					
+					If (footCenterX < Self.footOnObject.collisionRect.x0) Then
+						If (Self.faceDirection) Then
+							Self.animationID = ANI_CLIFF_2
+						Else
+							Self.animationID = ANI_CLIFF_1
+						EndIf
+					ElseIf (footCenterX <= Self.footOnObject.collisionRect.x1) Then
+						' Nothing so far.
+					Else
+						
+						If (Self.faceDirection) Then
+							Self.animationID = ANI_CLIFF_1
+						Else
+							Self.animationID = ANI_CLIFF_2
+						EndIf
+					EndIf
+				Default
+					' Nothing so far.
+			End Select
 		End
 	Public
 		' Functions:
@@ -6081,664 +6158,590 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				End Select
 			EndIf
 		End
-	
-	Public Function gamepauseInit:Void()
-		cursor = 0
-		cursorIndex = 0
-		Key.touchkeygameboardClose()
-	End
-	
-	Public Function gamepauseDraw:Void(g:MFGraphics)
-		PAUSE_MENU_NORMAL_ITEM = PAUSE_MENU_NORMAL_NOSHOP
-		State.fillMenuRect(g, (SCREEN_WIDTH / 2) + PAUSE_FRAME_OFFSET_X, (SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y, PAUSE_FRAME_WIDTH, PAUSE_FRAME_HEIGHT)
-		State.drawMenuFontById(g, BACKGROUND_WIDTH, SCREEN_WIDTH / 2, (((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + (MENU_SPACE / 2)) + 10)
 		
-		If (stageModeState = STATE_NORMAL_MODE) Then
-			currentPauseMenuItem = PAUSE_MENU_NORMAL_ITEM
-		Else
-			currentPauseMenuItem = PAUSE_MENU_RACE_ITEM
-		EndIf
-		
-		If (currentPauseMenuItem.length <= 4) Then
+		Function gamepauseInit:Void()
+			cursor = 0
 			cursorIndex = 0
-		ElseIf (cursorIndex > cursor) Then
-			cursorIndex = cursor
-		ElseIf ((cursorIndex + 4) - 1 < cursor) Then
-			cursorIndex = (cursor - 4) + 1
-		EndIf
+			
+			Key.touchkeygameboardClose()
+		End
 		
-		State.drawMenuFontById(g, 119, SCREEN_WIDTH / 2, (((((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * (cursor - cursorIndex)))
-		State.drawMenuFontById(g, StringIndex.STR_RIGHT_ARROW, ((SCREEN_WIDTH / 2) - 56) - 0, (((((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * (cursor - cursorIndex)))
-		For (Int i = cursorIndex; i < cursorIndex + 4; i += 1)
-			State.drawMenuFontById(g, currentPauseMenuItem[i], SCREEN_WIDTH / 2, (((((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * (i - cursorIndex)))
-		Next
-		
-		If (currentPauseMenuItem.length > 4) Then
-			If (cursorIndex = 0) Then
-				State.drawMenuFontById(g, 96, SCREEN_WIDTH / 2, ((SCREEN_HEIGHT / 2) - PAUSE_FRAME_OFFSET_Y) + (MENU_SPACE / 2))
-				GameState.IsSingleUp = False
-				GameState.IsSingleDown = True
-			ElseIf (cursorIndex = currentPauseMenuItem.length - 4) Then
-				State.drawMenuFontById(g, 95, SCREEN_WIDTH / 2, ((SCREEN_HEIGHT / 2) - PAUSE_FRAME_OFFSET_Y) + (MENU_SPACE / 2))
-				GameState.IsSingleUp = True
-				GameState.IsSingleDown = False
+		Function gamepauseDraw:Void(g:MFGraphics)
+			PAUSE_MENU_NORMAL_ITEM = PAUSE_MENU_NORMAL_NOSHOP
+			
+			State.fillMenuRect(g, (SCREEN_WIDTH / 2) + PAUSE_FRAME_OFFSET_X, (SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y, PAUSE_FRAME_WIDTH, PAUSE_FRAME_HEIGHT)
+			State.drawMenuFontById(g, BACKGROUND_WIDTH, SCREEN_WIDTH / 2, (((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + (MENU_SPACE / 2)) + 10)
+			
+			If (stageModeState = STATE_NORMAL_MODE) Then
+				currentPauseMenuItem = PAUSE_MENU_NORMAL_ITEM
 			Else
-				State.drawMenuFontById(g, 95, (SCREEN_WIDTH / 2) - ANI_BAR_ROLL_2, ((SCREEN_HEIGHT / 2) - PAUSE_FRAME_OFFSET_Y) + (MENU_SPACE / 2))
-				State.drawMenuFontById(g, 96, (SCREEN_WIDTH / 2) + ANI_BAR_ROLL_1, ((SCREEN_HEIGHT / 2) - PAUSE_FRAME_OFFSET_Y) + (MENU_SPACE / 2))
-				GameState.IsSingleUp = False
-				GameState.IsSingleDown = False
+				currentPauseMenuItem = PAUSE_MENU_RACE_ITEM
 			EndIf
-		EndIf
+			
+			If (currentPauseMenuItem.length <= 4) Then
+				cursorIndex = 0
+			ElseIf (cursorIndex > cursor) Then
+				cursorIndex = cursor
+			ElseIf ((cursorIndex + 4) - 1 < cursor) Then
+				cursorIndex = (cursor - 4) + 1
+			EndIf
+			
+			State.drawMenuFontById(g, 119, SCREEN_WIDTH / 2, (((((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * (cursor - cursorIndex)))
+			State.drawMenuFontById(g, StringIndex.STR_RIGHT_ARROW, ((SCREEN_WIDTH / 2) - 56) - 0, (((((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * (cursor - cursorIndex)))
+			
+			For Local I:= cursorIndex Until (cursorIndex + 4) ' currentPauseMenuItem.Length
+				State.drawMenuFontById(g, currentPauseMenuItem[I], SCREEN_WIDTH / 2, (((((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * (I - cursorIndex)))
+			Next
+			
+			If (currentPauseMenuItem.length > 4) Then
+				If (cursorIndex = 0) Then
+					State.drawMenuFontById(g, 96, SCREEN_WIDTH / 2, ((SCREEN_HEIGHT / 2) - PAUSE_FRAME_OFFSET_Y) + (MENU_SPACE / 2))
+					
+					GameState.IsSingleUp = False
+					GameState.IsSingleDown = True
+				ElseIf (cursorIndex = currentPauseMenuItem.length - 4) Then
+					State.drawMenuFontById(g, 95, SCREEN_WIDTH / 2, ((SCREEN_HEIGHT / 2) - PAUSE_FRAME_OFFSET_Y) + (MENU_SPACE / 2))
+					
+					GameState.IsSingleUp = True
+					GameState.IsSingleDown = False
+				Else
+					State.drawMenuFontById(g, 95, (SCREEN_WIDTH / 2) - ANI_BAR_ROLL_2, ((SCREEN_HEIGHT / 2) - PAUSE_FRAME_OFFSET_Y) + (MENU_SPACE / 2))
+					State.drawMenuFontById(g, 96, (SCREEN_WIDTH / 2) + ANI_BAR_ROLL_1, ((SCREEN_HEIGHT / 2) - PAUSE_FRAME_OFFSET_Y) + (MENU_SPACE / 2))
+					
+					GameState.IsSingleUp = False
+					GameState.IsSingleDown = False
+				EndIf
+			EndIf
+			
+			State.drawSoftKey(g, True, True)
+		End
 		
-		State.drawSoftKey(g, True, True)
-	End
-	
-	Public Method close:Void()
-		Animation.closeAnimationDrawer(Self.waterFallDrawer)
-		Self.waterFallDrawer = Null
-		Animation.closeAnimationDrawer(Self.waterFlushDrawer)
-		Self.waterFlushDrawer = Null
-		Animation.closeAnimationDrawer(Self.drawer)
-		Self.drawer = Null
-		Animation.closeAnimationDrawer(Self.effectDrawer)
-		Self.effectDrawer = Null
-		Animation.closeAnimation(Self.dustEffectAnimation)
-		Self.dustEffectAnimation = Null
-		closeImpl()
-	End
-	
-	Public Function doWhileQuitGame:Void()
-		bariaDrawer = Null
-		gBariaDrawer = Null
-		invincibleAnimation = Null
-		invincibleDrawer = Null
-	End
-	
-	Public Function IsInvincibility:Bool()
+		Function doWhileQuitGame:Void()
+			bariaDrawer = Null
+			gBariaDrawer = Null
+			invincibleAnimation = Null
+			invincibleDrawer = Null
+		End
 		
-		If (invincibleCount > 0) Then
-			Return True
-		EndIf
+		Function IsInvincibility:Bool()
+			If (invincibleCount > 0) Then
+				Return True
+			EndIf
+			
+			Return False
+		End
 		
-		Return False
-	End
-	
-	Public Function IsUnderSheild:Bool()
+		' This was not a typo on my part...
+		Function IsUnderSheild:Bool()
+			If (shieldType = 2) Then
+				Return True
+			EndIf
+			
+			Return False
+		End
 		
-		If (shieldType = 2) Then
-			Return True
-		EndIf
+		Function IsSpeedUp:Bool()
+			If (speedCount > 0) Then
+				Return True
+			EndIf
+			
+			Return False
+		End
 		
-		Return False
-	End
-	
-	Public Function IsSpeedUp:Bool()
-		
-		If (speedCount > 0) Then
-			Return True
-		EndIf
-		
-		Return False
-	End
-	
-	Public Method setAntiGravity:Void()
-		Bool z
-		Int i
-		
-		If (Self.isAntiGravity) Then
-			z = False
-		Else
-			z = True
-		EndIf
-		
-		Self.isAntiGravity = z
-		Self.worldCal.actionState = 1
-		Self.collisionState = COLLISION_STATE_JUMP
-		
-		If (Self.faceDirection) Then
-			z = False
-		Else
-			z = True
-		EndIf
-		
-		Self.faceDirection = z
-		Int bodyCenterX = getNewPointX(Self.posX, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
-		Int bodyCenterY = getNewPointY(Self.posY, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
-		
-		If (Self.isAntiGravity) Then
-			i = 180
-		Else
-			i = 0
-		EndIf
-		
-		Self.faceDegree = i
-		i = getNewPointX(bodyCenterX, 0, Self.collisionRect.getHeight() / 2, Self.faceDegree)
-		Self.footPointX = i
-		Self.posX = i
-		i = getNewPointY(bodyCenterY, 0, Self.collisionRect.getHeight() / 2, Self.faceDegree)
-		Self.footPointY = i
-		Self.posY = i
-	End
-	
-	Public Method setAntiGravity:Void(GraFlag:Bool)
-		Self.orgGravity = Self.isAntiGravity
-		Self.isAntiGravity = GraFlag
-		
-		If (Self.orgGravity <> Self.isAntiGravity) Then
-			Int i
+		' Methods:
+		Method setAntiGravity:Void()
+			Self.isAntiGravity = Not Self.isAntiGravity
+			
+			' Magic number: 1 (Action-state)
 			Self.worldCal.actionState = 1
+			
 			Self.collisionState = COLLISION_STATE_JUMP
+			
 			Self.faceDirection = Not Self.faceDirection
 			
-			If (Self.isAntiGravity) Then
-				i = 180
-			Else
-				i = 0
+			Local bodyCenterX:= getNewPointX(Self.posX, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
+			Local bodyCenterY:= getNewPointY(Self.posY, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
+			
+			Self.faceDegree = PickValue(Self.isAntiGravity, 180, 0)
+			
+			Local x:= getNewPointX(bodyCenterX, 0, Self.collisionRect.getHeight() / 2, Self.faceDegree)
+			
+			Self.footPointX = x
+			Self.posX = x
+			
+			Local y:= getNewPointY(bodyCenterY, 0, Self.collisionRect.getHeight() / 2, Self.faceDegree)
+			
+			Self.footPointY = y
+			Self.posY = y
+		End
+		
+		Method setAntiGravity:Void(GraFlag:Bool)
+			Self.orgGravity = Self.isAntiGravity
+			Self.isAntiGravity = GraFlag
+			
+			If (Self.orgGravity <> Self.isAntiGravity) Then
+				' Magic number: 1 (Action-state)
+				Self.worldCal.actionState = 1
+				
+				Self.collisionState = COLLISION_STATE_JUMP
+				Self.faceDirection = Not Self.faceDirection
+				
+				Self.faceDegree = PickValue(Self.isAntiGravity, 180, 0)
+			EndIf
+		End
+		
+		Method doWhileTouchWorld:Void(direction:Int, degree:Int)
+			' Magic numbers: 1, 0, ... ("Action states")
+			If (Self.worldCal.getActionState() = 1) Then
+				Select (direction)
+					Case DIRECTION_UP
+						If (Self.collisionState = COLLISION_STATE_ON_OBJECT And Self.movedSpeedY < 0) Then
+							setDie(False)
+						EndIf
+					Case DIRECTION_DOWN
+						If (Self.isAntiGravity) Then
+							Self.leftStopped = True
+						Else
+							Self.rightStopped = True
+						EndIf
+						
+						If (Self.leftStopped And Self.rightStopped) Then
+							setDie(False)
+							
+							Return
+						EndIf
+					Case DIRECTION_RIGHT
+						If (Self.isAntiGravity) Then
+							Self.rightStopped = True
+						Else
+							Self.leftStopped = True
+						EndIf
+						
+						If (Self.leftStopped And Self.rightStopped) Then
+							setDie(False)
+							
+							Return
+						EndIf
+				End Select
 			EndIf
 			
-			Self.faceDegree = i
-		EndIf
-		
-	End
-	
-	Public Method doWhileTouchWorld:Void(direction:Int, degree:Int)
-		
-		If (Self.worldCal.getActionState() = 1) Then
-			Select (direction)
-				Case 0
-					
-					If (Self.collisionState = TER_STATE_LOOK_MOON And Self.movedSpeedY < 0) Then
-						setDie(False)
-						break
-					EndIf
-					
-				Case 1
-					
-					If (Self.isAntiGravity) Then
-						Self.leftStopped = True
-					Else
-						Self.rightStopped = True
-					EndIf
-					
-					If (Self.leftStopped And Self.rightStopped) Then
-						setDie(False)
-						Return
-					EndIf
-					
-				Case 3
-					
-					If (Self.isAntiGravity) Then
-						Self.rightStopped = True
-					Else
-						Self.leftStopped = True
-					EndIf
-					
-					If (Self.leftStopped And Self.rightStopped) Then
-						setDie(False)
-						Return
-					EndIf
-					
-			End Select
-		EndIf
-		
-		If (Self.worldCal.getActionState() = Null Or Self.collisionState = TER_STATE_LOOK_MOON) Then
-			Select (direction)
-				Case 0
-					
-					If (Self.collisionState = TER_STATE_LOOK_MOON And Self.movedSpeedY < 0) Then
-						setDie(False)
-					EndIf
-					
-				Case 1
-					
-					If (Not Self.speedLock) Then
-						Self.totalVelocity = 0
-					EndIf
-					
-					If (Self.isAntiGravity) Then
-						Self.leftStopped = True
-					Else
-						Self.rightStopped = True
-					EndIf
-					
-					If (Self.leftStopped And Self.rightStopped) Then
-						setDie(False)
-					ElseIf ((Key.repeat(Key.gRight) And Not Self.isAntiGravity) Or (Key.repeat(Key.gLeft) And Self.isAntiGravity)) Then
-						If (Self.animationID = ANI_STAND Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = ANI_CLIFF_2 Or Self.animationID = ANI_RUN_1 Or Self.animationID = ANI_RUN_2 Or Self.animationID = ANI_RUN_3) Then
-							Self.animationID = ANI_PUSH_WALL
+			If (Self.worldCal.getActionState() = 0 Or Self.collisionState = COLLISION_STATE_ON_OBJECT) Then
+				Select (direction)
+					Case DIRECTION_UP
+						If (Self.collisionState = TER_STATE_LOOK_MOON And Self.movedSpeedY < 0) Then
+							setDie(False)
+							
+							Return
 						EndIf
-					EndIf
-					
-				Case 3
-					
-					If (Not Self.speedLock) Then
-						Self.totalVelocity = 0
-					EndIf
-					
-					If (Self.isAntiGravity) Then
-						Self.rightStopped = True
-					Else
-						Self.leftStopped = True
-					EndIf
-					
-					If (Self.leftStopped And Self.rightStopped) Then
-						setDie(False)
-					ElseIf ((Key.repeat(Key.gLeft) And Not Self.isAntiGravity) Or (Key.repeat(Key.gRight) And Self.isAntiGravity)) Then
-						If (Self.animationID = ANI_STAND Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = ANI_CLIFF_2 Or Self.animationID = ANI_RUN_1 Or Self.animationID = ANI_RUN_2 Or Self.animationID = ANI_RUN_3) Then
-							Self.animationID = ANI_PUSH_WALL
+					Case DIRECTION_DOWN
+						If (Not Self.speedLock) Then
+							Self.totalVelocity = 0
 						EndIf
-					EndIf
-					
-				Default
-			End Select
-		EndIf
+						
+						If (Self.isAntiGravity) Then
+							Self.leftStopped = True
+						Else
+							Self.rightStopped = True
+						EndIf
+						
+						If (Self.leftStopped And Self.rightStopped) Then
+							setDie(False)
+							
+							Return
+						ElseIf ((Key.repeat(Key.gRight) And Not Self.isAntiGravity) Or (Key.repeat(Key.gLeft) And Self.isAntiGravity)) Then
+							If (Self.animationID = ANI_STAND Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = ANI_CLIFF_2 Or Self.animationID = ANI_RUN_1 Or Self.animationID = ANI_RUN_2 Or Self.animationID = ANI_RUN_3) Then
+								Self.animationID = ANI_PUSH_WALL
+							EndIf
+						EndIf
+					Case DIRECTION_RIGHT
+						If (Not Self.speedLock) Then
+							Self.totalVelocity = 0
+						EndIf
+						
+						If (Self.isAntiGravity) Then
+							Self.rightStopped = True
+						Else
+							Self.leftStopped = True
+						EndIf
+						
+						If (Self.leftStopped And Self.rightStopped) Then
+							setDie(False)
+							
+							Return
+						ElseIf ((Key.repeat(Key.gLeft) And Not Self.isAntiGravity) Or (Key.repeat(Key.gRight) And Self.isAntiGravity)) Then
+							If (Self.animationID = ANI_STAND Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = ANI_CLIFF_2 Or Self.animationID = ANI_RUN_1 Or Self.animationID = ANI_RUN_2 Or Self.animationID = ANI_RUN_3) Then
+								Self.animationID = ANI_PUSH_WALL
+							EndIf
+						EndIf
+				End Select
+			EndIf
+		End
 		
-	End
-	
-	Public Method getBodyDegree:Int()
-		Return Self.worldCal.footDegree
-	End
-	
-	Public Method getBodyOffset:Int()
-		Return BODY_OFFSET
-	End
-	
-	Public Method getFootOffset:Int()
-		Return SIDE_FOOT_FROM_CENTER
-	End
-	
-	Public Method getFootX:Int()
-		Return Self.posX
-	End
-	
-	Public Method getFootY:Int()
-		Return Self.posY
-	End
-	
-	Public Method getPressToGround:Int()
-		Return GRAVITY / 2
-	End
-	
-	Public Method didAfterEveryMove:Void(arg0:Int, arg1:Int)
-		player.moveDistance.x = arg0
-		player.moveDistance.y = arg1
-		Self.footPointX = Self.posX
-		Self.footPointY = Self.posY
-		collisionCheckWithGameObject()
-		Self.posZ = Self.currentLayer
-	End
-	
-	Public Method doBeforeCollisionCheck:Void()
-		' Empty implementation.
-	End
-	
-	Public Method doWhileCollision:Void(arg0:ACObject, arg1:ACCollision, arg2:Int, arg3:Int, arg4:Int, arg5:Int, arg6:Int)
-		' Empty implementation.
-	End
-	
-	Public Method doWhileLeaveGround:Void()
-		calDivideVelocity()
-		Self.collisionState = COLLISION_STATE_JUMP
+		Method getBodyDegree:Int()
+			Return Self.worldCal.footDegree
+		End
 		
-		If (isTerminal And terminalState >= TER_STATE_CHANGE_1) Then
-			Self.collisionState = COLLISION_STATE_NONE
-		EndIf
+		Method getBodyOffset:Int()
+			Return BODY_OFFSET
+		End
 		
-	End
-	
-	Public Method doWhileLand:Void(degree:Int)
-		Self.faceDegree = degree
-		land()
+		Method getFootOffset:Int()
+			Return SIDE_FOOT_FROM_CENTER
+		End
 		
-		If (Self.footOnObject <> Null) Then
+		Method getFootX:Int()
+			Return Self.posX
+		End
+		
+		Method getFootY:Int()
+			Return Self.posY
+		End
+		
+		Method getPressToGround:Int()
+			Return (GRAVITY / 2)
+		End
+		
+		Method didAfterEveryMove:Void(x:Int, y:Int)
+			player.moveDistance.x = x
+			player.moveDistance.y = y
+			
+			Self.footPointX = Self.posX
+			Self.footPointY = Self.posY
+			
+			collisionCheckWithGameObject()
+			
+			Self.posZ = Self.currentLayer
+		End
+		
+		Method doBeforeCollisionCheck:Void()
+			' Empty implementation.
+		End
+		
+		Method doWhileCollision:Void(arg0:ACObject, arg1:ACCollision, arg2:Int, arg3:Int, arg4:Int, arg5:Int, arg6:Int)
+			' Empty implementation.
+		End
+		
+		Method doWhileLeaveGround:Void()
+			calDivideVelocity()
+			
+			Self.collisionState = COLLISION_STATE_JUMP
+			
+			If (isTerminal And terminalState >= TER_STATE_CHANGE_1) Then
+				Self.collisionState = COLLISION_STATE_NONE
+			EndIf
+		End
+		
+		Method doWhileLand:Void(degree:Int)
+			Self.faceDegree = degree
+			
+			land()
+			
+			If (Self.footOnObject <> Null) Then
+				Self.worldCal.stopMove()
+				
+				Self.footOnObject = Null
+			EndIf
+			
+			Self.collisionState = TER_STATE_RUN
+			Self.isSidePushed = 4
+			
+			Print("~~~~velx:" + (Self.velX Shr 6))
+		End
+		
+		Method getMinDegreeToLeaveGround:Int()
+			Return ANI_DEAD_PRE
+		End
+		
+		Method stopMove:Void()
 			Self.worldCal.stopMove()
-			Self.footOnObject = Null
-		EndIf
+		End
 		
-		Self.collisionState = TER_STATE_RUN
-		Self.isSidePushed = 4
-		Print("~~velx:" + (Self.velX Shr 6))
-	End
-	
-	Public Method getMinDegreeToLeaveGround:Int()
-		Return ANI_DEAD_PRE
-	End
-	
-	Public Method stopMove:Void()
-		Self.worldCal.stopMove()
-	End
-	
-	Public Method getCal:ACWorldCollisionCalculator()
-		Return Self.worldCal
-	End
-	
-	Public Method getDegreeDiff:Int(degree1:Int, degree2:Int)
-		Int re = Abs(degree1 - degree2)
+		Method getCal:ACWorldCollisionCalculator()
+			Return Self.worldCal
+		End
 		
-		If (re > 180) Then
-			re = 360 - re
-		EndIf
+		Method getDegreeDiff:Int(degree1:Int, degree2:Int)
+			Local re:= Abs(degree1 - degree2)
+			
+			If (re > 180) Then
+				re = 360 - re
+			EndIf
+			
+			If (re > 90) Then
+				Return 180 - re
+			EndIf
+			
+			Return re
+		End
+	Protected
+		' Methods:
+		Method extraLogicJump:Void()
+			' Empty implementation.
+		End
 		
-		If (re > 90) Then
-			Return 180 - re
-		EndIf
+		Method extraLogicWalk:Void()
+			' Empty implementation.
+		End
 		
-		Return re
-	End
-	
-	Protected Method extraLogicJump:Void()
-		' Empty implementation.
-	End
-	
-	Protected Method extraLogicWalk:Void()
-		' Empty implementation.
-	End
-	
-	Protected Method extraLogicOnObject:Void()
-		' Empty implementation.
-	End
-	
-	Protected Method extraInputLogic:Void()
-		' Empty implementation.
-	End
-	
-	Private Method checkCliffAnimation:Void()
-		Int footLeftX = ACUtilities.getRelativePointX(Self.posX, LEFT_FOOT_OFFSET_X, 0, Self.faceDegree)
-		Int footLeftY = ACUtilities.getRelativePointY(Self.posY, LEFT_FOOT_OFFSET_X, Self.worldInstance.getTileHeight(), Self.faceDegree)
-		Int footCenterX = ACUtilities.getRelativePointX(Self.posX, 0, 0, Self.faceDegree)
-		Int footCenterY = ACUtilities.getRelativePointY(Self.posY, 0, Self.worldInstance.getTileHeight(), Self.faceDegree)
-		Int footRightX = ACUtilities.getRelativePointX(Self.posX, SIDE_FOOT_FROM_CENTER, 0, Self.faceDegree)
-		Int footRightY = ACUtilities.getRelativePointY(Self.posY, SIDE_FOOT_FROM_CENTER, Self.worldInstance.getTileHeight(), Self.faceDegree)
-		Select (Self.collisionState)
-			Case 0
-				
-				If (Self.worldInstance.getWorldY(footCenterX, footCenterY, Self.currentLayer, Self.worldCal.getDirectionByDegree(Self.faceDegree)) <> ACParam.NO_COLLISION) Then
-					Return
-				EndIf
-				
-				If (Self.worldInstance.getWorldY(footLeftX, footLeftY, Self.currentLayer, Self.worldCal.getDirectionByDegree(Self.faceDegree)) <> ACParam.NO_COLLISION) Then
-					If (Self.faceDirection) Then
-						Self.animationID = ANI_CLIFF_1
+		Method extraLogicOnObject:Void()
+			' Empty implementation.
+		End
+		
+		Method extraInputLogic:Void()
+			' Empty implementation.
+		End
+		
+		Method spinLogic:Bool()
+			If (Not (Key.repeat(Key.gLeft) Or Key.repeat(Key.gRight) Or isTerminal Or Self.animationID = ANI_NONE Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = ANI_CLIFF_2)) Then
+				If (Key.repeat(Key.gDown)) Then
+					' Magic number: 64 (Velocity; X)
+					If (Abs(getVelX()) > 64 Or getDegreeDiff(Self.faceDegree, Self.degreeStable) > ANI_DEAD_PRE) Then
+						If (Not (Self.animationID = ANI_JUMP Or characterID = CHARACTER_AMY Or Self.isCrashFallingSand)) Then
+							soundInstance.playSe(4)
+						EndIf
+						
+						Self.animationID = ANI_JUMP
 					Else
-						Self.animationID = ANI_CLIFF_2
-					EndIf
-					
-				ElseIf (Self.worldInstance.getWorldY(footRightX, footRightY, Self.currentLayer, Self.worldCal.getDirectionByDegree(Self.faceDegree)) = ACParam.NO_COLLISION) Then
-				Else
-					
-					If (Self.faceDirection) Then
-						Self.animationID = ANI_CLIFF_2
-					Else
-						Self.animationID = ANI_CLIFF_1
-					EndIf
-				EndIf
-				
-			Case 2
-				
-				If (Self.footOnObject = Null) Then
-					Return
-				EndIf
-				
-				If (footCenterX < Self.footOnObject.collisionRect.x0) Then
-					If (Self.faceDirection) Then
-						Self.animationID = ANI_CLIFF_2
-					Else
-						Self.animationID = ANI_CLIFF_1
-					EndIf
-					
-				ElseIf (footCenterX <= Self.footOnObject.collisionRect.x1) Then
-				Else
-					
-					If (Self.faceDirection) Then
-						Self.animationID = ANI_CLIFF_1
-					Else
-						Self.animationID = ANI_CLIFF_2
-					EndIf
-				EndIf
-				
-			Default
-		End Select
-	End
-	
-	Public Method setCliffAnimation:Void()
-		
-		If (Self.faceDirection) Then
-			Self.animationID = ANI_CLIFF_2
-		Else
-			Self.animationID = ANI_CLIFF_1
-		EndIf
-		
-		Self.drawer.restart()
-	End
-	
-	Protected Method spinLogic:Bool()
-		
-		If (Not (Key.repeat(Key.gLeft) Or Key.repeat(Key.gRight) Or isTerminal Or Self.animationID = ANI_NONE Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = ANI_CLIFF_2)) Then
-			If (Key.repeat(Key.gDown)) Then
-				If (Abs(getVelX()) > 64 Or getDegreeDiff(Self.faceDegree, Self.degreeStable) > ANI_DEAD_PRE) Then
-					If (Not (Self.animationID = ANI_JUMP Or characterID = CHARACTER_AMY Or Self.isCrashFallingSand)) Then
-						soundInstance.playSe(4)
-					EndIf
-					
-					Self.animationID = ANI_JUMP
-				Else
-					
-					If (Self.animationID <> ANI_SQUAT) Then
-						Self.animationID = ANI_SQUAT_PROCESS
-					EndIf
-					
-					If (Self.collisionState = TER_STATE_LOOK_MOON_WAIT) Then
-						If (characterID = CHARACTER_AMY) Then
+						If (Self.animationID <> ANI_SQUAT) Then
+							Self.animationID = ANI_SQUAT_PROCESS
+						EndIf
+						
+						If (Self.collisionState = COLLISION_STATE_IN_SAND) Then
+							If (characterID = CHARACTER_AMY) Then
+								Self.dashRolling = True
+								Self.spinDownWaitCount = 0
+								
+								If (characterID <> CHARACTER_AMY) Then
+									soundInstance.playSe(4)
+								EndIf
+							EndIf
+						ElseIf (Key.press(Key.B_HIGH_JUMP | Key.gUp)) Then
 							Self.dashRolling = True
 							Self.spinDownWaitCount = 0
 							
 							If (characterID <> CHARACTER_AMY) Then
+								' Magic number: 4 (Sound-effect ID)
 								soundInstance.playSe(4)
 							EndIf
 						EndIf
 						
-					ElseIf (Key.press(Key.B_HIGH_JUMP | Key.gUp)) Then
-						Self.dashRolling = True
-						Self.spinDownWaitCount = 0
-						
-						If (characterID <> CHARACTER_AMY) Then
-							soundInstance.playSe(4)
+						If (Not Self.dashRolling) Then
+							Self.focusMovingState = FOCUS_MOVING_DOWN
 						EndIf
 					EndIf
-					
-					If (Not Self.dashRolling) Then
-						Self.focusMovingState = 2
-					EndIf
-				EndIf
-				
-			ElseIf (Self.animationID = ANI_SQUAT) Then
-				Self.animationID = ANI_SQUAT_PROCESS
-			EndIf
-		EndIf
-		
-		If (Self.animationID = ANI_STAND And getDegreeDiff(Self.faceDegree, Self.degreeStable) <= ANI_DEAD_PRE) Then
-			If (Key.press(Key.B_SPIN2)) Then
-				Self.dashRolling = True
-				
-				If (characterID <> CHARACTER_AMY) Then
-					soundInstance.playSe(4)
-				EndIf
-				
-				Self.spinCount = SPIN_LV2_COUNT
-				Self.spinKeyCount = SPIN_KEY_COUNT
-			ElseIf (Key.press(Key.B_7)) Then
-				Self.faceDirection = False
-				Self.dashRolling = True
-				Self.spinKeyCount = SPIN_KEY_COUNT
-				
-				If (characterID <> CHARACTER_AMY) Then
-					soundInstance.playSe(4)
-				EndIf
-				
-				Self.spinCount = SPIN_LV2_COUNT
-			ElseIf (Key.press(Key.B_9)) Then
-				Self.faceDirection = True
-				Self.dashRolling = True
-				Self.spinKeyCount = SPIN_KEY_COUNT
-				
-				If (characterID <> CHARACTER_AMY) Then
-					soundInstance.playSe(4)
-				EndIf
-				
-				Self.spinCount = SPIN_LV2_COUNT
-			EndIf
-		EndIf
-		
-		Return Self.dashRolling
-	End
-	
-	Protected Method spinLogic2:Bool()
-		
-		If (Not (Key.repeat(Key.gLeft) Or Key.repeat(Key.gRight) Or isTerminal Or Self.animationID = ANI_NONE Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = ANI_CLIFF_2)) Then
-			If (Key.repeat(Key.gDown)) Then
-				If (getDegreeDiff(Self.faceDegree, Self.degreeStable) <= ANI_DEAD_PRE And Self.animationID <> ANI_SQUAT) Then
+				ElseIf (Self.animationID = ANI_SQUAT) Then
 					Self.animationID = ANI_SQUAT_PROCESS
 				EndIf
-				
-			ElseIf (Self.animationID = ANI_SQUAT) Then
-				Self.animationID = ANI_SQUAT_PROCESS
-			EndIf
-		EndIf
-		
-		Return Self.dashRolling
-	End
-	
-	Public Method dashRollingLogicCheck:Void()
-		
-		If (Self.dashRolling) Then
-			dashRollingLogic()
-		ElseIf (Self.effectID = 0 Or Self.effectID = 1) Then
-			Self.effectID = -1
-		EndIf
-		
-	End
-	
-	Public Method getCharacterAnimationID:Int()
-		Return Self.myAnimationID
-	End
-	
-	Public Method setCharacterAnimationID:Void(aniID:Int)
-		Self.myAnimationID = aniID
-	End
-	
-	Public Method getGravity:Int()
-		
-		If (Self.isInWater) Then
-			Return (GRAVITY * 3) / 5
-		EndIf
-		
-		Return GRAVITY
-	End
-	
-	Public Method doBreatheBubble:Bool()
-		
-		If (Self.collisionState <> COLLISION_STATE_JUMP) Then
-			Return False
-		EndIf
-		
-		resetBreatheCount()
-		Self.animationID = ANI_BREATHE
-		
-		If (characterID = CHARACTER_TAILS) Then
-			((PlayerTails) player).flyCount = 0
-		EndIf
-		
-		Self.velX = 0
-		Self.velY = 0
-		Return True
-	End
-	
-	Public Method resetBreatheCount:Void()
-		Self.breatheCount = 0
-		Self.breatheNumCount = -1
-		Self.preBreatheNumCount = -1
-	End
-	
-	Public Method checkBreatheReset:Void()
-		
-		If (getNewPointY(Self.posY, 0, -Self.collisionRect.getHeight(), Self.faceDegree) + SIDE_FOOT_FROM_CENTER < (StageManager.getWaterLevel() Shl 6)) Then
-			resetBreatheCount()
-		EndIf
-		
-	End
-	
-	Public Method waitingChk:Void()
-		
-		If (Key.repeat(((((Key.gSelect | Key.gLeft) | Key.gRight) | Key.gDown) | Key.gUp) | Key.B_HIGH_JUMP) Or Not (Self.animationID = ANI_STAND Or Self.animationID = ANI_WAITING_1 Or Self.animationID = ANI_WAITING_2)) Then
-			Self.waitingCount = 0
-			Self.waitingLevel = 0
-			Self.isResetWaitAni = True
-			Return
-		EndIf
-		
-		Self.waitingCount += 1
-		
-		If (Self.waitingCount > 96) Then
-			If (Self.waitingLevel = 0) Then
-				Self.animationID = ANI_WAITING_1
 			EndIf
 			
-			If ((Self.drawer.checkEnd() And Self.waitingLevel = 0) Or Self.waitingLevel = 1) Then
-				Self.waitingLevel = 1
-				Self.animationID = ANI_WAITING_2
+			If (Self.animationID = ANI_STAND And getDegreeDiff(Self.faceDegree, Self.degreeStable) <= ANI_DEAD_PRE) Then
+				If (Key.press(Key.B_SPIN2)) Then
+					Self.dashRolling = True
+					
+					If (characterID <> CHARACTER_AMY) Then
+						' Magic number: 4 (Sound-effect ID)
+						soundInstance.playSe(4)
+					EndIf
+					
+					Self.spinCount = SPIN_LV2_COUNT
+					Self.spinKeyCount = SPIN_KEY_COUNT
+				ElseIf (Key.press(Key.B_7)) Then
+					Self.faceDirection = False
+					Self.dashRolling = True
+					
+					Self.spinKeyCount = SPIN_KEY_COUNT
+					
+					If (characterID <> CHARACTER_AMY) Then
+						' Magic number: 4 (Sound-effect ID)
+						soundInstance.playSe(4)
+					EndIf
+					
+					Self.spinCount = SPIN_LV2_COUNT
+				ElseIf (Key.press(Key.B_9)) Then
+					Self.faceDirection = True
+					Self.dashRolling = True
+					
+					Self.spinKeyCount = SPIN_KEY_COUNT
+					
+					If (characterID <> CHARACTER_AMY) Then
+						' Magic number: 4 (Sound-effect ID)
+						soundInstance.playSe(4)
+					EndIf
+					
+					Self.spinCount = SPIN_LV2_COUNT
+				EndIf
 			EndIf
-		EndIf
+			
+			Return Self.dashRolling
+		End
 		
-	End
-	
-	Public Method drawDrawerByDegree:Void(g:MFGraphics, drawer:AnimationDrawer, aniID:Int, x:Int, y:Int, loop:Bool, degree:Int, mirror:Bool)
-		g.saveCanvas()
-		g.translateCanvas(x, y)
-		g.rotateCanvas((Float) degree)
-		drawer.draw(g, aniID, 0, 0, loop, PickValue((Not mirror), 0, 2))
-		g.restoreCanvas()
-	End
-	
-	Public Method loseRing:Void(rNum:Int)
-		RingObject.hurtRingExplosion(rNum, getBodyPositionX(), getBodyPositionY(), Self.currentLayer, Self.isAntiGravity)
-	End
-	
-	Public Function getRingNum:Int()
-		Return ringNum
-	End
-	
-	Public Function setRingNum:Void(rNum:Int)
-		ringNum = rNum
-	End
-	
-	Public Method beSpSpring:Void(springPower:Int, direction:Int)
+		Method spinLogic2:Bool()
+			If (Not (Key.repeat(Key.gLeft) Or Key.repeat(Key.gRight) Or isTerminal Or Self.animationID = ANI_NONE Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = ANI_CLIFF_2)) Then
+				If (Key.repeat(Key.gDown)) Then
+					If (getDegreeDiff(Self.faceDegree, Self.degreeStable) <= ANI_DEAD_PRE And Self.animationID <> ANI_SQUAT) Then
+						Self.animationID = ANI_SQUAT_PROCESS
+					EndIf
+				ElseIf (Self.animationID = ANI_SQUAT) Then
+					Self.animationID = ANI_SQUAT_PROCESS
+				EndIf
+			EndIf
+			
+			Return Self.dashRolling
+		End
+	Public
+		' Functions:
+		Function getRingNum:Int()
+			Return ringNum
+		End
 		
-		If (Self.collisionState = COLLISION_STATE_NONE) Then
-			calDivideVelocity()
-		EndIf
+		Function setRingNum:Void(rNum:Int)
+			ringNum = rNum
+		End
 		
-		Self.velY = -springPower
-		Self.worldCal.stopMoveY()
+		' Methods:
+		Method setCliffAnimation:Void()
+			If (Self.faceDirection) Then
+				Self.animationID = ANI_CLIFF_2
+			Else
+				Self.animationID = ANI_CLIFF_1
+			EndIf
+			
+			Self.drawer.restart()
+		End
 		
-		If (Self.collisionState = COLLISION_STATE_NONE) Then
-			calTotalVelocity()
-		EndIf
+		Method dashRollingLogicCheck:Void()
+			If (Self.dashRolling) Then
+				dashRollingLogic()
+			ElseIf (Self.effectID = EFFECT_SAND_1 Or Self.effectID = EFFECT_SAND_2) Then
+				Self.effectID = EFFECT_NONE
+			EndIf
+		End
 		
-		Int i = Self.degreeStable
-		Self.faceDegree = i
-		Self.degreeForDraw = i
-		Self.animationID = ANI_ROTATE_JUMP
-		Self.collisionState = COLLISION_STATE_JUMP
-		Self.worldCal.actionState = 1
-		Self.collisionChkBreak = True
-		Self.drawer.restart()
-		MapManager.setFocusObj(Null)
-		setMeetingBoss(False)
-		Self.animationID = ANI_POP_JUMP_UP
-		Self.enteringSP = True
-		soundInstance.playSe(ANI_SMALL_ZERO_Y)
-	End
+		Method getCharacterAnimationID:Int()
+			Return Self.myAnimationID
+		End
+		
+		Method setCharacterAnimationID:Void(aniID:Int)
+			Self.myAnimationID = aniID
+		End
+		
+		Method getGravity:Int()
+			If (Self.isInWater) Then
+				Return ((GRAVITY * 3) / 5)
+			EndIf
+			
+			Return GRAVITY
+		End
+		
+		Method doBreatheBubble:Bool()
+			If (Self.collisionState <> COLLISION_STATE_JUMP) Then
+				Return False
+			EndIf
+			
+			resetBreatheCount()
+			Self.animationID = ANI_BREATHE
+			
+			If (characterID = CHARACTER_TAILS) Then
+				' Unsafe, but it works:
+				Local tails:= PlayerTails(player)
+				
+				tails.flyCount = 0
+			EndIf
+			
+			Self.velX = 0
+			Self.velY = 0
+			
+			Return True
+		End
 	
+		Method resetBreatheCount:Void()
+			Self.breatheCount = 0
+			Self.breatheNumCount = -1
+			Self.preBreatheNumCount = -1
+		End
+		
+		Method checkBreatheReset:Void()
+			If (getNewPointY(Self.posY, 0, -Self.collisionRect.getHeight(), Self.faceDegree) + SIDE_FOOT_FROM_CENTER < (StageManager.getWaterLevel() Shl 6)) Then
+				resetBreatheCount()
+			EndIf
+		End
+		
+		Method waitingChk:Void()
+			If (Key.repeat(((((Key.gSelect | Key.gLeft) | Key.gRight) | Key.gDown) | Key.gUp) | Key.B_HIGH_JUMP) Or Not (Self.animationID = ANI_STAND Or Self.animationID = ANI_WAITING_1 Or Self.animationID = ANI_WAITING_2)) Then
+				Self.waitingCount = 0
+				Self.waitingLevel = 0
+				
+				Self.isResetWaitAni = True
+				
+				Return
+			EndIf
+			
+			Self.waitingCount += 1
+			
+			' Magic number: 96
+			If (Self.waitingCount > 96) Then
+				If (Self.waitingLevel = 0) Then
+					Self.animationID = ANI_WAITING_1
+				EndIf
+				
+				If ((Self.drawer.checkEnd() And Self.waitingLevel = 0) Or Self.waitingLevel = 1) Then
+					Self.waitingLevel = 1
+					
+					Self.animationID = ANI_WAITING_2
+				EndIf
+			EndIf
+		End
+		
+		Method drawDrawerByDegree:Void(g:MFGraphics, drawer:AnimationDrawer, aniID:Int, x:Int, y:Int, loop:Bool, degree:Int, mirror:Bool)
+			g.saveCanvas()
+			g.translateCanvas(x, y)
+			g.rotateCanvas(Float(degree))
+			
+			drawer.draw(g, aniID, 0, 0, loop, PickValue((Not mirror), 0, 2))
+			
+			g.restoreCanvas()
+		End
+		
+		Method loseRing:Void(rNum:Int)
+			RingObject.hurtRingExplosion(rNum, getBodyPositionX(), getBodyPositionY(), Self.currentLayer, Self.isAntiGravity)
+		End
+		
+		Method beSpSpring:Void(springPower:Int, direction:Int)
+			If (Self.collisionState = COLLISION_STATE_NONE) Then
+				calDivideVelocity()
+			EndIf
+			
+			Self.velY = -springPower
+			
+			Self.worldCal.stopMoveY()
+			
+			If (Self.collisionState = COLLISION_STATE_NONE) Then
+				calTotalVelocity()
+			EndIf
+			
+			Self.faceDegree = Self.degreeStable
+			Self.degreeForDraw = Self.degreeStable
+			
+			Self.animationID = ANI_ROTATE_JUMP
+			
+			Self.collisionState = COLLISION_STATE_JUMP
+			
+			' Magic number: 1 ("Action state")
+			Self.worldCal.actionState = 1
+			
+			Self.collisionChkBreak = True
+			
+			Self.drawer.restart()
+			MapManager.setFocusObj(Null)
+			setMeetingBoss(False)
+			
+			Self.animationID = ANI_POP_JUMP_UP
+			Self.enteringSP = True
+			
+			' Magic number: 37 (Sound-effect ID)
+			soundInstance.playSe(37)
+		End
+		
 	Public Method setStagePassRunOutofScreen:Void()
 		MapManager.setFocusObj(Null)
 		Self.animationID = ANI_RUN_3
