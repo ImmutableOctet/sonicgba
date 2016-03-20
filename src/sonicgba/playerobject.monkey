@@ -3878,7 +3878,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Self.animationID = ANI_ROTATE_JUMP
 				Self.collisionState = COLLISION_STATE_JUMP
 				
-				' Magic number: 1
+				' Magic number: 1 (Action-state)
 				Self.worldCal.actionState = 1
 				
 				Self.collisionChkBreak = True
@@ -3894,135 +3894,143 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 		End
 		
-	Public Method bePop:Void(springPower:Int, direction:Int)
-		beSpring(springPower, direction)
-		
-		If ((Not Self.isAntiGravity And direction = 1) Or (Self.isAntiGravity And direction = 0)) Then
-			Self.animationID = ANI_POP_JUMP_UP
-			Self.collisionState = COLLISION_STATE_JUMP
-			Self.worldCal.actionState = 1
-		EndIf
-		
-	End
-	
-	Public Method beHurt:Void()
-		
-		If (player.canBeHurt()) Then
-			doHurt()
-			Int bodyCenterX = getNewPointX(Self.footPointX, 0, -BODY_OFFSET, Self.faceDegree)
-			Int bodyCenterY = getNewPointY(Self.footPointY, 0, -BODY_OFFSET, Self.faceDegree)
-			Self.faceDegree = Self.degreeStable
-			Self.footPointX = getNewPointX(bodyCenterX, 0, BODY_OFFSET, Self.faceDegree)
-			Self.footPointY = getNewPointY(bodyCenterY, 0, BODY_OFFSET, Self.faceDegree)
+		' Presumably, this is for the balloons.
+		Method bePop:Void(springPower:Int, direction:Int)
+			beSpring(springPower, direction)
 			
-			If (shieldType <> 0) Then
-				shieldType = 0
+			If ((Not Self.isAntiGravity And direction = DIRECTION_DOWN) Or (Self.isAntiGravity And direction = DIRECTION_UP)) Then
+				Self.animationID = ANI_POP_JUMP_UP
+				Self.collisionState = COLLISION_STATE_JUMP
 				
-				If (Not Self.beAttackByHari) Then
-					soundInstance.playSe(ANI_POP_JUMP_UP)
+				' Magic number: 1 (Action-state)
+				Self.worldCal.actionState = 1
+			EndIf
+		End
+		
+		Method beHurt:Void()
+			Local sType:= shieldType
+			
+			If (beHurtNoRingLose()) Then ' player.canBeHurt()
+				If (sType <> 0) Then
+					'sType = 0
+					
+					If (Not Self.beAttackByHari) Then
+						' Magic number: 14 (Sound-effect ID)
+						' If it wasn't obvious, this is probably the "hurt sound".
+						soundInstance.playSe(14)
+					EndIf
+					
+					If (Self.beAttackByHari) Then
+						Self.beAttackByHari = False
+					EndIf
+				ElseIf (ringNum + ringTmpNum > 0) Then
+					' This behavior may change in the future.
+					RingObject.hurtRingExplosion(ringNum + ringTmpNum, getBodyPositionX(), getBodyPositionY(), Self.currentLayer, Self.isAntiGravity)
+					
+					ringNum = 0
+					ringTmpNum = 0
+				ElseIf (ringNum = 0 And ringTmpNum = 0) Then
+					setDie(False)
+				EndIf
+			EndIf
+		End
+		
+		Method beHurtNoRingLose:Bool()
+			If (canBeHurt()) Then ' player.canBeHurt()
+				doHurt()
+				
+				Local bodyCenterX:= getNewPointX(Self.footPointX, 0, -BODY_OFFSET, Self.faceDegree)
+				Local bodyCenterY:= getNewPointY(Self.footPointY, 0, -BODY_OFFSET, Self.faceDegree)
+				
+				Self.faceDegree = Self.degreeStable
+				
+				Self.footPointX = getNewPointX(bodyCenterX, 0, BODY_OFFSET, Self.faceDegree)
+				Self.footPointY = getNewPointY(bodyCenterY, 0, BODY_OFFSET, Self.faceDegree)
+				
+				If (shieldType <> 0) Then
+					shieldType = 0
 				EndIf
 				
-				If (Self.beAttackByHari) Then
-					Self.beAttackByHari = False
-				EndIf
-				
-			ElseIf (ringNum + ringTmpNum > 0) Then
-				RingObject.hurtRingExplosion(ringNum + ringTmpNum, getBodyPositionX(), getBodyPositionY(), Self.currentLayer, Self.isAntiGravity)
-				ringNum = 0
-				ringTmpNum = 0
-			ElseIf (ringNum = 0 And ringTmpNum = 0) Then
-				setDie(False)
+				Return True
 			EndIf
-		EndIf
-		
-	End
-	
-	Public Method beHurtNoRingLose:Void()
-		
-		If (player.canBeHurt()) Then
-			doHurt()
-			Int bodyCenterX = getNewPointX(Self.footPointX, 0, -BODY_OFFSET, Self.faceDegree)
-			Int bodyCenterY = getNewPointY(Self.footPointY, 0, -BODY_OFFSET, Self.faceDegree)
-			Self.faceDegree = Self.degreeStable
-			Self.footPointX = getNewPointX(bodyCenterX, 0, BODY_OFFSET, Self.faceDegree)
-			Self.footPointY = getNewPointY(bodyCenterY, 0, BODY_OFFSET, Self.faceDegree)
 			
-			If (shieldType <> 0) Then
-				shieldType = 0
-			EndIf
-		EndIf
-		
-	End
-	
-	Public Method beHurtByCage:Void()
-		
-		If (Self.hurtCount = 0) Then
-			doHurt()
-			Self.velX = (Self.velX * 3) / 2
-			Self.velY = (Self.velY * 3) / 2
-		EndIf
-		
-	End
-	
-	Public Method doHurt:Void()
-		Int i
-		Self.animationID = ANI_HURT_PRE
-		
-		If (Self.collisionState = COLLISION_STATE_ON_OBJECT) Then
-			Self.footPointY -= 128
-			prepareForCollision()
-		EndIf
-		
-		If (Self.outOfControl And Self.outOfControlObject <> Null And Self.outOfControlObject.releaseWhileBeHurt()) Then
-			Self.outOfControl = False
-			Self.outOfControlObject = Null
-		EndIf
-		
-		Self.hurtCount = HURT_COUNT
-		
-		If (Self.velX = 0) Then
-			Self.velX = DSgn(Not Self.faceDirection) * HURT_POWER_X
-		ElseIf (Self.velX > 0) Then
-			Self.velX = -HURT_POWER_X
-		Else
-			Self.velX = HURT_POWER_X
-		EndIf
-		
-		If (Self.isAntiGravity) Then
-			Self.velX = -Self.velX
-		EndIf
-		
-		If (Self.isAntiGravity) Then
-			i = -1
-		Else
-			i = 1
-		EndIf
-		
-		Self.velY = i * HURT_POWER_Y
-		Self.collisionState = COLLISION_STATE_JUMP
-		Self.worldCal.actionState = 1
-		Self.collisionChkBreak = True
-		Self.worldCal.stopMove()
-		Self.onObjectContinue = False
-		Self.footOnObject = Null
-		Self.hurtNoControl = True
-		Self.attackanimationID = ANI_STAND
-		Self.attackCount = 0
-		Self.attackLevel = 0
-		Self.dashRolling = False
-		MyAPI.vibrate()
-		Self.degreeRotateMode = 0
-	End
-	
-	Public Method canBeHurt:Bool()
-		
-		If (Self.hurtCount > 0 Or invincibleCount > 0 Or Self.isDead) Then
 			Return False
-		EndIf
+		End
 		
-		Return True
-	End
-	
+		Method beHurtByCage:Void()
+			If (Self.hurtCount = 0) Then
+				doHurt()
+				
+				Self.velX = ((Self.velX * 3) / 2)
+				Self.velY = ((Self.velY * 3) / 2)
+			EndIf
+		End
+		
+		Method doHurt:Void()
+			Self.animationID = ANI_HURT_PRE
+			
+			If (Self.collisionState = COLLISION_STATE_ON_OBJECT) Then
+				' Magic number: 128
+				Self.footPointY -= 128
+				
+				prepareForCollision()
+			EndIf
+			
+			If (Self.outOfControl And Self.outOfControlObject <> Null And Self.outOfControlObject.releaseWhileBeHurt()) Then
+				Self.outOfControl = False
+				
+				Self.outOfControlObject = Null
+			EndIf
+			
+			Self.hurtCount = HURT_COUNT
+			
+			If (Self.velX = 0) Then
+				Self.velX = DSgn(Not Self.faceDirection) * HURT_POWER_X
+			ElseIf (Self.velX > 0) Then
+				Self.velX = -HURT_POWER_X
+			Else
+				Self.velX = HURT_POWER_X
+			EndIf
+			
+			If (Self.isAntiGravity) Then
+				Self.velX = -Self.velX
+			EndIf
+			
+			Self.velY = (DSgn(Not Self.isAntiGravity) * HURT_POWER_Y)
+			
+			Self.collisionState = COLLISION_STATE_JUMP
+			
+			' Magic number: 1 (Action-state)
+			Self.worldCal.actionState = 1
+			
+			Self.collisionChkBreak = True
+			
+			Self.worldCal.stopMove()
+			
+			Self.onObjectContinue = False
+			Self.footOnObject = Null
+			
+			Self.hurtNoControl = True
+			
+			Self.attackanimationID = ANI_STAND
+			Self.attackCount = 0
+			Self.attackLevel = 0
+			
+			Self.dashRolling = False
+			
+			MyAPI.vibrate()
+			
+			Self.degreeRotateMode = 0
+		End
+		
+		Method canBeHurt:Bool()
+			If (Self.hurtCount > 0 Or invincibleCount > 0 Or Self.isDead) Then
+				Return False
+			EndIf
+			
+			Return True
+		End
+		
 	Public Method isFootOnObject:Bool(obj:GameObject)
 		
 		If (Self.outOfControl) Then
