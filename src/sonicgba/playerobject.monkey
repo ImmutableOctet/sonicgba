@@ -3686,9 +3686,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			Select (direction)
 				Case DIRECTION_UP
-					If (beStop_Up(newPosition, obj)) Then
-						beStop_Down(newPosition, obj, isDirectionDown) ' False
-					Endif
+					beStop_Up(newPosition, obj)
 				Case DIRECTION_DOWN
 					beStop_Down(newPosition, obj, isDirectionDown) ' True
 				Case DIRECTION_LEFT, DIRECTION_RIGHT
@@ -3704,9 +3702,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			Select (direction)
 				Case DIRECTION_UP
-					If (beStop_Up(newPosition, obj)) Then
-						beStop_Down(newPosition, obj, isDirectionDown, True) ' False
-					Endif
+					beStop_Up(newPosition, obj)
 				Case DIRECTION_DOWN
 					beStop_Down(newPosition, obj, isDirectionDown, True) ' True
 				Case DIRECTION_LEFT, DIRECTION_RIGHT
@@ -5511,549 +5507,570 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				numDrawer.draw(g, (NUM_SPACE[type] * I) + leftPosition, y)
 			Next
 		End
-	
-	Public Function timeLogic:Void()
 		
-		If (Not timeStopped) Then
-			If (overTime > timeCount) Then
-				timeCount += 60
-				
-				If (timeCount > overTime) Then
-					timeCount = overTime
-				EndIf
-				
-				If (GlobalResource.timeIsLimit()) Then
-					If (overTime - timeCount <= BREATHE_TIME_COUNT) Then
-						If (timeCount / 1000 <> preTimeCount) Then
-							SoundSystem.getInstance().playSe(ANI_YELL)
+		Function timeLogic:Void()
+			If (Not timeStopped) Then
+				If (overTime > timeCount) Then
+					timeCount += 60
+					
+					If (timeCount > overTime) Then
+						timeCount = overTime
+					EndIf
+					
+					If (GlobalResource.timeIsLimit()) Then
+						If (overTime - timeCount <= BREATHE_TIME_COUNT) Then
+							Local t:= (timeCount / 1000)
+							
+							If (t <> preTimeCount) Then
+								SoundSystem.getInstance().playSe(ANI_YELL)
+							EndIf
+							
+							preTimeCount = t
 						EndIf
 						
-						preTimeCount = timeCount / 1000
-					EndIf
-					
-					If (timeCount = overTime And player <> Null) Then
-						If (stageModeState = STATE_RACE_MODE) Then
-							player.setDie(False)
-							StageManager.setStageTimeover()
-							StageManager.checkPointTime = 0
-						ElseIf (lifeNum > 0) Then
-							player.setDie(False)
-							StageManager.setStageTimeover()
-							StageManager.checkPointTime = 0
-							minusLife()
-						Else
-							player.setDie(False)
-							StageManager.setStageGameover()
+						If (timeCount = overTime And player <> Null) Then
+							If (stageModeState = STATE_RACE_MODE) Then
+								player.setDie(False)
+								StageManager.setStageTimeover()
+								StageManager.checkPointTime = 0
+							ElseIf (lifeNum > 0) Then
+								player.setDie(False)
+								StageManager.setStageTimeover()
+								StageManager.checkPointTime = 0
+								minusLife()
+							Else
+								player.setDie(False)
+								StageManager.setStageGameover()
+							EndIf
 						EndIf
-					EndIf
-					
-				ElseIf (stageModeState = STATE_RACE_MODE) Then
-					If (overTime - timeCount <= BREATHE_TIME_COUNT) Then
-						If (timeCount / 1000 <> preTimeCount) Then
-							SoundSystem.getInstance().playSe(ANI_YELL)
-						EndIf
-						
-						preTimeCount = timeCount / 1000
-					EndIf
-					
-					If (timeCount = overTime And player <> Null) Then
-						If (stageModeState = STATE_RACE_MODE) Then
-							player.setDie(False)
-							StageManager.setStageTimeover()
-							StageManager.checkPointTime = 0
-						ElseIf (lifeNum > 0) Then
-							player.setDie(False)
-							StageManager.setStageTimeover()
-							StageManager.checkPointTime = 0
-							minusLife()
-						Else
-							player.setDie(False)
-							StageManager.setStageGameover()
-						EndIf
-					EndIf
-				EndIf
-				
-			ElseIf (overTime < timeCount) Then
-				timeCount -= 60
-				
-				If (timeCount < overTime) Then
-					timeCount = overTime
-				EndIf
-				
-				If (GlobalResource.timeIsLimit()) Then
-					If (timeCount <= BREATHE_TIME_COUNT) Then
-						If (timeCount / 1000 <> preTimeCount) Then
-							SoundSystem.getInstance().playSe(ANI_YELL)
+					ElseIf (stageModeState = STATE_RACE_MODE) Then
+						If (overTime - timeCount <= BREATHE_TIME_COUNT) Then
+							If (timeCount / 1000 <> preTimeCount) Then
+								' Magic number: 30 (Sound-effect ID)
+								SoundSystem.getInstance().playSe(30)
+							EndIf
+							
+							preTimeCount = timeCount / 1000
 						EndIf
 						
-						preTimeCount = timeCount / 1000
-					EndIf
-					
-					If (timeCount = overTime And player <> Null) Then
-						If (stageModeState = STATE_RACE_MODE) Then
-							player.setDie(False)
-							StageManager.setStageTimeover()
-							StageManager.checkPointTime = 0
-						ElseIf (lifeNum > 0) Then
-							player.setDie(False)
-							StageManager.setStageTimeover()
-							StageManager.checkPointTime = 0
-							minusLife()
-						Else
-							player.setDie(False)
-							StageManager.setStageGameover()
+						If (timeCount = overTime And player <> Null) Then
+							If (stageModeState = STATE_RACE_MODE) Then
+								player.setDie(False)
+								
+								StageManager.setStageTimeover()
+								StageManager.checkPointTime = 0
+							ElseIf (lifeNum > 0) Then
+								player.setDie(False)
+								
+								StageManager.setStageTimeover()
+								StageManager.checkPointTime = 0
+								
+								minusLife()
+							Else
+								player.setDie(False)
+								
+								StageManager.setStageGameover()
+							EndIf
 						EndIf
 					EndIf
 					
-				ElseIf (stageModeState = STATE_RACE_MODE) Then
-					If (timeCount <= BREATHE_TIME_COUNT) Then
-						If (timeCount / 1000 <> preTimeCount) Then
-							SoundSystem.getInstance().playSe(ANI_YELL)
+				ElseIf (overTime < timeCount) Then
+					timeCount -= 60
+					
+					If (timeCount < overTime) Then
+						timeCount = overTime
+					EndIf
+					
+					If (GlobalResource.timeIsLimit()) Then
+						If (timeCount <= BREATHE_TIME_COUNT) Then
+							If (timeCount / 1000 <> preTimeCount) Then
+								' Magic number: 30 (Sound-effect ID)
+								SoundSystem.getInstance().playSe(30)
+							EndIf
+							
+							preTimeCount = timeCount / 1000
 						EndIf
 						
-						preTimeCount = timeCount / 1000
-					EndIf
-					
-					If (timeCount = overTime And player <> Null) Then
-						If (stageModeState = STATE_RACE_MODE) Then
-							player.setDie(False)
-							StageManager.setStageTimeover()
-							StageManager.checkPointTime = 0
-						ElseIf (lifeNum > 0) Then
-							player.setDie(False)
-							StageManager.setStageTimeover()
-							StageManager.checkPointTime = 0
-							minusLife()
-						Else
-							player.setDie(False)
-							StageManager.setStageGameover()
+						If (timeCount = overTime And player <> Null) Then
+							If (stageModeState = STATE_RACE_MODE) Then
+								player.setDie(False)
+								
+								StageManager.setStageTimeover()
+								StageManager.checkPointTime = 0
+							ElseIf (lifeNum > 0) Then
+								player.setDie(False)
+								
+								StageManager.setStageTimeover()
+								StageManager.checkPointTime = 0
+								
+								minusLife()
+							Else
+								player.setDie(False)
+								
+								StageManager.setStageGameover()
+							EndIf
+						EndIf
+					ElseIf (stageModeState = STATE_RACE_MODE) Then
+						If (timeCount <= BREATHE_TIME_COUNT) Then
+							Local t:= (timeCount / 1000)
+							
+							If (t <> preTimeCount) Then
+								' Magic number: 30 (Sound-effect ID)
+								SoundSystem.getInstance().playSe(30)
+							EndIf
+							
+							preTimeCount = t
+						EndIf
+						
+						If (timeCount = overTime And player <> Null) Then
+							If (stageModeState = STATE_RACE_MODE) Then
+								player.setDie(False)
+								
+								StageManager.setStageTimeover()
+								StageManager.checkPointTime = 0
+							ElseIf (lifeNum > 0) Then
+								player.setDie(False)
+								
+								StageManager.setStageTimeover()
+								StageManager.checkPointTime = 0
+								
+								minusLife()
+							Else
+								player.setDie(False)
+								StageManager.setStageGameover()
+							EndIf
 						EndIf
 					EndIf
 				EndIf
 			EndIf
-		EndIf
+		End
 		
-	End
+		Function setTimeCount:Void(min:Int, sec:Int, msec:Int)
+			timeCount = (((min * 60) * 1000) + (sec * 1000)) + msec
+			lastTimeCount = timeCount
+		End
+		
+		Function setTimeCount:Void(count:Int)
+			timeCount = count
+			lastTimeCount = timeCount
+		End
+		
+		Function setOverCount:Void(min:Int, sec:Int, msec:Int)
+			overTime = (((min * 60) * 1000) + (sec * 1000)) + msec
+		End
+		
+		Function setOverCount:Void(count:Int)
+			overTime = count
+		End
+		
+		Function getTimeCount:Int()
+			Return timeCount
+		End
+		
+		Function timeDraw:Void(g:MFGraphics, x:Int, y:Int)
+			Local min:= (timeCount / 60000)
+			Local sec:= (timeCount Mod 60000) / 1000
+			Local msec:= ((timeCount Mod 60000) Mod 1000) / 10
+			Local numType:= 0
+			
+			If ((GlobalResource.timeIsLimit() Or stageModeState = STATE_RACE_MODE) And (((overTime > timeCount And timeCount > 540000) Or (overTime < timeCount And timeCount < 60000)) And (timeCount / SSDef.PLAYER_MOVE_HEIGHT) Mod 2 = 0)) Then
+				numType = 3
+			EndIf
+			
+			If (msec < 10) Then
+				drawNum(g, 0, x - NUM_SPACE[numType], y, 2, numType)
+			EndIf
+			
+			drawNum(g, msec, x, y, 2, numType)
+			NumberDrawer.drawColon(g, PickValue((numType = 3), 2, 0), (x - (NUM_SPACE[numType] * 2)) - (NUM_SPACE[numType] / 2), y, 34)
+			
+			If (sec < 10) Then
+				drawNum(g, 0, x - (NUM_SPACE[numType] * 4), y, 2, numType)
+			EndIf
+			
+			drawNum(g, sec, x - (NUM_SPACE[numType] * 3), y, 2, numType)
+			NumberDrawer.drawColon(g, PickValue((numType = 3), 2, 0), (x - (NUM_SPACE[numType] * 5)) - (NUM_SPACE[numType] / 2), y, 34)
+			drawNum(g, min, x - (NUM_SPACE[numType] * 6), y, 2, numType)
+		End
+		
+		Function drawRecordTime:Void(g:MFGraphics, timeCount:Int, x:Int, y:Int, numType:Int, anchor:Int)
+			Local min:= timeCount / 60000
+			Local sec:= (timeCount Mod 60000) / 1000
+			
+			timeCount = ((timeCount Mod 60000) Mod 1000) / 100
+			
+			Select (anchor)
+				Case 0
+					x += (NUM_SPACE[numType] * 7) / 2
+				Case 1
+					x += NUM_SPACE[numType] * 7
+			End Select
+			
+			If (timeCount < 10) Then
+				drawNum(g, 0, x - NUM_SPACE[numType], y, 2, numType)
+			EndIf
+			
+			drawNum(g, timeCount, x, y, 2, numType)
+			NumberDrawer.drawColon(g, 3, (x - (NUM_SPACE[numType] * 2)) - (NUM_SPACE[numType] / 2), y, 34)
+			
+			If (sec < 10) Then
+				drawNum(g, 0, x - (NUM_SPACE[numType] * 4), y, 2, numType)
+			EndIf
+			
+			drawNum(g, sec, x - (NUM_SPACE[numType] * 3), y, 2, numType)
+			NumberDrawer.drawColon(g, 3, (x - (NUM_SPACE[numType] * 5)) - (NUM_SPACE[numType] / 2), y, 34)
+			drawNum(g, min, x - (NUM_SPACE[numType] * 6), y, 2, numType)
+		End
 	
-	Public Function setTimeCount:Void(min:Int, sec:Int, msec:Int)
-		timeCount = (((min * 60) * 1000) + (sec * 1000)) + msec
-		lastTimeCount = timeCount
-	End
+		Function drawRecordTimeTotalYellow:Void(g:MFGraphics, timeCount:Int, x:Int, y:Int, numType:Int, anchor:Int)
+			Local min:= timeCount / 60000
+			Local sec:= (timeCount Mod 60000) / 1000
+			
+			timeCount = ((timeCount Mod 60000) Mod 1000) / 10
+			
+			Select (anchor)
+				Case 0
+					x += (NUM_SPACE[numType] * 7) / 2
+				Case 1
+					x += NUM_SPACE[numType] * 7
+			End Select
+			
+			If (timeCount < 10) Then
+				drawNum(g, 0, x - NUM_SPACE[numType], y, 2, numType)
+			EndIf
+			
+			drawNum(g, timeCount, x, y, 2, numType)
+			NumberDrawer.drawColon(g, 0, (x - (NUM_SPACE[numType] * 2)) - (NUM_SPACE[numType] / 2), y, 34)
+			
+			If (sec < 10) Then
+				drawNum(g, 0, x - (NUM_SPACE[numType] * 4), y, 2, numType)
+			EndIf
+			
+			drawNum(g, sec, x - (NUM_SPACE[numType] * 3), y, 2, numType)
+			NumberDrawer.drawColon(g, 0, (x - (NUM_SPACE[numType] * 5)) - (NUM_SPACE[numType] / 2), y, 34)
+			drawNum(g, min, x - (NUM_SPACE[numType] * 6), y, 2, numType)
+		End
+		
+		Function drawRecordTimeLeft:Void(g:MFGraphics, timeCount:Int, x:Int, y:Int)
+			drawRecordTimeTotalYellow(g, timeCount, x, y, 0, 1)
+			
+			MyAPI.setBmfColor(0)
+		End
+		
+		Function initMovingBar:Void()
+			offsetx = SCREEN_WIDTH
+			offsety = (SCREEN_HEIGHT / 2) + HURT_COUNT
+			
+			' Magic number: 12, 36, 34, 35
+			If (StageManager.getStageID() >= 12) Then
+				passStageActionID = (StageManager.getStageID() - 12) + 36
+			ElseIf (StageManager.getStageID() Mod 2 = 0) Then
+				passStageActionID = 34
+			ElseIf (StageManager.getStageID() Mod 2 = 1) Then
+				passStageActionID = 35
+			EndIf
+		End
+	Private
+		' Functions:
+		Function drawStaticAni:Void(g:MFGraphics, aniId:Int, x:Int, y:Int)
+			numDrawer.setActionId(aniId)
+			
+			numDrawer.draw(g, x, y)
+		End
 	
-	Public Function setTimeCount:Void(count:Int)
-		timeCount = count
-		lastTimeCount = timeCount
-	End
-	
-	Public Function setOverCount:Void(min:Int, sec:Int, msec:Int)
-		overTime = (((min * 60) * 1000) + (sec * 1000)) + msec
-	End
-	
-	Public Function setOverCount:Void(count:Int)
-		overTime = count
-	End
-	
-	Public Function getTimeCount:Int()
-		Return timeCount
-	End
-	
-	Public Function timeDraw:Void(g:MFGraphics, x:Int, y:Int)
-		Int min = timeCount / 60000
-		Int sec = (timeCount Mod 60000) / 1000
-		Int msec = ((timeCount Mod 60000) Mod 1000) / TERMINAL_COUNT
-		Int numType = 0
-		
-		If ((GlobalResource.timeIsLimit() Or stageModeState = STATE_RACE_MODE) And (((overTime > timeCount And timeCount > 540000) Or (overTime < timeCount And timeCount < 60000)) And (timeCount / SSDef.PLAYER_MOVE_HEIGHT) Mod 2 = 0)) Then
-			numType = 3
-		EndIf
-		
-		If (msec < TERMINAL_COUNT) Then
-			drawNum(g, 0, x - NUM_SPACE[numType], y, 2, numType)
-		EndIf
-		
-		drawNum(g, msec, x, y, 2, numType)
-		NumberDrawer.drawColon(g, PickValue((numType = 3), 2, 0), (x - (NUM_SPACE[numType] * 2)) - (NUM_SPACE[numType] / 2), y, ANI_BANK_3)
-		
-		If (sec < TERMINAL_COUNT) Then
-			drawNum(g, 0, x - (NUM_SPACE[numType] * 4), y, 2, numType)
-		EndIf
-		
-		drawNum(g, sec, x - (NUM_SPACE[numType] * 3), y, 2, numType)
-		NumberDrawer.drawColon(g, PickValue((numType = 3), 2, 0), (x - (NUM_SPACE[numType] * 5)) - (NUM_SPACE[numType] / 2), y, ANI_BANK_3)
-		drawNum(g, min, x - (NUM_SPACE[numType] * 6), y, 2, numType)
-	End
-	
-	Public Function drawRecordTime:Void(g:MFGraphics, timeCount:Int, x:Int, y:Int, numType:Int, anchor:Int)
-		Int min = timeCount / 60000
-		Int sec = (timeCount Mod 60000) / 1000
-		timeCount = ((timeCount Mod 60000) Mod 1000) / TERMINAL_COUNT
-		Select (anchor)
-			Case 0
-				x += (NUM_SPACE[numType] * 7) / 2
-				break
-			Case 1
-				x += NUM_SPACE[numType] * 7
-				break
-		End Select
-		
-		If (timeCount < TERMINAL_COUNT) Then
-			drawNum(g, 0, x - NUM_SPACE[numType], y, 2, numType)
-		EndIf
-		
-		drawNum(g, timeCount, x, y, 2, numType)
-		NumberDrawer.drawColon(g, 3, (x - (NUM_SPACE[numType] * 2)) - (NUM_SPACE[numType] / 2), y, ANI_BANK_3)
-		
-		If (sec < TERMINAL_COUNT) Then
-			drawNum(g, 0, x - (NUM_SPACE[numType] * 4), y, 2, numType)
-		EndIf
-		
-		drawNum(g, sec, x - (NUM_SPACE[numType] * 3), y, 2, numType)
-		NumberDrawer.drawColon(g, 3, (x - (NUM_SPACE[numType] * 5)) - (NUM_SPACE[numType] / 2), y, ANI_BANK_3)
-		drawNum(g, min, x - (NUM_SPACE[numType] * 6), y, 2, numType)
-	End
-	
-	Public Function drawRecordTimeTotalYellow:Void(g:MFGraphics, timeCount:Int, x:Int, y:Int, numType:Int, anchor:Int)
-		Int min = timeCount / 60000
-		Int sec = (timeCount Mod 60000) / 1000
-		timeCount = ((timeCount Mod 60000) Mod 1000) / TERMINAL_COUNT
-		Select (anchor)
-			Case 0
-				x += (NUM_SPACE[numType] * 7) / 2
-				break
-			Case 1
-				x += NUM_SPACE[numType] * 7
-				break
-		End Select
-		
-		If (timeCount < TERMINAL_COUNT) Then
-			drawNum(g, 0, x - NUM_SPACE[numType], y, 2, numType)
-		EndIf
-		
-		drawNum(g, timeCount, x, y, 2, numType)
-		NumberDrawer.drawColon(g, 0, (x - (NUM_SPACE[numType] * 2)) - (NUM_SPACE[numType] / 2), y, ANI_BANK_3)
-		
-		If (sec < TERMINAL_COUNT) Then
-			drawNum(g, 0, x - (NUM_SPACE[numType] * 4), y, 2, numType)
-		EndIf
-		
-		drawNum(g, sec, x - (NUM_SPACE[numType] * 3), y, 2, numType)
-		NumberDrawer.drawColon(g, 0, (x - (NUM_SPACE[numType] * 5)) - (NUM_SPACE[numType] / 2), y, ANI_BANK_3)
-		drawNum(g, min, x - (NUM_SPACE[numType] * 6), y, 2, numType)
-	End
-	
-	Public Function drawRecordTimeLeft:Void(g:MFGraphics, timeCount:Int, x:Int, y:Int)
-		drawRecordTimeTotalYellow(g, timeCount, x, y, 0, 1)
-		MyAPI.setBmfColor(0)
-	End
-	
-	Private Function drawStaticAni:Void(g:MFGraphics, aniId:Int, x:Int, y:Int)
-		numDrawer.setActionId(aniId)
-		numDrawer.draw(g, x, y)
-	End
-	
-	Private Function drawStagePassInfoScroll:Void(g:MFGraphics, y:Int, speed:Int, space:Int)
-		State.drawBar(g, 2, y)
-		itemOffsetX -= speed
-		itemOffsetX Mod= space
-		Int x1 = itemOffsetX - 294
-		While (x1 < SCREEN_WIDTH * 2) {
-			GameState.stageInfoAniDrawer.draw(g, getCharacterID() + ANI_WIND_JUMP, x1, (y - TERMINAL_COUNT) + 2, False, 0)
-			GameState.stageInfoAniDrawer.draw(g, ANI_BANK_2, x1, (y - TERMINAL_COUNT) + 2, False, 0)
-			MFGraphics mFGraphics = g
-			GameState.stageInfoAniDrawer.draw(mFGraphics, passStageActionID, x1, (y - TERMINAL_COUNT) + 2, False, 0)
-			x1 += space
-		Next
-	End
-	
-	Private Function drawStagePassInfoScroll:Void(g:MFGraphics, offset_x:Int, y:Int, speed:Int, space:Int)
-		
-		If (isbarOut) Then
-			State.drawBar(g, 2, offset_x, y)
-			State.drawBar(g, 2, SCREEN_WIDTH + offset_x, y)
-			State.drawBar(g, 2, (SCREEN_WIDTH * 2) + offset_x, y)
-		Else
+		Function drawStagePassInfoScroll:Void(g:MFGraphics, y:Int, speed:Int, space:Int)
 			State.drawBar(g, 2, y)
-		EndIf
-		
-		If (offset_x = 0) Then
+			
 			itemOffsetX -= speed
 			itemOffsetX Mod= space
-		EndIf
-		
-		Int x1 = itemOffsetX - 294
-		While (x1 < SCREEN_WIDTH * 2) {
-			MFGraphics mFGraphics = g
-			GameState.stageInfoAniDrawer.draw(mFGraphics, getCharacterID() + ANI_WIND_JUMP, x1 + offset_x, (y - TERMINAL_COUNT) + 2, False, 0)
-			mFGraphics = g
-			GameState.stageInfoAniDrawer.draw(mFGraphics, ANI_BANK_2, x1 + offset_x, (y - TERMINAL_COUNT) + 2, False, 0)
-			mFGraphics = g
-			GameState.stageInfoAniDrawer.draw(mFGraphics, passStageActionID, x1 + offset_x, (y - TERMINAL_COUNT) + 2, False, 0)
-			x1 += space
-		Next
-	End
-	
-	Public Function initMovingBar:Void()
-		offsetx = SCREEN_WIDTH
-		offsety = (SCREEN_HEIGHT / 2) + HURT_COUNT
-		
-		If (StageManager.getStageID() >= SPIN_LV2_COUNT) Then
-			passStageActionID = (StageManager.getStageID() - SPIN_LV2_COUNT) + SPIN_LV2_COUNT_CONF
-		ElseIf (StageManager.getStageID() Mod 2 = 0) Then
-			passStageActionID = ANI_BANK_3
-		ElseIf (StageManager.getStageID() Mod 2 = 1) Then
-			passStageActionID = ANI_CELEBRATE_1
-		EndIf
-		
-	End
-	
-	Private Function drawMovingbar:Void(g:MFGraphics, space:Int)
-		State.drawBar(g, 2, offsetx - BACKGROUND_WIDTH, offsety)
-		State.drawBar(g, 2, (offsetx - BACKGROUND_WIDTH) + SCREEN_WIDTH, offsety)
-		Int drawNum = (((SCREEN_WIDTH + space) - 1) / space) + 2
-		For (Int i = 0; i < drawNum; i += 1)
-			Int x2 = offsetx + (i * space)
-			GameState.stageInfoAniDrawer.draw(g, getCharacterID() + ANI_WIND_JUMP, x2, (offsety - TERMINAL_COUNT) + 2, False, 0)
-			GameState.stageInfoAniDrawer.draw(g, ANI_BANK_2, x2, (offsety - TERMINAL_COUNT) + 2, False, 0)
-			GameState.stageInfoAniDrawer.draw(g, passStageActionID, x2, (offsety - TERMINAL_COUNT) + 2, False, 0)
-		Next
-	End
-	
-	Public Function stagePassLogic:Void()
-		Select (stageModeState)
-		End Select
-	End
-	
-	Private Function isRaceModeNewRecord:Bool()
-		Return (timeCount < StageManager.getTimeModeScore(characterID))
-	End
-	
-	Public Function isHadRaceRecord:Bool()
-		Return (StageManager.getTimeModeScore(characterID) < SonicDef.OVER_TIME)
-	End
-	
-	Public Function movingBar:Bool()
-		
-		If (offsetx <= 0) Then
-			offsetx = 0
-		Else
-			offsetx -= movespeedx
 			
-			If (offsetx = SCREEN_WIDTH - movespeedx) Then
-				If (stageModeState = STATE_RACE_MODE) Then
-					If (isRaceModeNewRecord()) Then
-						SoundSystem.getInstance().playBgm(ANI_DEAD, False)
+			' Magic number: 294
+			For Local x1:= (itemOffsetX - 294) Until (x1 < SCREEN_WIDTH * 2) Step space
+				GameState.stageInfoAniDrawer.draw(g, getCharacterID() + 29, x1, (y - 10) + 2, False, 0)
+				GameState.stageInfoAniDrawer.draw(g, 34, x1, (y - 10) + 2, False, 0)
+				GameState.stageInfoAniDrawer.draw(g, passStageActionID, x1, (y - 10) + 2, False, 0)
+			Next
+		End
+		
+		Function drawStagePassInfoScroll:Void(g:MFGraphics, offset_x:Int, y:Int, speed:Int, space:Int)
+			If (isbarOut) Then
+				State.drawBar(g, 2, offset_x, y)
+				State.drawBar(g, 2, SCREEN_WIDTH + offset_x, y)
+				State.drawBar(g, 2, (SCREEN_WIDTH * 2) + offset_x, y)
+			Else
+				State.drawBar(g, 2, y)
+			EndIf
+			
+			If (offset_x = 0) Then
+				itemOffsetX -= speed
+				itemOffsetX Mod= space
+			EndIf
+			
+			For Local x1:= (itemOffsetX - 294) Until (SCREEN_WIDTH * 2) Step space
+				GameState.stageInfoAniDrawer.draw(g, getCharacterID() + ANI_WIND_JUMP, x1 + offset_x, (y - 10) + 2, False, 0)
+				GameState.stageInfoAniDrawer.draw(g, 34, x1 + offset_x, (y - 10) + 2, False, 0)
+				GameState.stageInfoAniDrawer.draw(g, passStageActionID, x1 + offset_x, (y - 10) + 2, False, 0)
+			Next
+		End
+		
+		Function drawMovingbar:Void(g:MFGraphics, space:Int)
+			State.drawBar(g, 2, offsetx - BACKGROUND_WIDTH, offsety)
+			State.drawBar(g, 2, (offsetx - BACKGROUND_WIDTH) + SCREEN_WIDTH, offsety)
+			
+			Local drawNum:= (((SCREEN_WIDTH + space) - 1) / space) + 2
+			
+			For For Local I:= 0 Until drawNum
+				Local x2:= (offsetx + (I * space))
+				
+				GameState.stageInfoAniDrawer.draw(g, getCharacterID() + ANI_WIND_JUMP, x2, (offsety - 10) + 2, False, 0)
+				GameState.stageInfoAniDrawer.draw(g, 33, x2, (offsety - 10) + 2, False, 0)
+				GameState.stageInfoAniDrawer.draw(g, passStageActionID, x2, (offsety - 10) + 2, False, 0)
+			Next
+		End
+		
+		Private Function isRaceModeNewRecord:Bool()
+			Return (timeCount < StageManager.getTimeModeScore(characterID))
+		End
+	Public
+		' Functions:
+		Function stagePassLogic:Void()
+			#Rem
+				Select (stageModeState)
+					' Nothing so far.
+				End Select
+			#End
+		End
+		
+		Function isHadRaceRecord:Bool()
+			Return (StageManager.getTimeModeScore(characterID) < SonicDef.OVER_TIME)
+		End
+	
+		Function movingBar:Bool()
+			If (offsetx <= 0) Then
+				offsetx = 0
+			Else
+				offsetx -= movespeedx
+				
+				' Magic numbers:
+				If (offsetx = SCREEN_WIDTH - movespeedx) Then
+					If (stageModeState = STATE_RACE_MODE) Then
+						If (isRaceModeNewRecord()) Then
+							SoundSystem.getInstance().playBgm(41, False)
+						Else
+							SoundSystem.getInstance().playBgm(42, False)
+						EndIf
+					ElseIf (StageManager.getStageID() = 13) Then
+						SoundSystem.getInstance().playBgm(28, False)
+					ElseIf (StageManager.getStageID() = 13) Then
+						SoundSystem.getInstance().playBgm(29, False)
 					Else
-						SoundSystem.getInstance().playBgm(ANI_POP_JUMP_UP_SLOW, False)
-					EndIf
-					
-				ElseIf (StageManager.getStageID() = SPIN_LV2_COUNT) Then
-					SoundSystem.getInstance().playBgm(28, False)
-				ElseIf (StageManager.getStageID() = ANI_POAL_PULL) Then
-					SoundSystem.getInstance().playBgm(ANI_WIND_JUMP, False)
-				Else
-					
-					If (StageManager.getStageID() Mod 2 = 0) Then
-						SoundSystem.getInstance().playBgm(MOON_STAR_DES_Y_1, False)
-					EndIf
-					
-					If (StageManager.getStageID() Mod 2 = 1) Then
-						SoundSystem.getInstance().playBgm(ANI_SMALL_ZERO, False)
+						If (StageManager.getStageID() Mod 2 = 0) Then
+							SoundSystem.getInstance().playBgm(26, False)
+						EndIf
+						
+						If (StageManager.getStageID() Mod 2 = 1) Then
+							SoundSystem.getInstance().playBgm(27, False)
+						EndIf
 					EndIf
 				EndIf
 			EndIf
-		EndIf
-		
-		If (offsetx <> 0) Then
-			Return False
-		EndIf
-		
-		If (offsety <= (SCREEN_HEIGHT / 2) - SPIN_LV2_COUNT_CONF) Then
-			offsety = (SCREEN_HEIGHT / 2) - SPIN_LV2_COUNT_CONF
-			Return True
-		EndIf
-		
-		offsety -= movespeedy
-		Return False
-	End
-	
-	Public Function clipMoveInit:Void(startx:Int, starty:Int, startw:Int, endw:Int, height:Int)
-		clipx = startx
-		clipy = starty
-		clipstartw = startw
-		clipendw = endw
-		cliph = height
-	End
-	
-	Public Function clipMoveLogic:Bool()
-		
-		If (clipstartw < clipendw) Then
-			clipstartw += clipspeed
-			Return False
-		EndIf
-		
-		clipstartw = clipendw
-		Return True
-	End
-	
-	Public Function clipMoveShadow:Void(g:MFGraphics)
-		MyAPI.setClip(g, clipx, 0, clipstartw, SCREEN_HEIGHT)
-	End
-	
-	Public Function calculateScore:Void()
-		
-		If (StageManager.getStageID() = TERMINAL_COUNT) Then
-			Print("timeCount=" + timeCount)
 			
-			If (timeCount > 192000) Then
+			If (offsetx <> 0) Then
+				Return False
+			EndIf
+			
+			If (offsety <= (SCREEN_HEIGHT / 2) - 36) Then
+				offsety = (SCREEN_HEIGHT / 2) - 36
+				
+				Return True
+			EndIf
+			
+			offsety -= movespeedy
+			
+			Return False
+		End
+	
+		Function clipMoveInit:Void(startx:Int, starty:Int, startw:Int, endw:Int, height:Int)
+			clipx = startx
+			clipy = starty
+			clipstartw = startw
+			clipendw = endw
+			cliph = height
+		End
+		
+		Function clipMoveLogic:Bool()
+			If (clipstartw < clipendw) Then
+				clipstartw += clipspeed
+				
+				Return False
+			EndIf
+			
+			clipstartw = clipendw
+			
+			Return True
+		End
+		
+		Function clipMoveShadow:Void(g:MFGraphics)
+			MyAPI.setClip(g, clipx, 0, clipstartw, SCREEN_HEIGHT)
+		End
+		
+		Function calculateScore:Void()
+			' Magic number: 10 (Stage ID)
+			If (StageManager.getStageID() = 10) Then
+				Print("timeCount=" + timeCount)
+				
+				If (timeCount > 192000) Then
+					score1 = 1000
+				ElseIf (timeCount > 192000 Or timeCount <= 132000) Then
+					score1 = 0
+				Else
+					score1 = BANKING_MIN_SPEED
+				EndIf
+				
+				score2 = ringNum * 100
+				
+				Return
+			EndIf
+			
+			If (timeCount < 50000) Then
+				score1 = 50000
+			ElseIf (timeCount >= 50000 And timeCount < 60000) Then
+				score1 = 10000
+			ElseIf (timeCount >= 60000 And timeCount < 90000) Then
+				score1 = 5000
+			ElseIf (timeCount >= 90000 And timeCount < 120000) Then
+				score1 = 4000
+			ElseIf (timeCount >= 120000 And timeCount < 180000) Then
+				score1 = 3000
+			ElseIf (timeCount >= 180000 And timeCount < 240000) Then
+				score1 = 2000
+			ElseIf (timeCount >= 240000 And timeCount < 300000) Then
 				score1 = 1000
-			ElseIf (timeCount > 192000 Or timeCount <= 132000) Then
+			ElseIf (timeCount < 300000 Or timeCount >= 360000) Then
 				score1 = 0
 			Else
-				score1 = BANKING_MIN_SPEED
+				score1 = 500
 			EndIf
 			
 			score2 = ringNum * 100
-			Return
-		EndIf
+		End
 		
-		If (timeCount < 50000) Then
-			score1 = 50000
-		ElseIf (timeCount >= 50000 And timeCount < 60000) Then
-			score1 = 10000
-		ElseIf (timeCount >= 60000 And timeCount < 90000) Then
-			score1 = 5000
-		ElseIf (timeCount >= 90000 And timeCount < 120000) Then
-			score1 = 4000
-		ElseIf (timeCount >= 120000 And timeCount < 180000) Then
-			score1 = 3000
-		ElseIf (timeCount >= 180000 And timeCount < 240000) Then
-			score1 = 2000
-		ElseIf (timeCount >= 240000 And timeCount < 300000) Then
-			score1 = 1000
-		ElseIf (timeCount < 300000 Or timeCount >= 360000) Then
-			score1 = 0
-		Else
-			score1 = BANKING_MIN_SPEED
-		EndIf
-		
-		score2 = ringNum * 100
-	End
-	
-	Public Function stagePassDraw:Void(g:MFGraphics)
-		If (Not StageManager.isOnlyStagePass) Then
-			Select (stageModeState)
-				Case 0
-					
-					If (movingBar()) Then
-						drawStagePassInfoScroll(g, stagePassResultOutOffsetX, (SCREEN_HEIGHT / 2) - SPIN_LV2_COUNT_CONF, ANI_PUSH_WALL, SIDE_FOOT_FROM_CENTER)
-						
-						If (Not clipMoveLogic()) Then
-							clipMoveShadow(g)
-							GameState.guiAniDrawer.draw(g, 6, (SCREEN_WIDTH / 2) - 70, (SCREEN_HEIGHT / 2) - 6, False, 0)
-							GameState.guiAniDrawer.draw(g, 7, (SCREEN_WIDTH / 2) - 70, ((SCREEN_HEIGHT / 2) + MENU_SPACE) - 6, False, 0)
-							drawNum(g, score1, (SCREEN_WIDTH / 2) + NUM_DISTANCE, SCREEN_HEIGHT / 2, 2, 0)
-							drawNum(g, score2, (SCREEN_WIDTH / 2) + NUM_DISTANCE, (SCREEN_HEIGHT / 2) + MENU_SPACE, 2, 0)
-							MyAPI.setClip(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
-							totalPlusscore = (score1 + score2) + scoreNum
-						EndIf
-						
-					Else
-						drawMovingbar(g, STAGE_PASS_STR_SPACE)
-						stagePassResultOutOffsetX = 0
-						isStartStageEndFlag = False
-						stageEndFrameCnt = 0
-						isOnlyBarOut = False
-					EndIf
-					
-					If (clipMoveLogic()) Then
-						GameState.guiAniDrawer.draw(g, 6, stagePassResultOutOffsetX + ((SCREEN_WIDTH / 2) - 70), (SCREEN_HEIGHT / 2) - 6, False, 0)
-						GameState.guiAniDrawer.draw(g, 7, stagePassResultOutOffsetX + ((SCREEN_WIDTH / 2) - 70), ((SCREEN_HEIGHT / 2) + MENU_SPACE) - 6, False, 0)
-						
-						If (stageModeState = STATE_RACE_MODE) Then
-							raceScoreNum = MyAPI.calNextPosition((double) raceScoreNum, (double) totalPlusscore, 1, 5)
-						Else
-							scoreNum = MyAPI.calNextPosition((double) scoreNum, (double) totalPlusscore, 1, 5)
-						EndIf
-						
-						score1 = MyAPI.calNextPosition((double) score1, 0.0d, 1, 5)
-						score2 = MyAPI.calNextPosition((double) score2, 0.0d, 1, 5)
-						drawNum(g, score1, ((SCREEN_WIDTH / 2) + NUM_DISTANCE) + stagePassResultOutOffsetX, SCREEN_HEIGHT / 2, 2, 0)
-						drawNum(g, score2, ((SCREEN_WIDTH / 2) + NUM_DISTANCE) + stagePassResultOutOffsetX, (SCREEN_HEIGHT / 2) + MENU_SPACE, 2, 0)
-						
-						If (scoreNum = totalPlusscore) Then
-							IsStarttoCnt = True
+		Function stagePassDraw:Void(g:MFGraphics)
+			If (Not StageManager.isOnlyStagePass) Then
+				Select (stageModeState)
+					Case STATE_NORMAL_MODE
+						If (movingBar()) Then
+							drawStagePassInfoScroll(g, stagePassResultOutOffsetX, (SCREEN_HEIGHT / 2) - SPIN_LV2_COUNT_CONF, ANI_PUSH_WALL, SIDE_FOOT_FROM_CENTER)
 							
-							If (StageManager.isOnlyScoreCal) Then
-								isOnlyBarOut = True
-							Else
-								isStartStageEndFlag = True
+							If (Not clipMoveLogic()) Then
+								clipMoveShadow(g)
+								
+								GameState.guiAniDrawer.draw(g, 6, (SCREEN_WIDTH / 2) - 70, (SCREEN_HEIGHT / 2) - 6, False, 0)
+								GameState.guiAniDrawer.draw(g, 7, (SCREEN_WIDTH / 2) - 70, ((SCREEN_HEIGHT / 2) + MENU_SPACE) - 6, False, 0)
+								
+								drawNum(g, score1, (SCREEN_WIDTH / 2) + NUM_DISTANCE, SCREEN_HEIGHT / 2, 2, 0)
+								drawNum(g, score2, (SCREEN_WIDTH / 2) + NUM_DISTANCE, (SCREEN_HEIGHT / 2) + MENU_SPACE, 2, 0)
+								
+								MyAPI.setClip(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+								totalPlusscore = (score1 + score2) + scoreNum
 							EndIf
-							
 						Else
-							SoundSystem.getInstance().playSe(ANI_POAL_PULL_2)
+							drawMovingbar(g, STAGE_PASS_STR_SPACE)
+							
+							stagePassResultOutOffsetX = 0
+							isStartStageEndFlag = False
+							stageEndFrameCnt = 0
+							isOnlyBarOut = False
 						EndIf
-					EndIf
-					
-					If (isStartStageEndFlag) Then
-						stageEndFrameCnt += 1
-						
-						If (stageEndFrameCnt = 2) Then
-							SoundSystem.getInstance().playSe(LOOK_COUNT)
-						EndIf
-					EndIf
-					
-					If (isOnlyBarOut) Then
-						onlyBarOutCnt += 1
-						
-						If (onlyBarOutCnt = 2) Then
-							SoundSystem.getInstance().playSe(LOOK_COUNT)
-						EndIf
-						
-						If (onlyBarOutCnt > onlyBarOutCntMax) Then
-							stagePassResultOutOffsetX -= 96
-						EndIf
-						
-						If (stagePassResultOutOffsetX < ACParam.NO_COLLISION) Then
-							StageManager.isScoreBarOutOfScreen = True
-						EndIf
-					EndIf
-					
-				Case 1
-					
-					If (movingBar()) Then
-						drawStagePassInfoScroll(g, (SCREEN_HEIGHT / 2) - SPIN_LV2_COUNT_CONF, ANI_PUSH_WALL, SIDE_FOOT_FROM_CENTER)
 						
 						If (clipMoveLogic()) Then
-							IsStarttoCnt = True
+							GameState.guiAniDrawer.draw(g, 6, stagePassResultOutOffsetX + ((SCREEN_WIDTH / 2) - 70), (SCREEN_HEIGHT / 2) - 6, False, 0)
+							GameState.guiAniDrawer.draw(g, 7, stagePassResultOutOffsetX + ((SCREEN_WIDTH / 2) - 70), ((SCREEN_HEIGHT / 2) + MENU_SPACE) - 6, False, 0)
+							
+							If (stageModeState = STATE_RACE_MODE) Then
+								raceScoreNum = MyAPI.calNextPosition(Double(raceScoreNum), Double(totalPlusscore), 1, 5)
+							Else
+								scoreNum = MyAPI.calNextPosition(Double(scoreNum), Double(totalPlusscore), 1, 5)
+							EndIf
+							
+							score1 = MyAPI.calNextPosition((double) score1, 0.0d, 1, 5)
+							score2 = MyAPI.calNextPosition((double) score2, 0.0d, 1, 5)
+							
+							drawNum(g, score1, ((SCREEN_WIDTH / 2) + NUM_DISTANCE) + stagePassResultOutOffsetX, SCREEN_HEIGHT / 2, 2, 0)
+							drawNum(g, score2, ((SCREEN_WIDTH / 2) + NUM_DISTANCE) + stagePassResultOutOffsetX, (SCREEN_HEIGHT / 2) + MENU_SPACE, 2, 0)
+							
+							If (scoreNum = totalPlusscore) Then
+								IsStarttoCnt = True
+								
+								If (StageManager.isOnlyScoreCal) Then
+									isOnlyBarOut = True
+								Else
+									isStartStageEndFlag = True
+								EndIf
+							Else
+								SoundSystem.getInstance().playSe(31)
+							EndIf
 						EndIf
 						
-						clipMoveShadow(g)
-						GameState.guiAniDrawer.draw(g, ANI_PUSH_WALL, (SCREEN_WIDTH / 2) - BACKGROUND_WIDTH, SCREEN_HEIGHT / 2, False, 0)
-						drawRecordTime(g, timeCount, (SCREEN_WIDTH / 2) + NUM_DISTANCE_BIG, (SCREEN_HEIGHT / 2) + 7, 2, 2)
-						MyAPI.setClip(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
-						
-						If (isRaceModeNewRecord() And IsStarttoCnt And Not StageManager.isSaveTimeModeScore) Then
-							IsDisplayRaceModeNewRecord = True
+						If (isStartStageEndFlag) Then
+							stageEndFrameCnt += 1
+							
+							If (stageEndFrameCnt = 2) Then
+								SoundSystem.getInstance().playSe(32)
+							EndIf
 						EndIf
 						
-						If (IsDisplayRaceModeNewRecord) Then
-							GameState.guiAniDrawer.draw(g, ANI_ROTATE_JUMP, SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + ANI_BANK_2, False, 0)
+						If (isOnlyBarOut) Then
+							onlyBarOutCnt += 1
+							
+							If (onlyBarOutCnt = 2) Then
+								SoundSystem.getInstance().playSe(32)
+							EndIf
+							
+							If (onlyBarOutCnt > onlyBarOutCntMax) Then
+								stagePassResultOutOffsetX -= 96
+							EndIf
+							
+							If (stagePassResultOutOffsetX < ACParam.NO_COLLISION) Then
+								StageManager.isScoreBarOutOfScreen = True
+							EndIf
 						EndIf
-						
-						If (StageManager.isSaveTimeModeScore = Null And IsStarttoCnt) Then
-							StageManager.setTimeModeScore(characterID, timeCount)
-							StageManager.isSaveTimeModeScore = True
+					Case STATE_RACE_MODE
+						If (movingBar()) Then
+							drawStagePassInfoScroll(g, (SCREEN_HEIGHT / 2) - SPIN_LV2_COUNT_CONF, ANI_PUSH_WALL, SIDE_FOOT_FROM_CENTER)
+							
+							If (clipMoveLogic()) Then
+								IsStarttoCnt = True
+							EndIf
+							
+							clipMoveShadow(g)
+							GameState.guiAniDrawer.draw(g, ANI_PUSH_WALL, (SCREEN_WIDTH / 2) - BACKGROUND_WIDTH, SCREEN_HEIGHT / 2, False, 0)
+							drawRecordTime(g, timeCount, (SCREEN_WIDTH / 2) + NUM_DISTANCE_BIG, (SCREEN_HEIGHT / 2) + 7, 2, 2)
+							
+							MyAPI.setClip(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+							
+							If (isRaceModeNewRecord() And IsStarttoCnt And Not StageManager.isSaveTimeModeScore) Then
+								IsDisplayRaceModeNewRecord = True
+							EndIf
+							
+							If (IsDisplayRaceModeNewRecord) Then
+								GameState.guiAniDrawer.draw(g, ANI_ROTATE_JUMP, SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + ANI_BANK_2, False, 0)
+							EndIf
+							
+							If (StageManager.isSaveTimeModeScore = Null And IsStarttoCnt) Then
+								StageManager.setTimeModeScore(characterID, timeCount)
+								StageManager.isSaveTimeModeScore = True
+								
+								Return
+							EndIf
+							
 							Return
 						EndIf
 						
-						Return
-					EndIf
-					
-					drawMovingbar(g, STAGE_PASS_STR_SPACE) ' 182
-				Default
-			End Select
-		EndIf
-	End
+						drawMovingbar(g, STAGE_PASS_STR_SPACE) ' 182
+				End Select
+			EndIf
+		End
 	
 	Public Function gamepauseInit:Void()
 		cursor = 0
@@ -6064,7 +6081,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Function gamepauseDraw:Void(g:MFGraphics)
 		PAUSE_MENU_NORMAL_ITEM = PAUSE_MENU_NORMAL_NOSHOP
 		State.fillMenuRect(g, (SCREEN_WIDTH / 2) + PAUSE_FRAME_OFFSET_X, (SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y, PAUSE_FRAME_WIDTH, PAUSE_FRAME_HEIGHT)
-		State.drawMenuFontById(g, BACKGROUND_WIDTH, SCREEN_WIDTH / 2, (((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + (MENU_SPACE / 2)) + TERMINAL_COUNT)
+		State.drawMenuFontById(g, BACKGROUND_WIDTH, SCREEN_WIDTH / 2, (((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + (MENU_SPACE / 2)) + 10)
 		
 		If (stageModeState = STATE_NORMAL_MODE) Then
 			currentPauseMenuItem = PAUSE_MENU_NORMAL_ITEM
@@ -6080,10 +6097,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			cursorIndex = (cursor - 4) + 1
 		EndIf
 		
-		State.drawMenuFontById(g, 119, SCREEN_WIDTH / 2, (((((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + TERMINAL_COUNT) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * (cursor - cursorIndex)))
-		State.drawMenuFontById(g, StringIndex.STR_RIGHT_ARROW, ((SCREEN_WIDTH / 2) - 56) - 0, (((((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + TERMINAL_COUNT) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * (cursor - cursorIndex)))
+		State.drawMenuFontById(g, 119, SCREEN_WIDTH / 2, (((((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * (cursor - cursorIndex)))
+		State.drawMenuFontById(g, StringIndex.STR_RIGHT_ARROW, ((SCREEN_WIDTH / 2) - 56) - 0, (((((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * (cursor - cursorIndex)))
 		For (Int i = cursorIndex; i < cursorIndex + 4; i += 1)
-			State.drawMenuFontById(g, currentPauseMenuItem[i], SCREEN_WIDTH / 2, (((((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + TERMINAL_COUNT) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * (i - cursorIndex)))
+			State.drawMenuFontById(g, currentPauseMenuItem[i], SCREEN_WIDTH / 2, (((((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * (i - cursorIndex)))
 		Next
 		
 		If (currentPauseMenuItem.length > 4) Then

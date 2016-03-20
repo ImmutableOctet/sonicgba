@@ -215,8 +215,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>82</Y>
+        <X>25</X>
+        <Y>84</Y>
       </CursorPos>
       <DocGUID>9de52c82-cef6-423d-8a3b-636a1822fd5b</DocGUID>
       <Bookmarks />
@@ -323,8 +323,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>61</X>
-        <Y>259</Y>
+        <X>3</X>
+        <Y>3498</Y>
       </CursorPos>
       <DocGUID>9e5f42a1-f393-44d9-bb0a-778b95a3e775</DocGUID>
       <Bookmarks />
