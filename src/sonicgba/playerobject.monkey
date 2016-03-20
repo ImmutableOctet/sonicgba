@@ -3725,23 +3725,23 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method isAttackingEnemy:Bool()
-			If ((Self instanceof PlayerAmy) And getCharacterAnimationID() = ANI_LOOK_UP_2) Then
+			If ((characterID = CHARACTER_AMY) And getCharacterAnimationID() = ANI_LOOK_UP_2) Then
 				Return False
 			EndIf
 			
-			If ((Self instanceof PlayerAmy) And (getCharacterAnimationID() = ANI_ATTACK_1 Or getCharacterAnimationID() = ANI_ATTACK_2 Or getCharacterAnimationID() = SPIN_KEY_COUNT Or getCharacterAnimationID() = ANI_RAIL_ROLL Or getCharacterAnimationID() = ANI_BAR_ROLL_1 Or getCharacterAnimationID() = 7)) Then
+			If ((characterID = CHARACTER_AMY) And (getCharacterAnimationID() = ANI_ATTACK_1 Or getCharacterAnimationID() = ANI_ATTACK_2 Or getCharacterAnimationID() = ANI_ATTACK_3 Or getCharacterAnimationID() = ANI_RAIL_ROLL Or getCharacterAnimationID() = ANI_BAR_ROLL_1 Or getCharacterAnimationID() = ANI_SPIN_LV2)) Then
 				Return True
 			EndIf
 			
-			If ((Self instanceof PlayerSonic) And (getCharacterAnimationID() = ANI_POAL_PULL Or getCharacterAnimationID() = ANI_POP_JUMP_UP Or getCharacterAnimationID() = ANI_JUMP_ROLL Or getCharacterAnimationID() = 4)) Then
+			If ((characterID = CHARACTER_SONIC) And (getCharacterAnimationID() = ANI_POAL_PULL Or getCharacterAnimationID() = ANI_POP_JUMP_UP Or getCharacterAnimationID() = ANI_JUMP_ROLL Or getCharacterAnimationID() = ANI_JUMP)) Then
 				Return True
 			EndIf
 			
-			If ((Self instanceof PlayerTails) And getCharacterAnimationID() = ANI_SLIP) Then
+			If ((characterID = CHARACTER_TAILS) And getCharacterAnimationID() = ANI_SLIP) Then
 				Return True
 			EndIf
 			
-			If ((Self instanceof PlayerKnuckles) And (getCharacterAnimationID() = ANI_SLIP Or getCharacterAnimationID() = SPIN_LV2_COUNT Or getCharacterAnimationID() = ANI_POAL_PULL Or getCharacterAnimationID() = ANI_ATTACK_2 Or getCharacterAnimationID() = SPIN_KEY_COUNT Or getCharacterAnimationID() = ANI_RAIL_ROLL Or getCharacterAnimationID() = ANI_BAR_ROLL_1)) Then
+			If ((characterID = CHARACTER_KNUCKLES) And (getCharacterAnimationID() = ANI_SLIP Or getCharacterAnimationID() = SPIN_LV2_COUNT Or getCharacterAnimationID() = ANI_POAL_PULL Or getCharacterAnimationID() = ANI_ATTACK_2 Or getCharacterAnimationID() = ANI_ATTACK_3 Or getCharacterAnimationID() = ANI_RAIL_ROLL Or getCharacterAnimationID() = ANI_BAR_ROLL_1)) Then
 				Return True
 			EndIf
 			
@@ -4823,7 +4823,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				setVelY(-ATTACK_POP_POWER)
 			ElseIf (characterID <> CHARACTER_KNUCKLES) Then
 				setVelY(-Self.velY)
-			ElseIf (getCharacterAnimationID() = ANI_ATTACK_2 Or getCharacterAnimationID() = SPIN_KEY_COUNT Or getCharacterAnimationID() = ANI_RAIL_ROLL Or getCharacterAnimationID() = ANI_BAR_ROLL_1) Then
+			ElseIf (getCharacterAnimationID() = ANI_ATTACK_2 Or getCharacterAnimationID() = ANI_ATTACK_3 Or getCharacterAnimationID() = ANI_RAIL_ROLL Or getCharacterAnimationID() = ANI_BAR_ROLL_1) Then
 				setVelY((-Self.velY) - 325)
 			Else
 				setVelY(-Self.velY)
@@ -5146,7 +5146,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		For (Int i = 0; i < 5; i += 1)
 			If (itemVec[i][0] = -1) Then
 				itemVec[i][0] = itemId
-				itemVec[i][1] = SPIN_KEY_COUNT
+				itemVec[i][1] = 20 ' SPIN_KEY_COUNT
 				Return
 			EndIf
 		Next
