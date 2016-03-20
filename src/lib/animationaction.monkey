@@ -20,7 +20,8 @@ Private
 	Import lib.myapi
 	
 	Import lib.animation
-	'Import lib.animationframe
+	Import lib.animationframe
+	Import lib.animationimageinfo
 	
 	Import com.sega.mobile.framework.device.mfdevice
 	'Import com.sega.mobile.framework.device.mfgamepad
@@ -35,6 +36,9 @@ Public
 ' Classes:
 Class Action
 	Private
+		' Constant variable(s):
+		Const FRAME_DATA_SIZE:= 2
+		
 		' Fields:
 		Field img_clip:MFImage
 		Field m_CurFrame:Short
@@ -83,7 +87,7 @@ Class Action
 				Return Null
 			EndIf
 			
-			Return m_Ani.m_Frames[GetTempFrame()].GetARect()
+			Return Self.m_Ani.m_Frames[GetTempFrame()].GetARect()
 		End
 		
 		Method GetCRect:Byte[]()
@@ -91,7 +95,7 @@ Class Action
 				Return Null
 			EndIf
 			
-			Return m_Ani.m_Frames[GetTempFrame()].GetCRect()
+			Return Self.m_Ani.m_Frames[GetTempFrame()].GetCRect()
 		End
 		
 		Method JumpFrame:Void(frame:Byte)
@@ -105,135 +109,138 @@ Class Action
 			Return Self.m_CurFrame
 		End
 		
+		Method InitializeFrameInfo:Byte[][](nFrames:Int)
+			Self.m_FrameInfo = New Byte[nFrames][]
+			
+			For Local i:= 0 Until Self.m_nFrames ' Self.m_FrameInfo.Length
+				Self.m_FrameInfo[i] = New Byte[FRAME_DATA_SIZE]
+			Next
+		End
+		
 		Method LoadAction:Void(in:Stream)
 			Self.m_nFrames = in.ReadByte()
-			Self.m_FrameInfo = (Byte[][]) Array.newInstance(Byte.TYPE, New Int[]{Self.m_nFrames, 2})
 			
-			For (Short i = (Short) 0; i < Self.m_nFrames; i += 1)
-				For (Int j = 0; j < 2; j += 1)
+			If (Self.m_nFrames < 0) Then
+				Self.m_nFrames = (Self.m_nFrames + 256)
+			EndIf
+			
+			InitializeFrameInfo(Self.m_nFrames)
+			
+			For Local i:= 0 Until Self.m_nFrames
+				For Local j:= 0 Until FRAME_DATA_SIZE
 					Self.m_FrameInfo[i][j] = in.ReadByte()
 				Next
 			EndIf
 		End
-	
-	Public Method loadActionG2:Void(ds:Stream)
-		Self.m_nFrames = ds.ReadByte()
 		
-		If (Self.m_nFrames < (Short) 0) Then
-			Self.m_nFrames = (Short) (Self.m_nFrames + 256)
-		EndIf
-		
-		Self.m_FrameInfo = (Byte[][]) Array.newInstance(Byte.TYPE, New Int[]{Self.m_nFrames, 2})
-		For (Short i = (Short) 0; i < Self.m_nFrames; i += 1)
-			For (Int j = 0; j < 2; j += 1)
-				Self.m_FrameInfo[i][j] = ds.ReadByte()
-			Next
-			ds.ReadShort()
-			ds.ReadShort()
-		EndIf
-	End
-	
-	Public Method LoadAction:Void()
-		Self.m_nFrames = (Short) 1
-		Self.m_FrameInfo = (Byte[][]) Array.newInstance(Byte.TYPE, New Int[]{Self.m_nFrames, 2})
-		For (Short i = (Short) 0; i < Self.m_nFrames; i += 1)
-			Self.m_FrameInfo[i][0] = (Byte) 0
-			Self.m_FrameInfo[i][1] = GimmickObject.GIMMICK_DASH_PANEL_HIGH
-		EndIf
-	End
-	
-	Public Method IsEnd:Bool()
-		
-		If (Self.m_bLoop) Then
-			Return False
-		EndIf
-		
-		If (Self.m_Timer < Self.m_FrameInfo[Self.m_CurFrame][1] Or Self.m_CurFrame <> Self.m_nFrames - 1) Then
-			Return False
-		EndIf
-		
-		Return True
-	End
-	
-	Public Method SetFrames:Void(frames:Frame[])
-		Animation.Self.m_Frames = frames
-	End
-	
-	Public Method SetPause:Void(pause:Bool)
-		Self.m_bPause = pause
-	End
-	
-	Public Method Draw:Void(g:MFGraphics, x:Int, y:Int, attr:Short)
-		
-		If (Self.m_nFrames <> (Short) 0) Then
-			Int tmpFrame = Self.m_FrameInfo[Self.m_CurFrame][0]
+		Method loadActionG2:Void(ds:Stream)
+			Self.m_nFrames = ds.ReadByte()
 			
-			If (tmpFrame < 0) Then
-				tmpFrame += 256
+			If (Self.m_nFrames < 0) Then
+				Self.m_nFrames = (Self.m_nFrames + 256)
 			EndIf
 			
-			Animation.Self.m_Frames[tmpFrame].Draw(g, x, y, attr)
+			InitializeFrameInfo(Self.m_nFrames)
 			
-			If (Not Self.m_bPause) Then
-				Self.m_Timer = (Short) (Self.m_Timer + 1)
+			For Local i:= 0 Until Self.m_nFrames
+				For Local j:= 0 Until FRAME_DATA_SIZE
+					Self.m_FrameInfo[i][j] = ds.ReadByte()
+				Next
 				
-				If (Self.m_Timer >= Self.m_FrameInfo[Self.m_CurFrame][1]) Then
-					Self.m_CurFrame = (Short) (Self.m_CurFrame + 1)
-					
-					If (Self.m_CurFrame < Self.m_nFrames) Then
-						Self.m_Timer = (Short) 0
-					ElseIf (Self.m_bLoop) Then
-						Self.m_Timer = (Short) 0
-						Self.m_CurFrame = (Short) 0
-					} Else {
-						Self.m_CurFrame = (Byte) (Self.m_nFrames - 1)
-					EndIf
-				EndIf
+				ds.ReadShort()
+				ds.ReadShort()
 			EndIf
-		EndIf
+		End
 		
-	End
-	
-	Public Method Draw:Void(g:MFGraphics, frame:Short, x:Int, y:Int, attr:Short)
-		try {
+		Method LoadAction:Void()
+			Self.m_nFrames = 1
 			
-			If (frame < Self.m_nFrames) Then
-				Self.m_CurFrame = frame
-				Int tmpFrame = Self.m_FrameInfo[frame][0]
+			InitializeFrameInfo(Self.m_nFrames)
+			
+			For Local i:= 0 Until Self.m_nFrames
+				Self.m_FrameInfo[i][0] = 0
+				Self.m_FrameInfo[i][1] = 100
+			EndIf
+		End
+		
+		Method IsEnd:Bool()
+			If (Self.m_bLoop) Then
+				Return False
+			EndIf
+			
+			If (Self.m_Timer < Self.m_FrameInfo[Self.m_CurFrame][1] Or Self.m_CurFrame <> Self.m_nFrames - 1) Then
+				Return False
+			EndIf
+			
+			Return True
+		End
+		
+		Method SetFrames:Void(frames:Frame[])
+			Self.m_Ani.m_Frames = frames
+		End
+	
+		Method SetPause:Void(pause:Bool)
+			Self.m_bPause = pause
+		End
+		
+		Method Draw:Void(g:MFGraphics, x:Int, y:Int, attr:Short)
+			If (Self.m_nFrames <> 0) Then
+				Local tmpFrame:= Self.m_FrameInfo[Self.m_CurFrame][0]
 				
 				If (tmpFrame < 0) Then
 					tmpFrame += 256
 				EndIf
 				
-				Animation.Self.m_Frames[tmpFrame].Draw(g, x, y, attr)
+				Self.m_Ani.m_Frames[tmpFrame].Draw(g, x, y, attr)
+				
+				If (Not Self.m_bPause) Then
+					Self.m_Timer = Short(Self.m_Timer + 1)
+					
+					If (Self.m_Timer >= Self.m_FrameInfo[Self.m_CurFrame][1]) Then
+						Self.m_CurFrame = Short(Self.m_CurFrame + 1)
+						
+						If (Self.m_CurFrame < Self.m_nFrames) Then
+							Self.m_Timer = 0
+						ElseIf (Self.m_bLoop) Then
+							Self.m_Timer = 0
+							Self.m_CurFrame = 0
+						Else
+							Self.m_CurFrame = (Self.m_nFrames - 1)
+						EndIf
+					EndIf
+				EndIf
+			EndIf
+		End
+		
+		Method Draw:Void(g:MFGraphics, frame:Short, x:Int, y:Int, attr:Short)
+			If (frame < Self.m_nFrames) Then
+				Self.m_CurFrame = frame
+				
+				Local tmpFrame:= Self.m_FrameInfo[frame][0]
+				
+				If (tmpFrame < 0) Then
+					tmpFrame += 256
+				EndIf
+				
+				Self.m_Ani.m_Frames[tmpFrame].Draw(g, x, y, attr)
+			EndIf
+		End
+		
+		Method SetFrame:Void(frame:Short)
+			If (frame < Self.m_nFrames) Then
+				Self.m_CurFrame = frame
+			EndIf
+		End
+		
+		Method getFrameNum:Int()
+			Return Self.m_nFrames
+		End
+		
+		Method isTimeOver:Bool(time:Int)
+			If (Self.m_nFrames = 0) Then
+				Return True
 			EndIf
 			
-		} catch (Exception e) {
-			Print("frame:" + frame)
-			Print("m_FrameInfo.Length:" + Self.m_FrameInfo.Length)
-			Print("m_FrameInfo[frame][0]:" + Self.m_FrameInfo[frame][0])
-			Print("m_Frames.Length:" + Animation.Self.m_Frames.Length)
-		EndIf
-	End
-	
-	Public Method SetFrame:Void(frame:Short)
-		
-		If (frame < Self.m_nFrames) Then
-			Self.m_CurFrame = frame
-		EndIf
-		
-	End
-	
-	Public Method getFrameNum:Int()
-		Return Self.m_nFrames
-	End
-	
-	Public Method isTimeOver:Bool(time:Int)
-		
-		If (Self.m_nFrames = (Short) 0) Then
-			Return True
-		EndIf
-		
-		Return time >= Self.m_FrameInfo[Self.m_CurFrame][1]
-	End
+			Return (time >= Self.m_FrameInfo[Self.m_CurFrame][1])
+		End
 End

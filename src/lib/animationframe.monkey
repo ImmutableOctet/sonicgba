@@ -21,6 +21,7 @@ Private
 	
 	Import lib.animation
 	Import lib.animationaction
+	Import lib.animationimageinfo
 	
 	Import com.sega.mobile.framework.device.mfdevice
 	'Import com.sega.mobile.framework.device.mfgamepad

@@ -10,32 +10,32 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animation.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>1</X>
-        <Y>20</Y>
+        <X>27</X>
+        <Y>33</Y>
       </CursorPos>
       <DocGUID>1ee23869-2aab-47b8-b3b2-eb805042c0d5</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationaction.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>29</X>
-        <Y>7</Y>
+        <X>24</X>
+        <Y>239</Y>
       </CursorPos>
       <DocGUID>4b6b7754-e03d-42cf-905e-3b598c9f9876</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationframe.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>1</X>
+        <Y>23</Y>
       </CursorPos>
       <DocGUID>ce0adb72-d17b-4263-b0fc-1eac3ad12e19</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationimageinfo.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>25</X>
-        <Y>7</Y>
+        <X>1</X>
+        <Y>23</Y>
       </CursorPos>
       <DocGUID>c434fcb0-d260-4b9b-b20d-03d0aabb2369</DocGUID>
       <Bookmarks />
