@@ -2584,171 +2584,163 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				EndIf
 			EndIf
 		End
-	
-	Private Method inputLogicOnObject:Void()
-		Int i
-		Self.leavingBar = False
-		Self.doJumpForwardly = False
-		Self.degreeRotateMode = 0
-		Int tmpPower = Self.movePower
-		Int tmpMaxVel = Self.maxVelocity
 		
-		If (Self.animationID <> 5) Then
-			Int reversePower
+		Method inputLogicOnObject:Void()
+			Local i:Int
 			
-			If (((Key.repeat(Key.gLeft) And (Self.animationID = ANI_STAND Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT Or Self.animationID = ANI_RUN_1 Or Self.animationID = ANI_RUN_2 Or Self.animationID = ANI_RUN_3)) Or (Self.isCelebrate And Not Self.faceDirection)) And Not isOnSlip0()) Then
-				If (Self.animationID = ANI_SQUAT) Then
-					Self.animationID = ANI_STAND
-				EndIf
+			Self.leavingBar = False
+			Self.doJumpForwardly = False
+			Self.degreeRotateMode = 0
+			
+			Local tmpPower:= Self.movePower
+			Local tmpMaxVel:= Self.maxVelocity
+			
+			If (Self.animationID <> ANI_SQUAT) Then
+				Local reversePower:Int
 				
-				Self.faceDirection = Self.isAntiGravity ? True : False
-				
-				If (Self.velX > 0) Then
-					If (Self.animationID = ANI_JUMP) Then
-						reversePower = Self.movePowerReserseBall
-					Else
-						reversePower = Self.movePowerReverse
+				If (((Key.repeat(Key.gLeft) And (Self.animationID = ANI_STAND Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = ANI_CLIFF_2 Or Self.animationID = ANI_RUN_1 Or Self.animationID = ANI_RUN_2 Or Self.animationID = ANI_RUN_3)) Or (Self.isCelebrate And Not Self.faceDirection)) And Not isOnSlip0()) Then
+					If (Self.animationID = ANI_SQUAT) Then
+						Self.animationID = ANI_STAND
 					EndIf
 					
-					Self.velX -= reversePower
+					Self.faceDirection = (Self.isAntiGravity)
 					
-					If (Self.velX < 0) Then
-						Self.velX = (0 - reversePower) Shr 2
-					Else
-						Self.faceDirection = True
-					EndIf
-					
-				ElseIf (Self.animationID <> ANI_JUMP) Then
-					Self.velX -= tmpPower
-					
-					If (Self.velX < (-tmpMaxVel)) Then
-						Self.velX += tmpPower
-						
-						If (Self.velX > (-tmpMaxVel)) Then
-							Self.velX = -tmpMaxVel
+					If (Self.velX > 0) Then
+						If (Self.animationID = ANI_JUMP) Then
+							reversePower = Self.movePowerReserseBall
+						Else
+							reversePower = Self.movePowerReverse
 						EndIf
-					EndIf
-				EndIf
-				
-			ElseIf ((Key.repeat(Key.gRight) And (Self.animationID = ANI_STAND Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT Or Self.animationID = ANI_RUN_1 Or Self.animationID = ANI_RUN_2 Or Self.animationID = ANI_RUN_3)) Or (Self.isCelebrate And Self.faceDirection)) Then
-				If (Self.animationID = ANI_SQUAT) Then
-					Self.animationID = ANI_STAND
-				EndIf
-				
-				Self.faceDirection = Self.isAntiGravity ? False : True
-				
-				If (Self.velX < 0) Then
-					If (Self.animationID = ANI_JUMP) Then
-						reversePower = Self.movePowerReserseBall
-					Else
-						reversePower = Self.movePowerReverse
-					EndIf
-					
-					Self.velX += reversePower
-					
-					If (Self.velX > -1) Then
-						Self.velX = reversePower Shr 2
-					Else
-						Self.faceDirection = False
-					EndIf
-					
-				ElseIf (Self.animationID <> ANI_JUMP) Then
-					Self.velX += tmpPower
-					
-					If (Self.velX > tmpMaxVel) Then
+						
+						Self.velX -= reversePower
+						
+						If (Self.velX < 0) Then
+							Self.velX = (-reversePower) Shr 2
+						Else
+							Self.faceDirection = True
+						EndIf
+						
+					ElseIf (Self.animationID <> ANI_JUMP) Then
 						Self.velX -= tmpPower
 						
-						If (Self.velX < tmpMaxVel) Then
-							Self.velX = tmpMaxVel
+						If (Self.velX < (-tmpMaxVel)) Then
+							Self.velX += tmpPower
+							
+							If (Self.velX > (-tmpMaxVel)) Then
+								Self.velX = -tmpMaxVel
+							EndIf
+						EndIf
+					EndIf
+					
+				ElseIf ((Key.repeat(Key.gRight) And (Self.animationID = ANI_STAND Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = ANI_CLIFF_2 Or Self.animationID = ANI_RUN_1 Or Self.animationID = ANI_RUN_2 Or Self.animationID = ANI_RUN_3)) Or (Self.isCelebrate And Self.faceDirection)) Then
+					If (Self.animationID = ANI_SQUAT) Then
+						Self.animationID = ANI_STAND
+					EndIf
+					
+					Self.faceDirection = Self.isAntiGravity ? False : True
+					
+					If (Self.velX < 0) Then
+						If (Self.animationID = ANI_JUMP) Then
+							reversePower = Self.movePowerReserseBall
+						Else
+							reversePower = Self.movePowerReverse
+						EndIf
+						
+						Self.velX += reversePower
+						
+						If (Self.velX > -1) Then
+							Self.velX = (reversePower Shr 2)
+						Else
+							Self.faceDirection = False
+						EndIf
+						
+					ElseIf (Self.animationID <> ANI_JUMP) Then
+						Self.velX += tmpPower
+						
+						If (Self.velX > tmpMaxVel) Then
+							Self.velX -= tmpPower
+							
+							If (Self.velX < tmpMaxVel) Then
+								Self.velX = tmpMaxVel
+							EndIf
 						EndIf
 					EndIf
 				EndIf
 			EndIf
-		EndIf
-		
-		If (Self.animationID <> ANI_NONE) Then
-			If (Abs(Self.velX) <= 0) Then
-				If (Not (Self.animationID = ANI_LOOK_UP_1 Or Self.animationID = ANI_LOOK_UP_2 Or Self.animationID = ANI_LOOK_UP_OVER Or Self.animationID = ANI_SQUAT)) Then
-					Self.animationID = ANI_STAND
-					checkCliffAnimation()
-				EndIf
-				
-			ElseIf (Self.animationID <> ANI_JUMP) Then
-				If (Abs(Self.velX) < SPEED_LIMIT_LEVEL_1) Then
-					Self.animationID = ANI_RUN_1
-				ElseIf (Abs(Self.velX) < SPEED_LIMIT_LEVEL_2) Then
-					Self.animationID = ANI_RUN_2
-				Else
-					Self.animationID = ANI_RUN_3
-				EndIf
-			EndIf
-		EndIf
-		
-		extraLogicOnObject()
-		Self.attackAnimationID = Self.animationID
-		
-		If (Not spinLogic()) Then
-			If (canDoJump() And Not Self.dashRolling And Key.press(Key.gUp | Key.B_HIGH_JUMP)) Then
-				If (characterID <> CHARACTER_AMY Or PlayerAmy.isCanJump) Then
-					doJump()
-				EndIf
-				
-			ElseIf (Key.repeat(Key.gUp | Key.B_LOOK)) Then
-				If (Self.animationID = ANI_LOOK_UP_1 And Self.drawer.checkEnd()) Then
-					Self.animationID = ANI_LOOK_UP_2
-				EndIf
-				
-				If (Not (Self.animationID = ANI_LOOK_UP_1 Or Self.animationID = ANI_LOOK_UP_2 Or Self.animationID <> ANI_STAND)) Then
-					Self.animationID = ANI_LOOK_UP_1
-				EndIf
-				
-				If (Self.animationID = ANI_LOOK_UP_2) Then
-					Self.focusMovingState = 1
-				EndIf
-				
-			Else
-				
-				If (Self.animationID = ANI_LOOK_UP_OVER And Self.drawer.checkEnd()) Then
-					Self.animationID = ANI_STAND
-				EndIf
-				
-				If (Self.animationID = ANI_LOOK_UP_1 Or Self.animationID = ANI_LOOK_UP_2) Then
-					Self.animationID = ANI_LOOK_UP_OVER
-				EndIf
-			EndIf
-		EndIf
-		
-		If (needRetPower() And Self.collisionState = COLLISION_STATE_ON_OBJECT) Then
-			Int resistance = getRetPower()
 			
-			If (Self.velX > 0) Then
-				Self.velX -= resistance
-				
-				If (Self.velX < 0) Then
-					Self.velX = 0
+			If (Self.animationID <> ANI_NONE) Then
+				If (Abs(Self.velX) <= 0) Then
+					If (Not (Self.animationID = ANI_LOOK_UP_1 Or Self.animationID = ANI_LOOK_UP_2 Or Self.animationID = ANI_LOOK_UP_OVER Or Self.animationID = ANI_SQUAT)) Then
+						Self.animationID = ANI_STAND
+						checkCliffAnimation()
+					EndIf
+					
+				ElseIf (Self.animationID <> ANI_JUMP) Then
+					If (Abs(Self.velX) < SPEED_LIMIT_LEVEL_1) Then
+						Self.animationID = ANI_RUN_1
+					ElseIf (Abs(Self.velX) < SPEED_LIMIT_LEVEL_2) Then
+						Self.animationID = ANI_RUN_2
+					Else
+						Self.animationID = ANI_RUN_3
+					EndIf
 				EndIf
-				
-			ElseIf (Self.velX < 0) Then
-				Self.velX += resistance
+			EndIf
+			
+			extraLogicOnObject()
+			
+			Self.attackAnimationID = Self.animationID
+			
+			If (Not spinLogic()) Then
+				If (canDoJump() And Not Self.dashRolling And Key.press(Key.gUp | Key.B_HIGH_JUMP)) Then
+					If (characterID <> CHARACTER_AMY Or PlayerAmy.isCanJump) Then
+						doJump()
+					EndIf
+				ElseIf (Key.repeat(Key.gUp | Key.B_LOOK)) Then
+					If (Self.animationID = ANI_LOOK_UP_1 And Self.drawer.checkEnd()) Then
+						Self.animationID = ANI_LOOK_UP_2
+					EndIf
+					
+					If (Not (Self.animationID = ANI_LOOK_UP_1 Or Self.animationID = ANI_LOOK_UP_2 Or Self.animationID <> ANI_STAND)) Then
+						Self.animationID = ANI_LOOK_UP_1
+					EndIf
+					
+					If (Self.animationID = ANI_LOOK_UP_2) Then
+						Self.focusMovingState = FOCUS_MOVING_UP
+					EndIf
+				Else
+					If (Self.animationID = ANI_LOOK_UP_OVER And Self.drawer.checkEnd()) Then
+						Self.animationID = ANI_STAND
+					EndIf
+					
+					If (Self.animationID = ANI_LOOK_UP_1 Or Self.animationID = ANI_LOOK_UP_2) Then
+						Self.animationID = ANI_LOOK_UP_OVER
+					EndIf
+				EndIf
+			EndIf
+			
+			If (needRetPower() And Self.collisionState = COLLISION_STATE_ON_OBJECT) Then
+				Local resistance:= getRetPower()
 				
 				If (Self.velX > 0) Then
-					Self.velX = 0
+					Self.velX -= resistance
+					
+					If (Self.velX < 0) Then
+						Self.velX = 0
+					EndIf
+				ElseIf (Self.velX < 0) Then
+					Self.velX += resistance
+					
+					If (Self.velX > 0) Then
+						Self.velX = 0
+					EndIf
 				EndIf
 			EndIf
-		EndIf
+			
+			Self.velY += (getGravity() * Sgn(Int(Not Self.isAntiGravity)))
+			
+			waitingChk()
+		End
 		
-		Int i2 = Self.velY
-		
-		If (Self.isAntiGravity) Then
-			i = -1
-		Else
-			i = 1
-		EndIf
-		
-		Self.velY = i2 + (i * getGravity())
-		waitingChk()
-	End
-	
 	Private Method inputLogicJump:Void()
 		Int newPointX
 		Int i
@@ -3009,7 +3001,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 				EndIf
 				
-			ElseIf (Not (Self.myAnimationID = ANI_HURT Or Self.myAnimationID = HURT_COUNT Or Self.myAnimationID = ANI_BREATHE)) Then
+			ElseIf (Not (Self.myAnimationID = ANI_HURT Or Self.myanimationID = ANI_CLIFF_2 Or Self.myAnimationID = ANI_BREATHE)) Then
 				((PlayerTails) player).flyCount = 0
 			EndIf
 			
@@ -3085,7 +3077,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					If (Key.repeat(Key.gDown)) Then
 						If (Abs(Self.velX) > 64) Then
 							Self.velX = 0
-						ElseIf (Self.animationID <> 5) Then
+						ElseIf (Self.animationID <> ANI_SQUAT) Then
 							Self.animationID = ANI_SQUAT_PROCESS
 						EndIf
 						
@@ -3094,7 +3086,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 				EndIf
 				
-				If (Self.animationID <> 5 And Key.press(Key.gUp | Key.B_HIGH_JUMP)) Then
+				If (Self.animationID <> ANI_SQUAT And Key.press(Key.gUp | Key.B_HIGH_JUMP)) Then
 					If ((Self instanceof PlayerTails) And ((PlayerTails) player).flyCount > 0) Then
 						((PlayerTails) player).flyCount = 0
 					EndIf
@@ -3847,7 +3839,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						Self.movedSpeedX = 0
 					EndIf
 					
-					If (Key.repeat(Key.gRight) And ((Self.animationID = ANI_STAND Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT Or Self.animationID = ANI_RUN_1 Or Self.animationID = ANI_RUN_2 Or Self.animationID = ANI_RUN_3) And Not ((object instanceof Hari) And object.objId = 3 And canBeHurt()))) Then
+					If (Key.repeat(Key.gRight) And ((Self.animationID = ANI_STAND Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = ANI_CLIFF_2 Or Self.animationID = ANI_RUN_1 Or Self.animationID = ANI_RUN_2 Or Self.animationID = ANI_RUN_3) And Not ((object instanceof Hari) And object.objId = 3 And canBeHurt()))) Then
 						Self.animationID = ANI_PUSH_WALL
 					EndIf
 					
@@ -3867,7 +3859,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						Self.movedSpeedX = 0
 					EndIf
 					
-					If (Key.repeat(Key.gLeft) And ((Self.animationID = ANI_STAND Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT Or Self.animationID = ANI_RUN_1 Or Self.animationID = ANI_RUN_2 Or Self.animationID = ANI_RUN_3) And Not ((object instanceof Hari) And object.objId = 4 And canBeHurt()))) Then
+					If (Key.repeat(Key.gLeft) And ((Self.animationID = ANI_STAND Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = ANI_CLIFF_2 Or Self.animationID = ANI_RUN_1 Or Self.animationID = ANI_RUN_2 Or Self.animationID = ANI_RUN_3) And Not ((object instanceof Hari) And object.objId = 4 And canBeHurt()))) Then
 						Self.animationID = ANI_PUSH_WALL
 					EndIf
 					
@@ -6429,7 +6421,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					If (Self.leftStopped And Self.rightStopped) Then
 						setDie(False)
 					ElseIf ((Key.repeat(Key.gRight) And Not Self.isAntiGravity) Or (Key.repeat(Key.gLeft) And Self.isAntiGravity)) Then
-						If (Self.animationID = ANI_STAND Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT Or Self.animationID = ANI_RUN_1 Or Self.animationID = ANI_RUN_2 Or Self.animationID = ANI_RUN_3) Then
+						If (Self.animationID = ANI_STAND Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = ANI_CLIFF_2 Or Self.animationID = ANI_RUN_1 Or Self.animationID = ANI_RUN_2 Or Self.animationID = ANI_RUN_3) Then
 							Self.animationID = ANI_PUSH_WALL
 						EndIf
 					EndIf
@@ -6449,7 +6441,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					If (Self.leftStopped And Self.rightStopped) Then
 						setDie(False)
 					ElseIf ((Key.repeat(Key.gLeft) And Not Self.isAntiGravity) Or (Key.repeat(Key.gRight) And Self.isAntiGravity)) Then
-						If (Self.animationID = ANI_STAND Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT Or Self.animationID = ANI_RUN_1 Or Self.animationID = ANI_RUN_2 Or Self.animationID = ANI_RUN_3) Then
+						If (Self.animationID = ANI_STAND Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = ANI_CLIFF_2 Or Self.animationID = ANI_RUN_1 Or Self.animationID = ANI_RUN_2 Or Self.animationID = ANI_RUN_3) Then
 							Self.animationID = ANI_PUSH_WALL
 						EndIf
 					EndIf
@@ -6585,14 +6577,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					If (Self.faceDirection) Then
 						Self.animationID = ANI_CLIFF_1
 					Else
-						Self.animationID = HURT_COUNT
+						Self.animationID = ANI_CLIFF_2
 					EndIf
 					
 				ElseIf (Self.worldInstance.getWorldY(footRightX, footRightY, Self.currentLayer, Self.worldCal.getDirectionByDegree(Self.faceDegree)) = ACParam.NO_COLLISION) Then
 				Else
 					
 					If (Self.faceDirection) Then
-						Self.animationID = HURT_COUNT
+						Self.animationID = ANI_CLIFF_2
 					Else
 						Self.animationID = ANI_CLIFF_1
 					EndIf
@@ -6606,7 +6598,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				If (footCenterX < Self.footOnObject.collisionRect.x0) Then
 					If (Self.faceDirection) Then
-						Self.animationID = HURT_COUNT
+						Self.animationID = ANI_CLIFF_2
 					Else
 						Self.animationID = ANI_CLIFF_1
 					EndIf
@@ -6617,7 +6609,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					If (Self.faceDirection) Then
 						Self.animationID = ANI_CLIFF_1
 					Else
-						Self.animationID = HURT_COUNT
+						Self.animationID = ANI_CLIFF_2
 					EndIf
 				EndIf
 				
@@ -6628,7 +6620,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public Method setCliffAnimation:Void()
 		
 		If (Self.faceDirection) Then
-			Self.animationID = HURT_COUNT
+			Self.animationID = ANI_CLIFF_2
 		Else
 			Self.animationID = ANI_CLIFF_1
 		EndIf
@@ -6638,7 +6630,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	
 	Protected Method spinLogic:Bool()
 		
-		If (Not (Key.repeat(Key.gLeft) Or Key.repeat(Key.gRight) Or isTerminal Or Self.animationID = ANI_NONE Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT)) Then
+		If (Not (Key.repeat(Key.gLeft) Or Key.repeat(Key.gRight) Or isTerminal Or Self.animationID = ANI_NONE Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = ANI_CLIFF_2)) Then
 			If (Key.repeat(Key.gDown)) Then
 				If (Abs(getVelX()) > 64 Or getDegreeDiff(Self.faceDegree, Self.degreeStable) > ANI_DEAD_PRE) Then
 					If (Not (Self.animationID = ANI_JUMP Or characterID = CHARACTER_AMY Or Self.isCrashFallingSand)) Then
@@ -6648,7 +6640,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.animationID = ANI_JUMP
 				Else
 					
-					If (Self.animationID <> 5) Then
+					If (Self.animationID <> ANI_SQUAT) Then
 						Self.animationID = ANI_SQUAT_PROCESS
 					EndIf
 					
@@ -6719,9 +6711,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	
 	Protected Method spinLogic2:Bool()
 		
-		If (Not (Key.repeat(Key.gLeft) Or Key.repeat(Key.gRight) Or isTerminal Or Self.animationID = ANI_NONE Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = HURT_COUNT)) Then
+		If (Not (Key.repeat(Key.gLeft) Or Key.repeat(Key.gRight) Or isTerminal Or Self.animationID = ANI_NONE Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = ANI_CLIFF_2)) Then
 			If (Key.repeat(Key.gDown)) Then
-				If (getDegreeDiff(Self.faceDegree, Self.degreeStable) <= ANI_DEAD_PRE And Self.animationID <> 5) Then
+				If (getDegreeDiff(Self.faceDegree, Self.degreeStable) <= ANI_DEAD_PRE And Self.animationID <> ANI_SQUAT) Then
 					Self.animationID = ANI_SQUAT_PROCESS
 				EndIf
 				
@@ -6911,7 +6903,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	End
 	
 	Public Method canDoJump:Bool()
-		Return Self.animationID <> 5 ? True : False
+		Return Self.animationID <> ANI_SQUAT ? True : False
 	End
 	
 	Private Method aspirating:Void()
