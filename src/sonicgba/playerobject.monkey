@@ -4838,137 +4838,109 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				EndIf
 			EndIf
 		End
-	
-	Public Method inRailState:Bool()
-		Return (Self.railing Or Self.railOut)
-	End
-	
-	Public Method changeVisible:Void(mVisible:Bool)
-		Self.visible = mVisible
-	End
-	
-	Public Method setOutOfControl:Void(obj:GameObject)
-		Self.outOfControl = True
-		Self.outOfControlObject = obj
-		Self.piping = False
-	End
-	
-	Public Method setOutOfControlInPipe:Void(obj:GameObject)
-		Self.outOfControl = True
-		Self.outOfControlObject = obj
-	End
-	
-	Public Method releaseOutOfControl:Void()
-		Self.outOfControl = False
-		Self.outOfControlObject = Null
-	End
-	
-	Public Method isControlObject:Bool(obj:GameObject)
-		Return (Self.controlObjectLogic And obj = Self.outOfControlObject)
-	End
-	
-	Public Method setDieInit:Void(isDrowning:Bool, v0:Int)
-		Self.velX = 0
 		
-		If (Not isDrowning Or Self.breatheNumCount < 6) Then
-			Self.velY = v0
-		Else
-			Self.velY = 0
-		EndIf
+		Method inRailState:Bool()
+			Return (Self.railing Or Self.railOut)
+		End
 		
-		If (Self.isAntiGravity) Then
-			Self.velY = -Self.velY
-		EndIf
+		Method changeVisible:Void(mVisible:Bool)
+			Self.visible = mVisible
+		End
 		
-		Int i = Self.degreeStable
-		Self.faceDegree = i
-		Self.degreeForDraw = i
-		Self.collisionState = COLLISION_STATE_JUMP
-		MapManager.setFocusObj(Null)
-		Self.isDead = True
-		Self.finishDeadStuff = False
-		Self.animationID = ANI_DEAD_PRE
-		Self.drawer.restart()
-		timeStopped = True
-		Self.worldCal.stopMove()
-		Self.collisionChkBreak = True
-		Self.hurtCount = 0
-		Self.dashRolling = False
+		Method setOutOfControl:Void(obj:GameObject)
+			Self.outOfControl = True
+			Self.outOfControlObject = obj
+			
+			Self.piping = False
+		End
 		
-		If (Self.effectID = 0 Or Self.effectID = 1) Then
-			Self.effectID = -1
-		EndIf
+		Method setOutOfControlInPipe:Void(obj:GameObject)
+			Self.outOfControl = True
+			Self.outOfControlObject = obj
+		End
 		
-		Self.drownCnt = 0
+		Method releaseOutOfControl:Void()
+			Self.outOfControl = False
+			Self.outOfControlObject = Null
+		End
 		
-		If (stageModeState = 1 And StageManager.getStageID() = TERMINAL_COUNT) Then
-			RocketSeparateEffect.clearInstance()
-		EndIf
+		Method isControlObject:Bool(obj:GameObject)
+			Return (Self.controlObjectLogic And obj = Self.outOfControlObject)
+		End
 		
-		GameState.isThroughGame = True
-		shieldType = 0
-		invincibleCount = 0
-		speedCount = 0
+		Method setDieInit:Void(isDrowning:Bool, vel:Int)
+			Self.velX = 0
+			
+			' Magic number: 6
+			If (Not isDrowning Or Self.breatheNumCount < 6) Then
+				Self.velY = vel
+			Else
+				Self.velY = 0
+			EndIf
+			
+			If (Self.isAntiGravity) Then
+				Self.velY = -Self.velY
+			EndIf
+			
+			Self.faceDegree = Self.degreeStable
+			Self.degreeForDraw = Self.degreeStable
+			
+			Self.collisionState = COLLISION_STATE_JUMP
+			
+			MapManager.setFocusObj(Null)
+			
+			Self.isDead = True
+			Self.finishDeadStuff = False
+			
+			Self.animationID = ANI_DEAD_PRE
+			
+			Self.drawer.restart()
+			
+			timeStopped = True
+			
+			Self.worldCal.stopMove()
+			
+			Self.collisionChkBreak = True
+			Self.hurtCount = 0
+			Self.dashRolling = False
+			
+			If (Self.effectID = EFFECT_SAND_1 Or Self.effectID = EFFECT_SAND_2) Then
+				Self.effectID = EFFECT_NONE
+			EndIf
+			
+			Self.drownCnt = 0
+			
+			' Magic numbers: 1, 10 (State, ID):
+			If (stageModeState = 1 And StageManager.getStageID() = 10) Then
+				RocketSeparateEffect.clearInstance()
+			EndIf
+			
+			GameState.isThroughGame = True
+			shieldType = 0
+			invincibleCount = 0
+			speedCount = 0
+			
+			If (Self.currentLayer = 0) Then
+				Self.currentLayer = 1
+			ElseIf (Self.currentLayer = 1) Then
+				Self.currentLayer = 0
+			EndIf
+			
+			resetFlyCount()
+		End
 		
-		If (Self.currentLayer = 0) Then
-			Self.currentLayer = 1
-		ElseIf (Self.currentLayer = 1) Then
-			Self.currentLayer = 0
-		EndIf
+		Method setDie:Void(isDrowning:Bool)
+			setDie(isDrowning, DIE_DRIP_STATE_JUMP_V0)
+		End
 		
-		resetFlyCount()
-	End
-	
-	/* JADX WARNING: inconsistent code. */
-	/* Code decompiled incorrectly, please refer to instructions dump. */
-	Public Method setDie:Void(r3:Bool, r4:Int)
-		/*
-		r2 = Self
-		r2.setDieInit(r3, r4)
-		r0 = lib.soundsystem.getInstance()
-		r0 = r0.getPlayingBGMIndex()
-		lib.soundsystem.getInstance()
-		r1 = 21
+		Method setDieWithoutSE:Void()
+			setDieInit(False, DIE_DRIP_STATE_JUMP_V0)
+		End
 		
-		If (r0 = r1) goto L_0x0021
-	L_0x0012:
-		r0 = lib.soundsystem.getInstance()
-		r0 = r0.getPlayingBGMIndex()
-		lib.soundsystem.getInstance()
-		r1 = 44
+		Method setDie:Void(isDrowning:Bool)
+			setDie(isDrowning, DIE_DRIP_STATE_JUMP_V0)
+		End
 		
-		If (r0 <> r1) goto L_0x0029
-	L_0x0021:
-		r0 = lib.soundsystem.getInstance()
-		r1 = 0
-		r0.stopBgm(r1)
-	L_0x0029:
-		
-		If (r3 <> 0) goto L_0x0033
-	L_0x002b:
-		r0 = soundInstance
-		r1 = 14
-		r0.playSe(r1)
-	L_0x0032:
-		Return
-	L_0x0033:
-		r0 = soundInstance
-		r1 = 60
-		r0.playSe(r1)
-		goto L_0x0032
-		*/
-		throw New UnsupportedOperationException("Method not decompiled: SonicGBA.PlayerObject.setDie(Bool, Int):Void")
-		' Empty implementation.
-	End
-	
-	Public Method setDieWithoutSE:Void()
-		setDieInit(False, DIE_DRIP_STATE_JUMP_V0)
-	End
-	
-	Public Method setDie:Void(isDrowning:Bool)
-		setDie(isDrowning, DIE_DRIP_STATE_JUMP_V0)
-	End
-	
 	Public Method setNoKey:Void()
 		Self.noKeyFlag = True
 	End
