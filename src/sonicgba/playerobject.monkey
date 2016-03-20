@@ -3418,11 +3418,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 		End
 		
-		Public Method prepareForCollision:Void()
+		Method prepareForCollision:Void()
 			refreshCollisionRectWrap()
 		End
 		
-		Public Method setSlideAni:Void()
+		Method setSlideAni:Void()
 			' Empty implementation.
 		End
 	
@@ -3503,7 +3503,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Return True
 		End
 		
-		Method beStop_Down:Void(newPosition:Int, obj:GameObject, isDirectionDown:Bool)
+		Method beStop_Down:Void(newPosition:Int, obj:GameObject, isDirectionDown:Bool, alt:Bool=False)
 			If (Self.collisionState = COLLISION_STATE_NONE) Then
 				calDivideVelocity()
 			EndIf
@@ -3527,9 +3527,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.checkedObject = True
 				EndIf
 				
-				setVelY(0)
-				
-				Self.worldCal.stopMoveY()
+				If (Not alt) Then
+					setVelY(0)
+					
+					Self.worldCal.stopMoveY()
+				Endif
 				
 				If (Not (Self.collisionState = COLLISION_STATE_ON_OBJECT And isFootOnObject(obj))) Then
 					Self.footOnObject = obj
@@ -3537,26 +3539,28 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.collisionChkBreak = True
 				EndIf
 				
-				If (Not (Self.isSidePushed = DIRECTION_NONE And isDirectionDown)) Then
-					If (Self.isSidePushed = DIRECTION_RIGHT) Then
-						Self.footPointX = Self.bePushedFootX
-						
-						Print("~~~~RIGHT footPointX:" + Self.footPointX)
-						
-						If (getVelX() > 0) Then
-							setVelX(0)
+				If (Not alt) Then
+					If (Not (Self.isSidePushed = DIRECTION_NONE And isDirectionDown)) Then
+						If (Self.isSidePushed = DIRECTION_RIGHT) Then
+							Self.footPointX = Self.bePushedFootX
 							
-							Self.worldCal.stopMoveX()
-						EndIf
-					ElseIf (Self.isSidePushed = DIRECTION_LEFT) Then
-						Self.footPointX = Self.bePushedFootX
-						
-						Print("~~~~LEFT footPointX:" + Self.footPointX)
-						
-						If (getVelX() < 0) Then
-							setVelX(0)
+							Print("~~~~RIGHT footPointX:" + Self.footPointX)
 							
-							Self.worldCal.stopMoveX()
+							If (getVelX() > 0) Then
+								setVelX(0)
+								
+								Self.worldCal.stopMoveX()
+							EndIf
+						ElseIf (Self.isSidePushed = DIRECTION_LEFT) Then
+							Self.footPointX = Self.bePushedFootX
+							
+							Print("~~~~LEFT footPointX:" + Self.footPointX)
+							
+							If (getVelX() < 0) Then
+								setVelX(0)
+								
+								Self.worldCal.stopMoveX()
+							EndIf
 						EndIf
 					EndIf
 				EndIf
@@ -3566,18 +3570,122 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Self.footPointY = obj.getCollisionRect().y0
 			EndIf
 			
-			Self.movedSpeedY = Self.footPointY - prey
+			If (Not alt) Then
+				Self.movedSpeedY = Self.footPointY - prey
+			Endif
+			
 			Self.onObjectContinue = True
 		End
 		
-		Method beStop:Void(newPosition:Int, direction:Int, obj:GameObject, isDirectionDown:Bool)
+		Method beStop_Left_Right:Void(newPosition:Int, direction:Int, obj:GameObject, isDirectionDown:Bool, alt:Bool=False)
+			Local prex:Int
+			Local curx:Int
+			
+			Local isSomethingElse:Bool = False
+			
+			If (direction = DIRECTION_RIGHT) Then
+				prex = Self.footPointX
+				
+				Self.footPointX = (obj.getCollisionRect().x0 - (Self.collisionRect.getWidth() / 2)) + 1
+				Self.footPointX = getNewPointX(Self.footPointX, 0, getCurrentHeight() / 2, Self.faceDegree)
+				
+				curx = Self.footPointX
+				
+				If (Not alt) Then
+					Self.bePushedFootX = Self.footPointX - RIGHT_WALK_COLLISION_CHECK_OFFSET_X
+				Endif
+				
+				Self.movedSpeedX = (curx - prex)
+				
+				' Optimization potential; dynamic cast.
+				If (DekaPlatform(obj) = Null) Then
+					Self.movedSpeedX = 0
+					
+					isSomethingElse = True
+				EndIf
+				
+				If (Key.repeat(Key.gRight) And ((Self.collisionState = COLLISION_STATE_NONE Or Self.collisionState = COLLISION_STATE_ON_OBJECT Or Self.collisionState = COLLISION_STATE_IN_SAND) And Not Self.isAttacking)) Then
+					Self.animationID = ANI_PUSH_WALL
+				EndIf
+				
+				If (getVelX() > 0) Then
+					setVelX(0)
+					
+					Self.worldCal.stopMoveX()
+				EndIf
+				
+				Self.rightStopped = True
+				
+				If (alt) Then
+					Self.faceDirection = Not Self.isAntiGravity
+				Endif
+			Else
+				prex = Self.footPointX
+				
+				Self.footPointX = (obj.getCollisionRect().x1 + (Self.collisionRect.getWidth() / 2)) - 1
+				Self.footPointX = getNewPointX(Self.footPointX, 0, getCurrentHeight() / 2, Self.faceDegree)
+				
+				curx = Self.footPointX
+				
+				If (alt) Then
+					Self.bePushedFootX = Self.footPointX
+				Endif
+				
+				Self.movedSpeedX = curx - prex
+				
+				' Optimization potential; dynamic cast.
+				If (DekaPlatform(obj) = Null) Then
+					Self.movedSpeedX = 0
+					
+					isSomethingElse = True
+				EndIf
+				
+				If (Key.repeat(Key.gLeft) And ((Self.collisionState = COLLISION_STATE_NONE Or Self.collisionState = COLLISION_STATE_ON_OBJECT Or Self.collisionState = COLLISION_STATE_IN_SAND) And Not Self.isAttacking)) Then
+					Self.animationID = ANI_PUSH_WALL
+				EndIf
+				
+				If (getVelX() < 0) Then
+					setVelX(0)
+					Self.worldCal.stopMoveX()
+				EndIf
+				
+				Self.leftStopped = True
+				
+				If (alt) Then
+					Self.faceDirection = Self.isAntiGravity
+				Endif
+			EndIf
+			
+			' Optimization potential; dynamic cast.
+			If (Self.collisionState = COLLISION_STATE_NONE And Self.animationID = ANI_JUMP And Not isSomethingElse And Hari(obj) <> Null) Then
+				Self.animationID = ANI_STAND
+				
+				isSomethingElse = True
+			EndIf
+			
+			Select (Self.collisionState)
+				Case COLLISION_STATE_JUMP
+					Self.xFirst = False
+			End Select
+			
+			' Optimization potential; dynamic cast.
+			Self.isStopByObject = (Not isSomethingElse And (GimmickObject(obj) <> Null))
+		End
+		
+		Method resolveDirection:Int(direction:Int)
 			If (Self.isAntiGravity) Then
 				If (direction = DIRECTION_DOWN) Then
-					direction = DIRECTION_UP
+					Return DIRECTION_UP
 				ElseIf (direction = DIRECTION_UP) Then
-					direction = DIRECTION_DOWN
+					Return DIRECTION_DOWN
 				EndIf
 			EndIf
+			
+			Return direction
+		End
+		
+		Method beStop:Void(newPosition:Int, direction:Int, obj:GameObject, isDirectionDown:Bool)
+			direction = resolveDirection(direction)
 			
 			Select (direction)
 				Case DIRECTION_UP
@@ -3587,402 +3695,59 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Case DIRECTION_DOWN
 					beStop_Down(newPosition, obj, isDirectionDown) ' True
 				Case DIRECTION_LEFT, DIRECTION_RIGHT
-					Local prex:Int
-					Local curx:Int
-					
-					If (direction = DIRECTION_RIGHT) Then
-						prex = Self.footPointX
-						
-						Self.footPointX = (obj.getCollisionRect().x0 - (Self.collisionRect.getWidth() / 2)) + 1
-						Self.footPointX = getNewPointX(Self.footPointX, 0, getCurrentHeight() / 2, Self.faceDegree)
-						
-						curx = Self.footPointX
-						
-						Self.bePushedFootX = Self.footPointX - RIGHT_WALK_COLLISION_CHECK_OFFSET_X
-						Self.movedSpeedX = curx - prex
-						
-						If (DekaPlatform(obj) = Null) Then
-							Self.movedSpeedX = 0
-						EndIf
-						
-						If (Key.repeat(Key.gRight) And ((Self.collisionState = COLLISION_STATE_NONE Or Self.collisionState = COLLISION_STATE_ON_OBJECT Or Self.collisionState = COLLISION_STATE_IN_SAND) And Not Self.isAttacking)) Then
-							Self.animationID = ANI_PUSH_WALL
-						EndIf
-						
-						If (getVelX() > 0) Then
-							setVelX(0)
-							
-							Self.worldCal.stopMoveX()
-						EndIf
-						
-						Self.rightStopped = True
-					Else
-						prex = Self.footPointX
-						
-						Self.footPointX = (obj.getCollisionRect().x1 + (Self.collisionRect.getWidth() / 2)) - 1
-						Self.footPointX = getNewPointX(Self.footPointX, 0, getCurrentHeight() / 2, Self.faceDegree)
-						
-						curx = Self.footPointX
-						
-						Self.bePushedFootX = Self.footPointX
-						Self.movedSpeedX = curx - prex
-						
-						' Optimization potential; dynamic cast.
-						If (DekaPlatform(obj) = Null) Then
-							Self.movedSpeedX = 0
-						EndIf
-						
-						If (Key.repeat(Key.gLeft) And ((Self.collisionState = COLLISION_STATE_NONE Or Self.collisionState = COLLISION_STATE_ON_OBJECT Or Self.collisionState = COLLISION_STATE_IN_SAND) And Not Self.isAttacking)) Then
-							Self.animationID = ANI_PUSH_WALL
-						EndIf
-						
-						If (getVelX() < 0) Then
-							setVelX(0)
-							Self.worldCal.stopMoveX()
-						EndIf
-						
-						Self.leftStopped = True
-					EndIf
-					
-					' Optimization potential; dynamic cast.
-					If (Self.collisionState = COLLISION_STATE_NONE And Self.animationID = ANI_JUMP And Hari(obj) <> Null) Then
-						Self.animationID = ANI_STAND
-					EndIf
-					
-					Select (Self.collisionState)
-						Case COLLISION_STATE_JUMP
-							Self.xFirst = False
-					End Select
-					
-					If (Not (obj instanceof GimmickObject)) Then
-						Self.isStopByObject = False
-					Else
-						Self.isStopByObject = True
-					EndIf
+					beStop_Left_Right(newPosition, direction, obj)
 			End Select
 			
 			Self.posX = Self.footPointX
 			Self.posY = Self.footPointY
 		End
-	
-	Public Method beStopbyDoor:Void(newPosition:Int, direction:Int, obj:GameObject)
 		
-		If (Self.isAntiGravity) Then
-			If (direction = 1) Then
-				direction = 0
-			ElseIf (direction = 0) Then
-				direction = 1
+		Method beStopbyDoor:Void(newPosition:Int, direction:Int, obj:GameObject)
+			direction = resolveDirection(direction)
+			
+			Select (direction)
+				Case DIRECTION_UP
+					If (beStop_Up(newPosition, obj)) Then
+						beStop_Down(newPosition, obj, isDirectionDown, True) ' False
+					Endif
+				Case DIRECTION_DOWN
+					beStop_Down(newPosition, obj, isDirectionDown, True) ' True
+				Case DIRECTION_LEFT, DIRECTION_RIGHT
+					beStop_Left_Right(newPosition, direction, obj, False)
+			End Select
+			
+			Self.posX = Self.footPointX
+			Self.posY = Self.footPointY
+		End
+		
+		Method beStop:Void(newPosition:Int, direction:Int, obj:GameObject)
+			beStop(newPosition, direction, obj, (direction = DIRECTION_DOWN))
+		End
+		
+		Method isAttackingEnemy:Bool()
+			If ((Self instanceof PlayerAmy) And getCharacterAnimationID() = ANI_LOOK_UP_2) Then
+				Return False
 			EndIf
-		EndIf
-		
-		Select (direction)
-			Case 0
-				
-				If (Not Self.isAntiGravity And Self.velY < 0) Then
-					setVelY(0)
-					Self.worldCal.stopMoveY()
-				EndIf
-				
-				If (Self.isAntiGravity And Self.velY > 0) Then
-					setVelY(0)
-					Self.worldCal.stopMoveY()
-				EndIf
-				
-				If (Self.isAntiGravity) Then
-					Self.footPointY = obj.getCollisionRect().y0 - Self.collisionRect.getHeight()
-				Else
-					Self.footPointY = obj.getCollisionRect().y1 + Self.collisionRect.getHeight()
-				EndIf
-				
-				If ((Self.collisionState = COLLISION_STATE_NONE Or Self.collisionState = TER_STATE_LOOK_MOON) And Self.faceDegree = 0) Then
-					setDie(False)
-					break
-				EndIf
-				
-			Case 1
-				
-				If (Self.collisionState = COLLISION_STATE_NONE) Then
-					calDivideVelocity()
-				EndIf
-				
-				Self.degreeRotateMode = 0
-				
-				If (Not Self.hurtNoControl Or Self.collisionState <> COLLISION_STATE_JUMP Or ((Self.velY >= 0 Or Self.isAntiGravity) And (Self.velY <= 0 Or Not Self.isAntiGravity))) Then
-					If (Not (Self.collisionState = TER_STATE_LOOK_MOON Or (obj instanceof Spring))) Then
-						land()
-					EndIf
-					
-					If (Self.isAntiGravity) Then
-						Self.footPointY = obj.getCollisionRect().y1
-					Else
-						Self.footPointY = obj.getCollisionRect().y0
-					EndIf
-					
-					If (isFootOnObject(obj)) Then
-						Self.checkedObject = True
-					EndIf
-					
-					If (Not (Self.collisionState = TER_STATE_LOOK_MOON And isFootOnObject(obj))) Then
-						Self.footOnObject = obj
-						Self.collisionState = TER_STATE_LOOK_MOON
-						Self.collisionChkBreak = True
-					EndIf
-					
-				ElseIf (Self.isAntiGravity) Then
-					Self.footPointY = obj.getCollisionRect().y1
-				Else
-					Self.footPointY = obj.getCollisionRect().y0
-				EndIf
-				
-				Self.onObjectContinue = True
-				break
-			Case 2
-			Case 3
-				Int prex
-				
-				If (direction = 3) Then
-					Bool z
-					prex = Self.footPointX
-					Self.footPointX = (obj.getCollisionRect().x0 - (Self.collisionRect.getWidth() / 2)) + 1
-					Self.footPointX = getNewPointX(Self.footPointX, 0, getCurrentHeight() / 2, Self.faceDegree)
-					Self.movedSpeedX = Self.footPointX - prex
-					
-					If (Not (obj instanceof DekaPlatform)) Then
-						Self.movedSpeedX = 0
-					EndIf
-					
-					If (Key.repeat(Key.gRight) And ((Self.collisionState = COLLISION_STATE_NONE Or Self.collisionState = TER_STATE_LOOK_MOON Or Self.collisionState = TER_STATE_LOOK_MOON_WAIT) And Not Self.isAttacking)) Then
-						Self.animationID = ANI_PUSH_WALL
-					EndIf
-					
-					If (getVelX() > 0) Then
-						setVelX(0)
-						Self.worldCal.stopMoveX()
-					EndIf
-					
-					Self.rightStopped = True
-					
-					If (Self.isAntiGravity) Then
-						z = False
-					Else
-						z = True
-					EndIf
-					
-					Self.faceDirection = z
-				Else
-					prex = Self.footPointX
-					Self.footPointX = (obj.getCollisionRect().x1 + (Self.collisionRect.getWidth() / 2)) - 1
-					Self.footPointX = getNewPointX(Self.footPointX, 0, getCurrentHeight() / 2, Self.faceDegree)
-					Self.movedSpeedX = Self.footPointX - prex
-					
-					If (Not (obj instanceof DekaPlatform)) Then
-						Self.movedSpeedX = 0
-					EndIf
-					
-					If (Key.repeat(Key.gLeft) And ((Self.collisionState = COLLISION_STATE_NONE Or Self.collisionState = TER_STATE_LOOK_MOON Or Self.collisionState = TER_STATE_LOOK_MOON_WAIT) And Not Self.isAttacking)) Then
-						Self.animationID = ANI_PUSH_WALL
-					EndIf
-					
-					If (getVelX() < 0) Then
-						setVelX(0)
-						Self.worldCal.stopMoveX()
-					EndIf
-					
-					Self.leftStopped = True
-					Self.faceDirection = Self.isAntiGravity
-				EndIf
-				
-				If (Self.collisionState = COLLISION_STATE_NONE And Self.animationID = ANI_JUMP And (obj instanceof Hari)) Then
-					Self.animationID = ANI_STAND
-				EndIf
-				
-				Select (Self.collisionState)
-					Case 1
-						Self.xFirst = False
-						break
-				End Select
-				
-				If (Not (obj instanceof GimmickObject)) Then
-					Self.isStopByObject = False
-					break
-				Else
-					Self.isStopByObject = True
-					break
-				EndIf
-				
-		End Select
-		Self.posX = Self.footPointX
-		Self.posY = Self.footPointY
-	End
-	
-	Public Method beStop:Void(newPosition:Int, direction:Int, obj:GameObject)
-		
-		If (Self.isAntiGravity) Then
-			If (direction = 1) Then
-				direction = 0
-			ElseIf (direction = 0) Then
-				direction = 1
+			
+			If ((Self instanceof PlayerAmy) And (getCharacterAnimationID() = ANI_ATTACK_1 Or getCharacterAnimationID() = ANI_ATTACK_2 Or getCharacterAnimationID() = SPIN_KEY_COUNT Or getCharacterAnimationID() = ANI_RAIL_ROLL Or getCharacterAnimationID() = ANI_BAR_ROLL_1 Or getCharacterAnimationID() = 7)) Then
+				Return True
 			EndIf
-		EndIf
+			
+			If ((Self instanceof PlayerSonic) And (getCharacterAnimationID() = ANI_POAL_PULL Or getCharacterAnimationID() = ANI_POP_JUMP_UP Or getCharacterAnimationID() = ANI_JUMP_ROLL Or getCharacterAnimationID() = 4)) Then
+				Return True
+			EndIf
+			
+			If ((Self instanceof PlayerTails) And getCharacterAnimationID() = ANI_SLIP) Then
+				Return True
+			EndIf
+			
+			If ((Self instanceof PlayerKnuckles) And (getCharacterAnimationID() = ANI_SLIP Or getCharacterAnimationID() = SPIN_LV2_COUNT Or getCharacterAnimationID() = ANI_POAL_PULL Or getCharacterAnimationID() = ANI_ATTACK_2 Or getCharacterAnimationID() = SPIN_KEY_COUNT Or getCharacterAnimationID() = ANI_RAIL_ROLL Or getCharacterAnimationID() = ANI_BAR_ROLL_1)) Then
+				Return True
+			EndIf
+			
+			Return (Self.animationID = ANI_ATTACK_1 Or Self.animationID = ANI_ATTACK_2 Or Self.animationID = ANI_ATTACK_3 Or Self.animationID = ANI_JUMP Or Self.animationID = ANI_SPIN_LV1 Or Self.animationID = ANI_SPIN_LV2 Or invincibleCount > 0)
+		End
 		
-		Select (direction)
-			Case 0
-				
-				If (Not Self.isAntiGravity And Self.velY < 0) Then
-					setVelY(0)
-					Self.worldCal.stopMoveY()
-				EndIf
-				
-				If (Self.isAntiGravity And Self.velY > 0) Then
-					setVelY(0)
-					Self.worldCal.stopMoveY()
-				EndIf
-				
-				If (Self.isAntiGravity) Then
-					Self.footPointY = obj.getCollisionRect().y0 - Self.collisionRect.getHeight()
-				Else
-					Self.footPointY = obj.getCollisionRect().y1 + Self.collisionRect.getHeight()
-				EndIf
-				
-				If ((Self.collisionState = COLLISION_STATE_NONE Or Self.collisionState = TER_STATE_LOOK_MOON) And Self.faceDegree = 0 And Not (obj instanceof Spring) And Not (obj instanceof ItemObject)) Then
-					setDie(False)
-					break
-				EndIf
-				
-			Case 1
-				
-				If (Self.collisionState = COLLISION_STATE_NONE) Then
-					calDivideVelocity()
-				EndIf
-				
-				Self.degreeRotateMode = 0
-				
-				If (Not Self.hurtNoControl Or Self.collisionState <> COLLISION_STATE_JUMP Or ((Self.velY >= 0 Or Self.isAntiGravity) And (Self.velY <= 0 Or Not Self.isAntiGravity))) Then
-					If (Not (Self.collisionState = TER_STATE_LOOK_MOON Or (obj instanceof Spring))) Then
-						land()
-					EndIf
-					
-					If (Self.isAntiGravity) Then
-						Self.footPointY = obj.getCollisionRect().y1
-					Else
-						Self.footPointY = obj.getCollisionRect().y0
-					EndIf
-					
-					If (isFootOnObject(obj)) Then
-						Self.checkedObject = True
-					EndIf
-					
-					setVelY(0)
-					Self.worldCal.stopMoveY()
-					
-					If (Not (Self.collisionState = TER_STATE_LOOK_MOON And isFootOnObject(obj))) Then
-						Self.footOnObject = obj
-						Self.collisionState = TER_STATE_LOOK_MOON
-						Self.collisionChkBreak = True
-					EndIf
-					
-				ElseIf (Self.isAntiGravity) Then
-					Self.footPointY = obj.getCollisionRect().y1
-				Else
-					Self.footPointY = obj.getCollisionRect().y0
-				EndIf
-				
-				Self.onObjectContinue = True
-				break
-			Case 2
-			Case 3
-				Int prex
-				
-				If (direction = 3) Then
-					prex = Self.footPointX
-					Self.footPointX = (obj.getCollisionRect().x0 - (Self.collisionRect.getWidth() / 2)) + 1
-					Self.footPointX = getNewPointX(Self.footPointX, 0, getCurrentHeight() / 2, Self.faceDegree)
-					Self.movedSpeedX = Self.footPointX - prex
-					
-					If (Not (obj instanceof DekaPlatform)) Then
-						Self.movedSpeedX = 0
-					EndIf
-					
-					If (Key.repeat(Key.gRight) And ((Self.animationID = ANI_STAND Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = ANI_CLIFF_2 Or Self.animationID = ANI_RUN_1 Or Self.animationID = ANI_RUN_2 Or Self.animationID = ANI_RUN_3) And Not ((obj instanceof Hari) And obj.objId = 3 And canBeHurt()))) Then
-						Self.animationID = ANI_PUSH_WALL
-					EndIf
-					
-					If (Not ((obj instanceof Hari) And obj.objId = 3 And canBeHurt()) And getVelX() > 0) Then
-						setVelX(0)
-						Self.worldCal.stopMoveX()
-					EndIf
-					
-					Self.rightStopped = True
-				Else
-					prex = Self.footPointX
-					Self.footPointX = (obj.getCollisionRect().x1 + (Self.collisionRect.getWidth() / 2)) - 1
-					Self.footPointX = getNewPointX(Self.footPointX, 0, getCurrentHeight() / 2, Self.faceDegree)
-					Self.movedSpeedX = Self.footPointX - prex
-					
-					If (Not (obj instanceof DekaPlatform)) Then
-						Self.movedSpeedX = 0
-					EndIf
-					
-					If (Key.repeat(Key.gLeft) And ((Self.animationID = ANI_STAND Or Self.animationID = ANI_CLIFF_1 Or Self.animationID = ANI_CLIFF_2 Or Self.animationID = ANI_RUN_1 Or Self.animationID = ANI_RUN_2 Or Self.animationID = ANI_RUN_3) And Not ((obj instanceof Hari) And obj.objId = 4 And canBeHurt()))) Then
-						Self.animationID = ANI_PUSH_WALL
-					EndIf
-					
-					If (Not ((obj instanceof Hari) And obj.objId = 4 And canBeHurt()) And getVelX() < 0) Then
-						setVelX(0)
-						Self.worldCal.stopMoveX()
-					EndIf
-					
-					Self.leftStopped = True
-				EndIf
-				
-				If (Self.collisionState = COLLISION_STATE_NONE And Self.animationID = ANI_JUMP And (obj instanceof Hari)) Then
-					Self.animationID = ANI_STAND
-				EndIf
-				
-				Select (Self.collisionState)
-					Case 1
-						Self.xFirst = False
-						break
-				End Select
-				
-				If (Not (obj instanceof GimmickObject)) Then
-					Self.isStopByObject = False
-					break
-				Else
-					Self.isStopByObject = True
-					break
-				EndIf
-				
-		End Select
-		Self.posX = Self.footPointX
-		Self.posY = Self.footPointY
-	End
-	
-	Public Method isAttackingEnemy:Bool()
-		
-		If ((Self instanceof PlayerAmy) And getCharacterAnimationID() = ANI_LOOK_UP_2) Then
-			Return False
-		EndIf
-		
-		If ((Self instanceof PlayerAmy) And (getCharacterAnimationID() = ANI_ATTACK_1 Or getCharacterAnimationID() = ANI_ATTACK_2 Or getCharacterAnimationID() = SPIN_KEY_COUNT Or getCharacterAnimationID() = ANI_RAIL_ROLL Or getCharacterAnimationID() = ANI_BAR_ROLL_1 Or getCharacterAnimationID() = 7)) Then
-			Return True
-		EndIf
-		
-		If ((Self instanceof PlayerSonic) And (getCharacterAnimationID() = ANI_POAL_PULL Or getCharacterAnimationID() = ANI_POP_JUMP_UP Or getCharacterAnimationID() = ANI_JUMP_ROLL Or getCharacterAnimationID() = 4)) Then
-			Return True
-		EndIf
-		
-		If ((Self instanceof PlayerTails) And getCharacterAnimationID() = ANI_SLIP) Then
-			Return True
-		EndIf
-		
-		If ((Self instanceof PlayerKnuckles) And (getCharacterAnimationID() = ANI_SLIP Or getCharacterAnimationID() = SPIN_LV2_COUNT Or getCharacterAnimationID() = ANI_POAL_PULL Or getCharacterAnimationID() = ANI_ATTACK_2 Or getCharacterAnimationID() = SPIN_KEY_COUNT Or getCharacterAnimationID() = ANI_RAIL_ROLL Or getCharacterAnimationID() = ANI_BAR_ROLL_1)) Then
-			Return True
-		EndIf
-		
-		Return (Self.animationID = ANI_ATTACK_1 Or Self.animationID = ANI_ATTACK_2 Or Self.animationID = ANI_ATTACK_3 Or Self.animationID = ANI_JUMP Or Self.animationID = ANI_SPIN_LV1 Or Self.animationID = ANI_SPIN_LV2 Or invincibleCount > 0)
-	End
-	
 	Public Method isAttackingItem:Bool(pFirstTouch:Bool)
 		
 		If (Self.ignoreFirstTouch Or pFirstTouch) Then
