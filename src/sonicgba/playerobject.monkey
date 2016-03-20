@@ -1811,14 +1811,24 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			If (terminalType = TERMINAL_SUPER_SONIC) Then
 				Local tState:= terminalState 
 				
-				If (tState <= TER_STATE_RUN) Then terminalLogic_SS_Run()
-				If (tState <= TER_STATE_BRAKE) Then terminalLogic_SS_Brake()
-				If (tState <= TER_STATE_LOOK_MOON) Then terminalLogic_SS_Look_Moon()
-				If (tState <= TER_STATE_LOOK_MOON_WAIT) Then terminalLogic_SS_Moon_Wait()
-				If (tState <= TER_STATE_CHANGE_1) Then terminalLogic_SS_Change_1()
-				If (tState <= TER_STATE_CHANGE_2) Then terminalLogic_SS_Change_2()
-				If (tState <= TER_STATE_GO_AWAY) Then terminalLogic_SS_Go_Away()
-				If (tState <= TER_STATE_SHINING_2) Then terminalLogic_SS_Shining_2()
+				Select tState
+					Case TER_STATE_RUN
+						terminalLogic_SS_Run()
+					Case TER_STATE_BRAKE
+						terminalLogic_SS_Brake()
+					Case TER_STATE_LOOK_MOON
+						terminalLogic_SS_Look_Moon()
+					Case TER_STATE_LOOK_MOON_WAIT)
+						terminalLogic_SS_Moon_Wait()
+					Case TER_STATE_CHANGE_1
+						terminalLogic_SS_Change_1()
+					Case TER_STATE_CHANGE_2
+						terminalLogic_SS_Change_2()
+					Case TER_STATE_GO_AWAY
+						terminalLogic_SS_Go_Away()
+					Case TER_STATE_SHINING_2
+						terminalLogic_SS_Shining_2()
+				End Select
 			EndIf
 		End
 		
