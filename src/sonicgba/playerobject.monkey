@@ -3202,9 +3202,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				calDivideVelocity()
 			EndIf
 			
-			Self.collisionState = COLLISION_STATE_JUMP
-			Self.worldCal.actionState = 1
-			
 			Local jumpVel:Int
 			
 			If (Self.isInWater) Then
@@ -3213,31 +3210,18 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				jumpVel = JUMP_START_VELOCITY
 			EndIf
 			
-			Self.velY += ((jumpVel * Cos(faceDegreeChk())) / 100)
+			Local velY:= Self.velY + ((jumpVel * Cos(faceDegreeChk())) / 100)
 			Self.velX += ((jumpVel * (-Sin(faceDegreeChk()))) / 100)
 			
 			If (Self.faceDegree >= 0 And Self.faceDegree <= 90) Then
 				If (Self.isAntiGravity) Then
-					Self.velY = Max(Self.velY, -JUMP_PROTECT)
+					velY = Max(velY, -JUMP_PROTECT)
 				Else
 					Self.velY = Min(Self.velY, JUMP_PROTECT)
 				EndIf
 			EndIf
 			
-			Self.animationID = ANI_JUMP
-			
-			' Magic number: 11 (Sound-effect ID)
-			soundInstance.playSe(11)
-			
-			Self.smallJumpCount = 4
-			Self.onBank = False
-			Self.attackanimationID = ANI_STAND
-			Self.attackCount = 0
-			Self.attackLevel = 0
-			Self.noVelMinus = False
-			Self.doJumpForwardly = True
-			
-			slipJumpOut()
+			doJumpV(velY)
 			
 			If (StageManager.getWaterLevel() > 0 And characterID = CHARACTER_KNUCKLES) Then
 				' Unsafe, but it works.
@@ -3247,21 +3231,40 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 		End
 		
-		Method doJump:Void(v0:Int)
+		Method doJump:Void(vel:Int)
 			If (Self.collisionState = Null) Then
 				calDivideVelocity()
 			EndIf
 			
-			Self.collisionState = COLLISION_STATE_JUMP
-			Self.worldCal.actionState = 1
-			Self.velY += (Cos(faceDegreeChk()) * v0) / 100
-			Self.velX += ((-Sin(faceDegreeChk())) * v0) / 100
+			Self.velX += ((-Sin(faceDegreeChk())) * vel) / 100
+			
+			Local velY:= Self.velY + (Cos(faceDegreeChk()) * vel) / 100
+			
+			doJumpV(velY)
 			
 			If (Self.isAntiGravity) Then
 				Self.velY = Max(Self.velY, -JUMP_PROTECT)
 			Else
 				Self.velY = Min(Self.velY, JUMP_PROTECT)
 			EndIf
+		End
+		
+		Method doJumpV:Void()
+			If (Self.collisionState = Null) Then
+				calDivideVelocity()
+			EndIf
+			
+			setVelX(0)
+			doJumpV(PickValue(Self.isInWater, JUMP_INWATER_START_VELOCITY, JUMP_START_VELOCITY))
+			
+			slipJumpOut()
+		End
+		
+		Method doJumpV:Void(vel:Int)
+			Self.collisionState = COLLISION_STATE_JUMP
+			Self.worldCal.actionState = 1
+			
+			setVelY(vel)
 			
 			Self.animationID = ANI_JUMP
 			
@@ -3279,44 +3282,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.noVelMinus = False
 			Self.doJumpForwardly = True
 		End
-	
-	Public Method doJumpV:Void()
 		
-		If (Self.collisionState = Null) Then
-			calDivideVelocity()
-		EndIf
-		
-		Self.collisionState = COLLISION_STATE_JUMP
-		Self.worldCal.actionState = 1
-		setVelX(0)
-		setVelY(PickValue(Self.isInWater, JUMP_INWATER_START_VELOCITY, JUMP_START_VELOCITY))
-		Self.animationID = ANI_JUMP
-		soundInstance.playSe(11)
-		Self.smallJumpCount = 4
-		Self.onBank = False
-		Self.attackanimationID = ANI_STAND
-		Self.attackCount = 0
-		Self.attackLevel = 0
-		Self.noVelMinus = False
-		Self.doJumpForwardly = True
-		slipJumpOut()
-	End
-	
-	Public Method doJumpV:Void(v0:Int)
-		Self.collisionState = COLLISION_STATE_JUMP
-		Self.worldCal.actionState = 1
-		setVelY(v0)
-		Self.animationID = ANI_JUMP
-		soundInstance.playSe(11)
-		Self.smallJumpCount = 4
-		Self.onBank = False
-		Self.attackanimationID = ANI_STAND
-		Self.attackCount = 0
-		Self.attackLevel = 0
-		Self.noVelMinus = False
-		Self.doJumpForwardly = True
-	End
-	
 	Public Method setFurikoOutVelX:Void(degree:Int)
 		Self.velX = ((-JUMP_PROTECT) * Cos(degree)) / 100
 	End
