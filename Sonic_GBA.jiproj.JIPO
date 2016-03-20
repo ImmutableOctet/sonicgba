@@ -10,10 +10,26 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animation.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>15</X>
-        <Y>25</Y>
+        <X>11</X>
+        <Y>60</Y>
       </CursorPos>
       <DocGUID>1ee23869-2aab-47b8-b3b2-eb805042c0d5</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\lib\animationaction.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>7</X>
+        <Y>46</Y>
+      </CursorPos>
+      <DocGUID>4b6b7754-e03d-42cf-905e-3b598c9f9876</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\lib\animationframe.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>21</X>
+        <Y>20</Y>
+      </CursorPos>
+      <DocGUID>ce0adb72-d17b-4263-b0fc-1eac3ad12e19</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\antigravity.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
