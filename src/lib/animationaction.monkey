@@ -5,6 +5,7 @@ Public
 ' Friends:
 Friend lib.animation
 Friend lib.animationframe
+Friend lib.animationimageinfo
 
 ' Imports:
 Private
@@ -34,6 +35,7 @@ Public
 ' Classes:
 Class Action
 	Private
+		' Fields:
 		Field img_clip:MFImage
 		Field m_CurFrame:Short
 		Field m_FrameInfo:Byte[][]
@@ -43,8 +45,10 @@ Class Action
 		Field m_bPause:Bool
 		Field m_nFrames:Short
 	Protected
+		' Fields:
 		Field m_Ani:Animation
 	Public
+		' Constructor(s):
 		Method New(ani:Animation)
 			Self.m_Ani = ani
 			
@@ -54,72 +58,63 @@ Class Action
 			
 			Self.m_bLoop = True
 		End
-	
-	Public Method SetLoop:Void(loop:Bool)
-		Self.m_bLoop = loop
-	End
-	
-	Public Method GetLoop:Bool()
-		Return Self.m_bLoop
-	End
-	
-	Public Method GetARect:Byte[]()
 		
-		If (Self.m_nFrames = (Short) 0) Then
-			Return Null
-		EndIf
+		' Methods:
+		Method SetLoop:Void(loop:Bool)
+			Self.m_bLoop = loop
+		End
 		
-		Int tmpFrame = Self.m_FrameInfo[Self.m_CurFrame][0]
+		Method GetLoop:Bool()
+			Return Self.m_bLoop
+		End
 		
-		If (tmpFrame < 0) Then
-			tmpFrame += 256
-		EndIf
-		
-		Return Animation.Self.m_Frames[tmpFrame].GetARect()
-	End
-	
-	Public Method GetCRect:Byte[]()
-		Byte[] rect = Null
-		try {
-			Int tmpFrame = Self.m_FrameInfo[Self.m_CurFrame][0]
+		Method GetTempFrame:Int()
+			Local tmpFrame:= Self.m_FrameInfo[Self.m_CurFrame][0]
 			
 			If (tmpFrame < 0) Then
 				tmpFrame += 256
 			EndIf
 			
-			rect = Animation.Self.m_Frames[tmpFrame].GetCRect()
-		} catch (Exception e) {
-			e.printStackTrace()
-		EndIf
-		Return rect
-	End
-	
-	Public Method JumpFrame:Void(frame:Byte)
+			Return tmpFrame
+		End
 		
-		If (frame < Self.m_nFrames) Then
-			Self.m_Timer = (Short) 0
-			Self.m_CurFrame = frame
-		EndIf
+		Method GetARect:Byte[]()
+			If (Self.m_nFrames = 0) Then
+				Return Null
+			EndIf
+			
+			Return m_Ani.m_Frames[GetTempFrame()].GetARect()
+		End
 		
-	End
-	
-	Public Method GetFrameNo:Short()
-		Return Self.m_CurFrame
-	End
-	
-	Public Method LoadAction:Void(in:InputStream)
-		try {
+		Method GetCRect:Byte[]()
+			If (Self.m_nFrames = 0) Then
+				Return Null
+			EndIf
+			
+			Return m_Ani.m_Frames[GetTempFrame()].GetCRect()
+		End
+		
+		Method JumpFrame:Void(frame:Byte)
+			If (frame < Self.m_nFrames) Then
+				Self.m_Timer = 0
+				Self.m_CurFrame = frame
+			EndIf
+		End
+		
+		Method GetFrameNo:Short()
+			Return Self.m_CurFrame
+		End
+		
+		Method LoadAction:Void(in:Stream)
 			Self.m_nFrames = in.ReadByte()
 			Self.m_FrameInfo = (Byte[][]) Array.newInstance(Byte.TYPE, New Int[]{Self.m_nFrames, 2})
+			
 			For (Short i = (Short) 0; i < Self.m_nFrames; i += 1)
 				For (Int j = 0; j < 2; j += 1)
 					Self.m_FrameInfo[i][j] = in.ReadByte()
 				Next
 			EndIf
-		} catch (Exception e) {
-			e.printStackTrace()
-		EndIf
-	End
+		End
 	
 	Public Method loadActionG2:Void(ds:Stream)
 		Self.m_nFrames = ds.ReadByte()
