@@ -8,6 +8,21 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\com\sega\mobile\define\mdphone.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>17</X>
+        <Y>8</Y>
+      </CursorPos>
+      <DocGUID>b65e7a27-7f8e-4fe0-89e2-8013a9ccf1da</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\com\sega\mobile\mdversion.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>13</X>
+        <Y>7</Y>
+      </CursorPos>
+      <DocGUID />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animation.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>21</X>
@@ -585,10 +600,12 @@
     <FolderStatus NodePath="Sonic_GBA\sonic.data\tuch" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\sonic.data\water" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\com" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\com" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\action" Expanded="true" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile" Expanded="true" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\define" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\sonicgba" Expanded="true" />
   </Folders>
