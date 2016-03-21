@@ -17,6 +17,7 @@ Private
 	Import lib.myapi
 	Import lib.myrandom
 	Import lib.soundsystem
+	Import lib.constutil
 	'Import lib.crlfp32
 	
 	Import mflib.bpdef
@@ -44,35 +45,6 @@ Private
 	Import sonicgba.moveobject
 	Import sonicgba.focusable
 Public
-
-' Functions:
-Private
-	' Extensions:
-	Function DSgn:Int(value:Int)
-		If (value > 0) Then
-			Return 1
-		EndIf
-		
-		Return -1
-	End
-	
-	Function DSgn:Int(value:Bool)
-		If (Not value) Then
-			Return -1
-		EndIf
-		
-		Return 1
-	End
-Public
-
-' Extensions:
-Function PickValue:Int(Toggle:Bool, A:Int, B:Int)
-	If (Toggle) Then
-		Return A
-	EndIf
-	
-	Return B
-End
 
 ' Classes:
 Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstract

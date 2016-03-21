@@ -9,6 +9,34 @@ Private
 	Import com.sega.mobile.framework.device.mfimage
 Public
 
+' Functions:
+
+' Extensions:
+Function DSgn:Int(value:Int)
+	If (value > 0) Then
+		Return 1
+	EndIf
+	
+	Return -1
+End
+
+Function DSgn:Int(value:Bool)
+	If (Not value) Then
+		Return -1
+	EndIf
+	
+	Return 1
+End
+
+' Extensions:
+Function PickValue:Int(Toggle:Bool, A:Int, B:Int)
+	If (Toggle) Then
+		Return A
+	EndIf
+	
+	Return B
+End
+
 ' Classes:
 Class ConstUtil
 	Public

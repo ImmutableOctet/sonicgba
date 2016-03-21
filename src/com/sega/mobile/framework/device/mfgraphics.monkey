@@ -228,9 +228,8 @@ Class MFGraphics
 			Self.clipWidth = screenWidth
 			Self.clipHeight = screenHeight
 		End
-	
-		Public Method translate:Void(x:Int, y:Int) Final
-			
+		
+		Method translate:Void(x:Int, y:Int) Final
 			If (MFDevice.preScaleZoomOutFlag) Then
 				x Shr= MFDevice.preScaleShift
 				y Shr= MFDevice.preScaleShift
@@ -241,12 +240,12 @@ Class MFGraphics
 			
 			Self.transX += x
 			Self.transY += y
+			
 			Self.clipX += x
 			Self.clipY += y
 		End
-	
-		Public Method setTranslate:Void(x:Int, y:Int) Final
-			
+		
+		Method setTranslate:Void(x:Int, y:Int) Final
 			If (MFDevice.preScaleZoomOutFlag) Then
 				x Shr= MFDevice.preScaleShift
 				y Shr= MFDevice.preScaleShift
@@ -257,28 +256,26 @@ Class MFGraphics
 			
 			translate(x - Self.transX, y - Self.transY)
 		End
-	
-		Public Method getTranslateX:Int() Final
-			
+		
+		Method getTranslateX:Int() Final
 			If (MFDevice.preScaleZoomOutFlag) Then
-				Return Self.transX Shl MFDevice.preScaleShift
+				Return (Self.transX Shl MFDevice.preScaleShift)
 			EndIf
 			
 			If (MFDevice.preScaleZoomInFlag) Then
-				Return Self.transX Shr MFDevice.preScaleShift
+				Return (Self.transX Shr MFDevice.preScaleShift)
 			EndIf
 			
 			Return Self.transX
 		End
-	
-		Public Method getTranslateY:Int() Final
-			
+		
+		Method getTranslateY:Int() Final
 			If (MFDevice.preScaleZoomOutFlag) Then
-				Return Self.transY Shl MFDevice.preScaleShift
+				Return (Self.transY Shl MFDevice.preScaleShift)
 			EndIf
 			
 			If (MFDevice.preScaleZoomInFlag) Then
-				Return Self.transY Shr MFDevice.preScaleShift
+				Return (Self.transY Shr MFDevice.preScaleShift)
 			EndIf
 			
 			Return Self.transY
