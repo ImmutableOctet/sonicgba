@@ -2643,7 +2643,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 				EndIf
 				
-				'Print(BPDef.gameID)
+				'Print("")
 				
 				If (Self.collisionState = COLLISION_STATE_JUMP) Then
 					newPointX = Self.velY

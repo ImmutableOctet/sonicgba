@@ -3,7 +3,7 @@ Strict
 Public
 
 #Rem
-	Terrifying names aside, this seems to be the standard bumper object.
+	Terrifying names aside, this seems to be the standard bumper objData.
 	Although, that does make me wonder what the heck a "hobin/horbin" is...
 #End
 
@@ -77,7 +77,7 @@ Class Banper Extends GimmickObject ' Class Bumper Extends GimmickObject
 				Local sePlayed:Bool = False
 				
 				' Magic number: 55 (Sound-effect ID)
-				' Bump the player if they're moving toward this object:
+				' Bump the player if they're moving toward this objData:
 				If ((player.getVelX() * preVelX) <= 0) Then
 					player.getCal().stopMoveX()
 					

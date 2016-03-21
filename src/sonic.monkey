@@ -7,6 +7,8 @@ Public
 
 ' Functions:
 Function Main:Int()
+	Seed = Millisecs()
+	
 	'New Game()
 	
 	Return 0

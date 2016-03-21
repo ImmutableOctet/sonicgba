@@ -63,7 +63,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		
 		Const LOAD_NUM_IN_ONE_LOOP:=	20
 		
-		' Loadable object types:
+		' Loadable objData types:
 		Const LOAD_INDEX_GIMMICK:=		0
 		Const LOAD_INDEX_RING:=			1
 		Const LOAD_INDEX_ENEMY:=		2
@@ -213,8 +213,8 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		
 		' Fields:
 		
-		' From what I know, this is different for every object type.
-		' Essentially, object identifiers represent literal classes.
+		' From what I know, this is different for every objData type.
+		' Essentially, objData identifiers represent literal classes.
 		' They're mainly used for "meta" behavior like deserialization.
 		Field objId:Int
 		
@@ -237,7 +237,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			' Get a handle of the current player.
 			player = PlayerObject.getPlayer()
 			
-			' Clear the boss-object container.
+			' Clear the boss-objData container.
 			bossObjVec.Clear()
 			
 			' Calculate the size of 'allGameObject':
@@ -305,7 +305,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 				soundInstance = SoundSystem.getInstance()
 			EndIf
 			
-			' Initialize object behavior:
+			' Initialize objData behavior:
 			RingObject.ringInit()
 			GimmickObject.gimmickInit()
 			EnemyObject.enemyInit()
@@ -340,7 +340,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 				paintVec[I].Clear()
 			Next
 			
-			' Update specialized object behavior:
+			' Update specialized objData behavior:
 			GimmickObject.gimmickStaticLogic()
 			EnemyObject.enemyStaticLogic()
 			RingObject.ringLogic()
@@ -349,7 +349,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			' this needs to be done here, but whatever, we'll keep it.
 			RocketSeparateEffect.getInstance().logic()
 			
-			' Update the main player object(s):
+			' Update the main player objData(s):
 			
 			' NOTE: If multiplayer ever gets added to this, this is where
 			' you'd need to change the value of 'player', preferably in a loop.
@@ -383,12 +383,12 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 					currentObject = currentVec.Get(objIndex)
 					
 					If (Not player.isControlObject(currentObject)) Then
-						' Update the current object.
+						' Update the current objData.
 						currentObject.logic()
 						
-						' Check the destruction status of the object:
+						' Check the destruction status of the objData:
 						If (currentObject.objectChkDestroy()) Then
-							' Formally close the object.
+							' Formally close the objData.
 							currentObject.close()
 							
 							' Remove the entry at this index, then move back one index.
@@ -403,9 +403,9 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 						EndIf
 					EndIf
 					
-					' Check if we need to render this object:
+					' Check if we need to render this objData:
 					If (checkPaintNecessary(currentObject)) Then
-						' Get the object's preferred layer, and add to it.
+						' Get the objData's preferred layer, and add to it.
 						paintVec[currentObject.getPaintLayer()].Push(currentObject)
 					EndIf
 					
@@ -421,12 +421,12 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			If (bossObjVec <> Null) Then
 				' Update all boss objects:
 				For currentObject = EachIn bossObjVec
-					' Update the currentObject-object.
+					' Update the currentObject-objData.
 					currentObject.logic()
 					
 					' Check if we should be rendering this currentObject.
 					If (Not currentObject.isFarAwayCamera()) Then
-						' Add this currentObject-object to its preferred layer.
+						' Add this currentObject-objData to its preferred layer.
 						paint[currentObject.getPaintLayer()].Push(currentObject)
 					EndIf
 				Next
@@ -500,7 +500,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		Method drawObjects:Void(graphics:MFGraphics)
 			' Removing the pause-check here may actually be interesting.
 			If (Not (ringDrawer = Null Or IsGamePause)) Then
-				' From what I understand, this is updating the rings' shared animation object.
+				' From what I understand, this is updating the rings' shared animation objData.
 				ringDrawer.moveOn()
 			EndIf
 			
@@ -797,7 +797,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			EndIf
 			
 			If (allGameObject <> Null) Then
-				' Close every object handle:
+				' Close every objData handle:
 				For Local W:= 0 Until objVecWidth
 					For Local H:= 0 Until objVecHeight
 						Local current:= allGameObject[W][H]
@@ -1146,7 +1146,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		Method draw:Void(graphics:MFGraphics) Abstract
 		
 		' This is used to update the collision bounds of a 'GameObject'.
-		' The two arguments are very likely the X and Y coordinates of the object.
+		' The two arguments are very likely the X and Y coordinates of the objData.
 		Method refreshCollisionRect:Void(x:Int, y:Int) Abstract
 		
 		' Methods (Implemented):
@@ -1237,7 +1237,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			' Empty implementation.
 		End
 		
-		' This is used to tell the main update routine to destroy this object.
+		' This is used to tell the main update routine to destroy this objData.
 		Method objectChkDestroy:Bool()
 			Return False
 		End

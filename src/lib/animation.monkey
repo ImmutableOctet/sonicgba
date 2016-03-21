@@ -39,7 +39,7 @@ Class Animation
 		Global animationInstance:Animation[]
 		Global imageIdArray:Int[] = New Int[10]
 		
-		Global tmpPath:String = BPDef.gameID
+		Global tmpPath:String = ""
 		
 		' Fields:
 		Field m_Actions:Action[]

@@ -3,10 +3,10 @@ Strict
 Public
 
 #Rem
-	This is most likely the snow bank object.
-	Well, either that, or it's a (Potentially shared) bank object.
+	This is most likely the snow bank objData.
+	Well, either that, or it's a (Potentially shared) bank objData.
 	
-	It seems to be used by multiple object types later on,
+	It seems to be used by multiple objData types later on,
 	so I'm going to assume shared behavior at least.
 	
 	Maybe the type determines restriction of left or right movement?
@@ -33,7 +33,7 @@ Class Bank Extends GimmickObject
 	Public
 		' Methods:
 		
-		' This object's type seems to determine if 'var1' will be affected.
+		' This objData's type seems to determine if 'var1' will be affected.
 		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
 			If (player.onBank) Then
 				player.onBank = False
