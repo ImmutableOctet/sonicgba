@@ -339,124 +339,141 @@ Class MFGraphics
 			
 			Self.context.setClip(cx, cy, tx - cx, ty - cy)
 		End
-	
-		Public Method getClipX:Int() Final
-			
+		
+		Method getClipX:Int() Final
 			If (MFDevice.preScaleZoomOutFlag) Then
-				Return (Self.clipX - Self.transX) Shl MFDevice.preScaleShift
+				Return ((Self.clipX - Self.transX) Shl MFDevice.preScaleShift)
 			EndIf
 			
 			If (MFDevice.preScaleZoomInFlag) Then
-				Return (Self.clipX - Self.transX) Shr MFDevice.preScaleShift
+				Return ((Self.clipX - Self.transX) Shr MFDevice.preScaleShift)
 			EndIf
 			
-			Return Self.clipX - Self.transX
+			Return (Self.clipX - Self.transX)
 		End
 	
-		Public Method getClipY:Int() Final
-			
+		Method getClipY:Int() Final
 			If (MFDevice.preScaleZoomOutFlag) Then
-				Return (Self.clipY - Self.transY) Shl MFDevice.preScaleShift
+				Return ((Self.clipY - Self.transY) Shl MFDevice.preScaleShift)
 			EndIf
 			
 			If (MFDevice.preScaleZoomInFlag) Then
-				Return (Self.clipY - Self.transY) Shr MFDevice.preScaleShift
+				Return ((Self.clipY - Self.transY) Shr MFDevice.preScaleShift)
 			EndIf
 			
-			Return Self.clipY - Self.transY
+			Return (Self.clipY - Self.transY)
 		End
 	
-		Public Method getClipWidth:Int() Final
-			
+		Method getClipWidth:Int() Final
 			If (MFDevice.preScaleZoomOutFlag) Then
-				Return Self.clipWidth Shl MFDevice.preScaleShift
+				Return (Self.clipWidth Shl MFDevice.preScaleShift)
 			EndIf
 			
 			If (MFDevice.preScaleZoomInFlag) Then
-				Return Self.clipWidth Shr MFDevice.preScaleShift
+				Return (Self.clipWidth Shr MFDevice.preScaleShift)
 			EndIf
 			
 			Return Self.clipWidth
 		End
 	
-		Public Method getClipHeight:Int() Final
-			
+		Method getClipHeight:Int() Final
 			If (MFDevice.preScaleZoomOutFlag) Then
-				Return Self.clipHeight Shl MFDevice.preScaleShift
+				Return (Self.clipHeight Shl MFDevice.preScaleShift)
 			EndIf
 			
 			If (MFDevice.preScaleZoomInFlag) Then
-				Return Self.clipHeight Shr MFDevice.preScaleShift
+				Return (Self.clipHeight Shr MFDevice.preScaleShift)
 			EndIf
 			
 			Return Self.clipHeight
 		End
 	
-		Public Method drawImage:Void(image:MFImage, x:Int, y:Int, anchor:Int) Final
-			Int imageWidth = image.getWidth()
-			Int imageHeight = image.getHeight()
+		Method drawImage:Void(image:MFImage, x:Int, y:Int, anchor:Int) Final
+			Local imageWidth:= image.getWidth()
+			Local imageHeight:= image.getHeight()
 			
 			If (MFDevice.preScaleZoomOutFlag) Then
 				x Shr= MFDevice.preScaleShift
 				y Shr= MFDevice.preScaleShift
+				
 				imageWidth Shr= MFDevice.preScaleShift
 				imageHeight Shr= MFDevice.preScaleShift
 			ElseIf (MFDevice.preScaleZoomInFlag) Then
 				x Shl= MFDevice.preScaleShift
 				y Shl= MFDevice.preScaleShift
+				
 				imageWidth Shl= MFDevice.preScaleShift
 				imageHeight Shl= MFDevice.preScaleShift
 			EndIf
 			
 			caculateAnchorOffset(imageWidth, imageHeight, anchor)
+			
 			drawImageImpl(image, xOff + x, yOff + y)
 		End
 	
-		Public Method drawImage:Void(image:MFImage, x:Int, y:Int) Final
-			drawImage(image, x, y, 20)
+		Method drawImage:Void(image:MFImage, x:Int, y:Int) Final
+			drawImage(image, x, y, (TOP|RIGHT))
 		End
-	
-		Public Method drawImage:Void(image:MFImage, x:Int, y:Int, flipMode:Int, anchor:Int) Final
+		
+		Method drawImage:Void(image:MFImage, x:Int, y:Int, flipMode:Int, anchor:Int) Final
 			drawRegion(image, TRANS_NONE, TRANS_NONE, image.getWidth(), image.getHeight(), flipMode, x, y, anchor)
 		End
 	
-		Public Method drawImage:Void(image:MFImage, x:Int, y:Int, regionX:Int, regionY:Int, regionW:Int, regionH:Int) Final
-			drawRegion(image, regionX, regionY, regionW, regionH, TRANS_NONE, x, y, 20)
+		Method drawImage:Void(image:MFImage, x:Int, y:Int, regionX:Int, regionY:Int, regionW:Int, regionH:Int) Final
+			drawRegion(image, regionX, regionY, regionW, regionH, TRANS_NONE, x, y, (TOP|RIGHT))
 		End
-	
-		Public Method drawRegion:Void(image:MFImage, regionX:Int, regionY:Int, regionW:Int, regionH:Int, flipMode:Int, x:Int, y:Int, anchor:Int) Final
-			
+		
+		Method drawRegion:Void(image:MFImage, regionX:Int, regionY:Int, regionW:Int, regionH:Int, flipMode:Int, x:Int, y:Int, anchor:Int) Final
 			If (MFDevice.preScaleZoomOutFlag) Then
 				x Shr= MFDevice.preScaleShift
 				y Shr= MFDevice.preScaleShift
+				
 				regionX Shr= MFDevice.preScaleShift
 				regionY Shr= MFDevice.preScaleShift
+				
 				regionW Shr= MFDevice.preScaleShift
 				regionH Shr= MFDevice.preScaleShift
 			ElseIf (MFDevice.preScaleZoomInFlag) Then
 				x Shl= MFDevice.preScaleShift
 				y Shl= MFDevice.preScaleShift
+				
 				regionX Shl= MFDevice.preScaleShift
 				regionY Shl= MFDevice.preScaleShift
+				
 				regionW Shl= MFDevice.preScaleShift
 				regionH Shl= MFDevice.preScaleShift
 			EndIf
 			
 			If (flipMode <= TRANS_ROT180) Then
 				caculateAnchorOffset(regionW, regionH, anchor)
-			} Else {
+			Else
 				caculateAnchorOffset(regionH, regionW, anchor)
 			EndIf
 			
 			drawRegionImpl(image, regionX, regionY, regionW, regionH, flipMode, x + xOff, y + yOff)
 		End
-	
-		Private Method caculateAnchorOffset:Void(width:Int, height:Int, anchor:Int) Final
+	Private
+		' Functions:
+		Function getFont:Font(type:Int) ' Final
+			Select (type)
+				Case FONT_LARGE
+					Return font_large
+				Case FONT_MEDIUM
+					Return font_medium
+				Case FONT_SMALL
+					Return font_small
+			End Select
+			
+			Return Font.getFont(type)
+		End
+		
+		' Methods:
+		Method caculateAnchorOffset:Void(width:Int, height:Int, anchor:Int) Final
 			xOff = TRANS_NONE
 			yOff = TRANS_NONE
 			
 			If ((anchor & TRANS_MIRROR_ROT180) <> 0) Then
-				xOff -= width Shr TRANS_MIRROR_ROT180
+				xOff -= (width Shr TRANS_MIRROR_ROT180)
 			ElseIf ((anchor & RIGHT) <> 0) Then
 				xOff -= width
 			EndIf
@@ -466,523 +483,497 @@ Class MFGraphics
 			ElseIf ((anchor & BOTTOM) <> 0) Then
 				yOff -= height
 			EndIf
-			
 		End
 		
-		' This is only really used for fade effects, so it can be replaced pretty easily.
-		Public Method drawRGB:Void(rgbData:Int[], offset:Int, scanlength:Int, x:Int, y:Int, width:Int, height:Int, processAlpha:Bool)
-			Int i
-			
-			If (Self.effectFlag) Then
-				If (Self.alphaValue <> 0) Then
-					If (Not (Self.redValue = 0 And Self.greenValue = 0 And Self.blueValue = 0)) Then
-						For (i = TRANS_NONE; i < rgbData.length; i += TRANS_MIRROR_ROT180)
-							rgbData[i] = caculateColorValue(rgbData[i])
-						Next
-					EndIf
-					
-					If (Self.grayValue <> 0) Then
-						For (i = TRANS_NONE; i < rgbData.length; i += TRANS_MIRROR_ROT180)
-							rgbData[i] = caculateGray(rgbData[i])
-						Next
-					EndIf
-					
-					If (Self.alphaValue <> 255) Then
-						For (i = TRANS_NONE; i < rgbData.length; i += TRANS_MIRROR_ROT180)
-							rgbData[i] = caculateAlpha(rgbData[i])
-						Next
-					EndIf
-					
-				} Else {
-					Return
-				EndIf
-			EndIf
-			
-			Int[] drawRGB = rgbData
-			Int j
-			
-			If (MFDevice.preScaleZoomOutFlag) Then
-				x Shr= MFDevice.preScaleShift
-				y Shr= MFDevice.preScaleShift
-				width Shr= MFDevice.preScaleShift
-				height Shr= MFDevice.preScaleShift
-				drawRGB = New Int[(width * height)]
-				For (i = TRANS_NONE; i < width; i += TRANS_MIRROR_ROT180)
-					For (j = TRANS_NONE; j < height; j += TRANS_MIRROR_ROT180)
-						drawRGB[(j * width) + i] = rgbData[(i Shl MFDevice.preScaleShift) + ((j Shl MFDevice.preScaleShift) * (width Shl MFDevice.preScaleShift))]
-					EndIf
-				EndIf
-				offset = TRANS_NONE
-				scanlength = width
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				x Shl= MFDevice.preScaleShift
-				y Shl= MFDevice.preScaleShift
-				width Shl= MFDevice.preScaleShift
-				height Shl= MFDevice.preScaleShift
-				drawRGB = New Int[(width * height)]
-				For (i = TRANS_NONE; i < width; i += TRANS_MIRROR_ROT180)
-					For (j = TRANS_NONE; j < height; j += TRANS_MIRROR_ROT180)
-						drawRGB[(j * width) + i] = rgbData[(i Shr MFDevice.preScaleShift) + ((j Shr MFDevice.preScaleShift) * (width Shr MFDevice.preScaleShift))]
-					EndIf
-				Next
-				offset = TRANS_NONE
-				scanlength = width
-			EndIf
-			
-			If (Self.effectFlag) Then
-				drawRGBFlip(drawRGB, x + Self.transX, y + Self.transY, width, height, TRANS_NONE)
-				Return
-			EndIf
-			
-			drawRGBImpl(drawRGB, offset, scanlength, x + Self.transX, y + Self.transY, width, height, processAlpha)
-		End
-		
-		Private Method drawRGBImpl:Void(rgbData:Int[], offset:Int, scanlength:Int, x:Int, y:Int, width:Int, height:Int, processAlpha:Bool)
+		' This method may be removed at a later date.
+		Method drawRGBImpl:Void(rgbData:Int[], offset:Int, scanlength:Int, x:Int, y:Int, width:Int, height:Int, processAlpha:Bool)
 			Self.context.drawRGB(rgbData, offset, scanlength, x, y, width, height, processAlpha)
 		End
-
-	Public Method setColor:Void(color:Int)
-		Self.context.setColor(color)
-	End
-
-	Public Method getColor:Int()
-		Return Self.context.getColor()
-	End
-
-	Public Method setColor:Void(red:Int, green:Int, blue:Int)
-		Self.context.setColor(((red Shl TOP) | (green Shl RIGHT)) | blue)
-	End
-
-	Public Method drawPixel:Void(x:Int, y:Int) Final
 		
-		If (MFDevice.preScaleZoomOutFlag) Then
-			x Shr= MFDevice.preScaleShift
-			y Shr= MFDevice.preScaleShift
-		ElseIf (MFDevice.preScaleZoomInFlag) Then
-			x Shl= MFDevice.preScaleShift
-			y Shl= MFDevice.preScaleShift
-		EndIf
-		
-		drawPixelImpl(Self.transX + x, Self.transY + y)
-	End
-
-	Private Method drawPixelImpl:Void(x:Int, y:Int) Final
-		
-		If (Self.effectFlag) Then
-			Self.pixelInt[TRANS_NONE] = Self.context.getColor() | -16777216
-			
-			If (Not (Self.alphaValue = 0 Or (Self.redValue = 0 And Self.greenValue = 0 And Self.blueValue = 0))) Then
-				Self.pixelInt[TRANS_NONE] = caculateColorValue(Self.pixelInt[TRANS_NONE])
-			EndIf
-			
-			If (Not (Self.alphaValue = 0 Or Self.grayValue = 0)) Then
-				Self.pixelInt[TRANS_NONE] = caculateGray(Self.pixelInt[TRANS_NONE])
-			EndIf
-			
-			If (Not (Self.alphaValue = 255 Or Self.alphaValue = 0)) Then
-				Self.pixelInt[TRANS_NONE] = caculateAlpha(Self.pixelInt[TRANS_NONE])
-			EndIf
-			
-			If (Self.alphaValue <> 0) Then
-				Self.context.drawRGB(Self.pixelInt, TRANS_NONE, TRANS_MIRROR_ROT180, x, y, TRANS_MIRROR_ROT180, TRANS_MIRROR_ROT180, True)
+		Method drawPixelImpl:Void(x:Int, y:Int) Final
+			If (Self.effectFlag) Then
+				Self.pixelInt[0] = Self.context.getColor() | -16777216
+				
+				If (Not (Self.alphaValue = 0 Or (Self.redValue = 0 And Self.greenValue = 0 And Self.blueValue = 0))) Then
+					Self.pixelInt[0] = caculateColorValue(Self.pixelInt[0])
+				EndIf
+				
+				If (Not (Self.alphaValue = 0 Or Self.grayValue = 0)) Then
+					Self.pixelInt[0] = caculateGray(Self.pixelInt[0])
+				EndIf
+				
+				If (Not (Self.alphaValue = 255 Or Self.alphaValue = 0)) Then
+					Self.pixelInt[0] = caculateAlpha(Self.pixelInt[0])
+				EndIf
+				
+				If (Self.alphaValue <> 0) Then
+					Self.context.drawRGB(Self.pixelInt, TRANS_NONE, TRANS_MIRROR_ROT180, x, y, TRANS_MIRROR_ROT180, TRANS_MIRROR_ROT180, True)
+					
+					Return
+				EndIf
+				
 				Return
 			EndIf
 			
-			Return
-		EndIf
+			Self.context.drawLine(x, y, x, y)
+		End
 		
-		Self.context.drawLine(x, y, x, y)
-	End
-
-	Public Method drawLine:Void(x1:Int, y1:Int, x2:Int, y2:Int) Final
-		
-		If (MFDevice.preScaleZoomOutFlag) Then
-			x1 Shr= MFDevice.preScaleShift
-			y1 Shr= MFDevice.preScaleShift
-			x2 Shr= MFDevice.preScaleShift
-			y2 Shr= MFDevice.preScaleShift
-		ElseIf (MFDevice.preScaleZoomInFlag) Then
-			x1 Shl= MFDevice.preScaleShift
-			y1 Shl= MFDevice.preScaleShift
-			x2 Shl= MFDevice.preScaleShift
-			y2 Shl= MFDevice.preScaleShift
-		EndIf
-		
-		If (Self.effectFlag) Then
-			drawLinePerPixel(Self.transX + x1, Self.transY + y1, Self.transX + x2, Self.transY + y2)
-		} Else {
-			Self.context.drawLine(Self.transX + x1, Self.transY + y1, Self.transX + x2, Self.transY + y2)
-		EndIf
-		
-	End
-
-	Private Method drawLinePerPixel:Void(x1:Int, y1:Int, x2:Int, y2:Int) Final
-		Int i
-		drawLineStepX = x1 < x2 ? TRANS_MIRROR_ROT180 : FONT_SMALL
-		
-		If (y1 < y2) Then
-			i = TRANS_MIRROR_ROT180
-		} Else {
-			i = FONT_SMALL
-		EndIf
-		
-		drawLineStepY = i
-		drawLineDX = Abs(x2 - x1)
-		drawLineDY = Abs(y2 - y1)
-		drawLineMFlag = drawLineDX - drawLineDY > 0
-		
-		If (drawLineMFlag) Then
-			drawLineD = drawLineDX - (drawLineDY Shl TRANS_MIRROR_ROT180)
-			drawLineIncrE = -(drawLineDY Shl TRANS_MIRROR_ROT180)
-			drawLineIncrNE = (drawLineDX - drawLineDY) Shl TRANS_MIRROR_ROT180
-		} Else {
-			drawLineD = drawLineDY - (drawLineDX Shl TRANS_MIRROR_ROT180)
-			drawLineIncrE = -(drawLineDX Shl TRANS_MIRROR_ROT180)
-			drawLineIncrNE = (drawLineDY - drawLineDX) Shl TRANS_MIRROR_ROT180
-		EndIf
-		
-		drawLineX = x1
-		drawLineY = y1
-		drawPixelImpl(drawLineX, drawLineY)
-		
-		If (drawLineMFlag) Then
-			While (drawLineX <> x2) {
+		Method drawLinePerPixel:Void(x1:Int, y1:Int, x2:Int, y2:Int) Final
+			drawLineStepX = DSgn(x1 < x2)
+			drawLineStepY = -drawLineStepX ' DSgn((y1 >= y2))
+			
+			drawLineDX = Abs(x2 - x1)
+			drawLineDY = Abs(y2 - y1)
+			
+			drawLineMFlag = ((drawLineDX - drawLineDY) > 0)
+			
+			If (drawLineMFlag) Then
+				drawLineD = drawLineDX - (drawLineDY Shl 1)
+				drawLineIncrE = -(drawLineDY Shl 1)
+				drawLineIncrNE = ((drawLineDX - drawLineDY) Shl 1)
+			Else
+				drawLineD = drawLineDY - (drawLineDX Shl 1)
+				drawLineIncrE = -(drawLineDX Shl 1)
+				drawLineIncrNE = ((drawLineDY - drawLineDX) Shl 1)
+			EndIf
+			
+			drawLineX = x1
+			drawLineY = y1
+			
+			drawPixelImpl(drawLineX, drawLineY)
+			
+			If (drawLineMFlag) Then
+				While (drawLineX <> x2)
+					If (drawLineD > 0) Then
+						drawLineD += drawLineIncrE
+						drawLineX += drawLineStepX
+					Else
+						drawLineD += drawLineIncrNE
+						drawLineX += drawLineStepX
+						drawLineY += drawLineStepY
+					EndIf
+					
+					drawPixelImpl(drawLineX, drawLineY)
+				Wend
 				
+				Return
+			EndIf
+			
+			While (drawLineY <> y2)
 				If (drawLineD > 0) Then
 					drawLineD += drawLineIncrE
-					drawLineX += drawLineStepX
-				} Else {
+					drawLineY += drawLineStepY
+				Else
 					drawLineD += drawLineIncrNE
 					drawLineX += drawLineStepX
 					drawLineY += drawLineStepY
 				EndIf
 				
 				drawPixelImpl(drawLineX, drawLineY)
-			EndIf
-			Return
-		EndIf
-		
-		While (drawLineY <> y2) {
-			
-			If (drawLineD > 0) Then
-				drawLineD += drawLineIncrE
-				drawLineY += drawLineStepY
-			} Else {
-				drawLineD += drawLineIncrNE
-				drawLineX += drawLineStepX
-				drawLineY += drawLineStepY
-			EndIf
-			
-			drawPixelImpl(drawLineX, drawLineY)
-		EndIf
-	End
-
-	Public Method drawTriangle:Void(x1:Int, y1:Int, x2:Int, y2:Int, x3:Int, y3:Int) Final
-		drawLine(x1, y1, x2, y2)
-		drawLine(x1, y1, x3, y3)
-		drawLine(x2, y2, x3, y3)
-	End
-
-	Public Method fillTriangle:Void(x1:Int, y1:Int, x2:Int, y2:Int, x3:Int, y3:Int) Final
-		
-		If (MFDevice.preScaleZoomOutFlag) Then
-			x1 Shr= MFDevice.preScaleShift
-			y1 Shr= MFDevice.preScaleShift
-			x2 Shr= MFDevice.preScaleShift
-			y2 Shr= MFDevice.preScaleShift
-			x3 Shr= MFDevice.preScaleShift
-			y3 Shr= MFDevice.preScaleShift
-		ElseIf (MFDevice.preScaleZoomInFlag) Then
-			x1 Shl= MFDevice.preScaleShift
-			y1 Shl= MFDevice.preScaleShift
-			x2 Shl= MFDevice.preScaleShift
-			y2 Shl= MFDevice.preScaleShift
-			x3 Shl= MFDevice.preScaleShift
-			y3 Shl= MFDevice.preScaleShift
-		EndIf
-		
-		Self.context.fillTriangle(Self.transX + x1, Self.transY + y1, Self.transX + x2, Self.transY + y2, Self.transX + x3, Self.transY + y3)
-	End
-
-	Public Method drawRect:Void(x:Int, y:Int, w:Int, h:Int) Final
-		
-		If (MFDevice.preScaleZoomOutFlag) Then
-			x Shr= MFDevice.preScaleShift
-			y Shr= MFDevice.preScaleShift
-			w Shr= MFDevice.preScaleShift
-			h Shr= MFDevice.preScaleShift
-		ElseIf (MFDevice.preScaleZoomInFlag) Then
-			x Shl= MFDevice.preScaleShift
-			y Shl= MFDevice.preScaleShift
-			w Shl= MFDevice.preScaleShift
-			h Shl= MFDevice.preScaleShift
-		EndIf
-		
-		If (w >= 0 And h >= 0) Then
+			Wend
+		End
+	Public
+		' This is only really used for fade effects, so it can be replaced
+		' pretty easily. Therefore, this method may be removed at a later date.
+		Method drawRGB:Void(rgbData:Int[], offset:Int, scanlength:Int, x:Int, y:Int, width:Int, height:Int, processAlpha:Bool)
 			If (Self.effectFlag) Then
-				fillRect(x, y, w, TRANS_MIRROR_ROT180)
-				fillRect(x, y, TRANS_MIRROR_ROT180, h)
-				fillRect(x + w, y, TRANS_MIRROR_ROT180, h)
-				fillRect(x, y + h, w, TRANS_MIRROR_ROT180)
+				If (Self.alphaValue <> 0) Then
+					If (Not (Self.redValue = 0 And Self.greenValue = 0 And Self.blueValue = 0)) Then
+						For Local i:= 0 Until rgbData.length
+							rgbData[i] = caculateColorValue(rgbData[i])
+						Next
+					EndIf
+					
+					If (Self.grayValue <> 0) Then
+						For Local i:= 0 Until rgbData.length
+							rgbData[i] = caculateGray(rgbData[i])
+						Next
+					EndIf
+					
+					If (Self.alphaValue <> 255) Then
+						For Local i:= 0 Until rgbData.length
+							rgbData[i] = caculateAlpha(rgbData[i])
+						Next
+					EndIf
+				Else
+					Return
+				EndIf
+			EndIf
+			
+			Local drawRGB:= rgbData
+			
+			If (MFDevice.preScaleZoomOutFlag) Then
+				x Shr= MFDevice.preScaleShift
+				y Shr= MFDevice.preScaleShift
+				
+				width Shr= MFDevice.preScaleShift
+				height Shr= MFDevice.preScaleShift
+				
+				drawRGB = New Int[(width * height)]
+				
+				For Local i:= 0 Until width
+					For Local j:= 0 Until height
+						drawRGB[(j * width) + i] = rgbData[(i Shl MFDevice.preScaleShift) + ((j Shl MFDevice.preScaleShift) * (width Shl MFDevice.preScaleShift))]
+					Next
+				Next
+				
+				offset = TRANS_NONE
+				scanlength = width
+			ElseIf (MFDevice.preScaleZoomInFlag) Then
+				x Shl= MFDevice.preScaleShift
+				y Shl= MFDevice.preScaleShift
+				
+				width Shl= MFDevice.preScaleShift
+				height Shl= MFDevice.preScaleShift
+				
+				drawRGB = New Int[(width * height)]
+				
+				For Local i:= 0 Until width
+					For Local j:= 0 Until height
+						drawRGB[(j * width) + i] = rgbData[(i Shr MFDevice.preScaleShift) + ((j Shr MFDevice.preScaleShift) * (width Shr MFDevice.preScaleShift))]
+					Next
+				Next
+				
+				offset = TRANS_NONE
+				scanlength = width
+			EndIf
+			
+			If (Self.effectFlag) Then
+				drawRGBFlip(drawRGB, x + Self.transX, y + Self.transY, width, height, TRANS_NONE)
+				
 				Return
 			EndIf
 			
-			Self.context.drawRect(Self.transX + x, Self.transY + y, w, h)
-		EndIf
+			drawRGBImpl(drawRGB, offset, scanlength, x + Self.transX, y + Self.transY, width, height, processAlpha)
+		End
 		
-	End
+		Method setColor:Void(color:Int)
+			Self.context.setColor(color)
+		End
+	
+		Method getColor:Int()
+			Return Self.context.getColor()
+		End
+	
+		Method setColor:Void(red:Int, green:Int, blue:Int)
+			Self.context.setColor(((red Shl TOP) | (green Shl RIGHT)) | blue)
+		End
+	
+		Method drawPixel:Void(x:Int, y:Int) Final
+			If (MFDevice.preScaleZoomOutFlag) Then
+				x Shr= MFDevice.preScaleShift
+				y Shr= MFDevice.preScaleShift
+			ElseIf (MFDevice.preScaleZoomInFlag) Then
+				x Shl= MFDevice.preScaleShift
+				y Shl= MFDevice.preScaleShift
+			EndIf
+			
+			drawPixelImpl(Self.transX + x, Self.transY + y)
+		End
+		
+		Method drawLine:Void(x1:Int, y1:Int, x2:Int, y2:Int) Final
+			If (MFDevice.preScaleZoomOutFlag) Then
+				x1 Shr= MFDevice.preScaleShift
+				y1 Shr= MFDevice.preScaleShift
+				
+				x2 Shr= MFDevice.preScaleShift
+				y2 Shr= MFDevice.preScaleShift
+			ElseIf (MFDevice.preScaleZoomInFlag) Then
+				x1 Shl= MFDevice.preScaleShift
+				y1 Shl= MFDevice.preScaleShift
+				
+				x2 Shl= MFDevice.preScaleShift
+				y2 Shl= MFDevice.preScaleShift
+			EndIf
+			
+			If (Self.effectFlag) Then
+				drawLinePerPixel(Self.transX + x1, Self.transY + y1, Self.transX + x2, Self.transY + y2)
+			Else
+				Self.context.drawLine(Self.transX + x1, Self.transY + y1, Self.transX + x2, Self.transY + y2)
+			EndIf
+		End
+		
+		Method drawTriangle:Void(x1:Int, y1:Int, x2:Int, y2:Int, x3:Int, y3:Int) Final
+			drawLine(x1, y1, x2, y2)
+			drawLine(x1, y1, x3, y3)
+			drawLine(x2, y2, x3, y3)
+		End
+		
+		Method fillTriangle:Void(x1:Int, y1:Int, x2:Int, y2:Int, x3:Int, y3:Int) Final
+			If (MFDevice.preScaleZoomOutFlag) Then
+				x1 Shr= MFDevice.preScaleShift
+				y1 Shr= MFDevice.preScaleShift
+				
+				x2 Shr= MFDevice.preScaleShift
+				y2 Shr= MFDevice.preScaleShift
+				
+				x3 Shr= MFDevice.preScaleShift
+				y3 Shr= MFDevice.preScaleShift
+			ElseIf (MFDevice.preScaleZoomInFlag) Then
+				x1 Shl= MFDevice.preScaleShift
+				y1 Shl= MFDevice.preScaleShift
+				
+				x2 Shl= MFDevice.preScaleShift
+				y2 Shl= MFDevice.preScaleShift
+				
+				x3 Shl= MFDevice.preScaleShift
+				y3 Shl= MFDevice.preScaleShift
+			EndIf
+			
+			Self.context.fillTriangle(Self.transX + x1, Self.transY + y1, Self.transX + x2, Self.transY + y2, Self.transX + x3, Self.transY + y3)
+		End
+		
+		Method drawRect:Void(x:Int, y:Int, w:Int, h:Int) Final
+			If (MFDevice.preScaleZoomOutFlag) Then
+				x Shr= MFDevice.preScaleShift
+				y Shr= MFDevice.preScaleShift
+				
+				w Shr= MFDevice.preScaleShift
+				h Shr= MFDevice.preScaleShift
+			ElseIf (MFDevice.preScaleZoomInFlag) Then
+				x Shl= MFDevice.preScaleShift
+				y Shl= MFDevice.preScaleShift
+				
+				w Shl= MFDevice.preScaleShift
+				h Shl= MFDevice.preScaleShift
+			EndIf
+			
+			If (w >= 0 And h >= 0) Then
+				If (Self.effectFlag) Then
+					fillRect(x, y, w, TRANS_MIRROR_ROT180)
+					fillRect(x, y, TRANS_MIRROR_ROT180, h)
+					fillRect(x + w, y, TRANS_MIRROR_ROT180, h)
+					fillRect(x, y + h, w, TRANS_MIRROR_ROT180)
+					
+					Return
+				EndIf
+				
+				Self.context.drawRect(Self.transX + x, Self.transY + y, w, h)
+			EndIf
+		End
 
-	Public Method fillRect:Void(x:Int, y:Int, w:Int, h:Int) Final
-		
-		If (MFDevice.preScaleZoomOutFlag) Then
-			x Shr= MFDevice.preScaleShift
-			y Shr= MFDevice.preScaleShift
-			w Shr= MFDevice.preScaleShift
-			h Shr= MFDevice.preScaleShift
-		ElseIf (MFDevice.preScaleZoomInFlag) Then
-			x Shl= MFDevice.preScaleShift
-			y Shl= MFDevice.preScaleShift
-			w Shl= MFDevice.preScaleShift
-			h Shl= MFDevice.preScaleShift
-		EndIf
-		
-		If (Self.effectFlag) Then
-			Self.fillRectRGB[TRANS_NONE] = Self.context.getColor() | -16777216
-			
-			If (Not (Self.alphaValue = 0 Or (Self.redValue = 0 And Self.greenValue = 0 And Self.blueValue = 0))) Then
-				Self.fillRectRGB[TRANS_NONE] = caculateColorValue(Self.fillRectRGB[TRANS_NONE])
+		Method fillRect:Void(x:Int, y:Int, w:Int, h:Int) Final
+			If (MFDevice.preScaleZoomOutFlag) Then
+				x Shr= MFDevice.preScaleShift
+				y Shr= MFDevice.preScaleShift
+				
+				w Shr= MFDevice.preScaleShift
+				h Shr= MFDevice.preScaleShift
+			ElseIf (MFDevice.preScaleZoomInFlag) Then
+				x Shl= MFDevice.preScaleShift
+				y Shl= MFDevice.preScaleShift
+				
+				w Shl= MFDevice.preScaleShift
+				h Shl= MFDevice.preScaleShift
 			EndIf
 			
-			If (Not (Self.alphaValue = 0 Or Self.grayValue = 0)) Then
-				Self.fillRectRGB[TRANS_NONE] = caculateGray(Self.fillRectRGB[TRANS_NONE])
-			EndIf
-			
-			If (Not (Self.alphaValue = 255 Or Self.alphaValue = 0)) Then
-				Self.fillRectRGB[TRANS_NONE] = caculateAlpha(Self.fillRectRGB[TRANS_NONE])
-			EndIf
-			
-			If (Self.alphaValue <> 0) Then
-				Int i
-				Int x1
-				Int y1
-				Int i2 = TRANS_NONE
-				While (True) {
-					
-					If (i2 >= Self.fillRectRGB.length) Then
-						break
-					EndIf
-					
-					Self.fillRectRGB[i2] = Self.fillRectRGB[TRANS_NONE]
-					i2 += TRANS_MIRROR_ROT180
-				EndIf
-				If (Self.transX + x < Self.clipX) Then
-					i = Self.clipX
-				} Else {
-					x1 = Self.transX + x
+			If (Self.effectFlag) Then
+				Self.fillRectRGB[0] = Self.context.getColor() | -16777216
+				
+				If (Not (Self.alphaValue = 0 Or (Self.redValue = 0 And Self.greenValue = 0 And Self.blueValue = 0))) Then
+					Self.fillRectRGB[0] = caculateColorValue(Self.fillRectRGB[0])
 				EndIf
 				
-				If (Self.transY + y < Self.clipY) Then
-					i = Self.clipY
-				} Else {
-					y1 = Self.transY + y
+				If (Not (Self.alphaValue = 0 Or Self.grayValue = 0)) Then
+					Self.fillRectRGB[0] = caculateGray(Self.fillRectRGB[0])
 				EndIf
 				
-				Int x2 = (Self.transX + x) + w
-				Int y2 = (Self.transY + y) + h
-				Self.context.setClip(x1, y1, x2 - x1, y2 - y1)
-				For (i2 = TRANS_NONE; i2 < (w / 10) + TRANS_MIRROR_ROT180; i2 += TRANS_MIRROR_ROT180)
-					For (Int j = TRANS_NONE; j < (h / 10) + TRANS_MIRROR_ROT180; j += TRANS_MIRROR_ROT180)
-						Self.context.drawRGB(Self.fillRectRGB, TRANS_NONE, 10, (Self.transX + x) + (i2 * 10), (Self.transY + y) + (j * 10), 10, 10, True)
-					EndIf
+				If (Not (Self.alphaValue = 255 Or Self.alphaValue = 0)) Then
+					Self.fillRectRGB[0] = caculateAlpha(Self.fillRectRGB[0])
 				EndIf
-				Self.context.setClip(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
+				
+				If (Self.alphaValue <> 0) Then
+					Local i:Int
+					
+					Local x1:Int
+					Local y1:Int
+					
+					Local i2:Int = 0
+					
+					For Local i2:= 0 Until Self.fillRectRGB.length
+						Self.fillRectRGB[i2] = Self.fillRectRGB[0]
+					Next
+					
+					If (Self.transX + x < Self.clipX) Then
+						i = Self.clipX
+					Else
+						x1 = Self.transX + x
+					EndIf
+					
+					If (Self.transY + y < Self.clipY) Then
+						i = Self.clipY
+					Else
+						y1 = Self.transY + y
+					EndIf
+					
+					Local x2:= ((Self.transX + x) + w)
+					Local y2:= ((Self.transY + y) + h)
+					
+					Self.context.setClip(x1, y1, x2 - x1, y2 - y1)
+					
+					For Local i2:= 0 Until ((w / 10) + 1)
+						For Local j:= 0 Until ((h / 10) + 1)
+							Self.context.drawRGB(Self.fillRectRGB, TRANS_NONE, 10, (Self.transX + x) + (i2 * 10), (Self.transY + y) + (j * 10), 10, 10, True)
+						Next
+					Next
+					
+					Self.context.setClip(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
+					
+					Return
+				EndIf
+				
 				Return
 			EndIf
 			
-			Return
-		EndIf
+			Self.context.fillRect(Self.transX + x, Self.transY + y, w, h)
+		End
 		
-		Self.context.fillRect(Self.transX + x, Self.transY + y, w, h)
-	End
-
-	Public Method drawArc:Void(x:Int, y:Int, width:Int, height:Int, startAngle:Int, arcAngle:Int) Final
-		
-		If (MFDevice.preScaleZoomOutFlag) Then
-			x Shr= MFDevice.preScaleShift
-			y Shr= MFDevice.preScaleShift
-			width Shr= MFDevice.preScaleShift
-			height Shr= MFDevice.preScaleShift
-		ElseIf (MFDevice.preScaleZoomInFlag) Then
-			x Shl= MFDevice.preScaleShift
-			y Shl= MFDevice.preScaleShift
-			width Shl= MFDevice.preScaleShift
-			height Shl= MFDevice.preScaleShift
-		EndIf
-		
-		Self.context.drawArc(Self.transX + x, Self.transY + y, width, height, startAngle, arcAngle)
-	End
-
-	Public Method fillArc:Void(x:Int, y:Int, width:Int, height:Int, startAngle:Int, arcAngle:Int) Final
-		
-		If (MFDevice.preScaleZoomOutFlag) Then
-			x Shr= MFDevice.preScaleShift
-			y Shr= MFDevice.preScaleShift
-			width Shr= MFDevice.preScaleShift
-			height Shr= MFDevice.preScaleShift
-		ElseIf (MFDevice.preScaleZoomInFlag) Then
-			x Shl= MFDevice.preScaleShift
-			y Shl= MFDevice.preScaleShift
-			width Shl= MFDevice.preScaleShift
-			height Shl= MFDevice.preScaleShift
-		EndIf
-		
-		Self.context.fillArc(Self.transX + x, Self.transY + y, width, height, startAngle, arcAngle)
-	End
-
-	Public Method drawRoundRect:Void(x:Int, y:Int, width:Int, height:Int, arcWidth:Int, arcHeight:Int) Final
-		
-		If (MFDevice.preScaleZoomOutFlag) Then
-			x Shr= MFDevice.preScaleShift
-			y Shr= MFDevice.preScaleShift
-			width Shr= MFDevice.preScaleShift
-			height Shr= MFDevice.preScaleShift
-		ElseIf (MFDevice.preScaleZoomInFlag) Then
-			x Shl= MFDevice.preScaleShift
-			y Shl= MFDevice.preScaleShift
-			width Shl= MFDevice.preScaleShift
-			height Shl= MFDevice.preScaleShift
-		EndIf
-		
-		Self.context.drawRoundRect(Self.transX + x, Self.transY + y, width, height, arcWidth, arcWidth)
-	End
-
-	Public Method fillRoundRect:Void(x:Int, y:Int, width:Int, height:Int, arcWidth:Int, arcHeight:Int) Final
-		
-		If (MFDevice.preScaleZoomOutFlag) Then
-			x Shr= MFDevice.preScaleShift
-			y Shr= MFDevice.preScaleShift
-			width Shr= MFDevice.preScaleShift
-			height Shr= MFDevice.preScaleShift
-		ElseIf (MFDevice.preScaleZoomInFlag) Then
-			x Shl= MFDevice.preScaleShift
-			y Shl= MFDevice.preScaleShift
-			width Shl= MFDevice.preScaleShift
-			height Shl= MFDevice.preScaleShift
-		EndIf
-		
-		Self.context.fillRoundRect(Self.transX + x, Self.transY + y, width, height, arcWidth, arcWidth)
-	End
-
-	Private Function getFont:Font(type:Int) Final
-		Select (type)
-			Case FONT_LARGE
-				Return font_large
-			Case FONT_MEDIUM
-				Return font_medium
-			Case FONT_SMALL
-				Return font_small
-			Default
-				Return Font.getFont(type)
-		EndIf
-	}
-
-	Public Method setFont:Void(font:Int) Final
-		
-		If (MFDevice.preScaleZoomOutFlag) Then
-			font Shr= MFDevice.preScaleShift
-		ElseIf (MFDevice.preScaleZoomInFlag) Then
-			font Shl= MFDevice.preScaleShift
-		EndIf
-		
-		If (font_type <> font) Then
-			currentFont = getFont(font)
-			
-			If (currentFont <> Null) Then
-				font_type = font
+		Method drawArc:Void(x:Int, y:Int, width:Int, height:Int, startAngle:Int, arcAngle:Int) Final
+			If (MFDevice.preScaleZoomOutFlag) Then
+				x Shr= MFDevice.preScaleShift
+				y Shr= MFDevice.preScaleShift
+				
+				width Shr= MFDevice.preScaleShift
+				height Shr= MFDevice.preScaleShift
+			ElseIf (MFDevice.preScaleZoomInFlag) Then
+				x Shl= MFDevice.preScaleShift
+				y Shl= MFDevice.preScaleShift
+				
+				width Shl= MFDevice.preScaleShift
+				height Shl= MFDevice.preScaleShift
 			EndIf
-		EndIf
+			
+			Self.context.drawArc(Self.transX + x, Self.transY + y, width, height, startAngle, arcAngle)
+		End
 		
-		Self.context.setFont(currentFont)
-	End
+		Method fillArc:Void(x:Int, y:Int, width:Int, height:Int, startAngle:Int, arcAngle:Int) Final
+			If (MFDevice.preScaleZoomOutFlag) Then
+				x Shr= MFDevice.preScaleShift
+				y Shr= MFDevice.preScaleShift
+				
+				width Shr= MFDevice.preScaleShift
+				height Shr= MFDevice.preScaleShift
+			ElseIf (MFDevice.preScaleZoomInFlag) Then
+				x Shl= MFDevice.preScaleShift
+				y Shl= MFDevice.preScaleShift
+				
+				width Shl= MFDevice.preScaleShift
+				height Shl= MFDevice.preScaleShift
+			EndIf
+			
+			Self.context.fillArc(Self.transX + x, Self.transY + y, width, height, startAngle, arcAngle)
+		End
+		
+		Method drawRoundRect:Void(x:Int, y:Int, width:Int, height:Int, arcWidth:Int, arcHeight:Int) Final
+			If (MFDevice.preScaleZoomOutFlag) Then
+				x Shr= MFDevice.preScaleShift
+				y Shr= MFDevice.preScaleShift
+				
+				width Shr= MFDevice.preScaleShift
+				height Shr= MFDevice.preScaleShift
+			ElseIf (MFDevice.preScaleZoomInFlag) Then
+				x Shl= MFDevice.preScaleShift
+				y Shl= MFDevice.preScaleShift
+				
+				width Shl= MFDevice.preScaleShift
+				height Shl= MFDevice.preScaleShift
+			EndIf
+			
+			Self.context.drawRoundRect(Self.transX + x, Self.transY + y, width, height, arcWidth, arcWidth)
+		End
+		
+		Method fillRoundRect:Void(x:Int, y:Int, width:Int, height:Int, arcWidth:Int, arcHeight:Int) Final
+			If (MFDevice.preScaleZoomOutFlag) Then
+				x Shr= MFDevice.preScaleShift
+				y Shr= MFDevice.preScaleShift
+				
+				width Shr= MFDevice.preScaleShift
+				height Shr= MFDevice.preScaleShift
+			ElseIf (MFDevice.preScaleZoomInFlag) Then
+				x Shl= MFDevice.preScaleShift
+				y Shl= MFDevice.preScaleShift
+				
+				width Shl= MFDevice.preScaleShift
+				height Shl= MFDevice.preScaleShift
+			EndIf
+			
+			Self.context.fillRoundRect(Self.transX + x, Self.transY + y, width, height, arcWidth, arcWidth)
+		End
 
-	Public Method getFont:Int() Final
+		Method setFont:Void(font:Int) Final
+			If (MFDevice.preScaleZoomOutFlag) Then
+				font Shr= MFDevice.preScaleShift
+			ElseIf (MFDevice.preScaleZoomInFlag) Then
+				font Shl= MFDevice.preScaleShift
+			EndIf
+			
+			If (font_type <> font) Then
+				currentFont = getFont(font)
+				
+				If (currentFont <> Null) Then
+					font_type = font
+				EndIf
+			EndIf
+			
+			Self.context.setFont(currentFont)
+		End
 		
-		If (MFDevice.preScaleZoomOutFlag) Then
-			Return font_type Shl MFDevice.preScaleShift
-		EndIf
+		Method getFont:Int() Final
+			If (MFDevice.preScaleZoomOutFlag) Then
+				Return font_type Shl MFDevice.preScaleShift
+			EndIf
+			
+			If (MFDevice.preScaleZoomInFlag) Then
+				Return font_type Shr MFDevice.preScaleShift
+			EndIf
+			
+			Return font_type
+		End
 		
-		If (MFDevice.preScaleZoomInFlag) Then
-			Return font_type Shr MFDevice.preScaleShift
-		EndIf
-		
-		Return font_type
-	End
+		Method drawString:Void(str:String, x:Int, y:Int, anchor:Int) Final
+			Local stringWidth:= stringWidth(str)
+			Local charHeight:= charHeight()
+			
+			If (MFDevice.preScaleZoomOutFlag) Then
+				stringWidth Shr= MFDevice.preScaleShift
+				charHeight Shr= MFDevice.preScaleShift
+				
+				x Shr= MFDevice.preScaleShift
+				y Shr= MFDevice.preScaleShift
+			ElseIf (MFDevice.preScaleZoomInFlag) Then
+				stringWidth Shl= MFDevice.preScaleShift
+				charHeight Shl= MFDevice.preScaleShift
+				
+				x Shl= MFDevice.preScaleShift
+				y Shl= MFDevice.preScaleShift
+			EndIf
+			
+			caculateAnchorOffset(stringWidth, charHeight, anchor)
+			
+			Self.context.drawString(str, (xOff + x) + Self.transX, (yOff + y) + Self.transY, (TOP|RIGHT))
+		End
 
-	Public Method drawString:Void(str:String, x:Int, y:Int, anchor:Int) Final
-		Int stringWidth = stringWidth(str)
-		Int charHeight = charHeight()
-		
-		If (MFDevice.preScaleZoomOutFlag) Then
-			stringWidth Shr= MFDevice.preScaleShift
-			charHeight Shr= MFDevice.preScaleShift
-			x Shr= MFDevice.preScaleShift
-			y Shr= MFDevice.preScaleShift
-		ElseIf (MFDevice.preScaleZoomInFlag) Then
-			stringWidth Shl= MFDevice.preScaleShift
-			charHeight Shl= MFDevice.preScaleShift
-			x Shl= MFDevice.preScaleShift
-			y Shl= MFDevice.preScaleShift
-		EndIf
-		
-		caculateAnchorOffset(stringWidth, charHeight, anchor)
-		Self.context.drawString(str, (xOff + x) + Self.transX, (yOff + y) + Self.transY, 20)
-	End
+		Method drawSubstring:Void(str:String, offset:Int, len:Int, x:Int, y:Int, anchor:Int) Final
+			drawString(str.substring(offset, len), x, y, anchor)
+		End
 
-	Public Method drawSubstring:Void(str:String, offset:Int, len:Int, x:Int, y:Int, anchor:Int) Final
-		drawString(str.substring(offset, len), x, y, anchor)
-	End
-
-	/* JADX WARNING: inconsistent code. */
-	/* Code decompiled incorrectly, please refer to instructions dump. */
-	Public Function charHeight:Int(r2:Int) Final
-		/*
-		r0 = r2
-		Select(r2)
-			Case -3 goto L_0x0011
-			Case -2 goto L_0x000f
-			Case -1 goto L_0x000d
-			Default goto L_0x0004
-		EndIf
-	L_0x0004:
-		r1 = com.sega.mobile.framework.device.MFDevice.preScaleZoomOutFlag
-		
-		If (r1 = 0) goto L_0x0014
-	L_0x0008:
-		r1 = com.sega.mobile.framework.device.MFDevice.preScaleShift
-		r1 = r0 Shl r1
-	L_0x000c:
-		Return r1
-	L_0x000d:
-		r0 = 24
-	L_0x000f:
-		r0 = 26
-	L_0x0011:
-		r0 = 30
-		goto L_0x0004
-	L_0x0014:
-		r1 = com.sega.mobile.framework.device.MFDevice.preScaleZoomInFlag
-		
-		If (r1 = 0) goto L_0x001d
-	L_0x0018:
-		r1 = com.sega.mobile.framework.device.MFDevice.preScaleShift
-		r1 = r0 Shr r1
-		goto L_0x000c
-	L_0x001d:
-		r1 = r0
-		goto L_0x000c
-		*/
-		throw New UnsupportedOperationException("Method not decompiled: com.sega.mobile.framework.device.MFGraphics.charHeight(Int):Int")
-	}
+		Function charHeight:Int(_var:Int)
+			Local var:= _var
+			
+			Select var
+				Case FONT_SMALL, FONT_MEDIUM, FONT_LARGE
+					' Magic number: 30
+					var = 30
+			End Select
+			
+			If (MFDevice.preScaleZoomOutFlag) Then
+				var Shl= MFDevice.preScaleShift
+			ElseIf (MFDevice.preScaleZoomInFlag) Then
+				var Shr= MFDevice.preScaleShift
+			EndIf
+			
+			Return var
+		End
 
 	Public Function stringWidth:Int(font:Int, str:String) Final
 		
@@ -1150,19 +1141,19 @@ Class MFGraphics
 			image.getRGB(Self.drawEffectRGB, TRANS_NONE, image.getWidth(), TRANS_NONE, TRANS_NONE, image.getWidth(), image.getHeight())
 			
 			If (Not (Self.alphaValue = 0 Or (Self.redValue = 0 And Self.greenValue = 0 And Self.blueValue = 0))) Then
-				For (i = TRANS_NONE; i < Self.drawEffectRGB.length; i += TRANS_MIRROR_ROT180)
+				For (i = TRANS_NONE; i < Self.drawEffectRGB.length; i += 1)
 					Self.drawEffectRGB[i] = caculateColorValue(Self.drawEffectRGB[i])
 				EndIf
 			EndIf
 			
 			If (Not (Self.alphaValue = 0 Or Self.grayValue = 0)) Then
-				For (i = TRANS_NONE; i < Self.drawEffectRGB.length; i += TRANS_MIRROR_ROT180)
+				For (i = TRANS_NONE; i < Self.drawEffectRGB.length; i += 1)
 					Self.drawEffectRGB[i] = caculateGray(Self.drawEffectRGB[i])
 				EndIf
 			EndIf
 			
 			If (Not (Self.alphaValue = 255 Or Self.alphaValue = 0)) Then
-				For (i = TRANS_NONE; i < Self.drawEffectRGB.length; i += TRANS_MIRROR_ROT180)
+				For (i = TRANS_NONE; i < Self.drawEffectRGB.length; i += 1)
 					Self.drawEffectRGB[i] = caculateAlpha(Self.drawEffectRGB[i])
 				Next
 			EndIf
@@ -1175,32 +1166,32 @@ Class MFGraphics
 			Return
 		EndIf
 		
-		Self.context.drawImage(image.image, Self.transX + x, Self.transY + y, 20)
+		Self.context.drawImage(image.image, Self.transX + x, Self.transY + y, (TOP|RIGHT))
 	End
 
 	Private Method drawRegionImpl:Void(image:MFImage, regionX:Int, regionY:Int, regionW:Int, regionH:Int, flipMode:Int, x:Int, y:Int) Final
 		
 		If (Not Self.effectFlag) Then
-			Self.context.drawRegion(image.image, regionX, regionY, regionW, regionH, flipMode, x + Self.transX, y + Self.transY, 20)
+			Self.context.drawRegion(image.image, regionX, regionY, regionW, regionH, flipMode, x + Self.transX, y + Self.transY, (TOP|RIGHT))
 		ElseIf (Self.alphaValue <> 0) Then
 			Int i
 			Self.drawEffectRGB = New Int[(regionW * regionH)]
 			image.getRGB(Self.drawEffectRGB, TRANS_NONE, regionW, regionX, regionY, regionW, regionH)
 			
 			If (Not (Self.redValue = 0 And Self.greenValue = 0 And Self.blueValue = 0)) Then
-				For (i = TRANS_NONE; i < Self.drawEffectRGB.length; i += TRANS_MIRROR_ROT180)
+				For (i = TRANS_NONE; i < Self.drawEffectRGB.length; i += 1)
 					Self.drawEffectRGB[i] = caculateColorValue(Self.drawEffectRGB[i])
 				Next
 			EndIf
 			
 			If (Self.grayValue <> 0) Then
-				For (i = TRANS_NONE; i < Self.drawEffectRGB.length; i += TRANS_MIRROR_ROT180)
+				For (i = TRANS_NONE; i < Self.drawEffectRGB.length; i += 1)
 					Self.drawEffectRGB[i] = caculateGray(Self.drawEffectRGB[i])
 				Next
 			EndIf
 			
 			If (Self.alphaValue <> 255) Then
-				For (i = TRANS_NONE; i < Self.drawEffectRGB.length; i += TRANS_MIRROR_ROT180)
+				For (i = TRANS_NONE; i < Self.drawEffectRGB.length; i += 1)
 					Self.drawEffectRGB[i] = caculateAlpha(Self.drawEffectRGB[i])
 				Next
 			EndIf
@@ -1216,45 +1207,45 @@ Class MFGraphics
 		Int i
 		Select (flipMode)
 			Case TRANS_NONE
-				For (i = TRANS_NONE; i < height; i += TRANS_MIRROR_ROT180)
+				For (i = TRANS_NONE; i < height; i += 1)
 					System.arraycopy(argb, i * width, rgbData, TRANS_NONE, width)
 					Self.context.drawRGB(rgbData, TRANS_NONE, width, x, y + i, width, TRANS_MIRROR_ROT180, True)
 				Next
 			Case TRANS_MIRROR_ROT180
-				For (i = TRANS_NONE; i < height; i += TRANS_MIRROR_ROT180)
+				For (i = TRANS_NONE; i < height; i += 1)
 					System.arraycopy(argb, i * width, rgbData, TRANS_NONE, width)
 					Self.context.drawRGB(rgbData, TRANS_NONE, width, x, ((y + height) - TRANS_MIRROR_ROT180) - i, width, TRANS_MIRROR_ROT180, True)
 				Next
 			Case VCENTER
-				For (i = TRANS_NONE; i < height; i += TRANS_MIRROR_ROT180)
+				For (i = TRANS_NONE; i < height; i += 1)
 					System.arraycopy(argb, i * width, rgbData, TRANS_NONE, width)
 					MFUtility.revertArray(rgbData)
 					Self.context.drawRGB(rgbData, TRANS_NONE, width, x, y + i, width, TRANS_MIRROR_ROT180, True)
 				Next
 			Case TRANS_ROT180
-				For (i = TRANS_NONE; i < height; i += TRANS_MIRROR_ROT180)
+				For (i = TRANS_NONE; i < height; i += 1)
 					System.arraycopy(argb, i * width, rgbData, TRANS_NONE, width)
 					MFUtility.revertArray(rgbData)
 					Self.context.drawRGB(rgbData, TRANS_NONE, width, x, ((y + height) - TRANS_MIRROR_ROT180) - i, width, TRANS_MIRROR_ROT180, True)
 				Next
 			Case TRANS_MIRROR_ROT270
-				For (i = TRANS_NONE; i < height; i += TRANS_MIRROR_ROT180)
+				For (i = TRANS_NONE; i < height; i += 1)
 					System.arraycopy(argb, i * width, rgbData, TRANS_NONE, width)
 					Self.context.drawRGB(rgbData, TRANS_NONE, TRANS_MIRROR_ROT180, x + i, y, TRANS_MIRROR_ROT180, width, True)
 				Next
 			Case TRANS_ROT90
-				For (i = TRANS_NONE; i < height; i += TRANS_MIRROR_ROT180)
+				For (i = TRANS_NONE; i < height; i += 1)
 					System.arraycopy(argb, i * width, rgbData, TRANS_NONE, width)
 					Self.context.drawRGB(rgbData, TRANS_NONE, TRANS_MIRROR_ROT180, ((x + height) - TRANS_MIRROR_ROT180) - i, y, TRANS_MIRROR_ROT180, width, True)
 				Next
 			Case TRANS_ROT270
-				For (i = TRANS_NONE; i < height; i += TRANS_MIRROR_ROT180)
+				For (i = TRANS_NONE; i < height; i += 1)
 					System.arraycopy(argb, i * width, rgbData, TRANS_NONE, width)
 					MFUtility.revertArray(rgbData)
 					Self.context.drawRGB(rgbData, TRANS_NONE, TRANS_MIRROR_ROT180, x + i, y, TRANS_MIRROR_ROT180, width, True)
 				Next
 			Case TRANS_MIRROR_ROT90
-				For (i = TRANS_NONE; i < height; i += TRANS_MIRROR_ROT180)
+				For (i = TRANS_NONE; i < height; i += 1)
 					System.arraycopy(argb, i * width, rgbData, TRANS_NONE, width)
 					MFUtility.revertArray(rgbData)
 					Self.context.drawRGB(rgbData, TRANS_NONE, TRANS_MIRROR_ROT180, ((x + height) - TRANS_MIRROR_ROT180) - i, y, TRANS_MIRROR_ROT180, width, True)
