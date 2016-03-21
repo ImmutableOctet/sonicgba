@@ -13,30 +13,16 @@ Private
 	
 	Import regal.util
 	
-	Import mojo.graphics
+	'Import mojo.graphics
 Public
 
 ' Classes:
-Class MFGraphics
+Class MFGraphics Implements GRAPHICS_MACROS
 	Public
 		' Constant variable(s):
-		Const BOTTOM:Int = 32
 		Const FONT_LARGE:Int = -3
 		Const FONT_MEDIUM:Int = -2
 		Const FONT_SMALL:Int = -1
-		Const HCENTER:Int = 1
-		Const LEFT:Int = 4
-		Const RIGHT:Int = 8
-		Const TOP:Int = 16
-		Const TRANS_MIRROR:Int = 2
-		Const TRANS_MIRROR_ROT180:Int = 1
-		Const TRANS_MIRROR_ROT270:Int = 4
-		Const TRANS_MIRROR_ROT90:Int = 7
-		Const TRANS_NONE:Int = 0
-		Const TRANS_ROT180:Int = 3
-		Const TRANS_ROT270:Int = 6
-		Const TRANS_ROT90:Int = 5
-		Const VCENTER:Int = 2
 	Private
 		' Global variable(s):
 		Global currentFont:Font
