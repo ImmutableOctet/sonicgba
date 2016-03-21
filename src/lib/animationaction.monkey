@@ -131,7 +131,7 @@ Class Action
 				For Local j:= 0 Until FRAME_DATA_SIZE
 					Self.m_FrameInfo[i][j] = in.ReadByte()
 				Next
-			EndIf
+			Next
 		End
 		
 		Method loadActionG2:Void(ds:Stream)
@@ -150,7 +150,7 @@ Class Action
 				
 				ds.ReadShort()
 				ds.ReadShort()
-			EndIf
+			Next
 		End
 		
 		Method LoadAction:Void()
@@ -161,7 +161,7 @@ Class Action
 			For Local i:= 0 Until Self.m_nFrames
 				Self.m_FrameInfo[i][0] = 0
 				Self.m_FrameInfo[i][1] = 100
-			EndIf
+			Next
 		End
 		
 		Method IsEnd:Bool()

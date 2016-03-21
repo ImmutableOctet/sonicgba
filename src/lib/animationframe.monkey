@@ -98,7 +98,7 @@ Class Frame
 			
 			For Local i:= 0 Until Self.rect1.Length ' 4
 				Self.tmp_rect2[i] = Self.rect2[i]
-			EndIf
+			Next
 			
 			Return Self.tmp_rect2
 		End
@@ -304,7 +304,7 @@ Class Frame
 				If (clipArray[Self.m_ClipInfo[i][2]][heightId] + Self.m_ClipInfo[i][1] > yBottom) Then
 					yBottom = clipArray[Self.m_ClipInfo[i][2]][heightId] + Self.m_ClipInfo[i][1]
 				EndIf
-			EndIf
+			Next
 			
 			Self.frameHeight = Abs(yBottom - yTop)
 			
@@ -358,7 +358,7 @@ Class Frame
 							m_Ani.qiAnimationArray[Self.m_ClipInfo[i][2]].m_Frames[Self.m_ClipInfo[i][3]].Draw(g, 0, 0, attr)
 							
 							g.restoreCanvas()
-					EndIf
+					End Select
 				Next
 			EndIf
 		End
@@ -401,7 +401,7 @@ Class Frame
 						tmp = tmp_x
 						tmp_x = (-tmp_y) - m_Clips_2[3]
 						tmp_y = (-tmp) - m_Clips_2[2]
-				EndIf
+				End Select
 				
 				Local original_attr:= tmp_attr
 				

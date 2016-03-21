@@ -312,7 +312,7 @@ Class Animation
 						Local __1:= ds.ReadShort()
 						Local __2:= ds.ReadShort()
 						Local __3:= ds.ReadShort()
-					EndIf
+					Next
 				Next
 				
 				Local crossarrays:= (ds.ReadByte() & 255)
@@ -410,7 +410,7 @@ Class Animation
 		Function getInstanceFromQi:Animation[](fileName:String, index:Bool[])
 			For Local i:= 0 Until imageIdArray.Length
 				imageIdArray[i] = -1
-			EndIf
+			Next
 			
 			Local fb_ds:Stream = Null
 			
@@ -430,7 +430,7 @@ Class Animation
 					anim.LoadAnimationG2(ds)
 					
 					animationInstance[i] = anim
-				EndIf
+				Next
 				
 				Local imageNum:= ds.ReadByte()
 				
@@ -489,7 +489,7 @@ Class Animation
 					closeAnimation(animation[i])
 					
 					animation[i] = Null
-				EndIf
+				Next
 			EndIf
 		End
 		
@@ -505,7 +505,7 @@ Class Animation
 					closeAnimationDrawer(drawer[i])
 					
 					drawer[i] = Null
-				EndIf
+				Next
 			EndIf
 			
 			drawer = []
