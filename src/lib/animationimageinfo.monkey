@@ -35,117 +35,141 @@ Public
 
 ' Classes:
 Class ImageInfo
-	private MFImage[] imageSeperate
-	protected MFImage img_clip
-	private Short[][] m_Clips
-	private Short m_nClips
-
-	Private Method ImageInfo:private()
-	End
-
-	Private Method ImageInfo:private(image:MFImage)
-		Self.img_clip = image
-	End
-
-	Private Method ImageInfo:private(imageFileName:String)
-		try {
+	Private
+		' Constant variable(s):
+		Const CLIP_DATA_SIZE:= 4
+		
+		' Fields:
+		Field imageSeperate:MFImage[]
+		Field m_Clips:Short[][]
+		Field m_nClips:Short
+	Protected
+		' Fields:
+		Field img_clip:MFImage
+	Private
+		' Constructor(s):
+		Method New()
+			' Nothing so far.
+		End
+		
+		Method New(image:MFImage)
+			Self.img_clip = image
+		End
+		
+		Method New(imageFileName:String)
 			Self.img_clip = MFImage.createImage(imageFileName)
-		} catch (Throwable th) {
-			th.printStackTrace()
-		EndIf
-	End
-
-	Public Method close:Void()
-		Self.img_clip = Null
+		End
 		
-		If (Self.imageSeperate <> Null) Then
-			For (Int i = 0; i < Self.imageSeperate.Length; i += 1)
-				Self.imageSeperate[i] = Null
+		' Methods:
+		Method InitializeClips:Short[][](nSize:Int)
+			Self.m_Clips = New Short[nSize][]
+			
+			For Local i:= 0 Until nSize
+				Self.m_Clips[i] = New Short[CLIP_DATA_SIZE]
+			Next
+		End
+	Public
+		' Methods:
+		Method close:Void()
+			Self.img_clip = Null
+			
+			If (Self.imageSeperate <> Null) Then
+				For Local i:= 0 Until Self.imageSeperate.Length
+					Self.imageSeperate[i] = Null
+				Next
 			EndIf
-		EndIf
-		
-		Self.imageSeperate = Null
-	End
+			
+			Self.imageSeperate = Null
+		End
 
-	Public Method loadInfo:Void(ds:Stream)
-		Self.m_nClips = ds.ReadByte()
-		
-		If (Self.m_nClips < (Short) 0) Then
-			Self.m_nClips = (Short) (Self.m_nClips + UOCTET_MAX_POSITIVE_NUMBERS)
-		EndIf
-		
-		Self.m_Clips = (Short[][]) Array.newInstance(Short.TYPE, New Int[]{Self.m_nClips, 4})
-		For (Short i = (Short) 0; i < Self.m_nClips; i += 1)
-			For (Int j = 0; j < 4; j += 1)
-				Self.m_Clips[i][j] = ds.ReadShort()
+		Method loadInfo:Void(ds:Stream)
+			Self.m_nClips = ds.ReadByte()
+			
+			If (Self.m_nClips < 0) Then
+				Self.m_nClips = Short(Self.m_nClips + UOCTET_MAX_POSITIVE_NUMBERS)
 			EndIf
-		EndIf
-		String fileName = ds.readUTF()
-		
-		If (Animation.isImageWanted) Then
-			String tmpFileName = MyAPI.getFileName(fileName)
-			Self.img_clip = MFImage.createImage(Animation.tmpPath + tmpFileName)
-			Print("image fileName:" + tmpFileName)
-		EndIf
-		
-	End
-
-	Public Method loadInfo:Void(ds:Stream)
-		Short i
-		
-		If (ds = Null) Then
-			Self.m_nClips = (Short) 1
-			Self.m_Clips = (Short[][]) Array.newInstance(Short.TYPE, New Int[]{Self.m_nClips, 4})
-			For (i = (Short) 0; i < Self.m_nClips; i += 1)
-				Self.m_Clips[i][0] = (Short) 0
-				Self.m_Clips[i][1] = (Short) 0
-				Self.m_Clips[i][2] = (Short) (Self.img_clip.getWidth() & USHORT_MAX)
-				Self.m_Clips[i][3] = (Short) (Self.img_clip.getHeight() & USHORT_MAX)
+			
+			InitializeClips(Self.m_nClips)
+			
+			For Local i:= 0 Until Self.m_nClips
+				For Local j:= 0 Until CLIP_DATA_SIZE
+					Self.m_Clips[i][j] = ds.ReadShort()
+				Next
+			Next
+			
+			Local fileNameLen:= ds.ReadShort()
+			Local fileName:= ds.ReadString(fileNameLen, "utf8")
+			
+			If (Animation.isImageWanted) Then
+				Local tmpFileName:= MyAPI.getFileName(fileName)
+				
+				Self.img_clip = MFImage.createImage(Animation.tmpPath + tmpFileName)
+				
+				Print("image fileName:" + tmpFileName)
 			EndIf
-			Return
-		EndIf
+		End
 		
-		Self.m_nClips = (Byte) ds.ReadByte()
-		
-		If (Self.m_nClips < (Short) 0) Then
-			Self.m_nClips = (Short) (Self.m_nClips + UOCTET_MAX_POSITIVE_NUMBERS)
-		EndIf
-		
-		Self.m_Clips = (Short[][]) Array.newInstance(Short.TYPE, New Int[]{Self.m_nClips, 4})
-		For (i = (Short) 0; i < Self.m_nClips; i += 1)
-			For (Int j = 0; j < 4; j += 1)
-				Self.m_Clips[i][j] = ds.ReadShort()
+		Method loadInfo:Void(ds:Stream)
+			If (ds = Null) Then
+				Self.m_nClips = 1
+				
+				InitializeClips(Self.m_nClips)
+				
+				For Local i:= 0 Until Self.m_nClips
+					Self.m_Clips[i][0] = 0
+					Self.m_Clips[i][1] = 0
+					Self.m_Clips[i][2] = Short(Self.img_clip.getWidth() & USHORT_MAX)
+					Self.m_Clips[i][3] = Short(Self.img_clip.getHeight() & USHORT_MAX)
+				Next
+				
+				Return
 			EndIf
-		EndIf
-	End
-
-	Public Method getImage:MFImage()
-		Return Self.img_clip
-	End
-
-	Public Method getClips:Short[][]()
-		Return Self.m_Clips
-	End
-
-	Public Method doubleParam:Void()
-		For (Short i = (Short) 0; i < Self.m_nClips; i += 1)
-			For (Int j = 0; j < 4; j += 1)
-				Self.m_Clips[i][j] = (Short) (Self.m_Clips[i][j] Shl 1)
+			
+			Self.m_nClips = ds.ReadByte()
+			
+			If (Self.m_nClips < 0) Then
+				Self.m_nClips = Short(Self.m_nClips + UOCTET_MAX_POSITIVE_NUMBERS)
 			EndIf
-		EndIf
-	End
+			
+			InitializeClips(Self.m_nClips)
+			
+			For Local i:= 0 Until Self.m_nClips
+				For Local j:= 0 Until CLIP_DATA_SIZE
+					Self.m_Clips[i][j] = ds.ReadShort()
+				Next
+			Next
+		End
+		
+		Method getImage:MFImage()
+			Return Self.img_clip
+		End
+	
+		Method getClips:Short[][]()
+			Return Self.m_Clips
+		End
 
-	Public Method separateImage:Void()
-		Self.imageSeperate = New MFImage[Self.m_nClips]
-		For (Short i = (Short) 0; i < Self.m_nClips; i += 1)
-			Self.imageSeperate[i] = MFImage.createImage(Self.img_clip, Self.m_Clips[i][0], Self.m_Clips[i][1], Self.m_Clips[i][2], Self.m_Clips[i][3], 0)
-			Self.m_Clips[i][0] = (Short) 0
-			Self.m_Clips[i][1] = (Short) 0
-		EndIf
-		Self.img_clip = Null
-	End
-
-	Public Method getSeparateImage:MFImage(id:Int)
-		Return Self.imageSeperate[id]
-	End
+		Method doubleParam:Void()
+			For Local i:= 0 Until Self.m_nClips
+				For Local j:= 0 Until CLIP_DATA_SIZE
+					Self.m_Clips[i][j] = Short(Self.m_Clips[i][j] Shl 1) ' * 2
+				Next
+			Next
+		End
+		
+		Method separateImage:Void()
+			Self.imageSeperate = New MFImage[Self.m_nClips]
+			
+			For Local i:= 0 Until Self.m_nClips
+				Self.imageSeperate[i] = MFImage.createImage(Self.img_clip, Self.m_Clips[i][0], Self.m_Clips[i][1], Self.m_Clips[i][2], Self.m_Clips[i][3], 0)
+				
+				Self.m_Clips[i][0] = 0
+				Self.m_Clips[i][1] = 0
+			Next
+			
+			Self.img_clip = Null
+		End
+		
+		Method getSeparateImage:MFImage(id:Int)
+			Return Self.imageSeperate[id]
+		End
 End

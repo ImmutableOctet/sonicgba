@@ -36,6 +36,9 @@ Public
 ' Classes:
 Class Frame
 	Private
+		' Constant variable(s):
+		Const CLIP_DATA_SIZE:= 5
+		
 		' Fields:
 		Field color:Int
 		Field frameHeight:Short
@@ -50,6 +53,17 @@ Class Frame
 		Field rect2:Byte[]
 		Field tmp_rect1:Byte[]
 		Field tmp_rect2:Byte[]
+		
+		' Methods:
+		Method InitializeClips:Short[][](nSize:Int)
+			Self.m_ClipInfo = New Short[nSize]
+				
+			For Local i:= 0 Until nSize
+				Self.m_ClipInfo[i] = New Short[CLIP_DATA_SIZE]
+			Next
+			
+			Self.m_ClipInfo
+		End
 	Public
 		' Constructor(s):
 		Method New(ani:Animation)
@@ -101,11 +115,7 @@ Class Frame
 				
 				Self.m_nClips = in.ReadByte()
 				
-				Self.m_ClipInfo = New Short[Self.m_nClips]
-				
-				For Local i:= 0 Until Self.m_nClips
-					Self.m_ClipInfo[i] = New Short[5]
-				Next
+				InitializeClips(Self.m_nClips)
 				
 				Self.functionID = New Int[Self.m_nClips]
 				
@@ -167,11 +177,7 @@ Class Frame
 			
 			Self.m_nClips = in.ReadByte()
 			
-			Self.m_ClipInfo = New Short[Self.m_nClips]
-			
-			For Local i:= 0 Until Self.m_nClips
-				Self.m_ClipInfo[i] = New Short[5]
-			Next
+			InitializeClips(Self.m_nClips)
 			
 			Self.functionID = New Int[Self.m_nClips]
 			

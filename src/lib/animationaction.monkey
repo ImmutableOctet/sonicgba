@@ -48,6 +48,15 @@ Class Action
 		Field m_bLoop:Bool
 		Field m_bPause:Bool
 		Field m_nFrames:Short
+		
+		' Methods:
+		Method InitializeFrameInfo:Byte[][](nFrames:Int)
+			Self.m_FrameInfo = New Byte[nFrames][]
+			
+			For Local i:= 0 Until Self.m_nFrames ' Self.m_FrameInfo.Length
+				Self.m_FrameInfo[i] = New Byte[FRAME_DATA_SIZE]
+			Next
+		End
 	Protected
 		' Fields:
 		Field m_Ani:Animation
@@ -107,14 +116,6 @@ Class Action
 		
 		Method GetFrameNo:Short()
 			Return Self.m_CurFrame
-		End
-		
-		Method InitializeFrameInfo:Byte[][](nFrames:Int)
-			Self.m_FrameInfo = New Byte[nFrames][]
-			
-			For Local i:= 0 Until Self.m_nFrames ' Self.m_FrameInfo.Length
-				Self.m_FrameInfo[i] = New Byte[FRAME_DATA_SIZE]
-			Next
 		End
 		
 		Method LoadAction:Void(in:Stream)
