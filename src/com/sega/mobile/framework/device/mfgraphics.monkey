@@ -9,6 +9,8 @@ Private
 	Import com.sega.mobile.framework.android.graphics
 	Import com.sega.mobile.framework.utility.mfutility
 	
+	Import lib.constutil
+	
 	Import mojo.graphics
 Public
 
@@ -281,50 +283,57 @@ Class MFGraphics
 			Return Self.transY
 		End
 	
-		Public Method setClip:Void(x:Int, y:Int, width:Int, height:Int) Final
-			Int screenWidth = MFDevice.getScreenWidth()
-			Int screenHeight = MFDevice.getScreenHeight()
+		Method setClip:Void(x:Int, y:Int, width:Int, height:Int) Final
+			Local screenWidth:= MFDevice.getScreenWidth()
+			Local screenHeight:= MFDevice.getScreenHeight()
 			
 			If (MFDevice.preScaleZoomOutFlag) Then
 				x Shr= MFDevice.preScaleShift
 				y Shr= MFDevice.preScaleShift
+				
 				width Shr= MFDevice.preScaleShift
 				height Shr= MFDevice.preScaleShift
+				
 				screenWidth Shr= MFDevice.preScaleShift
 				screenHeight Shr= MFDevice.preScaleShift
 			ElseIf (MFDevice.preScaleZoomInFlag) Then
 				x Shl= MFDevice.preScaleShift
 				y Shl= MFDevice.preScaleShift
+				
 				width Shl= MFDevice.preScaleShift
 				height Shl= MFDevice.preScaleShift
+				
 				screenWidth Shl= MFDevice.preScaleShift
 				screenHeight Shl= MFDevice.preScaleShift
 			EndIf
 			
-			Self.clipX = Self.transX + x
-			Self.clipY = Self.transY + y
+			Self.clipX = (Self.transX + x)
+			Self.clipY = (Self.transY + y)
+			
 			Self.clipWidth = width
 			Self.clipHeight = height
 			
 			If (Self.enableExceed) Then
 				Self.context.setClip(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
+				
 				Return
 			EndIf
 			
-			Int tx
-			Int ty
-			Int cx = Self.clipX < 0 ? TRANS_NONE : Self.clipX
-			Int cy = Self.clipY < 0 ? TRANS_NONE : Self.clipY
+			Local tx:Int
+			Local ty:Int
+			
+			Local cx:= PickValue((Self.clipX < 0), TRANS_NONE, Self.clipX)
+			Local cy:= PickValue((Self.clipY < 0), TRANS_NONE, Self.clipY)
 			
 			If (Self.clipX + width > screenWidth) Then
 				tx = screenWidth
-			} Else {
+			Else
 				tx = Self.clipX + width
 			EndIf
 			
 			If (Self.clipY + height > screenHeight) Then
 				ty = screenHeight
-			} Else {
+			Else
 				ty = Self.clipY + height
 			EndIf
 			

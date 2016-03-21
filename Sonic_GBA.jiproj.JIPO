@@ -18,8 +18,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>242</Y>
+        <X>7</X>
+        <Y>335</Y>
       </CursorPos>
       <DocGUID>607658f5-ee62-4c1b-bb84-dd0cb3ce7ef7</DocGUID>
       <Bookmarks />
@@ -62,8 +62,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\constutil.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>37</Y>
+        <X>17</X>
+        <Y>32</Y>
       </CursorPos>
       <DocGUID>3ffdae5c-9379-4ed0-977d-dcd7f272e3c3</DocGUID>
       <Bookmarks />
