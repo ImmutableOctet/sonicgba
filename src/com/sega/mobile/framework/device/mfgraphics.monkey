@@ -11,6 +11,8 @@ Private
 	
 	Import lib.constutil
 	
+	Import regal.util
+	
 	Import mojo.graphics
 Public
 
@@ -114,6 +116,44 @@ Class MFGraphics
 			ret.disableEffect()
 			
 			Return ret
+		End
+		
+		Function charHeight:Int(_var:Int)
+			Local var:= _var
+			
+			Select var
+				Case FONT_SMALL, FONT_MEDIUM, FONT_LARGE
+					' Magic number: 30
+					var = 30
+			End Select
+			
+			If (MFDevice.preScaleZoomOutFlag) Then
+				var Shl= MFDevice.preScaleShift
+			ElseIf (MFDevice.preScaleZoomInFlag) Then
+				var Shr= MFDevice.preScaleShift
+			EndIf
+			
+			Return var
+		End
+		
+		Function stringWidth:Int(font:Int, str:String) Final
+			If (MFDevice.preScaleZoomOutFlag) Then
+				If (font_type = font) Then
+					Return (currentFont.stringWidth(str) Shl MFDevice.preScaleShift)
+				EndIf
+				
+				Return (getFont(font).stringWidth(str) Shl MFDevice.preScaleShift)
+			ElseIf (MFDevice.preScaleZoomInFlag) Then
+				If (font_type = font) Then
+					Return (currentFont.stringWidth(str) Shr MFDevice.preScaleShift)
+				EndIf
+				
+				Return (getFont(font).stringWidth(str) Shr MFDevice.preScaleShift)
+			ElseIf (font_type = font) Then
+				Return currentFont.stringWidth(str)
+			EndIf
+			
+			Return getFont(font).stringWidth(str)
 		End
 	
 		' Methods:
@@ -473,13 +513,13 @@ Class MFGraphics
 			yOff = TRANS_NONE
 			
 			If ((anchor & TRANS_MIRROR_ROT180) <> 0) Then
-				xOff -= (width Shr TRANS_MIRROR_ROT180)
+				xOff -= (width Shr 1)
 			ElseIf ((anchor & RIGHT) <> 0) Then
 				xOff -= width
 			EndIf
 			
 			If ((anchor & VCENTER) <> 0) Then
-				yOff -= height Shr TRANS_MIRROR_ROT180
+				yOff -= height Shr 1
 			ElseIf ((anchor & BOTTOM) <> 0) Then
 				yOff -= height
 			EndIf
@@ -956,384 +996,370 @@ Class MFGraphics
 		Method drawSubstring:Void(str:String, offset:Int, len:Int, x:Int, y:Int, anchor:Int) Final
 			drawString(str.substring(offset, len), x, y, anchor)
 		End
-
-		Function charHeight:Int(_var:Int)
-			Local var:= _var
+		
+		Method charHeight:Int() Final
+			Return charHeight(font_type)
+		End
+		
+		Method stringWidth:Int(str:String) Final
+			Return stringWidth(font_type, str)
+		End
+		
+		Method enableEffect:Void() Final
+			Self.pixelInt = New Int[TRANS_MIRROR_ROT180]
 			
-			Select var
-				Case FONT_SMALL, FONT_MEDIUM, FONT_LARGE
-					' Magic number: 30
-					var = 30
-			End Select
+			Self.redValue = 0
+			Self.greenValue = 0
+			Self.blueValue = 0
+			Self.alphaValue = 255
+			Self.grayValue = 0
 			
-			If (MFDevice.preScaleZoomOutFlag) Then
-				var Shl= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				var Shr= MFDevice.preScaleShift
-			EndIf
-			
-			Return var
+			Self.effectFlag = True
 		End
 
-	Public Function stringWidth:Int(font:Int, str:String) Final
+		Method disableEffect:Void() Final
+			Self.effectFlag = False
+		End
 		
-		If (MFDevice.preScaleZoomOutFlag) Then
-			If (font_type = font) Then
-				Return currentFont.stringWidth(str) Shl MFDevice.preScaleShift
+		Method enableExceedBoundary:Void() Final
+			Self.enableExceed = True
+			
+			Self.context.setClip(-MFDevice.horizontalOffset, -MFDevice.verticvalOffset, MFDevice.bufferWidth, MFDevice.bufferHeight)
+		End
+		
+		Method getExceedBoundaryFlag:Bool() Final
+			Return Self.enableExceed
+		End
+		
+		Method getEffectFlag:Bool() Final
+			Return Self.effectFlag
+		End
+	
+		Method getNativeCanvasLeft:Int() Final
+			Return -MFDevice.horizontalOffset
+		End
+	
+		Method getNativeCanvasTop:Int() Final
+			Return -MFDevice.verticvalOffset
+		End
+	
+		Method getNativeCanvasRight:Int() Final
+			Return (MFDevice.bufferWidth - MFDevice.horizontalOffset)
+		End
+	
+		Method getNativeCanvasBottom:Int() Final
+			Return (MFDevice.bufferHeight - MFDevice.verticvalOffset)
+		End
+	
+		Method getNativeCanvasWidth:Int() Final
+			Return MFDevice.bufferWidth
+		End
+	
+		Method getNativeCanvasHeight:Int() Final
+			Return MFDevice.bufferHeight
+		End
+
+		Method disableExceedBoundary:Void() Final
+			Self.enableExceed = False
+			
+			If (MFDevice.preScaleZoomOutFlag) Then
+				Self.context.setClip(TRANS_NONE, TRANS_NONE, (MFDevice.bufferWidth - (MFDevice.horizontalOffset Shl 1)) Shl MFDevice.preScaleShift, (MFDevice.bufferHeight - (MFDevice.verticvalOffset Shl 1)) Shl MFDevice.preScaleShift)
+			ElseIf (MFDevice.preScaleZoomInFlag) Then
+				Self.context.setClip(TRANS_NONE, TRANS_NONE, (MFDevice.bufferWidth - (MFDevice.horizontalOffset Shl 1)) Shr MFDevice.preScaleShift, (MFDevice.bufferHeight - (MFDevice.verticvalOffset Shl 1)) Shr MFDevice.preScaleShift)
 			EndIf
 			
-			Return getFont(font).stringWidth(str) Shl MFDevice.preScaleShift
-		ElseIf (MFDevice.preScaleZoomInFlag) Then
-			If (font_type = font) Then
-				Return currentFont.stringWidth(str) Shr MFDevice.preScaleShift
+			Self.context.setClip(TRANS_NONE, TRANS_NONE, MFDevice.bufferWidth - (MFDevice.horizontalOffset Shl 1), MFDevice.bufferHeight - (MFDevice.verticvalOffset Shl 1))
+		End
+
+		Method clearScreen:Void(color:Int) Final
+			Self.context.setColor(color)
+			
+			enableExceedBoundary()
+			
+			Self.context.fillRect(-MFDevice.horizontalOffset, -MFDevice.verticvalOffset, MFDevice.bufferWidth, MFDevice.bufferHeight)
+			
+			disableExceedBoundary()
+		End
+		
+		Method setHue:Void(rValue:Int, gValue:Int, bValue:Int) Final
+			Self.redValue = caculateValue(rValue)
+			Self.greenValue = caculateValue(gValue)
+			Self.blueValue = caculateValue(bValue)
+		End
+		
+		Method setAlpha:Void(alpha:Int) Final
+			Self.alphaValue = alpha
+			
+			If (Self.alphaValue = 1) Then
+				Self.alphaValue = 255
 			EndIf
 			
-			Return getFont(font).stringWidth(str) Shr MFDevice.preScaleShift
-		ElseIf (font_type = font) Then
-			Return currentFont.stringWidth(str)
-		} Else {
-			Return getFont(font).stringWidth(str)
-		EndIf
-		
-	}
-
-	Public Method charHeight:Int() Final
-		Return charHeight(font_type)
-	End
-
-	Public Method stringWidth:Int(str:String) Final
-		Return stringWidth(font_type, str)
-	End
-
-	Public Method enableEffect:Void() Final
-		Self.pixelInt = New Int[TRANS_MIRROR_ROT180]
-		Self.redValue = TRANS_NONE
-		Self.greenValue = TRANS_NONE
-		Self.blueValue = TRANS_NONE
-		Self.alphaValue = 255
-		Self.grayValue = TRANS_NONE
-		Self.effectFlag = True
-	End
-
-	Public Method disableEffect:Void() Final
-		Self.effectFlag = False
-	End
-
-	Public Method enableExceedBoundary:Void() Final
-		Self.enableExceed = True
-		Self.context.setClip(-MFDevice.horizontalOffset, -MFDevice.verticvalOffset, MFDevice.bufferWidth, MFDevice.bufferHeight)
-	End
-
-	Public Method getExceedBoundaryFlag:Bool() Final
-		Return Self.enableExceed
-	End
-
-	Public Method getEffectFlag:Bool() Final
-		Return Self.effectFlag
-	End
-
-	Public Method getNativeCanvasLeft:Int() Final
-		Return -MFDevice.horizontalOffset
-	End
-
-	Public Method getNativeCanvasTop:Int() Final
-		Return -MFDevice.verticvalOffset
-	End
-
-	Public Method getNativeCanvasRight:Int() Final
-		Return MFDevice.bufferWidth - MFDevice.horizontalOffset
-	End
-
-	Public Method getNativeCanvasBottom:Int() Final
-		Return MFDevice.bufferHeight - MFDevice.verticvalOffset
-	End
-
-	Public Method getNativeCanvasWidth:Int() Final
-		Return MFDevice.bufferWidth
-	End
-
-	Public Method getNativeCanvasHeight:Int() Final
-		Return MFDevice.bufferHeight
-	End
-
-	Public Method disableExceedBoundary:Void() Final
-		Self.enableExceed = False
-		
-		If (MFDevice.preScaleZoomOutFlag) Then
-			Self.context.setClip(TRANS_NONE, TRANS_NONE, (MFDevice.bufferWidth - (MFDevice.horizontalOffset Shl TRANS_MIRROR_ROT180)) Shl MFDevice.preScaleShift, (MFDevice.bufferHeight - (MFDevice.verticvalOffset Shl TRANS_MIRROR_ROT180)) Shl MFDevice.preScaleShift)
-		ElseIf (MFDevice.preScaleZoomInFlag) Then
-			Self.context.setClip(TRANS_NONE, TRANS_NONE, (MFDevice.bufferWidth - (MFDevice.horizontalOffset Shl TRANS_MIRROR_ROT180)) Shr MFDevice.preScaleShift, (MFDevice.bufferHeight - (MFDevice.verticvalOffset Shl TRANS_MIRROR_ROT180)) Shr MFDevice.preScaleShift)
-		EndIf
-		
-		Self.context.setClip(TRANS_NONE, TRANS_NONE, MFDevice.bufferWidth - (MFDevice.horizontalOffset Shl TRANS_MIRROR_ROT180), MFDevice.bufferHeight - (MFDevice.verticvalOffset Shl TRANS_MIRROR_ROT180))
-	End
-
-	Public Method clearScreen:Void(color:Int) Final
-		Self.context.setColor(color)
-		enableExceedBoundary()
-		Self.context.fillRect(-MFDevice.horizontalOffset, -MFDevice.verticvalOffset, MFDevice.bufferWidth, MFDevice.bufferHeight)
-		disableExceedBoundary()
-	End
-
-	Public Method setHue:Void(rValue:Int, gValue:Int, bValue:Int) Final
-		Self.redValue = caculateValue(rValue)
-		Self.greenValue = caculateValue(gValue)
-		Self.blueValue = caculateValue(bValue)
-	End
-
-	Public Method setAlpha:Void(alpha:Int) Final
-		Self.alphaValue = alpha
-		
-		If (Self.alphaValue = FONT_SMALL) Then
-			Self.alphaValue = 255
-		EndIf
-		
-		If (Self.alphaValue < 0) Then
-			Self.alphaValue = TRANS_NONE
-		EndIf
-		
-		If (Self.alphaValue > 255) Then
-			Self.alphaValue = 255
-		EndIf
-		
-		Self.context.setAlpha(Self.alphaValue)
-	End
-
-	Public Method getAlpha:Int() Final
-		Return Self.context.getAlpha()
-	End
-
-	Public Method setGray:Void(gValue:Int) Final
-		Self.grayValue = gValue
-		
-		If (Self.grayValue < 0) Then
-			Self.grayValue = TRANS_NONE
-		EndIf
-		
-		If (Self.grayValue > 255) Then
-			Self.grayValue = 255
-		EndIf
-		
-	End
-
-	Private Method caculateValue:Int(value:Int) Final
-		
-		If (value < 0) Then
-			If (value > -255) Then
-				Return value
+			If (Self.alphaValue < 0) Then
+				Self.alphaValue = 0
 			EndIf
 			
-			Return -255
-		ElseIf (value = 0) Then
-			Return TRANS_NONE
-		} Else {
-			Return value > 255 ? 255 : (MFGamePad.KEY_NUM_STAR / (RollPlatformSpeedC.COLLISION_OFFSET_Y - value)) - RollPlatformSpeedC.COLLISION_OFFSET_Y
-		EndIf
-		
-	End
-
-	Private Method drawImageImpl:Void(image:MFImage, x:Int, y:Int) Final
-		
-		If (Self.effectFlag) Then
-			Int i
-			Self.drawEffectRGB = Null
-			Self.drawEffectRGB = New Int[(image.getWidth() * image.getHeight())]
-			image.getRGB(Self.drawEffectRGB, TRANS_NONE, image.getWidth(), TRANS_NONE, TRANS_NONE, image.getWidth(), image.getHeight())
+			If (Self.alphaValue > 255) Then
+				Self.alphaValue = 255
+			EndIf
 			
-			If (Not (Self.alphaValue = 0 Or (Self.redValue = 0 And Self.greenValue = 0 And Self.blueValue = 0))) Then
-				For (i = TRANS_NONE; i < Self.drawEffectRGB.length; i += 1)
-					Self.drawEffectRGB[i] = caculateColorValue(Self.drawEffectRGB[i])
+			Self.context.setAlpha(Self.alphaValue)
+		End
+		
+		Method getAlpha:Int() Final
+			Return Self.context.getAlpha()
+		End
+		
+		Method setGray:Void(gValue:Int) Final
+			Self.grayValue = gValue
+			
+			If (Self.grayValue < 0) Then
+				Self.grayValue = 0
+			EndIf
+			
+			If (Self.grayValue > 255) Then
+				Self.grayValue = 255
+			EndIf
+		End
+		
+		Method drawRegion:Void(img:MFImage, x_src:Int, y_src:Int, width:Int, height:Int, rotate_x:Int, rotate_y:Int, degree:Int, scale_x:Int, scale_y:Int, x_dest:Int, y_dest:Int, anchor:Int)
+			If (MFDevice.preScaleZoomOutFlag) Then
+				x_src Shr= MFDevice.preScaleShift
+				y_src Shr= MFDevice.preScaleShift
+				
+				width Shr= MFDevice.preScaleShift
+				height Shr= MFDevice.preScaleShift
+				
+				rotate_x Shr= MFDevice.preScaleShift
+				rotate_y Shr= MFDevice.preScaleShift
+				
+				scale_x Shr= MFDevice.preScaleShift
+				scale_y Shr= MFDevice.preScaleShift
+				
+				x_dest Shr= MFDevice.preScaleShift
+				y_dest Shr= MFDevice.preScaleShift
+			ElseIf (MFDevice.preScaleZoomInFlag) Then
+				x_src Shl= MFDevice.preScaleShift
+				y_src Shl= MFDevice.preScaleShift
+				
+				width Shl= MFDevice.preScaleShift
+				height Shl= MFDevice.preScaleShift
+				
+				rotate_x Shl= MFDevice.preScaleShift
+				rotate_y Shl= MFDevice.preScaleShift
+				
+				scale_x Shl= MFDevice.preScaleShift
+				scale_y Shl= MFDevice.preScaleShift
+				
+				x_dest Shl= MFDevice.preScaleShift
+				y_dest Shl= MFDevice.preScaleShift
+			EndIf
+			
+			Self.context.drawRegion(img.image, x_src, y_src, width, height, rotate_x, rotate_y, degree, scale_x, scale_y, x_dest, y_dest, anchor)
+		End
+	Private
+		' Methods:
+		Method caculateValue:Int(value:Int) Final
+			If (value < 0) Then
+				If (value > -255) Then
+					Return value
 				EndIf
-			EndIf
-			
-			If (Not (Self.alphaValue = 0 Or Self.grayValue = 0)) Then
-				For (i = TRANS_NONE; i < Self.drawEffectRGB.length; i += 1)
-					Self.drawEffectRGB[i] = caculateGray(Self.drawEffectRGB[i])
+				
+				Return -255
+			ElseIf (value = 0) Then
+				Return TRANS_NONE
+			Else
+				If (value > 255) Then
+					Return value
 				EndIf
+				
+				Return ((65536 / (256 - value)) - 256)
 			EndIf
-			
-			If (Not (Self.alphaValue = 255 Or Self.alphaValue = 0)) Then
-				For (i = TRANS_NONE; i < Self.drawEffectRGB.length; i += 1)
-					Self.drawEffectRGB[i] = caculateAlpha(Self.drawEffectRGB[i])
-				Next
-			EndIf
-			
-			If (Self.alphaValue <> 0) Then
-				drawRGBFlip(Self.drawEffectRGB, x + Self.transX, y + Self.transY, image.getWidth(), image.getHeight(), TRANS_NONE)
+		End
+		
+		Method drawImageImpl:Void(image:MFImage, x:Int, y:Int) Final
+			If (Self.effectFlag) Then
+				Self.drawEffectRGB = New Int[(image.getWidth() * image.getHeight())]
+				
+				image.getRGB(Self.drawEffectRGB, TRANS_NONE, image.getWidth(), TRANS_NONE, TRANS_NONE, image.getWidth(), image.getHeight()) ' 0, 0, 0
+				
+				If (Not (Self.alphaValue = 0 Or (Self.redValue = 0 And Self.greenValue = 0 And Self.blueValue = 0))) Then
+					For Local i:= 0 Until Self.drawEffectRGB.length
+						Self.drawEffectRGB[i] = caculateColorValue(Self.drawEffectRGB[i])
+					Next
+				EndIf
+				
+				If (Not (Self.alphaValue = 0 Or Self.grayValue = 0)) Then
+					For Local i:= 0 Until Self.drawEffectRGB.length
+						Self.drawEffectRGB[i] = caculateGray(Self.drawEffectRGB[i])
+					Next
+				EndIf
+				
+				If (Not (Self.alphaValue = 255 Or Self.alphaValue = 0)) Then
+					For Local i:= 0 Until Self.drawEffectRGB.length
+						Self.drawEffectRGB[i] = caculateAlpha(Self.drawEffectRGB[i])
+					Next
+				EndIf
+				
+				If (Self.alphaValue <> 0) Then
+					drawRGBFlip(Self.drawEffectRGB, x + Self.transX, y + Self.transY, image.getWidth(), image.getHeight(), TRANS_NONE) ' 0
+					
+					Return
+				EndIf
+				
 				Return
 			EndIf
 			
-			Return
-		EndIf
+			Self.context.drawImage(image.image, Self.transX + x, Self.transY + y, (TOP|RIGHT))
+		End
 		
-		Self.context.drawImage(image.image, Self.transX + x, Self.transY + y, (TOP|RIGHT))
-	End
-
-	Private Method drawRegionImpl:Void(image:MFImage, regionX:Int, regionY:Int, regionW:Int, regionH:Int, flipMode:Int, x:Int, y:Int) Final
-		
-		If (Not Self.effectFlag) Then
-			Self.context.drawRegion(image.image, regionX, regionY, regionW, regionH, flipMode, x + Self.transX, y + Self.transY, (TOP|RIGHT))
-		ElseIf (Self.alphaValue <> 0) Then
-			Int i
-			Self.drawEffectRGB = New Int[(regionW * regionH)]
-			image.getRGB(Self.drawEffectRGB, TRANS_NONE, regionW, regionX, regionY, regionW, regionH)
+		Method drawRegionImpl:Void(image:MFImage, regionX:Int, regionY:Int, regionW:Int, regionH:Int, flipMode:Int, x:Int, y:Int) Final
 			
-			If (Not (Self.redValue = 0 And Self.greenValue = 0 And Self.blueValue = 0)) Then
-				For (i = TRANS_NONE; i < Self.drawEffectRGB.length; i += 1)
-					Self.drawEffectRGB[i] = caculateColorValue(Self.drawEffectRGB[i])
-				Next
+			If (Not Self.effectFlag) Then
+				Self.context.drawRegion(image.image, regionX, regionY, regionW, regionH, flipMode, x + Self.transX, y + Self.transY, (TOP|RIGHT))
+			ElseIf (Self.alphaValue <> 0) Then
+				Self.drawEffectRGB = New Int[(regionW * regionH)]
+				
+				image.getRGB(Self.drawEffectRGB, TRANS_NONE, regionW, regionX, regionY, regionW, regionH) ' 0
+				
+				If (Not (Self.redValue = 0 And Self.greenValue = 0 And Self.blueValue = 0)) Then
+					For Local i:= 0 Until Self.drawEffectRGB.length
+						Self.drawEffectRGB[i] = caculateColorValue(Self.drawEffectRGB[i])
+					Next
+				EndIf
+				
+				If (Self.grayValue <> 0) Then
+					For Local i:= 0 Until Self.drawEffectRGB.length
+						Self.drawEffectRGB[i] = caculateGray(Self.drawEffectRGB[i])
+					Next
+				EndIf
+				
+				If (Self.alphaValue <> 255) Then
+					For Local i:= 0 Until Self.drawEffectRGB.length
+						Self.drawEffectRGB[i] = caculateAlpha(Self.drawEffectRGB[i])
+					Next
+				EndIf
+				
+				drawRGBFlip(Self.drawEffectRGB, x + Self.transX, y + Self.transY, regionW, regionH, flipMode)
+				
+				Self.drawEffectRGB = Null
+			EndIf
+		End
+		
+		Method drawRGBFlip:Void(argb:Int[], x:Int, y:Int, width:Int, height:Int, flipMode:Int) Final
+			Local rgbData:= New Int[width]
+			
+			Select (flipMode)
+				Case TRANS_NONE
+					For Local i:= 0 Until height
+						GenericUtilities<Int>.CopyArray(argb, rgbData, (i * width), 0, width)
+						
+						Self.context.drawRGB(rgbData, 0, width, x, y + i, width, 1, True)
+					Next
+				Case TRANS_MIRROR_ROT180
+					For Local i:= 0 Until height
+						GenericUtilities<Int>.CopyArray(argb, rgbData, (i * width), 0, width)
+						
+						Self.context.drawRGB(rgbData, 0, width, x, ((y + height) - 1) - i, width, 1, True)
+					Next
+				Case TRANS_MIRROR
+					For Local i:= 0 Until height
+						GenericUtilities<Int>.CopyArray(argb, rgbData, (i * width), 0, width)
+						
+						MFUtility.revertArray(rgbData)
+						
+						Self.context.drawRGB(rgbData, 0, width, x, y + i, width, 1, True)
+					Next
+				Case TRANS_ROT180
+					For Local i:= 0 Until height
+						GenericUtilities<Int>.CopyArray(argb, rgbData, (i * width), 0, width)
+						
+						MFUtility.revertArray(rgbData)
+						
+						Self.context.drawRGB(rgbData, 0, width, x, ((y + height) - 1) - i, width, 1, True)
+					Next
+				Case TRANS_MIRROR_ROT270
+					For Local i:= 0 Until height
+						GenericUtilities<Int>.CopyArray(argb, rgbData, (i * width), 0, width)
+						
+						Self.context.drawRGB(rgbData, 0, 1, x + i, y, 1, width, True)
+					Next
+				Case TRANS_ROT90
+					For Local i:= 0 Until height
+						GenericUtilities<Int>.CopyArray(argb, rgbData, (i * width), 0, width)
+						
+						Self.context.drawRGB(rgbData, 0, 1, ((x + height) - 1) - i, y, 1, width, True)
+					Next
+				Case TRANS_ROT270
+					For Local i:= 0 Until height
+						GenericUtilities<Int>.CopyArray(argb, rgbData, (i * width), 0, width)
+						
+						MFUtility.revertArray(rgbData)
+						
+						Self.context.drawRGB(rgbData, 0, 1, x + i, y, 1, width, True)
+					Next
+				Case TRANS_MIRROR_ROT90
+					For Local i:= 0 Until height
+						GenericUtilities<Int>.CopyArray(argb, rgbData, (i * width), 0, width)
+						
+						MFUtility.revertArray(rgbData)
+						
+						Self.context.drawRGB(rgbData, 0, 1, ((x + height) - 1) - i, y, 1, width, True)
+					Next
+				Default
+			EndIf
+		End
+		
+		Method caculateColorValue:Int(argb:Int) Final
+			Return (((-16777216 & argb) | (caculatePerColor((16711680 & argb) Shr 16, Self.redValue) Shl 16)) | (caculatePerColor((65280 & argb) Shr 8, Self.greenValue) Shl 8)) | caculatePerColor(argb & 255, Self.blueValue)
+			'Return (((-16777216 & argb) | (caculatePerColor((16711680 & argb) >>> 16, Self.redValue) Shl 16)) | (caculatePerColor((65280 & argb) >>> 8, Self.greenValue) Shl 8)) | caculatePerColor(argb & 255, Self.blueValue)
+		End
+		
+		Method caculatePerColor:Int(color:Int, value:Int) Final
+			If (value = 0) Then
+				Return color
 			EndIf
 			
-			If (Self.grayValue <> 0) Then
-				For (i = TRANS_NONE; i < Self.drawEffectRGB.length; i += 1)
-					Self.drawEffectRGB[i] = caculateGray(Self.drawEffectRGB[i])
-				Next
+			color += ((color + 1) * value) Shr 8
+			
+			If (color > 255) Then
+				Return 255
 			EndIf
 			
-			If (Self.alphaValue <> 255) Then
-				For (i = TRANS_NONE; i < Self.drawEffectRGB.length; i += 1)
-					Self.drawEffectRGB[i] = caculateAlpha(Self.drawEffectRGB[i])
-				Next
+			If (color < 0) Then
+				Return 0
 			EndIf
 			
-			drawRGBFlip(Self.drawEffectRGB, x + Self.transX, y + Self.transY, regionW, regionH, flipMode)
-			Self.drawEffectRGB = Null
-		EndIf
-		
-	End
-
-	Private Method drawRGBFlip:Void(argb:Int[], x:Int, y:Int, width:Int, height:Int, flipMode:Int) Final
-		Int[] rgbData = New Int[width]
-		Int i
-		Select (flipMode)
-			Case TRANS_NONE
-				For (i = TRANS_NONE; i < height; i += 1)
-					System.arraycopy(argb, i * width, rgbData, TRANS_NONE, width)
-					Self.context.drawRGB(rgbData, TRANS_NONE, width, x, y + i, width, TRANS_MIRROR_ROT180, True)
-				Next
-			Case TRANS_MIRROR_ROT180
-				For (i = TRANS_NONE; i < height; i += 1)
-					System.arraycopy(argb, i * width, rgbData, TRANS_NONE, width)
-					Self.context.drawRGB(rgbData, TRANS_NONE, width, x, ((y + height) - TRANS_MIRROR_ROT180) - i, width, TRANS_MIRROR_ROT180, True)
-				Next
-			Case VCENTER
-				For (i = TRANS_NONE; i < height; i += 1)
-					System.arraycopy(argb, i * width, rgbData, TRANS_NONE, width)
-					MFUtility.revertArray(rgbData)
-					Self.context.drawRGB(rgbData, TRANS_NONE, width, x, y + i, width, TRANS_MIRROR_ROT180, True)
-				Next
-			Case TRANS_ROT180
-				For (i = TRANS_NONE; i < height; i += 1)
-					System.arraycopy(argb, i * width, rgbData, TRANS_NONE, width)
-					MFUtility.revertArray(rgbData)
-					Self.context.drawRGB(rgbData, TRANS_NONE, width, x, ((y + height) - TRANS_MIRROR_ROT180) - i, width, TRANS_MIRROR_ROT180, True)
-				Next
-			Case TRANS_MIRROR_ROT270
-				For (i = TRANS_NONE; i < height; i += 1)
-					System.arraycopy(argb, i * width, rgbData, TRANS_NONE, width)
-					Self.context.drawRGB(rgbData, TRANS_NONE, TRANS_MIRROR_ROT180, x + i, y, TRANS_MIRROR_ROT180, width, True)
-				Next
-			Case TRANS_ROT90
-				For (i = TRANS_NONE; i < height; i += 1)
-					System.arraycopy(argb, i * width, rgbData, TRANS_NONE, width)
-					Self.context.drawRGB(rgbData, TRANS_NONE, TRANS_MIRROR_ROT180, ((x + height) - TRANS_MIRROR_ROT180) - i, y, TRANS_MIRROR_ROT180, width, True)
-				Next
-			Case TRANS_ROT270
-				For (i = TRANS_NONE; i < height; i += 1)
-					System.arraycopy(argb, i * width, rgbData, TRANS_NONE, width)
-					MFUtility.revertArray(rgbData)
-					Self.context.drawRGB(rgbData, TRANS_NONE, TRANS_MIRROR_ROT180, x + i, y, TRANS_MIRROR_ROT180, width, True)
-				Next
-			Case TRANS_MIRROR_ROT90
-				For (i = TRANS_NONE; i < height; i += 1)
-					System.arraycopy(argb, i * width, rgbData, TRANS_NONE, width)
-					MFUtility.revertArray(rgbData)
-					Self.context.drawRGB(rgbData, TRANS_NONE, TRANS_MIRROR_ROT180, ((x + height) - TRANS_MIRROR_ROT180) - i, y, TRANS_MIRROR_ROT180, width, True)
-				Next
-			Default
-		EndIf
-	End
-
-	Private Method caculateColorValue:Int(argb:Int) Final
-		Return (((-16777216 & argb) | (caculatePerColor((16711680 & argb) >>> TOP, Self.redValue) Shl TOP)) | (caculatePerColor((65280 & argb) >>> RIGHT, Self.greenValue) Shl RIGHT)) | caculatePerColor(argb & 255, Self.blueValue)
-	End
-
-	Private Method caculatePerColor:Int(color:Int, value:Int) Final
-		
-		If (value = 0) Then
 			Return color
-		EndIf
+		End
 		
-		color += ((color + TRANS_MIRROR_ROT180) * value) Shr RIGHT
+		Method caculateGray:Int(argb:Int) Final
+			Local color:Int
+			Local r:= (16711680 & argb) Shr 16 ' >>> 16
+			Local g:= (65280 & argb) Shr 8 ' >>> 8
+			Local b:= (argb & 255)
+			
+			If (r > g) Then
+				color = r
+			Else
+				color = g
+			EndIf
+			
+			If (color <= b) Then
+				color = b
+			EndIf
+			
+			color = ((Self.grayValue * color) Shr RIGHT)
+			
+			If (color > 255) Then
+				color = 255
+			ElseIf (color < 0) Then
+				color = 0
+			EndIf
+			
+			Return (color | (((-16777216 & argb) | (color Shl 16)) | (color Shl 8)))
+		End
 		
-		If (color > 255) Then
-			Return 255
-		EndIf
-		
-		If (color < 0) Then
-			Return TRANS_NONE
-		EndIf
-		
-		Return color
-	End
-
-	Private Method caculateGray:Int(argb:Int) Final
-		Int color
-		Int r = (16711680 & argb) >>> TOP
-		Int g = (65280 & argb) >>> RIGHT
-		Int b = argb & 255
-		
-		If (r > g) Then
-			color = r
-		} Else {
-			color = g
-		EndIf
-		
-		If (color <= b) Then
-			color = b
-		EndIf
-		
-		color = (Self.grayValue * color) Shr RIGHT
-		
-		If (color > 255) Then
-			color = 255
-		ElseIf (color < 0) Then
-			color = TRANS_NONE
-		EndIf
-		
-		Return color | (((-16777216 & argb) | (color Shl TOP)) | (color Shl RIGHT))
-	End
-
-	Private Method caculateAlpha:Int(argb:Int) Final
-		Return (MapManager.END_COLOR & argb) | (((((-16777216 & argb) >>> 24) * Self.alphaValue) Shr RIGHT) Shl 24)
-	End
-
-	Public Method drawRegion:Void(img:MFImage, x_src:Int, y_src:Int, width:Int, height:Int, rotate_x:Int, rotate_y:Int, degree:Int, scale_x:Int, scale_y:Int, x_dest:Int, y_dest:Int, anchor:Int)
-		
-		If (MFDevice.preScaleZoomOutFlag) Then
-			x_src Shr= MFDevice.preScaleShift
-			y_src Shr= MFDevice.preScaleShift
-			width Shr= MFDevice.preScaleShift
-			height Shr= MFDevice.preScaleShift
-			rotate_x Shr= MFDevice.preScaleShift
-			rotate_y Shr= MFDevice.preScaleShift
-			scale_x Shr= MFDevice.preScaleShift
-			scale_y Shr= MFDevice.preScaleShift
-			x_dest Shr= MFDevice.preScaleShift
-			y_dest Shr= MFDevice.preScaleShift
-		ElseIf (MFDevice.preScaleZoomInFlag) Then
-			x_src Shl= MFDevice.preScaleShift
-			y_src Shl= MFDevice.preScaleShift
-			width Shl= MFDevice.preScaleShift
-			height Shl= MFDevice.preScaleShift
-			rotate_x Shl= MFDevice.preScaleShift
-			rotate_y Shl= MFDevice.preScaleShift
-			scale_x Shl= MFDevice.preScaleShift
-			scale_y Shl= MFDevice.preScaleShift
-			x_dest Shl= MFDevice.preScaleShift
-			y_dest Shl= MFDevice.preScaleShift
-		EndIf
-		
-		Self.context.drawRegion(img.image, x_src, y_src, width, height, rotate_x, rotate_y, degree, scale_x, scale_y, x_dest, y_dest, anchor)
-	End
+		Method caculateAlpha:Int(argb:Int) Final
+			Return (16777215 & argb) | (((((-16777216 & argb) >>> 24) * Self.alphaValue) Shr 8) Shl 24) ' MapManager.END_COLOR
+		End
 End
