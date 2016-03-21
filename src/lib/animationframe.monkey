@@ -14,6 +14,7 @@ Private
 	Import lib.animation
 	Import lib.animationaction
 	Import lib.animationimageinfo
+	Import lib.constutil
 	
 	Import com.sega.mobile.framework.device.mfdevice
 	'Import com.sega.mobile.framework.device.mfgamepad
@@ -126,15 +127,14 @@ Class Frame
 					
 					Local tmp_attr:= (sArr[3] Shl 8)
 					
-					' Magic numbers:
-					If (tmp_attr = 8192 Or tmp_attr = 28672) Then
+					If (tmp_attr = ConstUtil.TRANS[2] Or tmp_attr = ConstUtil.TRANS[5]) Then
 						sArr[0] = Short(sArr[0] - 1)
-					ElseIf (tmp_attr = 16384 Or tmp_attr = 4096) Then
+					ElseIf (tmp_attr = ConstUtil.TRANS[1] Or tmp_attr = ConstUtil.TRANS[6]) Then
 						sArr[1] = Short(sArr[1] - 1)
-					ElseIf (tmp_attr = 24576) Then
+					ElseIf (tmp_attr = ConstUtil.TRANS[3]) Then
 						sArr[0] = Short(sArr[0] - 1)
 						sArr[1] = Short(sArr[1] - 1)
-					ElseIf (tmp_attr = 12288 Or tmp_attr = 12288) Then
+					ElseIf (tmp_attr = ConstUtil.TRANS[7] Or tmp_attr = ConstUtil.TRANS[7]) Then
 						sArr[0] = Short(sArr[0] - 1)
 						sArr[1] = Short(sArr[1] - 1)
 					EndIf
@@ -255,7 +255,7 @@ Class Frame
 				Local clipArray:= m_Ani.imageInfo[Self.m_ClipInfo[i][4]].getClips()
 				Local widthId:= 2
 				
-				If (((Short(Self.m_ClipInfo[i][3] Shl 8)) & 4096) <> 0) Then
+				If (((Short(Self.m_ClipInfo[i][3] Shl 8)) & ConstUtil.TRANS[6]) <> 0) Then
 					widthId = 3
 				EndIf
 				
@@ -289,7 +289,7 @@ Class Frame
 				Local clipArray:= m_Ani.imageInfo[Self.m_ClipInfo[i][4]].getClips()
 				Local heightId:= 3
 				
-				If (((Short(Self.m_ClipInfo[i][3] Shl 8)) & 4096) <> 0) Then
+				If (((Short(Self.m_ClipInfo[i][3] Shl 8)) & ConstUtil.TRANS[6]) <> 0) Then
 					heightId = 2
 				EndIf
 				
@@ -399,15 +399,15 @@ Class Frame
 				
 				tmp_attr ~= draw_attr
 				
-				If ((tmp_attr & 4096) <> 0) Then
-					If ((Int((original_attr & 8192) <> 0) ~ Int((original_attr & 16384) <> 0)) <> 0) Then
-						tmp_attr ~= 24576
+				If ((tmp_attr & ConstUtil.TRANS[6]) <> 0) Then
+					If ((Int((original_attr & ConstUtil.TRANS[2]) <> 0) ~ Int((original_attr & ConstUtil.TRANS[1]) <> 0)) <> 0) Then
+						tmp_attr ~= ConstUtil.TRANS[3]
 					EndIf
-				ElseIf (Not ((original_attr & 4096) = 0 Or (draw_attr & 4096) = 0)) Then
-					tmp_attr ~= 24576
+				ElseIf (Not ((original_attr & ConstUtil.TRANS[6]) = 0 Or (draw_attr & ConstUtil.TRANS[6]) = 0)) Then
+					tmp_attr ~= ConstUtil.TRANS[3]
 				EndIf
 				
-				g.DrawImage(image, tmp_x + x, tmp_y + y, m_Clips_2[0], m_Clips_2[1], m_Clips_2[2], m_Clips_2[3], tmp_attr)
+				ConstUtil.DrawImage(g, image, tmp_x + x, tmp_y + y, m_Clips_2[0], m_Clips_2[1], m_Clips_2[2], m_Clips_2[3], tmp_attr)
 			EndIf
 		End
 	Private
@@ -415,11 +415,11 @@ Class Frame
 			Local x:= Self.m_ClipInfo[i][0]
 			Local y:= Self.m_ClipInfo[i][1]
 			
-			If ((attr & 8192) > 0) Then
+			If ((attr & ConstUtil.TRANS[2]) > 0) Then
 				x = ((-x) - Self.m_ClipInfo[i][2]) + 1
 			EndIf
 			
-			If ((attr & 16384) > 0) Then
+			If ((attr & ConstUtil.TRANS[1]) > 0) Then
 				y = ((-y) - Self.m_ClipInfo[i][3]) + 1
 			EndIf
 			
@@ -434,11 +434,11 @@ Class Frame
 			Local x:= Self.m_ClipInfo[i][0]
 			Local y:= Self.m_ClipInfo[i][1]
 			
-			If ((attr & 8192) > 0) Then
+			If ((attr & ConstUtil.TRANS[2]) > 0) Then
 				x = ((-x) - Self.m_ClipInfo[i][2]) + 1
 			EndIf
 			
-			If ((attr & 16384) > 0) Then
+			If ((attr & ConstUtil.TRANS[1]) > 0) Then
 				y = ((-y) - Self.m_ClipInfo[i][3]) + 1
 			EndIf
 			
@@ -452,25 +452,25 @@ Class Frame
 		Method getMIDPTransId:Int(tmp_attr:Int)
 			Local attr:Int = 0
 			
-			If ((tmp_attr & 4096) <> 0) Then
+			If ((tmp_attr & ConstUtil.TRANS[6]) <> 0) Then
 				attr = 0 | 6
 				
-				If ((tmp_attr & 8192) <> 0) Then
+				If ((tmp_attr & ConstUtil.TRANS[2]) <> 0) Then
 					attr ~= 1
 				EndIf
 				
-				If ((tmp_attr & 16384) <> 0) Then
+				If ((tmp_attr & ConstUtil.TRANS[1]) <> 0) Then
 					Return attr ~ 2
 				EndIf
 				
 				Return attr
 			EndIf
 			
-			If ((tmp_attr & 8192) <> 0) Then
+			If ((tmp_attr & ConstUtil.TRANS[2]) <> 0) Then
 				attr = 0 | 2
 			EndIf
 			
-			If ((tmp_attr & 16384) <> 0) Then
+			If ((tmp_attr & ConstUtil.TRANS[1]) <> 0) Then
 				Return attr | 1
 			EndIf
 			
