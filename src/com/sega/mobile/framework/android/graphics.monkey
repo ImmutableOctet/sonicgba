@@ -180,13 +180,13 @@ Class Graphics Implements GRAPHICS_MACROS
 		Method drawString:Void(str:String, x:Int, y:Int, anchor:Int)
 			#Rem
 			If ((anchor & TRANS_MIRROR_ROT180) <> 0) Then
-				x -= Self.mFont.stringWidth(str) / VCENTER
+				x -= Self.mFont.stringWidth(str) / 2 ' VCENTER
 			ElseIf ((anchor & RIGHT) <> 0) Then
 				x -= Self.mFont.stringWidth(str)
 			EndIf
 			
 			If ((anchor & VCENTER) <> 0) Then
-				y -= Self.mFont.getHeight() / VCENTER
+				y -= Self.mFont.getHeight() / 2 ' VCENTER
 			ElseIf ((anchor & BOTTOM) <> 0) Then
 				y -= Self.mFont.getHeight()
 			EndIf
@@ -196,211 +196,233 @@ Class Graphics Implements GRAPHICS_MACROS
 			EndIf
 			#End
 		End
+		
+		Method drawImage:Void(image:Image, x:Int, y:Int, anchor:Int)
+			If ((anchor & TRANS_MIRROR_ROT180) <> 0) Then
+				x -= image.getWidth() / 2 ' VCENTER
+			ElseIf ((anchor & RIGHT) <> 0) Then
+				x -= image.getWidth()
+			EndIf
+			
+			If ((anchor & VCENTER) <> 0) Then
+				y -= image.getHeight() / 2 ' VCENTER
+			ElseIf ((anchor & BOTTOM) <> 0) Then
+				y -= image.getHeight()
+			EndIf
+			
+			#Rem
+			If (Self.mCanvas <> Null) Then
+				Local alpha:= Self.mPaint.getAlpha()
+				
+				If (image.getAlpha() <> -1) Then
+					Self.mPaint.setAlpha(image.getAlpha())
+				EndIf
+				
+				Self.mCanvas.drawBitmap(image.getBitmap(), (Float) x, (Float) y, Self.mPaint)
+				Self.mPaint.setAlpha(alpha)
+			EndIf
+			#End
+		End
+		
+		Method setClip:Void(x:Int, y:Int, w:Int, h:Int)
+			#Rem
+			If (Self.mCanvas <> Null) Then
+				Self.mCanvas.clipRect((Float) x, (Float) y, (Float) (x + w), (Float) (y + h), Op.REPLACE)
+			EndIf
+			#End
+		End
+		
+		Method drawRGB:Void(rgbData:Int[], offset:Int, scanlength:Int, x:Int, y:Int, width:Int, height:Int, processAlpha:Bool)
+			'Self.mCanvas.drawBitmap(rgbData, offset, scanlength, x, y, width, height, processAlpha, Self.mPaint)
+		End
+		
+		Method getColor:Int()
+			'Return Self.mPaint.getColor()
+		End
 
-	Public Method drawImage:Void(image:Image, x:Int, y:Int, anchor:Int)
+		Method drawRect:Void(x:Int, y:Int, w:Int, h:Int)
+			#Rem
+			Self.mPaint.setStyle(Style.STROKE)
+			
+			If (Self.mCanvas <> Null) Then
+				Self.mCanvas.drawRect((Float) x, (Float) y, (Float) (x + w), (Float) (y + h), Self.mPaint)
+			EndIf
+			#End
+		End
 		
-		If ((anchor & TRANS_MIRROR_ROT180) <> 0) Then
-			x -= image.getWidth() / VCENTER
-		ElseIf ((anchor & RIGHT) <> 0) Then
-			x -= image.getWidth()
-		EndIf
+		Method drawArc:Void(x:Int, y:Int, width:Int, height:Int, startAngle:Int, arcAngle:Int)
+			#Rem
+			Self.mPaint.setStyle(Style.STROKE)
+			
+			If (Self.mCanvas <> Null) Then
+				Self.mCanvas.drawArc(New RectF((Float) x, (Float) y, (Float) (x + width), (Float) (y + height)), (Float) startAngle, (Float) arcAngle, False, Self.mPaint)
+			EndIf
+			#End
+		End
+	
+		Method fillArc:Void(x:Int, y:Int, width:Int, height:Int, startAngle:Int, arcAngle:Int)
+			#Rem
+			Self.mPaint.setStyle(Style.FILL)
+			
+			If (Self.mCanvas <> Null) Then
+				Self.mCanvas.drawArc(New RectF((Float) x, (Float) y, (Float) (x + width), (Float) (y + height)), (Float) startAngle, (Float) arcAngle, False, Self.mPaint)
+			EndIf
+			#End
+		End
+	
+		Method drawRoundRect:Void(x:Int, y:Int, width:Int, height:Int, arcWidth:Int, arcHeight:Int)
+			#Rem
+			Self.mPaint.setStyle(Style.STROKE)
+			
+			If (Self.mCanvas <> Null) Then
+				Self.mCanvas.drawRoundRect(New RectF((Float) x, (Float) y, (Float) (x + width), (Float) (y + height)), (Float) arcWidth, (Float) arcHeight, Self.mPaint)
+			EndIf
+			#End
+		End
+	
+		Method fillRoundRect:Void(x:Int, y:Int, width:Int, height:Int, arcWidth:Int, arcHeight:Int)
+			#Rem
+			Self.mPaint.setStyle(Style.FILL)
+			
+			If (Self.mCanvas <> Null) Then
+				Self.mCanvas.drawRoundRect(New RectF((Float) x, (Float) y, (Float) (x + width), (Float) (y + height)), (Float) arcWidth, (Float) arcHeight, Self.mPaint)
+			EndIf
+			#End
+		End
 		
-		If ((anchor & VCENTER) <> 0) Then
-			y -= image.getHeight() / VCENTER
-		ElseIf ((anchor & BOTTOM) <> 0) Then
-			y -= image.getHeight()
-		EndIf
-		
-		If (Self.mCanvas <> Null) Then
-			Int alpha = Self.mPaint.getAlpha()
+		Method drawRegion:Void(image:Image, x_src:Int, y_src:Int, width:Int, height:Int, transform:Int, x_dest:Int, y_dest:Int, anchor:Int)
+			#Rem
+			Self.mMatrix.reset()
+			
+			Local drawWidth:= width
+			Local drawHeight:= height
+			
+			Local xOffset:= TRANS_NONE
+			Local yOffset:= TRANS_NONE
+			
+			Select (transform)
+				Case TRANS_NONE
+					xOffset = -x_src
+					yOffset = -y_src
+				Case TRANS_MIRROR_ROT180
+					Self.mMatrix.preScale(-1.0, 1.0)
+					Self.mMatrix.preRotate(-180.0)
+					
+					xOffset = -x_src
+					yOffset = drawHeight + y_src
+				Case TRANS_MIRROR
+					Self.mMatrix.preScale(-1.0, 1.0)
+					
+					xOffset = drawWidth + x_src
+					yOffset = -y_src
+				Case TRANS_ROT180
+					Self.mMatrix.preRotate(180.0)
+					
+					xOffset = drawWidth + x_src
+					yOffset = drawHeight + y_src
+				Case TRANS_MIRROR_ROT270
+					Self.mMatrix.preScale(-1.0, 1.0)
+					Self.mMatrix.preRotate(-270.0)
+					
+					drawWidth = height
+					drawHeight = width
+					
+					xOffset = -y_src
+					yOffset = -x_src
+				Case TRANS_ROT90
+					Self.mMatrix.preRotate(90.0)
+					
+					drawWidth = height
+					drawHeight = width
+					
+					xOffset = drawWidth + y_src
+					yOffset = -x_src
+				Case TRANS_ROT270
+					Self.mMatrix.preRotate(270.0)
+					
+					drawWidth = height
+					drawHeight = width
+					
+					xOffset = -y_src
+					yOffset = drawHeight + x_src
+				Case TRANS_MIRROR_ROT90
+					Self.mMatrix.preScale(-1.0, 1.0)
+					Self.mMatrix.preRotate(-90.0)
+					
+					drawWidth = height
+					drawHeight = width
+					
+					xOffset = drawWidth + y_src
+					yOffset = drawHeight + x_src
+			End Select
+			
+			If (anchor = 0) Then
+				anchor = (TOP|RIGHT)
+			EndIf
+			
+			If ((anchor & BOTTOM) <> 0) Then
+				y_dest -= drawHeight
+			ElseIf ((anchor & VCENTER) <> 0) Then
+				y_dest -= drawHeight Shr 1 ' >>> 1
+			EndIf
+			
+			If ((anchor & RIGHT) <> 0) Then
+				x_dest -= drawWidth
+			ElseIf ((anchor & TRANS_MIRROR_ROT180) <> 0) Then
+				x_dest -= drawWidth >>> TRANS_MIRROR_ROT180
+			EndIf
+			
+			Self.mCanvas.save()
+			
+			Self.mCanvas.clipRect(x_dest, y_dest, x_dest + drawWidth, y_dest + drawHeight)
+			Self.mCanvas.translate((Float) (x_dest + xOffset), (Float) (y_dest + yOffset))
+			
+			Local alpha:= Self.mPaint.getAlpha()
 			
 			If (image.getAlpha() <> -1) Then
 				Self.mPaint.setAlpha(image.getAlpha())
 			EndIf
 			
-			Self.mCanvas.drawBitmap(image.getBitmap(), (Float) x, (Float) y, Self.mPaint)
+			Self.mCanvas.drawBitmap(image.getBitmap(), Self.mMatrix, Self.mPaint)
 			Self.mPaint.setAlpha(alpha)
-		EndIf
-		
-	End
+			
+			Self.mCanvas.restore()
+			#End
+		End
 
-	Public Method setClip:Void(x:Int, y:Int, w:Int, h:Int)
-		
-		If (Self.mCanvas <> Null) Then
-			Self.mCanvas.clipRect((Float) x, (Float) y, (Float) (x + w), (Float) (y + h), Op.REPLACE)
-		EndIf
-		
-	End
-
-	Public Method drawRGB:Void(rgbData:Int[], offset:Int, scanlength:Int, x:Int, y:Int, width:Int, height:Int, processAlpha:Bool)
-		Self.mCanvas.drawBitmap(rgbData, offset, scanlength, x, y, width, height, processAlpha, Self.mPaint)
-	End
-
-	Public Method getColor:Int()
-		Return Self.mPaint.getColor()
-	End
-
-	Public Method drawRect:Void(x:Int, y:Int, w:Int, h:Int)
-		Self.mPaint.setStyle(Style.STROKE)
-		
-		If (Self.mCanvas <> Null) Then
-			Self.mCanvas.drawRect((Float) x, (Float) y, (Float) (x + w), (Float) (y + h), Self.mPaint)
-		EndIf
-		
-	End
-
-	Public Method drawArc:Void(x:Int, y:Int, width:Int, height:Int, startAngle:Int, arcAngle:Int)
-		Self.mPaint.setStyle(Style.STROKE)
-		
-		If (Self.mCanvas <> Null) Then
-			Self.mCanvas.drawArc(New RectF((Float) x, (Float) y, (Float) (x + width), (Float) (y + height)), (Float) startAngle, (Float) arcAngle, False, Self.mPaint)
-		EndIf
-		
-	End
-
-	Public Method fillArc:Void(x:Int, y:Int, width:Int, height:Int, startAngle:Int, arcAngle:Int)
-		Self.mPaint.setStyle(Style.FILL)
-		
-		If (Self.mCanvas <> Null) Then
-			Self.mCanvas.drawArc(New RectF((Float) x, (Float) y, (Float) (x + width), (Float) (y + height)), (Float) startAngle, (Float) arcAngle, False, Self.mPaint)
-		EndIf
-		
-	End
-
-	Public Method drawRoundRect:Void(x:Int, y:Int, width:Int, height:Int, arcWidth:Int, arcHeight:Int)
-		Self.mPaint.setStyle(Style.STROKE)
-		
-		If (Self.mCanvas <> Null) Then
-			Self.mCanvas.drawRoundRect(New RectF((Float) x, (Float) y, (Float) (x + width), (Float) (y + height)), (Float) arcWidth, (Float) arcHeight, Self.mPaint)
-		EndIf
-		
-	End
-
-	Public Method fillRoundRect:Void(x:Int, y:Int, width:Int, height:Int, arcWidth:Int, arcHeight:Int)
-		Self.mPaint.setStyle(Style.FILL)
-		
-		If (Self.mCanvas <> Null) Then
-			Self.mCanvas.drawRoundRect(New RectF((Float) x, (Float) y, (Float) (x + width), (Float) (y + height)), (Float) arcWidth, (Float) arcHeight, Self.mPaint)
-		EndIf
-		
-	End
-
-	Public Method drawRegion:Void(image:Image, x_src:Int, y_src:Int, width:Int, height:Int, transform:Int, x_dest:Int, y_dest:Int, anchor:Int)
-		Self.mMatrix.reset()
-		Int drawWidth = width
-		Int drawHeight = height
-		Int xOffset = TRANS_NONE
-		Int yOffset = TRANS_NONE
-		Select (transform)
-			Case TRANS_NONE
-				xOffset = -x_src
-				yOffset = -y_src
-				break
-			Case TRANS_MIRROR_ROT180
-				Self.mMatrix.preScale(-1.0, 1.0)
-				Self.mMatrix.preRotate(-180.0)
-				xOffset = -x_src
-				yOffset = drawHeight + y_src
-				break
-			Case VCENTER
-				Self.mMatrix.preScale(-1.0, 1.0)
-				xOffset = drawWidth + x_src
-				yOffset = -y_src
-				break
-			Case TRANS_ROT180
-				Self.mMatrix.preRotate(180.0)
-				xOffset = drawWidth + x_src
-				yOffset = drawHeight + y_src
-				break
-			Case TRANS_MIRROR_ROT270
-				Self.mMatrix.preScale(-1.0, 1.0)
-				Self.mMatrix.preRotate(-270.0)
-				drawWidth = height
-				drawHeight = width
-				xOffset = -y_src
-				yOffset = -x_src
-				break
-			Case TRANS_ROT90
-				Self.mMatrix.preRotate(90.0)
-				drawWidth = height
-				drawHeight = width
-				xOffset = drawWidth + y_src
-				yOffset = -x_src
-				break
-			Case TRANS_ROT270
-				Self.mMatrix.preRotate(270.0)
-				drawWidth = height
-				drawHeight = width
-				xOffset = -y_src
-				yOffset = drawHeight + x_src
-				break
-			Case TRANS_MIRROR_ROT90
-				Self.mMatrix.preScale(-1.0, 1.0)
-				Self.mMatrix.preRotate(-90.0)
-				drawWidth = height
-				drawHeight = width
-				xOffset = drawWidth + y_src
-				yOffset = drawHeight + x_src
-				break
-		EndIf
-		If (anchor = 0) Then
-			anchor = 20
-		EndIf
-		
-		If ((anchor & BOTTOM) <> 0) Then
-			y_dest -= drawHeight
-		ElseIf ((anchor & VCENTER) <> 0) Then
-			y_dest -= drawHeight >>> TRANS_MIRROR_ROT180
-		EndIf
-		
-		If ((anchor & RIGHT) <> 0) Then
-			x_dest -= drawWidth
-		ElseIf ((anchor & TRANS_MIRROR_ROT180) <> 0) Then
-			x_dest -= drawWidth >>> TRANS_MIRROR_ROT180
-		EndIf
-		
-		Self.mCanvas.save()
-		Self.mCanvas.clipRect(x_dest, y_dest, x_dest + drawWidth, y_dest + drawHeight)
-		Self.mCanvas.translate((Float) (x_dest + xOffset), (Float) (y_dest + yOffset))
-		Int alpha = Self.mPaint.getAlpha()
-		
-		If (image.getAlpha() <> -1) Then
-			Self.mPaint.setAlpha(image.getAlpha())
-		EndIf
-		
-		Self.mCanvas.drawBitmap(image.getBitmap(), Self.mMatrix, Self.mPaint)
-		Self.mPaint.setAlpha(alpha)
-		Self.mCanvas.restore()
-	End
-
-	Public Method drawRegion:Void(image:Image, x_src:Int, y_src:Int, width:Int, height:Int, rotate_x:Int, rotate_y:Int, degree:Int, scale_x:Int, scale_y:Int, x_dest:Int, y_dest:Int, anchor:Int)
-		Self.mMatrix.reset()
-		Self.mCanvas.save()
-		
-		If ((anchor & BOTTOM) <> 0) Then
-			y_dest -= height
-		ElseIf ((anchor & VCENTER) <> 0) Then
-			y_dest -= height Shr TRANS_MIRROR_ROT180
-		EndIf
-		
-		If ((anchor & RIGHT) <> 0) Then
-			x_dest -= width
-		ElseIf ((anchor & TRANS_MIRROR_ROT180) <> 0) Then
-			x_dest -= width Shr TRANS_MIRROR_ROT180
-		EndIf
-		
-		Self.mCanvas.translate((Float) (x_dest - x_src), (Float) (y_dest - y_src))
-		Self.mCanvas.rotate((Float) degree, (Float) (rotate_x + x_src), (Float) (rotate_y + y_src))
-		Self.mCanvas.scale((Float) scale_x, (Float) scale_y, (Float) ((width / VCENTER) + x_src), (Float) ((height / VCENTER) + y_src))
-		Self.mCanvas.clipRect(x_src, y_src, x_src + width, y_src + height)
-		Int alpha = Self.mPaint.getAlpha()
-		
-		If (image.getAlpha() <> -1) Then
-			Self.mPaint.setAlpha(image.getAlpha())
-		EndIf
-		
-		Self.mCanvas.drawBitmap(image.getBitmap(), Self.mMatrix, Self.mPaint)
-		Self.mPaint.setAlpha(alpha)
-		Self.mCanvas.restore()
-	End
+		Method drawRegion:Void(image:Image, x_src:Int, y_src:Int, width:Int, height:Int, rotate_x:Int, rotate_y:Int, degree:Int, scale_x:Int, scale_y:Int, x_dest:Int, y_dest:Int, anchor:Int)
+			#Rem
+			Self.mMatrix.reset()
+			
+			Self.mCanvas.save()
+			
+			If ((anchor & BOTTOM) <> 0) Then
+				y_dest -= height
+			ElseIf ((anchor & VCENTER) <> 0) Then
+				y_dest -= height Shr 1
+			EndIf
+			
+			If ((anchor & RIGHT) <> 0) Then
+				x_dest -= width
+			ElseIf ((anchor & TRANS_MIRROR_ROT180) <> 0) Then
+				x_dest -= width Shr 1
+			EndIf
+			
+			Self.mCanvas.translate((Float) (x_dest - x_src), (Float) (y_dest - y_src))
+			Self.mCanvas.rotate((Float) degree, (Float) (rotate_x + x_src), (Float) (rotate_y + y_src))
+			Self.mCanvas.scale((Float) scale_x, (Float) scale_y, (Float) ((width / VCENTER) + x_src), (Float) ((height / VCENTER) + y_src))
+			Self.mCanvas.clipRect(x_src, y_src, x_src + width, y_src + height)
+			
+			Local alpha:= Self.mPaint.getAlpha()
+			
+			If (image.getAlpha() <> -1) Then
+				Self.mPaint.setAlpha(image.getAlpha())
+			EndIf
+			
+			Self.mCanvas.drawBitmap(image.getBitmap(), Self.mMatrix, Self.mPaint)
+			Self.mPaint.setAlpha(alpha)
+			
+			Self.mCanvas.restore()
+			#End
+		End
 End

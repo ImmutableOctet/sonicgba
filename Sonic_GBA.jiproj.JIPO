@@ -18,16 +18,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>41</X>
-        <Y>41</Y>
+        <X>3</X>
+        <Y>425</Y>
       </CursorPos>
       <DocGUID>1d4cd78a-bbe1-4107-ad72-4da458d31b84</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>43</X>
-        <Y>19</Y>
+        <X>26</X>
+        <Y>440</Y>
       </CursorPos>
       <DocGUID>607658f5-ee62-4c1b-bb84-dd0cb3ce7ef7</DocGUID>
       <Bookmarks />
