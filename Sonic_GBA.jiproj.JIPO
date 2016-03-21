@@ -10,8 +10,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animation.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>25</X>
-        <Y>16</Y>
+        <X>4</X>
+        <Y>38</Y>
       </CursorPos>
       <DocGUID>1ee23869-2aab-47b8-b3b2-eb805042c0d5</DocGUID>
       <Bookmarks />
@@ -26,16 +26,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationframe.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>10</X>
-        <Y>293</Y>
+        <X>21</X>
+        <Y>454</Y>
       </CursorPos>
       <DocGUID>ce0adb72-d17b-4263-b0fc-1eac3ad12e19</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationimageinfo.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>71</X>
-        <Y>101</Y>
+        <X>0</X>
+        <Y>0</Y>
       </CursorPos>
       <DocGUID>c434fcb0-d260-4b9b-b20d-03d0aabb2369</DocGUID>
       <Bookmarks />
@@ -460,13 +460,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>23</X>
         <Y>30</Y>
       </CursorPos>
-      <DocGUID>100c0e59-d7fc-47f9-92be-728211fffe47</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\stareffect.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>

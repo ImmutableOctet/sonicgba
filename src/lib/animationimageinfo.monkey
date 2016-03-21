@@ -114,7 +114,7 @@ Class ImageInfo
 		Self.m_Clips = (Short[][]) Array.newInstance(Short.TYPE, New Int[]{Self.m_nClips, 4})
 		For (i = (Short) 0; i < Self.m_nClips; i += 1)
 			For (Int j = 0; j < 4; j += 1)
-				Self.m_Clips[i][j] = Const.ReadShort(ds)
+				Self.m_Clips[i][j] = ds.ReadShort()
 			EndIf
 		EndIf
 	End

@@ -308,182 +308,174 @@ Class Frame
 			
 			Return Self.frameHeight
 		End
-
-	Public Method SetClips:Void(clip:Short[][])
-	End
-
-	Public Method Draw:Void(g:MFGraphics, x:Int, y:Int, attr:Short)
 		
-		If (Self.m_nClips <> Null) Then
-			For (Byte i = (Byte) 0; i < Self.m_nClips; i += 1)
-				Select (Self.functionID[i])
-					Case TitleState.STAGE_SELECT_KEY_RECORD_1
-						
-						If (Not m_Ani.isDoubleScale) Then
-							DrawImage(g, i, x, y, attr)
-							break
-						EndIf
-						
-						g.saveCanvas()
-						g.translateCanvas(x, y)
-						g.scaleCanvas(0.5f, 0.5f)
-						DrawImage(g, i, 0, 0, attr)
-						g.restoreCanvas()
-						break
-					Case TitleState.STAGE_SELECT_KEY_RECORD_2
-						fillRect(g, i, x, y, attr)
-						break
-					Case TitleState.STAGE_SELECT_KEY_DIRECT_PLAY
-						drawRect(g, i, x, y, attr)
-						break
-					Case SSDef.SSOBJ_BNLD_ID
-						try {
-							Int tmp_x = Self.m_ClipInfo[i][0]
-							Int tmp_y = Self.m_ClipInfo[i][1]
-							
+		Method SetClips:Void(clip:Short[][])
+			' Empty implementation.
+		End
+		
+		Method Draw:Void(g:MFGraphics, x:Int, y:Int, attr:Short)
+			If (Self.m_nClips <> Null) Then
+				For Local i:= 0 Until Self.m_nClips
+					Select (Self.functionID[i])
+						Case 0
 							If (Not m_Ani.isDoubleScale) Then
-								m_Ani.qiAnimationArray[Self.m_ClipInfo[i][2]].m_Frames[Self.m_ClipInfo[i][3]].Draw(g, x + tmp_x, y + tmp_y, attr)
-								break
+								DrawImage(g, i, x, y, attr)
+								
+								Continue
 							EndIf
 							
 							g.saveCanvas()
+							
+							g.translateCanvas(x, y)
+							g.scaleCanvas(0.5f, 0.5f)
+							DrawImage(g, i, 0, 0, attr)
+							
+							g.restoreCanvas()
+						Case 1
+							fillRect(g, i, x, y, attr)
+						Case 2
+							drawRect(g, i, x, y, attr)
+						Case 3
+							Local tmp_x:= Self.m_ClipInfo[i][0]
+							Local tmp_y:= Self.m_ClipInfo[i][1]
+							
+							If (Not m_Ani.isDoubleScale) Then
+								m_Ani.qiAnimationArray[Self.m_ClipInfo[i][2]].m_Frames[Self.m_ClipInfo[i][3]].Draw(g, x + tmp_x, y + tmp_y, attr)
+								
+								Continue
+							EndIf
+							
+							g.saveCanvas()
+							
 							g.translateCanvas(x + tmp_x, y + tmp_y)
 							g.scaleCanvas(0.5f, 0.5f)
 							m_Ani.qiAnimationArray[Self.m_ClipInfo[i][2]].m_Frames[Self.m_ClipInfo[i][3]].Draw(g, 0, 0, attr)
+							
 							g.restoreCanvas()
-							break
-						} catch (Exception e) {
-							Print(New StringBuilder(String.valueOf(Self.m_ClipInfo[i][3])).append("is out of bounds").toString())
-							break
-						EndIf
-					Default
-						break
+					EndIf
+				Next
+			EndIf
+		End
+		
+		Method DrawImage:Void(g:MFGraphics, i:Int, x:Int, y:Int, attr:Short)
+			If (Self.m_nClips <> Null) Then
+				Local image:= m_Ani.imageInfo[Self.m_ClipInfo[i][4]].getImage()
+				
+				Local m_Clips_2:= m_Ani.imageInfo[Self.m_ClipInfo[i][4]].getClips()[Self.m_ClipInfo[i][2]]
+				
+				Local draw_attr:= attr
+				Local tmp_attr:Int = Short(Self.m_ClipInfo[i][3] Shl 8)
+				
+				Local tmp_x:= Self.m_ClipInfo[i][0]
+				Local tmp_y:= Self.m_ClipInfo[i][1]
+				
+				Local tmp:Int
+				
+				Select (getMIDPTransId(attr))
+					Case 1
+						tmp_y = (-tmp_y) - m_Clips_2[3]
+					Case 2
+						tmp_x = (-tmp_x) - m_Clips_2[2]
+					Case 3
+						tmp_x = (-tmp_x) - m_Clips_2[2]
+						tmp_y = (-tmp_y) - m_Clips_2[3]
+					Case 4
+						tmp = tmp_x
+						tmp_x = tmp_y
+						tmp_y = tmp
+					Case 5
+						tmp = tmp_x
+						tmp_x = (-tmp_y) - m_Clips_2[3]
+						tmp_y = tmp
+					Case 6
+						tmp = tmp_x
+						tmp_x = tmp_y
+						tmp_y = (-tmp) - m_Clips_2[2]
+					Case 7
+						tmp = tmp_x
+						tmp_x = (-tmp_y) - m_Clips_2[3]
+						tmp_y = (-tmp) - m_Clips_2[2]
 				EndIf
-			EndIf
-		EndIf
-		
-	End
-
-	Public Method DrawImage:Void(g:MFGraphics, i:Int, x:Int, y:Int, attr:Short)
-		
-		If (Self.m_nClips <> Null) Then
-			MFImage image = m_Ani.imageInfo[Self.m_ClipInfo[i][4]].getImage()
-			Short[] m_Clips_2 = m_Ani.imageInfo[Self.m_ClipInfo[i][4]].getClips()[Self.m_ClipInfo[i][2]]
-			Short draw_attr = attr
-			Int tmp_attr = (Short) (Self.m_ClipInfo[i][3] Shl 8)
-			Int tmp_x = Self.m_ClipInfo[i][0]
-			Int tmp_y = Self.m_ClipInfo[i][1]
-			Int tmp
-			Select (getMIDPTransId(attr))
-				Case TitleState.STAGE_SELECT_KEY_RECORD_2
-					tmp_y = (-tmp_y) - m_Clips_2[3]
-					break
-				Case TitleState.STAGE_SELECT_KEY_DIRECT_PLAY
-					tmp_x = (-tmp_x) - m_Clips_2[2]
-					break
-				Case SpecialObject.Z_ZOOM
-					tmp_x = (-tmp_x) - m_Clips_2[2]
-					tmp_y = (-tmp_y) - m_Clips_2[3]
-					break
-				Case TitleState.CHARACTER_RECORD_BG_SPEED
-					tmp = tmp_x
-					tmp_x = tmp_y
-					tmp_y = tmp
-					break
-				Case SSDef.SSOBJ_BNRU_ID
-					tmp = tmp_x
-					tmp_x = (-tmp_y) - m_Clips_2[3]
-					tmp_y = tmp
-					break
-				Case SSDef.SSOBJ_BNLD_ID
-					tmp = tmp_x
-					tmp_x = tmp_y
-					tmp_y = (-tmp) - m_Clips_2[2]
-					break
-				Case SSDef.SSOBJ_BNRD_ID
-					tmp = tmp_x
-					tmp_x = (-tmp_y) - m_Clips_2[3]
-					tmp_y = (-tmp) - m_Clips_2[2]
-					break
-			EndIf
-			Int original_attr = tmp_attr
-			tmp_attr ~= draw_attr
-			
-			If ((tmp_attr & MFGamePad.KEY_NUM_6) <> 0) Then
-				If ((((original_attr & MFGamePad.KEY_NUM_7) <> 0 ? 1 : 0) ~ ((original_attr & MFGamePad.KEY_NUM_8) <> 0 ? 1 : 0)) <> 0) Then
+				
+				Local original_attr:= tmp_attr
+				
+				tmp_attr ~= draw_attr
+				
+				If ((tmp_attr & 4096) <> 0) Then
+					If ((Int((original_attr & 8192) <> 0) ~ Int((original_attr & 16384) <> 0)) <> 0) Then
+						tmp_attr ~= 24576
+					EndIf
+				ElseIf (Not ((original_attr & 4096) = 0 Or (draw_attr & 4096) = 0)) Then
 					tmp_attr ~= 24576
 				EndIf
 				
-			ElseIf (Not ((original_attr & MFGamePad.KEY_NUM_6) = 0 Or (draw_attr & MFGamePad.KEY_NUM_6) = 0)) Then
-				tmp_attr ~= 24576
+				g.DrawImage(image, tmp_x + x, tmp_y + y, m_Clips_2[0], m_Clips_2[1], m_Clips_2[2], m_Clips_2[3], tmp_attr)
+			EndIf
+		End
+	Private
+		Method fillRect:Void(g:MFGraphics, i:Int, iX:Int, iY:Int, attr:Int)
+			Local x:= Self.m_ClipInfo[i][0]
+			Local y:= Self.m_ClipInfo[i][1]
+			
+			If ((attr & 8192) > 0) Then
+				x = ((-x) - Self.m_ClipInfo[i][2]) + 1
 			EndIf
 			
-			Const.DrawImage(g, tmp_x + x, tmp_y + y, image, m_Clips_2[0], m_Clips_2[1], m_Clips_2[2], m_Clips_2[3], tmp_attr)
-		EndIf
-		
-	End
-
-	Private Method fillRect:Void(g:MFGraphics, i:Int, iX:Int, iY:Int, attr:Int)
-		Int x = Self.m_ClipInfo[i][0]
-		Int y = Self.m_ClipInfo[i][1]
-		
-		If ((attr & MFGamePad.KEY_NUM_7) > 0) Then
-			x = ((-x) - Self.m_ClipInfo[i][2]) + 1
-		EndIf
-		
-		If ((attr & MFGamePad.KEY_NUM_8) > 0) Then
-			y = ((-y) - Self.m_ClipInfo[i][3]) + 1
-		EndIf
-		
-		Int colorBack = g.getColor()
-		g.setColor(Self.color)
-		g.fillRect(iX + x, iY + y, Self.m_ClipInfo[i][2], Self.m_ClipInfo[i][3])
-		g.setColor(colorBack)
-	End
-
-	Private Method drawRect:Void(g:MFGraphics, i:Int, iX:Int, iY:Int, attr:Int)
-		Int x = Self.m_ClipInfo[i][0]
-		Int y = Self.m_ClipInfo[i][1]
-		
-		If ((attr & MFGamePad.KEY_NUM_7) > 0) Then
-			x = ((-x) - Self.m_ClipInfo[i][2]) + 1
-		EndIf
-		
-		If ((attr & MFGamePad.KEY_NUM_8) > 0) Then
-			y = ((-y) - Self.m_ClipInfo[i][3]) + 1
-		EndIf
-		
-		Int colorBack = g.getColor()
-		g.setColor(Self.color)
-		g.fillRect(iX + x, iY + y, Self.m_ClipInfo[i][2], Self.m_ClipInfo[i][3])
-		g.setColor(colorBack)
-	End
-
-	Private Method getMIDPTransId:Int(tmp_attr:Int)
-		Int attr = 0
-		
-		If ((tmp_attr & MFGamePad.KEY_NUM_6) <> 0) Then
-			attr = 0 | 6
-			
-			If ((tmp_attr & MFGamePad.KEY_NUM_7) <> 0) Then
-				attr ~= 1
+			If ((attr & 16384) > 0) Then
+				y = ((-y) - Self.m_ClipInfo[i][3]) + 1
 			EndIf
 			
-			If ((tmp_attr & MFGamePad.KEY_NUM_8) <> 0) Then
-				Return attr ~ 2
+			Local colorBack:= g.getColor()
+			
+			g.setColor(Self.color)
+			g.fillRect(iX + x, iY + y, Self.m_ClipInfo[i][2], Self.m_ClipInfo[i][3])
+			g.setColor(colorBack)
+		End
+	
+		Method drawRect:Void(g:MFGraphics, i:Int, iX:Int, iY:Int, attr:Int)
+			Local x:= Self.m_ClipInfo[i][0]
+			Local y:= Self.m_ClipInfo[i][1]
+			
+			If ((attr & 8192) > 0) Then
+				x = ((-x) - Self.m_ClipInfo[i][2]) + 1
+			EndIf
+			
+			If ((attr & 16384) > 0) Then
+				y = ((-y) - Self.m_ClipInfo[i][3]) + 1
+			EndIf
+			
+			Local colorBack:= g.getColor()
+			
+			g.setColor(Self.color)
+			g.fillRect(iX + x, iY + y, Self.m_ClipInfo[i][2], Self.m_ClipInfo[i][3])
+			g.setColor(colorBack)
+		End
+	
+		Method getMIDPTransId:Int(tmp_attr:Int)
+			Local attr:Int = 0
+			
+			If ((tmp_attr & 4096) <> 0) Then
+				attr = 0 | 6
+				
+				If ((tmp_attr & 8192) <> 0) Then
+					attr ~= 1
+				EndIf
+				
+				If ((tmp_attr & 16384) <> 0) Then
+					Return attr ~ 2
+				EndIf
+				
+				Return attr
+			EndIf
+			
+			If ((tmp_attr & 8192) <> 0) Then
+				attr = 0 | 2
+			EndIf
+			
+			If ((tmp_attr & 16384) <> 0) Then
+				Return attr | 1
 			EndIf
 			
 			Return attr
-		EndIf
-		
-		If ((tmp_attr & MFGamePad.KEY_NUM_7) <> 0) Then
-			attr = 0 | 2
-		EndIf
-		
-		If ((tmp_attr & MFGamePad.KEY_NUM_8) <> 0) Then
-			Return attr | 1
-		EndIf
-		
-		Return attr
-	End
+		End
 End
