@@ -9,14 +9,6 @@ Friend lib.animationframe
 
 ' Imports:
 Private
-	#Rem
-		Import mflib.bpdef
-		Import sonicgba.gimmickobject
-		Import special.ssdef
-		Import special.specialobject
-		Import state.titlestate
-	#End
-	
 	Import lib.myapi
 	
 	Import lib.animation

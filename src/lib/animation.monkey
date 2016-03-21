@@ -9,21 +9,13 @@ Friend lib.animationimageinfo
 
 ' Imports:
 Private
-	#Rem
-		Import mflib.bpdef
-		Import sonicgba.gimmickobject
-		Import special.ssdef
-		Import special.specialobject
-		Import state.titlestate
-	#End
-	
 	Import lib.myapi
 	
 	Import lib.animationframe
 	Import lib.animationimageinfo
 	
 	Import com.sega.mobile.framework.device.mfdevice
-	Import com.sega.mobile.framework.device.mfgamepad
+	'Import com.sega.mobile.framework.device.mfgamepad
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
 	
