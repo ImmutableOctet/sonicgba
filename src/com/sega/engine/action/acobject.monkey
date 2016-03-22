@@ -84,7 +84,7 @@ Class ACObject Implements ACParam Abstract
 			Return Self.posX
 		End
 		
-		Public Method getY:Int()
+		Method getY:Int()
 			Return Self.posY
 		End
 		
