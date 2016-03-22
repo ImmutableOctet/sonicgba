@@ -1,12 +1,20 @@
 <?xml version="1.0"?>
 <JiProjUserOptions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Files>
+    <DocUserOptions Filename=".\src\com\sega\engine\action\acblock.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>2</X>
+        <Y>54</Y>
+      </CursorPos>
+      <DocGUID>354e77ef-4e6a-4264-924f-4e99d9bf8ec7</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acparam.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>1</X>
-        <Y>14</Y>
+        <X>3</X>
+        <Y>15</Y>
       </CursorPos>
-      <DocGUID>4a8f55cd-9a28-4b9b-9224-64adcc7c244a</DocGUID>
+      <DocGUID>7c2d2744-8c28-4da9-a8dc-609d4c6b46b0</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\define\mdphone.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
