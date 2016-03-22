@@ -25,6 +25,11 @@ Class MFImage
 	Protected
 		' Fields:
 		Field image:Image
+		
+		' Methods:
+		
+		' Extensions:
+		Method ensure
 	Private
 		' Functions:
 		
@@ -127,7 +132,7 @@ Class MFImage
 			Local ret:= New MFImage()
 			
 			ret.image = New Image(width, height, 0.0, 0.0)
-			ret.graphics = MFGraphics.createMFGraphics(ret.getGraphics(), width, height)
+			ret.graphics = MFGraphics.createMFGraphics(ret.getGraphics().getSystemgraphics(), width, height)
 			ret.mutable = True
 			
 			Return ret
@@ -179,7 +184,7 @@ Class MFImage
 		Method getAlphaColor:Int()
 			Return Self.alphaColor
 		End
-	
+		
 		Method setAlpha:Void(a:Int)
 			'Self.image.setAlpha(a)
 		End
