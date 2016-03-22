@@ -3,13 +3,11 @@ Strict
 Public
 
 ' Imports:
-' Nothing so far.
+Import application
 
 ' Functions:
 Function Main:Int()
-	Seed = Millisecs()
-	
-	'New Game()
+	New Application()
 	
 	Return 0
 End
