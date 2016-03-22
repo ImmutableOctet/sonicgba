@@ -74,7 +74,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acparam.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
+        <X>22</X>
         <Y>11</Y>
       </CursorPos>
       <DocGUID>2eb090d5-c6ad-436d-a907-05e8a222bf80</DocGUID>
@@ -113,8 +113,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acworldcollisioncalculator.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
-        <Y>783</Y>
+        <X>5</X>
+        <Y>945</Y>
       </CursorPos>
       <DocGUID>89ec1983-40bd-46ea-b524-b554d4ab7f15</DocGUID>
       <Bookmarks />

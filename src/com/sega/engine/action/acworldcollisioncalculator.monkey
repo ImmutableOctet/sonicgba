@@ -714,7 +714,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 					plumbDegree = ((degree + 90) Mod 360)
 					
 					If ((((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100) > 0) Then
-						Self.actionState = 0
+						Self.actionState = WALK_ACTION_STATE
 						
 						Self.footX = ACUtilities.getRelativePointX(Self.collisionData.collisionX, -Self.footCollisionPointOffsetX[Self.collisionData.chkPointID], -Self.footCollisionPointOffsetY, degree)
 						Self.footY = ACUtilities.getRelativePointY(Self.collisionData.collisionY, -Self.footCollisionPointOffsetX[Self.collisionData.chkPointID], -Self.footCollisionPointOffsetY, degree)
@@ -786,974 +786,164 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 			calObjPositionFromFoot()
 		End
 
-	/* JADX WARNING: inconsistent code. */
-	/* Code decompiled incorrectly, please refer to instructions dump. */
-	Private Method findTheFootPoint:Void()
-		/*
-		r21 = Self
-		r0 = r21
-		r0 = r0.actionState
-		r15 = r0
-		r16 = 1
-		r0 = r15
-		r1 = r16
+		Method findTheFootPoint:Void()
+			If (Self.actionState = JUMP_ACTION_STATE) Then
+				Self.chkPointX = ACUtilities.getRelativePointX(Self.footX, Self.footCollisionPointOffsetX[Self.priorityChkId], Self.footCollisionPointOffsetY, Self.footDegree)
+				Self.chkPointY = ACUtilities.getRelativePointY(Self.footY, Self.footCollisionPointOffsetX[Self.priorityChkId], Self.footCollisionPointOffsetY, Self.footDegree)
+				
+				Self.chkPointId = Self.priorityChkId
+				Self.chkPointDegree = Self.footDegree
+				
+				Self.calChkOffset(Self.chkPointX, Self.chkPointY, Self.chkPointId, Self.chkPointDegree)
+			Else
+				Local var1:= Self.getDirectionByDegree(Self.footDegree)
+				
+				Select (var1)
+					Case DIRECTION_UP, DIRECTION_DOWN
+						Local var10:= Self.footDegree
+						Local var11:= NO_COLLISION
+						Local var12:= -1
+						
+						For Local var13:= 0 Until Self.footCollisionPointOffsetX.Length
+							Self.footCollisionPointResaultX[var13] = ACUtilities.getRelativePointX(Self.footX, Self.footCollisionPointOffsetX[var13], Self.footCollisionPointOffsetY, var10)
+							Self.footCollisionPointResaultY[var13] = Self.getWorldY(Self.footCollisionPointResaultX[var13], ACUtilities.getRelativePointY(Self.footY, Self.footCollisionPointOffsetX[var13], Self.footCollisionPointOffsetY + Self.user.getPressToGround(), var10), var1)
+							
+							If (Self.footCollisionPointResaultY[var13] <> NO_COLLISION And (var11 = NO_COLLISION Or var1 = DIRECTION_UP And Self.footCollisionPointResaultY[var13] < var11 Or var1 = DIRECTION_DOWN And Self.footCollisionPointResaultY[var13] > var11 Or var13 = Self.priorityChkId)) Then
+								var12 = var13
+								var11 = Self.footCollisionPointResaultY[var13]
+								
+								If (var13 = Self.priorityChkId) Then
+									Exit
+								EndIf
+							EndIf
+						Next
+						
+						' Check if this variable was set:
+						If (var12 = -1) Then
+							Self.user.doWhileLeaveGround()
+							
+							Self.chkPointX = ACUtilities.getRelativePointX(Self.footX, Self.footCollisionPointOffsetX[Self.priorityChkId], Self.footCollisionPointOffsetY, var10)
+							Self.chkPointY = ACUtilities.getRelativePointY(Self.footY, Self.footCollisionPointOffsetX[Self.priorityChkId], Self.footCollisionPointOffsetY, var10)
+							
+							Self.chkPointId = Self.priorityChkId
+							Self.chkPointDegree = Self.footDegree
+							
+							Self.calChkOffset(Self.chkPointX, Self.chkPointY, Self.chkPointId, Self.chkPointDegree)
+							
+							Self.actionState = JUMP_ACTION_STATE
+							
+							Return
+						EndIf
 		
-		If (r0 <> r1) goto L_0x0094
-	L_0x000c:
-		r0 = r21
-		r0 = r0.footX
-		r15 = r0
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetX
-		r16 = r0
-		r0 = r21
-		r0 = r0.priorityChkId
-		r17 = r0
-		r16 = r16[r17]
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetY
-		r17 = r0
-		r0 = r21
-		r0 = r0.footDegree
-		r18 = r0
-		r15 = com.sega.engine.action.ACUtilities.getRelativePointX(r15, r16, r17, r18)
-		r0 = r15
-		r1 = r21
-		r1.chkPointX = r0
-		r0 = r21
-		r0 = r0.footY
-		r15 = r0
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetX
-		r16 = r0
-		r0 = r21
-		r0 = r0.priorityChkId
-		r17 = r0
-		r16 = r16[r17]
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetY
-		r17 = r0
-		r0 = r21
-		r0 = r0.footDegree
-		r18 = r0
-		r15 = com.sega.engine.action.ACUtilities.getRelativePointY(r15, r16, r17, r18)
-		r0 = r15
-		r1 = r21
-		r1.chkPointY = r0
-		r0 = r21
-		r0 = r0.priorityChkId
-		r15 = r0
-		r0 = r15
-		r1 = r21
-		r1.chkPointId = r0
-		r0 = r21
-		r0 = r0.footDegree
-		r15 = r0
-		r0 = r15
-		r1 = r21
-		r1.chkPointDegree = r0
-		r0 = r21
-		r0 = r0.chkPointX
-		r15 = r0
-		r0 = r21
-		r0 = r0.chkPointY
-		r16 = r0
-		r0 = r21
-		r0 = r0.chkPointId
-		r17 = r0
-		r0 = r21
-		r0 = r0.chkPointDegree
-		r18 = r0
-		r0 = r21
-		r1 = r15
-		r2 = r16
-		r3 = r17
-		r4 = r18
-		r0.calChkOffset(r1, r2, r3, r4)
-	L_0x0093:
-		Return
-	L_0x0094:
-		r0 = r21
-		r0 = r0.footDegree
-		r15 = r0
-		r0 = r21
-		r1 = r15
-		r7 = r0.getDirectionByDegree(r1)
-		r11 = -1
-		r5 = 0
-		Select(r7)
-			Case 0 goto L_0x00a6
-			Case 1 goto L_0x036f
-			Case 2 goto L_0x00a6
-			Case 3 goto L_0x036f
-			Default goto L_0x00a5
-		EndIf
+						Self.chkPointX = Self.footCollisionPointResaultX[var12]
+						Self.chkPointY = var11
+						Self.chkPointId = var12
+						Self.chkPointDegree = Self.footDegree
+						
+						Self.calChkOffset(Self.chkPointX, Self.chkPointY, Self.chkPointId, Self.chkPointDegree)
+						Self.footDegree = Self.getDegreeFromWorld(Self.footDegree, Self.chkPointX, Self.chkPointY, Self.acObj.posZ)
+						
+						Self.actionState = WALK_ACTION_STATE
+						
+						Local var14:= ((90 + Self.footDegree) Mod 360)
+						Local var15:= (Self.moveDistanceX * MyAPI.dCos(var14) + Self.moveDistanceY * MyAPI.dSin(var14)) / 100 + Self.user.getPressToGround()
+						Local var16:= CrlFP32.actTanDegree(Self.acObj.velY, Self.acObj.velX)
+						Local var17:= Self.getDegreeDiff(Self.footDegree, var16)
+						
+						If (var15 < 0 And var17 > Self.user.getMinDegreeToLeaveGround()) Then
+							Self.user.doWhileLeaveGround()
+							
+							Self.chkPointX = ACUtilities.getRelativePointX(Self.footX, Self.footCollisionPointOffsetX[Self.priorityChkId], Self.footCollisionPointOffsetY, var10)
+							Self.chkPointY = ACUtilities.getRelativePointY(Self.footY, Self.footCollisionPointOffsetX[Self.priorityChkId], Self.footCollisionPointOffsetY, var10)
+							
+							Self.chkPointId = Self.priorityChkId
+							Self.chkPointDegree = Self.footDegree
+							
+							Self.calChkOffset(Self.chkPointX, Self.chkPointY, Self.chkPointId, Self.chkPointDegree)
+							
+							Self.actionState = JUMP_ACTION_STATE
+							
+							return
+						EndIf
+					Case DIRECTION_RIGHT, DIRECTION_LEFT
+						Local var2:= NO_COLLISION
+						Local var3:= Self.footDegree
+						Local var4:= -1
+						
+						If (Self.checkArrayForShowX = Null) Then
+							Self.checkArrayForShowX = new Int[Self.footCollisionPointOffsetX.length]
+							Self.checkArrayForShowY = new Int[Self.footCollisionPointOffsetX.length]
+						EndIf
+						
+						For Local var5:= 0 Until Self.footCollisionPointOffsetX.Length
+							Self.footCollisionPointResaultY[var5] = ACUtilities.getRelativePointY(Self.footY, Self.footCollisionPointOffsetX[var5], Self.footCollisionPointOffsetY, var3)
+							
+							Self.checkArrayForShowX[var5] = ACUtilities.getRelativePointX(Self.footX, Self.footCollisionPointOffsetX[var5], Self.footCollisionPointOffsetY + Self.user.getPressToGround(), var3)
+							Self.checkArrayForShowY[var5] = Self.footCollisionPointResaultY[var5]
+							
+							Self.footCollisionPointResaultX[var5] = Self.getWorldX(ACUtilities.getRelativePointX(Self.footX, Self.footCollisionPointOffsetX[var5], Self.footCollisionPointOffsetY + Self.user.getPressToGround(), var3), Self.footCollisionPointResaultY[var5], var1)
+							
+							If (Self.footCollisionPointResaultX[var5] <> NO_COLLISION And (var2 = NO_COLLISION Or var1 = DIRECTION_RIGHT And Self.footCollisionPointResaultX[var5] > var2 Or var1 = DIRECTION_LEFT And Self.footCollisionPointResaultX[var5] < var2 Or var5 = Self.priorityChkId)) Then
+								var4 = var5
+								var2 = Self.footCollisionPointResaultX[var5]
+								
+								If (var5 = Self.priorityChkId) Then
+									Exit
+								EndIf
+							EndIf
+						Next
 		
-	L_0x00a5:
-		goto L_0x0093
-	L_0x00a6:
-		r0 = r21
-		r0 = r0.footDegree
-		r5 = r0
-		r10 = NO_COLLISION; // 0xfffffffffffffc18 Float:NaN double:NaN
-		r11 = -1
-		r8 = 0
-	L_0x00af:
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetX
-		r15 = r0
-		r15 = r15.length
+						If (var4 = -1) Then
+							Self.user.doWhileLeaveGround()
+							
+							Self.chkPointX = ACUtilities.getRelativePointX(Self.footX, Self.footCollisionPointOffsetX[Self.priorityChkId], Self.footCollisionPointOffsetY, var3)
+							Self.chkPointY = ACUtilities.getRelativePointY(Self.footY, Self.footCollisionPointOffsetX[Self.priorityChkId], Self.footCollisionPointOffsetY, var3)
+							
+							Self.chkPointId = Self.priorityChkId
+							Self.chkPointDegree = Self.footDegree
+							
+							Self.calChkOffset(Self.chkPointX, Self.chkPointY, Self.chkPointId, Self.chkPointDegree)
+							
+							Self.actionState = JUMP_ACTION_STATE
+							
+							Return
+						EndIf
 		
-		If (r8 < r15) goto L_0x022a
-	L_0x00b7:
-		r15 = -1
-		
-		If (r11 = r15) goto L_0x02d8
-	L_0x00ba:
-		r0 = r21
-		r0 = r0.footCollisionPointResaultX
-		r15 = r0
-		r15 = r15[r11]
-		r0 = r15
-		r1 = r21
-		r1.chkPointX = r0
-		r0 = r10
-		r1 = r21
-		r1.chkPointY = r0
-		r0 = r11
-		r1 = r21
-		r1.chkPointId = r0
-		r0 = r21
-		r0 = r0.footDegree
-		r15 = r0
-		r0 = r15
-		r1 = r21
-		r1.chkPointDegree = r0
-		r0 = r21
-		r0 = r0.chkPointX
-		r15 = r0
-		r0 = r21
-		r0 = r0.chkPointY
-		r16 = r0
-		r0 = r21
-		r0 = r0.chkPointId
-		r17 = r0
-		r0 = r21
-		r0 = r0.chkPointDegree
-		r18 = r0
-		r0 = r21
-		r1 = r15
-		r2 = r16
-		r3 = r17
-		r4 = r18
-		r0.calChkOffset(r1, r2, r3, r4)
-		r0 = r21
-		r0 = r0.footDegree
-		r15 = r0
-		r0 = r21
-		r0 = r0.chkPointX
-		r16 = r0
-		r0 = r21
-		r0 = r0.chkPointY
-		r17 = r0
-		r0 = r21
-		r0 = r0.acObj
-		r18 = r0
-		r0 = r18
-		r0 = r0.posZ
-		r18 = r0
-		r0 = r21
-		r1 = r15
-		r2 = r16
-		r3 = r17
-		r4 = r18
-		r15 = r0.getDegreeFromWorld(r1, r2, r3, r4)
-		r0 = r15
-		r1 = r21
-		r1.footDegree = r0
-		r15 = 0
-		r0 = r15
-		r1 = r21
-		r1.actionState = r0
-		r0 = r21
-		r0 = r0.footDegree
-		r15 = r0
-		r15 = r15 + 90
-		r12 = r15 Mod 360
-		r0 = r21
-		r0 = r0.moveDistanceX
-		r15 = r0
-		r16 = com.sega.engine.lib.Cos(r12)
-		r15 = r15 * r16
-		r0 = r21
-		r0 = r0.moveDistanceY
-		r16 = r0
-		r17 = com.sega.engine.lib.Sin(r12)
-		r16 = r16 * r17
-		r15 = r15 + r16
-		r15 = r15 / 100
-		r0 = r21
-		r0 = r0.user
-		r16 = r0
-		r16 = r16.getPressToGround()
-		r13 = r15 + r16
-		r0 = r21
-		r0 = r0.acObj
-		r15 = r0
-		r15 = r15.velY
-		r0 = r21
-		r0 = r0.acObj
-		r16 = r0
-		r0 = r16
-		r0 = r0.velX
-		r16 = r0
-		r14 = com.sega.engine.lib.CrlFP32.actTanDegree(r15, r16)
-		r0 = r21
-		r0 = r0.footDegree
-		r15 = r0
-		r0 = r21
-		r1 = r15
-		r2 = r14
-		r6 = r0.getDegreeDiff(r1, r2)
-		
-		If (r13 >= 0) goto L_0x0093
-	L_0x0188:
-		r0 = r21
-		r0 = r0.user
-		r15 = r0
-		r15 = r15.getMinDegreeToLeaveGround()
-		
-		If (r6 <= r15) goto L_0x0093
-	L_0x0193:
-		r0 = r21
-		r0 = r0.user
-		r15 = r0
-		r15.doWhileLeaveGround()
-		r0 = r21
-		r0 = r0.footX
-		r15 = r0
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetX
-		r16 = r0
-		r0 = r21
-		r0 = r0.priorityChkId
-		r17 = r0
-		r16 = r16[r17]
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetY
-		r17 = r0
-		r0 = r15
-		r1 = r16
-		r2 = r17
-		r3 = r5
-		r15 = com.sega.engine.action.ACUtilities.getRelativePointX(r0, r1, r2, r3)
-		r0 = r15
-		r1 = r21
-		r1.chkPointX = r0
-		r0 = r21
-		r0 = r0.footY
-		r15 = r0
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetX
-		r16 = r0
-		r0 = r21
-		r0 = r0.priorityChkId
-		r17 = r0
-		r16 = r16[r17]
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetY
-		r17 = r0
-		r0 = r15
-		r1 = r16
-		r2 = r17
-		r3 = r5
-		r15 = com.sega.engine.action.ACUtilities.getRelativePointY(r0, r1, r2, r3)
-		r0 = r15
-		r1 = r21
-		r1.chkPointY = r0
-		r0 = r21
-		r0 = r0.priorityChkId
-		r15 = r0
-		r0 = r15
-		r1 = r21
-		r1.chkPointId = r0
-		r0 = r21
-		r0 = r0.footDegree
-		r15 = r0
-		r0 = r15
-		r1 = r21
-		r1.chkPointDegree = r0
-		r0 = r21
-		r0 = r0.chkPointX
-		r15 = r0
-		r0 = r21
-		r0 = r0.chkPointY
-		r16 = r0
-		r0 = r21
-		r0 = r0.chkPointId
-		r17 = r0
-		r0 = r21
-		r0 = r0.chkPointDegree
-		r18 = r0
-		r0 = r21
-		r1 = r15
-		r2 = r16
-		r3 = r17
-		r4 = r18
-		r0.calChkOffset(r1, r2, r3, r4)
-		r15 = 1
-		r0 = r15
-		r1 = r21
-		r1.actionState = r0
-		goto L_0x0093
-	L_0x022a:
-		r0 = r21
-		r0 = r0.footCollisionPointResaultX
-		r15 = r0
-		r0 = r21
-		r0 = r0.footX
-		r16 = r0
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetX
-		r17 = r0
-		r17 = r17[r8]
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetY
-		r18 = r0
-		r0 = r16
-		r1 = r17
-		r2 = r18
-		r3 = r5
-		r16 = com.sega.engine.action.ACUtilities.getRelativePointX(r0, r1, r2, r3)
-		r15[r8] = r16
-		r0 = r21
-		r0 = r0.footCollisionPointResaultY
-		r15 = r0
-		r0 = r21
-		r0 = r0.footCollisionPointResaultX
-		r16 = r0
-		r16 = r16[r8]
-		r0 = r21
-		r0 = r0.footY
-		r17 = r0
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetX
-		r18 = r0
-		r18 = r18[r8]
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetY
-		r19 = r0
-		r0 = r21
-		r0 = r0.user
-		r20 = r0
-		r20 = r20.getPressToGround()
-		r19 = r19 + r20
-		r0 = r17
-		r1 = r18
-		r2 = r19
-		r3 = r5
-		r17 = com.sega.engine.action.ACUtilities.getRelativePointY(r0, r1, r2, r3)
-		r0 = r21
-		r1 = r16
-		r2 = r17
-		r3 = r7
-		r16 = r0.getWorldY(r1, r2, r3)
-		r15[r8] = r16
-		r0 = r21
-		r0 = r0.footCollisionPointResaultY
-		r15 = r0
-		r15 = r15[r8]
-		r16 = NO_COLLISION; // 0xfffffffffffffc18 Float:NaN double:NaN
-		r0 = r15
-		r1 = r16
-		
-		If (r0 = r1) goto L_0x02d4
-	L_0x02a3:
-		r15 = NO_COLLISION; // 0xfffffffffffffc18 Float:NaN double:NaN
-		
-		If (r10 = r15) goto L_0x02c5
-	L_0x02a7:
-		
-		If (r7 <> 0) goto L_0x02b2
-	L_0x02a9:
-		r0 = r21
-		r0 = r0.footCollisionPointResaultY
-		r15 = r0
-		r15 = r15[r8]
-		
-		If (r15 < r10) goto L_0x02c5
-	L_0x02b2:
-		r15 = 2
-		
-		If (r7 <> r15) goto L_0x02be
-	L_0x02b5:
-		r0 = r21
-		r0 = r0.footCollisionPointResaultY
-		r15 = r0
-		r15 = r15[r8]
-		
-		If (r15 > r10) goto L_0x02c5
-	L_0x02be:
-		r0 = r21
-		r0 = r0.priorityChkId
-		r15 = r0
-		
-		If (r8 <> r15) goto L_0x02d4
-	L_0x02c5:
-		r11 = r8
-		r0 = r21
-		r0 = r0.footCollisionPointResaultY
-		r15 = r0
-		r10 = r15[r8]
-		r0 = r21
-		r0 = r0.priorityChkId
-		r15 = r0
-		
-		If (r8 = r15) goto L_0x00b7
-	L_0x02d4:
-		r8 = r8 + 1
-		goto L_0x00af
-	L_0x02d8:
-		r0 = r21
-		r0 = r0.user
-		r15 = r0
-		r15.doWhileLeaveGround()
-		r0 = r21
-		r0 = r0.footX
-		r15 = r0
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetX
-		r16 = r0
-		r0 = r21
-		r0 = r0.priorityChkId
-		r17 = r0
-		r16 = r16[r17]
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetY
-		r17 = r0
-		r0 = r15
-		r1 = r16
-		r2 = r17
-		r3 = r5
-		r15 = com.sega.engine.action.ACUtilities.getRelativePointX(r0, r1, r2, r3)
-		r0 = r15
-		r1 = r21
-		r1.chkPointX = r0
-		r0 = r21
-		r0 = r0.footY
-		r15 = r0
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetX
-		r16 = r0
-		r0 = r21
-		r0 = r0.priorityChkId
-		r17 = r0
-		r16 = r16[r17]
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetY
-		r17 = r0
-		r0 = r15
-		r1 = r16
-		r2 = r17
-		r3 = r5
-		r15 = com.sega.engine.action.ACUtilities.getRelativePointY(r0, r1, r2, r3)
-		r0 = r15
-		r1 = r21
-		r1.chkPointY = r0
-		r0 = r21
-		r0 = r0.priorityChkId
-		r15 = r0
-		r0 = r15
-		r1 = r21
-		r1.chkPointId = r0
-		r0 = r21
-		r0 = r0.footDegree
-		r15 = r0
-		r0 = r15
-		r1 = r21
-		r1.chkPointDegree = r0
-		r0 = r21
-		r0 = r0.chkPointX
-		r15 = r0
-		r0 = r21
-		r0 = r0.chkPointY
-		r16 = r0
-		r0 = r21
-		r0 = r0.chkPointId
-		r17 = r0
-		r0 = r21
-		r0 = r0.chkPointDegree
-		r18 = r0
-		r0 = r21
-		r1 = r15
-		r2 = r16
-		r3 = r17
-		r4 = r18
-		r0.calChkOffset(r1, r2, r3, r4)
-		r15 = 1
-		r0 = r15
-		r1 = r21
-		r1.actionState = r0
-		goto L_0x0093
-	L_0x036f:
-		r9 = NO_COLLISION; // 0xfffffffffffffc18 Float:NaN double:NaN
-		r0 = r21
-		r0 = r0.footDegree
-		r5 = r0
-		r11 = -1
-		r0 = r21
-		r0 = r0.checkArrayForShowX
-		r15 = r0
-		
-		If (r15 <> 0) goto L_0x0398
-	L_0x037e:
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetX
-		r15 = r0
-		r15 = r15.length
-		r15 = New Int[r15]
-		r0 = r15
-		r1 = r21
-		r1.checkArrayForShowX = r0
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetX
-		r15 = r0
-		r15 = r15.length
-		r15 = New Int[r15]
-		r0 = r15
-		r1 = r21
-		r1.checkArrayForShowY = r0
-	L_0x0398:
-		r8 = 0
-	L_0x0399:
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetX
-		r15 = r0
-		r15 = r15.length
-		
-		If (r8 < r15) goto L_0x050c
-	L_0x03a1:
-		r15 = -1
-		
-		If (r11 = r15) goto L_0x05fc
-	L_0x03a4:
-		r0 = r9
-		r1 = r21
-		r1.chkPointX = r0
-		r0 = r21
-		r0 = r0.footCollisionPointResaultY
-		r15 = r0
-		r15 = r15[r11]
-		r0 = r15
-		r1 = r21
-		r1.chkPointY = r0
-		r0 = r11
-		r1 = r21
-		r1.chkPointId = r0
-		r0 = r21
-		r0 = r0.footDegree
-		r15 = r0
-		r0 = r15
-		r1 = r21
-		r1.chkPointDegree = r0
-		r0 = r21
-		r0 = r0.footDegree
-		r15 = r0
-		r0 = r21
-		r0 = r0.chkPointX
-		r16 = r0
-		r0 = r21
-		r0 = r0.chkPointY
-		r17 = r0
-		r0 = r21
-		r0 = r0.acObj
-		r18 = r0
-		r0 = r18
-		r0 = r0.posZ
-		r18 = r0
-		r0 = r21
-		r1 = r15
-		r2 = r16
-		r3 = r17
-		r4 = r18
-		r15 = r0.getDegreeFromWorld(r1, r2, r3, r4)
-		r0 = r15
-		r1 = r21
-		r1.footDegree = r0
-		r0 = r21
-		r0 = r0.chkPointX
-		r15 = r0
-		r0 = r21
-		r0 = r0.chkPointY
-		r16 = r0
-		r0 = r21
-		r0 = r0.chkPointId
-		r17 = r0
-		r0 = r21
-		r0 = r0.chkPointDegree
-		r18 = r0
-		r0 = r21
-		r1 = r15
-		r2 = r16
-		r3 = r17
-		r4 = r18
-		r0.calChkOffset(r1, r2, r3, r4)
-		r15 = 0
-		r0 = r15
-		r1 = r21
-		r1.actionState = r0
-		r0 = r21
-		r0 = r0.footDegree
-		r15 = r0
-		r15 = r15 + 90
-		r12 = r15 Mod 360
-		r0 = r21
-		r0 = r0.moveDistanceX
-		r15 = r0
-		r16 = com.sega.engine.lib.Cos(r12)
-		r15 = r15 * r16
-		r0 = r21
-		r0 = r0.moveDistanceY
-		r16 = r0
-		r17 = com.sega.engine.lib.Sin(r12)
-		r16 = r16 * r17
-		r15 = r15 + r16
-		r15 = r15 / 100
-		r0 = r21
-		r0 = r0.user
-		r16 = r0
-		r16 = r16.getPressToGround()
-		r13 = r15 + r16
-		r0 = r21
-		r0 = r0.moveDistanceY
-		r15 = r0
-		r0 = r21
-		r0 = r0.moveDistanceX
-		r16 = r0
-		r14 = com.sega.engine.lib.CrlFP32.actTanDegree(r15, r16)
-		r0 = r21
-		r0 = r0.footDegree
-		r15 = r0
-		r0 = r21
-		r1 = r15
-		r2 = r14
-		r6 = r0.getDegreeDiff(r1, r2)
-		
-		If (r13 >= 0) goto L_0x0093
-	L_0x046a:
-		r0 = r21
-		r0 = r0.user
-		r15 = r0
-		r15 = r15.getMinDegreeToLeaveGround()
-		
-		If (r6 <= r15) goto L_0x0093
-	L_0x0475:
-		r0 = r21
-		r0 = r0.user
-		r15 = r0
-		r15.doWhileLeaveGround()
-		r0 = r21
-		r0 = r0.footX
-		r15 = r0
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetX
-		r16 = r0
-		r0 = r21
-		r0 = r0.priorityChkId
-		r17 = r0
-		r16 = r16[r17]
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetY
-		r17 = r0
-		r0 = r15
-		r1 = r16
-		r2 = r17
-		r3 = r5
-		r15 = com.sega.engine.action.ACUtilities.getRelativePointX(r0, r1, r2, r3)
-		r0 = r15
-		r1 = r21
-		r1.chkPointX = r0
-		r0 = r21
-		r0 = r0.footY
-		r15 = r0
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetX
-		r16 = r0
-		r0 = r21
-		r0 = r0.priorityChkId
-		r17 = r0
-		r16 = r16[r17]
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetY
-		r17 = r0
-		r0 = r15
-		r1 = r16
-		r2 = r17
-		r3 = r5
-		r15 = com.sega.engine.action.ACUtilities.getRelativePointY(r0, r1, r2, r3)
-		r0 = r15
-		r1 = r21
-		r1.chkPointY = r0
-		r0 = r21
-		r0 = r0.priorityChkId
-		r15 = r0
-		r0 = r15
-		r1 = r21
-		r1.chkPointId = r0
-		r0 = r21
-		r0 = r0.footDegree
-		r15 = r0
-		r0 = r15
-		r1 = r21
-		r1.chkPointDegree = r0
-		r0 = r21
-		r0 = r0.chkPointX
-		r15 = r0
-		r0 = r21
-		r0 = r0.chkPointY
-		r16 = r0
-		r0 = r21
-		r0 = r0.chkPointId
-		r17 = r0
-		r0 = r21
-		r0 = r0.chkPointDegree
-		r18 = r0
-		r0 = r21
-		r1 = r15
-		r2 = r16
-		r3 = r17
-		r4 = r18
-		r0.calChkOffset(r1, r2, r3, r4)
-		r15 = 1
-		r0 = r15
-		r1 = r21
-		r1.actionState = r0
-		goto L_0x0093
-	L_0x050c:
-		r0 = r21
-		r0 = r0.footCollisionPointResaultY
-		r15 = r0
-		r0 = r21
-		r0 = r0.footY
-		r16 = r0
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetX
-		r17 = r0
-		r17 = r17[r8]
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetY
-		r18 = r0
-		r0 = r16
-		r1 = r17
-		r2 = r18
-		r3 = r5
-		r16 = com.sega.engine.action.ACUtilities.getRelativePointY(r0, r1, r2, r3)
-		r15[r8] = r16
-		r0 = r21
-		r0 = r0.checkArrayForShowX
-		r15 = r0
-		r0 = r21
-		r0 = r0.footX
-		r16 = r0
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetX
-		r17 = r0
-		r17 = r17[r8]
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetY
-		r18 = r0
-		r0 = r21
-		r0 = r0.user
-		r19 = r0
-		r19 = r19.getPressToGround()
-		r18 = r18 + r19
-		r0 = r16
-		r1 = r17
-		r2 = r18
-		r3 = r5
-		r16 = com.sega.engine.action.ACUtilities.getRelativePointX(r0, r1, r2, r3)
-		r15[r8] = r16
-		r0 = r21
-		r0 = r0.checkArrayForShowY
-		r15 = r0
-		r0 = r21
-		r0 = r0.footCollisionPointResaultY
-		r16 = r0
-		r16 = r16[r8]
-		r15[r8] = r16
-		r0 = r21
-		r0 = r0.footCollisionPointResaultX
-		r15 = r0
-		r0 = r21
-		r0 = r0.footX
-		r16 = r0
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetX
-		r17 = r0
-		r17 = r17[r8]
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetY
-		r18 = r0
-		r0 = r21
-		r0 = r0.user
-		r19 = r0
-		r19 = r19.getPressToGround()
-		r18 = r18 + r19
-		r0 = r16
-		r1 = r17
-		r2 = r18
-		r3 = r5
-		r16 = com.sega.engine.action.ACUtilities.getRelativePointX(r0, r1, r2, r3)
-		r0 = r21
-		r0 = r0.footCollisionPointResaultY
-		r17 = r0
-		r17 = r17[r8]
-		r0 = r21
-		r1 = r16
-		r2 = r17
-		r3 = r7
-		r16 = r0.getWorldX(r1, r2, r3)
-		r15[r8] = r16
-		r0 = r21
-		r0 = r0.footCollisionPointResaultX
-		r15 = r0
-		r15 = r15[r8]
-		r16 = NO_COLLISION; // 0xfffffffffffffc18 Float:NaN double:NaN
-		r0 = r15
-		r1 = r16
-		
-		If (r0 = r1) goto L_0x05f8
-	L_0x05c6:
-		r15 = NO_COLLISION; // 0xfffffffffffffc18 Float:NaN double:NaN
-		
-		If (r9 = r15) goto L_0x05e9
-	L_0x05ca:
-		r15 = 1
-		
-		If (r7 <> r15) goto L_0x05d6
-	L_0x05cd:
-		r0 = r21
-		r0 = r0.footCollisionPointResaultX
-		r15 = r0
-		r15 = r15[r8]
-		
-		If (r15 > r9) goto L_0x05e9
-	L_0x05d6:
-		r15 = 3
-		
-		If (r7 <> r15) goto L_0x05e2
-	L_0x05d9:
-		r0 = r21
-		r0 = r0.footCollisionPointResaultX
-		r15 = r0
-		r15 = r15[r8]
-		
-		If (r15 < r9) goto L_0x05e9
-	L_0x05e2:
-		r0 = r21
-		r0 = r0.priorityChkId
-		r15 = r0
-		
-		If (r8 <> r15) goto L_0x05f8
-	L_0x05e9:
-		r11 = r8
-		r0 = r21
-		r0 = r0.footCollisionPointResaultX
-		r15 = r0
-		r9 = r15[r8]
-		r0 = r21
-		r0 = r0.priorityChkId
-		r15 = r0
-		
-		If (r8 = r15) goto L_0x03a1
-	L_0x05f8:
-		r8 = r8 + 1
-		goto L_0x0399
-	L_0x05fc:
-		r0 = r21
-		r0 = r0.user
-		r15 = r0
-		r15.doWhileLeaveGround()
-		r0 = r21
-		r0 = r0.footX
-		r15 = r0
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetX
-		r16 = r0
-		r0 = r21
-		r0 = r0.priorityChkId
-		r17 = r0
-		r16 = r16[r17]
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetY
-		r17 = r0
-		r0 = r15
-		r1 = r16
-		r2 = r17
-		r3 = r5
-		r15 = com.sega.engine.action.ACUtilities.getRelativePointX(r0, r1, r2, r3)
-		r0 = r15
-		r1 = r21
-		r1.chkPointX = r0
-		r0 = r21
-		r0 = r0.footY
-		r15 = r0
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetX
-		r16 = r0
-		r0 = r21
-		r0 = r0.priorityChkId
-		r17 = r0
-		r16 = r16[r17]
-		r0 = r21
-		r0 = r0.footCollisionPointOffsetY
-		r17 = r0
-		r0 = r15
-		r1 = r16
-		r2 = r17
-		r3 = r5
-		r15 = com.sega.engine.action.ACUtilities.getRelativePointY(r0, r1, r2, r3)
-		r0 = r15
-		r1 = r21
-		r1.chkPointY = r0
-		r0 = r21
-		r0 = r0.priorityChkId
-		r15 = r0
-		r0 = r15
-		r1 = r21
-		r1.chkPointId = r0
-		r0 = r21
-		r0 = r0.footDegree
-		r15 = r0
-		r0 = r15
-		r1 = r21
-		r1.chkPointDegree = r0
-		r0 = r21
-		r0 = r0.chkPointX
-		r15 = r0
-		r0 = r21
-		r0 = r0.chkPointY
-		r16 = r0
-		r0 = r21
-		r0 = r0.chkPointId
-		r17 = r0
-		r0 = r21
-		r0 = r0.chkPointDegree
-		r18 = r0
-		r0 = r21
-		r1 = r15
-		r2 = r16
-		r3 = r17
-		r4 = r18
-		r0.calChkOffset(r1, r2, r3, r4)
-		r15 = 1
-		r0 = r15
-		r1 = r21
-		r1.actionState = r0
-		goto L_0x0093
-		*/
-		throw New UnsupportedOperationException("Method not decompiled: com.sega.engine.action.ACWorldCollisionCalculator.findTheFootPoint():Void")
-	End
+						Self.chkPointX = var2
+						Self.chkPointY = Self.footCollisionPointResaultY[var4]
+						Self.chkPointId = var4
+						Self.chkPointDegree = Self.footDegree
+						
+						Self.footDegree = Self.getDegreeFromWorld(Self.footDegree, Self.chkPointX, Self.chkPointY, Self.acObj.posZ)
+						Self.calChkOffset(Self.chkPointX, Self.chkPointY, Self.chkPointId, Self.chkPointDegree)
+						
+						Self.actionState = WALK_ACTION_STATE
+						
+						Local var6:= ((90 + Self.footDegree) Mod 360)
+						Local var7:= (Self.moveDistanceX * MyAPI.dCos(var6) + Self.moveDistanceY * MyAPI.dSin(var6)) / 100 + Self.user.getPressToGround()
+						Local var8:= CrlFP32.actTanDegree(Self.moveDistanceY, Self.moveDistanceX)
+						Local var9:= Self.getDegreeDiff(Self.footDegree, var8)
+						
+						If (var7 < 0 And var9 > Self.user.getMinDegreeToLeaveGround()) Then
+							Self.user.doWhileLeaveGround()
+							
+							Self.chkPointX = ACUtilities.getRelativePointX(Self.footX, Self.footCollisionPointOffsetX[Self.priorityChkId], Self.footCollisionPointOffsetY, var3)
+							Self.chkPointY = ACUtilities.getRelativePointY(Self.footY, Self.footCollisionPointOffsetX[Self.priorityChkId], Self.footCollisionPointOffsetY, var3)
+							
+							Self.chkPointId = Self.priorityChkId
+							Self.chkPointDegree = Self.footDegree
+							
+							Self.calChkOffset(Self.chkPointX, Self.chkPointY, Self.chkPointId, Self.chkPointDegree)
+							
+							Self.actionState = JUMP_ACTION_STATE
+							
+							Return
+						EndIf
+					Default
+						Return
+				End Select
+			EndIf
+		End
 
 	Private Method moveToNextPosition:Void()
 		Int newY
