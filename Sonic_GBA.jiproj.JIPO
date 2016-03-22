@@ -34,10 +34,18 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acdegreegetter.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>28</X>
-        <Y>22</Y>
+        <X>1</X>
+        <Y>21</Y>
       </CursorPos>
       <DocGUID>47414c0b-9c6e-4db9-b499-5c91cb2c9dce</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\com\sega\engine\action\acfocusable.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>10</X>
+        <Y>8</Y>
+      </CursorPos>
+      <DocGUID>c27e1b7d-6bed-4a36-992b-deb620f8b3bc</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acparam.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
