@@ -18,6 +18,8 @@ Private
 	Import com.sega.engine.lib.crlfp32
 	Import com.sega.engine.lib.MyAPI
 	
+	Import lib.constutil
+	
 	Import regal.typetool
 Public
 
@@ -26,11 +28,15 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 	Private
 		' Constant variable(s):
 		Const BLOCK_CHECK_RANGE:Int = 1
+		
 		Const DIRECTION_OFFSET_DOWN:Int= 0
 		Const DIRECTION_OFFSET_LEFT:Int = 1
-		Const DIRECTION_OFFSET_RIGHT:Int = 3
 		Const DIRECTION_OFFSET_UP:Int = 2
+		Const DIRECTION_OFFSET_RIGHT:Int = 3
+		
 		Const DOWN_SEARCH_BLOCK:Int = 8
+		
+		Const UNDEFINED_DISTANCE:= -9999
 		
 		' Fields:
 		Field degreeRe:DegreeReturner
@@ -103,8 +109,8 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 		Method New(acObj:ACObject, user:ACWorldCalUser)
 			Super.New(acObj, user)
 			
-			Self.lastMoveDistanceX = -9999
-			Self.lastMoveDistanceY = -9999
+			Self.lastMoveDistanceX = UNDEFINED_DISTANCE
+			Self.lastMoveDistanceY = UNDEFINED_DISTANCE
 			
 			Self.preWidth = -1
 			Self.preHeight = -1
@@ -284,9 +290,9 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 					Local preFootY:= Self.footY
 					
 					Select (Self.actionState)
-						Case DIRECTION_OFFSET_DOWN
+						Case WALK_ACTION_STATE
 							checkInGround()
-						Case DIRECTION_OFFSET_LEFT
+						Case JUMP_ACTION_STATE
 							checkInSky()
 					End Select
 					
@@ -299,105 +305,74 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				EndIf
 			Until (Not Self.isMoved)
 		End
-
-	Private Method checkInGround:Void()
-		moveToNextPosition()
-	End
-
-	Private Method checkInSky:Void()
-		Int newX
-		Int degree
-		Int plumbDegree
-		Int landDegree = DIRECTION_OFFSET_DOWN
-		Bool xFirst = Abs(Self.moveDistanceX) > Abs(Self.moveDistanceY)
-		Int startPointX = Self.chkPointX
-		Int startPointY = Self.chkPointY
 		
-		If (xFirst) Then
-			If (Abs(Self.moveDistanceX) > Self.worldInstance.getTileWidth() - (DIRECTION_OFFSET_LEFT Shl Self.worldInstance.getZoom())) Then
-				Self.chkPointX += (Self.moveDistanceX > 0 ? DIRECTION_OFFSET_LEFT : -1) * (Self.worldInstance.getTileWidth() - (DIRECTION_OFFSET_LEFT Shl Self.worldInstance.getZoom()))
-				Self.chkPointY += (Self.moveDistanceY * (Self.worldInstance.getTileWidth() - (DIRECTION_OFFSET_LEFT Shl Self.worldInstance.getZoom()))) / Abs(Self.moveDistanceX)
-			Else
-				Self.chkPointX += Self.moveDistanceX
-				Self.chkPointY += Self.moveDistanceY
-			EndIf
+		Method checkInGround:Void()
+			moveToNextPosition()
+		End
+		
+		Method checkInSky:Void()
+			Local newX:Int
+			Local degree:Int
+			Local plumbDegree:Int
 			
-		Else
+			Local landDegree:= 0
 			
-			If (Abs(Self.moveDistanceY) > Self.worldInstance.getTileHeight() - (DIRECTION_OFFSET_LEFT Shl Self.worldInstance.getZoom())) Then
-				Self.chkPointY += (Self.moveDistanceY > 0 ? DIRECTION_OFFSET_LEFT : -1) * (Self.worldInstance.getTileHeight() - (DIRECTION_OFFSET_LEFT Shl Self.worldInstance.getZoom()))
-				Self.chkPointX += (Self.moveDistanceX * (Self.worldInstance.getTileHeight() - (DIRECTION_OFFSET_LEFT Shl Self.worldInstance.getZoom()))) / Abs(Self.moveDistanceY)
-			Else
-				Self.chkPointX += Self.moveDistanceX
-				Self.chkPointY += Self.moveDistanceY
-			EndIf
-		EndIf
-		
-		calObjPositionFromFoot()
-		Bool sideCollision = False
-		Int sideOffset = DIRECTION_OFFSET_DOWN
-		Int sideCollisionDirection = DIRECTION_OFFSET_LEFT
-		Int sideCollisionDegree = DIRECTION_OFFSET_DOWN
-		Int sideNewX = DIRECTION_OFFSET_DOWN
-		Bool headCollision = False
-		Int bodyOffset = DIRECTION_OFFSET_DOWN
-		Int bodyNewY = DIRECTION_OFFSET_DOWN
-		Int collisionDegree = DIRECTION_OFFSET_DOWN
-		Int footChkPointID = DIRECTION_OFFSET_DOWN
-		Int footChkDegree = DIRECTION_OFFSET_DOWN
-		Bool footCollision = False
-		Int skyDirection = getDirectionByDegree(Self.footDegree)
-		Bool isVertical = skyDirection = DIRECTION_OFFSET_LEFT Or skyDirection = DIRECTION_OFFSET_RIGHT
-		rightSideCollisionChk(Self.footX, Self.footY, skyDirection, Self.collisionData)
-		
-		If (isVertical) Then
-			newX = Self.collisionData.newPosY
-		Else
-			newX = Self.collisionData.newPosX
-		EndIf
-		
-		If (newX <> NO_COLLISION) Then
-			If (isVertical) Then
-				sideOffset = Abs(newX - Self.footY)
-			Else
-				sideOffset = Abs(newX - Self.footX)
-			EndIf
+			Local xFirst:Bool = (Abs(Self.moveDistanceX) > Abs(Self.moveDistanceY))
 			
-			sideCollision = True
-			sideCollisionDirection = DIRECTION_OFFSET_LEFT
-			sideCollisionDegree = getDegreeFromWorld((Self.footDegree + 270) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
-			sideNewX = newX
-		EndIf
-		
-		leftSideCollisionChk(Self.footX, Self.footY, skyDirection, Self.collisionData)
-		
-		If (isVertical) Then
-			newX = Self.collisionData.newPosY
-		Else
-			newX = Self.collisionData.newPosX
-		EndIf
-		
-		If (newX <> NO_COLLISION) Then
-			If (sideCollision) Then
-				Int sideOffset2
-				
-				If (isVertical) Then
-					sideOffset2 = Abs(newX - Self.footY)
+			Local startPointX:= Self.chkPointX
+			Local startPointY:= Self.chkPointY
+			
+			If (xFirst) Then
+				If (Abs(Self.moveDistanceX) > Self.worldInstance.getTileWidth() - (1 Shl Self.worldInstance.getZoom())) Then
+					Self.chkPointX += DSgn((Self.moveDistanceX > 0)) * (Self.worldInstance.getTileWidth() - (1 Shl Self.worldInstance.getZoom()))
+					Self.chkPointY += (Self.moveDistanceY * (Self.worldInstance.getTileWidth() - (1 Shl Self.worldInstance.getZoom()))) / Abs(Self.moveDistanceX)
 				Else
-					sideOffset2 = Abs(newX - Self.footX)
+					Self.chkPointX += Self.moveDistanceX
+					Self.chkPointY += Self.moveDistanceY
 				EndIf
-				
-				Int totalVelocity = ACUtilities.getTotalFromDegree(Self.acObj.velX, Self.acObj.velY, Self.footDegree + 180)
-				
-				If (totalVelocity > 0 Or (totalVelocity = 0 And sideOffset2 < sideOffset)) Then
-					sideOffset = sideOffset2
-					sideCollisionDirection = DIRECTION_OFFSET_RIGHT
-					sideCollisionDegree = getDegreeFromWorld((Self.footDegree + 90) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
-					sideNewX = newX
-				EndIf
-				
 			Else
-				
+				If (Abs(Self.moveDistanceY) > Self.worldInstance.getTileHeight() - (1 Shl Self.worldInstance.getZoom())) Then
+					Self.chkPointY += DSgn((Self.moveDistanceY > 0)) * (Self.worldInstance.getTileHeight() - (1 Shl Self.worldInstance.getZoom()))
+					Self.chkPointX += (Self.moveDistanceX * (Self.worldInstance.getTileHeight() - (1 Shl Self.worldInstance.getZoom()))) / Abs(Self.moveDistanceY)
+				Else
+					Self.chkPointX += Self.moveDistanceX
+					Self.chkPointY += Self.moveDistanceY
+				EndIf
+			EndIf
+			
+			calObjPositionFromFoot()
+			
+			Local sideCollision:Bool = False
+			Local sideOffset:= 0
+			Local sideCollisionDirection = DIRECTION_RIGHT ' DIRECTION_RIGHT
+			Local sideCollisionDegree = 0
+			Local sideNewX = 0
+			
+			Loca lheadCollision:Bool = False
+			
+			Local bodyOffset:= 0 ' DIRECTION_UP
+			Local bodyNewY:= 0
+			
+			Local collisionDegree:= 0
+			
+			Local footChkPointID:= 0 ' DIRECTION_UP
+			Local footChkDegree:= 0
+			
+			Local footCollision:Bool = False
+			Local skyDirection:= getDirectionByDegree(Self.footDegree)
+			
+			' This behavior may change in the future.
+			Local isVertical:Bool = (skyDirection = DIRECTION_RIGHT Or skyDirection = DIRECTION_LEFT)
+			
+			rightSideCollisionChk(Self.footX, Self.footY, skyDirection, Self.collisionData)
+			
+			If (isVertical) Then
+				newX = Self.collisionData.newPosY
+			Else
+				newX = Self.collisionData.newPosX
+			EndIf
+			
+			If (newX <> NO_COLLISION) Then
 				If (isVertical) Then
 					sideOffset = Abs(newX - Self.footY)
 				Else
@@ -405,102 +380,308 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				EndIf
 				
 				sideCollision = True
-				sideCollisionDirection = DIRECTION_OFFSET_RIGHT
-				sideCollisionDegree = getDegreeFromWorld((Self.footDegree + 90) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
+				sideCollisionDirection = DIRECTION_RIGHT ' DIRECTION_RIGHT
+				sideCollisionDegree = getDegreeFromWorld((Self.footDegree + 270) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
+				
 				sideNewX = newX
 			EndIf
-		EndIf
-		
-		upSideCollisionChk(Self.footX, Self.footY, skyDirection, Self.collisionData)
-		
-		If (Not Self.collisionData.isNoCollision()) Then
-			degree = getDegreeFromWorld((Self.footDegree + 180) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
-			plumbDegree = (degree + 90) Mod 360
 			
-			If (((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100 > 0) Then
+			leftSideCollisionChk(Self.footX, Self.footY, skyDirection, Self.collisionData)
+			
+			If (isVertical) Then
+				newX = Self.collisionData.newPosY
+			Else
+				newX = Self.collisionData.newPosX
+			EndIf
+			
+			If (newX <> NO_COLLISION) Then
 				If (sideCollision) Then
+					Local sideOffset2:Int
+					
 					If (isVertical) Then
-						bodyOffset = Abs(Self.collisionData.newPosX - Self.footX)
-						bodyNewY = Self.collisionData.newPosX
+						sideOffset2 = Abs(newX - Self.footY)
 					Else
-						bodyOffset = Abs(Self.collisionData.newPosY - Self.footY)
-						bodyNewY = Self.collisionData.newPosY
+						sideOffset2 = Abs(newX - Self.footX)
 					EndIf
 					
-					collisionDegree = degree
-					headCollision = True
+					Local totalVelocity:= ACUtilities.getTotalFromDegree(Self.acObj.velX, Self.acObj.velY, Self.footDegree + 180)
+					
+					If (totalVelocity > 0 Or (totalVelocity = 0 And sideOffset2 < sideOffset)) Then
+						sideOffset = sideOffset2
+						sideCollisionDirection = DIRECTION_LEFT
+						sideCollisionDegree = getDegreeFromWorld((Self.footDegree + 90) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
+						
+						sideNewX = newX
+					EndIf
 				Else
-					
 					If (isVertical) Then
-						Self.footX = Self.collisionData.newPosX
+						sideOffset = Abs(newX - Self.footY)
 					Else
-						Self.footY = Self.collisionData.newPosY
+						sideOffset = Abs(newX - Self.footX)
 					EndIf
 					
-					calChkPointFromPos()
-					Self.user.doWhileTouchWorld(DIRECTION_OFFSET_DOWN, degree)
-					Int tangentDistance = ((Self.moveDistanceX * Cos(degree)) + (Self.moveDistanceY * Sin(degree))) / 100
-					Self.moveDistanceX = (Cos(degree) * tangentDistance) / 100
-					Self.moveDistanceY = (Sin(degree) * tangentDistance) / 100
-					Int tangentVel = ((Self.acObj.velX * Cos(degree)) + (Self.acObj.velY * Sin(degree))) / 100
-					Self.acObj.velX = (Cos(degree) * tangentVel) / 100
-					Self.acObj.velY = (Sin(degree) * tangentVel) / 100
+					sideCollision = True
+					sideCollisionDirection = DIRECTION_LEFT
+					sideCollisionDegree = getDegreeFromWorld((Self.footDegree + 90) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
+					
+					sideNewX = newX
 				EndIf
 			EndIf
-		EndIf
-		
-		downSideCollisionChk(Self.footX, Self.footY, skyDirection, Self.collisionData)
-		
-		If (Not Self.collisionData.isNoCollision()) Then
-			degree = getDegreeFromWorld(Self.footDegree, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
-			plumbDegree = (degree + 90) Mod 360
 			
-			If (((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100 > 0) Then
-				If (sideCollision) Then
-					If (isVertical) Then
-						bodyOffset = Abs(Self.collisionData.newPosX - Self.footX)
-						bodyNewY = Self.collisionData.newPosX
+			upSideCollisionChk(Self.footX, Self.footY, skyDirection, Self.collisionData)
+			
+			If (Not Self.collisionData.isNoCollision()) Then
+				degree = getDegreeFromWorld((Self.footDegree + 180) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
+				plumbDegree = ((degree + 90) Mod 360)
+				
+				If ((((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100) > 0) Then
+					If (sideCollision) Then
+						If (isVertical) Then
+							bodyOffset = Abs(Self.collisionData.newPosX - Self.footX)
+							bodyNewY = Self.collisionData.newPosX
+						Else
+							bodyOffset = Abs(Self.collisionData.newPosY - Self.footY)
+							bodyNewY = Self.collisionData.newPosY
+						EndIf
+						
+						collisionDegree = degree
+						headCollision = True
 					Else
-						bodyOffset = Abs(Self.collisionData.newPosY - Self.footY)
-						bodyNewY = Self.collisionData.newPosY
+						If (isVertical) Then
+							Self.footX = Self.collisionData.newPosX
+						Else
+							Self.footY = Self.collisionData.newPosY
+						EndIf
+						
+						calChkPointFromPos()
+						
+						Self.user.doWhileTouchWorld(DIRECTION_UP, degree)
+						
+						Local tangentDistance:= (((Self.moveDistanceX * Cos(degree)) + (Self.moveDistanceY * Sin(degree))) / 100)
+						
+						Self.moveDistanceX = ((Cos(degree) * tangentDistance) / 100)
+						Self.moveDistanceY = ((Sin(degree) * tangentDistance) / 100)
+						
+						Local tangentVel:= (((Self.acObj.velX * Cos(degree)) + (Self.acObj.velY * Sin(degree))) / 100)
+						
+						Self.acObj.velX = ((Cos(degree) * tangentVel) / 100)
+						Self.acObj.velY = ((Sin(degree) * tangentVel) / 100)
 					EndIf
-					
-					collisionDegree = degree
-					footCollision = True
-					footChkPointID = Self.collisionData.chkPointID
-					footChkDegree = degree
-				Else
-					Self.actionState = (Byte) 0
-					Self.footX = ACUtilities.getRelativePointX(Self.collisionData.collisionX, -Self.footCollisionPointOffsetX[Self.collisionData.chkPointID], -Self.footCollisionPointOffsetY, degree)
-					Self.footY = ACUtilities.getRelativePointY(Self.collisionData.collisionY, -Self.footCollisionPointOffsetX[Self.collisionData.chkPointID], -Self.footCollisionPointOffsetY, degree)
-					calChkPointFromPos()
-					Self.user.doWhileTouchWorld(DIRECTION_OFFSET_UP, degree)
-					landDegree = degree
 				EndIf
 			EndIf
-		EndIf
-		
-		If ((footCollision Or headCollision) And sideCollision) Then
-			If (sideOffset < bodyOffset) Then
+			
+			downSideCollisionChk(Self.footX, Self.footY, skyDirection, Self.collisionData)
+			
+			If (Not Self.collisionData.isNoCollision()) Then
+				degree = getDegreeFromWorld(Self.footDegree, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
+				plumbDegree = ((degree + 90) Mod 360)
+				
+				If ((((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100) > 0) Then
+					If (sideCollision) Then
+						If (isVertical) Then
+							bodyOffset = Abs(Self.collisionData.newPosX - Self.footX)
+							bodyNewY = Self.collisionData.newPosX
+						Else
+							bodyOffset = Abs(Self.collisionData.newPosY - Self.footY)
+							bodyNewY = Self.collisionData.newPosY
+						EndIf
+						
+						collisionDegree = degree
+						
+						footCollision = True
+						footChkPointID = Self.collisionData.chkPointID
+						footChkDegree = degree
+					Else
+						Self.actionState = WALK_ACTION_STATE
+						
+						Self.footX = ACUtilities.getRelativePointX(Self.collisionData.collisionX, -Self.footCollisionPointOffsetX[Self.collisionData.chkPointID], -Self.footCollisionPointOffsetY, degree)
+						Self.footY = ACUtilities.getRelativePointY(Self.collisionData.collisionY, -Self.footCollisionPointOffsetX[Self.collisionData.chkPointID], -Self.footCollisionPointOffsetY, degree)
+						
+						calChkPointFromPos()
+						
+						Self.user.doWhileTouchWorld(DIRECTION_DOWN, degree)
+						
+						landDegree = degree
+					EndIf
+				EndIf
+			EndIf
+			
+			If ((footCollision Or headCollision) And sideCollision) Then
+				If (sideOffset < bodyOffset) Then
+					Self.user.doWhileTouchWorld(sideCollisionDirection, sideCollisionDegree)
+					
+					If (isVertical) Then
+						Self.footY = sideNewX
+						
+						calChkPointFromPos()
+						
+						Self.moveDistanceY = DIRECTION_UP
+						Self.acObj.velY = DIRECTION_UP
+					ElseIf (canBeSideStop(sideCollisionDirection)) Then
+						Self.footX = sideNewX
+						
+						calChkPointFromPos()
+						
+						Self.moveDistanceX = DIRECTION_UP
+						Self.acObj.velX = DIRECTION_UP
+					EndIf
+					
+					upSideCollisionChk(Self.footX, Self.footY, skyDirection, Self.collisionData)
+					
+					If (Not Self.collisionData.isNoCollision()) Then
+						degree = getDegreeFromWorld(Self.footDegree + 180, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
+						
+						plumbDegree = ((degree + 90) Mod 360)
+						
+						If ((((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100) > 0) Then
+							If (isVertical) Then
+								Self.footX = Self.collisionData.newPosX
+							Else
+								Self.footY = Self.collisionData.newPosY
+							EndIf
+							
+							calChkPointFromPos()
+							
+							Self.user.doWhileTouchWorld(DIRECTION_UP, degree)
+							
+							tangentDistance = (((Self.moveDistanceX * Cos(degree)) + (Self.moveDistanceY * Sin(degree))) / 100)
+							
+							Self.moveDistanceX = ((Cos(degree) * tangentDistance) / 100)
+							Self.moveDistanceY = ((Sin(degree) * tangentDistance) / 100)
+							
+							tangentVel = (((Self.acObj.velX * Cos(degree)) + (Self.acObj.velY * Sin(degree))) / 100)
+							
+							Self.acObj.velX = ((Cos(degree) * tangentVel) / 100)
+							Self.acObj.velY = ((Sin(degree) * tangentVel) / 100)
+						EndIf
+					EndIf
+					
+					downSideCollisionChk(Self.footX, Self.footY, skyDirection, Self.collisionData)
+					
+					If (Not Self.collisionData.isNoCollision()) Then
+						degree = getDegreeFromWorld(Self.footDegree, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
+						plumbDegree = ((degree + 90) Mod 360)
+						
+						If ((((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100) > 0) Then
+							Self.actionState = WALK_ACTION_STATE
+							
+							Self.footX = ACUtilities.getRelativePointX(Self.collisionData.collisionX, -Self.footCollisionPointOffsetX[Self.collisionData.chkPointID], -Self.footCollisionPointOffsetY, degree)
+							Self.footY = ACUtilities.getRelativePointY(Self.collisionData.collisionY, -Self.footCollisionPointOffsetX[Self.collisionData.chkPointID], -Self.footCollisionPointOffsetY, degree)
+							
+							calChkPointFromPos()
+							
+							Self.user.doWhileTouchWorld(DIRECTION_DOWN, degree)
+							
+							landDegree = degree
+						EndIf
+					EndIf
+				Else
+					If (footCollision) Then
+						Self.actionState = WALK_ACTION_STATE
+						
+						Self.footX = ACUtilities.getRelativePointX(Self.collisionData.collisionX, -Self.footCollisionPointOffsetX[footChkPointID], -Self.footCollisionPointOffsetY, footChkDegree)
+						Self.footY = ACUtilities.getRelativePointY(Self.collisionData.collisionY, -Self.footCollisionPointOffsetX[footChkPointID], -Self.footCollisionPointOffsetY, footChkDegree)
+						
+						calChkPointFromPos()
+						
+						Self.user.doWhileTouchWorld(DIRECTION_DOWN, footChkDegree)
+						
+						landDegree = footChkDegree
+					Else
+						If (isVertical) Then
+							Self.footX = bodyNewY
+						Else
+							Self.footY = bodyNewY
+						EndIf
+						
+						calChkPointFromPos()
+						
+						Self.user.doWhileTouchWorld(DIRECTION_UP, collisionDegree)
+						
+						tangentDistance = (((Self.moveDistanceX * Cos(collisionDegree)) + (Self.moveDistanceY * Sin(collisionDegree))) / 100)
+						
+						Self.moveDistanceX = (Cos(collisionDegree) * tangentDistance) / 100
+						Self.moveDistanceY = (Sin(collisionDegree) * tangentDistance) / 100
+						
+						tangentVel = (((Self.acObj.velX * Cos(collisionDegree)) + (Self.acObj.velY * Sin(collisionDegree))) / 100)
+						
+						Self.acObj.velX = (Cos(collisionDegree) * tangentVel) / 100
+						Self.acObj.velY = (Sin(collisionDegree) * tangentVel) / 100
+					EndIf
+					
+					rightSideCollisionChk(Self.footX, Self.footY, skyDirection, Self.collisionData)
+					
+					If (isVertical) Then
+						newX = Self.collisionData.newPosY
+					Else
+						newX = Self.collisionData.newPosX
+					EndIf
+					
+					If (newX <> NO_COLLISION) Then
+						Self.user.doWhileTouchWorld(DIRECTION_RIGHT, getDegreeFromWorld((Self.footDegree + 270) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ))
+						
+						If (isVertical) Then
+							Self.footY = newX
+							
+							Self.moveDistanceY = DIRECTION_UP
+							Self.acObj.velY = DIRECTION_UP
+						ElseIf (canBeSideStop(sideCollisionDirection)) Then
+							Self.footX = newX
+							
+							Self.moveDistanceX = DIRECTION_UP
+							Self.acObj.velX = DIRECTION_UP
+						EndIf
+						
+						calChkPointFromPos()
+					EndIf
+					
+					leftSideCollisionChk(Self.footX, Self.footY, skyDirection, Self.collisionData)
+					
+					If (isVertical) Then
+						newX = Self.collisionData.newPosY
+					Else
+						newX = Self.collisionData.newPosX
+					EndIf
+					
+					If (newX <> NO_COLLISION) Then
+						Self.user.doWhileTouchWorld(DIRECTION_LEFT, getDegreeFromWorld((Self.footDegree + 90) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ))
+						
+						If (isVertical) Then
+							Self.footY = newX
+							
+							Self.moveDistanceY = DIRECTION_UP
+							Self.acObj.velY = DIRECTION_UP
+						ElseIf (canBeSideStop(sideCollisionDirection)) Then
+							Self.footX = newX
+							
+							Self.moveDistanceX = DIRECTION_UP
+							Self.acObj.velX = DIRECTION_UP
+						EndIf
+						
+						calChkPointFromPos()
+					EndIf
+				EndIf
+			ElseIf (sideCollision) Then
 				Self.user.doWhileTouchWorld(sideCollisionDirection, sideCollisionDegree)
 				
 				If (isVertical) Then
 					Self.footY = sideNewX
-					calChkPointFromPos()
-					Self.moveDistanceY = DIRECTION_OFFSET_DOWN
-					Self.acObj.velY = DIRECTION_OFFSET_DOWN
+					
+					Self.moveDistanceY = DIRECTION_UP
+					Self.acObj.velY = DIRECTION_UP
 				ElseIf (canBeSideStop(sideCollisionDirection)) Then
 					Self.footX = sideNewX
-					calChkPointFromPos()
-					Self.moveDistanceX = DIRECTION_OFFSET_DOWN
-					Self.acObj.velX = DIRECTION_OFFSET_DOWN
+					
+					Self.moveDistanceX = DIRECTION_UP
+					Self.acObj.velX = DIRECTION_UP
 				EndIf
 				
+				calChkPointFromPos()
 				upSideCollisionChk(Self.footX, Self.footY, skyDirection, Self.collisionData)
 				
 				If (Not Self.collisionData.isNoCollision()) Then
 					degree = getDegreeFromWorld(Self.footDegree + 180, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
-					plumbDegree = (degree + 90) Mod 360
+					plumbDegree = ((degree + 90) Mod 360)
 					
 					If (((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100 > 0) Then
 						If (isVertical) Then
@@ -510,13 +691,18 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 						EndIf
 						
 						calChkPointFromPos()
-						Self.user.doWhileTouchWorld(DIRECTION_OFFSET_DOWN, degree)
-						tangentDistance = ((Self.moveDistanceX * Cos(degree)) + (Self.moveDistanceY * Sin(degree))) / 100
-						Self.moveDistanceX = (Cos(degree) * tangentDistance) / 100
-						Self.moveDistanceY = (Sin(degree) * tangentDistance) / 100
-						tangentVel = ((Self.acObj.velX * Cos(degree)) + (Self.acObj.velY * Sin(degree))) / 100
-						Self.acObj.velX = (Cos(degree) * tangentVel) / 100
-						Self.acObj.velY = (Sin(degree) * tangentVel) / 100
+						
+						Self.user.doWhileTouchWorld(DIRECTION_UP, degree)
+						
+						tangentDistance = (((Self.moveDistanceX * Cos(degree)) + (Self.moveDistanceY * Sin(degree))) / 100)
+						
+						Self.moveDistanceX = ((Cos(degree) * tangentDistance) / 100)
+						Self.moveDistanceY = ((Sin(degree) * tangentDistance) / 100)
+						
+						tangentVel = (((Self.acObj.velX * Cos(degree)) + (Self.acObj.velY * Sin(degree))) / 100)
+						
+						Self.acObj.velX = ((Cos(degree) * tangentVel) / 100)
+						Self.acObj.velY = ((Sin(degree) * tangentVel) / 100)
 					EndIf
 				EndIf
 				
@@ -524,200 +710,81 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				
 				If (Not Self.collisionData.isNoCollision()) Then
 					degree = getDegreeFromWorld(Self.footDegree, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
-					plumbDegree = (degree + 90) Mod 360
 					
-					If (((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100 > 0) Then
-						Self.actionState = (Byte) 0
+					plumbDegree = ((degree + 90) Mod 360)
+					
+					If ((((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100) > 0) Then
+						Self.actionState = 0
+						
 						Self.footX = ACUtilities.getRelativePointX(Self.collisionData.collisionX, -Self.footCollisionPointOffsetX[Self.collisionData.chkPointID], -Self.footCollisionPointOffsetY, degree)
 						Self.footY = ACUtilities.getRelativePointY(Self.collisionData.collisionY, -Self.footCollisionPointOffsetX[Self.collisionData.chkPointID], -Self.footCollisionPointOffsetY, degree)
+						
 						calChkPointFromPos()
-						Self.user.doWhileTouchWorld(DIRECTION_OFFSET_UP, degree)
+						
+						Self.user.doWhileTouchWorld(DIRECTION_DOWN, degree)
+						
 						landDegree = degree
 					EndIf
 				EndIf
-				
-			Else
-				
-				If (footCollision) Then
-					Self.actionState = (Byte) 0
-					Self.footX = ACUtilities.getRelativePointX(Self.collisionData.collisionX, -Self.footCollisionPointOffsetX[footChkPointID], -Self.footCollisionPointOffsetY, footChkDegree)
-					Self.footY = ACUtilities.getRelativePointY(Self.collisionData.collisionY, -Self.footCollisionPointOffsetX[footChkPointID], -Self.footCollisionPointOffsetY, footChkDegree)
-					calChkPointFromPos()
-					Self.user.doWhileTouchWorld(DIRECTION_OFFSET_UP, footChkDegree)
-					landDegree = footChkDegree
-				Else
-					
-					If (isVertical) Then
-						Self.footX = bodyNewY
-					Else
-						Self.footY = bodyNewY
+			EndIf
+			
+			Local preMoveDistanceX:= Self.moveDistanceX
+			Local preMoveDistanceY:= Self.moveDistanceY
+			
+			If (Self.lastMoveDistanceX = 0) Then
+				If (Self.chkPointX - startPointX = 0 And Self.lastMoveDistanceY = 0) Then
+					If (Self.chkPointY - startPointY = 0) Then
+						Self.lastMoveDistanceX = UNDEFINED_DISTANCE
+						Self.lastMoveDistanceY = UNDEFINED_DISTANCE
+						
+						Self.moveDistanceX = 0
+						Self.moveDistanceY = 0
+						
+						If (Self.moveDistanceX * preMoveDistanceX <= 0) Then
+							Self.moveDistanceX = 0
+						EndIf
+						
+						If (Self.moveDistanceY * preMoveDistanceY <= 0) Then
+							Self.moveDistanceY = 0
+						EndIf
+						
+						If (Self.actionState = Null) Then
+							Self.totalDistance = ACUtilities.getTotalFromDegree(Self.moveDistanceX, Self.moveDistanceY, landDegree)
+							
+							Self.footDegree = landDegree
+							
+							Self.user.doWhileLand(Self.footDegree)
+						EndIf
+						
+						calObjPositionFromFoot()
 					EndIf
-					
-					calChkPointFromPos()
-					Self.user.doWhileTouchWorld(DIRECTION_OFFSET_DOWN, collisionDegree)
-					tangentDistance = ((Self.moveDistanceX * Cos(collisionDegree)) + (Self.moveDistanceY * Sin(collisionDegree))) / 100
-					Self.moveDistanceX = (Cos(collisionDegree) * tangentDistance) / 100
-					Self.moveDistanceY = (Sin(collisionDegree) * tangentDistance) / 100
-					tangentVel = ((Self.acObj.velX * Cos(collisionDegree)) + (Self.acObj.velY * Sin(collisionDegree))) / 100
-					Self.acObj.velX = (Cos(collisionDegree) * tangentVel) / 100
-					Self.acObj.velY = (Sin(collisionDegree) * tangentVel) / 100
-				EndIf
-				
-				rightSideCollisionChk(Self.footX, Self.footY, skyDirection, Self.collisionData)
-				
-				If (isVertical) Then
-					newX = Self.collisionData.newPosY
-				Else
-					newX = Self.collisionData.newPosX
-				EndIf
-				
-				If (newX <> NO_COLLISION) Then
-					Self.user.doWhileTouchWorld(DIRECTION_OFFSET_LEFT, getDegreeFromWorld((Self.footDegree + 270) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ))
-					
-					If (isVertical) Then
-						Self.footY = newX
-						Self.moveDistanceY = DIRECTION_OFFSET_DOWN
-						Self.acObj.velY = DIRECTION_OFFSET_DOWN
-					ElseIf (canBeSideStop(sideCollisionDirection)) Then
-						Self.footX = newX
-						Self.moveDistanceX = DIRECTION_OFFSET_DOWN
-						Self.acObj.velX = DIRECTION_OFFSET_DOWN
-					EndIf
-					
-					calChkPointFromPos()
-				EndIf
-				
-				leftSideCollisionChk(Self.footX, Self.footY, skyDirection, Self.collisionData)
-				
-				If (isVertical) Then
-					newX = Self.collisionData.newPosY
-				Else
-					newX = Self.collisionData.newPosX
-				EndIf
-				
-				If (newX <> NO_COLLISION) Then
-					Self.user.doWhileTouchWorld(DIRECTION_OFFSET_RIGHT, getDegreeFromWorld((Self.footDegree + 90) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ))
-					
-					If (isVertical) Then
-						Self.footY = newX
-						Self.moveDistanceY = DIRECTION_OFFSET_DOWN
-						Self.acObj.velY = DIRECTION_OFFSET_DOWN
-					ElseIf (canBeSideStop(sideCollisionDirection)) Then
-						Self.footX = newX
-						Self.moveDistanceX = DIRECTION_OFFSET_DOWN
-						Self.acObj.velX = DIRECTION_OFFSET_DOWN
-					EndIf
-					
-					calChkPointFromPos()
 				EndIf
 			EndIf
 			
-		ElseIf (sideCollision) Then
-			Self.user.doWhileTouchWorld(sideCollisionDirection, sideCollisionDegree)
+			Self.lastMoveDistanceX = (Self.chkPointX - startPointX)
+			Self.lastMoveDistanceY = (Self.chkPointY - startPointY)
 			
-			If (isVertical) Then
-				Self.footY = sideNewX
-				Self.moveDistanceY = DIRECTION_OFFSET_DOWN
-				Self.acObj.velY = DIRECTION_OFFSET_DOWN
-			ElseIf (canBeSideStop(sideCollisionDirection)) Then
-				Self.footX = sideNewX
-				Self.moveDistanceX = DIRECTION_OFFSET_DOWN
-				Self.acObj.velX = DIRECTION_OFFSET_DOWN
+			Self.moveDistanceX -= (Self.chkPointX - startPointX)
+			Self.moveDistanceY -= (Self.chkPointY - startPointY)
+			
+			If (Self.moveDistanceX * preMoveDistanceX <= 0) Then
+				Self.moveDistanceX = 0
 			EndIf
 			
-			calChkPointFromPos()
-			upSideCollisionChk(Self.footX, Self.footY, skyDirection, Self.collisionData)
+			If (Self.moveDistanceY * preMoveDistanceY <= 0) Then
+				Self.moveDistanceY = 0
+			EndIf
 			
-			If (Not Self.collisionData.isNoCollision()) Then
-				degree = getDegreeFromWorld(Self.footDegree + 180, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
-				plumbDegree = (degree + 90) Mod 360
+			If (Self.actionState = Null) Then
+				Self.totalDistance = ACUtilities.getTotalFromDegree(Self.moveDistanceX, Self.moveDistanceY, landDegree)
 				
-				If (((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100 > 0) Then
-					If (isVertical) Then
-						Self.footX = Self.collisionData.newPosX
-					Else
-						Self.footY = Self.collisionData.newPosY
-					EndIf
-					
-					calChkPointFromPos()
-					Self.user.doWhileTouchWorld(DIRECTION_OFFSET_DOWN, degree)
-					tangentDistance = ((Self.moveDistanceX * Cos(degree)) + (Self.moveDistanceY * Sin(degree))) / 100
-					Self.moveDistanceX = (Cos(degree) * tangentDistance) / 100
-					Self.moveDistanceY = (Sin(degree) * tangentDistance) / 100
-					tangentVel = ((Self.acObj.velX * Cos(degree)) + (Self.acObj.velY * Sin(degree))) / 100
-					Self.acObj.velX = (Cos(degree) * tangentVel) / 100
-					Self.acObj.velY = (Sin(degree) * tangentVel) / 100
-				EndIf
-			EndIf
-			
-			downSideCollisionChk(Self.footX, Self.footY, skyDirection, Self.collisionData)
-			
-			If (Not Self.collisionData.isNoCollision()) Then
-				degree = getDegreeFromWorld(Self.footDegree, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
-				plumbDegree = (degree + 90) Mod 360
+				Self.footDegree = landDegree
 				
-				If (((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100 > 0) Then
-					Self.actionState = (Byte) 0
-					Self.footX = ACUtilities.getRelativePointX(Self.collisionData.collisionX, -Self.footCollisionPointOffsetX[Self.collisionData.chkPointID], -Self.footCollisionPointOffsetY, degree)
-					Self.footY = ACUtilities.getRelativePointY(Self.collisionData.collisionY, -Self.footCollisionPointOffsetX[Self.collisionData.chkPointID], -Self.footCollisionPointOffsetY, degree)
-					calChkPointFromPos()
-					Self.user.doWhileTouchWorld(DIRECTION_OFFSET_UP, degree)
-					landDegree = degree
-				EndIf
+				Self.user.doWhileLand(Self.footDegree)
 			EndIf
-		EndIf
-		
-		Int preMoveDistanceX = Self.moveDistanceX
-		Int preMoveDistanceY = Self.moveDistanceY
-		
-		If (Self.lastMoveDistanceX = 0) Then
-			If (Self.chkPointX - startPointX = 0 And Self.lastMoveDistanceY = 0) Then
-				If (Self.chkPointY - startPointY = 0) Then
-					Self.lastMoveDistanceX = -9999
-					Self.lastMoveDistanceY = -9999
-					Self.moveDistanceX = DIRECTION_OFFSET_DOWN
-					Self.moveDistanceY = DIRECTION_OFFSET_DOWN
-					
-					If (Self.moveDistanceX * preMoveDistanceX <= 0) Then
-						Self.moveDistanceX = DIRECTION_OFFSET_DOWN
-					EndIf
-					
-					If (Self.moveDistanceY * preMoveDistanceY <= 0) Then
-						Self.moveDistanceY = DIRECTION_OFFSET_DOWN
-					EndIf
-					
-					If (Self.actionState = Null) Then
-						Self.totalDistance = ACUtilities.getTotalFromDegree(Self.moveDistanceX, Self.moveDistanceY, landDegree)
-						Self.footDegree = landDegree
-						Self.user.doWhileLand(Self.footDegree)
-					EndIf
-					
-					calObjPositionFromFoot()
-				EndIf
-			EndIf
-		EndIf
-		
-		Self.lastMoveDistanceX = Self.chkPointX - startPointX
-		Self.lastMoveDistanceY = Self.chkPointY - startPointY
-		Self.moveDistanceX -= Self.chkPointX - startPointX
-		Self.moveDistanceY -= Self.chkPointY - startPointY
-		
-		If (Self.moveDistanceX * preMoveDistanceX <= 0) Then
-			Self.moveDistanceX = DIRECTION_OFFSET_DOWN
-		EndIf
-		
-		If (Self.moveDistanceY * preMoveDistanceY <= 0) Then
-			Self.moveDistanceY = DIRECTION_OFFSET_DOWN
-		EndIf
-		
-		If (Self.actionState = Null) Then
-			Self.totalDistance = ACUtilities.getTotalFromDegree(Self.moveDistanceX, Self.moveDistanceY, landDegree)
-			Self.footDegree = landDegree
-			Self.user.doWhileLand(Self.footDegree)
-		EndIf
-		
-		calObjPositionFromFoot()
-	End
+			
+			calObjPositionFromFoot()
+		End
 
 	/* JADX WARNING: inconsistent code. */
 	/* Code decompiled incorrectly, please refer to instructions dump. */

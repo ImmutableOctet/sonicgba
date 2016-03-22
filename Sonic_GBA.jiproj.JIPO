@@ -75,7 +75,7 @@
     <DocUserOptions Filename=".\src\com\sega\engine\action\acparam.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>7</X>
-        <Y>7</Y>
+        <Y>11</Y>
       </CursorPos>
       <DocGUID>2eb090d5-c6ad-436d-a907-05e8a222bf80</DocGUID>
       <Bookmarks />
@@ -113,19 +113,18 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acworldcollisioncalculator.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>11</X>
-        <Y>299</Y>
+        <X>7</X>
+        <Y>783</Y>
       </CursorPos>
       <DocGUID>89ec1983-40bd-46ea-b524-b554d4ab7f15</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\mobile\define\mdphone.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\mobile\define\mdphone.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>29</X>
         <Y>11</Y>
       </CursorPos>
-      <DocGUID>b65e7a27-7f8e-4fe0-89e2-8013a9ccf1da</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -151,13 +150,12 @@
       <DocGUID>ca154a4d-0b81-4322-a185-d96264803579</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\mobile\mdversion.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\mobile\mdversion.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>3</X>
         <Y>11</Y>
       </CursorPos>
-      <DocGUID>1129c811-e343-4664-9f62-daff652f2ba9</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animation.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -757,6 +755,6 @@
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\device" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\mflib" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonicgba" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonicgba" Expanded="true" />
   </Folders>
 </JiProjUserOptions>
