@@ -268,6 +268,20 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 			
 			Return DIRECTION_DOWN
 		End
+		
+		Method getDegreeDiff:Int(degree1:Int, degree2:Int)
+			Local re:= Abs(degree1 - degree2)
+			
+			If (re > 180) Then
+				re = (360 - re)
+			EndIf
+			
+			If (re > 90) Then
+				Return (180 - re)
+			EndIf
+			
+			Return re
+		End
 	Private
 		Method checkInMap:Void()
 			If (Self.moveDistanceX = 0 And Self.moveDistanceY = 0 And Not Self.isMoved) Then
@@ -1523,67 +1537,58 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 		EndIf
 	End
 
-	Private Method getBlockLeftSide:Int(blockX:Int, blockY:Int)
-		Return (blockX + DIRECTION_OFFSET_DOWN) * Self.worldInstance.getTileWidth()
-	End
-
-	Private Method getBlockRightSide:Int(blockX:Int, blockY:Int)
-		Return ((blockX + DIRECTION_OFFSET_LEFT) * Self.worldInstance.getTileWidth()) - DIRECTION_OFFSET_LEFT
-	End
-
-	Private Method getBlockUpSide:Int(blockX:Int, blockY:Int)
-		Return (blockY + DIRECTION_OFFSET_DOWN) * Self.worldInstance.getTileHeight()
-	End
-
-	Private Method getBlockDownSide:Int(blockX:Int, blockY:Int)
-		Return ((blockY + DIRECTION_OFFSET_LEFT) * Self.worldInstance.getTileHeight()) - DIRECTION_OFFSET_LEFT
-	End
-
-	Private Method calObjPositionFromFoot:Void()
-		Self.footX = Self.chkPointX - Self.chkOffsetX
-		Self.footY = Self.chkPointY - Self.chkOffsetY
-	End
-
-	Private Method calChkPointFromPos:Void()
-		Self.chkPointX = Self.footX + Self.chkOffsetX
-		Self.chkPointY = Self.footY + Self.chkOffsetY
-	End
-
-	Private Method calChkOffset:Void(chkPointX:Int, chkPointY:Int, chkPointId:Int, degree:Int)
-		Int footX = ACUtilities.getRelativePointX(chkPointX, -Self.footCollisionPointOffsetX[chkPointId], -Self.footCollisionPointOffsetY, degree)
-		Int footY = ACUtilities.getRelativePointY(chkPointY, -Self.footCollisionPointOffsetX[chkPointId], -Self.footCollisionPointOffsetY, degree)
-		Self.chkOffsetX = chkPointX - footX
-		Self.chkOffsetY = chkPointY - footY
-	End
+		Method getBlockLeftSide:Int(blockX:Int, blockY:Int)
+			' Not sure why we're doing this, but whatever.
+			Return (blockX + 0) * Self.worldInstance.getTileWidth()
+		End
 	
-	Private Method getDegreeFromWorld:Int(currentDegree:Int, x:Int, y:Int, z:Int)
-		While (currentDegree < 0) {
-			currentDegree += 360
-		EndIf
-		currentDegree Mod= 360
+		Method getBlockRightSide:Int(blockX:Int, blockY:Int)
+			Return ((blockX + 1) * Self.worldInstance.getTileWidth()) - 1)
+		End
+	
+		Method getBlockUpSide:Int(blockX:Int, blockY:Int)
+			' Again, not sure why we're doing this, but whatever.
+			Return ((blockY + 0) * Self.worldInstance.getTileHeight())
+		End
+	
+		Method getBlockDownSide:Int(blockX:Int, blockY:Int)
+			Return ((blockY + 1) * Self.worldInstance.getTileHeight()) - 1
+		End
+	
+		Method calObjPositionFromFoot:Void()
+			Self.footX = (Self.chkPointX - Self.chkOffsetX)
+			Self.footY = (Self.chkPointY - Self.chkOffsetY)
+		End
+	
+		Method calChkPointFromPos:Void()
+			Self.chkPointX = (Self.footX + Self.chkOffsetX)
+			Self.chkPointY = (Self.footY + Self.chkOffsetY)
+		End
+	
+		Method calChkOffset:Void(chkPointX:Int, chkPointY:Int, chkPointId:Int, degree:Int)
+			Local footX:= ACUtilities.getRelativePointX(chkPointX, -Self.footCollisionPointOffsetX[chkPointId], -Self.footCollisionPointOffsetY, degree)
+			Local footY:= ACUtilities.getRelativePointY(chkPointY, -Self.footCollisionPointOffsetX[chkPointId], -Self.footCollisionPointOffsetY, degree)
+			
+			Self.chkOffsetX = (chkPointX - footX)
+			Self.chkOffsetY = (chkPointY - footY)
+		End
 		
-		If (Self.degreeGetter = Null) Then
-			Return currentDegree
-		EndIf
+		Method getDegreeFromWorld:Int(currentDegree:Int, x:Int, y:Int, z:Int)
+			While (currentDegree < 0)
+				currentDegree += 360
+			Wend
+			
+			currentDegree Mod= 360
+			
+			If (Self.degreeGetter = Null) Then
+				Return currentDegree
+			EndIf
+			
+			Self.degreeGetter.getDegreeFromWorldByPosition(Self.degreeRe, currentDegree, x, y, z)
+			
+			Return Self.degreeRe.degree
+		End
 		
-		Self.degreeGetter.getDegreeFromWorldByPosition(Self.degreeRe, currentDegree, x, y, z)
-		Return Self.degreeRe.degree
-	End
-
-	Public Method getDegreeDiff:Int(degree1:Int, degree2:Int)
-		Int re = Abs(degree1 - degree2)
-		
-		If (re > 180) Then
-			re = 360 - re
-		EndIf
-		
-		If (re > 90) Then
-			Return 180 - re
-		EndIf
-		
-		Return re
-	End
-
 		Method doSideCheckInGround:Void(direction:Int)
 			Local newX:Int
 			Local i:Int
