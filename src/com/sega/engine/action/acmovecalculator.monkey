@@ -14,6 +14,7 @@ Public
 ' Classes:
 Class ACMoveCalculator
 	Protected
+		' Fields:
 		Field acObj:ACObject
 		
 		Field moveDistanceX:Int
@@ -22,6 +23,7 @@ Class ACMoveCalculator
 		Field user:ACMoveCalUser
 		Field worldInstance:ACWorld
 	Private
+		' Fields:
 		Field chkPointX:Int
 		Field chkPointY:Int
 	Public
@@ -63,6 +65,7 @@ Class ACMoveCalculator
 			Self.moveDistanceY = 0
 		End
 	Private
+		' Methods:
 		Method checkInMap:Void()
 			If (Self.moveDistanceX = 0 And Self.moveDistanceY = 0) Then
 				Self.user.didAfterEveryMove(0, 0)
