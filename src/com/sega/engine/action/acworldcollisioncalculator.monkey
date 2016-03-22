@@ -126,11 +126,6 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 			
 			Self.collisionData = New ACCollisionData()
 		End
-		
-		' Methods:
-		Method setLimit:Void(limit:ACWorldCollisionLimit)
-			Self.limit = limit
-		End
 	Private
 		' Methods:
 		Method calPosition:Void(collisionWidth:Int, collisionHeight:Int, footOffset:Int, bodyOffset:Int)
@@ -171,83 +166,139 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				Next
 			EndIf
 		End
+	Public
+		' Methods:
+		Method setLimit:Void(limit:ACWorldCollisionLimit)
+			Self.limit = limit
+		End
 		
-	Public Method changeSize:Void(collisionWidth:Int, collisionHeight:Int, footOffset:Int, bodyOffset:Int)
-		
-		If (bodyOffset < Self.worldInstance.getTileHeight()) Then
-			bodyOffset = Self.worldInstance.getTileHeight()
-		EndIf
-		
-		If (collisionWidth <> Self.preWidth Or collisionHeight <> Self.preHeight Or footOffset <> Self.preFootOffset Or bodyOffset <> Self.preBodyOffset) Then
-			calPosition(collisionWidth, collisionHeight, footOffset, bodyOffset)
-			Self.preWidth = collisionWidth
-			Self.preHeight = collisionHeight
-			Self.preFootOffset = footOffset
-			Self.preBodyOffset = bodyOffset
-		EndIf
-	EndIf
-	
-
-	Public Method actionLogic:Void(moveDistanceX:Int, moveDistanceY:Int)
-		actionLogic(moveDistanceX, moveDistanceY, ((Cos(Self.footDegree) * moveDistanceX) + (Sin(Self.footDegree) * moveDistanceY)) / 100)
-	EndIf
-
-	Public Method actionLogic:Void(moveDistanceX:Int, moveDistanceY:Int, totalVelocity:Int)
-		changeSize(Self.acObj.getObjWidth(), Self.acObj.getObjHeight(), Self.user.getFootOffset(), Self.user.getBodyOffset())
-		
-		Self.footX = Self.user.getFootX()
-		Self.footY = Self.user.getFootY()
-		
-		Self.moveDistanceX = moveDistanceX
-		Self.moveDistanceY = moveDistanceY
-		
-		Select (Self.actionState)
-			Case DIRECTION_OFFSET_DOWN
-				Self.totalDistance = totalVelocity
-		End Select
-		
-		checkInMap()
-	EndIf
-
-	Public Method setMovedState:Void(state:Bool)
-		Self.isMoved = state
-	End
-
-	Public Method getMovedState:Bool()
-		Return Self.isMoved
-	End
-
-	Private Method checkInMap:Void()
-		If (Self.moveDistanceX = 0 And Self.moveDistanceY = 0 And Not Self.isMoved) Then
-			findTheFootPoint()
-			Self.user.didAfterEveryMove(DIRECTION_OFFSET_DOWN, DIRECTION_OFFSET_DOWN)
-		EndIf
-		
-		Repeat
-			If (Self.moveDistanceX <> 0 Or Self.moveDistanceY <> 0 Or Self.isMoved) Then
-				Self.footX = Self.user.getFootX()
-				Self.footY = Self.user.getFootY()
-				Self.footOffsetX = Self.footX - Self.acObj.posX
-				Self.footOffsetY = Self.footY - Self.acObj.posY
-				findTheFootPoint()
-				Int preFootX = Self.footX
-				Int preFootY = Self.footY
-				Select (Self.actionState)
-					Case DIRECTION_OFFSET_DOWN
-						checkInGround()
-						break
-					Case DIRECTION_OFFSET_LEFT
-						checkInSky()
-						break
-				End Select
-				Self.acObj.posX = Self.footX - Self.footOffsetX
-				Self.acObj.posY = Self.footY - Self.footOffsetY
-				Self.user.didAfterEveryMove(Self.footX - preFootX, Self.footY - preFootY)
-			Else
-				Return
+		Method changeSize:Void(collisionWidth:Int, collisionHeight:Int, footOffset:Int, bodyOffset:Int)
+			If (bodyOffset < Self.worldInstance.getTileHeight()) Then
+				bodyOffset = Self.worldInstance.getTileHeight()
 			EndIf
-		Until (Not Self.isMoved)
-	End
+			
+			If (collisionWidth <> Self.preWidth Or collisionHeight <> Self.preHeight Or footOffset <> Self.preFootOffset Or bodyOffset <> Self.preBodyOffset) Then
+				calPosition(collisionWidth, collisionHeight, footOffset, bodyOffset)
+				
+				Self.preWidth = collisionWidth
+				Self.preHeight = collisionHeight
+				
+				Self.preFootOffset = footOffset
+				Self.preBodyOffset = bodyOffset
+			EndIf
+		End
+		
+		Method actionLogic:Void(moveDistanceX:Int, moveDistanceY:Int)
+			actionLogic(moveDistanceX, moveDistanceY, ((Cos(Self.footDegree) * moveDistanceX) + (Sin(Self.footDegree) * moveDistanceY)) / 100)
+		End
+
+		Method actionLogic:Void(moveDistanceX:Int, moveDistanceY:Int, totalVelocity:Int)
+			changeSize(Self.acObj.getObjWidth(), Self.acObj.getObjHeight(), Self.user.getFootOffset(), Self.user.getBodyOffset())
+			
+			Self.footX = Self.user.getFootX()
+			Self.footY = Self.user.getFootY()
+			
+			Self.moveDistanceX = moveDistanceX
+			Self.moveDistanceY = moveDistanceY
+			
+			Select (Self.actionState)
+				Case DIRECTION_OFFSET_DOWN
+					Self.totalDistance = totalVelocity
+			End Select
+			
+			checkInMap()
+		End
+		
+		Method setMovedState:Void(state:Bool)
+			Self.isMoved = state
+		End
+		
+		Method getMovedState:Bool()
+			Return Self.isMoved
+		End
+		
+		Method stopMoveX:Void()
+			Super.stopMoveX()
+			
+			If (Self.actionState = Null) Then
+				Local tmpMoveDistanceX:= ((Self.totalDistance * Cos(Self.user.getBodyDegree())) / 100)
+				
+				Self.totalDistance = ACUtilities.getTotalFromDegree(0, (Self.totalDistance * Sin(Self.user.getBodyDegree())) / 100, Self.user.getBodyDegree())
+			EndIf
+		End
+		
+		Method stopMoveY:Void()
+			Super.stopMoveY()
+			
+			If (Self.actionState = Null) Then
+				Local dSin:= ((Self.totalDistance * Sin(Self.user.getBodyDegree())) / 100)
+				
+				Self.totalDistance = ACUtilities.getTotalFromDegree(((Self.totalDistance * Cos(Self.user.getBodyDegree())) / 100), 0, Self.user.getBodyDegree())
+			EndIf
+		End
+		
+		Method getActionState:Byte()
+			Return Self.actionState
+		End
+		
+		Method getDirectionByDegree:Int(degree:Int)
+			While (degree < 0)
+				degree += 360
+			Wend
+			
+			degree Mod= 360
+			
+			If (degree > 315 Or degree < 45) Then
+				Return DIRECTION_UP
+			EndIf
+			
+			If (degree >= 225 And degree <= 315) Then
+				Return DIRECTION_LEFT
+			EndIf
+			
+			If (degree <= StringIndex.FONT_COLON_RED Or degree >= 225) Then
+				Return DIRECTION_RIGHT
+			EndIf
+			
+			Return DIRECTION_DOWN
+		End
+	Private
+		Method checkInMap:Void()
+			If (Self.moveDistanceX = 0 And Self.moveDistanceY = 0 And Not Self.isMoved) Then
+				findTheFootPoint()
+				
+				Self.user.didAfterEveryMove(DIRECTION_OFFSET_DOWN, DIRECTION_OFFSET_DOWN)
+			EndIf
+			
+			Repeat
+				If (Self.moveDistanceX <> 0 Or Self.moveDistanceY <> 0 Or Self.isMoved) Then
+					Self.footX = Self.user.getFootX()
+					Self.footY = Self.user.getFootY()
+					
+					Self.footOffsetX = Self.footX - Self.acObj.posX
+					Self.footOffsetY = Self.footY - Self.acObj.posY
+					
+					findTheFootPoint()
+					
+					Local preFootX:= Self.footX
+					Local preFootY:= Self.footY
+					
+					Select (Self.actionState)
+						Case DIRECTION_OFFSET_DOWN
+							checkInGround()
+						Case DIRECTION_OFFSET_LEFT
+							checkInSky()
+					End Select
+					
+					Self.acObj.posX = Self.footX - Self.footOffsetX
+					Self.acObj.posY = Self.footY - Self.footOffsetY
+					
+					Self.user.didAfterEveryMove(Self.footX - preFootX, Self.footY - preFootY)
+				Else
+					Return
+				EndIf
+			Until (Not Self.isMoved)
+		End
 
 	Private Method checkInGround:Void()
 		moveToNextPosition()
@@ -314,7 +365,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 			
 			sideCollision = True
 			sideCollisionDirection = DIRECTION_OFFSET_LEFT
-			sideCollisionDegree = getDegreeFromWorld((Self.footDegree + 270) Mod MDPhone.SCREEN_WIDTH, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
+			sideCollisionDegree = getDegreeFromWorld((Self.footDegree + 270) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
 			sideNewX = newX
 		EndIf
 		
@@ -341,7 +392,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				If (totalVelocity > 0 Or (totalVelocity = 0 And sideOffset2 < sideOffset)) Then
 					sideOffset = sideOffset2
 					sideCollisionDirection = DIRECTION_OFFSET_RIGHT
-					sideCollisionDegree = getDegreeFromWorld((Self.footDegree + 90) Mod MDPhone.SCREEN_WIDTH, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
+					sideCollisionDegree = getDegreeFromWorld((Self.footDegree + 90) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
 					sideNewX = newX
 				EndIf
 				
@@ -355,7 +406,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				
 				sideCollision = True
 				sideCollisionDirection = DIRECTION_OFFSET_RIGHT
-				sideCollisionDegree = getDegreeFromWorld((Self.footDegree + 90) Mod MDPhone.SCREEN_WIDTH, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
+				sideCollisionDegree = getDegreeFromWorld((Self.footDegree + 90) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
 				sideNewX = newX
 			EndIf
 		EndIf
@@ -363,8 +414,8 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 		upSideCollisionChk(Self.footX, Self.footY, skyDirection, Self.collisionData)
 		
 		If (Not Self.collisionData.isNoCollision()) Then
-			degree = getDegreeFromWorld((Self.footDegree + 180) Mod MDPhone.SCREEN_WIDTH, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
-			plumbDegree = (degree + 90) Mod MDPhone.SCREEN_WIDTH
+			degree = getDegreeFromWorld((Self.footDegree + 180) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
+			plumbDegree = (degree + 90) Mod 360
 			
 			If (((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100 > 0) Then
 				If (sideCollision) Then
@@ -402,7 +453,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 		
 		If (Not Self.collisionData.isNoCollision()) Then
 			degree = getDegreeFromWorld(Self.footDegree, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
-			plumbDegree = (degree + 90) Mod MDPhone.SCREEN_WIDTH
+			plumbDegree = (degree + 90) Mod 360
 			
 			If (((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100 > 0) Then
 				If (sideCollision) Then
@@ -449,7 +500,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				
 				If (Not Self.collisionData.isNoCollision()) Then
 					degree = getDegreeFromWorld(Self.footDegree + 180, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
-					plumbDegree = (degree + 90) Mod MDPhone.SCREEN_WIDTH
+					plumbDegree = (degree + 90) Mod 360
 					
 					If (((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100 > 0) Then
 						If (isVertical) Then
@@ -473,7 +524,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				
 				If (Not Self.collisionData.isNoCollision()) Then
 					degree = getDegreeFromWorld(Self.footDegree, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
-					plumbDegree = (degree + 90) Mod MDPhone.SCREEN_WIDTH
+					plumbDegree = (degree + 90) Mod 360
 					
 					If (((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100 > 0) Then
 						Self.actionState = (Byte) 0
@@ -521,7 +572,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				EndIf
 				
 				If (newX <> NO_COLLISION) Then
-					Self.user.doWhileTouchWorld(DIRECTION_OFFSET_LEFT, getDegreeFromWorld((Self.footDegree + 270) Mod MDPhone.SCREEN_WIDTH, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ))
+					Self.user.doWhileTouchWorld(DIRECTION_OFFSET_LEFT, getDegreeFromWorld((Self.footDegree + 270) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ))
 					
 					If (isVertical) Then
 						Self.footY = newX
@@ -545,7 +596,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				EndIf
 				
 				If (newX <> NO_COLLISION) Then
-					Self.user.doWhileTouchWorld(DIRECTION_OFFSET_RIGHT, getDegreeFromWorld((Self.footDegree + 90) Mod MDPhone.SCREEN_WIDTH, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ))
+					Self.user.doWhileTouchWorld(DIRECTION_OFFSET_RIGHT, getDegreeFromWorld((Self.footDegree + 90) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ))
 					
 					If (isVertical) Then
 						Self.footY = newX
@@ -579,7 +630,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 			
 			If (Not Self.collisionData.isNoCollision()) Then
 				degree = getDegreeFromWorld(Self.footDegree + 180, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
-				plumbDegree = (degree + 90) Mod MDPhone.SCREEN_WIDTH
+				plumbDegree = (degree + 90) Mod 360
 				
 				If (((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100 > 0) Then
 					If (isVertical) Then
@@ -603,7 +654,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 			
 			If (Not Self.collisionData.isNoCollision()) Then
 				degree = getDegreeFromWorld(Self.footDegree, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
-				plumbDegree = (degree + 90) Mod MDPhone.SCREEN_WIDTH
+				plumbDegree = (degree + 90) Mod 360
 				
 				If (((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100 > 0) Then
 					Self.actionState = (Byte) 0
@@ -1746,7 +1797,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 					If (newY <> NO_COLLISION) Then
 						Self.footY = newY
 						calChkPointFromPos()
-						Self.user.doWhileTouchWorld(direction = DIRECTION_OFFSET_LEFT ? DIRECTION_OFFSET_LEFT : DIRECTION_OFFSET_RIGHT, getDegreeFromWorld((Self.footDegree + (direction = DIRECTION_OFFSET_LEFT ? 270 : 90)) Mod MDPhone.SCREEN_WIDTH, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ))
+						Self.user.doWhileTouchWorld(direction = DIRECTION_OFFSET_LEFT ? DIRECTION_OFFSET_LEFT : DIRECTION_OFFSET_RIGHT, getDegreeFromWorld((Self.footDegree + (direction = DIRECTION_OFFSET_LEFT ? 270 : 90)) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ))
 						Self.moveDistanceY = DIRECTION_OFFSET_DOWN
 						Self.acObj.velY = DIRECTION_OFFSET_DOWN
 					EndIf
@@ -1763,7 +1814,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 					If (newY <> NO_COLLISION) Then
 						Self.footY = newY
 						calChkPointFromPos()
-						Self.user.doWhileTouchWorld(direction = DIRECTION_OFFSET_LEFT ? DIRECTION_OFFSET_RIGHT : DIRECTION_OFFSET_LEFT, getDegreeFromWorld((Self.footDegree + (direction = DIRECTION_OFFSET_LEFT ? 90 : 270)) Mod MDPhone.SCREEN_WIDTH, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ))
+						Self.user.doWhileTouchWorld(direction = DIRECTION_OFFSET_LEFT ? DIRECTION_OFFSET_RIGHT : DIRECTION_OFFSET_LEFT, getDegreeFromWorld((Self.footDegree + (direction = DIRECTION_OFFSET_LEFT ? 90 : 270)) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ))
 						Self.moveDistanceY = DIRECTION_OFFSET_DOWN
 						Self.acObj.velY = DIRECTION_OFFSET_DOWN
 					EndIf
@@ -1829,28 +1880,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 		
 		Self.totalDistance = ((Self.moveDistanceX * Cos(Self.user.getBodyDegree())) + (Self.moveDistanceY * Sin(Self.user.getBodyDegree()))) / 100
 	End
-
-	Public Method getDirectionByDegree:Int(degree:Int)
-		While (degree < 0) {
-			degree += MDPhone.SCREEN_WIDTH
-		EndIf
-		degree Mod= MDPhone.SCREEN_WIDTH
-		
-		If (degree > 315 Or degree < 45) Then
-			Return DIRECTION_OFFSET_DOWN
-		EndIf
-		
-		If (degree >= 225 And degree <= 315) Then
-			Return DIRECTION_OFFSET_RIGHT
-		EndIf
-		
-		If (degree <= StringIndex.FONT_COLON_RED Or degree >= 225) Then
-			Return DIRECTION_OFFSET_LEFT
-		EndIf
-		
-		Return DIRECTION_OFFSET_UP
-	End
-
+	
 	Private Method getWorldY:Int(x:Int, y:Int, direction:Int)
 		Return Self.worldInstance.getWorldY(x, y, Self.acObj.posZ, direction)
 	End
@@ -2267,16 +2297,12 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 		Self.chkOffsetX = chkPointX - footX
 		Self.chkOffsetY = chkPointY - footY
 	End
-
-	Public Method getActionState:Byte()
-		Return Self.actionState
-	End
-
+	
 	Private Method getDegreeFromWorld:Int(currentDegree:Int, x:Int, y:Int, z:Int)
 		While (currentDegree < 0) {
-			currentDegree += MDPhone.SCREEN_WIDTH
+			currentDegree += 360
 		EndIf
-		currentDegree Mod= MDPhone.SCREEN_WIDTH
+		currentDegree Mod= 360
 		
 		If (Self.degreeGetter = Null) Then
 			Return currentDegree
@@ -2290,7 +2316,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 		Int re = Abs(degree1 - degree2)
 		
 		If (re > 180) Then
-			re = MDPhone.SCREEN_WIDTH - re
+			re = 360 - re
 		EndIf
 		
 		If (re > 90) Then
@@ -2326,7 +2352,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 					i = 90
 				EndIf
 				
-				degree = getDegreeFromWorld((i2 + i) Mod MDPhone.SCREEN_WIDTH, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
+				degree = getDegreeFromWorld((i2 + i) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
 				aCWorldCalUser = Self.user
 				
 				If (direction = 0) Then
@@ -2352,7 +2378,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 			If (newX <> ACParam.NO_COLLISION) Then
 				Self.footX = newX
 				calChkPointFromPos()
-				degree = getDegreeFromWorld((Self.footDegree + (direction = 0 ? 90 : 270)) Mod MDPhone.SCREEN_WIDTH, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
+				degree = getDegreeFromWorld((Self.footDegree + (direction = 0 ? 90 : 270)) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
 				aCWorldCalUser = Self.user
 				
 				If (direction = 0) Then
@@ -2368,27 +2394,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 		EndIf
 		
 	End
-
-	Public Method stopMoveX:Void()
-		Super.stopMoveX()
-		
-		If (Self.actionState = Null) Then
-			Int tmpMoveDistanceX = (Self.totalDistance * Cos(Self.user.getBodyDegree())) / 100
-			Self.totalDistance = ACUtilities.getTotalFromDegree(DIRECTION_OFFSET_DOWN, (Self.totalDistance * Sin(Self.user.getBodyDegree())) / 100, Self.user.getBodyDegree())
-		EndIf
-		
-	End
-
-	Public Method stopMoveY:Void()
-		Super.stopMoveY()
-		
-		If (Self.actionState = Null) Then
-			Int dSin = (Self.totalDistance * Sin(Self.user.getBodyDegree())) / 100
-			Self.totalDistance = ACUtilities.getTotalFromDegree((Self.totalDistance * Cos(Self.user.getBodyDegree())) / 100, DIRECTION_OFFSET_DOWN, Self.user.getBodyDegree())
-		EndIf
-		
-	End
-
+	
 	Private Method canBeSideStop:Bool(direction:Int)
 		Bool re = False
 		
