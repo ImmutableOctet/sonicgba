@@ -3,7 +3,11 @@ Strict
 Public
 
 ' Imports:
-' Nothing so far.
+Private
+	Import com.sega.engine.action.accollision
+	Import com.sega.engine.action.acobject
+	Import com.sega.engine.action.acworld
+Public
 
 ' Classes:
 Class ACBlock Extends ACCollision Abstract
@@ -21,10 +25,10 @@ Class ACBlock Extends ACCollision Abstract
 		Field width:Int
 	Public
 		' Methods (Abstract):
-		Method getCollisionXFromLeft:Int(Int i) Abstract
-		Method getCollisionXFromRight:Int(Int i) Abstract
-		Method getCollisionYFromDown:Int(Int i) Abstract
-		Method getCollisionYFromUp:Int(Int i) Abstract
+		Method getCollisionXFromLeft:Int(value:Int) Abstract
+		Method getCollisionXFromRight:Int(value:Int) Abstract
+		Method getCollisionYFromDown:Int(value:Int) Abstract
+		Method getCollisionYFromUp:Int(value:Int) Abstract
 		
 		' Constructor(s):
 		Method New(worldInstance:ACWorld)

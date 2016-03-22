@@ -1,18 +1,25 @@
 <?xml version="1.0"?>
 <JiProjUserOptions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Files>
-    <DocUserOptions Filename=".\src\com\sega\engine\action\acblock.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\engine\action\acblock.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>54</Y>
+        <X>38</X>
+        <Y>30</Y>
       </CursorPos>
-      <DocGUID>354e77ef-4e6a-4264-924f-4e99d9bf8ec7</DocGUID>
+      <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\com\sega\engine\action\accollision.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>8</X>
+        <Y>400</Y>
+      </CursorPos>
+      <DocGUID>35b18140-c785-4b6b-bad2-e622380fb9ae</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acparam.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>15</Y>
+        <X>19</X>
+        <Y>12</Y>
       </CursorPos>
       <DocGUID>7c2d2744-8c28-4da9-a8dc-609d4c6b46b0</DocGUID>
       <Bookmarks />
@@ -87,8 +94,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\constutil.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>17</X>
-        <Y>32</Y>
+        <X>18</X>
+        <Y>31</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -590,13 +597,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\application.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\application.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>2</X>
         <Y>6</Y>
       </CursorPos>
-      <DocGUID>6ccaa0e3-56a1-4be3-a220-82b1543ed5e6</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonic.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
