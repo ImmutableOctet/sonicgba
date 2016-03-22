@@ -43,7 +43,7 @@ Class ACObject Implements ACParam Abstract
 			Self.collisionVec = New Stack<ACCollision>()
 		End
 		
-		' Methods:
+		' Methods (Implemented):
 		Method addCollision:Void(collision:ACCollision)
 			Self.collisionVec.Push(collision)
 		End
