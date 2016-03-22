@@ -15,6 +15,8 @@ Private
 		Import android.graphics.rectf
 		Import android.graphics.region.op
 	#End
+	
+	Import mojo2.graphics
 Public
 
 ' Interfaces:
