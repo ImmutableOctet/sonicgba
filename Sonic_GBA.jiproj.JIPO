@@ -18,10 +18,18 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\accollisiondata.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>11</X>
-        <Y>35</Y>
+        <X>21</X>
+        <Y>11</Y>
       </CursorPos>
       <DocGUID>c938aa3a-ad62-4dc6-b1b2-9034420b07ed</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\com\sega\engine\action\acdebug.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>24</X>
+        <Y>9</Y>
+      </CursorPos>
+      <DocGUID>c8755789-f984-413c-b649-52551cb697aa</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acparam.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
