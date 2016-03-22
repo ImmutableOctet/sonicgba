@@ -66,10 +66,18 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acmovecaluser.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>17</X>
-        <Y>5</Y>
+        <X>23</X>
+        <Y>8</Y>
       </CursorPos>
       <DocGUID>a6da53d5-be0f-4aca-b89c-39b621eda964</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\com\sega\engine\action\acobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>2</X>
+        <Y>89</Y>
+      </CursorPos>
+      <DocGUID>915cb327-86b2-4724-94fe-63df5d1431b6</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acparam.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
