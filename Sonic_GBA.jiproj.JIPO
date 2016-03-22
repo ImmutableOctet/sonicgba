@@ -48,10 +48,18 @@
       <DocGUID>c27e1b7d-6bed-4a36-992b-deb620f8b3bc</DocGUID>
       <Bookmarks />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\com\sega\engine\action\acmapdegreegetter.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>3</X>
+        <Y>401</Y>
+      </CursorPos>
+      <DocGUID>10684e4c-d8ac-45d5-ba34-acf73c208710</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acparam.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>19</X>
-        <Y>12</Y>
+        <X>7</X>
+        <Y>7</Y>
       </CursorPos>
       <DocGUID>7c2d2744-8c28-4da9-a8dc-609d4c6b46b0</DocGUID>
       <Bookmarks />
