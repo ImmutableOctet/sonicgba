@@ -128,12 +128,20 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\com\sega\engine\lib\line.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>5</X>
+        <Y>59</Y>
+      </CursorPos>
+      <DocGUID>785f40c3-009a-4012-8872-d557f4770fdb</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\lib\myapi.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>11</X>
-        <Y>8</Y>
+        <X>521</X>
+        <Y>12</Y>
       </CursorPos>
-      <DocGUID>5cc945ac-8245-458c-b7e9-29b0ced1df74</DocGUID>
+      <DocGUID>bb2db043-f84a-4e84-bb3d-21549a379e4e</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\define\mdphone.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
