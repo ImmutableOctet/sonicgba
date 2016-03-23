@@ -113,10 +113,18 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acworldcollisioncalculator.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>47</X>
-        <Y>1597</Y>
+        <X>32</X>
+        <Y>26</Y>
       </CursorPos>
       <DocGUID>89ec1983-40bd-46ea-b524-b554d4ab7f15</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\com\sega\engine\action\acworldcollisionlimit.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>31</X>
+        <Y>8</Y>
+      </CursorPos>
+      <DocGUID>0a2efe71-d519-4619-8ee7-8ab608c105d5</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\define\mdphone.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
