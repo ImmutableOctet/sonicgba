@@ -885,8 +885,8 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 						Local var4:= -1
 						
 						If (Self.checkArrayForShowX = Null) Then
-							Self.checkArrayForShowX = new Int[Self.footCollisionPointOffsetX.length]
-							Self.checkArrayForShowY = new Int[Self.footCollisionPointOffsetX.length]
+							Self.checkArrayForShowX = new Int[Self.footCollisionPointOffsetX.Length]
+							Self.checkArrayForShowY = new Int[Self.footCollisionPointOffsetX.Length]
 						EndIf
 						
 						For Local var5:= 0 Until Self.footCollisionPointOffsetX.Length
@@ -1161,381 +1161,445 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 			Return Self.worldInstance.getWorldX(x, y, Self.acObj.posZ, direction)
 		End
 		
-	Private Method rightSideCollisionChk:Void(x:Int, y:Int, direction:Int, collisionData:ACCollisionData)
-		Int collisionPointId
-		Int maxDiff
-		Int i
-		Int objX
-		Int objY
-		Int diff
-		collisionData.reset()
-		
-		If (Self.limit <> Null) Then
-			If (Self.limit.noSideCollision()) Then
-				Return
-			EndIf
-		EndIf
-		
-		Select (direction)
-			Case DIRECTION_OFFSET_DOWN
-			Case DIRECTION_OFFSET_UP
-				Int maxBlockPixX = ACParam.NO_COLLISION
-				collisionPointId = -1
-				maxDiff = -1
-				i = DIRECTION_OFFSET_DOWN
-				While (True) {
-					
-					If (i >= Self.bodyCollisionPointOffsetY.length) Then
-						If (maxBlockPixX <> ACParam.NO_COLLISION) Then
-							collisionData.newPosX = ACUtilities.getRelativePointX(maxBlockPixX, -Self.bodyCollisionPointOffsetX, -Self.bodyCollisionPointOffsetY[collisionPointId], Self.user.getBodyDegree())
-							Self.worldInstance.getCollisionBlock(Self.getBlock, collisionData.collisionX, collisionData.collisionY, Self.acObj.posZ)
-							collisionData.reBlock = Self.getBlock
-							break
-						EndIf
-					EndIf
-					
-					objX = ACUtilities.getRelativePointX(x, Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
-					objY = ACUtilities.getRelativePointY(y, Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
-					Int blockPixX = getWorldX(objX, objY, (direction + DIRECTION_OFFSET_RIGHT) Mod 4)
-					
-					If (blockPixX <> ACParam.NO_COLLISION) Then
-						diff = Abs(blockPixX - objX)
-						
-						If (maxBlockPixX = ACParam.NO_COLLISION Or diff > maxDiff) Then
-							maxBlockPixX = blockPixX
-							collisionPointId = i
-							maxDiff = diff
-							collisionData.collisionX = maxBlockPixX
-							collisionData.collisionY = objY
-							collisionData.newPosY = y
-						EndIf
-					EndIf
-					
-					i += DIRECTION_OFFSET_LEFT
-				EndIf
-				break
-		EndIf
-		Int maxBlockPixY = ACParam.NO_COLLISION
-		collisionPointId = -1
-		maxDiff = -1
-		i = DIRECTION_OFFSET_DOWN
-		While (True) {
+		Method rightSideCollisionChk:Void(x:Int, y:Int, direction:Int, collisionData:ACCollisionData)
+			Local collisionPointId:Int
+			Local maxDiff:Int
+			Local i:Int
+			Local objX:Int
+			Local objY:Int
+			Local diff:Int
 			
-			If (i < Self.bodyCollisionPointOffsetY.length) Then
-				objX = ACUtilities.getRelativePointX(x, Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
-				objY = ACUtilities.getRelativePointY(y, Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
-				Int blockPixY = getWorldY(objX, objY, (direction + DIRECTION_OFFSET_RIGHT) Mod 4)
-				
-				If (blockPixY <> ACParam.NO_COLLISION) Then
-					diff = Abs(blockPixY - objY)
-					
-					If (maxBlockPixY = ACParam.NO_COLLISION Or diff > maxDiff) Then
-						maxBlockPixY = blockPixY
-						collisionPointId = i
-						maxDiff = diff
-						collisionData.collisionX = maxBlockPixY
-						collisionData.collisionY = objX
-						collisionData.newPosX = x
-					EndIf
-				EndIf
-				
-				i += DIRECTION_OFFSET_LEFT
-			ElseIf (maxBlockPixY <> ACParam.NO_COLLISION) Then
-				collisionData.newPosY = ACUtilities.getRelativePointY(maxBlockPixY, -Self.bodyCollisionPointOffsetX, -Self.bodyCollisionPointOffsetY[collisionPointId], Self.user.getBodyDegree())
-				Self.worldInstance.getCollisionBlock(Self.getBlock, collisionData.collisionX, collisionData.collisionY, Self.acObj.posZ)
-				collisionData.reBlock = Self.getBlock
-				Return
-			Else
-				Return
-			EndIf
-		EndIf
-	End
-
-	Private Method leftSideCollisionChk:Void(x:Int, y:Int, direction:Int, collisionData:ACCollisionData)
-		Int collisionPointId
-		Int maxDiff
-		Int i
-		Int objX
-		Int objY
-		Int diff
-		collisionData.reset()
-		
-		If (Self.limit <> Null) Then
-			If (Self.limit.noSideCollision()) Then
-				Return
-			EndIf
-		EndIf
-		
-		Select (direction)
-			Case DIRECTION_OFFSET_DOWN
-			Case DIRECTION_OFFSET_UP
-				Int maxBlockPixX = ACParam.NO_COLLISION
-				collisionPointId = -1
-				maxDiff = -1
-				i = DIRECTION_OFFSET_DOWN
-				While (True) {
-					
-					If (i >= Self.bodyCollisionPointOffsetY.length) Then
-						If (maxBlockPixX <> ACParam.NO_COLLISION) Then
-							collisionData.newPosX = ACUtilities.getRelativePointX(maxBlockPixX, Self.bodyCollisionPointOffsetX, -Self.bodyCollisionPointOffsetY[collisionPointId], Self.user.getBodyDegree())
-							Self.worldInstance.getCollisionBlock(Self.getBlock, collisionData.collisionX, collisionData.collisionY, Self.acObj.posZ)
-							collisionData.reBlock = Self.getBlock
-							break
-						EndIf
-					EndIf
-					
-					objX = ACUtilities.getRelativePointX(x, -Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
-					objY = ACUtilities.getRelativePointY(y, -Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
-					Int blockPixX = getWorldX(objX, objY, (direction + DIRECTION_OFFSET_LEFT) Mod 4)
-					
-					If (blockPixX <> ACParam.NO_COLLISION) Then
-						diff = Abs(blockPixX - objX)
-						
-						If (maxBlockPixX = ACParam.NO_COLLISION Or diff > maxDiff) Then
-							maxBlockPixX = blockPixX
-							collisionPointId = i
-							maxDiff = diff
-							collisionData.collisionX = maxBlockPixX
-							collisionData.collisionY = objY
-							collisionData.newPosY = y
-						EndIf
-					EndIf
-					
-					i += DIRECTION_OFFSET_LEFT
-				EndIf
-				break
-		EndIf
-		Int maxBlockPixY = ACParam.NO_COLLISION
-		collisionPointId = -1
-		maxDiff = -1
-		i = DIRECTION_OFFSET_DOWN
-		While (True) {
+			collisionData.reset()
 			
-			If (i < Self.bodyCollisionPointOffsetY.length) Then
-				objX = ACUtilities.getRelativePointX(x, -Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
-				objY = ACUtilities.getRelativePointY(y, -Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
-				Int blockPixY = getWorldY(objX, objY, (direction + DIRECTION_OFFSET_LEFT) Mod 4)
-				
-				If (blockPixY <> ACParam.NO_COLLISION) Then
-					diff = Abs(blockPixY - objY)
-					
-					If (maxBlockPixY = ACParam.NO_COLLISION Or diff > maxDiff) Then
-						maxBlockPixY = blockPixY
-						collisionPointId = i
-						maxDiff -= diff
-						collisionData.collisionX = objX
-						collisionData.collisionY = maxBlockPixY
-						collisionData.newPosX = x
-					EndIf
+			If (Self.limit <> Null) Then
+				If (Self.limit.noSideCollision()) Then
+					Return
 				EndIf
-				
-				i += DIRECTION_OFFSET_LEFT
-			ElseIf (maxBlockPixY <> ACParam.NO_COLLISION) Then
-				collisionData.newPosX = ACUtilities.getRelativePointY(maxBlockPixY, Self.bodyCollisionPointOffsetX, -Self.bodyCollisionPointOffsetY[collisionPointId], Self.user.getBodyDegree())
-				Self.worldInstance.getCollisionBlock(Self.getBlock, collisionData.collisionX, collisionData.collisionY, Self.acObj.posZ)
-				collisionData.reBlock = Self.getBlock
-				Return
-			Else
-				Return
 			EndIf
-		EndIf
-	End
-
-	Private Method upSideCollisionChk:Void(x:Int, y:Int, direction:Int, collisionData:ACCollisionData)
-		collisionData.reset()
-		
-		If (Self.limit <> Null) Then
-			If (Self.limit.noTopCollision()) Then
-				Return
-			EndIf
-		EndIf
-		
-		Int maxDiff
-		Int collisionPointId
-		Int i
-		Int objX
-		Int objY
-		Int diff
-		Select (direction)
-			Case DIRECTION_OFFSET_DOWN
-			Case DIRECTION_OFFSET_UP
-				Int maxBlockPixY = ACParam.NO_COLLISION
-				maxDiff = -1
-				collisionPointId = -1
-				i = DIRECTION_OFFSET_DOWN
-				While (True) {
+			
+			Select (direction)
+				Case DIRECTION_UP, DIRECTION_DOWN
+					Local maxBlockPixX:= ACParam.NO_COLLISION
 					
-					If (i < Self.headCollisionPointOffsetX.length) Then
-						objX = ACUtilities.getRelativePointX(x, Self.headCollisionPointOffsetX[i], Self.headCollisionPointOffsetY, Self.footDegree)
-						objY = ACUtilities.getRelativePointY(y, Self.headCollisionPointOffsetX[i], Self.headCollisionPointOffsetY, Self.footDegree)
-						Int blockPixY = getWorldY(objX, objY, (direction + DIRECTION_OFFSET_UP) Mod 4)
-						
-						If (blockPixY <> ACParam.NO_COLLISION) Then
-							diff = Abs(objY - blockPixY)
-							
-							If (maxBlockPixY = ACParam.NO_COLLISION Or diff > maxDiff) Then
-								maxBlockPixY = blockPixY
-								collisionPointId = i
-								maxDiff = diff
+					collisionPointId = -1
+					maxDiff = -1
+					
+					i = 0
+					
+					While (True)
+						If (i >= Self.bodyCollisionPointOffsetY.Length) Then
+							If (maxBlockPixX <> ACParam.NO_COLLISION) Then
+								collisionData.newPosX = ACUtilities.getRelativePointX(maxBlockPixX, -Self.bodyCollisionPointOffsetX, -Self.bodyCollisionPointOffsetY[collisionPointId], Self.user.getBodyDegree())
+								
+								Self.worldInstance.getCollisionBlock(Self.getBlock, collisionData.collisionX, collisionData.collisionY, Self.acObj.posZ)
+								
+								collisionData.reBlock = Self.getBlock
+								
+								Exit
 							EndIf
 						EndIf
 						
-						i += DIRECTION_OFFSET_LEFT
-					ElseIf (maxBlockPixY <> ACParam.NO_COLLISION) Then
-						objX = ACUtilities.getRelativePointX(x, Self.headCollisionPointOffsetX[collisionPointId], Self.headCollisionPointOffsetY, Self.footDegree)
-						objY = ACUtilities.getRelativePointY(y, Self.headCollisionPointOffsetX[collisionPointId], Self.headCollisionPointOffsetY, Self.footDegree)
-						Self.worldInstance.getCollisionBlock(Self.getBlock, objX, maxBlockPixY, Self.acObj.posZ)
-						collisionData.collisionX = objX
-						collisionData.collisionY = maxBlockPixY
-						collisionData.newPosX = x
-						collisionData.newPosY = ACUtilities.getRelativePointY(maxBlockPixY, -Self.headCollisionPointOffsetX[collisionPointId], -Self.headCollisionPointOffsetY, Self.footDegree)
-						collisionData.reBlock = Self.getBlock
-						Return
-					Else
-						Return
-					EndIf
-				EndIf
-				break
-			Default
-				Int maxBlockPixX = ACParam.NO_COLLISION
-				maxDiff = -1
-				collisionPointId = -1
-				i = DIRECTION_OFFSET_DOWN
-				While (True) {
-					
-					If (i < Self.headCollisionPointOffsetX.length) Then
-						objX = ACUtilities.getRelativePointX(x, Self.headCollisionPointOffsetX[i], Self.headCollisionPointOffsetY, Self.footDegree)
-						Int blockPixX = getWorldX(objX, ACUtilities.getRelativePointY(y, Self.headCollisionPointOffsetX[i], Self.headCollisionPointOffsetY, Self.footDegree), (direction + DIRECTION_OFFSET_UP) Mod 4)
+						objX = ACUtilities.getRelativePointX(x, Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
+						objY = ACUtilities.getRelativePointY(y, Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
+						
+						Local blockPixX:= getWorldX(objX, objY, (direction + DIRECTION_OFFSET_RIGHT) Mod DIRECTION_NUM)
 						
 						If (blockPixX <> ACParam.NO_COLLISION) Then
-							diff = Abs(objX - blockPixX)
+							diff = Abs(blockPixX - objX)
 							
 							If (maxBlockPixX = ACParam.NO_COLLISION Or diff > maxDiff) Then
 								maxBlockPixX = blockPixX
-								collisionPointId = i
-								maxDiff = diff
-							EndIf
-						EndIf
-						
-						i += DIRECTION_OFFSET_LEFT
-					ElseIf (maxBlockPixX <> ACParam.NO_COLLISION) Then
-						objX = ACUtilities.getRelativePointX(x, Self.headCollisionPointOffsetX[collisionPointId], Self.headCollisionPointOffsetY, Self.footDegree)
-						objY = ACUtilities.getRelativePointY(y, Self.headCollisionPointOffsetX[collisionPointId], Self.headCollisionPointOffsetY, Self.footDegree)
-						Self.worldInstance.getCollisionBlock(Self.getBlock, maxBlockPixX, objY, Self.acObj.posZ)
-						collisionData.collisionX = maxBlockPixX
-						collisionData.collisionY = objY
-						collisionData.newPosY = y
-						collisionData.newPosX = ACUtilities.getRelativePointX(maxBlockPixX, -Self.headCollisionPointOffsetX[collisionPointId], -Self.headCollisionPointOffsetY, Self.footDegree)
-						collisionData.reBlock = Self.getBlock
-						Return
-					Else
-						Return
-					EndIf
-				EndIf
-				break
-		EndIf
-	End
-
-	Private Method downSideCollisionChk:Void(x:Int, y:Int, direction:Int, collisionData:ACCollisionData)
-		collisionData.reset()
-		
-		If (Self.limit <> Null) Then
-			If (Self.limit.noDownCollision()) Then
-				Return
-			EndIf
-		EndIf
-		
-		Int collisionPointId = -1
-		Int maxDiff = -1
-		Int i
-		Int objX
-		Int objY
-		Int diff
-		Select (direction)
-			Case DIRECTION_OFFSET_DOWN
-			Case DIRECTION_OFFSET_UP
-				Int maxBlockPixY = ACParam.NO_COLLISION
-				i = DIRECTION_OFFSET_DOWN
-				While (True) {
-					
-					If (i < Self.footCollisionPointOffsetX.length) Then
-						objX = ACUtilities.getRelativePointX(x, Self.footCollisionPointOffsetX[i], Self.footCollisionPointOffsetY, Self.footDegree)
-						objY = ACUtilities.getRelativePointY(y, Self.footCollisionPointOffsetX[i], Self.footCollisionPointOffsetY, Self.footDegree)
-						Int blockPixY = getWorldY(objX, objY, (direction + DIRECTION_OFFSET_DOWN) Mod 4)
-						
-						If (blockPixY <> ACParam.NO_COLLISION) Then
-							diff = Abs(objY - blockPixY)
-							
-							If (maxBlockPixY = ACParam.NO_COLLISION Or diff > maxDiff Or i = Self.priorityChkId) Then
-								maxBlockPixY = blockPixY
+								
 								collisionPointId = i
 								maxDiff = diff
 								
-								If (i <> Self.priorityChkId) Then
-								EndIf
+								collisionData.collisionX = maxBlockPixX
+								collisionData.collisionY = objY
+								collisionData.newPosY = y
 							EndIf
 						EndIf
 						
-						i += DIRECTION_OFFSET_LEFT
+						i += 1
+					Wend
+			End Select
+			
+			Local maxBlockPixY:= ACParam.NO_COLLISION
+			
+			collisionPointId = -1
+			maxDiff = -1
+			
+			i = 0
+			
+			While (True)
+				If (i < Self.bodyCollisionPointOffsetY.Length) Then
+					objX = ACUtilities.getRelativePointX(x, Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
+					objY = ACUtilities.getRelativePointY(y, Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
+					
+					Local blockPixY:= getWorldY(objX, objY, (direction + DIRECTION_OFFSET_RIGHT) Mod DIRECTION_NUM)
+					
+					If (blockPixY <> ACParam.NO_COLLISION) Then
+						diff = Abs(blockPixY - objY)
+						
+						If (maxBlockPixY = ACParam.NO_COLLISION Or diff > maxDiff) Then
+							maxBlockPixY = blockPixY
+							
+							collisionPointId = i
+							maxDiff = diff
+							
+							collisionData.collisionX = maxBlockPixY
+							collisionData.collisionY = objX
+							collisionData.newPosX = x
+						EndIf
 					EndIf
 					
-					If (maxBlockPixY <> ACParam.NO_COLLISION) Then
-						objX = ACUtilities.getRelativePointX(x, Self.footCollisionPointOffsetX[collisionPointId], Self.footCollisionPointOffsetY, Self.footDegree)
-						objY = ACUtilities.getRelativePointY(y, Self.footCollisionPointOffsetX[collisionPointId], Self.footCollisionPointOffsetY, Self.footDegree)
-						Self.worldInstance.getCollisionBlock(Self.getBlock, objX, maxBlockPixY, Self.acObj.posZ)
-						collisionData.collisionX = objX
-						collisionData.collisionY = maxBlockPixY
-						collisionData.newPosX = x
-						collisionData.newPosY = ACUtilities.getRelativePointY(maxBlockPixY, -Self.footCollisionPointOffsetX[collisionPointId], -Self.footCollisionPointOffsetY, Self.footDegree)
-						collisionData.reBlock = Self.getBlock
-						collisionData.chkPointID = collisionPointId
-						Return
-					EndIf
+					i += 1
+				ElseIf (maxBlockPixY <> ACParam.NO_COLLISION) Then
+					collisionData.newPosY = ACUtilities.getRelativePointY(maxBlockPixY, -Self.bodyCollisionPointOffsetX, -Self.bodyCollisionPointOffsetY[collisionPointId], Self.user.getBodyDegree())
 					
+					Self.worldInstance.getCollisionBlock(Self.getBlock, collisionData.collisionX, collisionData.collisionY, Self.acObj.posZ)
+					
+					collisionData.reBlock = Self.getBlock
+					
+					Exit
+				Else
+					Exit
+				EndIf
+			Wend
+		End
+		
+		Method leftSideCollisionChk:Void(x:Int, y:Int, direction:Int, collisionData:ACCollisionData)
+			Local collisionPointId:Int
+			Local maxDiff:Int
+			Local i:Int
+			Local objX:Int
+			Local objY:Int
+			Local diff:Int
+			
+			collisionData.reset()
+			
+			If (Self.limit <> Null) Then
+				If (Self.limit.noSideCollision()) Then
 					Return
 				EndIf
-			Default
-				Int maxBlockPixX = ACParam.NO_COLLISION
-				i = DIRECTION_OFFSET_DOWN
-				While (True) {
+			EndIf
+			
+			Select (direction)
+				Case DIRECTION_UP, DIRECTION_DOWN
+					Local maxBlockPixX:= ACParam.NO_COLLISION
 					
-					If (i < Self.footCollisionPointOffsetX.length) Then
-						objX = ACUtilities.getRelativePointX(x, Self.footCollisionPointOffsetX[i], Self.footCollisionPointOffsetY, Self.footDegree)
-						Int blockPixX = getWorldX(objX, ACUtilities.getRelativePointY(y, Self.footCollisionPointOffsetX[i], Self.footCollisionPointOffsetY, Self.footDegree), (direction + DIRECTION_OFFSET_DOWN) Mod 4)
+					collisionPointId = -1
+					maxDiff = -1
+					
+					i = 0
+					
+					While (True)
+						If (i >= Self.bodyCollisionPointOffsetY.Length) Then
+							If (maxBlockPixX <> ACParam.NO_COLLISION) Then
+								collisionData.newPosX = ACUtilities.getRelativePointX(maxBlockPixX, Self.bodyCollisionPointOffsetX, -Self.bodyCollisionPointOffsetY[collisionPointId], Self.user.getBodyDegree())
+								
+								Self.worldInstance.getCollisionBlock(Self.getBlock, collisionData.collisionX, collisionData.collisionY, Self.acObj.posZ)
+								
+								collisionData.reBlock = Self.getBlock
+								
+								Exit
+							EndIf
+						EndIf
+						
+						objX = ACUtilities.getRelativePointX(x, -Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
+						objY = ACUtilities.getRelativePointY(y, -Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
+						
+						Local blockPixX:= getWorldX(objX, objY, (direction + DIRECTION_OFFSET_LEFT) Mod DIRECTION_NUM)
 						
 						If (blockPixX <> ACParam.NO_COLLISION) Then
-							diff = Abs(objX - blockPixX)
+							diff = Abs(blockPixX - objX)
 							
-							If (maxBlockPixX = ACParam.NO_COLLISION Or diff > maxDiff Or i = Self.priorityChkId) Then
+							If (maxBlockPixX = ACParam.NO_COLLISION Or diff > maxDiff) Then
 								maxBlockPixX = blockPixX
+								
 								collisionPointId = i
 								maxDiff = diff
 								
-								If (i <> Self.priorityChkId) Then
-								EndIf
+								collisionData.collisionX = maxBlockPixX
+								collisionData.collisionY = objY
+								collisionData.newPosY = y
 							EndIf
 						EndIf
 						
-						i += DIRECTION_OFFSET_LEFT
+						i += 1
+					Wend
+			End Select
+			
+			Local maxBlockPixY:= ACParam.NO_COLLISION
+			
+			collisionPointId = -1
+			maxDiff = -1
+			
+			i = 0
+			
+			While (True)
+				If (i < Self.bodyCollisionPointOffsetY.Length) Then
+					objX = ACUtilities.getRelativePointX(x, -Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
+					objY = ACUtilities.getRelativePointY(y, -Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
+					
+					Local blockPixY:= getWorldY(objX, objY, (direction + DIRECTION_OFFSET_LEFT) Mod DIRECTION_NUM)
+					
+					If (blockPixY <> ACParam.NO_COLLISION) Then
+						diff = Abs(blockPixY - objY)
+						
+						If (maxBlockPixY = ACParam.NO_COLLISION Or diff > maxDiff) Then
+							maxBlockPixY = blockPixY
+							
+							collisionPointId = i
+							maxDiff -= diff
+							
+							collisionData.collisionX = objX
+							collisionData.collisionY = maxBlockPixY
+							collisionData.newPosX = x
+						EndIf
 					EndIf
 					
-					If (maxBlockPixX <> ACParam.NO_COLLISION) Then
-						objX = ACUtilities.getRelativePointX(x, Self.footCollisionPointOffsetX[collisionPointId], Self.footCollisionPointOffsetY, Self.footDegree)
-						objY = ACUtilities.getRelativePointY(y, Self.footCollisionPointOffsetX[collisionPointId], Self.footCollisionPointOffsetY, Self.footDegree)
-						Self.worldInstance.getCollisionBlock(Self.getBlock, maxBlockPixX, objY, Self.acObj.posZ)
-						collisionData.collisionX = maxBlockPixX
-						collisionData.collisionY = objY
-						collisionData.newPosY = y
-						collisionData.newPosX = ACUtilities.getRelativePointX(maxBlockPixX, -Self.footCollisionPointOffsetX[collisionPointId], -Self.footCollisionPointOffsetY, Self.footDegree)
-						collisionData.reBlock = Self.getBlock
-						collisionData.chkPointID = collisionPointId
-						Return
-					EndIf
+					i += 1
+				ElseIf (maxBlockPixY <> ACParam.NO_COLLISION) Then
+					collisionData.newPosX = ACUtilities.getRelativePointY(maxBlockPixY, Self.bodyCollisionPointOffsetX, -Self.bodyCollisionPointOffsetY[collisionPointId], Self.user.getBodyDegree())
 					
+					Self.worldInstance.getCollisionBlock(Self.getBlock, collisionData.collisionX, collisionData.collisionY, Self.acObj.posZ)
+					
+					collisionData.reBlock = Self.getBlock
+					
+					Exit
+				Else
+					Exit
+				EndIf
+			Wend
+		End
+		
+		Method upSideCollisionChk:Void(x:Int, y:Int, direction:Int, collisionData:ACCollisionData)
+			collisionData.reset()
+			
+			If (Self.limit <> Null) Then
+				If (Self.limit.noTopCollision()) Then
 					Return
 				EndIf
-		EndIf
-	End
+			EndIf
+			
+			Local maxDiff:Int
+			Local collisionPointId:Int
+			Local i:Int
+			Local objX:Int
+			Local objY:Int
+			Local diff:Int
+			
+			Select (direction)
+				Case DIRECTION_UP, DIRECTION_DOWN
+					Local maxBlockPixY:= ACParam.NO_COLLISION
+					
+					maxDiff = -1
+					collisionPointId = -1
+					
+					i = 0
+					
+					While (True)
+						If (i < Self.headCollisionPointOffsetX.Length) Then
+							objX = ACUtilities.getRelativePointX(x, Self.headCollisionPointOffsetX[i], Self.headCollisionPointOffsetY, Self.footDegree)
+							objY = ACUtilities.getRelativePointY(y, Self.headCollisionPointOffsetX[i], Self.headCollisionPointOffsetY, Self.footDegree)
+							
+							Local blockPixY:= getWorldY(objX, objY, (direction + DIRECTION_OFFSET_UP) Mod DIRECTION_NUM)
+							
+							If (blockPixY <> ACParam.NO_COLLISION) Then
+								diff = Abs(objY - blockPixY)
+								
+								If (maxBlockPixY = ACParam.NO_COLLISION Or diff > maxDiff) Then
+									maxBlockPixY = blockPixY
+									
+									collisionPointId = i
+									maxDiff = diff
+								EndIf
+							EndIf
+							
+							i += 1
+						ElseIf (maxBlockPixY <> ACParam.NO_COLLISION) Then
+							objX = ACUtilities.getRelativePointX(x, Self.headCollisionPointOffsetX[collisionPointId], Self.headCollisionPointOffsetY, Self.footDegree)
+							objY = ACUtilities.getRelativePointY(y, Self.headCollisionPointOffsetX[collisionPointId], Self.headCollisionPointOffsetY, Self.footDegree)
+							
+							Self.worldInstance.getCollisionBlock(Self.getBlock, objX, maxBlockPixY, Self.acObj.posZ)
+							
+							collisionData.collisionX = objX
+							collisionData.collisionY = maxBlockPixY
+							
+							collisionData.newPosX = x
+							collisionData.newPosY = ACUtilities.getRelativePointY(maxBlockPixY, -Self.headCollisionPointOffsetX[collisionPointId], -Self.headCollisionPointOffsetY, Self.footDegree)
+							
+							collisionData.reBlock = Self.getBlock
+							
+							Exit
+						Else
+							Exit
+						EndIf
+					Wend
+				Default
+					Local maxBlockPixX:= ACParam.NO_COLLISION
+					
+					maxDiff = -1
+					collisionPointId = -1
+					
+					i = 0
+					
+					While (True)
+						If (i < Self.headCollisionPointOffsetX.Length) Then
+							objX = ACUtilities.getRelativePointX(x, Self.headCollisionPointOffsetX[i], Self.headCollisionPointOffsetY, Self.footDegree)
+							Local blockPixX:= getWorldX(objX, ACUtilities.getRelativePointY(y, Self.headCollisionPointOffsetX[i], Self.headCollisionPointOffsetY, Self.footDegree), (direction + DIRECTION_OFFSET_UP) Mod DIRECTION_NUM)
+							
+							If (blockPixX <> ACParam.NO_COLLISION) Then
+								diff = Abs(objX - blockPixX)
+								
+								If (maxBlockPixX = ACParam.NO_COLLISION Or diff > maxDiff) Then
+									maxBlockPixX = blockPixX
+									
+									collisionPointId = i
+									maxDiff = diff
+								EndIf
+							EndIf
+							
+							i += 1
+						ElseIf (maxBlockPixX <> ACParam.NO_COLLISION) Then
+							objX = ACUtilities.getRelativePointX(x, Self.headCollisionPointOffsetX[collisionPointId], Self.headCollisionPointOffsetY, Self.footDegree)
+							objY = ACUtilities.getRelativePointY(y, Self.headCollisionPointOffsetX[collisionPointId], Self.headCollisionPointOffsetY, Self.footDegree)
+							
+							Self.worldInstance.getCollisionBlock(Self.getBlock, maxBlockPixX, objY, Self.acObj.posZ)
+							
+							collisionData.collisionX = maxBlockPixX
+							collisionData.collisionY = objY
+							
+							collisionData.newPosY = y
+							collisionData.newPosX = ACUtilities.getRelativePointX(maxBlockPixX, -Self.headCollisionPointOffsetX[collisionPointId], -Self.headCollisionPointOffsetY, Self.footDegree)
+							
+							collisionData.reBlock = Self.getBlock
+							
+							Exit
+						Else
+							Exit
+						EndIf
+					Wend
+			End Select
+		End
+		
+		Method downSideCollisionChk:Void(x:Int, y:Int, direction:Int, collisionData:ACCollisionData)
+			collisionData.reset()
+			
+			If (Self.limit <> Null) Then
+				If (Self.limit.noDownCollision()) Then
+					Return
+				EndIf
+			EndIf
+			
+			Local collisionPointId:= -1
+			Local maxDiff:= -1
+			
+			Local i:Int
+			
+			Local objX:Int
+			Local objY:Int
+			Local diff:Int
+			
+			Select (direction)
+				Case DIRECTION_UP, DIRECTION_DOWN
+					Local maxBlockPixY:= ACParam.NO_COLLISION
+					
+					i = 0
+					
+					While (True)
+						If (i < Self.footCollisionPointOffsetX.Length) Then
+							objX = ACUtilities.getRelativePointX(x, Self.footCollisionPointOffsetX[i], Self.footCollisionPointOffsetY, Self.footDegree)
+							objY = ACUtilities.getRelativePointY(y, Self.footCollisionPointOffsetX[i], Self.footCollisionPointOffsetY, Self.footDegree)
+							
+							Local blockPixY:= getWorldY(objX, objY, (direction + DIRECTION_OFFSET_DOWN) Mod DIRECTION_NUM)
+							
+							If (blockPixY <> ACParam.NO_COLLISION) Then
+								diff = Abs(objY - blockPixY)
+								
+								If (maxBlockPixY = ACParam.NO_COLLISION Or diff > maxDiff Or i = Self.priorityChkId) Then
+									maxBlockPixY = blockPixY
+									
+									collisionPointId = i
+									maxDiff = diff
+									
+									If (i <> Self.priorityChkId) Then
+										' Nothing so far.
+									EndIf
+								EndIf
+							EndIf
+							
+							i += 1
+						EndIf
+						
+						If (maxBlockPixY <> ACParam.NO_COLLISION) Then
+							objX = ACUtilities.getRelativePointX(x, Self.footCollisionPointOffsetX[collisionPointId], Self.footCollisionPointOffsetY, Self.footDegree)
+							objY = ACUtilities.getRelativePointY(y, Self.footCollisionPointOffsetX[collisionPointId], Self.footCollisionPointOffsetY, Self.footDegree)
+							
+							Self.worldInstance.getCollisionBlock(Self.getBlock, objX, maxBlockPixY, Self.acObj.posZ)
+							
+							collisionData.collisionX = objX
+							collisionData.collisionY = maxBlockPixY
+							collisionData.newPosX = x
+							collisionData.newPosY = ACUtilities.getRelativePointY(maxBlockPixY, -Self.footCollisionPointOffsetX[collisionPointId], -Self.footCollisionPointOffsetY, Self.footDegree)
+							collisionData.reBlock = Self.getBlock
+							collisionData.chkPointID = collisionPointId
+							
+							Exit
+						EndIf
+						
+						' This may change in the future.
+						Exit
+					Wend
+				Default
+					Local maxBlockPixX:= ACParam.NO_COLLISION
+					
+					i = 0
+					
+					While (True)
+						If (i < Self.footCollisionPointOffsetX.Length) Then
+							objX = ACUtilities.getRelativePointX(x, Self.footCollisionPointOffsetX[i], Self.footCollisionPointOffsetY, Self.footDegree)
+							
+							Local blockPixX:= getWorldX(objX, ACUtilities.getRelativePointY(y, Self.footCollisionPointOffsetX[i], Self.footCollisionPointOffsetY, Self.footDegree), (direction + DIRECTION_OFFSET_DOWN) Mod DIRECTION_NUM)
+							
+							If (blockPixX <> ACParam.NO_COLLISION) Then
+								diff = Abs(objX - blockPixX)
+								
+								If (maxBlockPixX = ACParam.NO_COLLISION Or diff > maxDiff Or i = Self.priorityChkId) Then
+									maxBlockPixX = blockPixX
+									collisionPointId = i
+									maxDiff = diff
+									
+									If (i <> Self.priorityChkId) Then
+										' Nothing so far.
+									EndIf
+								EndIf
+							EndIf
+							
+							i += 1
+						EndIf
+						
+						If (maxBlockPixX <> ACParam.NO_COLLISION) Then
+							objX = ACUtilities.getRelativePointX(x, Self.footCollisionPointOffsetX[collisionPointId], Self.footCollisionPointOffsetY, Self.footDegree)
+							objY = ACUtilities.getRelativePointY(y, Self.footCollisionPointOffsetX[collisionPointId], Self.footCollisionPointOffsetY, Self.footDegree)
+							
+							Self.worldInstance.getCollisionBlock(Self.getBlock, maxBlockPixX, objY, Self.acObj.posZ)
+							
+							collisionData.collisionX = maxBlockPixX
+							collisionData.collisionY = objY
+							collisionData.newPosY = y
+							collisionData.newPosX = ACUtilities.getRelativePointX(maxBlockPixX, -Self.footCollisionPointOffsetX[collisionPointId], -Self.footCollisionPointOffsetY, Self.footDegree)
+							collisionData.reBlock = Self.getBlock
+							collisionData.chkPointID = collisionPointId
+							
+							Exit
+						EndIf
+						
+						' This behavior may change in the future.
+						Exit
+					Wend
+			End Select
+		End
 
 		Method getBlockLeftSide:Int(blockX:Int, blockY:Int)
 			' Not sure why we're doing this, but whatever.
