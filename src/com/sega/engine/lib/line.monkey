@@ -1,5 +1,11 @@
-package com.sega.engine.lib
+Strict
 
+Public
+
+' Imports:
+' Nothing so far.
+
+' Classes:
 Class Line
 	Private
 		' Constant variable(s):
