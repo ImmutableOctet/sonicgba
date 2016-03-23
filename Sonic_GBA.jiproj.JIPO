@@ -121,10 +121,18 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acworldcollisionlimit.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>31</X>
-        <Y>8</Y>
+        <X>3</X>
+        <Y>13</Y>
       </CursorPos>
       <DocGUID>0a2efe71-d519-4619-8ee7-8ab608c105d5</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\com\sega\engine\lib\crlfp32.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>9</X>
+        <Y>174</Y>
+      </CursorPos>
+      <DocGUID>e8210741-952c-41d6-8e11-01b043717079</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\define\mdphone.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
@@ -755,7 +763,9 @@
     <FolderStatus NodePath="Sonic_GBA\src\com" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\action" Expanded="true" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\action" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\ext" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\lib" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\define" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework" Expanded="false" />
