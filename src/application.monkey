@@ -1,34 +1,225 @@
-Strict
+﻿Strict
 
 Public
 
 ' Imports:
 Private
-	'Import mflib.mainstate
+	Import mflib.mainstate
+	'Import sonicgba.globalresource
+	Import state.state
+	
+	#Rem
+		Import android.app.dialog
+		Import android.content.Context
+		Import android.os.handler
+		Import android.os.message
+		Import android.telephony.telephonymanager
+		Import android.view.keyevent
+	#End
+	
+	Import com.sega.mobile.framework.mggamestate;
+	Import com.sega.mobile.framework.mfmain
+	Import com.sega.mobile.framework.device.mfdevice
+	Import com.sega.mobile.framework.device.mfgraphics
+	
+	#Rem
+		Import javax.crypto.Cipher;
+		Import javax.crypto.spec.IvParameterSpec;
+		Import javax.crypto.spec.SecretKeySpec;
+	#End
+	
+	'Import month.monthcertificationstate
+	
+	Import mojo.app
+	
+	#If TARGET = "glfw"
+		Import brl.requesters
+	#End
 Public
 
-Import mojo.app
-
 ' Classes:
-Class Application Extends App
-	' Methods:
-	Method OnCreate:Int()
-		SetUpdateRate(0) ' 60 ' 30
+Class Application Extends App ' Main Extends MFMain
+	Public
+		' Global variable(s):
+		Global BULLET_TIME:Bool = False
+		'Global MONTH_CHECK:Bool = False
 		
-		Seed = Millisecs()
+		' Fields:
+		'Field context:Context
+		Field handler:Handler
 		
-		Return 0
-	End
-	
-	Method OnUpdate:Int()
-		Return 0
-	End
-	
-	Method OnRender:Int()
-		Return 0
-	End
-	
-	Method OnClose:Int()
-		Return Super.OnClose()
-	End
+		Field isResumeFromOtherActivity:Bool
+		Field resumeFromOtherActivityFlag:Bool
+		
+		'Field segaMoreUrl:String
+	Private
+		' Fields:
+		
+		'Field encryptionSubID:String
+		'Field esubid:String
+		
+		Field mScore:String
+		Field mScoreStr:String
+		
+		'Field tMgr:TelephonyManager
+		
+		' Extensions:
+		Field graphics:Canvas
+		
+		' Booleans / Flags:
+		Field isSuspended:Bool
+	Public
+		' Methods:
+		Method OnCreate:Int()
+			SetUpdateRate(0) ' 60 ' 30
+			
+			Seed = Millisecs()
+			
+			#Rem
+				Self.mScore = ""
+				Self.mScoreStr = ""
+				Self.handler = New C00001()
+			#End
+			
+			' Extensions:
+			isSuspended = False
+			
+			Return 0
+		End
+		
+		Method OnUpdate:Int()
+			HandleSystemKeys()
+			
+			Return 0
+		End
+		
+		Method OnRender:Int()
+			If (isSuspended) Then
+				OnRenderWhileSuspended()
+				
+				Return 0
+			EndIf
+			
+			Return 0
+		End
+		
+		Method OnClose:Int()
+			' applicationName, message, acceptText, declineText
+			'setExitConfirmStr("ソニックアドバンス", "ゲームを終了しますか？", "はい", "キャンセル")
+			'setExitConfirmStr("Sonic Advance", "Are you sure you want to exit the game?", "Yes", "Cancel")
+			
+			If (Confirm("Sonic Advance", "Are you sure you want to exit the game?", False)) Then
+				Return Super.OnClose() ' EndApp()
+			EndIf
+			
+			Return 1 ' 0
+		End
+		
+		Method OnSuspend:Int()
+			isSuspended = True
+			
+			Return 0
+		End
+		
+		Method OnResume:Int()
+			If (Self.resumeFromOtherActivityFlag) Then
+				Self.isResumeFromOtherActivity = True
+				Self.resumeFromOtherActivityFlag = False
+			EndIf
+			
+			isSuspended = False
+			
+			Return 0
+		End
+		
+		Method OnRenderWhileSuspended:Void()
+			graphics.Cls()
+			
+			graphics.SetFont(Null)
+			
+			graphics.SetColor(0.0, 0.0, 0.0)
+			
+			graphics.DrawText("Game Suspended", DeviceWidth() / 2, DeviceHeight() / 2, 0.5, 0.5)
+		End
+		
+		Method getEntryGameState:MFGameState()
+			' Magic numbers:
+			MFDevice.setCanvasSize(Min(Max(240, (MFDevice.getDeviceWidth() * 160) / MFDevice.getDeviceHeight()), 284), 160) ' SSDef.PLAYER_MOVE_HEIGHT
+			MFDevice.setEnableCustomBack(True)
+			
+			Return New MainState(Self)
+		End
+		
+		Method setScore:Void(strScore:String)
+			Self.mScore = strScore
+		End
+		
+		Method setScoreStr:Void(strScore:String)
+			Self.mScoreStr = strScore
+		End
+		
+		Method setScore:Void(score:Int)
+			Local min:= (score / 60000)
+			Local sec:= ((score Mod 60000) / 1000)
+			Local msec:= (((score Mod 60000) Mod 1000) / 10)
+			
+			Local secStr:String
+			Local msecStr:String
+			
+			If (sec < 10) Then
+				secStr = "0" + String(sec) ' 07, 08, 09...
+			Else
+				secStr = String(sec)
+			EndIf
+			
+			If (msec < 10) Then
+				msecStr = "0" + String(msec) ' 01, 02, 03...
+			Else
+				msecStr = String(msec)
+			EndIf
+			
+			Self.mScore = (SonicDef.OVER_TIME - score)
+			
+			Print("~~mScore:" + Self.mScore)
+			
+			Self.mScoreStr = min + ":" + secStr + ":" + msecStr
+			
+			Print("~~mScoreStr:" + Self.mScoreStr)
+		End
+		
+		' Extensions:
+		Method HandleSystemKeys:Void()
+			#Rem
+				Local k:= GetChar()
+				
+				HandleSystemKey(k)
+			#End
+		End
+		
+		#Rem
+			Method HandleSystemKey:Void(keyCode:Int)
+				Select keyCode
+					Case KEYCODE_VOLUME_DOWN
+						If (GlobalResource.soundSwitchConfig = 0) Then
+							Return
+						EndIf
+						
+						If (Not State.IsInInterrupt) Then
+							State.setSoundVolumnDown()
+						EndIf
+						
+						MFDevice.getEnableVolumeKey()
+					Case KEYCODE_VOLUME_UP
+						If (GlobalResource.soundSwitchConfig = 0) Then
+							Return
+						EndIf
+						
+						If (Not State.IsInInterrupt) Then
+							State.setSoundVolumnUp()
+						EndIf
+						
+						MFDevice.getEnableVolumeKey()
+				End Select
+			End
+		#End
 End

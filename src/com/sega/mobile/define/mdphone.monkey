@@ -30,13 +30,17 @@ Interface MDPhone
 	Const KEY_CODE_SOFT_1:Int = 54
 	Const KEY_CODE_SOFT_2:Int = 52
 	Const KEY_CODE_X:Int = 23
-	Const LARGE_FONT_HEIGHT:Int = 30
+	
 	Const MAX_PROFETCHED_SE:Int = 15
+	
+	Const LARGE_FONT_HEIGHT:Int = 30
 	Const MEDIUM_FONT_HEIGHT:Int = 26
+	Const SMALL_FONT_HEIGHT:Int = 24
+	
 	Const SCREEN_HEIGHT:Int = 640
 	Const SCREEN_WIDTH:Int = 360
+	
 	Const SHIELD_NUMBER_KEY:Bool = True
-	Const SMALL_FONT_HEIGHT:Int = 24
 	Const SUPPORT_JOYSTICK:Bool = False
 	Const SUPPORT_TOUCH:Bool = True
 End
