@@ -2,6 +2,16 @@
 
 Public
 
+' Preprocessor related:
+#GLFW_WINDOW_TITLE = "Sonic Advance"
+#GLFW_WINDOW_WIDTH = 360
+#GLFW_WINDOW_HEIGHT = 640
+#GLFW_WINDOW_SAMPLES = 0
+#GLFW_WINDOW_RESIZABLE = False ' True
+#GLFW_WINDOW_DECORATED = True
+#GLFW_WINDOW_FLOATING = False
+#GLFW_WINDOW_FULLSCREEN = False
+
 ' Imports:
 Private
 	Import mflib.mainstate
