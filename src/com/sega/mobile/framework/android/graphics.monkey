@@ -47,7 +47,7 @@ End
 Class Graphics Implements GRAPHICS_MACROS
 	Private
 		' Fields:
-		Field mCanvas:Canvas
+		Field mCanvas:Canvas ' DrawList
 		'Field mFont:Font
 		'Field mMatrix:Matrix2D
 		'Field mPaint:Paint

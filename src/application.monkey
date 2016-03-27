@@ -18,7 +18,18 @@ Private
 	'Import sonicgba.globalresource
 	Import state.state
 	
+	Import com.sega.mobile.framework.mfgamestate
+	'Import com.sega.mobile.framework.mfmain
+	Import com.sega.mobile.framework.device.mfdevice
+	Import com.sega.mobile.framework.device.mfgraphics
+	
+	Import com.sega.mobile.framework.android.graphics
+	
 	#Rem
+		Import javax.crypto.Cipher
+		Import javax.crypto.spec.IvParameterSpec
+		Import javax.crypto.spec.SecretKeySpec
+		
 		Import android.app.dialog
 		Import android.content.Context
 		Import android.os.handler
@@ -27,28 +38,21 @@ Private
 		Import android.view.keyevent
 	#End
 	
-	Import com.sega.mobile.framework.mggamestate;
-	Import com.sega.mobile.framework.mfmain
-	Import com.sega.mobile.framework.device.mfdevice
-	Import com.sega.mobile.framework.device.mfgraphics
-	
-	#Rem
-		Import javax.crypto.Cipher;
-		Import javax.crypto.spec.IvParameterSpec;
-		Import javax.crypto.spec.SecretKeySpec;
-	#End
-	
 	'Import month.monthcertificationstate
 	
 	Import mojo.app
+	Import mojo2.graphics
 	
 	#If TARGET = "glfw"
 		Import brl.requesters
 	#End
 Public
 
+' Aliases:
+Alias Application = Main
+
 ' Classes:
-Class Application Extends App ' Main Extends MFMain
+Class Main Extends App ' Main Extends MFMain
 	Public
 		' Global variable(s):
 		Global BULLET_TIME:Bool = False
@@ -56,7 +60,7 @@ Class Application Extends App ' Main Extends MFMain
 		
 		' Fields:
 		'Field context:Context
-		Field handler:Handler
+		'Field handler:Handler
 		
 		Field isResumeFromOtherActivity:Bool
 		Field resumeFromOtherActivityFlag:Bool
@@ -73,17 +77,25 @@ Class Application Extends App ' Main Extends MFMain
 		
 		'Field tMgr:TelephonyManager
 		
-		' Extensions:
-		Field graphics:Canvas
+		' Extensions / Replacements:
+		Field graphics:Graphics
+		Field canvas:Canvas
 		
 		' Booleans / Flags:
 		Field isSuspended:Bool
 	Public
+		' Properties:
+		Method canvas:Canvas() Property
+			Return graphics.getCanvas()
+		End
+		
 		' Methods:
 		Method OnCreate:Int()
 			SetUpdateRate(0) ' 60 ' 30
 			
 			Seed = Millisecs()
+			
+			graphics = New Graphics()
 			
 			#Rem
 				Self.mScore = ""
@@ -100,6 +112,10 @@ Class Application Extends App ' Main Extends MFMain
 		Method OnUpdate:Int()
 			HandleSystemKeys()
 			
+			'MFGamePad.keyPressed(keyCode)
+			'MFGamePad.keyReleased(keyCode)
+			'MFGamePad.trackballMoved(keyCode)
+			
 			Return 0
 		End
 		
@@ -109,6 +125,9 @@ Class Application Extends App ' Main Extends MFMain
 				
 				Return 0
 			EndIf
+			
+			'canvas.Clear()
+			'canvas.Flush()
 			
 			Return 0
 		End
@@ -128,6 +147,9 @@ Class Application Extends App ' Main Extends MFMain
 		Method OnSuspend:Int()
 			isSuspended = True
 			
+			MFDevice.inSuspendFlag = True
+			MFDevice.notifyPause()
+			
 			Return 0
 		End
 		
@@ -139,17 +161,21 @@ Class Application Extends App ' Main Extends MFMain
 			
 			isSuspended = False
 			
+			MFDevice.inSuspendFlag = False
+			
 			Return 0
 		End
 		
 		Method OnRenderWhileSuspended:Void()
-			graphics.Cls()
+			canvas.Clear()
 			
-			graphics.SetFont(Null)
+			canvas.SetFont(Null)
 			
-			graphics.SetColor(0.0, 0.0, 0.0)
+			canvas.SetColor(0.0, 0.0, 0.0)
 			
-			graphics.DrawText("Game Suspended", DeviceWidth() / 2, DeviceHeight() / 2, 0.5, 0.5)
+			canvas.DrawText("Game Suspended", DeviceWidth() / 2, DeviceHeight() / 2, 0.5, 0.5)
+			
+			canvas.Flush()
 		End
 		
 		Method getEntryGameState:MFGameState()
