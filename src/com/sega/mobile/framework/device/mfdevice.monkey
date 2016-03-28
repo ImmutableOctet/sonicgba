@@ -25,9 +25,10 @@ Private
 	Import com.sega.mobile.framework.mfmain
 	
 	'Import com.sega.mobile.framework.android.canvas
-	'Import com.sega.mobile.framework.android.graphics
-	'Import com.sega.mobile.framework.android.image
-	'Import com.sega.mobile.framework.ui.mftouchkey
+	Import com.sega.mobile.framework.android.graphics
+	
+	Import mojo.app
+	Import mojo.input
 	
 	Import brl.databuffer
 	Import brl.datastream
@@ -79,7 +80,7 @@ Class MFDevice Final
 		' Global variable(s):
 		Global apnType:Int
 		Global bufferImage:Image
-		Global componentVector:Vector<MFComponent>
+		Global componentVector:Stack<MFComponent> ' Vector
 		Global currentState:MFGameState
 		Global currentSystemTime:Long
 		Global deviceKeyValue:Int
@@ -125,6 +126,7 @@ Class MFDevice Final
 	Public
 		' Functions:
 		Function deviceDraw:Void(g:Graphics)
+			' Magic numbers: 1, -1, etc.
 			For Local i:= 1 Until 0 Step -1
 				If (MFDevice.preLayerImage[i - 1] <> Null) Then
 					g.drawImage(MFDevice.preLayerImage[i - 1], 0, 0, 0)
@@ -141,88 +143,101 @@ Class MFDevice Final
 				EndIf
 			Next
 		End
-	static Class MyGameCanvas Extends Canvas {
-		Public Method keyPressed:Void(keyCode:Int) Final
-			synchronized (MFDevice.mainRunnable) {
-				
-			EndIf
-		End
-
-		Public Method keyReleased:Void(keyCode:Int) Final
-			synchronized (MFDevice.mainRunnable) {
-				
-			EndIf
-		End
-
-		Public Method paint:Void(g:Graphics) Final
-			synchronized (MFDevice.mainRunnable) {
-				
-			EndIf
-		End
-
-		Public Method pointerDragged:Void(id:Int, x:Int, y:Int) Final
+		
+		Function handleInput:Void()
+			' Constant variable(s):
+			Const START_MOUSE_INDEX:= MOUSE_LEFT
+			Const LAST_MOUSE_INDEX:= MOUSE_MIDDLE
 			
-			If (MFDevice.preScaleZoomOutFlag) Then
-				x Shl= MFDevice.preScaleShift
-				y Shl= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				x Shr= MFDevice.preScaleShift
-				y Shr= MFDevice.preScaleShift
-			EndIf
+			Const START_KEY_INDEX:= 0
+			Const LAST_KEY_INDEX:= 254 ' 255
 			
-			x = ((x - MFDevice.drawRect.left) * MFDevice.canvasWidth) / MFDevice.drawRect.width()
-			y = ((y - MFDevice.drawRect.top) * MFDevice.canvasHeight) / MFDevice.drawRect.height()
+			Local character:= GetChar()
 			
-			If (MFDevice.componentVector <> Null) Then
-				For (Int i = MFDevice.SIM_NONE; i < MFDevice.componentVector.size(); i += MFDevice.SIM_CMCC)
-					((MFComponent) MFDevice.componentVector.elementAt(i)).pointerDragged(id, x, y)
+			' Check if at least one character was pressed:
+			If (character <> 0) Then
+				For Local key:= START_KEY_INDEX To LAST_KEY_INDEX
+					If (KeyHit(key)) Then
+						MFGamePad.keyPressed(keyCode)
+						MFGamePad.keyReleased(keyCode)
+					ElseIf (KeyDown(key)) Then
+						MFGamePad.keyPressed(keyCode)
+					EndIf
 				Next
 			EndIf
 			
-		End
-
-		Public Method pointerPressed:Void(id:Int, x:Int, y:Int) Final
+			'MFGamePad.trackballMoved(keyCode)
 			
-			If (MFDevice.preScaleZoomOutFlag) Then
-				x Shl= MFDevice.preScaleShift
-				y Shl= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				x Shr= MFDevice.preScaleShift
-				y Shr= MFDevice.preScaleShift
+			Local tx:= TouchX()
+			Local ty:= TouchY()
+			
+			For Local index:= START_MOUSE_INDEX To LAST_MOUSE_INDEX
+				If (TouchHit(index)) Then
+					pointerPressed(index, tx, ty)
+					pointerReleased(index, tx, ty)
+				ElseIf (TouchDown(index)) Then
+					pointerPressed(index, tx, ty)
+					'pointerDragged(index, tx, ty)
+				EndIf
+			Next
+		End
+		
+		Function pointerDragged:Void(id:Int, x:Int, y:Int)
+			If (preScaleZoomOutFlag) Then
+				x Shl= preScaleShift
+				y Shl= preScaleShift
+			ElseIf (preScaleZoomInFlag) Then
+				x Shr= preScaleShift
+				y Shr= preScaleShift
 			EndIf
 			
-			x = ((x - MFDevice.drawRect.left) * MFDevice.canvasWidth) / MFDevice.drawRect.width()
-			y = ((y - MFDevice.drawRect.top) * MFDevice.canvasHeight) / MFDevice.drawRect.height()
+			x = ((x - drawRect.left) * canvasWidth) / drawRect.width()
+			y = ((y - drawRect.top) * canvasHeight) / drawRect.height()
 			
-			If (MFDevice.componentVector <> Null) Then
-				For (Int i = MFDevice.SIM_NONE; i < MFDevice.componentVector.size(); i += MFDevice.SIM_CMCC)
-					((MFComponent) MFDevice.componentVector.elementAt(i)).pointerPressed(id, x, y)
+			If (componentVector <> Null) Then
+				For Local component:= EachIn componentVector
+					component.pointerDragged(id, x, y)
 				Next
 			EndIf
-			
 		End
-
-		Public Method pointerReleased:Void(id:Int, x:Int, y:Int) Final
-			
-			If (MFDevice.preScaleZoomOutFlag) Then
-				x Shl= MFDevice.preScaleShift
-				y Shl= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				x Shr= MFDevice.preScaleShift
-				y Shr= MFDevice.preScaleShift
+		
+		Function pointerPressed:Void(id:Int, x:Int, y:Int)
+			If (preScaleZoomOutFlag) Then
+				x Shl= preScaleShift
+				y Shl= preScaleShift
+			ElseIf (preScaleZoomInFlag) Then
+				x Shr= preScaleShift
+				y Shr= preScaleShift
 			EndIf
 			
-			x = ((x - MFDevice.drawRect.left) * MFDevice.canvasWidth) / MFDevice.drawRect.width()
-			y = ((y - MFDevice.drawRect.top) * MFDevice.canvasHeight) / MFDevice.drawRect.height()
+			x = ((x - drawRect.left) * canvasWidth) / drawRect.width()
+			y = ((y - drawRect.top) * canvasHeight) / drawRect.height()
 			
-			If (MFDevice.componentVector <> Null) Then
-				For (Int i = MFDevice.SIM_NONE; i < MFDevice.componentVector.size(); i += MFDevice.SIM_CMCC)
-					((MFComponent) MFDevice.componentVector.elementAt(i)).pointerReleased(id, x, y)
+			If (componentVector <> Null) Then
+				For Local component:= EachIn componentVector
+					component.pointerPressed(id, x, y)
 				Next
 			EndIf
-			
 		End
-	}
+		
+		Function pointerReleased:Void(id:Int, x:Int, y:Int)
+			If (preScaleZoomOutFlag) Then
+				x Shl= preScaleShift
+				y Shl= preScaleShift
+			ElseIf (preScaleZoomInFlag) Then
+				x Shr= preScaleShift
+				y Shr= preScaleShift
+			EndIf
+			
+			x = ((x - drawRect.left) * canvasWidth) / drawRect.width()
+			y = ((y - drawRect.top) * canvasHeight) / drawRect.height()
+			
+			If (componentVector <> Null) Then
+				For Local component:= EachIn componentVector
+					component.pointerReleased(id, x, y)
+				Next
+			EndIf
+		End
 
 	static {
 		NULL_RECORD = New Byte[4]

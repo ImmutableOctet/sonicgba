@@ -112,10 +112,6 @@ Class Main Extends App ' Main Extends MFMain
 		Method OnUpdate:Int()
 			HandleSystemKeys()
 			
-			'MFGamePad.keyPressed(keyCode)
-			'MFGamePad.keyReleased(keyCode)
-			'MFGamePad.trackballMoved(keyCode)
-			
 			Return 0
 		End
 		
@@ -126,8 +122,11 @@ Class Main Extends App ' Main Extends MFMain
 				Return 0
 			EndIf
 			
-			'canvas.Clear()
-			'canvas.Flush()
+			canvas.Clear()
+			
+			MFDevice.deviceDraw(graphics)
+			
+			canvas.Flush()
 			
 			Return 0
 		End
@@ -230,6 +229,8 @@ Class Main Extends App ' Main Extends MFMain
 				
 				HandleSystemKey(k)
 			#End
+			
+			MFDevice.handleInput()
 		End
 		
 		#Rem
