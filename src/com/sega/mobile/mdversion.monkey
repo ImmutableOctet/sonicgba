@@ -7,6 +7,11 @@ Public
 
 ' Interfaces:
 Interface MDVersion
-	Const DEBUG_VERSION:Bool = False
+	#If CONFIG = "debug"
+		Const DEBUG_VERSION:Bool = True ' False
+	#Else
+		Const DEBUG_VERSION:Bool = False
+	#End
+	
 	Const VERSION:Int = 104
 End

@@ -42,16 +42,6 @@ Public
 ' Classes:
 Class MFDevice Final
 	Public
-		' Constant variable(s):
-		Const APN_CMNET:Int = 2
-		Const APN_CMWAP:Int = 1
-		Const APN_NONE:Int = 0
-		
-		Const SIM_CMCC:Int = 1
-		Const SIM_NONE:Int = 0
-		Const SIM_TELECOM:Int = 3
-		Const SIM_UNICOM:Int = 2
-		
 		' Global variable(s):
 		Global bufferWidth:Int
 		Global bufferHeight:Int
@@ -81,8 +71,6 @@ Class MFDevice Final
 		Global NULL_RECORD:Byte[] = New Byte[4] ' Const
 		
 		' Global variable(s):
-		Global apnType:Int = -1 ' APN_NONE
-		Global simType:Int = -1 ' SIM_NONE
 		
 		' Input related:
 		Global deviceKeyValue:Int = 0
@@ -122,7 +110,7 @@ Class MFDevice Final
 		Global responseInterrupt:Bool
 		
 		' Graphis:
-		Global bufferImage:Image
+		'Global bufferImage:Image ' <-- Used to be used to represent the screen.
 		
 		Global postLayerGraphics:MFGraphics[] = New MFGraphics[MAX_LAYER]
 		Global postLayerImage:Image[] = New Image[MAX_LAYER]
@@ -166,7 +154,7 @@ Class MFDevice Final
 			Const LAST_MOUSE_INDEX:= MOUSE_MIDDLE
 			
 			Const START_KEY_INDEX:= 0
-			Const LAST_KEY_INDEX:= 254 ' 255
+			Const LAST_KEY_INDEX:= 255 ' 256
 			
 			Local character:= GetChar()
 			
@@ -255,95 +243,64 @@ Class MFDevice Final
 			EndIf
 		End
 		
-	
-
-	Public Function addComponent:Void(component:MFComponent) Final
-		
-		If (componentVector <> Null And Not componentVector.contains(component)) Then
-			component.reset()
-			componentVector.addElement(component)
-		EndIf
-	}
-
-	Public Function changeState:Void(gameState:MFGameState)
-		nextState = gameState
-	}
-
-	Public Function clearScreen:Void() Final
-		Int i
-		For (i = SIM_CMCC; i > 0; i -= 1)
-			
-			If (preLayerImage[i - SIM_CMCC] <> Null) Then
-				preLayerImage[i - SIM_CMCC].earseColor(SIM_NONE)
+		Function addComponent:Void(component:MFComponent)
+			If (componentVector <> Null And Not componentVector.Contains(component)) Then
+				component.reset()
+				
+				componentVector.Push(component)
 			EndIf
-			
-		Next
+		End
 		
-		If (bufferImage <> Null) Then
-			bufferImage.earseColor(SIM_NONE)
-		EndIf
+		Function changeState:Void(gameState:MFGameState)
+			nextState = gameState
+		End
 		
-		For (i = SIM_CMCC; i <= SIM_CMCC; i += SIM_CMCC)
+		Function clearScreen:Void()
+			For Local i:= preLayerImage.Length Until 0 Step -1 ' MAX_LAYER
+				Local revIndex:= (i - MAX_LAYER) ' preLayerImage.Length
+				Local img:= preLayerImage[revIndex]
+				
+				If (img <> Null) Then
+					'img.earseColor(0)
+					preLayerGraphics[i].clear()
+				EndIf
+			Next
 			
-			If (postLayerImage[i - SIM_CMCC] <> Null) Then
-				postLayerImage[i - SIM_CMCC].earseColor(SIM_NONE)
-			EndIf
+			#Rem
+				If (bufferImage <> Null) Then
+					bufferImage.earseColor(0)
+				EndIf
+			#End
 			
-		Next
-	}
-
-	Public Function currentTimeMillis:Long()
-		Return System.currentTimeMillis()
-	}
-
-	Public Function DEBUG_ENABLE_LOGIC_TRACE:Void(enable:Bool) Final
-	}
-
-	Public Function DEBUG_ENABLE_METHOD_TRACE:Void(enable:Bool) Final
-	}
-
-	Public Function DEBUG_GET_DEVICE_KEY_VALUE:Int()
-		Return SIM_NONE
-	}
-
-	Public Function DEBUG_PAINT_LOGIC_TRACE:Void(traceLog:String) Final
-	}
-
-	Public Function DEBUG_PAINT_MESSAGE:Void(message:String) Final
-	}
-
-	Public Function DEBUG_PAINT_METHOD_TRACE:Void(methodInfo:String) Final
-	}
-
-	Public Function DEBUG_SHOW_ERROR:Void(t:Throwable) Final
-	}
-
-	Public Function deleteRecord:Void(recordName:String) Final
-		records.remove(recordName)
-		updateRecords()
-	}
-
+			graphics.clear()
+			
+			For Local i:= postLayerImage.Length To postLayerImage.Length ' MAX_LAYER
+				Local revIndex:= (i - MAX_LAYER) ' postLayerImage.Length
+				Local img:= postLayerImage[revIndex]
+				
+				If (img <> Null) Then
+					'img.earseColor(0)
+					
+					postLayerGraphics[revIndex].clear()
+				EndIf
+			Next
+		End
+		
+		Function currentTimeMillis:Long() ' Int
+			Return Millisecs()
+		End
+		
+		Function deleteRecord:Void(recordName:String)
+			records.Remove(recordName)
+			updateRecords()
+		End
+		
 	Public Function disableExceedBoundary:Void()
 		graphics.disableExceedBoundary()
 	}
 
 	Public Function enableExceedBoundary:Void()
 		graphics.enableExceedBoundary()
-	}
-
-	Public Function getApnType:Int()
-		apnType = SIM_NONE
-		Cursor cr = MFMain.getInstance().getContentResolver().query(Uri.parse("content://telephony/carriers/preferapn"), Null, Null, Null, Null)
-		String pxy = ""
-		While (cr <> Null And cr.moveToNext()) {
-			pxy = cr.getString(cr.getColumnIndex("proxy"))
-		}
-		
-		If (Not (pxy = Null Or pxy.equals(""))) Then
-			apnType = SIM_CMCC
-		EndIf
-		
-		Return apnType
 	}
 
 	Public Function getDeviceHeight:Int() Final
@@ -523,24 +480,6 @@ Class MFDevice Final
 		EndIf
 		
 		Return canvasWidth
-	}
-
-	Public Function getSimType:Int()
-		
-		If (simType < 0) Then
-			simType = SIM_NONE
-			String operator = ((TelephonyManager) MFMain.getInstance().getSystemService("phone")).getSimOperator()
-			
-			If (operator.equals("46000") Or operator.equals("46002")) Then
-				simType = SIM_CMCC
-			ElseIf (operator.equals("46001")) Then
-				simType = SIM_UNICOM
-			ElseIf (operator.equals("46003")) Then
-				simType = SIM_TELECOM
-			EndIf
-		EndIf
-		
-		Return simType
 	}
 
 	Public Function getSystemDisplayable:Object() Final

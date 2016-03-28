@@ -143,6 +143,12 @@ Class MFGraphics Implements GRAPHICS_MACROS
 		End
 	
 		' Methods:
+		
+		' Extensions:
+		Method clear:Void()
+			Self.context.clear()
+		End
+		
 		Method saveCanvas:Void()
 			Self.context.save()
 		End
