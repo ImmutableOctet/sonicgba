@@ -53,40 +53,49 @@ Class MFDevice Final
 		Const SIM_UNICOM:Int = 2
 		
 		' Global variable(s):
-		Global bufferHeight:Int
 		Global bufferWidth:Int
-		Global canvasHeight:Int
-		Global canvasWidth:Int
-		Global clearBuffer:Bool
-		Global enableTrackBall:Bool
-		Global horizontalOffset:Int
+		Global bufferHeight:Int
 		
-		Global mainThread:Thread
+		Global canvasWidth:Int
+		Global canvasHeight:Int
+		
+		Global clearBuffer:Bool = True
+		
+		'Global mainThread:Thread
 		
 		Global screenHeight:Int
 		Global screenWidth:Int
-		Global shieldInput:Bool
-	
+		
+		Global horizontalOffset:Int
 		Global verticvalOffset:Int
+		
+		Global enableTrackBall:Bool = True ' False
+		Global shieldInput:Bool = True
 	Private
 		' Constant variable(s):
-		Const VERSION_INFO:String = "104_RELEASE"
+		Const VERSION_INFO:String = "104_RELEASE" ' "100_RELEASE" ' "DEBUG"
 		Const MAX_LAYER:Int = 1
 		Const PER_VIBRATION_TIME:Int = 500
 		Const RECORD_NAME:String = "rms"
 		
-		Global NULL_RECORD:Byte[] ' Const
+		Global NULL_RECORD:Byte[] = New Byte[4] ' Const
 		
 		' Global variable(s):
-		Global apnType:Int
-		Global bufferImage:Image
+		Global apnType:Int = -1 ' APN_NONE
+		Global simType:Int = -1 ' SIM_NONE
+		
+		' Input related:
+		Global deviceKeyValue:Int = 0
+		
+		Global enableCustomBack:Bool = False
+		Global enableVolumeKey:Bool = True ' False
+		
 		Global componentVector:Stack<MFComponent> ' Vector
+		
 		Global currentState:MFGameState
-		Global currentSystemTime:Long
-		Global deviceKeyValue:Int
+		Global currentSystemTime:Long ' Int
 		Global drawRect:Rect
-		Global enableCustomBack:Bool
-		Global enableVolumeKey:Bool
+		
 		Global exitFlag:Bool
 		Global graphics:MFGraphics
 		
@@ -97,49 +106,56 @@ Class MFDevice Final
 		Global lastSystemTime:Long
 		Global logicTrace:Bool
 		
-		Global vibraionFlag:Bool
-		Global vibrateStartTime:Long
-		Global vibrateTime:Int
-		Global vibrator:Vibrator
-		Global webPageUrl:String
+		#Rem
+			Global vibraionFlag:Bool
+			Global vibrateStartTime:Long
+			Global vibrateTime:Int
+			Global vibrator:Vibrator
+		#End
 		
-		Global methodCallTrace:Bool
+		'Global webPageUrl:String
+		
+		'Global methodCallTrace:Bool
+		
 		Global nextState:MFGameState
-		Global postLayerGraphics:MFGraphics[]
-		Global postLayerImage:Image[]
-		Global preLayerGraphics:MFGraphics[]
-		Global preLayerImage:Image[]
-		
 		Global records:StringMap<Byte[]>
-		
 		Global responseInterrupt:Bool
 		
-		Global simType:Int
+		' Graphis:
+		Global bufferImage:Image
+		
+		Global postLayerGraphics:MFGraphics[] = New MFGraphics[MAX_LAYER]
+		Global postLayerImage:Image[] = New Image[MAX_LAYER]
+		Global preLayerGraphics:MFGraphics[] = New MFGraphics[MAX_LAYER]
+		Global preLayerImage:Image[] = New Image[MAX_LAYER]
 	Protected
 		' Global variable(s):
-		Global mainCanvas:MyGameCanvas
-		Global mainRunnable:Runnable
+		'Global mainRunnable:Runnable = New C00011()
+		'Global mainCanvas:MyGameCanvas = New MyGameCanvas(MFMain.getInstance())
 		
-		Global preScaleShift:Int
-		Global preScaleZoomInFlag:Bool
-		Global preScaleZoomOutFlag:Bool
+		' Graphics:
+		Global preScaleShift:Int = 0
+		
+		Global preScaleZoomInFlag:Bool = False
+		Global preScaleZoomOutFlag:Bool = False
 	Public
 		' Functions:
+		
+		' Extensions:
 		Function deviceDraw:Void(g:Graphics)
-			' Magic numbers: 1, -1, etc.
-			For Local i:= 1 Until 0 Step -1
-				If (MFDevice.preLayerImage[i - 1] <> Null) Then
-					g.drawImage(MFDevice.preLayerImage[i - 1], 0, 0, 0)
+			For Local i:= preLayerImage.Length Until 0 Step -1 ' MAX_LAYER
+				If (preLayerImage[i - preLayerImage.Length] <> Null) Then
+					g.drawImage(preLayerImage[i - preLayerImage.Length], 0, 0, 0)
 				EndIf
 			Next
 			
-			If (MFDevice.bufferImage <> Null) Then
-				g.drawScreen(MFDevice.bufferImage, Null, New Rect(0, 0, MFDevice.screenWidth, MFDevice.screenHeight))
+			If (bufferImage <> Null) Then
+				g.drawScreen(bufferImage, Null, New Rect(0, 0, screenWidth, screenHeight))
 			EndIf
 			
-			For Local i:= 1 To 1
-				If (MFDevice.postLayerImage[i - 1] <> Null) Then
-					g.drawImage(MFDevice.postLayerImage[i - 1], 0, 0, 0)
+			For Local i:= postLayerImage.Length To postLayerImage.Length ' MAX_LAYER
+				If (postLayerImage[i - MAX_LAYER] <> Null) Then
+					g.drawImage(postLayerImage[i - MAX_LAYER], 0, 0, 0)
 				EndIf
 			Next
 		End
@@ -238,27 +254,8 @@ Class MFDevice Final
 				Next
 			EndIf
 		End
-
-	static {
-		NULL_RECORD = New Byte[4]
-		apnType = -1
-		simType = -1
-		shieldInput = True
-		clearBuffer = True
-		preLayerImage = New Image[SIM_CMCC]
-		preLayerGraphics = New MFGraphics[SIM_CMCC]
-		postLayerImage = New Image[SIM_CMCC]
-		postLayerGraphics = New MFGraphics[SIM_CMCC]
-		deviceKeyValue = SIM_NONE
-		enableCustomBack = False
-		enableTrackBall = True
-		enableVolumeKey = True
-		preScaleShift = SIM_NONE
-		preScaleZoomInFlag = False
-		preScaleZoomOutFlag = False
-		mainCanvas = New MyGameCanvas(MFMain.getInstance())
-		mainRunnable = New C00011()
-	}
+		
+	
 
 	Public Function addComponent:Void(component:MFComponent) Final
 		
@@ -266,7 +263,6 @@ Class MFDevice Final
 			component.reset()
 			componentVector.addElement(component)
 		EndIf
-		
 	}
 
 	Public Function changeState:Void(gameState:MFGameState)
