@@ -31,7 +31,10 @@ Private
 	Import mojo.input
 	
 	Import brl.databuffer
+	Import brl.stream
+	
 	Import brl.datastream
+	Import brl.filestream
 	
 	Import monkey.map
 	Import monkey.stack
@@ -68,7 +71,7 @@ Class MFDevice Final
 		Const PER_VIBRATION_TIME:Int = 500
 		Const RECORD_NAME:String = "rms"
 		
-		Global NULL_RECORD:Byte[] = New Byte[4] ' Const
+		Global NULL_RECORD:DataBuffer = New DataBuffer(4) ' Const
 		
 		' Global variable(s):
 		
@@ -106,7 +109,7 @@ Class MFDevice Final
 		'Global methodCallTrace:Bool
 		
 		Global nextState:MFGameState
-		Global records:StringMap<Byte[]>
+		Global records:StringMap<DataBuffer>
 		Global responseInterrupt:Bool
 		
 		' Graphis:
@@ -295,264 +298,274 @@ Class MFDevice Final
 			updateRecords()
 		End
 		
-	Public Function disableExceedBoundary:Void()
-		graphics.disableExceedBoundary()
-	}
-
-	Public Function enableExceedBoundary:Void()
-		graphics.enableExceedBoundary()
-	}
-
-	Public Function getDeviceHeight:Int() Final
-		Return screenHeight
-	}
-
-	Public Function getDeviceWidth:Int() Final
-		Return screenWidth
-	}
-
-	Public Function getEnableCustomBack:Bool()
-		Return enableCustomBack
-	}
-
-	Public Function getEnableTrackBall:Bool()
-		Return enableTrackBall
-	}
-
-	Public Function getEnableVolumeKey:Bool()
-		Return enableVolumeKey
-	}
-
-	Public Function getGraphics:MFGraphics()
-		Return graphics
-	}
-
-	Public Function getMainThread:Thread()
-		Return mainThread
-	}
-
-	Public Function getNativeCanvasBottom:Int()
+		Function disableExceedBoundary:Void()
+			graphics.disableExceedBoundary()
+		End
+	
+		Function enableExceedBoundary:Void()
+			graphics.enableExceedBoundary()
+		End
 		
-		If (preScaleZoomOutFlag) Then
-			Return (bufferHeight - verticvalOffset) Shl preScaleShift
-		EndIf
+		Function getDeviceHeight:Int()
+			Return screenHeight
+		End
 		
-		If (preScaleZoomInFlag) Then
-			Return (bufferHeight - verticvalOffset) Shr preScaleShift
-		EndIf
+		Function getDeviceWidth:Int()
+			Return screenWidth
+		End
 		
-		Return bufferHeight + verticvalOffset
-	}
-
-	Public Function getNativeCanvasHeight:Int()
+		Function getEnableCustomBack:Bool()
+			Return enableCustomBack
+		End
 		
-		If (preScaleZoomOutFlag) Then
-			Return bufferHeight Shl preScaleShift
-		EndIf
+		Function getEnableTrackBall:Bool()
+			Return enableTrackBall
+		End
 		
-		If (preScaleZoomInFlag) Then
-			Return bufferHeight Shr preScaleShift
-		EndIf
+		Function getEnableVolumeKey:Bool()
+			Return enableVolumeKey
+		End
 		
-		Return bufferHeight
-	}
-
-	Public Function getNativeCanvasLeft:Int()
+		Function getGraphics:MFGraphics()
+			Return graphics
+		End
 		
-		If (preScaleZoomOutFlag) Then
-			Return -(horizontalOffset Shl preScaleShift)
-		EndIf
+		#Rem
+			Function getMainThread:Thread()
+				Return mainThread
+			End
+		#End
 		
-		If (preScaleZoomInFlag) Then
-			Return -(horizontalOffset Shr preScaleShift)
-		EndIf
-		
-		Return -horizontalOffset
-	}
-
-	Public Function getNativeCanvasRight:Int()
-		
-		If (preScaleZoomOutFlag) Then
-			Return (bufferWidth - horizontalOffset) Shl preScaleShift
-		EndIf
-		
-		If (preScaleZoomInFlag) Then
-			Return (bufferWidth - horizontalOffset) Shr preScaleShift
-		EndIf
-		
-		Return bufferWidth + horizontalOffset
-	}
-
-	Public Function getNativeCanvasTop:Int()
-		
-		If (preScaleZoomOutFlag) Then
-			Return -(verticvalOffset Shl preScaleShift)
-		EndIf
-		
-		If (preScaleZoomInFlag) Then
-			Return -(verticvalOffset Shr preScaleShift)
-		EndIf
-		
-		Return -verticvalOffset
-	}
-
-	Public Function getNativeCanvasWidth:Int()
-		
-		If (preScaleZoomOutFlag) Then
-			Return bufferWidth Shl preScaleShift
-		EndIf
-		
-		If (preScaleZoomInFlag) Then
-			Return bufferWidth Shr preScaleShift
-		EndIf
-		
-		Return bufferWidth
-	}
-
-	Public Function getPackageVersion:String()
-		String version = ""
-		try {
-			Return MFMain.getInstance().getPackageManager().getPackageInfo(MFMain.getInstance().getPackageName(), SIM_NONE).versionName
-		} catch (NameNotFoundException e) {
-			e.printStackTrace()
-			Return version
-		}
-	}
-
-	Public Function getResourceAsMFStream:MFInputStream(url:String) Final
-		try {
-			String substring
-			AssetManager assets = MFMain.getInstance().getAssets()
-			
-			If (url.startsWith("/")) Then
-				substring = url.substring(SIM_CMCC)
-			Else
-				substring = url
+		Function getNativeCanvasBottom:Int()
+			If (preScaleZoomOutFlag) Then
+				Return ((bufferHeight - verticvalOffset) Shl preScaleShift)
 			EndIf
 			
-			Return New MFInputStream(assets.open(substring))
-		} catch (Exception e) {
-			Print("Error on loading: " + url)
+			If (preScaleZoomInFlag) Then
+				Return ((bufferHeight - verticvalOffset) Shr preScaleShift)
+			EndIf
+			
+			Return (bufferHeight + verticvalOffset)
+		End
+		
+		Function getNativeCanvasHeight:Int()
+			If (preScaleZoomOutFlag) Then
+				Return (bufferHeight Shl preScaleShift)
+			EndIf
+			
+			If (preScaleZoomInFlag) Then
+				Return (bufferHeight Shr preScaleShift)
+			EndIf
+			
+			Return (bufferHeight)
+		End
+		
+		Function getNativeCanvasLeft:Int()
+			If (preScaleZoomOutFlag) Then
+				Return -(horizontalOffset Shl preScaleShift)
+			EndIf
+			
+			If (preScaleZoomInFlag) Then
+				Return -(horizontalOffset Shr preScaleShift)
+			EndIf
+			
+			Return -(horizontalOffset)
+		End
+		
+		Function getNativeCanvasRight:Int()
+			If (preScaleZoomOutFlag) Then
+				Return ((bufferWidth - horizontalOffset) Shl preScaleShift)
+			EndIf
+			
+			If (preScaleZoomInFlag) Then
+				Return ((bufferWidth - horizontalOffset) Shr preScaleShift)
+			EndIf
+			
+			Return (bufferWidth + horizontalOffset)
+		End
+		
+		Function getNativeCanvasTop:Int()
+			If (preScaleZoomOutFlag) Then
+				Return -(verticvalOffset Shl preScaleShift)
+			EndIf
+			
+			If (preScaleZoomInFlag) Then
+				Return -(verticvalOffset Shr preScaleShift)
+			EndIf
+			
+			Return -(verticvalOffset)
+		End
+		
+		Function getNativeCanvasWidth:Int()
+			If (preScaleZoomOutFlag) Then
+				Return (bufferWidth Shl preScaleShift)
+			EndIf
+			
+			If (preScaleZoomInFlag) Then
+				Return (bufferWidth Shr preScaleShift)
+			EndIf
+			
+			Return (bufferWidth)
+		End
+		
+		Function getPackageVersion:String()
+			#Rem
+			Local version:String = ""
+			
+			Return MFMain.getInstance().getPackageManager().getPackageInfo(MFMain.getInstance().getPackageName(), 0).versionName
+			#End
+			
+			Return getVersion() ' VERSION_INFO
+		End
+		
+		Function getResourceAsStream:Stream(url:String)
+			Try
+				Local substring:String
+				
+				Print("Attempting to load from URL: " + url)
+				
+				'Local assets:AssetManager = MFMain.getInstance().getAssets()
+				
+				If (url.StartsWith("/")) Then
+					' Skip the first slash.
+					substring = url[1..]
+				Else
+					substring = url
+				EndIf
+				
+				'ret = assets.open(substring)
+				
+				Local f:= OpenFileStream(url, "r")
+				
+				Return f
+			Catch E:StreamError
+				Print("Error on loading: " + url)
+			End Try
+			
 			Return Null
-		}
-	}
-
-	Public Function getResourceAsStream:InputStream(url:String) Final
-		InputStream ret = Null
-		try {
-			String substring
-			AssetManager assets = MFMain.getInstance().getAssets()
-			
-			If (url.startsWith("/")) Then
-				substring = url.substring(SIM_CMCC)
-			Else
-				substring = url
+		End
+		
+		Function getScreenWidth:Int() Final
+			If (preScaleZoomOutFlag) Then
+				Return (canvasWidth Shl preScaleShift)
 			EndIf
 			
-			ret = assets.open(substring)
-		} catch (Exception e) {
-			Print("Error on loading: " + url)
-		}
-		Return ret
-	}
-
-	Public Function getScreenHeight:Int() Final
+			If (preScaleZoomInFlag) Then
+				Return (canvasWidth Shr preScaleShift)
+			EndIf
+			
+			Return canvasWidth
+		End
 		
-		If (preScaleZoomOutFlag) Then
-			Return canvasHeight Shl preScaleShift
-		EndIf
+		Function getScreenHeight:Int()
+			If (preScaleZoomOutFlag) Then
+				Return (canvasHeight Shl preScaleShift)
+			EndIf
+			
+			If (preScaleZoomInFlag) Then
+				Return (canvasHeight Shr preScaleShift)
+			EndIf
+			
+			Return canvasHeight
+		End
 		
-		If (preScaleZoomInFlag) Then
-			Return canvasHeight Shr preScaleShift
-		EndIf
+		#Rem
+			Function getSystemDisplayable:Canvas()
+				Return mainCanvas
+			End
+		#End
 		
-		Return canvasHeight
-	}
-
-	Public Function getScreenWidth:Int() Final
+		Function getVersion:String()
+			Return VERSION_INFO
+		End
+	Private
+		' Functions:
 		
-		If (preScaleZoomOutFlag) Then
-			Return canvasWidth Shl preScaleShift
-		EndIf
+		' Extensions:
+		Function OpenFileStream:FileStream(path:String, mode:String)
+			Local f:= FileStream.Open(path, mode)
+			
+			If (f = Null) Then
+				Throw New FileNotFoundException(f, path)
+			EndIf
+			
+			Return f
+		End
 		
-		If (preScaleZoomInFlag) Then
-			Return canvasWidth Shr preScaleShift
-		EndIf
+		Function readRecord:DataBuffer(dis:Stream)
+			Local size:= dis.ReadInt()
+			
+			Local ret:DataBuffer
+			
+			If (t = 0) Then
+				ret = NULL_RECORD
+			Else
+				ret = New DataBuffer(size)
+				
+				dis.ReadAll(ret, 0, size)
+			EndIf
+			
+			Return ret
+		End
 		
-		Return canvasWidth
-	}
-
-	Public Function getSystemDisplayable:Object() Final
-		Return mainCanvas
-	}
-
-	Public Function getVersion:String() Final
-		Return VERSION_INFO
-	}
-
-	Private Function initRecords:Void() Final
-		Exception e
+		Function writeRecord:Void(dos:Stream, values:DataBuffer, count:Int, offset:Int=0)
+			Local rLen:= Max(Int(offset - count), 0) ' values.Length
+			
+			dos.WriteInt(rLen)
+			
+			dos.WriteAll(values, offset, count)
+		End
 		
-		If (records = Null) Then
-			records = New Hashtable()
-			DataInputStream dis = Null
-			ByteArrayInputStream bis = Null
-			try {
-				ByteArrayInputStream bis2 = New ByteArrayInputStream(openRecordStore(RECORD_NAME))
-				try {
-					DataInputStream dis2 = New DataInputStream(bis2)
-					try {
-						Int recordStoreNumber = dis2.readInt()
-						For (Int i = SIM_NONE; i < recordStoreNumber; i += SIM_CMCC)
-							String name = dis2.readUTF()
-							Int offset = SIM_NONE
-							Int dataSize = dis2.readInt()
-							Byte[] data = New Byte[dataSize]
-							do {
-								offset = dis2.read(data, offset, dataSize - offset)
-							} While (offset < dataSize)
-							records.put(name, data)
-						Next
-						bis = bis2
-						dis = dis2
-					} catch (Exception e2) {
-						e = e2
-						bis = bis2
-						dis = dis2
-					}
-				} catch (Exception e22) {
-					e = e22
-					bis = bis2
-					e.printStackTrace()
-					dis.close()
-					bis.close()
-				}
-			} catch (Exception e222) {
-				e = e222
-				e.printStackTrace()
-				dis.close()
-				bis.close()
-			}
-			try {
-				dis.close()
-			} catch (Exception e3) {
-			}
-			try {
-				bis.close()
-			} catch (Exception e4) {
-			}
-		EndIf
+		Function loadRecordFrom:DataBuffer(path:String)
+			Local dis:= OpenFileStream(path, "r")
+			
+			Local ret:= readRecord(dis)
+			
+			dis.Close()
+			
+			Return ret
+		End
 		
-	}
-
-	Public Function loadRecord:Byte[](recordName:String) Final
-		Return (Byte[]) records.get(recordName)
-	}
-
-	Public Function notifyExit:Void() Final
-		exitFlag = True
-	}
-
+		Function saveRecordTo:Void(path:String, values:DataBuffer, offset:Int=0, count:Int=0)
+			Local dos:= OpenFileStream(path, "w")
+			
+			If (count = 0) Then
+				count = values.Length
+			EndIf
+			
+			writeRecord(dos, values, count, offset)
+			
+			dos.Close()
+		End
+		
+		Function initRecords:Void(force:Bool=False)
+			If (Not force And records <> Null) Then
+				Return
+			EndIf
+			
+			records = New StringMap<DataBuffer>()
+			
+			Local recordStoreNumber:= dis.ReadInt()
+			
+			Local dis:= New DataStream(openRecordStore(RECORD_NAME))
+			
+			For Local i:= 0 Until recordStoreNumber
+				Local name:String = dis.ReadString("utf8")
+				Local record:= readRecord(dis)
+				
+				records.Set(name, record)
+			Next
+		End
+	Public
+		' Functions:
+		Function loadRecord:DataBuffer(recordName:String)
+			Return records.Get(recordName)
+		End
+		
+		Function notifyExit:Void()
+			exitFlag = True
+		End
+		
 	Public Function notifyPause:Void() Final
 		synchronized (mainRunnable) {
 			
@@ -568,10 +581,10 @@ Class MFDevice Final
 				interruptPauseFlag = True
 				
 				If (componentVector <> Null) Then
-					For (Int i = SIM_NONE; i < componentVector.size(); i += SIM_CMCC)
+					For (Int i = 0; i < componentVector.size(); i += 1)
 						((MFComponent) componentVector.elementAt(i)).reset()
 					Next
-					interruptConfirm = New MFTouchKey(SIM_NONE, canvasHeight - 50, 100, 50, Boss4Ice.DRAW_OFFSET_Y)
+					interruptConfirm = New MFTouchKey(0, canvasHeight - 50, 100, 50, Boss4Ice.DRAW_OFFSET_Y)
 					addComponent(interruptConfirm)
 				EndIf
 			EndIf
@@ -593,7 +606,7 @@ Class MFDevice Final
 				interruptPauseFlag = False
 				
 				If (componentVector <> Null) Then
-					For (Int i = SIM_NONE; i < componentVector.size(); i += SIM_CMCC)
+					For (Int i = 0; i < componentVector.size(); i += 1)
 						((MFComponent) componentVector.elementAt(i)).reset()
 					Next
 					removeComponent(interruptConfirm)
@@ -606,7 +619,7 @@ Class MFDevice Final
 	Public Function notifyStart:Void(width:Int, height:Int) Final
 		
 		If (mainThread = Null) Then
-			If (MFMain.getInstance().getRequestedOrientation() = SIM_CMCC) Then
+			If (MFMain.getInstance().getRequestedOrientation() = 1) Then
 				canvasHeight = MDPhone.SCREEN_HEIGHT
 				canvasWidth = MDPhone.SCREEN_WIDTH
 				
@@ -649,92 +662,25 @@ Class MFDevice Final
 		
 	}
 
-	Private Function openRecordStore:Byte[](str:String)
-		FileNotFoundException fileNotFoundException
-		DataOutputStream dos
-		Byte[] ret = Null
-		try {
-			DataInputStream dis = New DataInputStream(MFMain.getInstance().openFileInput(New StringBuilder(String.valueOf(str)).append(".rms").toString()))
-			try {
-				Int t = dis.readInt()
-				
-				If (t = 0) Then
-					ret = NULL_RECORD
-				Else
-					ret = New Byte[t]
-					For (Int i = SIM_NONE; i < ret.length; i += SIM_CMCC)
-						ret[i] = dis.readByte()
-					Next
-				EndIf
-				
-				dis.close()
-				DataInputStream dataInputStream = dis
-			} catch (FileNotFoundException e) {
-				fileNotFoundException = e
-				dataInputStream = dis
-				try {
-					Print("Create New save file.")
-					ret = NULL_RECORD
-					dos = New DataOutputStream(MFMain.getInstance().openFileOutput(New StringBuilder(String.valueOf(str)).append(".rms").toString(), SIM_NONE))
-					dos.write(NULL_RECORD, SIM_NONE, NULL_RECORD.length)
-					dos.flush()
-					dos.close()
-				} catch (IOException e2) {
-					IOException ex = e2
-					Print("RMS ERROR : Can't create rms file.")
-				}
-				Return ret
-			} catch (IOException e22) {
-				r4 = e22
-				dataInputStream = dis
-				Print("RMS ERROR : Can't read rms file.")
-				Return ret
-			}
-		} catch (FileNotFoundException e3) {
-			fileNotFoundException = e3
-			Print("Create New save file.")
+	Function openRecordStore:DataBuffer(str:String)
+		Local ret:DataBuffer = Null
+		Local path:String = "records/" + str + ".rms"
+		
+		Try
+			ret = loadRecordFrom(path)
+		Catch notFound:FileNotFoundException
+			Print("Create new record file: " + path)
+			
 			ret = NULL_RECORD
-			dos = New DataOutputStream(MFMain.getInstance().openFileOutput(New StringBuilder(String.valueOf(str)).append(".rms").toString(), SIM_NONE))
-			dos.write(NULL_RECORD, SIM_NONE, NULL_RECORD.length)
-			dos.flush()
-			dos.close()
-			Return ret
-		} catch (IOException e222) {
-			IOException iOException
-			iOException = e222
+			
+			saveRecordTo(path, ret)
+		Catch E:StreamError
 			Print("RMS ERROR : Can't read rms file.")
-			Return ret
-		}
+		End Try
+		
 		Return ret
-	}
-
-	Public Function openUrl:Void() Final
-		
-		If (webPageUrl <> Null) Then
-			try {
-				MFMain.getInstance().platformRequest(webPageUrl)
-			} catch (Exception e) {
-				e.printStackTrace()
-			}
-		EndIf
-		
-	}
-
-	Public Function openUrl:Void(url:String, needClose:Bool) Final
-		
-		If (needClose) Then
-			webPageUrl = url
-			notifyExit()
-			Return
-		EndIf
-		
-		try {
-			MFMain.getInstance().platformRequest(url)
-		} catch (Exception e) {
-			e.printStackTrace()
-		}
-	}
-
+	End
+	
 	Public Function removeAllComponents:Void() Final
 		
 		If (componentVector <> Null) Then
@@ -783,27 +729,27 @@ Class MFDevice Final
 
 	Public Function enableLayer:Void(layer:Int)
 		
-		If (layer <= 0 Or layer > SIM_CMCC) Then
-			If (layer < 0 And layer >= -1 And preLayerImage[(-layer) - SIM_CMCC] = Null) Then
-				preLayerImage[(-layer) - SIM_CMCC] = Image.createImage(screenWidth, screenHeight)
-				preLayerGraphics[(-layer) - SIM_CMCC] = MFGraphics.createMFGraphics(preLayerImage[(-layer) - SIM_CMCC].getGraphics(), screenWidth, screenHeight)
+		If (layer <= 0 Or layer > 1) Then
+			If (layer < 0 And layer >= -1 And preLayerImage[(-layer) - 1] = Null) Then
+				preLayerImage[(-layer) - 1] = Image.createImage(screenWidth, screenHeight)
+				preLayerGraphics[(-layer) - 1] = MFGraphics.createMFGraphics(preLayerImage[(-layer) - 1].getGraphics(), screenWidth, screenHeight)
 			EndIf
 			
-		ElseIf (postLayerImage[layer - SIM_CMCC] = Null) Then
-			postLayerImage[layer - SIM_CMCC] = Image.createImage(screenWidth, screenHeight)
-			postLayerGraphics[layer - SIM_CMCC] = MFGraphics.createMFGraphics(postLayerImage[layer - SIM_CMCC].getGraphics(), screenWidth, screenHeight)
+		ElseIf (postLayerImage[layer - 1] = Null) Then
+			postLayerImage[layer - 1] = Image.createImage(screenWidth, screenHeight)
+			postLayerGraphics[layer - 1] = MFGraphics.createMFGraphics(postLayerImage[layer - 1].getGraphics(), screenWidth, screenHeight)
 		EndIf
 		
 	}
 
 	Public Function disableLayer:Void(layer:Int)
 		
-		If (layer > 0 And layer <= SIM_CMCC) Then
-			postLayerImage[layer - SIM_CMCC] = Null
-			postLayerGraphics[layer - SIM_CMCC] = Null
+		If (layer > 0 And layer <= 1) Then
+			postLayerImage[layer - 1] = Null
+			postLayerGraphics[layer - 1] = Null
 		ElseIf (layer < 0 And layer >= -1) Then
-			preLayerImage[(-layer) - SIM_CMCC] = Null
-			preLayerGraphics[(-layer) - SIM_CMCC] = Null
+			preLayerImage[(-layer) - 1] = Null
+			preLayerGraphics[(-layer) - 1] = Null
 		EndIf
 		
 	}
@@ -815,18 +761,18 @@ Class MFDevice Final
 	Public Function setFullscreenMode:Void(b:Bool)
 		
 		If (b) Then
-			drawRect = New Rect(SIM_NONE, SIM_NONE, screenWidth, screenHeight)
+			drawRect = New Rect(0, 0, screenWidth, screenHeight)
 		ElseIf (((Float) screenWidth) / ((Float) canvasWidth) > ((Float) screenHeight) / ((Float) canvasHeight)) Then
 			Int tmpHeight
 			
 			If (preScaleZoomOutFlag And canvasHeight > screenHeight) Then
-				preScaleShift = SIM_NONE
+				preScaleShift = 0
 				tmpHeight = canvasHeight
-				While (tmpHeight > screenHeight And tmpHeight - screenHeight > screenHeight - (tmpHeight / SIM_UNICOM)) {
-					tmpHeight /= SIM_UNICOM
-					canvasWidth /= SIM_UNICOM
-					canvasHeight /= SIM_UNICOM
-					preScaleShift += SIM_CMCC
+				While (tmpHeight > screenHeight And tmpHeight - screenHeight > screenHeight - (tmpHeight / 2)) {
+					tmpHeight /= 2
+					canvasWidth /= 2
+					canvasHeight /= 2
+					preScaleShift += 1
 				}
 				
 				If (preScaleShift = 0) Then
@@ -837,13 +783,13 @@ Class MFDevice Final
 			EndIf
 			
 			If (preScaleZoomInFlag And canvasHeight < screenHeight) Then
-				preScaleShift = SIM_NONE
+				preScaleShift = 0
 				tmpHeight = canvasHeight
-				While (tmpHeight < screenHeight And screenHeight - tmpHeight > (tmpHeight * SIM_UNICOM) - screenHeight) {
-					tmpHeight *= SIM_UNICOM
-					canvasWidth *= SIM_UNICOM
-					canvasHeight *= SIM_UNICOM
-					preScaleShift += SIM_CMCC
+				While (tmpHeight < screenHeight And screenHeight - tmpHeight > (tmpHeight * 2) - screenHeight) {
+					tmpHeight *= 2
+					canvasWidth *= 2
+					canvasHeight *= 2
+					preScaleShift += 1
 				}
 				
 				If (preScaleShift = 0) Then
@@ -855,8 +801,8 @@ Class MFDevice Final
 			
 			h = screenHeight
 			w = (canvasWidth * h) / canvasHeight
-			Int x = (screenWidth - w) / SIM_UNICOM
-			drawRect = New Rect(x, SIM_NONE, x + w, SIM_NONE + h)
+			Int x = (screenWidth - w) / 2
+			drawRect = New Rect(x, 0, x + w, 0 + h)
 			
 			If (preScaleZoomOutFlag) Then
 				bufferImage = Image.createImage(((canvasHeight * screenWidth) / screenHeight) Shl preScaleShift, canvasHeight Shl preScaleShift)
@@ -871,13 +817,13 @@ Class MFDevice Final
 			Int tmpWidth
 			
 			If (preScaleZoomOutFlag And canvasWidth > screenWidth) Then
-				preScaleShift = SIM_NONE
+				preScaleShift = 0
 				tmpWidth = canvasWidth
-				While (tmpWidth > screenWidth And ((Float) tmpWidth) - ((Float) screenWidth) > ((Float) (screenWidth - (tmpWidth / SIM_UNICOM)))) {
-					tmpWidth /= SIM_UNICOM
-					canvasWidth /= SIM_UNICOM
-					canvasHeight /= SIM_UNICOM
-					preScaleShift += SIM_CMCC
+				While (tmpWidth > screenWidth And ((Float) tmpWidth) - ((Float) screenWidth) > ((Float) (screenWidth - (tmpWidth / 2)))) {
+					tmpWidth /= 2
+					canvasWidth /= 2
+					canvasHeight /= 2
+					preScaleShift += 1
 				}
 				
 				If (preScaleShift = 0) Then
@@ -888,13 +834,13 @@ Class MFDevice Final
 			EndIf
 			
 			If (preScaleZoomInFlag And canvasWidth < screenWidth) Then
-				preScaleShift = SIM_NONE
+				preScaleShift = 0
 				tmpWidth = canvasWidth
-				While (tmpWidth < screenWidth And screenWidth - tmpWidth < (tmpWidth * SIM_UNICOM) - screenWidth) {
-					tmpWidth *= SIM_UNICOM
-					canvasWidth *= SIM_UNICOM
-					canvasHeight *= SIM_UNICOM
-					preScaleShift += SIM_CMCC
+				While (tmpWidth < screenWidth And screenWidth - tmpWidth < (tmpWidth * 2) - screenWidth) {
+					tmpWidth *= 2
+					canvasWidth *= 2
+					canvasHeight *= 2
+					preScaleShift += 1
 				}
 				
 				If (preScaleShift = 0) Then
@@ -906,8 +852,8 @@ Class MFDevice Final
 			
 			w = screenWidth
 			h = (canvasHeight * w) / canvasWidth
-			Int y = (screenHeight - h) / SIM_UNICOM
-			drawRect = New Rect(SIM_NONE, y, SIM_NONE + w, y + h)
+			Int y = (screenHeight - h) / 2
+			drawRect = New Rect(0, y, 0 + w, y + h)
 			
 			If (preScaleZoomOutFlag) Then
 				bufferImage = Image.createImage(canvasWidth Shl preScaleShift, ((canvasWidth * screenHeight) / screenWidth) Shl preScaleShift)
@@ -934,9 +880,9 @@ Class MFDevice Final
 
 	Private Function setRecord:Void(str:String, data:Byte[], len:Int)
 		try {
-			DataOutputStream dos = New DataOutputStream(MFMain.getInstance().openFileOutput(New StringBuilder(String.valueOf(str)).append(".rms").toString(), SIM_NONE))
+			DataOutputStream dos = New DataOutputStream(MFMain.getInstance().openFileOutput(New StringBuilder(String.valueOf(str)).append(".rms").toString(), 0))
 			dos.writeInt(len)
-			For (Int i = SIM_NONE; i < len; i += SIM_CMCC)
+			For (Int i = 0; i < len; i += 1)
 				dos.writeByte(data[i])
 			Next
 			dos.flush()
@@ -1006,7 +952,7 @@ Class MFDevice Final
 					Byte[] tmp
 					out2.writeInt(records.size())
 					Enumeration<String> e2 = records.keys()
-					For (Int i = SIM_NONE; i < records.size(); i += SIM_CMCC)
+					For (Int i = 0; i < records.size(); i += 1)
 						String name = (String) e2.nextElement()
 						tmp = (Byte[]) records.get(name)
 						out2.writeUTF(name)
@@ -1148,7 +1094,7 @@ End
 				Int i
 				synchronized (MFDevice.mainRunnable) {
 					MFGamePad.keyTick()
-					For (i = MFDevice.SIM_NONE; i < MFDevice.componentVector.size(); i += MFDevice.SIM_CMCC)
+					For (i = MFDevice.0; i < MFDevice.componentVector.size(); i += MFDevice.1)
 						((MFComponent) MFDevice.componentVector.elementAt(i)).tick()
 					Next
 				}
@@ -1156,7 +1102,7 @@ End
 				
 				If (MFDevice.vibraionFlag) Then
 					If (MFDevice.vibrateTime > 0 And System.currentTimeMillis() - MFDevice.vibrateStartTime > ((Long) MFDevice.vibrateTime)) Then
-						MFDevice.vibrateTime = MFDevice.SIM_NONE
+						MFDevice.vibrateTime = MFDevice.0
 						MFDevice.inVibrationFlag = False
 					EndIf
 					
@@ -1191,18 +1137,18 @@ End
 					MFDevice.currentState.onTick()
 					
 					If (Not MFDevice.exitFlag) Then
-						For (i = MFDevice.SIM_CMCC; i > 0; i -= 1)
+						For (i = MFDevice.1; i > 0; i -= 1)
 							
-							If (MFDevice.preLayerGraphics[i - MFDevice.SIM_CMCC] <> Null) Then
-								MFDevice.currentState.onRender(MFDevice.preLayerGraphics[i - MFDevice.SIM_CMCC], -i)
+							If (MFDevice.preLayerGraphics[i - MFDevice.1] <> Null) Then
+								MFDevice.currentState.onRender(MFDevice.preLayerGraphics[i - MFDevice.1], -i)
 							EndIf
 							
 						Next
 						MFDevice.currentState.onRender(MFDevice.graphics)
-						For (i = MFDevice.SIM_CMCC; i <= MFDevice.SIM_CMCC; i += MFDevice.SIM_CMCC)
+						For (i = MFDevice.1; i <= MFDevice.1; i += MFDevice.1)
 							
-							If (MFDevice.postLayerGraphics[i - MFDevice.SIM_CMCC] <> Null) Then
-								MFDevice.currentState.onRender(MFDevice.postLayerGraphics[i - MFDevice.SIM_CMCC], i)
+							If (MFDevice.postLayerGraphics[i - MFDevice.1] <> Null) Then
+								MFDevice.currentState.onRender(MFDevice.postLayerGraphics[i - MFDevice.1], i)
 							EndIf
 							
 						Next
@@ -1215,3 +1161,20 @@ End
 		End
 	}
 #End
+
+Class FileNotFoundException Extends StreamError
+	' Constructor(s):
+	Method New(stream:Stream, filepath:String)
+		Super.New(stream)
+		
+		Self.file = filepath
+	End
+	
+	' Methods:
+	Method ToString:String()
+		Return ("Unable to find the specified file: " + file)
+	End
+	
+	' Fields:
+	Field file:String
+End
