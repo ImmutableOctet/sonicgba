@@ -106,7 +106,7 @@ Class Main Extends App ' Main Extends MFMain
 			' Extensions:
 			isSuspended = False
 			
-			MFDevice.notifyStart(DeviceWidth(), DeviceHeight())
+			MFDevice.notifyStart(graphics, DeviceWidth(), DeviceHeight())
 			
 			Return 0
 		End

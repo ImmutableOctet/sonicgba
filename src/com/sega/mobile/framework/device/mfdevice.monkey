@@ -446,7 +446,7 @@ Class MFDevice Final
 			Return Null
 		End
 		
-		Function getScreenWidth:Int() Final
+		Function getScreenWidth:Int()
 			If (preScaleZoomOutFlag) Then
 				Return (canvasWidth Shl preScaleShift)
 			EndIf
@@ -611,10 +611,59 @@ Class MFDevice Final
 			
 			setRecord(RECORD_NAME, buffer, len)
 		End
+		
+		Function setRecord:Void(str:String, data:DataBuffer, len:Int)
+			Try
+				saveRecordTo(ToRecordPath(str), data, 0, len)
+			Catch E:StreamError
+				Print("RMS ERROR : Can't save rms file.")
+			End
+		End
 	Public
 		' Functions:
+		
+		' Record-related:
 		Function loadRecord:DataBuffer(recordName:String)
 			Return records.Get(recordName)
+		End
+		
+		' Notifications:
+		Function notifyStart:Void(context:Graphics, width:Int, height:Int)
+			Local isSideways:Bool = False ' (MFMain.getInstance().getRequestedOrientation() = SCREEN_ORIENTATION_PORTRAIT)
+			
+			'If (mainThread = Null) Then
+			If (Not isSideways) Then
+				canvasHeight = MDPhone.SCREEN_HEIGHT
+				canvasWidth = MDPhone.SCREEN_WIDTH
+				
+				If (width > height) Then
+					screenWidth = height
+					screenHeight = width
+				Else
+					screenWidth = width
+					screenHeight = height
+				EndIf
+			Else
+				canvasHeight = MDPhone.SCREEN_WIDTH
+				canvasWidth = MDPhone.SCREEN_HEIGHT
+				
+				If (width < height) Then
+					screenWidth = height
+					screenHeight = width
+				Else
+					screenWidth = width
+					screenHeight = height
+				EndIf
+			EndIf
+			
+			Print("screenwidth:" + screenWidth + ",screenheight:" + screenHeight)
+			
+			changeState(MFMain.getInstance().getEntryGameState())
+			
+			setFullscreenMode(context, False)
+			
+			'startThread()
+			'EndIf
 		End
 		
 		Function notifyExit:Void()
@@ -635,11 +684,12 @@ Class MFDevice Final
 				interruptPauseFlag = True
 				
 				If (componentVector <> Null) Then
-					For (Int i = 0; i < componentVector.size(); i += 1)
-						((MFComponent) componentVector.elementAt(i)).reset()
+					For Local component:= EachIn componentVector
+						component.reset()
 					Next
-					interruptConfirm = New MFTouchKey(0, canvasHeight - 50, 100, 50, Boss4Ice.DRAW_OFFSET_Y)
-					addComponent(interruptConfirm)
+					
+					'interruptConfirm = New MFTouchKey(0, canvasHeight - 50, 100, 50, 2112)
+					'addComponent(interruptConfirm)
 				EndIf
 			EndIf
 		End
@@ -647,7 +697,7 @@ Class MFDevice Final
 		Function notifyResume:Void()
 			If (responseInterrupt And interruptPauseFlag) Then
 				MFGamePad.resetKeys()
-				MFSound.deviceResume()
+				'MFSound.deviceResume()
 				
 				If (currentState <> Null) Then
 					currentState.onResume()
@@ -656,324 +706,304 @@ Class MFDevice Final
 				interruptPauseFlag = False
 				
 				If (componentVector <> Null) Then
-					For (Int i = 0; i < componentVector.size(); i += 1)
-						((MFComponent) componentVector.elementAt(i)).reset()
+					For Local component:= EachIn componentVector
+						component.reset()
 					Next
-					removeComponent(interruptConfirm)
+					
+					'removeComponent(interruptConfirm)
 				EndIf
 			EndIf
 		End
-
-	Public Function notifyStart:Void(width:Int, height:Int) Final
 		
-		If (mainThread = Null) Then
-			If (MFMain.getInstance().getRequestedOrientation() = 1) Then
-				canvasHeight = MDPhone.SCREEN_HEIGHT
-				canvasWidth = MDPhone.SCREEN_WIDTH
-				
-				If (width > height) Then
-					screenWidth = height
-					screenHeight = width
-				Else
-					screenWidth = width
-					screenHeight = height
-				EndIf
-				
+		Function notifyVolumeChange:Void(isUp:Bool)
+			If (isUp) Then
+				currentState.onVolumeUp()
 			Else
-				canvasHeight = MDPhone.SCREEN_WIDTH
-				canvasWidth = MDPhone.SCREEN_HEIGHT
-				
-				If (width < height) Then
-					screenWidth = height
-					screenHeight = width
-				Else
-					screenWidth = width
-					screenHeight = height
-				EndIf
+				currentState.onVolumeDown()
 			EndIf
+		End
+		
+		Function removeAllComponents:Void()
+			If (componentVector <> Null) Then
+				componentVector.Clear()
+			EndIf
+		End
+		
+		Function removeComponent:Void(component:MFComponent)
+			If (componentVector <> Null) Then
+				componentVector.RemoveEach(component)
+			EndIf
+		End
+		
+		Function saveRecord:Void(recordName:String, record:DataBuffer)
+			records.Set(recordName, record)
 			
-			Print("screenwidth:" + screenWidth + ",screenheight:" + screenHeight)
-			changeState(MFMain.getInstance().getEntryGameState())
-			setFullscreenMode(False)
-			startThread()
-		EndIf
+			updateRecords()
+		End
 		
-	}
-
-	Public Function notifyVolumeChange:Void(isUp:Bool) Final
+		Function setAntiAlias:Void(b:Bool)
+			'mainCanvas.setAntiAlias(b)
+		End
 		
-		If (isUp) Then
-			currentState.onVolumeUp()
-		Else
-			currentState.onVolumeDown()
-		EndIf
-		
-	}
+		Function setCanvasSize:Void(w:Int, h:Int)
+			canvasWidth = w
+			canvasHeight = h
+		End
 	
-	Public Function removeAllComponents:Void() Final
-		
-		If (componentVector <> Null) Then
-			componentVector.removeAllElements()
-		EndIf
-		
-	}
-
-	Public Function removeComponent:Void(component:MFComponent) Final
-		
-		If (componentVector <> Null) Then
-			componentVector.removeElement(component)
-		EndIf
-		
-	}
-
-	Public Function saveRecord:Void(recordName:String, record:Byte[]) Final
-		records.put(recordName, record)
-		updateRecords()
-	}
-
-	Public Function setAntiAlias:Void(b:Bool)
-		mainCanvas.setAntiAlias(b)
-	}
-
-	Public Function setCanvasSize:Void(w:Int, h:Int)
-		canvasWidth = w
-		canvasHeight = h
-	}
-
-	Public Function setClearBuffer:Void(b:Bool)
-		clearBuffer = b
-	}
-
-	Public Function setEnableCustomBack:Void(b:Bool)
-		enableCustomBack = b
-	}
-
-	Public Function setEnableTrackBall:Void(b:Bool)
-		enableTrackBall = b
-	}
-
-	Public Function setEnableVolumeKey:Void(b:Bool)
-		enableVolumeKey = b
-	}
-
-	Public Function enableLayer:Void(layer:Int)
-		
-		If (layer <= 0 Or layer > 1) Then
-			If (layer < 0 And layer >= -1 And preLayerImage[(-layer) - 1] = Null) Then
-				preLayerImage[(-layer) - 1] = Image.createImage(screenWidth, screenHeight)
-				preLayerGraphics[(-layer) - 1] = MFGraphics.createMFGraphics(preLayerImage[(-layer) - 1].getGraphics(), screenWidth, screenHeight)
-			EndIf
-			
-		ElseIf (postLayerImage[layer - 1] = Null) Then
-			postLayerImage[layer - 1] = Image.createImage(screenWidth, screenHeight)
-			postLayerGraphics[layer - 1] = MFGraphics.createMFGraphics(postLayerImage[layer - 1].getGraphics(), screenWidth, screenHeight)
-		EndIf
-		
-	}
-
-	Public Function disableLayer:Void(layer:Int)
-		
-		If (layer > 0 And layer <= 1) Then
-			postLayerImage[layer - 1] = Null
-			postLayerGraphics[layer - 1] = Null
-		ElseIf (layer < 0 And layer >= -1) Then
-			preLayerImage[(-layer) - 1] = Null
-			preLayerGraphics[(-layer) - 1] = Null
-		EndIf
-		
-	}
-
-	Public Function setFilterBitmap:Void(b:Bool)
-		mainCanvas.setFilterBitmap(b)
-	}
-
-	Public Function setFullscreenMode:Void(b:Bool)
-		
-		If (b) Then
-			drawRect = New Rect(0, 0, screenWidth, screenHeight)
-		ElseIf (((Float) screenWidth) / ((Float) canvasWidth) > ((Float) screenHeight) / ((Float) canvasHeight)) Then
-			Int tmpHeight
-			
-			If (preScaleZoomOutFlag And canvasHeight > screenHeight) Then
-				preScaleShift = 0
-				tmpHeight = canvasHeight
-				While (tmpHeight > screenHeight And tmpHeight - screenHeight > screenHeight - (tmpHeight / 2)) {
-					tmpHeight /= 2
-					canvasWidth /= 2
-					canvasHeight /= 2
-					preScaleShift += 1
-				}
-				
-				If (preScaleShift = 0) Then
-					preScaleZoomOutFlag = False
-				EndIf
-				
-				preScaleZoomInFlag = False
-			EndIf
-			
-			If (preScaleZoomInFlag And canvasHeight < screenHeight) Then
-				preScaleShift = 0
-				tmpHeight = canvasHeight
-				While (tmpHeight < screenHeight And screenHeight - tmpHeight > (tmpHeight * 2) - screenHeight) {
-					tmpHeight *= 2
-					canvasWidth *= 2
-					canvasHeight *= 2
-					preScaleShift += 1
-				}
-				
-				If (preScaleShift = 0) Then
-					preScaleZoomInFlag = False
-				EndIf
-				
-				preScaleZoomOutFlag = False
-			EndIf
-			
-			h = screenHeight
-			w = (canvasWidth * h) / canvasHeight
-			Int x = (screenWidth - w) / 2
-			drawRect = New Rect(x, 0, x + w, 0 + h)
-			
-			If (preScaleZoomOutFlag) Then
-				bufferImage = Image.createImage(((canvasHeight * screenWidth) / screenHeight) Shl preScaleShift, canvasHeight Shl preScaleShift)
-			ElseIf (preScaleZoomInFlag) Then
-				bufferImage = Image.createImage(((canvasHeight * screenWidth) / screenHeight) Shr preScaleShift, canvasHeight Shr preScaleShift)
-			Else
-				bufferImage = Image.createImage((canvasHeight * screenWidth) / screenHeight, canvasHeight)
-			EndIf
-			
-			graphics = MFGraphics.createMFGraphics(bufferImage.getGraphics(), (canvasHeight * screenWidth) / screenHeight, canvasHeight)
-		Else
-			Int tmpWidth
-			
-			If (preScaleZoomOutFlag And canvasWidth > screenWidth) Then
-				preScaleShift = 0
-				tmpWidth = canvasWidth
-				While (tmpWidth > screenWidth And ((Float) tmpWidth) - ((Float) screenWidth) > ((Float) (screenWidth - (tmpWidth / 2)))) {
-					tmpWidth /= 2
-					canvasWidth /= 2
-					canvasHeight /= 2
-					preScaleShift += 1
-				}
-				
-				If (preScaleShift = 0) Then
-					preScaleZoomOutFlag = False
-				EndIf
-				
-				preScaleZoomInFlag = False
-			EndIf
-			
-			If (preScaleZoomInFlag And canvasWidth < screenWidth) Then
-				preScaleShift = 0
-				tmpWidth = canvasWidth
-				While (tmpWidth < screenWidth And screenWidth - tmpWidth < (tmpWidth * 2) - screenWidth) {
-					tmpWidth *= 2
-					canvasWidth *= 2
-					canvasHeight *= 2
-					preScaleShift += 1
-				}
-				
-				If (preScaleShift = 0) Then
-					preScaleZoomInFlag = False
-				EndIf
-				
-				preScaleZoomOutFlag = False
-			EndIf
-			
-			w = screenWidth
-			h = (canvasHeight * w) / canvasWidth
-			Int y = (screenHeight - h) / 2
-			drawRect = New Rect(0, y, 0 + w, y + h)
-			
-			If (preScaleZoomOutFlag) Then
-				bufferImage = Image.createImage(canvasWidth Shl preScaleShift, ((canvasWidth * screenHeight) / screenWidth) Shl preScaleShift)
-			ElseIf (preScaleZoomInFlag) Then
-				bufferImage = Image.createImage(canvasWidth Shr preScaleShift, ((canvasWidth * screenHeight) / screenWidth) Shr preScaleShift)
-			Else
-				bufferImage = Image.createImage(canvasWidth, (canvasWidth * screenHeight) / screenWidth)
-			EndIf
-			
-			graphics = MFGraphics.createMFGraphics(bufferImage.getGraphics(), canvasWidth, (canvasWidth * screenHeight) / screenWidth)
-		EndIf
-		
-		bufferWidth = bufferImage.getWidth() Shr preScaleShift
-		bufferHeight = bufferImage.getHeight() Shr preScaleShift
-		horizontalOffset = (drawRect.left * bufferWidth) / screenWidth
-		verticvalOffset = (drawRect.top * bufferHeight) / screenHeight
-		graphics.f7g.getCanvas().translate((Float) horizontalOffset, (Float) verticvalOffset)
-	}
-
-	Public Function setPreScale:Void(zoomIn:Bool, zoomOut:Bool)
-		preScaleZoomInFlag = zoomIn
-		preScaleZoomOutFlag = zoomOut
-	}
-
-	Private Function setRecord:Void(str:String, data:DataBuffer, len:Int)
-		Try
-			saveRecordTo(ToRecordPath(str), data, 0, len)
-		Catch E:StreamError
-			Print("RMS ERROR : Can't save rms file.")
+		Function setClearBuffer:Void(b:Bool)
+			clearBuffer = b
 		End
-	End
-
-	Public Function setResponseInterruptFlag:Void(flag:Bool) Final
-		responseInterrupt = flag
-	}
-
-	Public Function setShieldInput:Void(b:Bool) Final
-		shieldInput = b
-	}
-
-	Public Function setUseMultitouch:Void(b:Bool)
-		mainCanvas.setUseMultitouch(b)
-	}
-
-	Public Function setVibrationFlag:Void(enable:Bool) Final
-		vibraionFlag = enable
+	
+		Function setEnableCustomBack:Void(b:Bool)
+			enableCustomBack = b
+		End
+	
+		Function setEnableTrackBall:Void(b:Bool)
+			enableTrackBall = b
+		End
+	
+		Function setEnableVolumeKey:Void(b:Bool)
+			enableVolumeKey = b
+		End
 		
-		If (Not vibraionFlag) Then
-			stopVibrate()
-		EndIf
+		Function enableLayer:Void(layer:Int)
+			If (layer <= 0 Or layer > MAX_LAYER) Then ' (layer <> MAX_LAYER)
+				If (layer < 0 And layer >= -MAX_LAYER And preLayerImage[(-layer) - MAX_LAYER] = Null) Then
+					preLayerImage[(-layer) - MAX_LAYER] = Image.createImage(screenWidth, screenHeight)
+					preLayerGraphics[(-layer) - MAX_LAYER] = MFGraphics.createMFGraphics(preLayerImage[(-layer) - MAX_LAYER].getGraphics(), screenWidth, screenHeight)
+				EndIf
+			ElseIf (postLayerImage[layer - MAX_LAYER] = Null) Then
+				postLayerImage[layer - MAX_LAYER] = Image.createImage(screenWidth, screenHeight)
+				postLayerGraphics[layer - MAX_LAYER] = MFGraphics.createMFGraphics(postLayerImage[layer - MAX_LAYER].getGraphics(), screenWidth, screenHeight)
+			EndIf
+		End
 		
-	}
-
-	Public Function startThread:Void() Final
+		Function disableLayer:Void(layer:Int)
+			If (layer > 0 And layer <= MAX_LAYER) Then
+				postLayerImage[layer - MAX_LAYER] = Null
+				postLayerGraphics[layer - MAX_LAYER] = Null
+			ElseIf (layer < 0 And layer >= -MAX_LAYER) Then
+				preLayerImage[(-layer) - MAX_LAYER] = Null
+				preLayerGraphics[(-layer) - MAX_LAYER] = Null
+			EndIf
+		End
 		
-		If (mainThread = Null) Then
-			mainThread = New Thread(mainRunnable)
-			mainThread.start()
-		EndIf
+		Function setFilterBitmap:Void(b:Bool)
+			'mainCanvas.setFilterBitmap(b)
+		End
 		
-	}
-
-	Public Function startVibrate:Void() Final
+		Function setFullscreenMode:Void(context:Graphics, b:Bool)
+			Local vWidth:Int, vHeight:Int
+			
+			If (b) Then
+				drawRect = New Rect(0, 0, screenWidth, screenHeight)
+				
+				vWidth = screenWidth
+				vHeight = screenHeight
+			ElseIf (Float(screenWidth) / Float(canvasWidth) > Float(screenHeight) / Float(canvasHeight)) Then
+				Local tmpHeight:Int
+				
+				If (preScaleZoomOutFlag And canvasHeight > screenHeight) Then
+					preScaleShift = 0
+					
+					tmpHeight = canvasHeight
+					
+					While (tmpHeight > screenHeight And tmpHeight - screenHeight > screenHeight - (tmpHeight / 2))
+						tmpHeight /= 2
+						
+						canvasWidth /= 2
+						canvasHeight /= 2
+						
+						preScaleShift += 1
+					Wend
+					
+					If (preScaleShift = 0) Then
+						preScaleZoomOutFlag = False
+					EndIf
+					
+					preScaleZoomInFlag = False
+				EndIf
+				
+				If (preScaleZoomInFlag And canvasHeight < screenHeight) Then
+					preScaleShift = 0
+					
+					tmpHeight = canvasHeight
+					
+					While (tmpHeight < screenHeight And screenHeight - tmpHeight > (tmpHeight * 2) - screenHeight)
+						tmpHeight *= 2
+						
+						canvasWidth *= 2
+						canvasHeight *= 2
+						
+						preScaleShift += 1
+					Wend
+					
+					If (preScaleShift = 0) Then
+						preScaleZoomInFlag = False
+					EndIf
+					
+					preScaleZoomOutFlag = False
+				EndIf
+				
+				h = screenHeight
+				w = ((canvasWidth * h) / canvasHeight)
+				
+				Local x:= ((screenWidth - w) / 2)
+				
+				drawRect = New Rect(x, 0, x + w, h)
+				
+				#Rem
+					If (preScaleZoomOutFlag) Then
+						bufferImage = Image.createImage(((canvasHeight * screenWidth) / screenHeight) Shl preScaleShift, canvasHeight Shl preScaleShift)
+					ElseIf (preScaleZoomInFlag) Then
+						bufferImage = Image.createImage(((canvasHeight * screenWidth) / screenHeight) Shr preScaleShift, canvasHeight Shr preScaleShift)
+					Else
+						bufferImage = Image.createImage((canvasHeight * screenWidth) / screenHeight, canvasHeight)
+					EndIf
+					
+					graphics = MFGraphics.createMFGraphics(bufferImage.getGraphics(), (canvasHeight * screenWidth) / screenHeight, canvasHeight)
+				#End
+				
+				vWidth = ((canvasHeight * screenWidth) / screenHeight)
+				vHeight = canvasHeight
+			Else
+				Local tmpWidth:Int
+				
+				If (preScaleZoomOutFlag And canvasWidth > screenWidth) Then
+					preScaleShift = 0
+					
+					tmpWidth = canvasWidth
+					
+					While (tmpWidth > screenWidth And Float(tmpWidth) - Float(screenWidth) > Float(screenWidth - (tmpWidth / 2)))
+						tmpWidth /= 2
+						
+						canvasWidth /= 2
+						canvasHeight /= 2
+						
+						preScaleShift += 1
+					Wend
+					
+					If (preScaleShift = 0) Then
+						preScaleZoomOutFlag = False
+					EndIf
+					
+					preScaleZoomInFlag = False
+				EndIf
+				
+				If (preScaleZoomInFlag And canvasWidth < screenWidth) Then
+					preScaleShift = 0
+					
+					tmpWidth = canvasWidth
+					
+					While (tmpWidth < screenWidth And screenWidth - tmpWidth < (tmpWidth * 2) - screenWidth)
+						tmpWidth *= 2
+						
+						canvasWidth *= 2
+						canvasHeight *= 2
+						
+						preScaleShift += 1
+					Wend
+					
+					If (preScaleShift = 0) Then
+						preScaleZoomInFlag = False
+					EndIf
+					
+					preScaleZoomOutFlag = False
+				EndIf
+				
+				w = screenWidth
+				h = ((canvasHeight * w) / canvasWidth)
+				
+				Local y:= ((screenHeight - h) / 2)
+				
+				drawRect = New Rect(0, y, w, y + h)
+				
+				#Rem
+					If (preScaleZoomOutFlag) Then
+						bufferImage = Image.createImage(canvasWidth Shl preScaleShift, ((canvasWidth * screenHeight) / screenWidth) Shl preScaleShift)
+					ElseIf (preScaleZoomInFlag) Then
+						bufferImage = Image.createImage(canvasWidth Shr preScaleShift, ((canvasWidth * screenHeight) / screenWidth) Shr preScaleShift)
+					Else
+						bufferImage = Image.createImage(canvasWidth, (canvasWidth * screenHeight) / screenWidth)
+					EndIf
+					
+					graphics = MFGraphics.createMFGraphics(bufferImage.getGraphics(), canvasWidth, (canvasWidth * screenHeight) / screenWidth)
+				#End
+				
+				vWidth = canvasWidth
+				vHeight = ((canvasWidth * screenHeight) / screenWidth)
+			EndIf
+			
+			graphics = MFGraphics.createMFGraphics(context, vWidth, vHeight)
+			
+			bufferWidth = (vWidth Shr preScaleShift)
+			bufferHeight = (vHeight Shr preScaleShift)
+			
+			horizontalOffset = ((drawRect.left * bufferWidth) / screenWidth)
+			verticvalOffset = ((drawRect.top * bufferHeight) / screenHeight)
+			
+			graphics.context.getCanvas().Translate(Float(horizontalOffset), Float(verticvalOffset))
+		End
 		
-		If (vibraionFlag) Then
-			inVibrationFlag = True
-			((Vibrator) MFMain.getInstance().getSystemService("vibrator")).vibrate(10000)
-		EndIf
+		Function setPreScale:Void(zoomIn:Bool, zoomOut:Bool)
+			preScaleZoomInFlag = zoomIn
+			preScaleZoomOutFlag = zoomOut
+		End
 		
-	}
-
-	Public Function stopVibrate:Void() Final
+		Function setResponseInterruptFlag:Void(flag:Bool)
+			responseInterrupt = flag
+		End
 		
-		If (inVibrationFlag) Then
-			inVibrationFlag = False
-			((Vibrator) MFMain.getInstance().getSystemService("vibrator")).cancel()
-		EndIf
+		Function setShieldInput:Void(b:Bool)
+			shieldInput = b
+		End
 		
-	}
-
-	Public Function vibrateByTime:Void(time:Int) Final
+		Function setUseMultitouch:Void(b:Bool)
+			mainCanvas.setUseMultitouch(b)
+		End
 		
-		If (vibraionFlag) Then
-			vibrationImpl(time)
-		EndIf
+		Function setVibrationFlag:Void(enable:Bool)
+			vibraionFlag = enable
+			
+			If (Not vibraionFlag) Then
+				stopVibrate()
+			EndIf
+		End
 		
-	}
-
-	Private Function vibrationImpl:Void(time:Int) Final
-		vibrator.vibrate((Long) time)
-	}
+		#Rem
+			Function startThread:Void()
+				If (mainThread = Null) Then
+					mainThread = New Thread(mainRunnable)
+					mainThread.start()
+				EndIf
+			End
+		#End
+		
+		Function startVibrate:Void()
+			If (vibraionFlag) Then
+				inVibrationFlag = True
+				
+				'((Vibrator) MFMain.getInstance().getSystemService("vibrator")).vibrate(10000)
+			EndIf
+		End
+		
+		Function stopVibrate:Void()
+			If (inVibrationFlag) Then
+				inVibrationFlag = False
+				
+				'((Vibrator) MFMain.getInstance().getSystemService("vibrator")).cancel()
+			EndIf
+		End
+		
+		Function vibrateByTime:Void(time:Int)
+			If (vibraionFlag) Then
+				vibrationImpl(time)
+			EndIf
+		End
+		
+		Function vibrationImpl:Void(time:Int) ' Long
+			'vibrator.vibrate(Long(time))
+		End
 End
 
 #Rem
