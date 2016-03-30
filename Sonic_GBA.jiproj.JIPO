@@ -148,31 +148,38 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphics.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>18</X>
         <Y>154</Y>
       </CursorPos>
-      <DocGUID>b3fc5a4f-abd0-47dc-afc5-8b5948da12b2</DocGUID>
+      <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfcomponent.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>21</X>
+        <Y>8</Y>
+      </CursorPos>
+      <DocGUID>762ed543-d339-40e4-8e68-3e04e17273bb</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>68</X>
-        <Y>701</Y>
+        <X>7</X>
+        <Y>271</Y>
       </CursorPos>
       <DocGUID>71d340f3-4ddd-4472-b19e-34f6041fe892</DocGUID>
       <Bookmarks>
         <Point>
           <X>0</X>
-          <Y>58</Y>
+          <Y>60</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>23</X>
-        <Y>154</Y>
+        <X>0</X>
+        <Y>0</Y>
       </CursorPos>
       <DocGUID>0d2fb6b8-2580-4c4a-814c-0b7d9fcf2390</DocGUID>
       <Bookmarks />
@@ -185,13 +192,12 @@
       <DocGUID>ca154a4d-0b81-4322-a185-d96264803579</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\mobile\framework\mfgamestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\mfgamestate.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>21</X>
         <Y>25</Y>
       </CursorPos>
-      <DocGUID>4fec2a80-5715-487c-a228-c306a17d4dee</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\mdversion.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -735,8 +741,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\application.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>37</X>
-        <Y>199</Y>
+        <X>42</X>
+        <Y>29</Y>
       </CursorPos>
       <DocGUID>7103fc55-2884-4565-a197-c2e363300f6e</DocGUID>
       <Bookmarks />

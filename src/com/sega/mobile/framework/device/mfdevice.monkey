@@ -25,6 +25,8 @@ Private
 	'Import com.sega.mobile.framework.mfmain
 	Import com.sega.mobile.framework.mfgraphics
 	
+	Import com.sega.mobile.framework.device.mfcomponent
+	
 	'Import com.sega.mobile.framework.android.canvas
 	Import com.sega.mobile.framework.android.graphics
 	
