@@ -109,7 +109,7 @@ Class Main Extends App ' Main Extends MFMain
 			' Initialize the framework.
 			InitializeMobileFramework()
 			
-			MFDevice.notifyStart(graphics, DeviceWidth(), DeviceHeight())
+			MFDevice.notifyStart(graphics, getEntryGameState(), DeviceWidth(), DeviceHeight())
 			
 			Return 0
 		End

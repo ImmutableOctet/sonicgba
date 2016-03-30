@@ -699,7 +699,7 @@ Class MFDevice Final
 		End
 		
 		' Notifications:
-		Function notifyStart:Void(context:Graphics, width:Int, height:Int)
+		Function notifyStart:Void(context:Graphics, startState:MFGameState, width:Int, height:Int)
 			Local isSideways:Bool = False ' (MFMain.getInstance().getRequestedOrientation() = SCREEN_ORIENTATION_PORTRAIT)
 			
 			'If (mainThread = Null) Then
@@ -729,7 +729,7 @@ Class MFDevice Final
 			
 			Print("screenwidth:" + screenWidth + ",screenheight:" + screenHeight)
 			
-			changeState(MFMain.getInstance().getEntryGameState())
+			changeState(startState)
 			
 			setFullscreenMode(context, False)
 			

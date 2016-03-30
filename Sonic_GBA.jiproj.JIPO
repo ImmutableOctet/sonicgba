@@ -158,8 +158,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>41</X>
-        <Y>1097</Y>
+        <X>68</X>
+        <Y>701</Y>
       </CursorPos>
       <DocGUID>71d340f3-4ddd-4472-b19e-34f6041fe892</DocGUID>
       <Bookmarks>
@@ -187,8 +187,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\mfgamestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>33</X>
-        <Y>16</Y>
+        <X>21</X>
+        <Y>25</Y>
       </CursorPos>
       <DocGUID>4fec2a80-5715-487c-a228-c306a17d4dee</DocGUID>
       <Bookmarks />
@@ -244,8 +244,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>8</X>
-        <Y>32</Y>
+        <X>25</X>
+        <Y>45</Y>
       </CursorPos>
       <DocGUID>cfc7b73f-64a7-4602-ba18-f103db92f5bd</DocGUID>
       <Bookmarks />
@@ -735,8 +735,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\application.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>120</Y>
+        <X>37</X>
+        <Y>199</Y>
       </CursorPos>
       <DocGUID>7103fc55-2884-4565-a197-c2e363300f6e</DocGUID>
       <Bookmarks />
@@ -767,8 +767,8 @@
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\define" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\__test" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\android" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\device" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\android" Expanded="true" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\device" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\lib\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\mflib" Expanded="true" />
