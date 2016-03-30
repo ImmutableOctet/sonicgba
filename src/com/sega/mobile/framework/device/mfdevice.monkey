@@ -7,6 +7,8 @@ Friend application
 
 ' Imports:
 Private
+	Import lib.rect
+	
 	Import mflib.bpdef
 	
 	#Rem
@@ -20,15 +22,17 @@ Private
 		Import android.telephony.telephonymanager
 	#End
 	
-	Import com.sega.mobile.define.mdphone
 	Import com.sega.mobile.framework.mfgamestate
 	'Import com.sega.mobile.framework.mfmain
-	Import com.sega.mobile.framework.mfgraphics
-	
-	Import com.sega.mobile.framework.device.mfcomponent
-	
 	'Import com.sega.mobile.framework.android.canvas
 	Import com.sega.mobile.framework.android.graphics
+	'Import com.sega.mobile.framework.android.image
+	Import com.sega.mobile.framework.device.mfcomponent
+	Import com.sega.mobile.framework.device.mfgamepad
+	Import com.sega.mobile.framework.device.mfgraphics
+	'Import com.sega.mobile.framework.device.mfsensor
+	'Import com.sega.mobile.framework.device.mfsound
+	'Import com.sega.mobile.framework.ui.mftouchkey
 	
 	Import mojo.app
 	Import mojo.input
