@@ -151,6 +151,10 @@ Class Graphics Implements GRAPHICS_MACROS
 			mCanvas.Clear()
 		End
 		
+		Method flush:Void()
+			mCanvas.Flush()
+		End
+		
 		Method setFilterBitmap:Void(b:Bool)
 			'Self.mPaint.setFilterBitmap(b)
 		End

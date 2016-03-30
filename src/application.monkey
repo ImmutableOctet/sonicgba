@@ -79,7 +79,7 @@ Class Main Extends App ' Main Extends MFMain
 		
 		' Extensions / Replacements:
 		Field graphics:Graphics
-		Field canvas:Canvas
+		'Field canvas:Canvas
 		
 		' Booleans / Flags:
 		Field isSuspended:Bool
@@ -106,6 +106,9 @@ Class Main Extends App ' Main Extends MFMain
 			' Extensions:
 			isSuspended = False
 			
+			' Initialize the framework.
+			InitializeMobileFramework()
+			
 			MFDevice.notifyStart(graphics, DeviceWidth(), DeviceHeight())
 			
 			Return 0
@@ -113,6 +116,8 @@ Class Main Extends App ' Main Extends MFMain
 		
 		Method OnUpdate:Int()
 			HandleSystemKeys()
+			
+			MFDevice.Update()
 			
 			Return 0
 		End
@@ -124,11 +129,17 @@ Class Main Extends App ' Main Extends MFMain
 				Return 0
 			EndIf
 			
-			canvas.Clear()
+			'canvas.Clear()
 			
-			MFDevice.deviceDraw(graphics)
+			If (MFDevice.clearBuffer) Then
+				MFDevice.clearScreen()
+			EndIf
 			
-			canvas.Flush()
+			MFDevice.Render(graphics)
+			
+			MFDevice.flushScreen()
+			
+			'canvas.Flush()
 			
 			Return 0
 		End
@@ -139,6 +150,9 @@ Class Main Extends App ' Main Extends MFMain
 			'setExitConfirmStr("Sonic Advance", "Are you sure you want to exit the game?", "Yes", "Cancel")
 			
 			If (Confirm("Sonic Advance", "Are you sure you want to exit the game?", False)) Then
+				' This call may be moved later.
+				MFDevice.currentState.onExit()
+				
 				Return Super.OnClose() ' EndApp()
 			EndIf
 			

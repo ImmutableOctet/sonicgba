@@ -68,6 +68,7 @@ Class MFGraphics Implements GRAPHICS_MACROS
 		
 		' Functions:
 		Function init:Void() ' Final
+			#Rem
 			If (font_small = Null) Then
 				font_small = Font.getFont(TRANS_NONE, TRANS_NONE, RIGHT)
 				font_medium = Font.getFont(TRANS_NONE, TRANS_NONE, TRANS_NONE)
@@ -76,6 +77,7 @@ Class MFGraphics Implements GRAPHICS_MACROS
 				font_type = RIGHT
 				currentFont = font_small
 			EndIf
+			#End
 		End
 	Private
 		' Constructor(s):
@@ -147,6 +149,10 @@ Class MFGraphics Implements GRAPHICS_MACROS
 		' Extensions:
 		Method clear:Void()
 			Self.context.clear()
+		End
+		
+		Method flush:Void()
+			Self.context.flush()
 		End
 		
 		Method saveCanvas:Void()

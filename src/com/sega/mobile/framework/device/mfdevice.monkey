@@ -22,7 +22,8 @@ Private
 	
 	Import com.sega.mobile.define.mdphone
 	Import com.sega.mobile.framework.mfgamestate
-	Import com.sega.mobile.framework.mfmain
+	'Import com.sega.mobile.framework.mfmain
+	Import com.sega.mobile.framework.mfgraphics
 	
 	'Import com.sega.mobile.framework.android.canvas
 	Import com.sega.mobile.framework.android.graphics
@@ -134,6 +135,68 @@ Class MFDevice Final
 		' Functions:
 		
 		' Extensions:
+		Function Update:Void()
+			MFGamePad.keyTick()
+			
+			For Local component:= EachIn componentVector 
+				component.tick()
+			Next
+			
+			'MFSound.tick()
+			
+			' Update vibration behavior:
+			If (vibraionFlag) Then
+				If (vibrateTime > 0 And currentTimeMillis() - vibrateStartTime > Long(vibrateTime)) Then
+					vibrateTime = 0
+					
+					inVibrationFlag = False
+				EndIf
+				
+				If (inVibrationFlag) Then
+					vibrationImpl(PER_VIBRATION_TIME)
+				EndIf
+			EndIf
+			
+			' Handle state changes:
+			If (nextState <> Null) Then
+				If (currentState <> Null) Then
+					currentState.onExit()
+				EndIf
+				
+				currentState = nextState
+				
+				currentState.onEnter()
+				
+				nextState = Null
+			EndIf
+			
+			If (Not interruptPauseFlag) Then
+				currentState.onTick()
+			EndIf
+		End
+		
+		Function Render:Void(context:Graphics)
+			graphics.reset()
+			
+			If (Not interruptPauseFlag) Then
+				If (Not exitFlag) Then
+					For Local i:= preLayerImage.Length Until 0 Step -1 ' MAX_LAYER
+						If (preLayerGraphics[i - 1] <> Null) Then
+							currentState.onRender(preLayerGraphics[i - 1], -i)
+						EndIf
+					Next
+					
+					currentState.onRender(graphics)
+					
+					For Local i:= postLayerImage.Length To postLayerImage.Length ' MAX_LAYER
+						If (postLayerGraphics[i - MAX_LAYER] <> Null) Then
+							currentState.onRender(postLayerGraphics[i - MAX_LAYER], i)
+						EndIf
+					Next
+				EndIf
+			EndIf
+		End
+		
 		Function deviceDraw:Void(g:Graphics)
 			For Local i:= preLayerImage.Length Until 0 Step -1 ' MAX_LAYER
 				If (preLayerImage[i - preLayerImage.Length] <> Null) Then
@@ -141,9 +204,11 @@ Class MFDevice Final
 				EndIf
 			Next
 			
+			#Rem
 			If (bufferImage <> Null) Then
 				g.drawScreen(bufferImage, Null, New Rect(0, 0, screenWidth, screenHeight))
 			EndIf
+			#End
 			
 			For Local i:= postLayerImage.Length To postLayerImage.Length ' MAX_LAYER
 				If (postLayerImage[i - MAX_LAYER] <> Null) Then
@@ -259,6 +324,12 @@ Class MFDevice Final
 			nextState = gameState
 		End
 		
+		Function flushScreen:Void()
+			deviceDraw(graphics.getSystemgraphics())
+			
+			graphics.flush()
+		End
+		
 		Function clearScreen:Void()
 			For Local i:= preLayerImage.Length Until 0 Step -1 ' MAX_LAYER
 				Local revIndex:= (i - MAX_LAYER) ' preLayerImage.Length
@@ -291,7 +362,7 @@ Class MFDevice Final
 		End
 		
 		Function currentTimeMillis:Long() ' Int
-			Return Millisecs()
+			Return Long(Millisecs())
 		End
 		
 		Function deleteRecord:Void(recordName:String)
@@ -1006,163 +1077,6 @@ Class MFDevice Final
 		End
 End
 
-#Rem
-	/* renamed from: com.sega.mobile.framework.device.MFDevice.1 */
-	Class C00011 Implements Runnable {
-		C00011() {
-		}
-
-		/* JADX WARNING: inconsistent code. */
-		/* Code decompiled incorrectly, please refer to instructions dump. */
-		Public Method run:Void() Final
-			/*
-			r4 = Self
-			r3 = 1
-			r2 = 0
-			com.sega.mobile.framework.device.MFDevice.interruptPauseFlag = r2
-			com.sega.mobile.framework.device.MFDevice.responseInterrupt = r3
-			com.sega.mobile.framework.device.MFDevice.exitFlag = r2
-			r0 = java.lang.System.currentTimeMillis()
-			com.sega.mobile.framework.device.MFDevice.lastSystemTime = r0
-			com.sega.mobile.framework.device.MFDevice.initRecords()
-			com.sega.mobile.framework.device.MFGraphics.init()
-			com.sega.mobile.framework.device.MFSound.init()
-			com.sega.mobile.framework.device.MFSensor.init()
-			com.sega.mobile.framework.device.MFGamePad.resetKeys()
-			r0 = com.sega.mobile.framework.MFMain.getInstance()
-			r1 = "vibrator"
-			r0 = r0.getSystemService(r1)
-			r0 = (android.os.Vibrator) r0
-			com.sega.mobile.framework.device.MFDevice.vibrator = r0
-			r0 = New java.util.Vector
-			r0.<init>()
-			com.sega.mobile.framework.device.MFDevice.componentVector = r0
-			com.sega.mobile.framework.device.MFDevice.vibraionFlag = r3
-			com.sega.mobile.framework.device.MFDevice.inVibrationFlag = r2
-		L_0x003e:
-			r0 = com.sega.mobile.framework.device.MFDevice.exitFlag
-			
-			If (r0 = 0) goto L_0x0053
-		L_0x0044:
-			r0 = com.sega.mobile.framework.device.MFDevice.currentState
-			r0.onExit()
-			r0 = com.sega.mobile.framework.MFMain.getInstance()
-			r0.notifyDestroyed()
-			Return
-		L_0x0053:
-			r4.tick()
-		L_0x0056:
-			r0 = 10
-			java.lang.Thread.sleep(r0);	 Catch:{ Exception -> 0x0095 }
-		L_0x005b:
-			r0 = java.lang.System.currentTimeMillis()
-			com.sega.mobile.framework.device.MFDevice.currentSystemTime = r0
-			r0 = com.sega.mobile.framework.device.MFDevice.currentState
-			
-			If (r0 = 0) goto L_0x008d
-		L_0x0068:
-			r0 = com.sega.mobile.framework.device.MFDevice.currentSystemTime
-			r2 = com.sega.mobile.framework.device.MFDevice.lastSystemTime
-			r0 = r0 - r2
-			r2 = 0
-			r0 = (r0 > r2 ? 1 : (r0 = r2 ? 0 : -1))
-			
-			If (r0 <= 0) goto L_0x008d
-		L_0x0077:
-			r0 = com.sega.mobile.framework.device.MFDevice.currentSystemTime
-			r2 = com.sega.mobile.framework.device.MFDevice.lastSystemTime
-			r0 = r0 - r2
-			r2 = com.sega.mobile.framework.device.MFDevice.currentState
-			r2 = r2.getFrameTime()
-			r2 = (Long) r2
-			r0 = (r0 > r2 ? 1 : (r0 = r2 ? 0 : -1))
-			
-			If (r0 < 0) goto L_0x0056
-		L_0x008d:
-			r0 = java.lang.System.currentTimeMillis()
-			com.sega.mobile.framework.device.MFDevice.lastSystemTime = r0
-			goto L_0x003e
-		L_0x0095:
-			r0 = move-exception
-			goto L_0x005b
-			*/
-			throw New UnsupportedOperationException("Method not decompiled: com.sega.mobile.framework.device.MFDevice.1.run():Void")
-		End
-
-		Private Method tick:Void()
-			
-			If (MFDevice.mainCanvas.initialized()) Then
-				Int i
-				synchronized (MFDevice.mainRunnable) {
-					MFGamePad.keyTick()
-					For (i = MFDevice.0; i < MFDevice.componentVector.size(); i += MFDevice.1)
-						((MFComponent) MFDevice.componentVector.elementAt(i)).tick()
-					Next
-				}
-				MFSound.tick()
-				
-				If (MFDevice.vibraionFlag) Then
-					If (MFDevice.vibrateTime > 0 And System.currentTimeMillis() - MFDevice.vibrateStartTime > ((Long) MFDevice.vibrateTime)) Then
-						MFDevice.vibrateTime = MFDevice.0
-						MFDevice.inVibrationFlag = False
-					EndIf
-					
-					If (MFDevice.inVibrationFlag) Then
-						MFDevice.vibrationImpl(MFDevice.PER_VIBRATION_TIME)
-					EndIf
-				EndIf
-				
-				If (MFDevice.nextState <> Null) Then
-					If (MFDevice.currentState <> Null) Then
-						MFDevice.currentState.onExit()
-					EndIf
-					
-					MFDevice.currentState = MFDevice.nextState
-					MFDevice.currentState.onEnter()
-					MFDevice.nextState = Null
-				EndIf
-				
-				MFDevice.graphics.reset()
-				
-				If (MFDevice.clearBuffer) Then
-					MFDevice.clearScreen()
-				EndIf
-				
-				If (MFDevice.interruptPauseFlag) Then
-					If (Not MFDevice.inSuspendFlag And MFMain.getInstance().logicDeviceSuspend()) Then
-						MFDevice.notifyResume()
-					EndIf
-					
-					MFMain.getInstance().drawDeviceSuspend(MFDevice.graphics)
-				Else
-					MFDevice.currentState.onTick()
-					
-					If (Not MFDevice.exitFlag) Then
-						For (i = MFDevice.1; i > 0; i -= 1)
-							
-							If (MFDevice.preLayerGraphics[i - MFDevice.1] <> Null) Then
-								MFDevice.currentState.onRender(MFDevice.preLayerGraphics[i - MFDevice.1], -i)
-							EndIf
-							
-						Next
-						MFDevice.currentState.onRender(MFDevice.graphics)
-						For (i = MFDevice.1; i <= MFDevice.1; i += MFDevice.1)
-							
-							If (MFDevice.postLayerGraphics[i - MFDevice.1] <> Null) Then
-								MFDevice.currentState.onRender(MFDevice.postLayerGraphics[i - MFDevice.1], i)
-							EndIf
-							
-						Next
-					EndIf
-				EndIf
-				
-				MFDevice.mainCanvas.repaint()
-			EndIf
-			
-		End
-	}
-#End
-
 Class FileNotFoundException Extends StreamError
 	' Constructor(s):
 	Method New(stream:Stream, filepath:String)
@@ -1178,4 +1092,25 @@ Class FileNotFoundException Extends StreamError
 	
 	' Fields:
 	Field file:String
+End
+
+' Functions:
+Function InitializeMobileFramework:Void()
+	MFDevice.interruptPauseFlag = False
+	MFDevice.responseInterrupt = True
+	MFDevice.exitFlag = False
+	MFDevice.lastSystemTime = Millisecs()
+	
+	MFDevice.initRecords()
+	
+	MFGraphics.init()
+	
+	'MFSound.init()
+	'MFSensor.init()
+	MFGamePad.resetKeys()
+	
+	'MFDevice.vibrator = (Vibrator)MFMain.getInstance().getSystemService("vibrator")
+	MFDevice.componentVector = New Stack<MFComponent>()
+	MFDevice.vibraionFlag = True
+	MFDevice.inVibrationFlag = False
 End
