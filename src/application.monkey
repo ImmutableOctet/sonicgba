@@ -163,6 +163,7 @@ Class Main Extends App ' Main Extends MFMain
 			isSuspended = False
 			
 			MFDevice.inSuspendFlag = False
+			MFDevice.notifyResume()
 			
 			Return 0
 		End

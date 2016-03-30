@@ -40,6 +40,7 @@ Private
 	Import monkey.stack
 	
 	Import regal.typetool
+	Import regal.ioutil.publicdatastream
 Public
 
 ' Classes:
@@ -492,6 +493,11 @@ Class MFDevice Final
 			Return f
 		End
 		
+		' Record-related:
+		Function ToRecordPath:String(name:String)
+			Return ("records/" + name + ".rms")
+		End
+		
 		Function readRecord:DataBuffer(dis:Stream)
 			Local size:= dis.ReadInt()
 			
@@ -508,7 +514,11 @@ Class MFDevice Final
 			Return ret
 		End
 		
-		Function writeRecord:Void(dos:Stream, values:DataBuffer, count:Int, offset:Int=0)
+		Function writeRecord:Void(dos:Stream, values:DataBuffer, offset:Int=0, count:Int=0)
+			If (count = 0) Then
+				count = values.Length
+			EndIf
+			
 			Local rLen:= Max(Int(offset - count), 0) ' values.Length
 			
 			dos.WriteInt(rLen)
@@ -529,13 +539,28 @@ Class MFDevice Final
 		Function saveRecordTo:Void(path:String, values:DataBuffer, offset:Int=0, count:Int=0)
 			Local dos:= OpenFileStream(path, "w")
 			
-			If (count = 0) Then
-				count = values.Length
-			EndIf
-			
-			writeRecord(dos, values, count, offset)
+			writeRecord(dos, values, offset, count)
 			
 			dos.Close()
+		End
+		
+		Function openRecordStore:DataBuffer(str:String)
+			Local ret:DataBuffer = Null
+			Local path:String = ToRecordPath(str)
+			
+			Try
+				ret = loadRecordFrom(path)
+			Catch notFound:FileNotFoundException
+				Print("Create new record file: " + path)
+				
+				ret = NULL_RECORD
+				
+				saveRecordTo(path, ret)
+			Catch E:StreamError
+				Print("RMS ERROR : Can't read rms file.")
+			End Try
+			
+			Return ret
 		End
 		
 		Function initRecords:Void(force:Bool=False)
@@ -550,11 +575,41 @@ Class MFDevice Final
 			Local dis:= New DataStream(openRecordStore(RECORD_NAME))
 			
 			For Local i:= 0 Until recordStoreNumber
-				Local name:String = dis.ReadString("utf8")
+				Local nameLen:= dis.ReadShort()
+				Local name:String = dis.ReadString(nameLen, "utf8") ' "ascii"
 				Local record:= readRecord(dis)
 				
 				records.Set(name, record)
 			Next
+		End
+		
+		Function updateRecords:Void()
+			' Constant variable(s):
+			Const DEFAULT_FILE_SIZE:= 4096 ' Bytes.
+			
+			' Local variable(s):
+			Local dos:= new PublicDataStream(DEFAULT_FILE_SIZE)
+			
+			dos.WriteInt(records.Count())
+			
+			For Local rNode:= EachIn records
+				Local name:= rNode.Key
+				Local record:= rNode.Value
+				
+				Local nameLen:= name.Length
+				
+				dos.WriteShort(nameLen)
+				dos.WriteString(name, "utf8")
+				
+				'writeRecord:Void(dos:Stream, values:DataBuffer, offset:Int=0, count:Int=0)
+				writeRecord(dos, record)
+			Next
+			
+			Local len:= dos.Length
+			
+			Local buffer:= dos.CloseWithoutBuffer()
+			
+			setRecord(RECORD_NAME, buffer, len)
 		End
 	Public
 		' Functions:
@@ -566,13 +621,12 @@ Class MFDevice Final
 			exitFlag = True
 		End
 		
-	Public Function notifyPause:Void() Final
-		synchronized (mainRunnable) {
-			
+		Function notifyPause:Void()
 			If (responseInterrupt And Not interruptPauseFlag) Then
 				stopVibrate()
+				
 				MFGamePad.resetKeys()
-				MFSound.deviceInterrupt()
+				'MFSound.deviceInterrupt()
 				
 				If (currentState <> Null) Then
 					currentState.onPause()
@@ -588,13 +642,9 @@ Class MFDevice Final
 					addComponent(interruptConfirm)
 				EndIf
 			EndIf
-			
-		}
-	}
+		End
 
-	Public Function notifyResume:Void() Final
-		synchronized (mainRunnable) {
-			
+		Function notifyResume:Void()
 			If (responseInterrupt And interruptPauseFlag) Then
 				MFGamePad.resetKeys()
 				MFSound.deviceResume()
@@ -612,9 +662,7 @@ Class MFDevice Final
 					removeComponent(interruptConfirm)
 				EndIf
 			EndIf
-			
-		}
-	}
+		End
 
 	Public Function notifyStart:Void(width:Int, height:Int) Final
 		
@@ -661,25 +709,6 @@ Class MFDevice Final
 		EndIf
 		
 	}
-
-	Function openRecordStore:DataBuffer(str:String)
-		Local ret:DataBuffer = Null
-		Local path:String = "records/" + str + ".rms"
-		
-		Try
-			ret = loadRecordFrom(path)
-		Catch notFound:FileNotFoundException
-			Print("Create new record file: " + path)
-			
-			ret = NULL_RECORD
-			
-			saveRecordTo(path, ret)
-		Catch E:StreamError
-			Print("RMS ERROR : Can't read rms file.")
-		End Try
-		
-		Return ret
-	End
 	
 	Public Function removeAllComponents:Void() Final
 		
@@ -878,19 +907,13 @@ Class MFDevice Final
 		preScaleZoomOutFlag = zoomOut
 	}
 
-	Private Function setRecord:Void(str:String, data:Byte[], len:Int)
-		try {
-			DataOutputStream dos = New DataOutputStream(MFMain.getInstance().openFileOutput(New StringBuilder(String.valueOf(str)).append(".rms").toString(), 0))
-			dos.writeInt(len)
-			For (Int i = 0; i < len; i += 1)
-				dos.writeByte(data[i])
-			Next
-			dos.flush()
-			dos.close()
-		} catch (Exception e) {
+	Private Function setRecord:Void(str:String, data:DataBuffer, len:Int)
+		Try
+			saveRecordTo(ToRecordPath(str), data, 0, len)
+		Catch E:StreamError
 			Print("RMS ERROR : Can't save rms file.")
-		}
-	}
+		End
+	End
 
 	Public Function setResponseInterruptFlag:Void(flag:Bool) Final
 		responseInterrupt = flag
@@ -938,58 +961,6 @@ Class MFDevice Final
 			((Vibrator) MFMain.getInstance().getSystemService("vibrator")).cancel()
 		EndIf
 		
-	}
-
-	Private Function updateRecords:Void() Final
-		Exception e
-		DataOutputStream out = Null
-		ByteArrayOutputStream bos = Null
-		try {
-			ByteArrayOutputStream bos2 = New ByteArrayOutputStream()
-			try {
-				DataOutputStream out2 = New DataOutputStream(bos2)
-				try {
-					Byte[] tmp
-					out2.writeInt(records.size())
-					Enumeration<String> e2 = records.keys()
-					For (Int i = 0; i < records.size(); i += 1)
-						String name = (String) e2.nextElement()
-						tmp = (Byte[]) records.get(name)
-						out2.writeUTF(name)
-						out2.writeInt(tmp.length)
-						out2.write(tmp)
-					Next
-					out2.flush()
-					tmp = bos2.toByteArray()
-					setRecord(RECORD_NAME, tmp, tmp.length)
-					bos = bos2
-					out = out2
-				} catch (Exception e3) {
-					e = e3
-					bos = bos2
-					out = out2
-				}
-			} catch (Exception e32) {
-				e = e32
-				bos = bos2
-				e.printStackTrace()
-				out.close()
-				bos.close()
-			}
-		} catch (Exception e322) {
-			e = e322
-			e.printStackTrace()
-			out.close()
-			bos.close()
-		}
-		try {
-			out.close()
-		} catch (Exception e4) {
-		}
-		try {
-			bos.close()
-		} catch (Exception e5) {
-		}
 	}
 
 	Public Function vibrateByTime:Void(time:Int) Final
