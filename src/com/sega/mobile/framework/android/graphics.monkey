@@ -11,10 +11,12 @@ Private
 		Import android.graphics.paint
 		Import android.graphics.paint.style
 		Import android.graphics.path
-		Import android.graphics.rect
-		Import android.graphics.rectf
+		'Import android.graphics.rect
+		'Import android.graphics.rectf
 		Import android.graphics.region.op
 	#End
+	
+	Import lib.rect
 	
 	Import regal.typetool
 	'Import regal.matrix2d
