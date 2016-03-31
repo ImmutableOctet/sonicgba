@@ -662,7 +662,7 @@ Class MFDevice Final
 		
 		Function updateRecords:Void()
 			' Constant variable(s):
-			Const DEFAULT_FILE_SIZE:= 4096 ' Bytes.
+			Const DEFAULT_FILE_SIZE:= 1024 ' Bytes.
 			
 			' Local variable(s):
 			Local dos:= new PublicDataStream(DEFAULT_FILE_SIZE)
@@ -683,10 +683,11 @@ Class MFDevice Final
 			Next
 			
 			Local len:= dos.Length
+			Local outBuffer:= dos.ToDataBuffer()
 			
-			Local buffer:= dos.CloseWithoutBuffer()
+			dos.Close()
 			
-			setRecord(RECORD_NAME, buffer, len)
+			setRecord(RECORD_NAME, outBuffer, len)
 		End
 		
 		Function setRecord:Void(str:String, data:DataBuffer, len:Int)
@@ -1085,7 +1086,7 @@ End
 
 Class FileNotFoundException Extends StreamError
 	' Constructor(s):
-	Method New(stream:Stream, filepath:String)
+	Method New(stream:Stream, filepath:String="")
 		Super.New(stream)
 		
 		Self.file = filepath

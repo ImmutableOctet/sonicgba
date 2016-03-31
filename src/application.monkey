@@ -117,6 +117,7 @@ Class Main Extends App ' Main Extends MFMain
 		Method OnUpdate:Int()
 			HandleSystemKeys()
 			
+			MFDevice.handleInput()
 			MFDevice.Update()
 			
 			Return 0
@@ -246,8 +247,6 @@ Class Main Extends App ' Main Extends MFMain
 				
 				HandleSystemKey(k)
 			#End
-			
-			MFDevice.handleInput()
 		End
 		
 		#Rem

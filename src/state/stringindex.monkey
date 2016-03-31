@@ -7,6 +7,7 @@ Public
 
 ' Interfaces:
 Interface StringIndex
+	' Constant variable(s):
 	Const BLACK_BACKGROUND_ID:Int = 102
 	Const BLUE_BACKGROUND_ID:Int = 103
 	Const FONT_COLON:Int = 47

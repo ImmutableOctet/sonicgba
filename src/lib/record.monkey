@@ -10,6 +10,8 @@ Private
 	Import brl.stream
 	Import brl.datastream
 	'Import brl.filestream
+	
+	Import regal.ioutil.publicdatastream
 Public
 
 ' Classes:
@@ -52,9 +54,9 @@ Class Record
 			Return (New DataStream(data))
 		End
 		
-		Function saveRecordStream:Void(recordId:String, ds:DataStream)
+		Function saveRecordStream:Void(recordId:String, ds:PublicDataStream)
 			If (ds <> Null) Then
-				saveRecord(recordId, ds.Data)
+				saveRecord(recordId, ds.ToDataBuffer())
 			EndIf
 		End
 End
