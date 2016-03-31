@@ -495,8 +495,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\globalresource.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>20</X>
-        <Y>13</Y>
+        <X>27</X>
+        <Y>74</Y>
       </CursorPos>
       <DocGUID>87dcc701-fd2b-43f4-a3a7-d394e9bd5fee</DocGUID>
       <Bookmarks />

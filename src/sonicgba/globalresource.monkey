@@ -80,6 +80,10 @@ Class GlobalResource
 			Local dos:= new PublicDataStream(DEFAULT_FILE_SIZE)
 			
 			Try
+				If (ds = Null) Then
+					Throw New FileNotFoundException(ds)
+				EndIf
+				
 				dos.WriteByte(soundConfig)
 				dos.WriteByte(difficultyConfig)
 				dos.WriteByte(timeLimit)
