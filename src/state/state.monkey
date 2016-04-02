@@ -374,7 +374,7 @@ Class State Implements SonicDef, StringIndex Abstract
 					Case STATE_EXTRA_ENDING
 						state = New EndingState(STATE_GAME)
 					Case STATE_SPECIAL_ENDING
-						state = New EndingState(2)
+						state = New EndingState(STATE_RETURN_FROM_GAME)
 				End Select
 				
 				state.init()
@@ -697,7 +697,7 @@ Class State Implements SonicDef, StringIndex Abstract
 				Key.touchConfirmClose()
 				
 				Return Self.cursor
-			ElseIf (Key.touchConfirmYes.Isin() And Self.cursor = 0) Then
+			ElseIf (Key.touchConfirmYes.Isin() And Self.cursor = 1) Then
 				Self.cursor = 0
 				
 				Key.touchConfirmYes.reset()
@@ -724,11 +724,11 @@ Class State Implements SonicDef, StringIndex Abstract
 				EndIf
 				
 				If (Key.press(Key.gLeft)) Then
-					Self.cursor -= 0
+					Self.cursor -= 1
 					Self.cursor += 2
 					Self.cursor Mod= 2
 				ElseIf (Key.press(Key.gRight)) Then
-					Self.cursor += 0
+					Self.cursor += 1
 					Self.cursor += 2
 					Self.cursor Mod= 2
 				EndIf
@@ -852,7 +852,7 @@ Class State Implements SonicDef, StringIndex Abstract
 			EndIf
 			
 			If (Key.touchhelpuparrow.Isin()) Then
-				Self.arrowframecnt += 0
+				Self.arrowframecnt += 1
 				
 				If (Self.arrowframecnt <= STATE_SCORE_RANKING And Not Self.isArrowClicked) Then
 					MyAPI.logicString(False, True)
@@ -862,7 +862,7 @@ Class State Implements SonicDef, StringIndex Abstract
 				EndIf
 				
 			ElseIf (Key.touchhelpdownarrow.Isin()) Then
-				Self.arrowframecnt += 0
+				Self.arrowframecnt += 1
 				
 				If (Self.arrowframecnt <= STATE_SCORE_RANKING And Not Self.isArrowClicked) Then
 					MyAPI.logicString(True, False)
@@ -878,14 +878,14 @@ Class State Implements SonicDef, StringIndex Abstract
 			
 			If (Key.touchhelpleftarrow.IsButtonPress() And Self.arrowindex = 0) Then
 				SoundSystem.getInstance().playSe(STATE_SELECT_RACE_STAGE)
-				Self.helpIndex -= 0
+				Self.helpIndex -= 1
 				Self.helpIndex += helpStrings.length
 				Self.helpIndex Mod= helpStrings.length
 				MyAPI.initString()
 				strForShow = MyAPI.getStrings(helpStrings[Self.helpIndex], STATE_EXTRA_ENDING, SCREEN_WIDTH)
 			ElseIf (Key.touchhelprightarrow.IsButtonPress() And Self.arrowindex = 0) Then
 				SoundSystem.getInstance().playSe(STATE_SELECT_RACE_STAGE)
-				Self.helpIndex += 0
+				Self.helpIndex += 1
 				Self.helpIndex Mod= helpStrings.length
 				MyAPI.initString()
 				strForShow = MyAPI.getStrings(helpStrings[Self.helpIndex], STATE_EXTRA_ENDING, SCREEN_WIDTH)
@@ -902,13 +902,13 @@ Class State Implements SonicDef, StringIndex Abstract
 			EndIf
 			
 			muiAniDrawer.setActionId(62)
-			PageFrameCnt += 0
+			PageFrameCnt += 1
 			PageFrameCnt Mod= STATE_EXTRA_ENDING
 			
 			If (PageFrameCnt Mod 2 = 0) Then
-				PageBackGroundOffsetX += 0
+				PageBackGroundOffsetX += 1
 				PageBackGroundOffsetX Mod= HELP_PAGE_BACKGROUND_WIDTH
-				PageBackGroundOffsetY -= 0
+				PageBackGroundOffsetY -= 1
 				PageBackGroundOffsetY Mod= PAGE_BACKGROUND_HEIGHT
 			EndIf
 			
@@ -917,7 +917,7 @@ Class State Implements SonicDef, StringIndex Abstract
 					muiAniDrawer.draw(g, x, y)
 				Next
 			Next
-			For (Int i = 0; i < STATE_ENDING; i += 0)
+			For (Int i = 0; i < STATE_ENDING; i += 1)
 				MyAPI.drawImage(g, Self.textBGImage, ((SCREEN_WIDTH Shr 1) - Def.TOUCH_ROTATE_MAIN_MENU_ITEM_WIDTH) + (i * 26), (SCREEN_HEIGHT Shr 1) - 72, 0)
 			Next
 			MyAPI.drawStrings(g, strForShow, ((SCREEN_WIDTH Shr 1) - Def.TOUCH_ROTATE_MAIN_MENU_ITEM_WIDTH) + 10, ((SCREEN_HEIGHT Shr 1) - 72) + STATE_SELECT_NORMAL_STAGE, SCREEN_WIDTH, 131, (Int) 0, True, (Int) MENU_BG_COLOR_1, 4656650, (Int) 0, (Int) STATE_EXTRA_ENDING)
@@ -954,7 +954,7 @@ Class State Implements SonicDef, StringIndex Abstract
 		Public Method pauseoptionLogic:Void()
 			
 			If (Key.press(Key.gSelect)) Then
-				Self.pauseoptionCursor += 0
+				Self.pauseoptionCursor += 1
 				Self.pauseoptionCursor += STATE_SCORE_RANKING
 				Self.pauseoptionCursor Mod= STATE_SCORE_RANKING
 			EndIf
@@ -1023,12 +1023,12 @@ Class State Implements SonicDef, StringIndex Abstract
 				EndIf
 				
 				If (Key.press(Key.gUp)) Then
-					Self.cursor -= 0
+					Self.cursor -= 1
 					Self.cursor = (Self.cursor + Self.elementNum) Mod Self.elementNum
 					Self.selectMenuOffsetX = 0
 					changeUpSelect()
 				ElseIf (Key.press(Key.gDown)) Then
-					Self.cursor += 0
+					Self.cursor += 1
 					Self.cursor = (Self.cursor + Self.elementNum) Mod Self.elementNum
 					Self.selectMenuOffsetX = 0
 					changeDownSelect()
@@ -1229,7 +1229,7 @@ Class State Implements SonicDef, StringIndex Abstract
 		Public Function setTry:Void()
 			
 			If (trytimes > 0) Then
-				trytimes -= 0
+				trytimes -= 1
 			Else
 				trytimes = 0
 			EndIf
@@ -1327,7 +1327,7 @@ Class State Implements SonicDef, StringIndex Abstract
 			EndIf
 			
 			If (Self.isConfirm) Then
-				Self.confirmframe += 0
+				Self.confirmframe += 1
 				
 				If (Self.confirmframe > STATE_ENDING) Then
 					Return STATE_GAME
@@ -1451,7 +1451,7 @@ Class State Implements SonicDef, StringIndex Abstract
 			EndIf
 			
 			If (Self.isItemsSelect) Then
-				Self.itemsselectframe += 0
+				Self.itemsselectframe += 1
 				
 				If (Self.itemsselectframe > STATE_ENDING) Then
 					fadeInit(220, 102)
@@ -1550,13 +1550,13 @@ Class State Implements SonicDef, StringIndex Abstract
 			EndIf
 			
 			If (Key.touchsecondensureyes.Isin()) Then
-				Self.timeCnt += 0
+				Self.timeCnt += 1
 				
 				If (Self.timeCnt <= STATE_SCORE_RANKING And Not Self.isSoundVolumnClick) Then
 					If (GlobalResource.soundConfig <= 0) Then
 						GlobalResource.soundConfig = 0
 					Else
-						GlobalResource.soundConfig -= 0
+						GlobalResource.soundConfig -= 1
 					EndIf
 					
 					If (GlobalResource.soundConfig = 0) Then
@@ -1570,7 +1570,7 @@ Class State Implements SonicDef, StringIndex Abstract
 					If (GlobalResource.soundConfig <= 0) Then
 						GlobalResource.soundConfig = 0
 					Else
-						GlobalResource.soundConfig -= 0
+						GlobalResource.soundConfig -= 1
 					EndIf
 					
 					If (GlobalResource.soundConfig = 0) Then
@@ -1582,13 +1582,13 @@ Class State Implements SonicDef, StringIndex Abstract
 				EndIf
 				
 			ElseIf (Key.touchsecondensureno.Isin()) Then
-				Self.timeCnt += 0
+				Self.timeCnt += 1
 				
 				If (Self.timeCnt <= STATE_SCORE_RANKING And Not Self.isSoundVolumnClick) Then
 					If (GlobalResource.soundConfig >= 15) Then
 						GlobalResource.soundConfig = 15
 					Else
-						GlobalResource.soundConfig += 0
+						GlobalResource.soundConfig += 1
 					EndIf
 					
 					If (GlobalResource.soundConfig > 0) Then
@@ -1607,7 +1607,7 @@ Class State Implements SonicDef, StringIndex Abstract
 					If (GlobalResource.soundConfig >= 15) Then
 						GlobalResource.soundConfig = 15
 					Else
-						GlobalResource.soundConfig += 0
+						GlobalResource.soundConfig += 1
 					EndIf
 					
 					If (GlobalResource.soundConfig > 0) Then
@@ -1682,7 +1682,7 @@ Class State Implements SonicDef, StringIndex Abstract
 			muiAniDrawer.setActionId(71)
 			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
 			muiAniDrawer.setActionId(72)
-			For (Int i2 = 0; i2 <= GlobalResource.soundConfig; i2 += 0)
+			For (Int i2 = 0; i2 <= GlobalResource.soundConfig; i2 += 1)
 				muiAniDrawer.draw(g, ((SCREEN_WIDTH Shr 1) - PAGE_BACKGROUND_HEIGHT) + ((i2 - 1) * STATE_ENDING), (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
 			EndIf
 			muiAniDrawer.setActionId(GlobalResource.soundConfig + 73)
@@ -1730,7 +1730,7 @@ Class State Implements SonicDef, StringIndex Abstract
 			EndIf
 			
 			If (Self.isItemsSelect) Then
-				Self.itemsselectframe += 0
+				Self.itemsselectframe += 1
 				
 				If (Self.itemsselectframe > STATE_ENDING) Then
 					fadeInit(220, 102)
@@ -1828,7 +1828,7 @@ Class State Implements SonicDef, StringIndex Abstract
 			If (GlobalResource.soundConfig <= 0) Then
 				GlobalResource.soundConfig = 0
 			Else
-				GlobalResource.soundConfig -= 0
+				GlobalResource.soundConfig -= 1
 			EndIf
 			
 			If (GlobalResource.soundConfig = 0) Then
@@ -1844,7 +1844,7 @@ Class State Implements SonicDef, StringIndex Abstract
 			If (GlobalResource.soundConfig >= 15) Then
 				GlobalResource.soundConfig = 15
 			Else
-				GlobalResource.soundConfig += 0
+				GlobalResource.soundConfig += 1
 			EndIf
 			
 			If (GlobalResource.soundConfig = 0) Then
