@@ -8,6 +8,8 @@ Private
 	Import ending.specialending
 	Import ending.supersonicending
 	
+	Import state ' state.state
+	
 	' This import may be removed in the future.
 	Import state.titlestate
 	
