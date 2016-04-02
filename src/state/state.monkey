@@ -487,6 +487,45 @@ Class State Implements SonicDef, StringIndex Abstract
 			
 			fading = True
 		End
+		
+		Function initTouchkeyBoard:Void()
+			If (touchkeyboardAnimation = Null) Then
+				touchkeyboardAnimation = New Animation("/tuch/control_panel")
+			EndIf
+			
+			touchkeyboardDrawer = touchkeyboardAnimation.getDrawer(0, True, 0)
+			touchgamekeyboardDrawer = touchkeyboardAnimation.getDrawer(0, True, 0)
+		End
+		
+		Function releaseTouchkeyBoard:Void()
+			Animation.closeAnimation(touchkeyboardAnimation)
+			touchkeyboardAnimation = Null
+			
+			Animation.closeAnimationDrawer(touchkeyboardDrawer)
+			touchkeyboardDrawer = Null
+			
+			Animation.closeAnimation(touchgamekeyboardAnimation)
+			touchgamekeyboardAnimation = Null
+			
+			Animation.closeAnimationDrawer(touchgamekeyboardDrawer)
+			touchgamekeyboardDrawer = Null
+			
+			touchgamekeyImage = Null
+		End
+		
+		Function drawTouchGameKey:Void(g:MFGraphics)
+			' Empty implementation.
+		End
+		
+		Function drawTouchKeyBoardById:Void(g:MFGraphics, id:Int, x:Int, y:Int)
+			touchkeyboardDrawer.setActionId(id)
+			touchkeyboardDrawer.draw(g, x, y)
+		End
+		
+		Function drawTouchGameKeyBoardById:Void(g:MFGraphics, id:Int, x:Int, y:Int)
+			touchgamekeyboardDrawer.setActionId(id)
+			touchgamekeyboardDrawer.draw(g, x, y)
+		End
 	Private
 		' Functions:
 		Function initArrowDrawer:Void()
@@ -897,7 +936,7 @@ Class State Implements SonicDef, StringIndex Abstract
 			EndIf
 		End
 		
-		Public Method helpDraw:Void(g:MFGraphics)
+		Method helpDraw:Void(g:MFGraphics)
 			drawFade(g)
 			
 			If (muiAniDrawer = Null) Then
@@ -927,6 +966,7 @@ Class State Implements SonicDef, StringIndex Abstract
 			Next
 			
 			MyAPI.drawStrings(g, strForShow, ((SCREEN_WIDTH Shr 1) - 104) + 10, ((SCREEN_HEIGHT Shr 1) - 72) + STATE_SELECT_NORMAL_STAGE, SCREEN_WIDTH, 131, (Int) 0, True, (Int) MENU_BG_COLOR_1, 4656650, (Int) 0, (Int) STATE_EXTRA_ENDING)
+			
 			muiLeftArrowDrawer.draw(g, 0, (SCREEN_HEIGHT Shr 1) - STATE_SCORE_RANKING)
 			muiRightArrowDrawer.draw(g, SCREEN_WIDTH, (SCREEN_HEIGHT Shr 1) - STATE_SCORE_RANKING)
 			
@@ -944,37 +984,37 @@ Class State Implements SonicDef, StringIndex Abstract
 			muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
 		End
 		
-		Public Method moregameDraw:Void(g:MFGraphics)
+		Method moregameDraw:Void(g:MFGraphics)
 			menuBgDraw(g)
 			drawMenuTitle(g, STATE_SELECT_RACE_STAGE, 0)
 			fillMenuRect(g, Self.MORE_GAME_START_X, Self.MORE_GAME_START_Y, Self.MORE_GAME_WIDTH, Self.MORE_GAME_HEIGHT)
-			MFGraphics mFGraphics = g
-			MyAPI.drawBoldString(mFGraphics, "\u662f\u5426\u9000\u51fa\u6e38\u620f", SCREEN_WIDTH Shr 1, Self.MORE_GAME_START_Y + 10, 17, MENU_BG_COLOR_1, 0)
-			Int i = MENU_SPACE + (Self.MORE_GAME_START_Y + 10)
-			mFGraphics = g
-			MyAPI.drawBoldString(mFGraphics, "\u5e76\u8fde\u63a5\u7f51\u7edc", SCREEN_WIDTH Shr 1, i, 17, MENU_BG_COLOR_1, 0)
+			
+			MyAPI.drawBoldString(g, "Whether to exit the game", SCREEN_WIDTH Shr 1, Self.MORE_GAME_START_Y + 10, 17, MENU_BG_COLOR_1, 0) ' "\u662f\u5426\u9000\u51fa\u6e38\u620f"
+			
+			Local i:= MENU_SPACE + (Self.MORE_GAME_START_Y + 10)
+			
+			MyAPI.drawBoldString(g, "And connect to the network", SCREEN_WIDTH Shr 1, i, 17, MENU_BG_COLOR_1, 0) ' "\u5e76\u8fde\u63a5\u7f51\u7edc"
+			
 			drawMenuFontById(g, 101, ((Self.cursor * FADE_FILL_WIDTH) + COMFIRM_X) - BAR_HEIGHT, ((Self.MORE_GAME_START_Y + 10) + (MENU_SPACE * 3)) + FONT_H_HALF)
 			drawMenuFontById(g, 10, COMFIRM_X, ((Self.MORE_GAME_START_Y + 10) + (MENU_SPACE * 3)) + FONT_H_HALF)
 		End
 		
-		Public Method pauseoptionLogic:Void()
-			
+		Method pauseoptionLogic:Void()
 			If (Key.press(Key.gSelect)) Then
 				Self.pauseoptionCursor += 1
 				Self.pauseoptionCursor += STATE_SCORE_RANKING
 				Self.pauseoptionCursor Mod= STATE_SCORE_RANKING
 			EndIf
-			
 		End
 		
-		Public Method pauseoptionDraw:Void(g:MFGraphics)
-			drawMenuTitle(g, STATE_SELECT_NORMAL_STAGE, 0)
+		Method pauseoptionDraw:Void(g:MFGraphics)
+			drawMenuTitle(g, 5, 0) ' (10 / 2)
 			drawMenuFontById(g, 54, (SCREEN_WIDTH Shr 1) - 32, SCREEN_HEIGHT Shr 1)
 			drawMenuFontById(g, StringIndex.STR_RIGHT_ARROW, (SCREEN_WIDTH Shr 1) - 76, SCREEN_HEIGHT Shr 1)
 			drawMenuFontById(g, OPTION_SOUND[Self.pauseoptionCursor] + 55, (SCREEN_WIDTH Shr 1) + 32, SCREEN_HEIGHT Shr 1)
 		End
 		
-		Public Method menuInit:Void(menuElement:Int[])
+		Method menuInit:Void(menuElement:Int[])
 			Self.currentElement = menuElement
 			Self.cursor = 0
 			Self.mainMenuItemCursor = 0
@@ -985,7 +1025,7 @@ Class State Implements SonicDef, StringIndex Abstract
 			Self.mainMenuItemCursor = Self.returnCursor
 		End
 		
-		Public Method menuInit:Void(nElementNum:Int)
+		Method menuInit:Void(nElementNum:Int)
 			Self.cursor = 0
 			Self.mainMenuItemCursor = 0
 			Self.menuMoving = False
@@ -995,35 +1035,38 @@ Class State Implements SonicDef, StringIndex Abstract
 			Self.mainMenuItemCursor = Self.returnCursor
 		End
 		
-		Public Method menuInit:Void(nElementNum:Int, cursorIndex:Int)
+		Method menuInit:Void(nElementNum:Int, cursorIndex:Int)
 			menuInit(nElementNum)
+			
 			Self.cursor = cursorIndex
 			Self.mainMenuItemCursor = cursorIndex
 		End
 		
-		Public Method getMenuPosY:Int(i:Int)
+		Method getMenuPosY:Int(i:Int)
 			Return ((SCREEN_HEIGHT - ((Self.elementNum - 1) * MENU_SPACE)) Shr 1) + (MENU_SPACE * i)
 		End
 		
-		Public Method getMenuPosY:Int(i:Int, num:Int)
+		Method getMenuPosY:Int(i:Int, num:Int)
 			Return ((SCREEN_HEIGHT - ((num - 1) * MENU_SPACE)) Shr 1) + (MENU_SPACE * i)
 		End
 		
-		Public Method menuLogic:Int()
+		Method menuLogic:Int()
 			Key.touchMenuInit()
 			
 			If (Key.touchmenunew.Isin() And Self.cursor = 1) Then
 				Self.cursor = 0
 				Key.touchmenunew.reset()
+				
 				Return -1
 			ElseIf (Key.touchmenucon.Isin() And Self.cursor = 0) Then
 				Self.cursor = 1
+				
 				Key.touchmenucon.reset()
+				
 				Return -1
 			ElseIf ((Key.touchmenunew.Isin() And Self.cursor = 0) Or (Key.touchmenucon.Isin() And Self.cursor = 1)) Then
 				Return Self.cursor
 			Else
-				
 				If (Self.menuMoving) Then
 					Return -1
 				EndIf
@@ -1032,72 +1075,44 @@ Class State Implements SonicDef, StringIndex Abstract
 					Self.cursor -= 1
 					Self.cursor = (Self.cursor + Self.elementNum) Mod Self.elementNum
 					Self.selectMenuOffsetX = 0
+					
 					changeUpSelect()
 				ElseIf (Key.press(Key.gDown)) Then
 					Self.cursor += 1
 					Self.cursor = (Self.cursor + Self.elementNum) Mod Self.elementNum
 					Self.selectMenuOffsetX = 0
+					
 					changeDownSelect()
 				ElseIf (Key.press(Key.gSelect | Key.B_S1)) Then
 					Self.cursor = (Self.cursor + Self.elementNum) Mod Self.elementNum
+					
 					Key.touchMenuClose()
+					
 					Return Self.cursor
 				Else
 					
 					If (Key.press(2)) Then
+						' Nothing so far.
 					EndIf
 					
 					If (Key.press(Key.B_BACK)) Then
 						Key.touchMenuClose()
+						
 						Return RETURN_PRESSED
 					EndIf
 				EndIf
 				
 				Return -1
 			EndIf
-			
 		End
 		
-		Public Method changeUpSelect:Void()
+		Method changeUpSelect:Void()
+			' Empty implementation.
 		End
 		
-		Public Method changeDownSelect:Void()
+		Method changeDownSelect:Void()
+			' Empty implementation.
 		End
-		
-		Public Function initTouchkeyBoard:Void()
-			
-			If (touchkeyboardAnimation = Null) Then
-				touchkeyboardAnimation = New Animation("/tuch/control_panel")
-			EndIf
-			
-			touchkeyboardDrawer = touchkeyboardAnimation.getDrawer(0, True, 0)
-			touchgamekeyboardDrawer = touchkeyboardAnimation.getDrawer(0, True, 0)
-		}
-		
-		Public Function releaseTouchkeyBoard:Void()
-			Animation.closeAnimation(touchkeyboardAnimation)
-			touchkeyboardAnimation = Null
-			Animation.closeAnimationDrawer(touchkeyboardDrawer)
-			touchkeyboardDrawer = Null
-			Animation.closeAnimation(touchgamekeyboardAnimation)
-			touchgamekeyboardAnimation = Null
-			Animation.closeAnimationDrawer(touchgamekeyboardDrawer)
-			touchgamekeyboardDrawer = Null
-			touchgamekeyImage = Null
-		}
-		
-		Public Function drawTouchGameKey:Void(g:MFGraphics)
-		}
-		
-		Public Function drawTouchKeyBoardById:Void(g:MFGraphics, id:Int, x:Int, y:Int)
-			touchkeyboardDrawer.setActionId(id)
-			touchkeyboardDrawer.draw(g, x, y)
-		}
-		
-		Public Function drawTouchGameKeyBoardById:Void(g:MFGraphics, id:Int, x:Int, y:Int)
-			touchgamekeyboardDrawer.setActionId(id)
-			touchgamekeyboardDrawer.draw(g, x, y)
-		}
 		
 		Public Method drawArcLine:Void(g:MFGraphics, centerx:Int, centery:Int, pointx:Int, pointy:Int)
 			g.setColor(16711680)
