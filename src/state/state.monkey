@@ -870,7 +870,6 @@ Class State Implements SonicDef, StringIndex Abstract
 				ElseIf (Self.arrowframecnt > STATE_SCORE_RANKING And Self.arrowframecnt Mod 2 = 0) Then
 					MyAPI.logicString(True, False)
 				EndIf
-				
 			Else
 				Self.arrowframecnt = 0
 				Self.isArrowClicked = False
@@ -878,19 +877,24 @@ Class State Implements SonicDef, StringIndex Abstract
 			
 			If (Key.touchhelpleftarrow.IsButtonPress() And Self.arrowindex = 0) Then
 				SoundSystem.getInstance().playSe(STATE_SELECT_RACE_STAGE)
+				
 				Self.helpIndex -= 1
 				Self.helpIndex += helpStrings.length
 				Self.helpIndex Mod= helpStrings.length
+				
 				MyAPI.initString()
+				
 				strForShow = MyAPI.getStrings(helpStrings[Self.helpIndex], STATE_EXTRA_ENDING, SCREEN_WIDTH)
 			ElseIf (Key.touchhelprightarrow.IsButtonPress() And Self.arrowindex = 0) Then
 				SoundSystem.getInstance().playSe(STATE_SELECT_RACE_STAGE)
+				
 				Self.helpIndex += 1
 				Self.helpIndex Mod= helpStrings.length
+				
 				MyAPI.initString()
+				
 				strForShow = MyAPI.getStrings(helpStrings[Self.helpIndex], STATE_EXTRA_ENDING, SCREEN_WIDTH)
 			EndIf
-			
 		End
 		
 		Public Method helpDraw:Void(g:MFGraphics)
@@ -912,15 +916,17 @@ Class State Implements SonicDef, StringIndex Abstract
 				PageBackGroundOffsetY Mod= PAGE_BACKGROUND_HEIGHT
 			EndIf
 			
-			For (Int x = PageBackGroundOffsetX - 64; x < (SCREEN_WIDTH * 3) / 2; x += HELP_PAGE_BACKGROUND_WIDTH)
-				For (Int y = PageBackGroundOffsetY - 56; y < (SCREEN_HEIGHT * 3) / 2; y += PAGE_BACKGROUND_HEIGHT)
+			For Local x:= (PageBackGroundOffsetX - 64)  Until ((SCREEN_WIDTH * 3) / 2) Step HELP_PAGE_BACKGROUND_WIDTH
+				For Local y:= (PageBackGroundOffsetY - 56) Until  ((SCREEN_HEIGHT * 3) / 2) Step PAGE_BACKGROUND_HEIGHT
 					muiAniDrawer.draw(g, x, y)
 				Next
 			Next
-			For (Int i = 0; i < STATE_ENDING; i += 1)
-				MyAPI.drawImage(g, Self.textBGImage, ((SCREEN_WIDTH Shr 1) - Def.TOUCH_ROTATE_MAIN_MENU_ITEM_WIDTH) + (i * 26), (SCREEN_HEIGHT Shr 1) - 72, 0)
+			
+			For Local i:= 0 Until 8
+				MyAPI.drawImage(g, Self.textBGImage, ((SCREEN_WIDTH Shr 1) - 104) + (i * 26), (SCREEN_HEIGHT Shr 1) - 72, 0)
 			Next
-			MyAPI.drawStrings(g, strForShow, ((SCREEN_WIDTH Shr 1) - Def.TOUCH_ROTATE_MAIN_MENU_ITEM_WIDTH) + 10, ((SCREEN_HEIGHT Shr 1) - 72) + STATE_SELECT_NORMAL_STAGE, SCREEN_WIDTH, 131, (Int) 0, True, (Int) MENU_BG_COLOR_1, 4656650, (Int) 0, (Int) STATE_EXTRA_ENDING)
+			
+			MyAPI.drawStrings(g, strForShow, ((SCREEN_WIDTH Shr 1) - 104) + 10, ((SCREEN_HEIGHT Shr 1) - 72) + STATE_SELECT_NORMAL_STAGE, SCREEN_WIDTH, 131, (Int) 0, True, (Int) MENU_BG_COLOR_1, 4656650, (Int) 0, (Int) STATE_EXTRA_ENDING)
 			muiLeftArrowDrawer.draw(g, 0, (SCREEN_HEIGHT Shr 1) - STATE_SCORE_RANKING)
 			muiRightArrowDrawer.draw(g, SCREEN_WIDTH, (SCREEN_HEIGHT Shr 1) - STATE_SCORE_RANKING)
 			

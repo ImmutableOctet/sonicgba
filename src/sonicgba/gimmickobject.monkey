@@ -428,7 +428,7 @@ Class GimmickObject Extends GameObject
 							reElement = New Block(id, x, y, left, top, width, height)
 						Case StringIndex.BLUE_BACKGROUND_ID
 							reElement = New Fan(id, x, y, left, top, width, height)
-						Case Def.TOUCH_ROTATE_MAIN_MENU_ITEM_WIDTH
+						Case 104
 							reElement = New FinalShima(id, x, y, left, top, width, height)
 						Case Def.TOUCH_SEL_1_W
 							reElement = New UnseenSpring(id, x, y, left, top, width, height)
