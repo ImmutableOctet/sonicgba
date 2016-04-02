@@ -372,7 +372,7 @@ Class State Implements SonicDef, StringIndex Abstract
 					Case STATE_NORMAL_ENDING
 						state = New EndingState(0)
 					Case STATE_EXTRA_ENDING
-						state = New EndingState(STATE_GAME)
+						state = New EndingState(1)
 					Case STATE_SPECIAL_ENDING
 						state = New EndingState(STATE_RETURN_FROM_GAME)
 				End Select
@@ -524,7 +524,7 @@ Class State Implements SonicDef, StringIndex Abstract
 	Public
 		' Functions:
 		Function drawFadeBase:Void(g:MFGraphics, vel2:Int)
-			fadeAlpha = MyAPI.calNextPosition(Double(fadeAlpha), Double(fadeToValue), STATE_GAME, vel2, 3.0)
+			fadeAlpha = MyAPI.calNextPosition(Double(fadeAlpha), Double(fadeToValue), 1, vel2, 3.0)
 			
 			drawFadeCore(g)
 		End
@@ -1330,14 +1330,14 @@ Class State Implements SonicDef, StringIndex Abstract
 				Self.confirmframe += 1
 				
 				If (Self.confirmframe > STATE_ENDING) Then
-					Return STATE_GAME
+					Return 1
 				EndIf
 			EndIf
 			
 			If (Key.touchsecondensureyes.IsButtonPress() And Self.confirmcursor = 0 And Not Self.isConfirm) Then
 				Self.isConfirm = True
 				Self.confirmframe = 0
-				SoundSystem.getInstance().playSe(STATE_GAME)
+				SoundSystem.getInstance().playSe(1)
 				Return 0
 			ElseIf (Key.touchsecondensureno.IsButtonPress() And Self.confirmcursor = 0 And Not Self.isConfirm) Then
 				SoundSystem.getInstance().playSe(2)
@@ -1368,8 +1368,8 @@ Class State Implements SonicDef, StringIndex Abstract
 			If (Key.touchsecondensureyes.IsButtonPress() And Self.confirmcursor = 0) Then
 				Self.isConfirm = True
 				Self.confirmframe = 0
-				SoundSystem.getInstance().playSe(STATE_GAME)
-				Return STATE_GAME
+				SoundSystem.getInstance().playSe(1)
+				Return 1
 			ElseIf (Key.touchsecondensureno.IsButtonPress() And Self.confirmcursor = 0) Then
 				SoundSystem.getInstance().playSe(2)
 				Return 2
@@ -1392,7 +1392,7 @@ Class State Implements SonicDef, StringIndex Abstract
 			muiAniDrawer.setActionId(54)
 			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
 			AnimationDrawer animationDrawer = muiAniDrawer
-			Int i = (Key.touchsecondensureyes.Isin() And Self.confirmcursor = 0) ? STATE_GAME : 0
+			Int i = (Key.touchsecondensureyes.Isin() And Self.confirmcursor = 0) ? 1 : 0
 			animationDrawer.setActionId(i + 59)
 			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
 			animationDrawer = muiAniDrawer
@@ -1457,7 +1457,7 @@ Class State Implements SonicDef, StringIndex Abstract
 					fadeInit(220, 102)
 					
 					If (Self.Finalitemsselectcursor = 0) Then
-						Return STATE_GAME
+						Return 1
 					EndIf
 					
 					Return 2
@@ -1468,13 +1468,13 @@ Class State Implements SonicDef, StringIndex Abstract
 				Self.isItemsSelect = True
 				Self.itemsselectframe = 0
 				Self.Finalitemsselectcursor = 0
-				SoundSystem.getInstance().playSe(STATE_GAME)
+				SoundSystem.getInstance().playSe(1)
 				Return 0
 			ElseIf (Key.touchitemsselect2_2.IsButtonPress() And Self.itemsselectcursor = 0 And Not Self.isItemsSelect) Then
 				Self.isItemsSelect = True
 				Self.itemsselectframe = 0
 				Self.Finalitemsselectcursor = 0
-				SoundSystem.getInstance().playSe(STATE_GAME)
+				SoundSystem.getInstance().playSe(1)
 				Return 0
 			ElseIf ((Not Key.press(Key.B_BACK) And Not Key.touchitemsselect2_return.IsButtonPress()) Or Not fadeChangeOver()) Then
 				Return 0
@@ -1493,7 +1493,7 @@ Class State Implements SonicDef, StringIndex Abstract
 			EndIf
 			
 			AnimationDrawer animationDrawer = muiAniDrawer
-			Int i = (Key.touchitemsselect2_1.Isin() And Self.itemsselectcursor = 0) ? STATE_GAME : 0
+			Int i = (Key.touchitemsselect2_1.Isin() And Self.itemsselectcursor = 0) ? 1 : 0
 			animationDrawer.setActionId(i + 55)
 			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 18)
 			animationDrawer = muiAniDrawer
@@ -1736,7 +1736,7 @@ Class State Implements SonicDef, StringIndex Abstract
 					fadeInit(220, 102)
 					
 					If (Self.Finalitemsselectcursor = 0) Then
-						Return STATE_GAME
+						Return 1
 					EndIf
 					
 					If (Self.Finalitemsselectcursor = 0) Then
@@ -1751,19 +1751,19 @@ Class State Implements SonicDef, StringIndex Abstract
 				Self.isItemsSelect = True
 				Self.itemsselectframe = 0
 				Self.Finalitemsselectcursor = 0
-				SoundSystem.getInstance().playSe(STATE_GAME)
+				SoundSystem.getInstance().playSe(1)
 				Return 0
 			ElseIf (Key.touchitemsselect3_2.IsButtonPress() And Self.itemsselectcursor = 0 And Not Self.isItemsSelect) Then
 				Self.isItemsSelect = True
 				Self.itemsselectframe = 0
 				Self.Finalitemsselectcursor = 0
-				SoundSystem.getInstance().playSe(STATE_GAME)
+				SoundSystem.getInstance().playSe(1)
 				Return 0
 			ElseIf (Key.touchitemsselect3_3.IsButtonPress() And Self.itemsselectcursor = STATE_SCORE_RANKING And Not Self.isItemsSelect) Then
 				Self.isItemsSelect = True
 				Self.itemsselectframe = 0
 				Self.Finalitemsselectcursor = 2
-				SoundSystem.getInstance().playSe(STATE_GAME)
+				SoundSystem.getInstance().playSe(1)
 				Return 0
 			ElseIf ((Not Key.press(Key.B_BACK) And Not Key.touchitemsselect2_return.IsButtonPress()) Or Not fadeChangeOver()) Then
 				Return 0
@@ -1782,7 +1782,7 @@ Class State Implements SonicDef, StringIndex Abstract
 			EndIf
 			
 			AnimationDrawer animationDrawer = muiAniDrawer
-			Int i = (Key.touchitemsselect3_1.Isin() And Self.itemsselectcursor = 0) ? STATE_GAME : 0
+			Int i = (Key.touchitemsselect3_1.Isin() And Self.itemsselectcursor = 0) ? 1 : 0
 			animationDrawer.setActionId(i + 55)
 			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 36)
 			animationDrawer = muiAniDrawer
