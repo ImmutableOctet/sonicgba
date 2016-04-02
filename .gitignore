@@ -1,5 +1,6 @@
 etc
 *__test*
+*__backup*
 *.bak
 *.build*
 *.data
