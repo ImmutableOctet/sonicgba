@@ -4,9 +4,9 @@ Public
 
 ' Imports:
 Private
-	'Import gameengine.def
-	'Import gameengine.key
-	'Import gameengine.touchdirectkey
+	Import gameengine.def
+	Import gameengine.key
+	Import gameengine.touchdirectkey
 	
 	Import lib.constutil
 	Import lib.animation
