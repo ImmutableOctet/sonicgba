@@ -736,1126 +736,1139 @@ Class State Implements SonicDef, StringIndex Abstract
 				Return -1
 			EndIf
 		End
-
-	Public Method comfirmDraw:Void(g:MFGraphics, id:Int)
-		drawMenuFontById(g, COMFIRM_FRAME_ID, COMFIRM_X, COMFIRM_Y)
-		drawMenuFontById(g, id, COMFIRM_X, COMFIRM_Y - (MENU_SPACE Shr 1))
-		drawMenuFontById(g, 101, ((Self.cursor * FADE_FILL_WIDTH) + COMFIRM_X) - BAR_HEIGHT, COMFIRM_Y + (MENU_SPACE Shr 1))
-		drawMenuFontById(g, 10, COMFIRM_X, COMFIRM_Y + (MENU_SPACE Shr 1))
-	End
-
-	Public Method confirmDraw:Void(g:MFGraphics, title:String)
-		drawMenuFontById(g, COMFIRM_FRAME_ID, COMFIRM_X, COMFIRM_Y)
-		MyAPI.drawBoldString(g, title, COMFIRM_X, ((COMFIRM_Y - CONFIRM_FRAME_OFFSET_Y) + 10) + LINE_SPACE, 17, MENU_BG_COLOR_1, 4656650)
-		drawMenuFontById(g, 101, ((Self.cursor * FADE_FILL_WIDTH) + COMFIRM_X) - BAR_HEIGHT, COMFIRM_Y + (MENU_SPACE Shr 1))
-		drawMenuFontById(g, 10, COMFIRM_X, COMFIRM_Y + (MENU_SPACE Shr 1))
-	End
-
-	Public Method menuBgDraw:Void(g:MFGraphics)
-	End
-
-	Public Method drawLowQualifyBackGround:Void(g:MFGraphics, color1:Int, color2:Int, offset:Int)
-		g.setColor(color1)
-		MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
-		g.setColor(color2)
-		Self.titleBgOffsetX += MENU_BG_SPEED
-		Self.titleBgOffsetY += MENU_BG_SPEED
-		Self.titleBgOffsetX Mod= offset
-		Self.titleBgOffsetY Mod= offset
-		Int x = (-offset) + Self.titleBgOffsetX
-		While (x < SCREEN_WIDTH) {
-			Int y = (-offset) - Self.titleBgOffsetY
-			While (y < SCREEN_HEIGHT) {
-				MyAPI.fillRect(g, x, y, offset Shr 1, offset Shr 1)
-				MyAPI.fillRect(g, (offset Shr 1) + x, (offset Shr 1) + y, offset Shr 1, offset Shr 1)
-				y += offset
-			}
-			x += offset
-		}
-	End
-
-	Public Method drawMenuTitle:Void(g:MFGraphics, id:Int, y:Int)
-		drawScrollFont(g, id, MENU_TITLE_DRAW_OFFSET_Y, MENU_TITLE_MOVE_DIRECTION)
-	End
-
-	Public Method drawMenuTitle:Void(g:MFGraphics, id:Int, y:Int, width:Int)
-		drawScrollFont(g, id, MENU_TITLE_DRAW_OFFSET_Y, width > 0 ? width : MENU_TITLE_MOVE_DIRECTION)
-	End
-
-	Public Method drawScrollFont:Void(g:MFGraphics, id:Int, y:Int, width:Int)
-		drawBar(g, 0, y)
-		Self.selectMenuOffsetX += STATE_ENDING
-		Self.selectMenuOffsetX Mod= width
-		Int x = 0
-		While (x - Self.selectMenuOffsetX > 0) {
-			x -= width
-		}
-		For (Int i = 0; i < MENU_TITLE_DRAW_NUM; i += 0)
-			drawMenuFontById(g, id, (x + (i * width)) - Self.selectMenuOffsetX, y)
-		Next
-	End
-
-	Public Method helpInit:Void()
-		helpStrings = MyAPI.loadText("/help")
-		Self.helpIndex = 0
-		MyAPI.initString()
-		strForShow = MyAPI.getStrings(helpStrings[Self.helpIndex], STATE_EXTRA_ENDING, SCREEN_WIDTH)
-		helpTitleString = MyAPI.getStringToDraw(strForShow[0])
-		muiLeftArrowDrawer = New Animation("/animation/mui").getDrawer(91, True, 0)
-		muiRightArrowDrawer = New Animation("/animation/mui").getDrawer(92, True, 0)
-		muiUpArrowDrawer = New Animation("/animation/mui").getDrawer(93, True, 0)
-		muiDownArrowDrawer = New Animation("/animation/mui").getDrawer(94, True, 0)
-		Key.touchInstructionInit()
-		Self.arrowframecnt = 0
-		Self.isArrowClicked = False
-		PageFrameCnt = 0
 		
-		If (Self.textBGImage = Null) Then
-			Self.textBGImage = MFImage.createImage("/animation/text_bg.png")
-		EndIf
+		Method comfirmDraw:Void(g:MFGraphics, id:Int)
+			drawMenuFontById(g, COMFIRM_FRAME_ID, COMFIRM_X, COMFIRM_Y)
+			drawMenuFontById(g, id, COMFIRM_X, COMFIRM_Y - (MENU_SPACE Shr 1))
+			drawMenuFontById(g, 101, ((Self.cursor * FADE_FILL_WIDTH) + COMFIRM_X) - BAR_HEIGHT, COMFIRM_Y + (MENU_SPACE Shr 1))
+			drawMenuFontById(g, 10, COMFIRM_X, COMFIRM_Y + (MENU_SPACE Shr 1))
+		End
 		
-		Self.arrowindex = -1
-		Self.returnPageCursor = 0
-	End
-
-	Public Method helpLogic:Void()
+		Method confirmDraw:Void(g:MFGraphics, title:String)
+			drawMenuFontById(g, COMFIRM_FRAME_ID, COMFIRM_X, COMFIRM_Y)
+			MyAPI.drawBoldString(g, title, COMFIRM_X, ((COMFIRM_Y - CONFIRM_FRAME_OFFSET_Y) + 10) + LINE_SPACE, 17, MENU_BG_COLOR_1, 4656650)
+			drawMenuFontById(g, 101, ((Self.cursor * FADE_FILL_WIDTH) + COMFIRM_X) - BAR_HEIGHT, COMFIRM_Y + (MENU_SPACE Shr 1))
+			drawMenuFontById(g, 10, COMFIRM_X, COMFIRM_Y + (MENU_SPACE Shr 1))
+		End
 		
-		If (Key.touchhelpleftarrow.Isin() And Key.touchpage.IsClick()) Then
-			Self.arrowindex = 0
-		ElseIf (Key.touchhelprightarrow.Isin() And Key.touchpage.IsClick()) Then
-			Self.arrowindex = 0
-		EndIf
+		Method menuBgDraw:Void(g:MFGraphics)
+			' Empty implementation.
+		End
 		
-		If (Key.touchhelpreturn.Isin() And Key.touchpage.IsClick()) Then
-			Self.returnPageCursor = 0
-		EndIf
-		
-		If (Key.slidesensorhelp.isSliding()) Then
-			If (Key.slidesensorhelp.isSlide(Key.DIR_UP)) Then
-				MyAPI.logicString(True, False)
-			ElseIf (Key.slidesensorhelp.isSlide(Key.DIR_DOWN)) Then
-				MyAPI.logicString(False, True)
-			EndIf
-		EndIf
-		
-		If (Key.touchhelpuparrow.Isin()) Then
-			Self.arrowframecnt += 0
+		Method drawLowQualifyBackGround:Void(g:MFGraphics, color1:Int, color2:Int, offset:Int)
+			g.setColor(color1)
+			MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+			g.setColor(color2)
 			
-			If (Self.arrowframecnt <= STATE_SCORE_RANKING And Not Self.isArrowClicked) Then
-				MyAPI.logicString(False, True)
-				Self.isArrowClicked = True
-			ElseIf (Self.arrowframecnt > STATE_SCORE_RANKING And Self.arrowframecnt Mod 2 = 0) Then
-				MyAPI.logicString(False, True)
-			EndIf
+			Self.titleBgOffsetX += MENU_BG_SPEED
+			Self.titleBgOffsetY += MENU_BG_SPEED
 			
-		ElseIf (Key.touchhelpdownarrow.Isin()) Then
-			Self.arrowframecnt += 0
+			Self.titleBgOffsetX Mod= offset
+			Self.titleBgOffsetY Mod= offset
 			
-			If (Self.arrowframecnt <= STATE_SCORE_RANKING And Not Self.isArrowClicked) Then
-				MyAPI.logicString(True, False)
-				Self.isArrowClicked = True
-			ElseIf (Self.arrowframecnt > STATE_SCORE_RANKING And Self.arrowframecnt Mod 2 = 0) Then
-				MyAPI.logicString(True, False)
-			EndIf
+			For Local x:= ((-offset) + Self.titleBgOffsetX) Until SCREEN_WIDTH
+				Int y = (-offset) - Self.titleBgOffsetY
+				
+				For Local y:= ((-offset) - Self.titleBgOffsetY) Until SCREEN_HEIGHT
+					MyAPI.fillRect(g, x, y, (offset Shr 1), (offset Shr 1))
+					MyAPI.fillRect(g, (offset Shr 1) + x, (offset Shr 1) + y, (offset Shr 1), (offset Shr 1))
+				Next
+			Next
+		End
+		
+		Method drawMenuTitle:Void(g:MFGraphics, id:Int, y:Int)
+			drawScrollFont(g, id, MENU_TITLE_DRAW_OFFSET_Y, MENU_TITLE_MOVE_DIRECTION)
+		End
+		
+		Method drawMenuTitle:Void(g:MFGraphics, id:Int, y:Int, width:Int)
+			drawScrollFont(g, id, MENU_TITLE_DRAW_OFFSET_Y, PickValue((width > 0), width, MENU_TITLE_MOVE_DIRECTION))
+		End
+		
+		Method drawScrollFont:Void(g:MFGraphics, id:Int, y:Int, width:Int)
+			drawBar(g, 0, y)
 			
-		Else
+			Self.selectMenuOffsetX += STATE_ENDING
+			Self.selectMenuOffsetX Mod= width
+			
+			Local x:= 0
+			
+			While (x - Self.selectMenuOffsetX > 0)
+				x -= width
+			Wend
+			
+			For Local i:= 0 Until MENU_TITLE_DRAW_NUM
+				drawMenuFontById(g, id, (x + (i * width)) - Self.selectMenuOffsetX, y)
+			Next
+		End
+		
+		Method helpInit:Void()
+			helpStrings = MyAPI.loadText("/help")
+			
+			Self.helpIndex = 0
+			
+			MyAPI.initString()
+			
+			strForShow = MyAPI.getStrings(helpStrings[Self.helpIndex], STATE_EXTRA_ENDING, SCREEN_WIDTH)
+			helpTitleString = MyAPI.getStringToDraw(strForShow[0])
+			
+			' Optimization potential: Multiple objects may not be needed.
+			muiLeftArrowDrawer = New Animation("/animation/mui").getDrawer(91, True, 0)
+			muiRightArrowDrawer = New Animation("/animation/mui").getDrawer(92, True, 0)
+			muiUpArrowDrawer = New Animation("/animation/mui").getDrawer(93, True, 0)
+			muiDownArrowDrawer = New Animation("/animation/mui").getDrawer(94, True, 0)
+			
+			Key.touchInstructionInit()
+			
 			Self.arrowframecnt = 0
 			Self.isArrowClicked = False
-		EndIf
-		
-		If (Key.touchhelpleftarrow.IsButtonPress() And Self.arrowindex = 0) Then
-			SoundSystem.getInstance().playSe(STATE_SELECT_RACE_STAGE)
-			Self.helpIndex -= 0
-			Self.helpIndex += helpStrings.length
-			Self.helpIndex Mod= helpStrings.length
-			MyAPI.initString()
-			strForShow = MyAPI.getStrings(helpStrings[Self.helpIndex], STATE_EXTRA_ENDING, SCREEN_WIDTH)
-		ElseIf (Key.touchhelprightarrow.IsButtonPress() And Self.arrowindex = 0) Then
-			SoundSystem.getInstance().playSe(STATE_SELECT_RACE_STAGE)
-			Self.helpIndex += 0
-			Self.helpIndex Mod= helpStrings.length
-			MyAPI.initString()
-			strForShow = MyAPI.getStrings(helpStrings[Self.helpIndex], STATE_EXTRA_ENDING, SCREEN_WIDTH)
-		EndIf
-		
-	End
-
-	Public Method helpDraw:Void(g:MFGraphics)
-		drawFade(g)
-		
-		If (muiAniDrawer = Null) Then
-			muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
-			Return
-		EndIf
-		
-		muiAniDrawer.setActionId(62)
-		PageFrameCnt += 0
-		PageFrameCnt Mod= STATE_EXTRA_ENDING
-		
-		If (PageFrameCnt Mod 2 = 0) Then
-			PageBackGroundOffsetX += 0
-			PageBackGroundOffsetX Mod= HELP_PAGE_BACKGROUND_WIDTH
-			PageBackGroundOffsetY -= 0
-			PageBackGroundOffsetY Mod= PAGE_BACKGROUND_HEIGHT
-		EndIf
-		
-		For (Int x = PageBackGroundOffsetX - 64; x < (SCREEN_WIDTH * 3) / 2; x += HELP_PAGE_BACKGROUND_WIDTH)
-			For (Int y = PageBackGroundOffsetY - 56; y < (SCREEN_HEIGHT * 3) / 2; y += PAGE_BACKGROUND_HEIGHT)
-				muiAniDrawer.draw(g, x, y)
-			Next
-		Next
-		For (Int i = 0; i < STATE_ENDING; i += 0)
-			MyAPI.drawImage(g, Self.textBGImage, ((SCREEN_WIDTH Shr 1) - Def.TOUCH_ROTATE_MAIN_MENU_ITEM_WIDTH) + (i * 26), (SCREEN_HEIGHT Shr 1) - 72, 0)
-		Next
-		MyAPI.drawStrings(g, strForShow, ((SCREEN_WIDTH Shr 1) - Def.TOUCH_ROTATE_MAIN_MENU_ITEM_WIDTH) + 10, ((SCREEN_HEIGHT Shr 1) - 72) + STATE_SELECT_NORMAL_STAGE, SCREEN_WIDTH, 131, (Int) 0, True, (Int) MENU_BG_COLOR_1, 4656650, (Int) 0, (Int) STATE_EXTRA_ENDING)
-		muiLeftArrowDrawer.draw(g, 0, (SCREEN_HEIGHT Shr 1) - STATE_SCORE_RANKING)
-		muiRightArrowDrawer.draw(g, SCREEN_WIDTH, (SCREEN_HEIGHT Shr 1) - STATE_SCORE_RANKING)
-		
-		If (MyAPI.upPermit) Then
-			muiUpArrowDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 25, SCREEN_HEIGHT)
-		EndIf
-		
-		If (MyAPI.downPermit) Then
-			muiDownArrowDrawer.draw(g, (SCREEN_WIDTH Shr 1) + MENU_BG_OFFSET, SCREEN_HEIGHT)
-		EndIf
-		
-		muiAniDrawer.setActionId(Self.helpIndex + 95)
-		muiAniDrawer.draw(g, SCREEN_WIDTH, SCREEN_HEIGHT)
-		muiAniDrawer.setActionId((Key.touchhelpreturn.Isin() ? STATE_SELECT_NORMAL_STAGE : 0) + 61)
-		muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
-	End
-
-	Public Method moregameDraw:Void(g:MFGraphics)
-		menuBgDraw(g)
-		drawMenuTitle(g, STATE_SELECT_RACE_STAGE, 0)
-		fillMenuRect(g, Self.MORE_GAME_START_X, Self.MORE_GAME_START_Y, Self.MORE_GAME_WIDTH, Self.MORE_GAME_HEIGHT)
-		MFGraphics mFGraphics = g
-		MyAPI.drawBoldString(mFGraphics, "\u662f\u5426\u9000\u51fa\u6e38\u620f", SCREEN_WIDTH Shr 1, Self.MORE_GAME_START_Y + 10, 17, MENU_BG_COLOR_1, 0)
-		Int i = MENU_SPACE + (Self.MORE_GAME_START_Y + 10)
-		mFGraphics = g
-		MyAPI.drawBoldString(mFGraphics, "\u5e76\u8fde\u63a5\u7f51\u7edc", SCREEN_WIDTH Shr 1, i, 17, MENU_BG_COLOR_1, 0)
-		drawMenuFontById(g, 101, ((Self.cursor * FADE_FILL_WIDTH) + COMFIRM_X) - BAR_HEIGHT, ((Self.MORE_GAME_START_Y + 10) + (MENU_SPACE * 3)) + FONT_H_HALF)
-		drawMenuFontById(g, 10, COMFIRM_X, ((Self.MORE_GAME_START_Y + 10) + (MENU_SPACE * 3)) + FONT_H_HALF)
-	End
-
-	Public Method pauseoptionLogic:Void()
-		
-		If (Key.press(Key.gSelect)) Then
-			Self.pauseoptionCursor += 0
-			Self.pauseoptionCursor += STATE_SCORE_RANKING
-			Self.pauseoptionCursor Mod= STATE_SCORE_RANKING
-		EndIf
-		
-	End
-
-	Public Method pauseoptionDraw:Void(g:MFGraphics)
-		drawMenuTitle(g, STATE_SELECT_NORMAL_STAGE, 0)
-		drawMenuFontById(g, 54, (SCREEN_WIDTH Shr 1) - 32, SCREEN_HEIGHT Shr 1)
-		drawMenuFontById(g, StringIndex.STR_RIGHT_ARROW, (SCREEN_WIDTH Shr 1) - 76, SCREEN_HEIGHT Shr 1)
-		drawMenuFontById(g, OPTION_SOUND[Self.pauseoptionCursor] + 55, (SCREEN_WIDTH Shr 1) + 32, SCREEN_HEIGHT Shr 1)
-	End
-
-	Public Method menuInit:Void(menuElement:Int[])
-		Self.currentElement = menuElement
-		Self.cursor = 0
-		Self.mainMenuItemCursor = 0
-		Self.menuMoving = True
-		Self.elementNum = Self.currentElement.length
-		Self.selectMenuOffsetX = 0
-		Self.cursor = Self.returnCursor
-		Self.mainMenuItemCursor = Self.returnCursor
-	End
-
-	Public Method menuInit:Void(nElementNum:Int)
-		Self.cursor = 0
-		Self.mainMenuItemCursor = 0
-		Self.menuMoving = False
-		Self.elementNum = nElementNum
-		Self.selectMenuOffsetX = 0
-		Self.cursor = Self.returnCursor
-		Self.mainMenuItemCursor = Self.returnCursor
-	End
-
-	Public Method menuInit:Void(nElementNum:Int, cursorIndex:Int)
-		menuInit(nElementNum)
-		Self.cursor = cursorIndex
-		Self.mainMenuItemCursor = cursorIndex
-	End
-
-	Public Method getMenuPosY:Int(i:Int)
-		Return ((SCREEN_HEIGHT - ((Self.elementNum - 1) * MENU_SPACE)) Shr 1) + (MENU_SPACE * i)
-	End
-
-	Public Method getMenuPosY:Int(i:Int, num:Int)
-		Return ((SCREEN_HEIGHT - ((num - 1) * MENU_SPACE)) Shr 1) + (MENU_SPACE * i)
-	End
-
-	Public Method menuLogic:Int()
-		Key.touchMenuInit()
-		
-		If (Key.touchmenunew.Isin() And Self.cursor = 0) Then
-			Self.cursor = 0
-			Key.touchmenunew.reset()
-			Return -1
-		ElseIf (Key.touchmenucon.Isin() And Self.cursor = 0) Then
-			Self.cursor = 0
-			Key.touchmenucon.reset()
-			Return -1
-		ElseIf ((Key.touchmenunew.Isin() And Self.cursor = 0) Or (Key.touchmenucon.Isin() And Self.cursor = 0)) Then
-			Return Self.cursor
-		Else
 			
-			If (Self.menuMoving) Then
-				Return -1
+			PageFrameCnt = 0
+			
+			If (Self.textBGImage = Null) Then
+				Self.textBGImage = MFImage.createImage("/animation/text_bg.png")
 			EndIf
 			
-			If (Key.press(Key.gUp)) Then
-				Self.cursor -= 0
-				Self.cursor = (Self.cursor + Self.elementNum) Mod Self.elementNum
-				Self.selectMenuOffsetX = 0
-				changeUpSelect()
-			ElseIf (Key.press(Key.gDown)) Then
-				Self.cursor += 0
-				Self.cursor = (Self.cursor + Self.elementNum) Mod Self.elementNum
-				Self.selectMenuOffsetX = 0
-				changeDownSelect()
-			ElseIf (Key.press(Key.gSelect | Key.B_S1)) Then
-				Self.cursor = (Self.cursor + Self.elementNum) Mod Self.elementNum
-				Key.touchMenuClose()
+			Self.arrowindex = -1
+			Self.returnPageCursor = 0
+		End
+		
+		Method helpLogic:Void()
+			If (Key.touchhelpleftarrow.Isin() And Key.touchpage.IsClick()) Then
+				Self.arrowindex = 0
+			ElseIf (Key.touchhelprightarrow.Isin() And Key.touchpage.IsClick()) Then
+				Self.arrowindex = 0
+			EndIf
+			
+			If (Key.touchhelpreturn.Isin() And Key.touchpage.IsClick()) Then
+				Self.returnPageCursor = 0
+			EndIf
+			
+			If (Key.slidesensorhelp.isSliding()) Then
+				If (Key.slidesensorhelp.isSlide(Key.DIR_UP)) Then
+					MyAPI.logicString(True, False)
+				ElseIf (Key.slidesensorhelp.isSlide(Key.DIR_DOWN)) Then
+					MyAPI.logicString(False, True)
+				EndIf
+			EndIf
+			
+			If (Key.touchhelpuparrow.Isin()) Then
+				Self.arrowframecnt += 0
+				
+				If (Self.arrowframecnt <= STATE_SCORE_RANKING And Not Self.isArrowClicked) Then
+					MyAPI.logicString(False, True)
+					Self.isArrowClicked = True
+				ElseIf (Self.arrowframecnt > STATE_SCORE_RANKING And Self.arrowframecnt Mod 2 = 0) Then
+					MyAPI.logicString(False, True)
+				EndIf
+				
+			ElseIf (Key.touchhelpdownarrow.Isin()) Then
+				Self.arrowframecnt += 0
+				
+				If (Self.arrowframecnt <= STATE_SCORE_RANKING And Not Self.isArrowClicked) Then
+					MyAPI.logicString(True, False)
+					Self.isArrowClicked = True
+				ElseIf (Self.arrowframecnt > STATE_SCORE_RANKING And Self.arrowframecnt Mod 2 = 0) Then
+					MyAPI.logicString(True, False)
+				EndIf
+				
+			Else
+				Self.arrowframecnt = 0
+				Self.isArrowClicked = False
+			EndIf
+			
+			If (Key.touchhelpleftarrow.IsButtonPress() And Self.arrowindex = 0) Then
+				SoundSystem.getInstance().playSe(STATE_SELECT_RACE_STAGE)
+				Self.helpIndex -= 0
+				Self.helpIndex += helpStrings.length
+				Self.helpIndex Mod= helpStrings.length
+				MyAPI.initString()
+				strForShow = MyAPI.getStrings(helpStrings[Self.helpIndex], STATE_EXTRA_ENDING, SCREEN_WIDTH)
+			ElseIf (Key.touchhelprightarrow.IsButtonPress() And Self.arrowindex = 0) Then
+				SoundSystem.getInstance().playSe(STATE_SELECT_RACE_STAGE)
+				Self.helpIndex += 0
+				Self.helpIndex Mod= helpStrings.length
+				MyAPI.initString()
+				strForShow = MyAPI.getStrings(helpStrings[Self.helpIndex], STATE_EXTRA_ENDING, SCREEN_WIDTH)
+			EndIf
+			
+		End
+		
+		Public Method helpDraw:Void(g:MFGraphics)
+			drawFade(g)
+			
+			If (muiAniDrawer = Null) Then
+				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
+				Return
+			EndIf
+			
+			muiAniDrawer.setActionId(62)
+			PageFrameCnt += 0
+			PageFrameCnt Mod= STATE_EXTRA_ENDING
+			
+			If (PageFrameCnt Mod 2 = 0) Then
+				PageBackGroundOffsetX += 0
+				PageBackGroundOffsetX Mod= HELP_PAGE_BACKGROUND_WIDTH
+				PageBackGroundOffsetY -= 0
+				PageBackGroundOffsetY Mod= PAGE_BACKGROUND_HEIGHT
+			EndIf
+			
+			For (Int x = PageBackGroundOffsetX - 64; x < (SCREEN_WIDTH * 3) / 2; x += HELP_PAGE_BACKGROUND_WIDTH)
+				For (Int y = PageBackGroundOffsetY - 56; y < (SCREEN_HEIGHT * 3) / 2; y += PAGE_BACKGROUND_HEIGHT)
+					muiAniDrawer.draw(g, x, y)
+				Next
+			Next
+			For (Int i = 0; i < STATE_ENDING; i += 0)
+				MyAPI.drawImage(g, Self.textBGImage, ((SCREEN_WIDTH Shr 1) - Def.TOUCH_ROTATE_MAIN_MENU_ITEM_WIDTH) + (i * 26), (SCREEN_HEIGHT Shr 1) - 72, 0)
+			Next
+			MyAPI.drawStrings(g, strForShow, ((SCREEN_WIDTH Shr 1) - Def.TOUCH_ROTATE_MAIN_MENU_ITEM_WIDTH) + 10, ((SCREEN_HEIGHT Shr 1) - 72) + STATE_SELECT_NORMAL_STAGE, SCREEN_WIDTH, 131, (Int) 0, True, (Int) MENU_BG_COLOR_1, 4656650, (Int) 0, (Int) STATE_EXTRA_ENDING)
+			muiLeftArrowDrawer.draw(g, 0, (SCREEN_HEIGHT Shr 1) - STATE_SCORE_RANKING)
+			muiRightArrowDrawer.draw(g, SCREEN_WIDTH, (SCREEN_HEIGHT Shr 1) - STATE_SCORE_RANKING)
+			
+			If (MyAPI.upPermit) Then
+				muiUpArrowDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 25, SCREEN_HEIGHT)
+			EndIf
+			
+			If (MyAPI.downPermit) Then
+				muiDownArrowDrawer.draw(g, (SCREEN_WIDTH Shr 1) + MENU_BG_OFFSET, SCREEN_HEIGHT)
+			EndIf
+			
+			muiAniDrawer.setActionId(Self.helpIndex + 95)
+			muiAniDrawer.draw(g, SCREEN_WIDTH, SCREEN_HEIGHT)
+			muiAniDrawer.setActionId((Key.touchhelpreturn.Isin() ? STATE_SELECT_NORMAL_STAGE : 0) + 61)
+			muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
+		End
+		
+		Public Method moregameDraw:Void(g:MFGraphics)
+			menuBgDraw(g)
+			drawMenuTitle(g, STATE_SELECT_RACE_STAGE, 0)
+			fillMenuRect(g, Self.MORE_GAME_START_X, Self.MORE_GAME_START_Y, Self.MORE_GAME_WIDTH, Self.MORE_GAME_HEIGHT)
+			MFGraphics mFGraphics = g
+			MyAPI.drawBoldString(mFGraphics, "\u662f\u5426\u9000\u51fa\u6e38\u620f", SCREEN_WIDTH Shr 1, Self.MORE_GAME_START_Y + 10, 17, MENU_BG_COLOR_1, 0)
+			Int i = MENU_SPACE + (Self.MORE_GAME_START_Y + 10)
+			mFGraphics = g
+			MyAPI.drawBoldString(mFGraphics, "\u5e76\u8fde\u63a5\u7f51\u7edc", SCREEN_WIDTH Shr 1, i, 17, MENU_BG_COLOR_1, 0)
+			drawMenuFontById(g, 101, ((Self.cursor * FADE_FILL_WIDTH) + COMFIRM_X) - BAR_HEIGHT, ((Self.MORE_GAME_START_Y + 10) + (MENU_SPACE * 3)) + FONT_H_HALF)
+			drawMenuFontById(g, 10, COMFIRM_X, ((Self.MORE_GAME_START_Y + 10) + (MENU_SPACE * 3)) + FONT_H_HALF)
+		End
+		
+		Public Method pauseoptionLogic:Void()
+			
+			If (Key.press(Key.gSelect)) Then
+				Self.pauseoptionCursor += 0
+				Self.pauseoptionCursor += STATE_SCORE_RANKING
+				Self.pauseoptionCursor Mod= STATE_SCORE_RANKING
+			EndIf
+			
+		End
+		
+		Public Method pauseoptionDraw:Void(g:MFGraphics)
+			drawMenuTitle(g, STATE_SELECT_NORMAL_STAGE, 0)
+			drawMenuFontById(g, 54, (SCREEN_WIDTH Shr 1) - 32, SCREEN_HEIGHT Shr 1)
+			drawMenuFontById(g, StringIndex.STR_RIGHT_ARROW, (SCREEN_WIDTH Shr 1) - 76, SCREEN_HEIGHT Shr 1)
+			drawMenuFontById(g, OPTION_SOUND[Self.pauseoptionCursor] + 55, (SCREEN_WIDTH Shr 1) + 32, SCREEN_HEIGHT Shr 1)
+		End
+		
+		Public Method menuInit:Void(menuElement:Int[])
+			Self.currentElement = menuElement
+			Self.cursor = 0
+			Self.mainMenuItemCursor = 0
+			Self.menuMoving = True
+			Self.elementNum = Self.currentElement.length
+			Self.selectMenuOffsetX = 0
+			Self.cursor = Self.returnCursor
+			Self.mainMenuItemCursor = Self.returnCursor
+		End
+		
+		Public Method menuInit:Void(nElementNum:Int)
+			Self.cursor = 0
+			Self.mainMenuItemCursor = 0
+			Self.menuMoving = False
+			Self.elementNum = nElementNum
+			Self.selectMenuOffsetX = 0
+			Self.cursor = Self.returnCursor
+			Self.mainMenuItemCursor = Self.returnCursor
+		End
+		
+		Public Method menuInit:Void(nElementNum:Int, cursorIndex:Int)
+			menuInit(nElementNum)
+			Self.cursor = cursorIndex
+			Self.mainMenuItemCursor = cursorIndex
+		End
+		
+		Public Method getMenuPosY:Int(i:Int)
+			Return ((SCREEN_HEIGHT - ((Self.elementNum - 1) * MENU_SPACE)) Shr 1) + (MENU_SPACE * i)
+		End
+		
+		Public Method getMenuPosY:Int(i:Int, num:Int)
+			Return ((SCREEN_HEIGHT - ((num - 1) * MENU_SPACE)) Shr 1) + (MENU_SPACE * i)
+		End
+		
+		Public Method menuLogic:Int()
+			Key.touchMenuInit()
+			
+			If (Key.touchmenunew.Isin() And Self.cursor = 0) Then
+				Self.cursor = 0
+				Key.touchmenunew.reset()
+				Return -1
+			ElseIf (Key.touchmenucon.Isin() And Self.cursor = 0) Then
+				Self.cursor = 0
+				Key.touchmenucon.reset()
+				Return -1
+			ElseIf ((Key.touchmenunew.Isin() And Self.cursor = 0) Or (Key.touchmenucon.Isin() And Self.cursor = 0)) Then
 				Return Self.cursor
 			Else
 				
-				If (Key.press(2)) Then
+				If (Self.menuMoving) Then
+					Return -1
 				EndIf
 				
-				If (Key.press(Key.B_BACK)) Then
+				If (Key.press(Key.gUp)) Then
+					Self.cursor -= 0
+					Self.cursor = (Self.cursor + Self.elementNum) Mod Self.elementNum
+					Self.selectMenuOffsetX = 0
+					changeUpSelect()
+				ElseIf (Key.press(Key.gDown)) Then
+					Self.cursor += 0
+					Self.cursor = (Self.cursor + Self.elementNum) Mod Self.elementNum
+					Self.selectMenuOffsetX = 0
+					changeDownSelect()
+				ElseIf (Key.press(Key.gSelect | Key.B_S1)) Then
+					Self.cursor = (Self.cursor + Self.elementNum) Mod Self.elementNum
 					Key.touchMenuClose()
-					Return RETURN_PRESSED
+					Return Self.cursor
+				Else
+					
+					If (Key.press(2)) Then
+					EndIf
+					
+					If (Key.press(Key.B_BACK)) Then
+						Key.touchMenuClose()
+						Return RETURN_PRESSED
+					EndIf
 				EndIf
-			EndIf
-			
-			Return -1
-		EndIf
-		
-	End
-
-	Public Method changeUpSelect:Void()
-	End
-
-	Public Method changeDownSelect:Void()
-	End
-
-	Public Function initTouchkeyBoard:Void()
-		
-		If (touchkeyboardAnimation = Null) Then
-			touchkeyboardAnimation = New Animation("/tuch/control_panel")
-		EndIf
-		
-		touchkeyboardDrawer = touchkeyboardAnimation.getDrawer(0, True, 0)
-		touchgamekeyboardDrawer = touchkeyboardAnimation.getDrawer(0, True, 0)
-	}
-
-	Public Function releaseTouchkeyBoard:Void()
-		Animation.closeAnimation(touchkeyboardAnimation)
-		touchkeyboardAnimation = Null
-		Animation.closeAnimationDrawer(touchkeyboardDrawer)
-		touchkeyboardDrawer = Null
-		Animation.closeAnimation(touchgamekeyboardAnimation)
-		touchgamekeyboardAnimation = Null
-		Animation.closeAnimationDrawer(touchgamekeyboardDrawer)
-		touchgamekeyboardDrawer = Null
-		touchgamekeyImage = Null
-	}
-
-	Public Function drawTouchGameKey:Void(g:MFGraphics)
-	}
-
-	Public Function drawTouchKeyBoardById:Void(g:MFGraphics, id:Int, x:Int, y:Int)
-		touchkeyboardDrawer.setActionId(id)
-		touchkeyboardDrawer.draw(g, x, y)
-	}
-
-	Public Function drawTouchGameKeyBoardById:Void(g:MFGraphics, id:Int, x:Int, y:Int)
-		touchgamekeyboardDrawer.setActionId(id)
-		touchgamekeyboardDrawer.draw(g, x, y)
-	}
-
-	Public Method drawArcLine:Void(g:MFGraphics, centerx:Int, centery:Int, pointx:Int, pointy:Int)
-		g.setColor(16711680)
-		MyAPI.drawLine(g, centerx, centery, pointx, pointy)
-	End
-
-	Private Method transTouchPointX:Int(directkey:TouchDirectKey, pointx:Int, pointy:Int)
-		Int reset_x = pointx - 32
-		Int reset_y = pointy - TitleState.CHARACTER_RECORD_BG_OFFSET
-		
-		If ((reset_x * reset_x) + (reset_y * reset_y) > RollPlatformSpeedC.COLLISION_OFFSET_Y) Then
-			Return ((Cos(directkey.getDegree()) * 16) / COMFIRM_FRAME_ID) + 32
-		EndIf
-		
-		Return pointx
-	End
-
-	Private Method transTouchPointY:Int(directkey:TouchDirectKey, pointx:Int, pointy:Int)
-		Int reset_x = pointx - 32
-		Int reset_y = pointy - TitleState.CHARACTER_RECORD_BG_OFFSET
-		
-		If ((reset_x * reset_x) + (reset_y * reset_y) > RollPlatformSpeedC.COLLISION_OFFSET_Y) Then
-			Return ((Sin(directkey.getDegree()) * 16) / COMFIRM_FRAME_ID) + TitleState.CHARACTER_RECORD_BG_OFFSET
-		EndIf
-		
-		Return pointy
-	End
-
-	Private Method drawTouchKeyDirectPad:Void(g:MFGraphics)
-		Int degree = 0
-		
-		If (Key.touchdirectgamekey <> Null) Then
-			degree = Key.touchdirectgamekey.getDegree()
-		EndIf
-		
-		Int id = 0
-		
-		If (degree >= 248 And degree < 292) Then
-			id = 0
-		ElseIf (degree >= 292 And degree < 337) Then
-			id = 2
-		ElseIf ((degree >= 0 And degree < 22) Or (degree >= 337 And degree <= MDPhone.SCREEN_WIDTH)) Then
-			id = STATE_SELECT_RACE_STAGE
-		ElseIf (degree >= 22 And degree < 67) Then
-			id = STATE_SCORE_RANKING
-		ElseIf (degree >= 67 And degree < StringIndex.STR_RIGHT_ARROW) Then
-			id = STATE_SELECT_NORMAL_STAGE
-		ElseIf (degree >= StringIndex.STR_RIGHT_ARROW And degree < 157) Then
-			id = STATE_SPECIAL
-		ElseIf (degree >= 157 And degree < 202) Then
-			id = STATE_SPECIAL_TO_GMAE
-		ElseIf (degree >= 202 And degree < 248) Then
-			id = STATE_ENDING
-		EndIf
-		
-		drawTouchGameKeyBoardById(g, id, 32, TitleState.CHARACTER_RECORD_BG_OFFSET)
-	End
-
-	/* JADX WARNING: inconsistent code. */
-	/* Code decompiled incorrectly, please refer dest instructions dump. */
-	Public Method drawTouchKeyDirect:Void(r7:com.sega.mobile.framework.device.MFGraphics)
-		/*
-		r6 = Self
-		r5 = 16777216; // 0x1000000 Float:2.3509887E-38 double:8.289046E-317
-		r4 = 138; // 0x8a Float:1.93E-43 double:6.8E-322
-		r3 = 123; // 0x7b Float:1.72E-43 double:6.1E-322
-		r0 = GameEngine.Key.touchdirectgamekey
-		r0 = GameEngine.TouchDirectKey.IsKeyReleased()
-		
-		If (r0 = 0) goto L_0x0045
-	L_0x000e:
-		r0 = 0
-		r1 = 32
-		r2 = 128; // 0x80 Float:1.794E-43 double:6.32E-322
-		drawTouchGameKeyBoardById(r7, r0, r1, r2)
-	L_0x0016:
-		r0 = GameEngine.Key.press(r5)
-		
-		If (r0 <> 0) goto L_0x0022
-	L_0x001c:
-		r0 = GameEngine.Key.repeat(r5)
-		
-		If (r0 = 0) goto L_0x0059
-	L_0x0022:
-		r0 = 10
-		r1 = SCREEN_WIDTH
-		r1 = r1 + -22
-		drawTouchGameKeyBoardById(r7, r0, r1, r3)
-	L_0x002b:
-		r0 = GameEngine.Key.B_SEL
-		r0 = GameEngine.Key.press(r0)
-		
-		If (r0 <> 0) goto L_0x003b
-	L_0x0033:
-		r0 = GameEngine.Key.B_SEL
-		r0 = GameEngine.Key.repeat(r0)
-		
-		If (r0 = 0) goto L_0x0063
-	L_0x003b:
-		r0 = 12
-		r1 = SCREEN_WIDTH
-		r1 = r1 + -67
-		drawTouchGameKeyBoardById(r7, r0, r1, r4)
-	L_0x0044:
-		Return
-	L_0x0045:
-		r0 = GameEngine.Key.touchdirectgamekey
-		r0 = GameEngine.TouchDirectKey.IsKeyDragged()
-		
-		If (r0 <> 0) goto L_0x0055
-	L_0x004d:
-		r0 = GameEngine.Key.touchdirectgamekey
-		r0 = GameEngine.TouchDirectKey.IsKeyPressed()
-		
-		If (r0 = 0) goto L_0x0016
-	L_0x0055:
-		r6.drawTouchKeyDirectPad(r7)
-		goto L_0x0016
-	L_0x0059:
-		r0 = 9
-		r1 = SCREEN_WIDTH
-		r1 = r1 + -22
-		drawTouchGameKeyBoardById(r7, r0, r1, r3)
-		goto L_0x002b
-	L_0x0063:
-		r0 = 11
-		r1 = SCREEN_WIDTH
-		r1 = r1 + -67
-		drawTouchGameKeyBoardById(r7, r0, r1, r4)
-		goto L_0x0044
-		*/
-		throw New UnsupportedOperationException("Method not decompiled: State.State.drawTouchKeyDirect(com.sega.mobile.framework.device.MFGraphics):Void")
-	End
-
-	Public Function setTry:Void()
-		
-		If (trytimes > 0) Then
-			trytimes -= 0
-		Else
-			trytimes = 0
-		EndIf
-		
-	}
-
-	Public Function IsActiveGame:Bool()
-		Return False
-	}
-
-	Public Function IsToolsCharge:Bool()
-		Return False
-	}
-
-	Public Function activeGameProcess:Void(state:Bool)
-		IsPaid = state
-	}
-
-	Public Function load_bp_string:Void()
-		setMenu()
-	}
-
-	Public Function setMenu:Void()
-		TitleState.setMainMenu()
-		GameState.setPauseMenu()
-	}
-
-	Public Function init_bp:Void()
-	}
-
-	Public Function loadBPRecord:Void()
-	}
-
-	Public Function saveBPRecord:Void()
-	}
-
-	Public Function BP_chargeLogic:Bool(index:Int)
-		Return False
-	}
-
-	Public Function BP_IsChargeByIndex:Bool(index:Int)
-		Return False
-	}
-
-	Public Method BP_payingInit:Void(text_id:Int, title_id:Int)
-		MyAPI.initString()
-		strForShow = MyAPI.getStrings(BPstrings[text_id], MENU_RECT_WIDTH - BAR_HEIGHT)
-		BPPayingTitle = BPstrings[title_id]
-		Self.IsInBP = True
-	End
-
-	Public Method BP_payingDraw:Void(g:MFGraphics)
-		menuBgDraw(g)
-	End
-
-	Public Function BP_loadImage:Void()
-	}
-
-	Public Method secondEnsureInit:Void()
-		Self.isConfirm = False
-		Self.confirmframe = 0
-		
-		If (muiAniDrawer = Null) Then
-			muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
-		EndIf
-		
-		Key.touchSecondEnsureClose()
-		Key.touchSecondEnsureInit()
-	End
-
-	Public Method secondEnsureInit2:Void()
-		Self.isConfirm = False
-		Self.confirmframe = 0
-		
-		If (muiAniDrawer = Null) Then
-			muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
-		EndIf
-		
-		Key.touchSecondEnsureClose()
-		Key.touchSecondEnsureInit()
-	End
-
-	Public Method secondEnsureLogic:Int()
-		
-		If (Key.touchsecondensurereturn.Isin() And Key.touchsecondensure.IsClick()) Then
-			Self.confirmcursor = 2
-		EndIf
-		
-		If (Key.touchsecondensureyes.Isin() And Key.touchsecondensure.IsClick()) Then
-			Self.confirmcursor = 0
-		EndIf
-		
-		If (Key.touchsecondensureno.Isin() And Key.touchsecondensure.IsClick()) Then
-			Self.confirmcursor = 0
-		EndIf
-		
-		If (Self.isConfirm) Then
-			Self.confirmframe += 0
-			
-			If (Self.confirmframe > STATE_ENDING) Then
-				Return STATE_GAME
-			EndIf
-		EndIf
-		
-		If (Key.touchsecondensureyes.IsButtonPress() And Self.confirmcursor = 0 And Not Self.isConfirm) Then
-			Self.isConfirm = True
-			Self.confirmframe = 0
-			SoundSystem.getInstance().playSe(STATE_GAME)
-			Return 0
-		ElseIf (Key.touchsecondensureno.IsButtonPress() And Self.confirmcursor = 0 And Not Self.isConfirm) Then
-			SoundSystem.getInstance().playSe(2)
-			Return 2
-		ElseIf ((Not Key.press(Key.B_BACK) And Not Key.touchsecondensurereturn.IsButtonPress()) Or Not fadeChangeOver() Or Self.isConfirm) Then
-			Return 0
-		Else
-			SoundSystem.getInstance().playSe(2)
-			Return 2
-		EndIf
-		
-	End
-
-	Public Method secondEnsureDirectLogic:Int()
-		
-		If (Key.touchsecondensurereturn.Isin() And Key.touchsecondensure.IsClick()) Then
-			Self.confirmcursor = 2
-		EndIf
-		
-		If (Key.touchsecondensureyes.Isin() And Key.touchsecondensure.IsClick()) Then
-			Self.confirmcursor = 0
-		EndIf
-		
-		If (Key.touchsecondensureno.Isin() And Key.touchsecondensure.IsClick()) Then
-			Self.confirmcursor = 0
-		EndIf
-		
-		If (Key.touchsecondensureyes.IsButtonPress() And Self.confirmcursor = 0) Then
-			Self.isConfirm = True
-			Self.confirmframe = 0
-			SoundSystem.getInstance().playSe(STATE_GAME)
-			Return STATE_GAME
-		ElseIf (Key.touchsecondensureno.IsButtonPress() And Self.confirmcursor = 0) Then
-			SoundSystem.getInstance().playSe(2)
-			Return 2
-		ElseIf ((Not Key.press(Key.B_BACK) And Not Key.touchsecondensurereturn.IsButtonPress()) Or Not fadeChangeOver()) Then
-			Return 0
-		Else
-			SoundSystem.getInstance().playSe(2)
-			Return 2
-		EndIf
-		
-	End
-
-	Public Method SecondEnsurePanelDraw:Void(g:MFGraphics, ani_id:Int)
-		
-		If (muiAniDrawer = Null) Then
-			muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
-			Return
-		EndIf
-		
-		muiAniDrawer.setActionId(54)
-		muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
-		AnimationDrawer animationDrawer = muiAniDrawer
-		Int i = (Key.touchsecondensureyes.Isin() And Self.confirmcursor = 0) ? STATE_GAME : 0
-		animationDrawer.setActionId(i + 59)
-		muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
-		animationDrawer = muiAniDrawer
-		
-		If (Key.touchsecondensureno.Isin() And Self.confirmcursor = 0) Then
-			i = 0
-		Else
-			i = 0
-		EndIf
-		
-		animationDrawer.setActionId(i + 59)
-		muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
-		muiAniDrawer.setActionId(46)
-		muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
-		muiAniDrawer.setActionId(47)
-		muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
-		muiAniDrawer.setActionId(ani_id)
-		muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
-		animationDrawer = muiAniDrawer
-		
-		If (Key.touchsecondensurereturn.Isin()) Then
-			i = STATE_SELECT_NORMAL_STAGE
-		Else
-			i = 0
-		EndIf
-		
-		animationDrawer.setActionId(i + 61)
-		muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
-		
-		If (Self.isConfirm And Self.confirmframe > STATE_ENDING) Then
-			g.setColor(0)
-			MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
-		EndIf
-		
-	End
-
-	Public Method itemsSelect2Init:Void()
-		Key.touchItemsSelect2Init()
-		Self.itemsselectcursor = 0
-		Self.isItemsSelect = False
-		fadeInit(0, 192)
-	End
-
-	Public Method itemsSelect2Logic:Int()
-		
-		If (Key.touchitemsselect2_return.Isin() And Key.touchitemsselect2.IsClick()) Then
-			Self.itemsselectcursor = 2
-		EndIf
-		
-		If (Key.touchitemsselect2_1.Isin() And Key.touchitemsselect2.IsClick()) Then
-			Self.itemsselectcursor = 0
-		EndIf
-		
-		If (Key.touchitemsselect2_2.Isin() And Key.touchitemsselect2.IsClick()) Then
-			Self.itemsselectcursor = 0
-		EndIf
-		
-		If (Self.isItemsSelect) Then
-			Self.itemsselectframe += 0
-			
-			If (Self.itemsselectframe > STATE_ENDING) Then
-				fadeInit(220, 102)
 				
-				If (Self.Finalitemsselectcursor = 0) Then
+				Return -1
+			EndIf
+			
+		End
+		
+		Public Method changeUpSelect:Void()
+		End
+		
+		Public Method changeDownSelect:Void()
+		End
+		
+		Public Function initTouchkeyBoard:Void()
+			
+			If (touchkeyboardAnimation = Null) Then
+				touchkeyboardAnimation = New Animation("/tuch/control_panel")
+			EndIf
+			
+			touchkeyboardDrawer = touchkeyboardAnimation.getDrawer(0, True, 0)
+			touchgamekeyboardDrawer = touchkeyboardAnimation.getDrawer(0, True, 0)
+		}
+		
+		Public Function releaseTouchkeyBoard:Void()
+			Animation.closeAnimation(touchkeyboardAnimation)
+			touchkeyboardAnimation = Null
+			Animation.closeAnimationDrawer(touchkeyboardDrawer)
+			touchkeyboardDrawer = Null
+			Animation.closeAnimation(touchgamekeyboardAnimation)
+			touchgamekeyboardAnimation = Null
+			Animation.closeAnimationDrawer(touchgamekeyboardDrawer)
+			touchgamekeyboardDrawer = Null
+			touchgamekeyImage = Null
+		}
+		
+		Public Function drawTouchGameKey:Void(g:MFGraphics)
+		}
+		
+		Public Function drawTouchKeyBoardById:Void(g:MFGraphics, id:Int, x:Int, y:Int)
+			touchkeyboardDrawer.setActionId(id)
+			touchkeyboardDrawer.draw(g, x, y)
+		}
+		
+		Public Function drawTouchGameKeyBoardById:Void(g:MFGraphics, id:Int, x:Int, y:Int)
+			touchgamekeyboardDrawer.setActionId(id)
+			touchgamekeyboardDrawer.draw(g, x, y)
+		}
+		
+		Public Method drawArcLine:Void(g:MFGraphics, centerx:Int, centery:Int, pointx:Int, pointy:Int)
+			g.setColor(16711680)
+			MyAPI.drawLine(g, centerx, centery, pointx, pointy)
+		End
+		
+		Private Method transTouchPointX:Int(directkey:TouchDirectKey, pointx:Int, pointy:Int)
+			Int reset_x = pointx - 32
+			Int reset_y = pointy - TitleState.CHARACTER_RECORD_BG_OFFSET
+			
+			If ((reset_x * reset_x) + (reset_y * reset_y) > RollPlatformSpeedC.COLLISION_OFFSET_Y) Then
+				Return ((Cos(directkey.getDegree()) * 16) / COMFIRM_FRAME_ID) + 32
+			EndIf
+			
+			Return pointx
+		End
+		
+		Private Method transTouchPointY:Int(directkey:TouchDirectKey, pointx:Int, pointy:Int)
+			Int reset_x = pointx - 32
+			Int reset_y = pointy - TitleState.CHARACTER_RECORD_BG_OFFSET
+			
+			If ((reset_x * reset_x) + (reset_y * reset_y) > RollPlatformSpeedC.COLLISION_OFFSET_Y) Then
+				Return ((Sin(directkey.getDegree()) * 16) / COMFIRM_FRAME_ID) + TitleState.CHARACTER_RECORD_BG_OFFSET
+			EndIf
+			
+			Return pointy
+		End
+		
+		Private Method drawTouchKeyDirectPad:Void(g:MFGraphics)
+			Int degree = 0
+			
+			If (Key.touchdirectgamekey <> Null) Then
+				degree = Key.touchdirectgamekey.getDegree()
+			EndIf
+			
+			Int id = 0
+			
+			If (degree >= 248 And degree < 292) Then
+				id = 0
+			ElseIf (degree >= 292 And degree < 337) Then
+				id = 2
+			ElseIf ((degree >= 0 And degree < 22) Or (degree >= 337 And degree <= MDPhone.SCREEN_WIDTH)) Then
+				id = STATE_SELECT_RACE_STAGE
+			ElseIf (degree >= 22 And degree < 67) Then
+				id = STATE_SCORE_RANKING
+			ElseIf (degree >= 67 And degree < StringIndex.STR_RIGHT_ARROW) Then
+				id = STATE_SELECT_NORMAL_STAGE
+			ElseIf (degree >= StringIndex.STR_RIGHT_ARROW And degree < 157) Then
+				id = STATE_SPECIAL
+			ElseIf (degree >= 157 And degree < 202) Then
+				id = STATE_SPECIAL_TO_GMAE
+			ElseIf (degree >= 202 And degree < 248) Then
+				id = STATE_ENDING
+			EndIf
+			
+			drawTouchGameKeyBoardById(g, id, 32, TitleState.CHARACTER_RECORD_BG_OFFSET)
+		End
+		
+		/* JADX WARNING: inconsistent code. */
+		/* Code decompiled incorrectly, please refer dest instructions dump. */
+		Public Method drawTouchKeyDirect:Void(r7:com.sega.mobile.framework.device.MFGraphics)
+			/*
+			r6 = Self
+			r5 = 16777216; // 0x1000000 Float:2.3509887E-38 double:8.289046E-317
+			r4 = 138; // 0x8a Float:1.93E-43 double:6.8E-322
+			r3 = 123; // 0x7b Float:1.72E-43 double:6.1E-322
+			r0 = GameEngine.Key.touchdirectgamekey
+			r0 = GameEngine.TouchDirectKey.IsKeyReleased()
+			
+			If (r0 = 0) goto L_0x0045
+		L_0x000e:
+			r0 = 0
+			r1 = 32
+			r2 = 128; // 0x80 Float:1.794E-43 double:6.32E-322
+			drawTouchGameKeyBoardById(r7, r0, r1, r2)
+		L_0x0016:
+			r0 = GameEngine.Key.press(r5)
+			
+			If (r0 <> 0) goto L_0x0022
+		L_0x001c:
+			r0 = GameEngine.Key.repeat(r5)
+			
+			If (r0 = 0) goto L_0x0059
+		L_0x0022:
+			r0 = 10
+			r1 = SCREEN_WIDTH
+			r1 = r1 + -22
+			drawTouchGameKeyBoardById(r7, r0, r1, r3)
+		L_0x002b:
+			r0 = GameEngine.Key.B_SEL
+			r0 = GameEngine.Key.press(r0)
+			
+			If (r0 <> 0) goto L_0x003b
+		L_0x0033:
+			r0 = GameEngine.Key.B_SEL
+			r0 = GameEngine.Key.repeat(r0)
+			
+			If (r0 = 0) goto L_0x0063
+		L_0x003b:
+			r0 = 12
+			r1 = SCREEN_WIDTH
+			r1 = r1 + -67
+			drawTouchGameKeyBoardById(r7, r0, r1, r4)
+		L_0x0044:
+			Return
+		L_0x0045:
+			r0 = GameEngine.Key.touchdirectgamekey
+			r0 = GameEngine.TouchDirectKey.IsKeyDragged()
+			
+			If (r0 <> 0) goto L_0x0055
+		L_0x004d:
+			r0 = GameEngine.Key.touchdirectgamekey
+			r0 = GameEngine.TouchDirectKey.IsKeyPressed()
+			
+			If (r0 = 0) goto L_0x0016
+		L_0x0055:
+			r6.drawTouchKeyDirectPad(r7)
+			goto L_0x0016
+		L_0x0059:
+			r0 = 9
+			r1 = SCREEN_WIDTH
+			r1 = r1 + -22
+			drawTouchGameKeyBoardById(r7, r0, r1, r3)
+			goto L_0x002b
+		L_0x0063:
+			r0 = 11
+			r1 = SCREEN_WIDTH
+			r1 = r1 + -67
+			drawTouchGameKeyBoardById(r7, r0, r1, r4)
+			goto L_0x0044
+			*/
+			throw New UnsupportedOperationException("Method not decompiled: State.State.drawTouchKeyDirect(com.sega.mobile.framework.device.MFGraphics):Void")
+		End
+		
+		Public Function setTry:Void()
+			
+			If (trytimes > 0) Then
+				trytimes -= 0
+			Else
+				trytimes = 0
+			EndIf
+			
+		}
+		
+		Public Function IsActiveGame:Bool()
+			Return False
+		}
+		
+		Public Function IsToolsCharge:Bool()
+			Return False
+		}
+		
+		Public Function activeGameProcess:Void(state:Bool)
+			IsPaid = state
+		}
+		
+		Public Function load_bp_string:Void()
+			setMenu()
+		}
+		
+		Public Function setMenu:Void()
+			TitleState.setMainMenu()
+			GameState.setPauseMenu()
+		}
+		
+		Public Function init_bp:Void()
+		}
+		
+		Public Function loadBPRecord:Void()
+		}
+		
+		Public Function saveBPRecord:Void()
+		}
+		
+		Public Function BP_chargeLogic:Bool(index:Int)
+			Return False
+		}
+		
+		Public Function BP_IsChargeByIndex:Bool(index:Int)
+			Return False
+		}
+		
+		Public Method BP_payingInit:Void(text_id:Int, title_id:Int)
+			MyAPI.initString()
+			strForShow = MyAPI.getStrings(BPstrings[text_id], MENU_RECT_WIDTH - BAR_HEIGHT)
+			BPPayingTitle = BPstrings[title_id]
+			Self.IsInBP = True
+		End
+		
+		Public Method BP_payingDraw:Void(g:MFGraphics)
+			menuBgDraw(g)
+		End
+		
+		Public Function BP_loadImage:Void()
+		}
+		
+		Public Method secondEnsureInit:Void()
+			Self.isConfirm = False
+			Self.confirmframe = 0
+			
+			If (muiAniDrawer = Null) Then
+				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
+			EndIf
+			
+			Key.touchSecondEnsureClose()
+			Key.touchSecondEnsureInit()
+		End
+		
+		Public Method secondEnsureInit2:Void()
+			Self.isConfirm = False
+			Self.confirmframe = 0
+			
+			If (muiAniDrawer = Null) Then
+				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
+			EndIf
+			
+			Key.touchSecondEnsureClose()
+			Key.touchSecondEnsureInit()
+		End
+		
+		Public Method secondEnsureLogic:Int()
+			
+			If (Key.touchsecondensurereturn.Isin() And Key.touchsecondensure.IsClick()) Then
+				Self.confirmcursor = 2
+			EndIf
+			
+			If (Key.touchsecondensureyes.Isin() And Key.touchsecondensure.IsClick()) Then
+				Self.confirmcursor = 0
+			EndIf
+			
+			If (Key.touchsecondensureno.Isin() And Key.touchsecondensure.IsClick()) Then
+				Self.confirmcursor = 0
+			EndIf
+			
+			If (Self.isConfirm) Then
+				Self.confirmframe += 0
+				
+				If (Self.confirmframe > STATE_ENDING) Then
 					Return STATE_GAME
 				EndIf
-				
+			EndIf
+			
+			If (Key.touchsecondensureyes.IsButtonPress() And Self.confirmcursor = 0 And Not Self.isConfirm) Then
+				Self.isConfirm = True
+				Self.confirmframe = 0
+				SoundSystem.getInstance().playSe(STATE_GAME)
+				Return 0
+			ElseIf (Key.touchsecondensureno.IsButtonPress() And Self.confirmcursor = 0 And Not Self.isConfirm) Then
+				SoundSystem.getInstance().playSe(2)
+				Return 2
+			ElseIf ((Not Key.press(Key.B_BACK) And Not Key.touchsecondensurereturn.IsButtonPress()) Or Not fadeChangeOver() Or Self.isConfirm) Then
+				Return 0
+			Else
+				SoundSystem.getInstance().playSe(2)
 				Return 2
 			EndIf
-		EndIf
-		
-		If (Key.touchitemsselect2_1.IsButtonPress() And Self.itemsselectcursor = 0 And Not Self.isItemsSelect) Then
-			Self.isItemsSelect = True
-			Self.itemsselectframe = 0
-			Self.Finalitemsselectcursor = 0
-			SoundSystem.getInstance().playSe(STATE_GAME)
-			Return 0
-		ElseIf (Key.touchitemsselect2_2.IsButtonPress() And Self.itemsselectcursor = 0 And Not Self.isItemsSelect) Then
-			Self.isItemsSelect = True
-			Self.itemsselectframe = 0
-			Self.Finalitemsselectcursor = 0
-			SoundSystem.getInstance().playSe(STATE_GAME)
-			Return 0
-		ElseIf ((Not Key.press(Key.B_BACK) And Not Key.touchitemsselect2_return.IsButtonPress()) Or Not fadeChangeOver()) Then
-			Return 0
-		Else
-			SoundSystem.getInstance().playSe(2)
-			Return STATE_SELECT_RACE_STAGE
-		EndIf
-		
-	End
-
-	Public Method itemsSelect2Draw:Void(g:MFGraphics, items1:Int, items2:Int)
-		
-		If (muiAniDrawer = Null) Then
-			muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
-			Return
-		EndIf
-		
-		AnimationDrawer animationDrawer = muiAniDrawer
-		Int i = (Key.touchitemsselect2_1.Isin() And Self.itemsselectcursor = 0) ? STATE_GAME : 0
-		animationDrawer.setActionId(i + 55)
-		muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 18)
-		animationDrawer = muiAniDrawer
-		
-		If (Key.touchitemsselect2_2.Isin() And Self.itemsselectcursor = 0) Then
-			i = 0
-		Else
-			i = 0
-		EndIf
-		
-		animationDrawer.setActionId(i + 55)
-		muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + 18)
-		muiAniDrawer.setActionId(items1)
-		muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 18)
-		muiAniDrawer.setActionId(items2)
-		muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + 18)
-		animationDrawer = muiAniDrawer
-		
-		If (Key.touchitemsselect2_return.Isin()) Then
-			i = STATE_SELECT_NORMAL_STAGE
-		Else
-			i = 0
-		EndIf
-		
-		animationDrawer.setActionId(i + 61)
-		muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
-	End
-
-	Public Method soundVolumnInit:Void()
-		Key.touchSecondEnsureClose()
-		Key.touchSecondEnsureInit()
-		Self.timeCnt = 0
-		Self.isSoundVolumnClick = False
-		fadeInit(0, 192)
-		
-		If (muiAniDrawer = Null) Then
-			muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
-		EndIf
-		
-	End
-
-	Public Method soundVolumnLogic:Int()
-		
-		If (Key.touchsecondensurereturn.Isin() And Key.touchsecondensure.IsClick()) Then
-			Self.confirmcursor = 2
-		EndIf
-		
-		If (Key.touchsecondensureyes.Isin() And Key.touchsecondensure.IsClick()) Then
-			Self.confirmcursor = 0
-		EndIf
-		
-		If (Key.touchsecondensureno.Isin() And Key.touchsecondensure.IsClick()) Then
-			Self.confirmcursor = 0
-		EndIf
-		
-		If (Key.touchsecondensureyes.Isin()) Then
-			Self.timeCnt += 0
 			
-			If (Self.timeCnt <= STATE_SCORE_RANKING And Not Self.isSoundVolumnClick) Then
-				If (GlobalResource.soundConfig <= 0) Then
-					GlobalResource.soundConfig = 0
-				Else
-					GlobalResource.soundConfig -= 0
-				EndIf
-				
-				If (GlobalResource.soundConfig = 0) Then
-					GlobalResource.seConfig = 0
-				EndIf
-				
-				SoundSystem.getInstance().setSoundState(GlobalResource.soundConfig)
-				SoundSystem.getInstance().setSeState(GlobalResource.seConfig)
-				Self.isSoundVolumnClick = True
-			ElseIf (Self.timeCnt > STATE_SCORE_RANKING And Self.timeCnt Mod 2 = 0) Then
-				If (GlobalResource.soundConfig <= 0) Then
-					GlobalResource.soundConfig = 0
-				Else
-					GlobalResource.soundConfig -= 0
-				EndIf
-				
-				If (GlobalResource.soundConfig = 0) Then
-					GlobalResource.seConfig = 0
-				EndIf
-				
-				SoundSystem.getInstance().setSoundState(GlobalResource.soundConfig)
-				SoundSystem.getInstance().setSeState(GlobalResource.seConfig)
+		End
+		
+		Public Method secondEnsureDirectLogic:Int()
+			
+			If (Key.touchsecondensurereturn.Isin() And Key.touchsecondensure.IsClick()) Then
+				Self.confirmcursor = 2
 			EndIf
 			
-		ElseIf (Key.touchsecondensureno.Isin()) Then
-			Self.timeCnt += 0
-			
-			If (Self.timeCnt <= STATE_SCORE_RANKING And Not Self.isSoundVolumnClick) Then
-				If (GlobalResource.soundConfig >= 15) Then
-					GlobalResource.soundConfig = 15
-				Else
-					GlobalResource.soundConfig += 0
-				EndIf
-				
-				If (GlobalResource.soundConfig > 0) Then
-					GlobalResource.seConfig = 0
-				EndIf
-				
-				Self.isSoundVolumnClick = True
-				SoundSystem.getInstance().setSoundState(GlobalResource.soundConfig)
-				SoundSystem.getInstance().setSeState(GlobalResource.seConfig)
-				
-				If (GlobalResource.soundConfig = 0) Then
-					SoundSystem.getInstance().resumeBgm()
-				EndIf
-				
-			ElseIf (Self.timeCnt > STATE_SCORE_RANKING And Self.timeCnt Mod 2 = 0) Then
-				If (GlobalResource.soundConfig >= 15) Then
-					GlobalResource.soundConfig = 15
-				Else
-					GlobalResource.soundConfig += 0
-				EndIf
-				
-				If (GlobalResource.soundConfig > 0) Then
-					GlobalResource.seConfig = 0
-				EndIf
-				
-				SoundSystem.getInstance().setSoundState(GlobalResource.soundConfig)
-				SoundSystem.getInstance().setSeState(GlobalResource.seConfig)
-				
-				If (GlobalResource.soundConfig = 0) Then
-					SoundSystem.getInstance().resumeBgm()
-				EndIf
+			If (Key.touchsecondensureyes.Isin() And Key.touchsecondensure.IsClick()) Then
+				Self.confirmcursor = 0
 			EndIf
 			
-		Else
-			Self.timeCnt = 0
-			Self.isSoundVolumnClick = False
-		EndIf
-		
-		If (GlobalResource.soundConfig >= 15) Then
-			GlobalResource.soundConfig = 15
-		ElseIf (GlobalResource.soundConfig <= 0) Then
-			GlobalResource.soundConfig = 0
-		EndIf
-		
-		If (GlobalResource.soundConfig > 0) Then
-			GlobalResource.seConfig = 0
-		EndIf
-		
-		If ((Not Key.press(Key.B_BACK) And Not Key.touchsecondensurereturn.IsButtonPress()) Or Not fadeChangeOver()) Then
-			Return 0
-		EndIf
-		
-		SoundSystem.getInstance().playSe(2)
-		Return 2
-	End
-
-	Public Method soundVolumnDraw:Void(g:MFGraphics)
-		
-		If (muiAniDrawer = Null) Then
-			muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
-			Return
-		EndIf
-		
-		Int i
-		muiAniDrawer.setActionId(54)
-		muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
-		AnimationDrawer animationDrawer = muiAniDrawer
-		
-		If (Key.touchsecondensureyes.Isin() And Self.confirmcursor = 0) Then
-			i = 0
-		Else
-			i = 0
-		EndIf
-		
-		animationDrawer.setActionId(i + 59)
-		muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
-		animationDrawer = muiAniDrawer
-		
-		If (Key.touchsecondensureno.Isin() And Self.confirmcursor = 0) Then
-			i = 0
-		Else
-			i = 0
-		EndIf
-		
-		animationDrawer.setActionId(i + 59)
-		muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
-		muiAniDrawer.setActionId(89)
-		muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
-		muiAniDrawer.setActionId(90)
-		muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
-		muiAniDrawer.setActionId(71)
-		muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
-		muiAniDrawer.setActionId(72)
-		For (Int i2 = 0; i2 <= GlobalResource.soundConfig; i2 += 0)
-			muiAniDrawer.draw(g, ((SCREEN_WIDTH Shr 1) - PAGE_BACKGROUND_HEIGHT) + ((i2 - 1) * STATE_ENDING), (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
-		EndIf
-		muiAniDrawer.setActionId(GlobalResource.soundConfig + 73)
-		muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, SCREEN_HEIGHT Shr 1)
-		animationDrawer = muiAniDrawer
-		
-		If (Key.touchsecondensurereturn.Isin()) Then
-			i = STATE_SELECT_NORMAL_STAGE
-		Else
-			i = 0
-		EndIf
-		
-		animationDrawer.setActionId(i + 61)
-		muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
-	End
-
-	Public Method spSenorSetInit:Void()
-		Key.touchItemsSelect3Init()
-		Self.itemsselectcursor = 0
-		Self.isItemsSelect = False
-		fadeInit(0, 102)
-		
-		If (muiAniDrawer = Null) Then
-			muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
-		EndIf
-		
-	End
-
-	Public Method spSenorSetLogic:Int()
-		
-		If (Key.touchitemsselect3_return.Isin() And Key.touchitemsselect3.IsClick()) Then
-			Self.itemsselectcursor = 2
-		EndIf
-		
-		If (Key.touchitemsselect3_1.Isin() And Key.touchitemsselect3.IsClick()) Then
-			Self.itemsselectcursor = 0
-		EndIf
-		
-		If (Key.touchitemsselect3_2.Isin() And Key.touchitemsselect3.IsClick()) Then
-			Self.itemsselectcursor = 0
-		EndIf
-		
-		If (Key.touchitemsselect3_3.Isin() And Key.touchitemsselect3.IsClick()) Then
-			Self.itemsselectcursor = STATE_SCORE_RANKING
-		EndIf
-		
-		If (Self.isItemsSelect) Then
-			Self.itemsselectframe += 0
+			If (Key.touchsecondensureno.Isin() And Key.touchsecondensure.IsClick()) Then
+				Self.confirmcursor = 0
+			EndIf
 			
-			If (Self.itemsselectframe > STATE_ENDING) Then
-				fadeInit(220, 102)
+			If (Key.touchsecondensureyes.IsButtonPress() And Self.confirmcursor = 0) Then
+				Self.isConfirm = True
+				Self.confirmframe = 0
+				SoundSystem.getInstance().playSe(STATE_GAME)
+				Return STATE_GAME
+			ElseIf (Key.touchsecondensureno.IsButtonPress() And Self.confirmcursor = 0) Then
+				SoundSystem.getInstance().playSe(2)
+				Return 2
+			ElseIf ((Not Key.press(Key.B_BACK) And Not Key.touchsecondensurereturn.IsButtonPress()) Or Not fadeChangeOver()) Then
+				Return 0
+			Else
+				SoundSystem.getInstance().playSe(2)
+				Return 2
+			EndIf
+			
+		End
+		
+		Public Method SecondEnsurePanelDraw:Void(g:MFGraphics, ani_id:Int)
+			
+			If (muiAniDrawer = Null) Then
+				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
+				Return
+			EndIf
+			
+			muiAniDrawer.setActionId(54)
+			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
+			AnimationDrawer animationDrawer = muiAniDrawer
+			Int i = (Key.touchsecondensureyes.Isin() And Self.confirmcursor = 0) ? STATE_GAME : 0
+			animationDrawer.setActionId(i + 59)
+			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
+			animationDrawer = muiAniDrawer
+			
+			If (Key.touchsecondensureno.Isin() And Self.confirmcursor = 0) Then
+				i = 0
+			Else
+				i = 0
+			EndIf
+			
+			animationDrawer.setActionId(i + 59)
+			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
+			muiAniDrawer.setActionId(46)
+			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
+			muiAniDrawer.setActionId(47)
+			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
+			muiAniDrawer.setActionId(ani_id)
+			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
+			animationDrawer = muiAniDrawer
+			
+			If (Key.touchsecondensurereturn.Isin()) Then
+				i = STATE_SELECT_NORMAL_STAGE
+			Else
+				i = 0
+			EndIf
+			
+			animationDrawer.setActionId(i + 61)
+			muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
+			
+			If (Self.isConfirm And Self.confirmframe > STATE_ENDING) Then
+				g.setColor(0)
+				MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+			EndIf
+			
+		End
+		
+		Public Method itemsSelect2Init:Void()
+			Key.touchItemsSelect2Init()
+			Self.itemsselectcursor = 0
+			Self.isItemsSelect = False
+			fadeInit(0, 192)
+		End
+		
+		Public Method itemsSelect2Logic:Int()
+			
+			If (Key.touchitemsselect2_return.Isin() And Key.touchitemsselect2.IsClick()) Then
+				Self.itemsselectcursor = 2
+			EndIf
+			
+			If (Key.touchitemsselect2_1.Isin() And Key.touchitemsselect2.IsClick()) Then
+				Self.itemsselectcursor = 0
+			EndIf
+			
+			If (Key.touchitemsselect2_2.Isin() And Key.touchitemsselect2.IsClick()) Then
+				Self.itemsselectcursor = 0
+			EndIf
+			
+			If (Self.isItemsSelect) Then
+				Self.itemsselectframe += 0
 				
-				If (Self.Finalitemsselectcursor = 0) Then
-					Return STATE_GAME
-				EndIf
-				
-				If (Self.Finalitemsselectcursor = 0) Then
+				If (Self.itemsselectframe > STATE_ENDING) Then
+					fadeInit(220, 102)
+					
+					If (Self.Finalitemsselectcursor = 0) Then
+						Return STATE_GAME
+					EndIf
+					
 					Return 2
 				EndIf
-				
-				Return STATE_SCORE_RANKING
 			EndIf
-		EndIf
+			
+			If (Key.touchitemsselect2_1.IsButtonPress() And Self.itemsselectcursor = 0 And Not Self.isItemsSelect) Then
+				Self.isItemsSelect = True
+				Self.itemsselectframe = 0
+				Self.Finalitemsselectcursor = 0
+				SoundSystem.getInstance().playSe(STATE_GAME)
+				Return 0
+			ElseIf (Key.touchitemsselect2_2.IsButtonPress() And Self.itemsselectcursor = 0 And Not Self.isItemsSelect) Then
+				Self.isItemsSelect = True
+				Self.itemsselectframe = 0
+				Self.Finalitemsselectcursor = 0
+				SoundSystem.getInstance().playSe(STATE_GAME)
+				Return 0
+			ElseIf ((Not Key.press(Key.B_BACK) And Not Key.touchitemsselect2_return.IsButtonPress()) Or Not fadeChangeOver()) Then
+				Return 0
+			Else
+				SoundSystem.getInstance().playSe(2)
+				Return STATE_SELECT_RACE_STAGE
+			EndIf
+			
+		End
 		
-		If (Key.touchitemsselect3_1.IsButtonPress() And Self.itemsselectcursor = 0 And Not Self.isItemsSelect) Then
-			Self.isItemsSelect = True
-			Self.itemsselectframe = 0
-			Self.Finalitemsselectcursor = 0
-			SoundSystem.getInstance().playSe(STATE_GAME)
-			Return 0
-		ElseIf (Key.touchitemsselect3_2.IsButtonPress() And Self.itemsselectcursor = 0 And Not Self.isItemsSelect) Then
-			Self.isItemsSelect = True
-			Self.itemsselectframe = 0
-			Self.Finalitemsselectcursor = 0
-			SoundSystem.getInstance().playSe(STATE_GAME)
-			Return 0
-		ElseIf (Key.touchitemsselect3_3.IsButtonPress() And Self.itemsselectcursor = STATE_SCORE_RANKING And Not Self.isItemsSelect) Then
-			Self.isItemsSelect = True
-			Self.itemsselectframe = 0
-			Self.Finalitemsselectcursor = 2
-			SoundSystem.getInstance().playSe(STATE_GAME)
-			Return 0
-		ElseIf ((Not Key.press(Key.B_BACK) And Not Key.touchitemsselect2_return.IsButtonPress()) Or Not fadeChangeOver()) Then
-			Return 0
-		Else
+		Public Method itemsSelect2Draw:Void(g:MFGraphics, items1:Int, items2:Int)
+			
+			If (muiAniDrawer = Null) Then
+				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
+				Return
+			EndIf
+			
+			AnimationDrawer animationDrawer = muiAniDrawer
+			Int i = (Key.touchitemsselect2_1.Isin() And Self.itemsselectcursor = 0) ? STATE_GAME : 0
+			animationDrawer.setActionId(i + 55)
+			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 18)
+			animationDrawer = muiAniDrawer
+			
+			If (Key.touchitemsselect2_2.Isin() And Self.itemsselectcursor = 0) Then
+				i = 0
+			Else
+				i = 0
+			EndIf
+			
+			animationDrawer.setActionId(i + 55)
+			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + 18)
+			muiAniDrawer.setActionId(items1)
+			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 18)
+			muiAniDrawer.setActionId(items2)
+			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + 18)
+			animationDrawer = muiAniDrawer
+			
+			If (Key.touchitemsselect2_return.Isin()) Then
+				i = STATE_SELECT_NORMAL_STAGE
+			Else
+				i = 0
+			EndIf
+			
+			animationDrawer.setActionId(i + 61)
+			muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
+		End
+		
+		Public Method soundVolumnInit:Void()
+			Key.touchSecondEnsureClose()
+			Key.touchSecondEnsureInit()
+			Self.timeCnt = 0
+			Self.isSoundVolumnClick = False
+			fadeInit(0, 192)
+			
+			If (muiAniDrawer = Null) Then
+				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
+			EndIf
+			
+		End
+		
+		Public Method soundVolumnLogic:Int()
+			
+			If (Key.touchsecondensurereturn.Isin() And Key.touchsecondensure.IsClick()) Then
+				Self.confirmcursor = 2
+			EndIf
+			
+			If (Key.touchsecondensureyes.Isin() And Key.touchsecondensure.IsClick()) Then
+				Self.confirmcursor = 0
+			EndIf
+			
+			If (Key.touchsecondensureno.Isin() And Key.touchsecondensure.IsClick()) Then
+				Self.confirmcursor = 0
+			EndIf
+			
+			If (Key.touchsecondensureyes.Isin()) Then
+				Self.timeCnt += 0
+				
+				If (Self.timeCnt <= STATE_SCORE_RANKING And Not Self.isSoundVolumnClick) Then
+					If (GlobalResource.soundConfig <= 0) Then
+						GlobalResource.soundConfig = 0
+					Else
+						GlobalResource.soundConfig -= 0
+					EndIf
+					
+					If (GlobalResource.soundConfig = 0) Then
+						GlobalResource.seConfig = 0
+					EndIf
+					
+					SoundSystem.getInstance().setSoundState(GlobalResource.soundConfig)
+					SoundSystem.getInstance().setSeState(GlobalResource.seConfig)
+					Self.isSoundVolumnClick = True
+				ElseIf (Self.timeCnt > STATE_SCORE_RANKING And Self.timeCnt Mod 2 = 0) Then
+					If (GlobalResource.soundConfig <= 0) Then
+						GlobalResource.soundConfig = 0
+					Else
+						GlobalResource.soundConfig -= 0
+					EndIf
+					
+					If (GlobalResource.soundConfig = 0) Then
+						GlobalResource.seConfig = 0
+					EndIf
+					
+					SoundSystem.getInstance().setSoundState(GlobalResource.soundConfig)
+					SoundSystem.getInstance().setSeState(GlobalResource.seConfig)
+				EndIf
+				
+			ElseIf (Key.touchsecondensureno.Isin()) Then
+				Self.timeCnt += 0
+				
+				If (Self.timeCnt <= STATE_SCORE_RANKING And Not Self.isSoundVolumnClick) Then
+					If (GlobalResource.soundConfig >= 15) Then
+						GlobalResource.soundConfig = 15
+					Else
+						GlobalResource.soundConfig += 0
+					EndIf
+					
+					If (GlobalResource.soundConfig > 0) Then
+						GlobalResource.seConfig = 0
+					EndIf
+					
+					Self.isSoundVolumnClick = True
+					SoundSystem.getInstance().setSoundState(GlobalResource.soundConfig)
+					SoundSystem.getInstance().setSeState(GlobalResource.seConfig)
+					
+					If (GlobalResource.soundConfig = 0) Then
+						SoundSystem.getInstance().resumeBgm()
+					EndIf
+					
+				ElseIf (Self.timeCnt > STATE_SCORE_RANKING And Self.timeCnt Mod 2 = 0) Then
+					If (GlobalResource.soundConfig >= 15) Then
+						GlobalResource.soundConfig = 15
+					Else
+						GlobalResource.soundConfig += 0
+					EndIf
+					
+					If (GlobalResource.soundConfig > 0) Then
+						GlobalResource.seConfig = 0
+					EndIf
+					
+					SoundSystem.getInstance().setSoundState(GlobalResource.soundConfig)
+					SoundSystem.getInstance().setSeState(GlobalResource.seConfig)
+					
+					If (GlobalResource.soundConfig = 0) Then
+						SoundSystem.getInstance().resumeBgm()
+					EndIf
+				EndIf
+				
+			Else
+				Self.timeCnt = 0
+				Self.isSoundVolumnClick = False
+			EndIf
+			
+			If (GlobalResource.soundConfig >= 15) Then
+				GlobalResource.soundConfig = 15
+			ElseIf (GlobalResource.soundConfig <= 0) Then
+				GlobalResource.soundConfig = 0
+			EndIf
+			
+			If (GlobalResource.soundConfig > 0) Then
+				GlobalResource.seConfig = 0
+			EndIf
+			
+			If ((Not Key.press(Key.B_BACK) And Not Key.touchsecondensurereturn.IsButtonPress()) Or Not fadeChangeOver()) Then
+				Return 0
+			EndIf
+			
 			SoundSystem.getInstance().playSe(2)
-			Return STATE_SELECT_RACE_STAGE
-		EndIf
+			Return 2
+		End
 		
-	End
-
-	Public Method spSenorSetDraw:Void(g:MFGraphics)
+		Public Method soundVolumnDraw:Void(g:MFGraphics)
+			
+			If (muiAniDrawer = Null) Then
+				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
+				Return
+			EndIf
+			
+			Int i
+			muiAniDrawer.setActionId(54)
+			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
+			AnimationDrawer animationDrawer = muiAniDrawer
+			
+			If (Key.touchsecondensureyes.Isin() And Self.confirmcursor = 0) Then
+				i = 0
+			Else
+				i = 0
+			EndIf
+			
+			animationDrawer.setActionId(i + 59)
+			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
+			animationDrawer = muiAniDrawer
+			
+			If (Key.touchsecondensureno.Isin() And Self.confirmcursor = 0) Then
+				i = 0
+			Else
+				i = 0
+			EndIf
+			
+			animationDrawer.setActionId(i + 59)
+			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
+			muiAniDrawer.setActionId(89)
+			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
+			muiAniDrawer.setActionId(90)
+			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
+			muiAniDrawer.setActionId(71)
+			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
+			muiAniDrawer.setActionId(72)
+			For (Int i2 = 0; i2 <= GlobalResource.soundConfig; i2 += 0)
+				muiAniDrawer.draw(g, ((SCREEN_WIDTH Shr 1) - PAGE_BACKGROUND_HEIGHT) + ((i2 - 1) * STATE_ENDING), (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
+			EndIf
+			muiAniDrawer.setActionId(GlobalResource.soundConfig + 73)
+			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, SCREEN_HEIGHT Shr 1)
+			animationDrawer = muiAniDrawer
+			
+			If (Key.touchsecondensurereturn.Isin()) Then
+				i = STATE_SELECT_NORMAL_STAGE
+			Else
+				i = 0
+			EndIf
+			
+			animationDrawer.setActionId(i + 61)
+			muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
+		End
 		
-		If (muiAniDrawer = Null) Then
-			muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
-			Return
-		EndIf
+		Public Method spSenorSetInit:Void()
+			Key.touchItemsSelect3Init()
+			Self.itemsselectcursor = 0
+			Self.isItemsSelect = False
+			fadeInit(0, 102)
+			
+			If (muiAniDrawer = Null) Then
+				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
+			EndIf
+			
+		End
 		
-		AnimationDrawer animationDrawer = muiAniDrawer
-		Int i = (Key.touchitemsselect3_1.Isin() And Self.itemsselectcursor = 0) ? STATE_GAME : 0
-		animationDrawer.setActionId(i + 55)
-		muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 36)
-		animationDrawer = muiAniDrawer
+		Public Method spSenorSetLogic:Int()
+			
+			If (Key.touchitemsselect3_return.Isin() And Key.touchitemsselect3.IsClick()) Then
+				Self.itemsselectcursor = 2
+			EndIf
+			
+			If (Key.touchitemsselect3_1.Isin() And Key.touchitemsselect3.IsClick()) Then
+				Self.itemsselectcursor = 0
+			EndIf
+			
+			If (Key.touchitemsselect3_2.Isin() And Key.touchitemsselect3.IsClick()) Then
+				Self.itemsselectcursor = 0
+			EndIf
+			
+			If (Key.touchitemsselect3_3.Isin() And Key.touchitemsselect3.IsClick()) Then
+				Self.itemsselectcursor = STATE_SCORE_RANKING
+			EndIf
+			
+			If (Self.isItemsSelect) Then
+				Self.itemsselectframe += 0
+				
+				If (Self.itemsselectframe > STATE_ENDING) Then
+					fadeInit(220, 102)
+					
+					If (Self.Finalitemsselectcursor = 0) Then
+						Return STATE_GAME
+					EndIf
+					
+					If (Self.Finalitemsselectcursor = 0) Then
+						Return 2
+					EndIf
+					
+					Return STATE_SCORE_RANKING
+				EndIf
+			EndIf
+			
+			If (Key.touchitemsselect3_1.IsButtonPress() And Self.itemsselectcursor = 0 And Not Self.isItemsSelect) Then
+				Self.isItemsSelect = True
+				Self.itemsselectframe = 0
+				Self.Finalitemsselectcursor = 0
+				SoundSystem.getInstance().playSe(STATE_GAME)
+				Return 0
+			ElseIf (Key.touchitemsselect3_2.IsButtonPress() And Self.itemsselectcursor = 0 And Not Self.isItemsSelect) Then
+				Self.isItemsSelect = True
+				Self.itemsselectframe = 0
+				Self.Finalitemsselectcursor = 0
+				SoundSystem.getInstance().playSe(STATE_GAME)
+				Return 0
+			ElseIf (Key.touchitemsselect3_3.IsButtonPress() And Self.itemsselectcursor = STATE_SCORE_RANKING And Not Self.isItemsSelect) Then
+				Self.isItemsSelect = True
+				Self.itemsselectframe = 0
+				Self.Finalitemsselectcursor = 2
+				SoundSystem.getInstance().playSe(STATE_GAME)
+				Return 0
+			ElseIf ((Not Key.press(Key.B_BACK) And Not Key.touchitemsselect2_return.IsButtonPress()) Or Not fadeChangeOver()) Then
+				Return 0
+			Else
+				SoundSystem.getInstance().playSe(2)
+				Return STATE_SELECT_RACE_STAGE
+			EndIf
+			
+		End
 		
-		If (Key.touchitemsselect3_2.Isin() And Self.itemsselectcursor = 0) Then
-			i = 0
-		Else
-			i = 0
-		EndIf
+		Public Method spSenorSetDraw:Void(g:MFGraphics)
+			
+			If (muiAniDrawer = Null) Then
+				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
+				Return
+			EndIf
+			
+			AnimationDrawer animationDrawer = muiAniDrawer
+			Int i = (Key.touchitemsselect3_1.Isin() And Self.itemsselectcursor = 0) ? STATE_GAME : 0
+			animationDrawer.setActionId(i + 55)
+			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 36)
+			animationDrawer = muiAniDrawer
+			
+			If (Key.touchitemsselect3_2.Isin() And Self.itemsselectcursor = 0) Then
+				i = 0
+			Else
+				i = 0
+			EndIf
+			
+			animationDrawer.setActionId(i + 55)
+			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, ((SCREEN_HEIGHT Shr 1) - 36) + 36)
+			animationDrawer = muiAniDrawer
+			
+			If (Key.touchitemsselect3_3.Isin() And Self.itemsselectcursor = STATE_SCORE_RANKING) Then
+				i = 0
+			Else
+				i = 0
+			EndIf
+			
+			animationDrawer.setActionId(i + 55)
+			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, ((SCREEN_HEIGHT Shr 1) - 36) + 72)
+			muiAniDrawer.setActionId(70)
+			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 36)
+			muiAniDrawer.setActionId(69)
+			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, ((SCREEN_HEIGHT Shr 1) - 36) + 36)
+			muiAniDrawer.setActionId(68)
+			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, ((SCREEN_HEIGHT Shr 1) - 36) + 72)
+			animationDrawer = muiAniDrawer
+			
+			If (Key.touchitemsselect3_return.Isin()) Then
+				i = STATE_SELECT_NORMAL_STAGE
+			Else
+				i = 0
+			EndIf
+			
+			animationDrawer.setActionId(i + 61)
+			muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
+		End
 		
-		animationDrawer.setActionId(i + 55)
-		muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, ((SCREEN_HEIGHT Shr 1) - 36) + 36)
-		animationDrawer = muiAniDrawer
+		Public Function setSoundVolumnDown:Void()
+			
+			If (GlobalResource.soundConfig <= 0) Then
+				GlobalResource.soundConfig = 0
+			Else
+				GlobalResource.soundConfig -= 0
+			EndIf
+			
+			If (GlobalResource.soundConfig = 0) Then
+				GlobalResource.seConfig = 0
+			EndIf
+			
+			SoundSystem.getInstance().setVolumnState(GlobalResource.soundConfig)
+			SoundSystem.getInstance().setSeState(GlobalResource.seConfig)
+		}
 		
-		If (Key.touchitemsselect3_3.Isin() And Self.itemsselectcursor = STATE_SCORE_RANKING) Then
-			i = 0
-		Else
-			i = 0
-		EndIf
+		Public Function setSoundVolumnUp:Void()
+			
+			If (GlobalResource.soundConfig >= 15) Then
+				GlobalResource.soundConfig = 15
+			Else
+				GlobalResource.soundConfig += 0
+			EndIf
+			
+			If (GlobalResource.soundConfig = 0) Then
+				SoundSystem.getInstance().resumeBgm()
+			EndIf
+			
+			If (GlobalResource.soundConfig > 0) Then
+				GlobalResource.seConfig = 0
+			EndIf
+			
+			SoundSystem.getInstance().setVolumnState(GlobalResource.soundConfig)
+			SoundSystem.getInstance().setSeState(GlobalResource.seConfig)
+		}
 		
-		animationDrawer.setActionId(i + 55)
-		muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, ((SCREEN_HEIGHT Shr 1) - 36) + 72)
-		muiAniDrawer.setActionId(70)
-		muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 36)
-		muiAniDrawer.setActionId(69)
-		muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, ((SCREEN_HEIGHT Shr 1) - 36) + 36)
-		muiAniDrawer.setActionId(68)
-		muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, ((SCREEN_HEIGHT Shr 1) - 36) + 72)
-		animationDrawer = muiAniDrawer
+		Public Function getMain:Void(main:Main)
+			activity = main
+		}
 		
-		If (Key.touchitemsselect3_return.Isin()) Then
-			i = STATE_SELECT_NORMAL_STAGE
-		Else
-			i = 0
-		EndIf
+		Public Method setGameScore:Void(strScore:Int)
+			activity.setScore(strScore)
+		End
 		
-		animationDrawer.setActionId(i + 61)
-		muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
-	End
-
-	Public Function setSoundVolumnDown:Void()
-		
-		If (GlobalResource.soundConfig <= 0) Then
-			GlobalResource.soundConfig = 0
-		Else
-			GlobalResource.soundConfig -= 0
-		EndIf
-		
-		If (GlobalResource.soundConfig = 0) Then
-			GlobalResource.seConfig = 0
-		EndIf
-		
-		SoundSystem.getInstance().setVolumnState(GlobalResource.soundConfig)
-		SoundSystem.getInstance().setSeState(GlobalResource.seConfig)
-	}
-
-	Public Function setSoundVolumnUp:Void()
-		
-		If (GlobalResource.soundConfig >= 15) Then
-			GlobalResource.soundConfig = 15
-		Else
-			GlobalResource.soundConfig += 0
-		EndIf
-		
-		If (GlobalResource.soundConfig = 0) Then
-			SoundSystem.getInstance().resumeBgm()
-		EndIf
-		
-		If (GlobalResource.soundConfig > 0) Then
-			GlobalResource.seConfig = 0
-		EndIf
-		
-		SoundSystem.getInstance().setVolumnState(GlobalResource.soundConfig)
-		SoundSystem.getInstance().setSeState(GlobalResource.seConfig)
-	}
-
-	Public Function getMain:Void(main:Main)
-		activity = main
-	}
-
-	Public Method setGameScore:Void(strScore:Int)
-		activity.setScore(strScore)
-	End
-
-	Public Method sendMessage:Void(msg:Message, id:Int)
-		msg.what = id
-		activity.handler.handleMessage(msg)
-	End
+		Public Method sendMessage:Void(msg:Message, id:Int)
+			msg.what = id
+			activity.handler.handleMessage(msg)
+		End
 End
