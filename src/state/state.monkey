@@ -183,7 +183,7 @@ Class State Implements SonicDef, StringIndex Abstract
 		Const TOOL_TIP_WIDTH:Int = WARNING_WIDTH
 		Const WARNING_FONT_WIDTH:Int = (SCREEN_WIDTH - ((WARNING_X + 5) * 2)) ' (10 / 2)
 		Const WARNING_HEIGHT:Int = (WARNING_STR.Length * LINE_SPACE) + BAR_HEIGHT)
-		Const WARNING_STR:String[] = MyAPI.getStrings(WARNING_STR_ORIGNAL, WARNING_FONT_WIDTH)
+		Global WARNING_STR:String[] = MyAPI.getStrings(WARNING_STR_ORIGNAL, WARNING_FONT_WIDTH) ' Const
 		Const WARNING_STR_ORIGNAL:String = "WARNING: Starting a new game will overwrite your current game progress." ' "~u8b66~u544a~uff1a~u5f00~u59cb~u65b0~u6e38~u620f~u5c06~u8986~u76d6~u60a8~u5f53~u524d~u7684~u6e38~u620f~u8fdb~u5ea6"
 		Const WARNING_WIDTH:Int = (SCREEN_WIDTH - (WARNING_X * 2))
 		Const WARNING_X:Int = PickValue(SCREEN_WIDTH > SCREEN_HEIGHT, 50, 26)
