@@ -3,8 +3,8 @@
   <Files>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acblock.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>38</X>
-        <Y>30</Y>
+        <X>21</X>
+        <Y>16</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -768,8 +768,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\state.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>51</X>
-        <Y>1141</Y>
+        <X>11</X>
+        <Y>43</Y>
       </CursorPos>
       <DocGUID>9a004857-988c-416f-b563-9562724b042b</DocGUID>
       <Bookmarks />
@@ -784,8 +784,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\application.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>133</Y>
+        <X>9</X>
+        <Y>205</Y>
       </CursorPos>
       <DocGUID>7103fc55-2884-4565-a197-c2e363300f6e</DocGUID>
       <Bookmarks />
@@ -805,8 +805,8 @@
     <FolderStatus NodePath="Sonic_GBA\src" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\action" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine" Expanded="true" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\action" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\action\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\ext" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\lib" Expanded="false" />
