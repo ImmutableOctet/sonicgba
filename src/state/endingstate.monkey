@@ -8,6 +8,9 @@ Private
 	Import ending.specialending
 	Import ending.supersonicending
 	
+	' This import may be removed in the future.
+	Import state.titlestate
+	
 	Import sonicgba.playerobject
 	
 	Import com.sega.mobile.framework.device.mfgraphics
