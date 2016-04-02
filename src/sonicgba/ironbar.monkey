@@ -34,11 +34,11 @@ Class IronBar Extends GimmickObject
 				player.doPullBarMotion(Self.posY)
 				
 				' Magic number: 28 (Sound-effect ID)
-				If (Key.repeat(Key.gLeft)) Then
+				If (Key.repeated(Key.gLeft)) Then
 					player.setFootPositionX(preX - BAR_VELOCITY)
 					player.setAnimationId(28)
 					player.faceDirection = False
-				ElseIf (Key.repeat(Key.gRight)) Then
+				ElseIf (Key.repeated(Key.gRight)) Then
 					player.setFootPositionX(preX + BAR_VELOCITY)
 					player.setAnimationId(28)
 					player.faceDirection = True

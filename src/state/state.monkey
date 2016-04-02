@@ -1122,6 +1122,7 @@ Class State Implements SonicDef, StringIndex Abstract
 		
 		' This implementation may change in the future.
 		Method drawTouchKeyDirect:Void(var1:MFGraphics)
+			' Magic numbers everywhere:
 			Local var10000:TouchDirectKey = Key.touchdirectgamekey
 			
 			If (TouchDirectKey.IsKeyReleased()) Then
@@ -1138,13 +1139,13 @@ Class State Implements SonicDef, StringIndex Abstract
 				EndIf
 			EndIf
 			
-			If (Not Key.press(16777216) And Not Key.repeat(16777216)) Then
+			If (Not Key.press(16777216) And Not Key.repeated(16777216)) Then
 				drawTouchGameKeyBoardById(var1, 9, -22 + SCREEN_WIDTH, 123)
 			Else
 				drawTouchGameKeyBoardById(var1, 10, -22 + SCREEN_WIDTH, 123)
 			EndIf
 			
-			If (Not Key.press(Key.B_SEL) And Not Key.repeat(Key.B_SEL)) Then
+			If (Not Key.press(Key.B_SEL) And Not Key.repeated(Key.B_SEL)) Then
 				drawTouchGameKeyBoardById(var1, 11, -67 + SCREEN_WIDTH, 138)
 			Else
 				drawTouchGameKeyBoardById(var1, 12, -67 + SCREEN_WIDTH, 138)
