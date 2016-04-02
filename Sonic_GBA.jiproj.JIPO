@@ -768,16 +768,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\state.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>5</X>
-        <Y>527</Y>
+        <X>7</X>
+        <Y>1148</Y>
       </CursorPos>
       <DocGUID>9a004857-988c-416f-b563-9562724b042b</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\stringindex.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>36</X>
-        <Y>53</Y>
+        <X>7</X>
+        <Y>38</Y>
       </CursorPos>
       <DocGUID>a709b6ac-4158-4391-8ad7-291d70c547a5</DocGUID>
       <Bookmarks />

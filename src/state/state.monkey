@@ -777,14 +777,14 @@ Class State Implements SonicDef, StringIndex Abstract
 		End
 		
 		Method comfirmDraw:Void(g:MFGraphics, id:Int)
-			drawMenuFontById(g, COMFIRM_FRAME_ID, COMFIRM_X, COMFIRM_Y)
+			drawMenuFontById(g, 100, COMFIRM_X, COMFIRM_Y)
 			drawMenuFontById(g, id, COMFIRM_X, COMFIRM_Y - (MENU_SPACE Shr 1))
 			drawMenuFontById(g, 101, ((Self.cursor * FADE_FILL_WIDTH) + COMFIRM_X) - BAR_HEIGHT, COMFIRM_Y + (MENU_SPACE Shr 1))
 			drawMenuFontById(g, 10, COMFIRM_X, COMFIRM_Y + (MENU_SPACE Shr 1))
 		End
 		
 		Method confirmDraw:Void(g:MFGraphics, title:String)
-			drawMenuFontById(g, COMFIRM_FRAME_ID, COMFIRM_X, COMFIRM_Y)
+			drawMenuFontById(g, 100, COMFIRM_X, COMFIRM_Y)
 			MyAPI.drawBoldString(g, title, COMFIRM_X, ((COMFIRM_Y - CONFIRM_FRAME_OFFSET_Y) + 10) + LINE_SPACE, 17, MENU_BG_COLOR_1, 4656650)
 			drawMenuFontById(g, 101, ((Self.cursor * FADE_FILL_WIDTH) + COMFIRM_X) - BAR_HEIGHT, COMFIRM_Y + (MENU_SPACE Shr 1))
 			drawMenuFontById(g, 10, COMFIRM_X, COMFIRM_Y + (MENU_SPACE Shr 1))
@@ -796,7 +796,9 @@ Class State Implements SonicDef, StringIndex Abstract
 		
 		Method drawLowQualifyBackGround:Void(g:MFGraphics, color1:Int, color2:Int, offset:Int)
 			g.setColor(color1)
+			
 			MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+			
 			g.setColor(color2)
 			
 			Self.titleBgOffsetX += MENU_BG_SPEED
@@ -806,8 +808,6 @@ Class State Implements SonicDef, StringIndex Abstract
 			Self.titleBgOffsetY Mod= offset
 			
 			For Local x:= ((-offset) + Self.titleBgOffsetX) Until SCREEN_WIDTH
-				Int y = (-offset) - Self.titleBgOffsetY
-				
 				For Local y:= ((-offset) - Self.titleBgOffsetY) Until SCREEN_HEIGHT
 					MyAPI.fillRect(g, x, y, (offset Shr 1), (offset Shr 1))
 					MyAPI.fillRect(g, (offset Shr 1) + x, (offset Shr 1) + y, (offset Shr 1), (offset Shr 1))
@@ -1114,53 +1114,86 @@ Class State Implements SonicDef, StringIndex Abstract
 			' Empty implementation.
 		End
 		
-		Public Method drawArcLine:Void(g:MFGraphics, centerx:Int, centery:Int, pointx:Int, pointy:Int)
+		Method drawArcLine:Void(g:MFGraphics, centerx:Int, centery:Int, pointx:Int, pointy:Int)
 			g.setColor(16711680)
+			
 			MyAPI.drawLine(g, centerx, centery, pointx, pointy)
 		End
 		
-		Private Method transTouchPointX:Int(directkey:TouchDirectKey, pointx:Int, pointy:Int)
-			Int reset_x = pointx - 32
-			Int reset_y = pointy - TitleState.CHARACTER_RECORD_BG_OFFSET
+		' This implementation may change in the future.
+		Method drawTouchKeyDirect:Void(var1:MFGraphics)
+			Local var10000:TouchDirectKey = Key.touchdirectgamekey
+			
+			If (TouchDirectKey.IsKeyReleased()) Then
+				drawTouchGameKeyBoardById(var1, 0, 32, 128)
+			Else
+				var10000 = Key.touchdirectgamekey
+				
+				If (Not TouchDirectKey.IsKeyDragged()) Then
+					var10000 = Key.touchdirectgamekey
+					
+					If (Not TouchDirectKey.IsKeyPressed()) Then
+						drawTouchKeyDirectPad(var1)
+					EndIf
+				EndIf
+			EndIf
+			
+			If (Not Key.press(16777216) And Not Key.repeat(16777216)) Then
+				drawTouchGameKeyBoardById(var1, 9, -22 + SCREEN_WIDTH, 123)
+			Else
+				drawTouchGameKeyBoardById(var1, 10, -22 + SCREEN_WIDTH, 123)
+			EndIf
+			
+			If (Not Key.press(Key.B_SEL) And Not Key.repeat(Key.B_SEL)) Then
+				drawTouchGameKeyBoardById(var1, 11, -67 + SCREEN_WIDTH, 138)
+			Else
+				drawTouchGameKeyBoardById(var1, 12, -67 + SCREEN_WIDTH, 138)
+			EndIf
+		End
+	Private
+		' Methods:
+		Method transTouchPointX:Int(directkey:TouchDirectKey, pointx:Int, pointy:Int)
+			Local reset_x:= (pointx - 32)
+			Local reset_y:= (pointy - 128)
 			
 			If ((reset_x * reset_x) + (reset_y * reset_y) > RollPlatformSpeedC.COLLISION_OFFSET_Y) Then
-				Return ((Cos(directkey.getDegree()) * 16) / COMFIRM_FRAME_ID) + 32
+				Return ((Cos(directkey.getDegree()) * 16) / 100) + 32
 			EndIf
 			
 			Return pointx
 		End
 		
-		Private Method transTouchPointY:Int(directkey:TouchDirectKey, pointx:Int, pointy:Int)
-			Int reset_x = pointx - 32
-			Int reset_y = pointy - TitleState.CHARACTER_RECORD_BG_OFFSET
+		Method transTouchPointY:Int(directkey:TouchDirectKey, pointx:Int, pointy:Int)
+			Local reset_x:= (pointx - 32)
+			Local reset_y:= (pointy - 128)
 			
 			If ((reset_x * reset_x) + (reset_y * reset_y) > RollPlatformSpeedC.COLLISION_OFFSET_Y) Then
-				Return ((Sin(directkey.getDegree()) * 16) / COMFIRM_FRAME_ID) + TitleState.CHARACTER_RECORD_BG_OFFSET
+				Return ((Sin(directkey.getDegree()) * 16) / 100) + 128
 			EndIf
 			
 			Return pointy
 		End
 		
-		Private Method drawTouchKeyDirectPad:Void(g:MFGraphics)
-			Int degree = 0
+		Method drawTouchKeyDirectPad:Void(g:MFGraphics)
+			Local degree:= 0
 			
 			If (Key.touchdirectgamekey <> Null) Then
 				degree = Key.touchdirectgamekey.getDegree()
 			EndIf
 			
-			Int id = 0
+			Local id:= 0
 			
 			If (degree >= 248 And degree < 292) Then
 				id = 1
 			ElseIf (degree >= 292 And degree < 337) Then
 				id = 2
-			ElseIf ((degree >= 0 And degree < 22) Or (degree >= 337 And degree <= MDPhone.SCREEN_WIDTH)) Then
+			ElseIf ((degree >= 0 And degree < 22) Or (degree >= 337 And degree <= 360)) Then
 				id = STATE_SELECT_RACE_STAGE
 			ElseIf (degree >= 22 And degree < 67) Then
 				id = STATE_SCORE_RANKING
-			ElseIf (degree >= 67 And degree < StringIndex.STR_RIGHT_ARROW) Then
+			ElseIf (degree >= 67 And degree < 113) Then
 				id = STATE_SELECT_NORMAL_STAGE
-			ElseIf (degree >= StringIndex.STR_RIGHT_ARROW And degree < 157) Then
+			ElseIf (degree >= 113 And degree < 157) Then
 				id = STATE_SPECIAL
 			ElseIf (degree >= 157 And degree < 202) Then
 				id = STATE_SPECIAL_TO_GMAE
@@ -1168,83 +1201,7 @@ Class State Implements SonicDef, StringIndex Abstract
 				id = STATE_ENDING
 			EndIf
 			
-			drawTouchGameKeyBoardById(g, id, 32, TitleState.CHARACTER_RECORD_BG_OFFSET)
-		End
-		
-		/* JADX WARNING: inconsistent code. */
-		/* Code decompiled incorrectly, please refer dest instructions dump. */
-		Public Method drawTouchKeyDirect:Void(r7:com.sega.mobile.framework.device.MFGraphics)
-			/*
-			r6 = Self
-			r5 = 16777216; // 0x1000000 Float:2.3509887E-38 double:8.289046E-317
-			r4 = 138; // 0x8a Float:1.93E-43 double:6.8E-322
-			r3 = 123; // 0x7b Float:1.72E-43 double:6.1E-322
-			r0 = GameEngine.Key.touchdirectgamekey
-			r0 = GameEngine.TouchDirectKey.IsKeyReleased()
-			
-			If (r0 = 0) goto L_0x0045
-		L_0x000e:
-			r0 = 0
-			r1 = 32
-			r2 = 128; // 0x80 Float:1.794E-43 double:6.32E-322
-			drawTouchGameKeyBoardById(r7, r0, r1, r2)
-		L_0x0016:
-			r0 = GameEngine.Key.press(r5)
-			
-			If (r0 <> 0) goto L_0x0022
-		L_0x001c:
-			r0 = GameEngine.Key.repeat(r5)
-			
-			If (r0 = 0) goto L_0x0059
-		L_0x0022:
-			r0 = 10
-			r1 = SCREEN_WIDTH
-			r1 = r1 + -22
-			drawTouchGameKeyBoardById(r7, r0, r1, r3)
-		L_0x002b:
-			r0 = GameEngine.Key.B_SEL
-			r0 = GameEngine.Key.press(r0)
-			
-			If (r0 <> 0) goto L_0x003b
-		L_0x0033:
-			r0 = GameEngine.Key.B_SEL
-			r0 = GameEngine.Key.repeat(r0)
-			
-			If (r0 = 0) goto L_0x0063
-		L_0x003b:
-			r0 = 12
-			r1 = SCREEN_WIDTH
-			r1 = r1 + -67
-			drawTouchGameKeyBoardById(r7, r0, r1, r4)
-		L_0x0044:
-			Return
-		L_0x0045:
-			r0 = GameEngine.Key.touchdirectgamekey
-			r0 = GameEngine.TouchDirectKey.IsKeyDragged()
-			
-			If (r0 <> 0) goto L_0x0055
-		L_0x004d:
-			r0 = GameEngine.Key.touchdirectgamekey
-			r0 = GameEngine.TouchDirectKey.IsKeyPressed()
-			
-			If (r0 = 0) goto L_0x0016
-		L_0x0055:
-			r6.drawTouchKeyDirectPad(r7)
-			goto L_0x0016
-		L_0x0059:
-			r0 = 9
-			r1 = SCREEN_WIDTH
-			r1 = r1 + -22
-			drawTouchGameKeyBoardById(r7, r0, r1, r3)
-			goto L_0x002b
-		L_0x0063:
-			r0 = 11
-			r1 = SCREEN_WIDTH
-			r1 = r1 + -67
-			drawTouchGameKeyBoardById(r7, r0, r1, r4)
-			goto L_0x0044
-			*/
-			throw New UnsupportedOperationException("Method not decompiled: State.State.drawTouchKeyDirect(com.sega.mobile.framework.device.MFGraphics):Void")
+			drawTouchGameKeyBoardById(g, id, 32, 128)
 		End
 		
 		Public Function setTry:Void()
