@@ -766,12 +766,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\state\state.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\state\state.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>22</X>
-        <Y>40</Y>
+        <X>24</X>
+        <Y>300</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>92da4b06-d5bf-44ac-b796-7be48be3c7c2</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\stringindex.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -782,8 +783,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>22</X>
-        <Y>1142</Y>
+        <X>5</X>
+        <Y>1625</Y>
       </CursorPos>
       <DocGUID>c56a8fa0-c6b4-4779-9eeb-f2a47d843950</DocGUID>
       <Bookmarks />
