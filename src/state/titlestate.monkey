@@ -461,8 +461,29 @@ Class TitleState Extends State
 			MAIN_MENU_FUNCTION = MAIN_MENU_FUNCTION_MOREGAME
 		End
 		
+		Function drawTitle:Void(g:MFGraphics, layer:Int)
+			If (state = STATE_PRE_PRESS_START Or state = STATE_PRESS_START Or state = STATE_MOVING Or state = STATE_EXIT Or state = STATE_START_GAME Or state = STATE_SEGA_MORE) Then
+				Local scale:= (Float(MFDevice.getDeviceHeight()) / Float(titleLeftImage.getHeight()))
+				
+				g.saveCanvas()
+				g.scaleCanvas(scale, scale, TITLE_FRAME_HEIGHT, TITLE_FRAME_HEIGHT)
+				g.drawImage(titleLeftImage, TITLE_FRAME_HEIGHT, TITLE_FRAME_HEIGHT, STATE_RETURN_TO_LOGO_1)
+				g.restoreCanvas()
+				
+				g.saveCanvas()
+				g.scaleCanvas(scale, scale, MFDevice.getDeviceWidth(), TITLE_FRAME_HEIGHT)
+				g.drawImage(titleRightImage, MFDevice.getDeviceWidth(), TITLE_FRAME_HEIGHT, STATE_PRO_RACE_MODE)
+				g.restoreCanvas()
+				
+				g.saveCanvas()
+				g.scaleCanvas(scale, scale, MFDevice.getDeviceWidth(), MFDevice.getDeviceHeight())
+				g.drawImage(titleSegaImage, MFDevice.getDeviceWidth(), MFDevice.getDeviceHeight(), STATE_OPTION_SENSOR_SET)
+				g.restoreCanvas()
+			EndIf
+		End
+	Protected
 		' Constructor(s):
-		Method New()
+		Method Construct_TitleState:Void()
 			Self.STAGE_TOTAL_NUM = STATE_STAGE_SELECT
 			Self.count = TITLE_FRAME_HEIGHT
 			Self.titleScale = 1.0
@@ -518,133 +539,82 @@ Class TitleState Extends State
 			
 			state = TITLE_FRAME_HEIGHT
 			
-			Key.touchsoftkeyInit()
-			
 			Self.logoX = LOGO_POSITION_X
 			Self.logoY = LOGO_POSITION_Y
 			Self.sonicBigX = TITLE_FRAME_HEIGHT
+		End
+	Public
+		' Constructor(s):
+		Method New()
+			Construct_TitleState()
+			
+			Key.touchsoftkeyInit()
 			
 			initTitleRes()
 		End
 		
-		Public Function drawTitle:Void(g:MFGraphics, layer:Int)
+		Method New(stateId:Int)
+			Construct_TitleState()
 			
-			If (state = STATE_PRE_PRESS_START Or state = ZONE_NUM_OFFSET Or state = STATE_MOVING Or state = STATE_EXIT Or state = STATE_START_GAME Or state = STATE_SEGA_MORE) Then
-				Float scale = ((Float) MFDevice.getDeviceHeight()) / ((Float) titleLeftImage.getHeight())
-				g.saveCanvas()
-				g.scaleCanvas(scale, scale, TITLE_FRAME_HEIGHT, TITLE_FRAME_HEIGHT)
-				g.drawImage(titleLeftImage, TITLE_FRAME_HEIGHT, TITLE_FRAME_HEIGHT, STATE_RETURN_TO_LOGO_1)
-				g.restoreCanvas()
-				g.saveCanvas()
-				g.scaleCanvas(scale, scale, MFDevice.getDeviceWidth(), TITLE_FRAME_HEIGHT)
-				g.drawImage(titleRightImage, MFDevice.getDeviceWidth(), TITLE_FRAME_HEIGHT, STATE_PRO_RACE_MODE)
-				g.restoreCanvas()
-				g.saveCanvas()
-				g.scaleCanvas(scale, scale, MFDevice.getDeviceWidth(), MFDevice.getDeviceHeight())
-				g.drawImage(titleSegaImage, MFDevice.getDeviceWidth(), MFDevice.getDeviceHeight(), STATE_OPTION_SENSOR_SET)
-				g.restoreCanvas()
-			EndIf
-			
-		}
-		
-		Public Method TitleState:public(stateId:Int)
-			Self.STAGE_TOTAL_NUM = STATE_STAGE_SELECT
-			Self.count = TITLE_FRAME_HEIGHT
-			Self.titleScale = 1.0
-			Self.title_name_center_x = 77
-			Self.title_name_center_y = -53
-			Self.titleFrame = TITLE_FRAME_HEIGHT
-			Self.mainMenuBackFlag = False
-			Self.resetInfoCount = TITLE_FRAME_HEIGHT
-			Self.RESET_INFO_COUNT = STATE_OPTION_TIME_LIMIT
-			Self.optionCursor = New Int[OPTION_ELEMENT_NUM]
-			Self.isOptionDisFlag = False
-			Self.optionslide_getprey = ELEMENT_OFFSET
-			Self.optionslide_gety = ELEMENT_OFFSET
-			Self.offsetOfVolumeInterface = TITLE_FRAME_HEIGHT
-			Self.pressDelay = PRESS_DELAY
-			Self.pressDelay2 = OPENING_STATE_EMERALD_SHINING
-			Self.rankingScore = New Int[STATE_GOTO_GAME]
-			Self.timecount_ranking = TITLE_FRAME_HEIGHT
-			Self.offset_flag = TITLE_FRAME_HEIGHT
-			Self.RecordtimeScrollPosY = TITLE_FRAME_HEIGHT
-			Self.logoX = LOGO_POSITION_X
-			Self.logoGravity = STATE_EXIT
-			Self.copyOffsetX = TITLE_FRAME_HEIGHT
-			Self.opengingCursor = ELEMENT_OFFSET
-			Self.shakeCount = TITLE_FRAME_HEIGHT
-			Self.multiMainItems = New Int[]{STATE_OPENING, STATE_GOTO_GAME, STATE_MORE_GAME, STATE_EXIT, VISIBLE_OPTION_ITEMS_NUM}
-			Self.isAtMainMenu = True
-			Self.arrowPressState = TITLE_FRAME_HEIGHT
-			Self.timeAttackOffsetX = TITLE_FRAME_HEIGHT
-			Self.stageselectslide_getprey = ELEMENT_OFFSET
-			Self.stageselectslide_gety = ELEMENT_OFFSET
-			Self.stageSelectReturnFlag = False
-			Self.characterRecordDisFlag = False
-			Int[] iArr = New Int[STATE_EXIT]
-			iArr[TITLE_FRAME_HEIGHT] = ZONE_NUM_OFFSET
-			iArr[ZONE_NUM_OFFSET] = ZONE_NUM_OFFSET
-			iArr[STATE_MOVING] = STATE_MOVING
-			iArr[STATE_OPENING] = STATE_MOVING
-			iArr[STATE_START_GAME] = STATE_OPENING
-			iArr[STATE_GOTO_GAME] = STATE_OPENING
-			iArr[STATE_RACE_MODE] = STATE_MOVING
-			iArr[STATE_MORE_GAME] = STATE_MOVING
-			iArr[STATE_RANKING] = ZONE_NUM_OFFSET
-			iArr[VISIBLE_OPTION_ITEMS_NUM] = ZONE_NUM_OFFSET
-			Self.recordArrowOffsetXArray = iArr
-			Self.isTitleBGMPlay = False
-			Self.debug_bgm_state = TITLE_FRAME_HEIGHT
-			Self.debug_bgm_id = TITLE_FRAME_HEIGHT
-			state = TITLE_FRAME_HEIGHT
-			Self.logoX = LOGO_POSITION_X
-			Self.logoY = LOGO_POSITION_Y_2
-			Self.sonicBigX = TITLE_FRAME_HEIGHT
 			initTitleRes()
+			
 			Select (stateId)
 				Case STATE_MOVING
 					state = ZONE_NUM_OFFSET
+					
 					Self.nextState = ZONE_NUM_OFFSET
 					Self.logoY = LOGO_POSITION_Y
+					
 					SoundSystem.getInstance().playBgm(ZONE_NUM_OFFSET, False)
-					break
 				Case STATE_OPENING
 					state = STATE_STAGE_SELECT
+					
 					Self.nextState = STATE_STAGE_SELECT
 					preStageSelectState = STATE_CHARACTER_SELECT
 					Self.preCharaterSelectState = STATE_PRO_RACE_MODE
+					
 					menuInit(Self.STAGE_TOTAL_NUM)
 					initStageSelectRes()
+					
 					PlayerObject.stageModeState = ZONE_NUM_OFFSET
+					
 					SoundSystem.getInstance().playBgm(STATE_OPENING)
+					
 					Self.stage_sel_key = ZONE_NUM_OFFSET
-					break
 				Case STATE_START_GAME
 					rankingInit()
+					
 					state = STATE_GAMEOVER_RANKING
+					
 					Self.nextState = STATE_GAMEOVER_RANKING
+					
 					SoundSystem.getInstance().playBgm(STATE_START_GAME)
-					break
 				Case STATE_GOTO_GAME
 					state = STATE_STAGE_SELECT
+					
 					Self.nextState = STATE_STAGE_SELECT
 					preStageSelectState = STATE_MOVING
+					
 					menuInit(Self.STAGE_TOTAL_NUM)
 					initStageSelet()
+					
 					PlayerObject.stageModeState = TITLE_FRAME_HEIGHT
+					
 					SoundSystem.getInstance().playBgm(STATE_OPENING)
-					break
 				Case VISIBLE_OPTION_ITEMS_NUM
 					state = STATE_CHARACTER_SELECT
+					
 					Self.nextState = STATE_CHARACTER_SELECT
 					Self.preCharaterSelectState = STATE_PRO_RACE_MODE
 					Self.stage_sel_key = ZONE_NUM_OFFSET
+					
 					initCharacterSelectRes()
-					break
 			End Select
+			
 			Key.touchkeypauseClose()
 		End
 		
+		' Methods:
 		Public Method close:Void()
 			MFDevice.disableLayer(ELEMENT_OFFSET)
 			titleLeftImage = Null
