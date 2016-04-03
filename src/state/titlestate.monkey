@@ -219,8 +219,8 @@ Class TitleState Extends State
 		
 		Global IsSoundVolSet:Bool = False
 		
-		Global MAIN_MENU:Int[] = Null
-		Global MAIN_MENU_FUNCTION:Int[] = Null
+		Global MAIN_MENU:Int[]
+		Global MAIN_MENU_FUNCTION:Int[]
 		Global MENU_INTERVAL:Int = 0
 		Global MENU_OFFSET_X:Int = 0
 		
@@ -505,7 +505,7 @@ Class TitleState Extends State
 			Self.offset_flag = TITLE_FRAME_HEIGHT
 			Self.RecordtimeScrollPosY = TITLE_FRAME_HEIGHT
 			Self.logoX = LOGO_POSITION_X
-			Self.logoGravity = STATE_EXIT
+			Self.logoGravity = 12
 			Self.copyOffsetX = TITLE_FRAME_HEIGHT
 			Self.opengingCursor = ELEMENT_OFFSET
 			Self.shakeCount = TITLE_FRAME_HEIGHT
@@ -518,7 +518,7 @@ Class TitleState Extends State
 			Self.stageSelectReturnFlag = False
 			Self.characterRecordDisFlag = False
 			
-			Local iArr:= New Int[STATE_EXIT]
+			Local iArr:= New Int[12]
 			
 			iArr[TITLE_FRAME_HEIGHT] = ZONE_NUM_OFFSET
 			iArr[ZONE_NUM_OFFSET] = ZONE_NUM_OFFSET
@@ -570,7 +570,9 @@ Class TitleState Extends State
 					state = STATE_STAGE_SELECT
 					
 					Self.nextState = STATE_STAGE_SELECT
+					
 					preStageSelectState = STATE_CHARACTER_SELECT
+					
 					Self.preCharaterSelectState = STATE_PRO_RACE_MODE
 					
 					menuInit(Self.STAGE_TOTAL_NUM)
@@ -615,126 +617,137 @@ Class TitleState Extends State
 		End
 		
 		' Methods:
-		Public Method close:Void()
+		Method close:Void()
 			MFDevice.disableLayer(ELEMENT_OFFSET)
+			
 			titleLeftImage = Null
 			titleRightImage = Null
 			titleSegaImage = Null
+			
 			Animation.closeAnimationArray(Self.titleAni)
 			Self.titleAni = Null
+			
 			Animation.closeAnimationDrawer(Self.titleAniDrawer)
 			Self.titleAniDrawer = Null
+			
 			Animation.closeAnimationArray(Self.stageSelAni)
 			Self.stageSelAni = Null
+			
 			Animation.closeAnimationDrawer(Self.stageSelAniDrawer)
 			Self.stageSelAniDrawer = Null
+			
 			Animation.closeAnimationDrawer(Self.stageSelArrowUpDrawer)
 			Self.stageSelArrowUpDrawer = Null
+			
 			Animation.closeAnimationDrawer(Self.stageSelArrowDownDrawer)
 			Self.stageSelArrowDownDrawer = Null
+			
 			Animation.closeAnimationDrawer(Self.stageSelEmeraldDrawer)
 			Self.stageSelEmeraldDrawer = Null
+			
 			Animation.closeAnimationDrawer(Self.optionArrowUpDrawer)
 			Self.optionArrowUpDrawer = Null
+			
 			Animation.closeAnimationDrawer(Self.optionArrowDownDrawer)
 			Self.optionArrowDownDrawer = Null
+			
 			Animation.closeAnimationArray(Self.timeAttAni)
 			Self.timeAttAni = Null
+			
 			Animation.closeAnimationDrawer(Self.timeAttAniDrawer)
 			Self.timeAttAniDrawer = Null
+			
 			Animation.closeAnimationArray(Self.recordAni)
 			Self.recordAni = Null
+			
 			Animation.closeAnimationDrawer(Self.recordAniDrawer)
 			Self.recordAniDrawer = Null
+			
 			Animation.closeAnimationArray(Self.charSelAni)
 			Self.charSelAni = Null
+			
 			Animation.closeAnimationDrawer(Self.charSelAniDrawer)
 			Self.charSelAniDrawer = Null
+			
 			Animation.closeAnimationDrawer(Self.charSelCaseDrawer)
 			Self.charSelCaseDrawer = Null
+			
 			Animation.closeAnimationDrawer(Self.charSelRoleDrawer)
 			Self.charSelRoleDrawer = Null
+			
 			Animation.closeAnimationDrawer(Self.charSelArrowDrawer)
 			Self.charSelArrowDrawer = Null
+			
 			Animation.closeAnimationDrawer(Self.charSelTitleDrawer)
 			Self.charSelTitleDrawer = Null
+			
 			Animation.closeAnimationArray(Self.charSelFilAni)
 			Self.charSelFilAni = Null
+			
 			Animation.closeAnimationDrawer(Self.charSelFilAniDrawer)
 			Self.charSelFilAniDrawer = Null
+			
 			Animation.closeAnimationDrawer(Self.titleSonicDrawer)
 			Self.titleSonicDrawer = Null
+			
 			Self.logoImage = Null
 			Self.sonicBigImage = Null
 			Self.titleFrameImage = Null
 			Self.copyrightImage = Null
+			
 			openingClose()
+			
 			Animation.closeAnimationDrawer(Self.interruptDrawer)
 			Self.interruptDrawer = Null
+			
 			'System.gc()
-			try {
-				Thread.sleep(100)
-			} catch (Exception e) {
-				e.printStackTrace()
-			}
+			
+			'Thread.sleep(100)
 		End
 		
 		Public Method draw:Void(g:MFGraphics)
 			Select (state)
-				Case STATE_OPTION_HELP
-				Case STATE_OPTION_CREDIT
+				Case STATE_OPTION_HELP, STATE_OPTION_CREDIT
 					g.setFont(STATE_ABOUT)
-					break
 				Default
 					g.setFont(STATE_STAGE_SELECT)
-					break
 			End Select
+			
 			Select (state)
 				Case TITLE_FRAME_HEIGHT
 					Standard.drawSplash(g, MyAPI.zoomOut(SCREEN_WIDTH), MyAPI.zoomOut(SCREEN_HEIGHT))
-					break
 				Case ZONE_NUM_OFFSET
 					drawTitleBg(g)
-					break
 				Case STATE_MOVING
 					drawTitleBg(g)
 					drawMainMenu(g)
-					break
 				Case STATE_OPENING
 					openingDraw(g)
-					break
 				Case STATE_START_GAME
 					drawTitleBg(g)
 					drawMainMenu(g)
 					State.drawFade(g)
 					startGameDraw(g)
-					break
 				Case STATE_RACE_MODE
 					stageSelectDraw(g, ZONE_NUM_OFFSET)
 					drawTouchKeySelectStage(g)
 					State.drawSoftKey(g, True, True)
-					break
 				Case STATE_MORE_GAME
 					moregameDraw(g)
 					State.drawSoftKey(g, True, True)
-					break
 				Case STATE_RANKING
 					rankingDraw(g)
 					State.drawSoftKey(g, False, True)
-					break
 				Case VISIBLE_OPTION_ITEMS_NUM
 					optionDraw(g)
-					break
 				Case TOTAL_OPTION_ITEMS_NUM
 					helpDraw(g)
 					drawTouchKeyHelp(g)
 					State.drawSoftKey(g, False, True)
-					break
 				Case STATE_ABOUT
 					aboutDraw(g)
 					drawTouchKeyAbout(g)
 					State.drawSoftKey(g, False, True)
-					break
 				Case STATE_EXIT
 					drawTitleBg(g)
 					
@@ -744,137 +757,107 @@ Class TitleState Extends State
 					
 					State.drawFade(g)
 					SecondEnsurePanelDraw(g, STATE_STAGE_SELECT)
-					break
 				Case STATE_QUIT
 					Standard.drawMoreGame(g, MyAPI.zoomOut(SCREEN_WIDTH), MyAPI.zoomOut(SCREEN_HEIGHT))
-					break
 				Case STATE_STAGE_SELECT
 					drawStageSelect(g)
-					break
 				Case STATE_GAMEOVER_RANKING
 					rankingDraw(g)
 					State.drawSoftKey(g, False, True)
-					break
 				Case STATE_INTERRUPT
 					interruptDraw(g)
-					break
 				Case STATE_RESET_RECORD_ASK
 					menuBgDraw(g)
 					optionDraw(g)
 					State.drawFade(g)
 					comfirmDraw(g, StringIndex.STR_RESET_RECORD_COMFIRM)
 					State.drawSoftKey(g, True, True)
-					break
-				Case STATE_START_TO_MENU_1
-				Case STATE_START_TO_MENU_2
-				Case STATE_RETURN_TO_LOGO_1
-				Case STATE_RETURN_TO_LOGO_2
+				Case STATE_START_TO_MENU_1, STATE_START_TO_MENU_2, STATE_RETURN_TO_LOGO_1, STATE_RETURN_TO_LOGO_2
 					titleBgDraw0(g)
 					drawTitle1(g)
+					'drawTitle2(g)
 					
+					' This behavior may change in the future:
 					If (state <> ZONE_NUM_OFFSET Or (Millisecs() / 500) Mod 2 = 0) Then
 						drawTitle2(g)
-						break
+					Else
+						'drawTitle2(g)
 					EndIf
-					
-					drawTitle2(g)
-					break
 				Case STATE_CHARACTER_SELECT
 					drawCharacterSelect(g)
-					break
 				Case STATE_PRO_RACE_MODE
 					drawProTimeAttack(g)
-					break
 				Case STATE_CHARACTER_RECORD
 					drawCharacterRecord(g)
-					break
 				Case STATE_INTERGRADE_RECORD
 					drawIntergradeRecord(g)
-					break
 				Case STATE_OPTION_DIFF
 					optionDraw(g)
 					itemsSelect2Draw(g, STATE_OPTION_LANGUAGE, STATE_OPTION_HELP)
-					break
 				Case STATE_OPTION_SOUND
 					optionDraw(g)
 					itemsSelect2Draw(g, STATE_OPTION_CREDIT, STATE_OPTION_RESET_RECORD)
-					break
 				Case STATE_OPTION_VIBRATION
 					optionDraw(g)
 					itemsSelect2Draw(g, STATE_OPTION_CREDIT, STATE_OPTION_RESET_RECORD)
-					break
 				Case STATE_OPTION_TIME_LIMIT
 					optionDraw(g)
 					itemsSelect2Draw(g, STATE_OPTION_CREDIT, STATE_OPTION_RESET_RECORD)
-					break
 				Case TITLE_BG_OFFSET
 					optionDraw(g)
 					State.drawFade(g)
-					break
 				Case STATE_OPTION_SP_SET
 					optionDraw(g)
 					itemsSelect2Draw(g, STATE_OPTION_RESET_RECORD_ENSURE, STATE_PRE_PRESS_START)
-					break
 				Case STATE_OPTION_LANGUAGE
 					optionDraw(g)
 					menuOptionLanguageDraw(g)
-					break
 				Case STATE_OPTION_HELP
 					optionDraw(g)
 					helpDraw(g)
-					break
 				Case STATE_OPTION_CREDIT
 					optionDraw(g)
 					creditDraw(g)
-					break
 				Case STATE_OPTION_RESET_RECORD
 					optionDraw(g)
 					SecondEnsurePanelDraw(g, STATE_SCORE_UPDATED)
-					break
 				Case STATE_OPTION_RESET_RECORD_ENSURE
 					optionDraw(g)
 					SecondEnsurePanelDraw(g, 45)
-					break
 				Case STATE_PRE_PRESS_START
 					g.setColor(TITLE_FRAME_HEIGHT)
 					Self.titleAniDrawer.setActionId(TITLE_FRAME_HEIGHT)
 					State.drawFade(g)
-					break
 				Case STATE_OPTION_SOUND_VOLUMN
 					optionDraw(g)
 					soundVolumnDraw(g)
-					break
 				Case STATE_OPTION_SENSOR_SET
 					optionDraw(g)
 					spSenorSetDraw(g)
-					break
 				Case STATE_SEGA_MORE
 					drawTitleBg(g)
 					drawMainMenu(g)
 					State.drawFade(g)
 					SecondEnsurePanelDraw(g, 105)
-					break
 			End Select
 			
 			If (isDrawTouchPad And state <> 0 And state <> ZONE_NUM_OFFSET And state <> STATE_QUIT) Then
 				drawTouchKeyDirect(g)
 			EndIf
-			
 		End
 		
-		Public Method logic:Void()
-			
+		Method logic:Void()
 			If (Self.count > 0) Then
 				Self.count -= ZONE_NUM_OFFSET
 			EndIf
 			
 			fadeStateLogic()
+			
 			Select (state)
 				Case TITLE_FRAME_HEIGHT
-					
 					If (Key.press(Key.B_S1 | Key.gSelect)) Then
 						Standard.pressConfirm()
-					ElseIf (Key.press(STATE_MOVING)) Then
+					ElseIf (Key.press(2)) Then
 						Standard.pressCancel()
 					EndIf
 					
@@ -887,12 +870,14 @@ Class TitleState Extends State
 							EndIf
 							
 							GlobalResource.seConfig = ZONE_NUM_OFFSET
+							
 							SoundSystem.getInstance().setSoundState(GlobalResource.soundConfig)
 							SoundSystem.getInstance().setSeState(GlobalResource.seConfig)
 						Case STATE_MOVING
 							GlobalResource.soundSwitchConfig = ZONE_NUM_OFFSET
 							GlobalResource.soundConfig = TITLE_FRAME_HEIGHT
 							GlobalResource.seConfig = TITLE_FRAME_HEIGHT
+							
 							SoundSystem.getInstance().setSoundState(TITLE_FRAME_HEIGHT)
 							SoundSystem.getInstance().setSeState(TITLE_FRAME_HEIGHT)
 						Case STATE_OPENING
@@ -907,20 +892,24 @@ Class TitleState Extends State
 							Key.touchanykeyInit()
 							State.load_bp_string()
 						Default
+							' Nothing so far.
 					End Select
 				Case ZONE_NUM_OFFSET
 					Self.titleFrame += ZONE_NUM_OFFSET
 					
 					If (Self.titleFrame > 212) Then
 						state = STATE_OPENING
+						
 						openingInit()
 						Key.touchOpeningInit()
+						
 						SoundSystem.getInstance().playBgm(TITLE_FRAME_HEIGHT, False)
 					EndIf
 					
 					If (Self.titleFrame > STATE_START_GAME) Then
 						If (Key.buttonPress(Key.B_SEL)) Then
 							SoundSystem.getInstance().playSe(ZONE_NUM_OFFSET)
+							
 							gotoMainmenu()
 							State.setFadeOver()
 							Key.clear()
@@ -928,26 +917,29 @@ Class TitleState Extends State
 						
 						If (Key.press(Key.B_BACK) And State.fadeChangeOver()) Then
 							state = STATE_EXIT
+							
 							secondEnsureInit()
 							State.fadeInit(TITLE_FRAME_HEIGHT, 220)
+							
 							SoundSystem.getInstance().playSe(ZONE_NUM_OFFSET)
-							Self.quitFlag = ZONE_NUM_OFFSET
+							
+							Self.quitFlag = 1
 						EndIf
 					EndIf
-					
 				Case STATE_MOVING
 					mainMenuLogic()
 				Case STATE_OPENING
-					
 					If (openingLogic()) Then
 						state = STATE_PRE_PRESS_START
+						
 						Self.isTitleBGMPlay = True
+						
 						State.setFadeColor(MapManager.END_COLOR)
 						State.fadeInit(255, TITLE_FRAME_HEIGHT)
+						
 						openingClose()
 						initTitleRes()
 					EndIf
-					
 				Case STATE_START_GAME
 					startGameLogic()
 				Case STATE_GOTO_GAME
@@ -958,12 +950,12 @@ Class TitleState Extends State
 							SoundSystem.getInstance().stopBgm(True)
 							Standard.menuMoreGameSelected()
 							State.exitGame()
-						Case ZONE_NUM_OFFSET
-						Case RETURN_PRESSED
+						Case ZONE_NUM_OFFSET, RETURN_PRESSED
 							state = STATE_MOVING
 							menuInit(MAIN_MENU)
 							mainMenuInit()
 						Default
+							' Nothing so far.
 					End Select
 				Case STATE_RANKING
 					rankingLogic()
@@ -972,7 +964,8 @@ Class TitleState Extends State
 				Case TOTAL_OPTION_ITEMS_NUM
 					helpLogic()
 					
-					If (Key.press(STATE_MOVING)) Then
+					If (Key.press(2)) Then
+						' Nothing so far.
 					EndIf
 					
 					If (Key.press(Key.B_BACK)) Then
@@ -981,13 +974,11 @@ Class TitleState Extends State
 						mainMenuInit()
 						Key.touchHelpClose()
 					EndIf
-					
 				Case STATE_ABOUT
 					aboutLogic()
 				Case STATE_EXIT
 					quitLogic()
 				Case STATE_QUIT
-					
 					If (Key.press(Key.B_S1 | Key.gSelect)) Then
 						Standard.pressConfirm()
 					ElseIf (Key.press(STATE_MOVING)) Then
@@ -997,10 +988,14 @@ Class TitleState Extends State
 					Select (Standard.execMoreGame(True))
 						Case TITLE_FRAME_HEIGHT
 							Key.touchsoftkeyClose()
+							
 							GlobalResource.saveSystemConfig()
+							
 							State.exitGame()
-							sendMessage(New Message(), STATE_GOTO_GAME)
+							
+							'sendMessage(New Message(), STATE_GOTO_GAME)
 						Default
+							' Nothing so far.
 					End Select
 				Case STATE_STAGE_SELECT
 					stageSelectLogic()
@@ -1014,10 +1009,10 @@ Class TitleState Extends State
 							StageManager.resetGameRecord()
 							Self.resetInfoCount = Self.RESET_INFO_COUNT
 							state = VISIBLE_OPTION_ITEMS_NUM
-						Case ZONE_NUM_OFFSET
-						Case RETURN_PRESSED
+						Case ZONE_NUM_OFFSET, RETURN_PRESSED
 							state = VISIBLE_OPTION_ITEMS_NUM
 						Default
+							' Nothing so far.
 					End Select
 				Case STATE_START_TO_MENU_1
 					Self.logoX = MyAPI.calNextPositionReverse(Self.logoX, LOGO_POSITION_X, SCREEN_WIDTH + (SCREEN_WIDTH Shr ZONE_NUM_OFFSET), ZONE_NUM_OFFSET, STATE_MOVING)
@@ -1028,21 +1023,22 @@ Class TitleState Extends State
 						Self.nextState = STATE_MOVING
 						Self.logoY = LOGO_POSITION_Y_2
 					EndIf
-					
 				Case STATE_START_TO_MENU_2
-					Self.logoX = MyAPI.calNextPosition((double) Self.logoX, (double) LOGO_POSITION_X, ZONE_NUM_OFFSET, STATE_MOVING)
+					Self.logoX = MyAPI.calNextPosition(Double(Self.logoX), Double(LOGO_POSITION_X), ZONE_NUM_OFFSET, STATE_MOVING)
 					
 					If (Self.logoX = LOGO_POSITION_X) Then
 						state = STATE_MOVING
+						
 						Self.nextState = STATE_MOVING
 					EndIf
-					
 				Case STATE_RETURN_TO_LOGO_1
 					Self.logoX = MyAPI.calNextPositionReverse(Self.logoX, LOGO_POSITION_X, SCREEN_WIDTH + (SCREEN_WIDTH Shr ZONE_NUM_OFFSET), ZONE_NUM_OFFSET, STATE_MOVING)
 					
 					If (Self.logoX = SCREEN_WIDTH + (SCREEN_WIDTH Shr ZONE_NUM_OFFSET)) Then
 						Self.logoX = -(SCREEN_WIDTH Shr ZONE_NUM_OFFSET)
+						
 						state = STATE_RETURN_TO_LOGO_2
+						
 						Self.nextState = STATE_RETURN_TO_LOGO_2
 						Self.logoY = LOGO_POSITION_Y
 					EndIf
@@ -1050,19 +1046,18 @@ Class TitleState Extends State
 					If (Self.mainMenuBackFlag And Not Self.menuMoving) Then
 						Self.mainMenuBackFlag = False
 					EndIf
-					
 				Case STATE_RETURN_TO_LOGO_2
-					Self.logoX = MyAPI.calNextPosition((double) Self.logoX, (double) LOGO_POSITION_X, ZONE_NUM_OFFSET, STATE_MOVING)
+					Self.logoX = MyAPI.calNextPosition(Double(Self.logoX), Double(LOGO_POSITION_X), ZONE_NUM_OFFSET, STATE_MOVING)
 					
 					If (Self.logoX = LOGO_POSITION_X) Then
 						state = ZONE_NUM_OFFSET
+						
 						Self.nextState = ZONE_NUM_OFFSET
 					EndIf
 					
 					If (Self.mainMenuBackFlag And Not Self.menuMoving) Then
 						Self.mainMenuBackFlag = False
 					EndIf
-					
 				Case STATE_CHARACTER_SELECT
 					characterSelectLogic()
 				Case STATE_PRO_RACE_MODE
@@ -1088,10 +1083,11 @@ Class TitleState Extends State
 					
 					If ((Key.press(Key.B_BACK) Or (Key.touchhelpreturn.IsButtonPress() And Self.returnPageCursor = ZONE_NUM_OFFSET)) And State.fadeChangeOver()) Then
 						changeStateWithFade(VISIBLE_OPTION_ITEMS_NUM)
+						
 						Self.isOptionDisFlag = False
+						
 						SoundSystem.getInstance().playSe(STATE_MOVING)
 					EndIf
-					
 				Case STATE_OPTION_CREDIT
 					creditLogic()
 				Case STATE_OPTION_RESET_RECORD
@@ -1099,42 +1095,52 @@ Class TitleState Extends State
 				Case STATE_OPTION_RESET_RECORD_ENSURE
 					menuOptionResetRecordEnsureLogic()
 				Case STATE_PRE_PRESS_START
-					
 					If (State.fadeChangeOver()) Then
 						state = ZONE_NUM_OFFSET
+						
 						State.setFadeColor(TITLE_FRAME_HEIGHT)
+						
 						Key.touchOpeningClose()
 					EndIf
-					
 				Case STATE_OPTION_SOUND_VOLUMN
 					Select (soundVolumnLogic())
 						Case STATE_MOVING
 							State.fadeInit(220, TITLE_FRAME_HEIGHT)
 							state = VISIBLE_OPTION_ITEMS_NUM
 						Default
+							' Nothing so far.
 					End Select
 				Case STATE_OPTION_SENSOR_SET
 					Select (spSenorSetLogic())
 						Case ZONE_NUM_OFFSET
 							GlobalResource.sensorConfig = TITLE_FRAME_HEIGHT
+							
 							State.fadeInit(220, TITLE_FRAME_HEIGHT)
+							
 							state = VISIBLE_OPTION_ITEMS_NUM
 						Case STATE_MOVING
 							GlobalResource.sensorConfig = ZONE_NUM_OFFSET
+							
 							State.fadeInit(220, TITLE_FRAME_HEIGHT)
+							
 							state = VISIBLE_OPTION_ITEMS_NUM
 						Case STATE_OPENING
 							State.fadeInit(220, TITLE_FRAME_HEIGHT)
+							
 							state = VISIBLE_OPTION_ITEMS_NUM
 						Case STATE_START_GAME
 							GlobalResource.sensorConfig = STATE_MOVING
+							
 							State.fadeInit(220, TITLE_FRAME_HEIGHT)
+							
 							state = VISIBLE_OPTION_ITEMS_NUM
 						Default
+							' Nothing so far.
 					End Select
 				Case STATE_SEGA_MORE
 					segaMoreLogic()
 				Default
+					' Nothing so far.
 			End Select
 		End
 		
