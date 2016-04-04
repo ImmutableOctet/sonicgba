@@ -986,7 +986,7 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 		End
 		
 		Method itemsid:Int(id:Int)
-			Local itemsidoffset:= (Self.optionOffsetY / 24) * 2
+			Local itemsidoffset:= ((Self.optionOffsetY / 24) * 2)
 			
 			If (id + itemsidoffset < 0) Then
 				Return 0
@@ -999,17 +999,20 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 			Return (id + itemsidoffset)
 		End
 		
-		Private Method optionInit:Void()
-			
+		Method optionInit:Void()
 			If (muiAniDrawer = Null) Then
 				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
 			EndIf
 			
 			Self.optionOffsetX = 0
+			
 			Key.touchGamePauseOptionInit()
+			
 			Self.pauseOptionCursor = 0
 			Self.isOptionDisFlag = False
+			
 			Key.touchMenuOptionInit()
+			
 			Self.optionOffsetYAim = 0
 			Self.optionOffsetY = 0
 			Self.isChanged = False
@@ -1020,11 +1023,10 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 			Self.optionYDirect = 0
 		End
 		
-		Private Method optionLogic:Void()
-			Int i
-			
+		Method optionLogic:Void()
 			If (Not Self.isOptionDisFlag) Then
-				SoundSystem.getInstance().playBgm(STATE_WAIT_FOR_OVER)
+				SoundSystem.getInstance().playBgm(SoundSystem.BGM_CONTINUE)
+				
 				Self.isOptionDisFlag = True
 			EndIf
 			
@@ -1035,20 +1037,20 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 			Self.optionslide_gety = Key.slidesensormenuoption.getPointerY()
 			Self.optionslide_y = 0
 			Self.optionslidefirsty = 0
-			For (i = 0; i < (Key.touchmenuoptionitems.Length Shr 1); i += 1)
+			
+			For Local i:= 0 Until (Key.touchmenuoptionitems.Length / 2) ' Shr 1
 				Key.touchmenuoptionitems[i * 2].setStartY((((i * 24) + 28) + Self.optionDrawOffsetY) + Self.optionslide_y)
-				Key.touchmenuoptionitems[(i * 2) + WORD_FINISH_STAGE].setStartY((((i * 24) + 28) + Self.optionDrawOffsetY) + Self.optionslide_y)
+				Key.touchmenuoptionitems[(i * 2) + 1].setStartY((((i * 24) + 28) + Self.optionDrawOffsetY) + Self.optionslide_y)
 			Next
 			
 			If (Self.isSelectable) Then
-				For (i = 0; i < Key.touchmenuoptionitems.Length; i += 1)
-					
+				For Local i:= 0 Until Key.touchmenuoptionitems.Length
 					If (Key.touchmenuoptionitems[i].Isin() And Key.touchmenuoption.IsClick()) Then
-						Self.pauseOptionCursor = i / STATE_GAMING
+						Self.pauseOptionCursor = (i / 2)
 						Self.returnCursor = 0
-						break
+						
+						Exit
 					EndIf
-					
 				Next
 			EndIf
 			
@@ -1058,15 +1060,16 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 			
 			If ((Key.press(Key.B_BACK) Or (Key.touchmenuoptionreturn.IsButtonPress() And Self.returnCursor = 1)) And State.fadeChangeOver()) Then
 				changeStateWithFade(STATE_PAUSE)
+				
 				SoundSystem.getInstance().stopBgm(False)
 				SoundSystem.getInstance().playSe(SoundSystem.SE_107)
+				
 				GlobalResource.saveSystemConfig()
 			EndIf
 			
 			If (Key.slidesensormenuoption.isSliding()) Then
 				Self.isSelectable = True
 			Else
-				
 				If (Self.isOptionChange And Self.optionslide_y = 0) Then
 					Self.optionDrawOffsetY = Self.optionDrawOffsetTmpY1
 					Self.isOptionChange = False
@@ -1074,11 +1077,12 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 				EndIf
 				
 				If (Not Self.isOptionChange) Then
-					Int speed
+					Local speed:Int
 					
 					If (Self.optionDrawOffsetY > 0) Then
 						Self.optionYDirect = 1
-						speed = (-Self.optionDrawOffsetY) Shr 1
+						
+						speed = (-Self.optionDrawOffsetY) Shr 1 ' / 2
 						
 						If (speed > -2) Then
 							speed = -2
@@ -1090,16 +1094,16 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 						Else
 							Self.optionDrawOffsetY += speed
 						EndIf
-						
 					ElseIf (Self.optionDrawOffsetY < Self.optionDrawOffsetBottomY) Then
-						Self.optionYDirect = STATE_GAMING
-						speed = (Self.optionDrawOffsetBottomY - Self.optionDrawOffsetY) Shr 1
+						Self.optionYDirect = 2
+						
+						speed = ((Self.optionDrawOffsetBottomY - Self.optionDrawOffsetY) Shr 1) ' / 2
 						
 						If (speed < 2) Then
-							speed = STATE_GAMING
+							speed = 2
 						EndIf
 						
-						If (Self.optionDrawOffsetY + speed >= Self.optionDrawOffsetBottomY) Then
+						If ((Self.optionDrawOffsetY + speed) >= Self.optionDrawOffsetBottomY) Then
 							Self.optionDrawOffsetY = Self.optionDrawOffsetBottomY
 							Self.optionYDirect = 0
 						Else
@@ -1112,24 +1116,33 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 			If (Self.isSelectable And Self.optionYDirect = 0) Then
 				If (Key.touchmenuoptionitems[1].IsButtonPress() And Self.pauseOptionCursor = 0 And GlobalResource.soundSwitchConfig <> 0 And State.fadeChangeOver()) Then
 					Self.state = STATE_PAUSE_OPTION_SOUND_VOLUMN
+					
 					soundVolumnInit()
+					
 					SoundSystem.getInstance().playSe(WORD_FINISH_STAGE)
 				ElseIf (Key.touchmenuoptionitems[STATE_END].IsButtonPress() And Self.pauseOptionCursor = 1 And State.fadeChangeOver()) Then
 					Self.state = STATE_PAUSE_OPTION_VIB
+					
 					itemsSelect2Init()
+					
 					SoundSystem.getInstance().playSe(WORD_FINISH_STAGE)
 				ElseIf (Key.touchmenuoptionitems[STATE_WAIT_FOR_OVER].IsButtonPress() And Self.pauseOptionCursor = 2 And State.fadeChangeOver()) Then
 					Self.state = STATE_PAUSE_OPTION_SP_SET
+					
 					itemsSelect2Init()
+					
 					SoundSystem.getInstance().playSe(WORD_FINISH_STAGE)
 				ElseIf (Key.touchmenuoptionitems[STATE_PAUSE_TO_TITLE].IsButtonPress() And Self.pauseOptionCursor = STATE_END And GlobalResource.spsetConfig <> 0 And State.fadeChangeOver()) Then
 					Self.state = STATE_PAUSE_OPTION_SENSOR
+					
 					spSenorSetInit()
+					
 					SoundSystem.getInstance().playSe(WORD_FINISH_STAGE)
 				ElseIf (Key.touchmenuoptionitems[STATE_PAUSE_OPTION].IsButtonPress() And Self.pauseOptionCursor = STATE_GET_EMERALD And State.fadeChangeOver()) Then
 					changeStateWithFade(STATE_PAUSE_OPTION_HELP)
 					AnimationDrawer.setAllPause(False)
 					helpInit()
+					
 					SoundSystem.getInstance().playSe(WORD_FINISH_STAGE)
 				EndIf
 			EndIf
@@ -1137,8 +1150,8 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 			Self.optionslide_getprey = Self.optionslide_gety
 		End
 		
-		Private Method releaseOptionItemsTouchKey:Void()
-			For (Int i = 0; i < Key.touchmenuoptionitems.Length; i += 1)
+		Method releaseOptionItemsTouchKey:Void()
+			For Local i:= 0 Until Key.touchmenuoptionitems.Length
 				Key.touchmenuoptionitems[i].resetKeyState()
 			Next
 		End
