@@ -163,7 +163,7 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 		Field speedLight:MFImage
 		Field welcomeBgImage:MFImage
 		Field speedLightVec:Stack<Int[]>
-		
+	Public
 		' Constructor(s):
 		Method New()
 			Self.characterY = SCREEN_HEIGHT
@@ -183,7 +183,7 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 			
 			Self.barDrawer = WhiteBarDrawer.getInstance()
 			
-			If (GlobalResource.spsetConfig = WORD_FINISH_STAGE) Then
+			If (GlobalResource.spsetConfig = 1) Then
 				bButton = New MFTouchKey(STATE_READY, 0, MyAPI.zoomOut(Def.SCREEN_WIDTH) Shr 1, MyAPI.zoomOut(Def.SCREEN_HEIGHT), Key.B_SEL)
 				
 				MFDevice.addComponent(bButton)
@@ -237,7 +237,7 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 						EndIf
 						
 						If (Self.changingState) Then
-							Self.state = WORD_FINISH_STAGE
+							Self.state = 1
 							State.fadeInitAndStart(255, 0)
 							SpecialObject.player.initWelcome()
 							Self.changingState = False
@@ -519,132 +519,37 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 			End Select
 		End
 		
-		Private Method pausetoTitleLogic:Void()
-			Select (secondEnsureLogic())
-				Case WORD_FINISH_STAGE
-					Key.touchanykeyInit()
-					Key.touchMainMenuInit2()
-					AnimationDrawer.setAllPause(False)
-					StageManager.characterFromGame = PlayerObject.getCharacterID()
-					StageManager.stageIDFromGame = StageManager.getStageID()
-					State.setState(STATE_GAMING)
-				Case STATE_GAMING
-					pauseInitFromItems()
-				Default
-			End Select
-		End
-		
-		Private Method pauseOptionSoundLogic:Void()
-			Select (itemsSelect2Logic())
-				Case WORD_FINISH_STAGE
-					GlobalResource.soundConfig = STATE_WAIT_FOR_OVER
-					GlobalResource.seConfig = WORD_FINISH_STAGE
-					State.fadeInit(102, 0)
-					Self.state = STATE_PAUSE_OPTION
-					SoundSystem.getInstance().setSoundState(GlobalResource.soundConfig)
-					SoundSystem.getInstance().setSeState(GlobalResource.seConfig)
-				Case STATE_GAMING
-					GlobalResource.soundConfig = 0
-					GlobalResource.seConfig = 0
-					State.fadeInit(102, 0)
-					Self.state = STATE_PAUSE_OPTION
-					SoundSystem.getInstance().setSoundState(GlobalResource.soundConfig)
-					SoundSystem.getInstance().setSeState(GlobalResource.seConfig)
-				Case STATE_END
-					State.fadeInit(102, 0)
-					Self.state = STATE_PAUSE_OPTION
-					SoundSystem.getInstance().setSoundState(GlobalResource.soundConfig)
-					SoundSystem.getInstance().setSeState(GlobalResource.seConfig)
-				Default
-			End Select
-		End
-		
-		Private Method pauseOptionVibrationLogic:Void()
-			Select (itemsSelect2Logic())
-				Case WORD_FINISH_STAGE
-					GlobalResource.vibrationConfig = WORD_FINISH_STAGE
-					State.fadeInit(102, 0)
-					Self.state = STATE_PAUSE_OPTION
-					MyAPI.vibrate()
-				Case STATE_GAMING
-					GlobalResource.vibrationConfig = 0
-					State.fadeInit(102, 0)
-					Self.state = STATE_PAUSE_OPTION
-				Case STATE_END
-					State.fadeInit(102, 0)
-					Self.state = STATE_PAUSE_OPTION
-				Default
-			End Select
-		End
-		
-		Private Method pauseOptionSpSetLogic:Void()
-			Select (itemsSelect2Logic())
-				Case WORD_FINISH_STAGE
-					GlobalResource.spsetConfig = 0
-					State.fadeInit(102, 0)
-					Self.state = STATE_PAUSE_OPTION
-					Key.touchkeyboardClose()
-					Key.touchSpKeyboardInit()
-					
-					If (bButton <> Null) Then
-						MFDevice.removeComponent(bButton)
-						bButton = Null
-					EndIf
-					
-					If (aButton <> Null) Then
-						MFDevice.removeComponent(aButton)
-						aButton = Null
-					EndIf
-					
-				Case STATE_GAMING
-					GlobalResource.spsetConfig = WORD_FINISH_STAGE
-					State.fadeInit(102, 0)
-					Self.state = STATE_PAUSE_OPTION
-					Key.touchkeyboardClose()
-					
-					If (bButton = Null) Then
-						bButton = New MFTouchKey(STATE_READY, 0, MyAPI.zoomOut(Def.SCREEN_WIDTH) Shr 1, MyAPI.zoomOut(Def.SCREEN_HEIGHT), Key.B_SEL)
-						MFDevice.addComponent(bButton)
-					EndIf
-					
-					If (aButton = Null) Then
-						aButton = New MFTouchKey(MyAPI.zoomOut(Def.SCREEN_WIDTH) Shr 1, 0, MyAPI.zoomOut(Def.SCREEN_WIDTH) Shr 1, MyAPI.zoomOut(Def.SCREEN_HEIGHT), Key.B_HIGH_JUMP)
-						MFDevice.addComponent(aButton)
-					EndIf
-					
-				Case STATE_END
-					State.fadeInit(102, 0)
-					Self.state = STATE_PAUSE_OPTION
-				Default
-			End Select
-		End
-		
-		Public Method draw:Void(g:MFGraphics)
+		Method draw:Void(g:MFGraphics)
 			Select (Self.state)
 				Case STATE_PAUSE_OPTION_HELP
 					g.setFont(STATE_PAUSE_OPTION_KEY_CONTROL)
-					break
 				Default
 					g.setFont(STATE_INTERRUPT)
-					break
 			End Select
-			Int i
+			
 			Select (Self.state)
 				Case STATE_READY
 					MyAPI.drawImage(g, Self.readyBgImage, 0, 0, 0)
-					For (i = 0; i < Self.speedLightVec.size(); i += 1)
-						Int[] position = (Int[]) Self.speedLightVec.Get(i)
-						MyAPI.drawImage(g, Self.speedLight, position[STATE_READY], position[WORD_FINISH_STAGE], 33)
+					
+					For Local i:= 0 Until Self.speedLightVec.Length
+						Local position:= Self.speedLightVec.Get(i)
+						
+						' Magic number: 33
+						MyAPI.drawImage(g, Self.speedLight, position[0], position[1], 33)
 					Next
+					
 					Self.characterUpDrawer.draw(g, SCREEN_WIDTH Shr 1, Self.characterY)
 				Case WORD_FINISH_STAGE
-					g.setColor(STATE_READY)
+					g.setColor(0)
+					
 					MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 					MyAPI.drawImage(g, Self.welcomeBgImage, 0, 0, 0)
+					
 					SpecialObject.player.setPause(False)
 					SpecialObject.player.drawWelcome(g)
 				Case STATE_GAMING
 					SpecialMap.drawMap(g)
+					
 					SpecialObject.drawObjects(g)
 					SpecialObject.player.setPause(False)
 					SpecialObject.player.drawInfo(g)
@@ -656,51 +561,58 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 					If (SpecialObject.player.isNeedTouchPad()) Then
 						State.drawSoftKeyPause(g)
 					EndIf
-					
-				Case STATE_END
-				Case STATE_WAIT_FOR_OVER
+				Case STATE_END, STATE_WAIT_FOR_OVER
 					g.setColor(MapManager.END_COLOR)
+					
 					MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+					
 					Self.barDrawer.drawBar(g)
-					For (i = 0; i < Self.bonusY.Length; i += 1)
+					
+					For Local i = 0 Until Self.bonusY.Length
 						Self.fontDrawer.draw(g, BONUS_ID[i], Self.barDrawer.getBarX() + BONUS_X, Self.bonusY[i], False, 0)
-						Int drawNum = 0
+						
+						Local drawNum:= 0
+						
 						Select (i)
-							Case STATE_READY
+							Case 0
 								drawNum = Self.ringScore
-								break
-							Case WORD_FINISH_STAGE
+							Case 1
 								drawNum = Self.clearScore
-								break
-							Case STATE_GAMING
+							Case 2
 								drawNum = Self.totalScore
-								break
 							Default
-								break
+								' Nothing so far.
 						End Select
+						
 						NumberDrawer.drawNum(g, 0, drawNum, Self.barDrawer.getBarX() + ((SCREEN_WIDTH Shr 1) + 75), Self.bonusY[i], 4)
 					Next
-					i = 0
-					While (i < STATE_PAUSE_TO_TITLE) {
-						Self.fontDrawer.draw(g, emeraldStatus[i] = WORD_FINISH_STAGE ? i + STATE_PAUSE_OPTION_SOUND_VOLUMN : STATE_INTERRUPT, Self.emeraldX[i] + Self.barDrawer.getBarX(), EMERALD_Y, False, 0)
-						i += 1
-					}
+					
+					' Line of collected emeralds:
+					For Local i:= 0 Until emeraldStatus.Length ' 7
+						Self.fontDrawer.draw(g, PickValue((emeraldStatus[i] = 1), (i + 15), 14), Self.emeraldX[i] + Self.barDrawer.getBarX(), EMERALD_Y, False, 0)
+					Next
 				Case STATE_GET_EMERALD
 					Self.endingInstance.draw(g)
 				Case STATE_PAUSE
 					SpecialMap.drawMap(g)
+					
 					SpecialObject.drawObjects(g)
 					SpecialObject.player.setPause(True)
 					SpecialObject.player.drawInfo(g)
+					
 					pauseDraw(g)
 				Case STATE_PAUSE_TO_TITLE
 					SpecialMap.drawMap(g)
+					
 					SpecialObject.drawObjects(g)
 					SpecialObject.player.setPause(True)
 					SpecialObject.player.drawInfo(g)
+					
 					muiAniDrawer.setActionId(50)
 					muiAniDrawer.draw(g, Self.pause_saw_x, Self.pause_saw_y)
+					
 					State.drawFade(g)
+					
 					SecondEnsurePanelDraw(g, BONUS_Y_SPACE)
 				Case STATE_PAUSE_OPTION
 					optionDraw(g)
@@ -726,6 +638,138 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 					optionDraw(g)
 					spSenorSetDraw(g)
 				Default
+					' Nothing so far.
+			End Select
+		End
+	Private
+		' Methods:
+		Method pausetoTitleLogic:Void()
+			Select (secondEnsureLogic())
+				Case WORD_FINISH_STAGE
+					Key.touchanykeyInit()
+					Key.touchMainMenuInit2()
+					
+					AnimationDrawer.setAllPause(False)
+					
+					StageManager.characterFromGame = PlayerObject.getCharacterID()
+					StageManager.stageIDFromGame = StageManager.getStageID()
+					
+					State.setState(STATE_GAMING)
+				Case STATE_GAMING
+					pauseInitFromItems()
+				Default
+					' Nothing so far.
+			End Select
+		End
+		
+		Method pauseOptionSoundLogic:Void()
+			Select (itemsSelect2Logic())
+				Case WORD_FINISH_STAGE
+					GlobalResource.soundConfig = 5
+					GlobalResource.seConfig = 1
+					
+					State.fadeInit(102, 0)
+					
+					Self.state = STATE_PAUSE_OPTION
+					
+					SoundSystem.getInstance().setSoundState(GlobalResource.soundConfig)
+					SoundSystem.getInstance().setSeState(GlobalResource.seConfig)
+				Case STATE_GAMING
+					GlobalResource.soundConfig = 0
+					GlobalResource.seConfig = 0
+					
+					State.fadeInit(102, 0)
+					
+					Self.state = STATE_PAUSE_OPTION
+					
+					SoundSystem.getInstance().setSoundState(GlobalResource.soundConfig)
+					SoundSystem.getInstance().setSeState(GlobalResource.seConfig)
+				Case STATE_END
+					State.fadeInit(102, 0)
+					
+					Self.state = STATE_PAUSE_OPTION
+					
+					SoundSystem.getInstance().setSoundState(GlobalResource.soundConfig)
+					SoundSystem.getInstance().setSeState(GlobalResource.seConfig)
+				Default
+					' Nothing so far.
+			End Select
+		End
+		
+		Method pauseOptionVibrationLogic:Void()
+			Select (itemsSelect2Logic())
+				Case WORD_FINISH_STAGE
+					GlobalResource.vibrationConfig = 1
+					
+					State.fadeInit(102, 0)
+					
+					Self.state = STATE_PAUSE_OPTION
+					
+					MyAPI.vibrate()
+				Case STATE_GAMING
+					GlobalResource.vibrationConfig = 0
+					
+					State.fadeInit(102, 0)
+					
+					Self.state = STATE_PAUSE_OPTION
+				Case STATE_END
+					State.fadeInit(102, 0)
+					
+					Self.state = STATE_PAUSE_OPTION
+				Default
+					' Nothing so far.
+			End Select
+		End
+		
+		Method pauseOptionSpSetLogic:Void()
+			Select (itemsSelect2Logic())
+				Case WORD_FINISH_STAGE
+					GlobalResource.spsetConfig = 0
+					
+					State.fadeInit(102, 0)
+					
+					Self.state = STATE_PAUSE_OPTION
+					
+					Key.touchkeyboardClose()
+					Key.touchSpKeyboardInit()
+					
+					If (bButton <> Null) Then
+						MFDevice.removeComponent(bButton)
+						
+						bButton = Null
+					EndIf
+					
+					If (aButton <> Null) Then
+						MFDevice.removeComponent(aButton)
+						
+						aButton = Null
+					EndIf
+				Case STATE_GAMING
+					GlobalResource.spsetConfig = 1
+					
+					State.fadeInit(102, 0)
+					
+					Self.state = STATE_PAUSE_OPTION
+					
+					Key.touchkeyboardClose()
+					
+					If (bButton = Null) Then
+						bButton = New MFTouchKey(STATE_READY, 0, MyAPI.zoomOut(Def.SCREEN_WIDTH) Shr 1, MyAPI.zoomOut(Def.SCREEN_HEIGHT), Key.B_SEL)
+						
+						MFDevice.addComponent(bButton)
+					EndIf
+					
+					If (aButton = Null) Then
+						aButton = New MFTouchKey(MyAPI.zoomOut(Def.SCREEN_WIDTH) Shr 1, 0, MyAPI.zoomOut(Def.SCREEN_WIDTH) Shr 1, MyAPI.zoomOut(Def.SCREEN_HEIGHT), Key.B_HIGH_JUMP)
+						
+						MFDevice.addComponent(aButton)
+					EndIf
+				Case STATE_END
+					State.fadeInit(102, 0)
+					
+					Self.state = STATE_PAUSE_OPTION
+				Default
+					' Nothing so far.
 			End Select
 		End
 		
@@ -913,7 +957,7 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 				AnimationDrawer animationDrawer = muiAniDrawer
 				
 				If (Self.pause_item_cursor = 0 And Key.touchgamepauseitem[STATE_READY].Isin()) Then
-					i = WORD_FINISH_STAGE
+					i = 1
 				Else
 					i = 0
 				EndIf
@@ -923,7 +967,7 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 				animationDrawer = muiAniDrawer
 				
 				If (Self.pause_item_cursor = 1 And Key.touchgamepauseitem[WORD_FINISH_STAGE].Isin()) Then
-					i = WORD_FINISH_STAGE
+					i = 1
 				Else
 					i = 0
 				EndIf
@@ -933,7 +977,7 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 				animationDrawer = muiAniDrawer
 				
 				If (Self.pause_item_cursor = STATE_GAMING And Key.touchgamepauseitem[STATE_GAMING].Isin()) Then
-					i = WORD_FINISH_STAGE
+					i = 1
 				Else
 					i = 0
 				EndIf
@@ -1036,7 +1080,7 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 					Int speed
 					
 					If (Self.optionDrawOffsetY > 0) Then
-						Self.optionYDirect = WORD_FINISH_STAGE
+						Self.optionYDirect = 1
 						speed = (-Self.optionDrawOffsetY) Shr 1
 						
 						If (speed > -2) Then
@@ -1104,7 +1148,7 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 		
 		Private Method optionDraw:Void(g:MFGraphics)
 			Int i
-			g.setColor(STATE_READY)
+			g.setColor(0)
 			MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 			muiAniDrawer.setActionId(52)
 			For (Int i2 = 0; i2 < (SCREEN_WIDTH / 48) + WORD_FINISH_STAGE; i2 += 1)
@@ -1137,7 +1181,7 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 			animationDrawer = muiAniDrawer
 			
 			If (Key.touchmenuoptionitems[STATE_END].Isin() And Self.pauseOptionCursor = 1 And Self.isSelectable) Then
-				i = WORD_FINISH_STAGE
+				i = 1
 			Else
 				i = 0
 			EndIf
@@ -1147,7 +1191,7 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 			animationDrawer = muiAniDrawer
 			
 			If (GlobalResource.vibrationConfig = 0) Then
-				i = WORD_FINISH_STAGE
+				i = 1
 			Else
 				i = 0
 			EndIf
@@ -1159,7 +1203,7 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 			animationDrawer = muiAniDrawer
 			
 			If (Key.touchmenuoptionitems[STATE_WAIT_FOR_OVER].Isin() And Self.pauseOptionCursor = STATE_GAMING And Self.isSelectable) Then
-				i = WORD_FINISH_STAGE
+				i = 1
 			Else
 				i = 0
 			EndIf
@@ -1171,7 +1215,7 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 			If (GlobalResource.spsetConfig = 0) Then
 				i = 0
 			Else
-				i = WORD_FINISH_STAGE
+				i = 1
 			EndIf
 			
 			animationDrawer.setActionId(i + 37)
@@ -1204,7 +1248,7 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 			animationDrawer = muiAniDrawer
 			
 			If (Key.touchmenuoptionitems[STATE_PAUSE_OPTION].Isin() And Self.pauseOptionCursor = STATE_GET_EMERALD And Self.isSelectable) Then
-				i = WORD_FINISH_STAGE
+				i = 1
 			Else
 				i = 0
 			EndIf
