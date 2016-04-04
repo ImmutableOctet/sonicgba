@@ -48,9 +48,11 @@ Private
 	
 	Import brl.stream
 	Import brl.datastream
-	'Import brl.filestream
 	
 	Import monkey.stack
+	
+	'Import regal.ioutil.publicdatastream
+	Import regal.typetool
 Public
 
 ' Classes:
@@ -102,7 +104,7 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 		Const WORD_GET_EMERALD:Int = 0
 		
 		' Global variable(s):
-		Global emeraldStatus:Int[] = New Int[7]
+		Global emeraldStatus:Byte[] = New Byte[7]
 	Public
 		' Global variable(s):
 		Global aButton:MFTouchKey
@@ -214,6 +216,7 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 			
 			If (emeraldState(StageManager.getStageID()) <> WORD_FINISH_STAGE) Then
 				setEmeraldState(StageManager.getStageID(), STATE_GAMING)
+				
 				saveData()
 			EndIf
 		End
@@ -701,8 +704,139 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 			'System.gc()
 			'Thread.sleep(100)
 		End
+		
+		Method drawWord:Void(g:MFGraphics, wordID:Int, x:Int, y:Int)
+			Select (wordID)
+				Case STATE_READY
+					Self.fontDrawer.draw(g, PlayerObject.getCharacterID() + STATE_PAUSE_OPTION, x, y, False, 0)
+					Self.fontDrawer.draw(g, 12, x, y, False, 0)
+				Case WORD_FINISH_STAGE
+					Self.fontDrawer.draw(g, 13, x, y, False, 0)
+				Default
+					' Nothing so far.
+			End Select
+		End
+		
+		Method getWordLength:Int(wordID:Int)
+			Return 320
+		End
+		
+		Method changeStateWithFade:Void(nState:Int)
+			If (Not fading) Then
+				fading = True
+				
+				If (nState = STATE_PAUSE_OPTION) Then
+					State.fadeInit(102, 255)
+				Else
+					State.fadeInit(0, 255)
+				EndIf
+				
+				Self.nextState = nState
+				Self.fadeChangeState = True
+			EndIf
+		End
+		
+		Method fadeStateLogic:Void()
+			If (fading And Self.fadeChangeState And State.fadeChangeOver() And Self.state <> Self.nextState) Then
+				Self.state = Self.nextState
+				Self.fadeChangeState = False
+				
+				If (Self.state = STATE_PAUSE) Then
+					State.fadeInit_Modify(255, 102)
+				Else
+					State.fadeInit(255, 0)
+				EndIf
+			EndIf
+			
+			If (Self.state = Self.nextState And State.fadeChangeOver()) Then
+				fading = False
+			EndIf
+		End
+		
+		' Functions:
+		Function loadData:Void()
+			If (record <> Null) Then
+				Local ds:= Record.loadRecordStream(Record.EMERALD_RECORD)
+				
+				Try
+					For Local i:= 0 Until emeraldStatus.Length
+						emeraldStatus[i] = ds.ReadByte()
+					Next
+					
+					Return
+				Catch E:StreamError
+					If (ds <> Null) Then
+						ds.Close()
+					EndIf
+				End Try
+			EndIf
+			
+			For Local i:= 0 Until emeraldStatus.Length
+				emeraldStatus[i] = 0
+			Next
+		End
+		
+		Function saveData:Void()
+			#Rem
+				' Constant variable(s):
+				Const DEFAULT_FILE_SIZE:= 16 ' 7
+				
+				' Local variable(s):
+				Local ds:= New PublicDataStream(DEFAULT_FILE_SIZE)
+				
+				For Local i:= 0 Until emeraldStatus.Length
+					ds.WriteByte(emeraldStatus[i])
+				Next
+				
+				Record.saveRecord(Record.EMERALD_RECORD, ds.ToDataBuffer())
+				
+				ds.Close()
+			#End
+			
+			Local buffer:= New DataBuffer(emeraldStatus.Length)
+			
+			For Local i:= 0 Until emeraldStatus.Length
+				buffer.PokeByte(i, emeraldStatus[i])
+			Next
+			
+			Record.saveRecord(Record.EMERALD_RECORD, buffer)
+		End
+		
+		Function emptyEmeraldArray:Void()
+			For Local i:= 0 Until emeraldStatus.Length
+				emeraldStatus[i] = 0
+			Next
+			
+			saveData()
+		End
+		
+		Function emeraldMissed:Bool()
+			For Local i:= 0 Until emeraldStatus.Length
+				If (emeraldStatus[i] <> 1) Then
+					Return True
+				EndIf
+			Next
+			
+			Return False
+		End
+		
+		Function emeraldID:Int(stageId:Int)
+			Return STAGE_ID_TO_SPECIAL_ID[stageId]
+		End
+		
+		Function emeraldState:Int(stageId:Int)
+			Return emeraldStatus[emeraldID(stageId)]
+		End
+		
+		Function setEmeraldState:Void(stageId:Int, state:Int)
+			emeraldStatus[emeraldID(stageId)] = state
+		End
 	Private
 		' Methods:
+		Method backToGameStage:Void()
+			State.setState(STATE_PAUSE_TO_TITLE)
+		End
+		
 		Method pausetoTitleLogic:Void()
 			Select (secondEnsureLogic())
 				Case WORD_FINISH_STAGE
@@ -969,7 +1103,7 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 			EndIf
 			
 			If (Self.pausecnt > 7) Then
-				animationDrawer.setActionId((Key.touchgamepausereturn.Isin() ? STATE_WAIT_FOR_OVER : STATE_READY) + 61)
+				animationDrawer.setActionId(PickValue(Key.touchgamepausereturn.Isin(), 5, 0) + 61)
 				animationDrawer.draw(g, 0, SCREEN_HEIGHT)
 			EndIf
 			
@@ -1138,7 +1272,7 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 					spSenorSetInit()
 					
 					SoundSystem.getInstance().playSe(WORD_FINISH_STAGE)
-				ElseIf (Key.touchmenuoptionitems[STATE_PAUSE_OPTION].IsButtonPress() And Self.pauseOptionCursor = STATE_GET_EMERALD And State.fadeChangeOver()) Then
+				ElseIf (Key.touchmenuoptionitems[STATE_PAUSE_OPTION].IsButtonPress() And Self.pauseOptionCursor = 4 And State.fadeChangeOver()) Then
 					changeStateWithFade(STATE_PAUSE_OPTION_HELP)
 					AnimationDrawer.setAllPause(False)
 					helpInit()
@@ -1156,14 +1290,19 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 			Next
 		End
 		
-		Private Method optionDraw:Void(g:MFGraphics)
-			Int i
+		Method optionDraw:Void(g:MFGraphics)
 			g.setColor(0)
+			
 			MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
-			muiAniDrawer.setActionId(52)
-			For (Int i2 = 0; i2 < (SCREEN_WIDTH / 48) + WORD_FINISH_STAGE; i2 += 1)
-				For (Int j = 0; j < (SCREEN_HEIGHT / 48) + WORD_FINISH_STAGE; j += 1)
-					muiAniDrawer.draw(g, i2 * 48, j * 48)
+			
+			Local animationDrawer:= muiAniDrawer
+			
+			animationDrawer.setActionId(52)
+			
+			' Magic number: 48 (Width and height?)
+			For Local x:= 0 Until ((SCREEN_WIDTH / 48) + 1)
+				For Local y:= 0 Until ((SCREEN_HEIGHT / 48) + 1)
+					animationDrawer.draw(g, i2 * 48, j * 48)
 				Next
 			Next
 			
@@ -1171,143 +1310,96 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 				Self.pauseOptionCursor = -2
 			EndIf
 			
-			muiAniDrawer.setActionId(25)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + STATE_READY)
-			AnimationDrawer animationDrawer = muiAniDrawer
+			animationDrawer.setActionId(25)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y))
 			
-			If (GlobalResource.soundSwitchConfig = 0) Then
-				i = 67
-			Else
-				i = (Key.touchmenuoptionitems[1].Isin() And Self.pauseOptionCursor = 0 And Self.isSelectable) ? WORD_FINISH_STAGE : STATE_READY
-				i += 57
-			EndIf
+			animationDrawer.setActionId(PickValue((GlobalResource.soundSwitchConfig = 0), 67, Int(Key.touchmenuoptionitems[1].Isin() And Self.pauseOptionCursor = 0 And Self.isSelectable) + 57))
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y))
 			
-			animationDrawer.setActionId(i)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + STATE_READY)
-			muiAniDrawer.setActionId(GlobalResource.soundConfig + 73)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + STATE_READY)
-			muiAniDrawer.setActionId(21)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 24)
-			animationDrawer = muiAniDrawer
+			animationDrawer.setActionId(GlobalResource.soundConfig + 73)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y))
 			
-			If (Key.touchmenuoptionitems[STATE_END].Isin() And Self.pauseOptionCursor = 1 And Self.isSelectable) Then
-				i = 1
-			Else
-				i = 0
-			EndIf
+			animationDrawer.setActionId(21)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 24)
 			
-			animationDrawer.setActionId(i + 57)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 24)
-			animationDrawer = muiAniDrawer
+			animationDrawer.setActionId(Int(Key.touchmenuoptionitems[STATE_END].Isin() And Self.pauseOptionCursor = 1 And Self.isSelectable) + 57)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 24)
 			
-			If (GlobalResource.vibrationConfig = 0) Then
-				i = 1
-			Else
-				i = 0
-			EndIf
+			animationDrawer.setActionId(Int(GlobalResource.vibrationConfig = 0) + 35)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 24)
 			
-			animationDrawer.setActionId(i + 35)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 24)
-			muiAniDrawer.setActionId(23)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 48)
-			animationDrawer = muiAniDrawer
+			animationDrawer.setActionId(23)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 48)
 			
-			If (Key.touchmenuoptionitems[STATE_WAIT_FOR_OVER].Isin() And Self.pauseOptionCursor = 2 And Self.isSelectable) Then
-				i = 1
-			Else
-				i = 0
-			EndIf
+			animationDrawer.setActionId(Int(Key.touchmenuoptionitems[STATE_WAIT_FOR_OVER].Isin() And Self.pauseOptionCursor = 2 And Self.isSelectable) + 57)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 48)
 			
-			animationDrawer.setActionId(i + 57)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 48)
-			animationDrawer = muiAniDrawer
+			animationDrawer.setActionId(Int(GlobalResource.spsetConfig <> 0) + 37)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 48)
 			
-			If (GlobalResource.spsetConfig = 0) Then
-				i = 0
-			Else
-				i = 1
-			EndIf
+			animationDrawer.setActionId(24)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 72)
 			
-			animationDrawer.setActionId(i + 37)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 48)
-			muiAniDrawer.setActionId(24)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 72)
-			animationDrawer = muiAniDrawer
+			animationDrawer.setActionId(PickValue((GlobalResource.spsetConfig = 0), 67, Int(Key.touchmenuoptionitems[STATE_PAUSE_TO_TITLE].Isin() And Self.pauseOptionCursor = STATE_END And Self.isSelectable) + 57))
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 72)
 			
-			If (GlobalResource.spsetConfig = 0) Then
-				i = 67
-			Else
-				i = (Key.touchmenuoptionitems[STATE_PAUSE_TO_TITLE].Isin() And Self.pauseOptionCursor = STATE_END And Self.isSelectable) ? WORD_FINISH_STAGE : STATE_READY
-				i += 57
-			EndIf
-			
-			animationDrawer.setActionId(i)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 72)
 			Select (GlobalResource.sensorConfig)
-				Case STATE_READY
-					muiAniDrawer.setActionId(70)
-					break
-				Case WORD_FINISH_STAGE
-					muiAniDrawer.setActionId(69)
-					break
-				Case STATE_GAMING
-					muiAniDrawer.setActionId(68)
-					break
+				Case 0
+					animationDrawer.setActionId(70)
+				Case 1
+					animationDrawer.setActionId(69)
+				Case 2
+					animationDrawer.setActionId(68)
 			End Select
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 72)
-			animationDrawer = muiAniDrawer
 			
-			If (Key.touchmenuoptionitems[STATE_PAUSE_OPTION].Isin() And Self.pauseOptionCursor = STATE_GET_EMERALD And Self.isSelectable) Then
-				i = 1
-			Else
-				i = 0
-			EndIf
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 72)
 			
-			animationDrawer.setActionId(i + 27)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 96)
-			Self.optionOffsetX -= STATE_GET_EMERALD
+			animationDrawer.setActionId(Int(Key.touchmenuoptionitems[STATE_PAUSE_OPTION].Isin() And Self.pauseOptionCursor = 4 And Self.isSelectable) + 27)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 96)
+			
+			Self.optionOffsetX -= 4
 			Self.optionOffsetX Mod= OPTION_MOVING_INTERVAL
-			muiAniDrawer.setActionId(51)
-			For (Int x1 = Self.optionOffsetX; x1 < SCREEN_WIDTH * 2; x1 += OPTION_MOVING_INTERVAL)
-				muiAniDrawer.draw(g, x1, 0)
+			
+			animationDrawer.setActionId(51)
+			
+			For Local x1:= Self.optionOffsetX Until (SCREEN_WIDTH * 2) Step OPTION_MOVING_INTERVAL
+				animationDrawer.draw(g, x1, 0)
 			Next
-			animationDrawer = muiAniDrawer
 			
-			If (Key.touchmenuoptionreturn.Isin()) Then
-				i = STATE_WAIT_FOR_OVER
-			Else
-				i = 0
-			EndIf
+			animationDrawer.setActionId(PickValue(Key.touchmenuoptionreturn.Isin(), 5, 0) + 61)
+			animationDrawer.draw(g, 0, SCREEN_HEIGHT)
 			
-			animationDrawer.setActionId(i + 61)
-			muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
 			State.drawFade(g)
 		End
 		
-		Private Method BacktoGame:Void()
+		Method BacktoGame:Void()
 			Self.state = STATE_GAMING
+			
 			State.fadeInit(102, 0)
+			
 			SoundSystem instance = SoundSystem.getInstance()
 			SoundSystem.getInstance()
+			
 			instance.playBgm(SoundSystem.BGM_SP)
+			
 			Key.initSonic()
+			
 			SpecialObject.player.velZ = Self.preVelZ
 			AnimationDrawer.setAllPause(False)
 			
 			If (Key.touchspstagepause <> Null) Then
 				Key.touchspstagepause.resetKeyState()
 			EndIf
-			
 		End
 		
-		Public Method pause:Void()
-			
+		Method pause:Void()
 			If (Self.state <> STATE_INTERRUPT And Self.state <> STATE_PAUSE) Then
 				If (Self.state = STATE_GAMING And SpecialObject.player.isNeedTouchPad()) Then
 					pauseInit()
 				Else
 					Self.interrupt_state = Self.state
 					Self.state = STATE_INTERRUPT
+					
 					interruptInit()
 				EndIf
 				
@@ -1315,10 +1407,9 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 					Self.endingInstance.pause()
 				EndIf
 			EndIf
-			
 		End
 		
-		Private Method interruptInit:Void()
+		Method interruptInit:Void()
 			State.fadeInitAndStart(0, 0)
 			
 			If (SpecialObject.player.velZ <> 0) Then
@@ -1335,10 +1426,10 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 			Key.touchInterruptInit()
 		End
 		
-		Private Method interruptLogic:Void()
-			
+		Method interruptLogic:Void()
 			If (Key.touchinterruptreturn <> Null And Key.touchinterruptreturn.IsButtonPress()) Then
 				SoundSystem.getInstance().playSe(SoundSystem.SE_107)
+				
 				Key.touchInterruptClose()
 				
 				If (Key.touchitemsselect2_1 <> Null) Then
@@ -1363,165 +1454,43 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 				
 				Self.state = Self.interrupt_state
 				Self.interrupt_state = -1
+				
 				Key.clear()
+				
 				isDrawTouchPad = True
 				fading = False
+				
 				Select (Self.state)
-					Case STATE_READY
-					Case WORD_FINISH_STAGE
+					Case STATE_READY, STATE_INTRO
 						State.fadeInit(0, 0)
+						
 						SpecialObject.player.velZ = Self.preVelZ
 					Case STATE_GAMING
 						State.fadeInit(192, 192)
+						
 						SpecialObject.player.velZ = Self.preVelZ
+						
 						SoundSystem.getInstance().playBgm(SoundSystem.BGM_SP)
 					Case STATE_GET_EMERALD
 						Self.endingInstance.setOverFromInterrupt()
 					Case STATE_PAUSE_TO_TITLE
 						State.fadeInit(192, 192)
+						
 						isDrawTouchPad = False
 					Case STATE_PAUSE_OPTION
 						optionInit()
+						
 						isDrawTouchPad = False
-					Case VISIBLE_OPTION_ITEMS_NUM
-					Case STATE_PAUSE_OPTION_VIB
-					Case STATE_PAUSE_OPTION_KEY_CONTROL
-					Case STATE_PAUSE_OPTION_SP_SET
-					Case STATE_PAUSE_OPTION_SOUND_VOLUMN
-					Case STATE_PAUSE_OPTION_SENSOR
+					Case STATE_PAUSE_OPTION_SOUND, STATE_PAUSE_OPTION_VIB, STATE_PAUSE_OPTION_KEY_CONTROL, STATE_PAUSE_OPTION_SP_SET, STATE_PAUSE_OPTION_SOUND_VOLUMN, STATE_PAUSE_OPTION_SENSOR
 						State.fadeInit(192, 192)
 					Default
+						' Nothing so far.
 				End Select
 			EndIf
-			
 		End
 		
-		Private Method interruptDraw:Void(g:MFGraphics)
-			Self.interruptDrawer.setActionId((Key.touchinterruptreturn.Isin() ? WORD_FINISH_STAGE : STATE_READY) + STATE_READY)
-			Self.interruptDrawer.draw(g, SCREEN_WIDTH Shr 1, SCREEN_HEIGHT Shr 1)
-		End
-		
-		Public Method drawWord:Void(g:MFGraphics, wordID:Int, x:Int, y:Int)
-			Select (wordID)
-				Case STATE_READY
-					Self.fontDrawer.draw(g, PlayerObject.getCharacterID() + STATE_PAUSE_OPTION, x, y, False, 0)
-					Self.fontDrawer.draw(g, STATE_PAUSE_OPTION_SP_SET, x, y, False, 0)
-				Case WORD_FINISH_STAGE
-					Self.fontDrawer.draw(g, STATE_PAUSE_OPTION_HELP, x, y, False, 0)
-				Default
-			End Select
-		End
-		
-		Public Method getWordLength:Int(wordID:Int)
-			Return 320
-		End
-		
-		Private Method backToGameStage:Void()
-			State.setState(STATE_PAUSE_TO_TITLE)
-		End
-		
-		Public Function loadData:Void()
-			Int i
-			Byte[] record = Record.loadRecord(Record.EMERALD_RECORD)
-			
-			If (record <> Null) Then
-				DataInputStream ds = New DataInputStream(New ByteArrayInputStream(record))
-				i = 0
-				While (i < emeraldStatus.Length) {
-					try {
-						emeraldStatus[i] = ds.readByte()
-						i += 1
-					} catch (Exception e) {
-						For (i = 0; i < emeraldStatus.Length; i += 1)
-							emeraldStatus[i] = 0
-						Next
-						Return
-					}
-				}
-				Return
-			EndIf
-			
-			For (i = 0; i < emeraldStatus.Length; i += 1)
-				emeraldStatus[i] = 0
-			Next
-		}
-		
-		Public Function saveData:Void()
-			ByteArrayOutputStream os = New ByteArrayOutputStream()
-			DataOutputStream ds = New DataOutputStream(os)
-			Int i = 0
-			While (i < emeraldStatus.Length) {
-				try {
-					ds.writeByte(emeraldStatus[i])
-					i += 1
-				} catch (Exception e) {
-					Return
-				}
-			}
-			Record.saveRecord(Record.EMERALD_RECORD, os.toByteArray())
-		}
-		
-		Public Function emptyEmeraldArray:Void()
-			For (Int i = 0; i < emeraldStatus.Length; i += 1)
-				emeraldStatus[i] = 0
-			Next
-			saveData()
-		}
-		
-		Public Function emeraldMissed:Bool()
-			For (Int i = 0; i < emeraldStatus.Length; i += 1)
-				
-				If (emeraldStatus[i] <> WORD_FINISH_STAGE) Then
-					Return True
-				EndIf
-				
-			Next
-			Return False
-		}
-		
-		Public Function emeraldID:Int(stageId:Int)
-			Return STAGE_ID_TO_SPECIAL_ID[stageId]
-		}
-		
-		Public Function emeraldState:Int(stageId:Int)
-			Return emeraldStatus[emeraldID(stageId)]
-		}
-		
-		Public Function setEmeraldState:Void(stageId:Int, state:Int)
-			emeraldStatus[emeraldID(stageId)] = state
-		}
-		
-		Public Method changeStateWithFade:Void(nState:Int)
-			
-			If (Not fading) Then
-				fading = True
-				
-				If (nState = STATE_PAUSE_OPTION) Then
-					State.fadeInit(102, 255)
-				Else
-					State.fadeInit(0, 255)
-				EndIf
-				
-				Self.nextState = nState
-				Self.fadeChangeState = True
-			EndIf
-			
-		End
-		
-		Method fadeStateLogic:Void()
-			If (fading And Self.fadeChangeState And State.fadeChangeOver() And Self.state <> Self.nextState) Then
-				Self.state = Self.nextState
-				Self.fadeChangeState = False
-				
-				If (Self.state = STATE_PAUSE) Then
-					State.fadeInit_Modify(255, 102)
-				Else
-					State.fadeInit(255, 0)
-				EndIf
-			EndIf
-			
-			If (Self.state = Self.nextState And State.fadeChangeOver()) Then
-				fading = False
-			EndIf
+		Method interruptDraw:Void(g:MFGraphics)
+			Self.interruptDrawer.setActionId(Int(Key.touchinterruptreturn.Isin()))
+			Self.interruptDrawer.draw(g, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2) ' Shr 1
 		End
 End
