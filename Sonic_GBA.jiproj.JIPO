@@ -768,6 +768,14 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\state\specialstagestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>23</X>
+        <Y>53</Y>
+      </CursorPos>
+      <DocGUID>3a3c5744-6da8-4731-baaf-f43a09e55147</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\state\state.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>24</X>
@@ -782,13 +790,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>4</X>
-        <Y>4730</Y>
+        <X>1</X>
+        <Y>17</Y>
       </CursorPos>
-      <DocGUID>c56a8fa0-c6b4-4779-9eeb-f2a47d843950</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\application.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -812,7 +819,7 @@
     <FolderStatus NodePath="Sonic_GBA\etc\SAdv" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\etc\text_manipulate" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\com" Expanded="true" />
+    <FolderStatus NodePath="Sonic_GBA\src\com" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\action" Expanded="false" />
@@ -827,7 +834,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\android" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\device" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="true" />
+    <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\lib\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\mflib" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data" Expanded="false" />
