@@ -4,7 +4,7 @@ Sonic GBA is a fan developed reinterpretation of decompiled Java output from the
 
 All software is developed using the [Monkey programming language](https://github.com/blitz-research/monkey).
 
-This project aims to maintain an equivalent codebase that resembles the original decompiled output,
+This project aims to maintain a codebase that resembles the original decompiled output,
 without making any claim to parody the original behavior in any way.
 
 ## TODO
