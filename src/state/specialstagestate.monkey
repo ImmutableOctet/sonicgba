@@ -641,6 +641,66 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 					' Nothing so far.
 			End Select
 		End
+		
+		Method init:Void()
+			State.initTouchkeyBoard()
+			SpecialMap.loadMap()
+			SpecialObject.initObjects()
+			
+			Self.characterUpDrawer = New Animation("/animation/special/sp_up_chr").getDrawer(PlayerObject.getCharacterID(), True, 0)
+			
+			Self.characterY = SCREEN_HEIGHT + 40
+			
+			State.fadeInitAndStart(255, 0)
+			
+			Self.speedLight = MFImage.createImage("/special_res/speed_light.png")
+			
+			Self.speedLightVec = New Stack<Int[]>()
+			
+			Self.changingState = False
+			
+			Self.readyBgImage = MFImage.createImage("/special_res/sp_up_bg.png")
+			Self.welcomeBgImage = MFImage.createImage("/special_res/sp_welcome_bg.png")
+			
+			Self.fontDrawer = Animation.getInstanceFromQi("/special_res/sp_font.dat")[STATE_READY].getDrawer()
+		End
+		
+		Method close:Void()
+			State.releaseTouchkeyBoard()
+			
+			Animation.closeAnimationDrawer(Self.characterUpDrawer)
+			Self.characterUpDrawer = Null
+			
+			Self.speedLight = Null
+			Self.readyBgImage = Null
+			Self.welcomeBgImage = Null
+			
+			Animation.closeAnimationDrawer(Self.fontDrawer)
+			Self.fontDrawer = Null
+			
+			Animation.closeAnimationDrawer(Self.interruptDrawer)
+			Self.interruptDrawer = Null
+			
+			SpecialMap.releaseMap()
+			SpecialObject.closeObjects()
+			
+			If (bButton <> Null) Then
+				MFDevice.removeComponent(bButton)
+			EndIf
+			
+			If (aButton <> Null) Then
+				MFDevice.removeComponent(aButton)
+			EndIf
+			
+			If (GlobalResource.spsetConfig = 0) Then
+				Key.touchkeyboardClose()
+			EndIf
+			
+			Key.touchSPstageClose()
+			
+			'System.gc()
+			'Thread.sleep(100)
+		End
 	Private
 		' Methods:
 		Method pausetoTitleLogic:Void()
@@ -771,56 +831,6 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 				Default
 					' Nothing so far.
 			End Select
-		End
-		
-		Public Method init:Void()
-			State.initTouchkeyBoard()
-			SpecialMap.loadMap()
-			SpecialObject.initObjects()
-			Self.characterUpDrawer = New Animation("/animation/special/sp_up_chr").getDrawer(PlayerObject.getCharacterID(), True, 0)
-			Self.characterY = SCREEN_HEIGHT + 40
-			State.fadeInitAndStart(255, 0)
-			Self.speedLight = MFImage.createImage("/special_res/speed_light.png")
-			Self.speedLightVec = New Vector()
-			Self.changingState = False
-			Self.readyBgImage = MFImage.createImage("/special_res/sp_up_bg.png")
-			Self.welcomeBgImage = MFImage.createImage("/special_res/sp_welcome_bg.png")
-			Self.fontDrawer = Animation.getInstanceFromQi("/special_res/sp_font.dat")[STATE_READY].getDrawer()
-		End
-		
-		Public Method close:Void()
-			State.releaseTouchkeyBoard()
-			Animation.closeAnimationDrawer(Self.characterUpDrawer)
-			Self.characterUpDrawer = Null
-			Self.speedLight = Null
-			Self.readyBgImage = Null
-			Self.welcomeBgImage = Null
-			Animation.closeAnimationDrawer(Self.fontDrawer)
-			Self.fontDrawer = Null
-			Animation.closeAnimationDrawer(Self.interruptDrawer)
-			Self.interruptDrawer = Null
-			SpecialMap.releaseMap()
-			SpecialObject.closeObjects()
-			
-			If (bButton <> Null) Then
-				MFDevice.removeComponent(bButton)
-			EndIf
-			
-			If (aButton <> Null) Then
-				MFDevice.removeComponent(aButton)
-			EndIf
-			
-			If (GlobalResource.spsetConfig = 0) Then
-				Key.touchkeyboardClose()
-			EndIf
-			
-			Key.touchSPstageClose()
-			'System.gc()
-			try {
-				Thread.sleep(100)
-			} catch (Exception e) {
-				e.printStackTrace()
-			}
 		End
 		
 		Private Method pauseInit:Void()
