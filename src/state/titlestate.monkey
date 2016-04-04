@@ -856,7 +856,7 @@ Class TitleState Extends State
 			fadeStateLogic()
 			
 			Select (state)
-				Case 0
+				Case STATE_SEGA_LOGO
 					If (Key.press(Key.B_S1 | Key.gSelect)) Then
 						Standard.pressConfirm()
 					ElseIf (Key.press(2)) Then
@@ -896,7 +896,7 @@ Class TitleState Extends State
 						Default
 							' Nothing so far.
 					End Select
-				Case ZONE_NUM_OFFSET
+				Case STATE_PRESS_START
 					Self.titleFrame += 1
 					
 					If (Self.titleFrame > 212) Then
@@ -1625,46 +1625,47 @@ Class TitleState Extends State
 			Next
 		End
 		
-		Private Method optionDraw:Void(g:MFGraphics)
-			Int i
+		Method optionDraw:Void(g:MFGraphics)
+			Local i:Int
+			
 			g.setColor(0)
 			MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 			muiAniDrawer.setActionId(52)
-			For (Int i2 = 0; i2 < (SCREEN_WIDTH / CHARACTER_RECORD_BG_HEIGHT) + ZONE_NUM_OFFSET; i2 += 1)
-				For (Int j = 0; j < (SCREEN_HEIGHT / CHARACTER_RECORD_BG_HEIGHT) + ZONE_NUM_OFFSET; j += 1)
+			
+			For Local i2:= 0 Until (SCREEN_WIDTH / CHARACTER_RECORD_BG_HEIGHT) + 1 ' ZONE_NUM_OFFSET
+				For Local j:= 0 Until (SCREEN_HEIGHT / CHARACTER_RECORD_BG_HEIGHT) + 1 ' ZONE_NUM_OFFSET
 					muiAniDrawer.draw(g, i2 * CHARACTER_RECORD_BG_HEIGHT, j * CHARACTER_RECORD_BG_HEIGHT)
 				Next
 			Next
 			
 			If (state <> VISIBLE_OPTION_ITEMS_NUM) Then
-				Self.menuOptionCursor = TIME_ATTACK_SPEED_X
+				Self.menuOptionCursor = -2 ' TIME_ATTACK_SPEED_X
 			EndIf
 			
-			muiAniDrawer.setActionId(STATE_START_TO_MENU_2)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + Self.optionArrowDriveY)
-			AnimationDrawer animationDrawer = muiAniDrawer
+			Local animationDrawer:= muiAniDrawer
+			
+			animationDrawer.setActionId(STATE_START_TO_MENU_2)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + Self.optionArrowDriveY)
 			
 			If (Key.touchmenuoptionitems[ZONE_NUM_OFFSET].Isin() And Self.menuOptionCursor = 0 And Self.isSelectable) Then
-				i = ZONE_NUM_OFFSET
+				i = ZONE_NUM_OFFSET ' 1
 			Else
 				i = 0
 			EndIf
 			
 			animationDrawer.setActionId(i + 57)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, ((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + Self.optionArrowDriveY)
-			animationDrawer = muiAniDrawer
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, ((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + Self.optionArrowDriveY)
 			
 			If (GlobalResource.difficultyConfig = 0) Then
-				i = ZONE_NUM_OFFSET
+				i = ZONE_NUM_OFFSET ' 1
 			Else
 				i = 0
 			EndIf
 			
 			animationDrawer.setActionId(i + STATE_OPTION_LANGUAGE)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, ((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + Self.optionArrowDriveY)
-			muiAniDrawer.setActionId(STATE_CHARACTER_RECORD)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + STATE_PRO_RACE_MODE) + Self.optionArrowDriveY)
-			animationDrawer = muiAniDrawer
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, ((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + Self.optionArrowDriveY)
+			animationDrawer.setActionId(STATE_CHARACTER_RECORD)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + STATE_PRO_RACE_MODE) + Self.optionArrowDriveY)
 			
 			If (GlobalResource.soundSwitchConfig = 0) Then
 				i = 67
@@ -1674,12 +1675,11 @@ Class TitleState Extends State
 			EndIf
 			
 			animationDrawer.setActionId(i)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + STATE_PRO_RACE_MODE) + Self.optionArrowDriveY)
-			muiAniDrawer.setActionId(GlobalResource.soundConfig + 73)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + STATE_PRO_RACE_MODE) + Self.optionArrowDriveY)
-			muiAniDrawer.setActionId(STATE_RETURN_TO_LOGO_2)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + CHARACTER_RECORD_BG_HEIGHT) + Self.optionArrowDriveY)
-			animationDrawer = muiAniDrawer
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + STATE_PRO_RACE_MODE) + Self.optionArrowDriveY)
+			animationDrawer.setActionId(GlobalResource.soundConfig + 73)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + STATE_PRO_RACE_MODE) + Self.optionArrowDriveY)
+			animationDrawer.setActionId(STATE_RETURN_TO_LOGO_2)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + CHARACTER_RECORD_BG_HEIGHT) + Self.optionArrowDriveY)
 			
 			If (Key.touchmenuoptionitems[STATE_GOTO_GAME].Isin() And Self.menuOptionCursor = STATE_MOVING And Self.isSelectable) Then
 				i = ZONE_NUM_OFFSET
@@ -1688,8 +1688,7 @@ Class TitleState Extends State
 			EndIf
 			
 			animationDrawer.setActionId(i + 57)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + CHARACTER_RECORD_BG_HEIGHT) + Self.optionArrowDriveY)
-			animationDrawer = muiAniDrawer
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + CHARACTER_RECORD_BG_HEIGHT) + Self.optionArrowDriveY)
 			
 			If (GlobalResource.vibrationConfig = 0) Then
 				i = ZONE_NUM_OFFSET
@@ -1698,33 +1697,32 @@ Class TitleState Extends State
 			EndIf
 			
 			animationDrawer.setActionId(i + STATE_OPTION_CREDIT)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + CHARACTER_RECORD_BG_HEIGHT) + Self.optionArrowDriveY)
-			muiAniDrawer.setActionId(STATE_BP_TRY_PAYING)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + 72) + Self.optionArrowDriveY)
-			animationDrawer = muiAniDrawer
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + CHARACTER_RECORD_BG_HEIGHT) + Self.optionArrowDriveY)
+			animationDrawer.setActionId(STATE_BP_TRY_PAYING)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + 72) + Self.optionArrowDriveY)
 			
 			If (Key.touchmenuoptionitems[STATE_MORE_GAME].Isin() And Self.menuOptionCursor = STATE_OPENING And Self.isSelectable) Then
-				i = ZONE_NUM_OFFSET
+				i = ZONE_NUM_OFFSET ' 1
 			Else
 				i = 0
 			EndIf
 			
 			animationDrawer.setActionId(i + 57)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + 72) + Self.optionArrowDriveY)
-			muiAniDrawer.setActionId(GlobalResource.timeLimit + STATE_OPTION_CREDIT)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + 72) + Self.optionArrowDriveY)
-			muiAniDrawer.setActionId(STATE_CHARACTER_SELECT)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + BACK_LINE_SPACE_TIME) + Self.optionArrowDriveY)
-			animationDrawer = muiAniDrawer
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + 72) + Self.optionArrowDriveY)
+			animationDrawer.setActionId(GlobalResource.timeLimit + STATE_OPTION_CREDIT)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + 72) + Self.optionArrowDriveY)
+			animationDrawer.setActionId(STATE_CHARACTER_SELECT)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + BACK_LINE_SPACE_TIME) + Self.optionArrowDriveY)
+			
 			i = (Key.touchmenuoptionitems[VISIBLE_OPTION_ITEMS_NUM].Isin() And Self.menuOptionCursor = STATE_START_GAME And Self.isSelectable) ? ZONE_NUM_OFFSET : 0
+			
 			animationDrawer.setActionId(i + 57)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + BACK_LINE_SPACE_TIME) + Self.optionArrowDriveY)
-			animationDrawer = muiAniDrawer
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + BACK_LINE_SPACE_TIME) + Self.optionArrowDriveY)
 			
 			If (GlobalResource.spsetConfig = 0) Then
 				i = 0
 			Else
-				i = ZONE_NUM_OFFSET
+				i = ZONE_NUM_OFFSET ' 1
 			EndIf
 			
 			animationDrawer.setActionId(i + STATE_OPTION_RESET_RECORD_ENSURE)
@@ -1741,20 +1739,18 @@ Class TitleState Extends State
 			EndIf
 			
 			animationDrawer.setActionId(i)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + SONIC_BALL_SPACE) + Self.optionArrowDriveY)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + SONIC_BALL_SPACE) + Self.optionArrowDriveY)
+			
 			Select (GlobalResource.sensorConfig)
 				Case 0
-					muiAniDrawer.setActionId(70)
-					break
-				Case ZONE_NUM_OFFSET
-					muiAniDrawer.setActionId(69)
-					break
-				Case STATE_MOVING
-					muiAniDrawer.setActionId(68)
-					break
+					animationDrawer.setActionId(70)
+				Case 1
+					animationDrawer.setActionId(69)
+				Case 2
+					animationDrawer.setActionId(68)
 			End Select
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + SONIC_BALL_SPACE) + Self.optionArrowDriveY)
-			animationDrawer = muiAniDrawer
+			
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + SONIC_BALL_SPACE) + Self.optionArrowDriveY)
 			
 			If (Key.touchmenuoptionitems[STATE_EXIT].Isin() And Self.menuOptionCursor = STATE_RACE_MODE And Self.isSelectable) Then
 				i = ZONE_NUM_OFFSET
@@ -1763,8 +1759,7 @@ Class TitleState Extends State
 			EndIf
 			
 			animationDrawer.setActionId(i + STATE_OPTION_DIFF)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + StringIndex.STR_SOUND_OPEN) + Self.optionArrowDriveY)
-			animationDrawer = muiAniDrawer
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + StringIndex.STR_SOUND_OPEN) + Self.optionArrowDriveY)
 			
 			If (Key.touchmenuoptionitems[STATE_STAGE_SELECT].Isin() And Self.menuOptionCursor = STATE_MORE_GAME And Self.isSelectable) Then
 				i = ZONE_NUM_OFFSET
@@ -1773,8 +1768,7 @@ Class TitleState Extends State
 			EndIf
 			
 			animationDrawer.setActionId(i + STATE_OPTION_VIBRATION)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + 168) + Self.optionArrowDriveY)
-			animationDrawer = muiAniDrawer
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + 168) + Self.optionArrowDriveY)
 			
 			If (Key.touchmenuoptionitems[STATE_INTERRUPT].Isin() And Self.menuOptionCursor = STATE_RANKING And Self.isSelectable) Then
 				i = ZONE_NUM_OFFSET
@@ -1783,7 +1777,7 @@ Class TitleState Extends State
 			EndIf
 			
 			animationDrawer.setActionId(i + TITLE_BG_OFFSET)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + 192) + Self.optionArrowDriveY)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + 192) + Self.optionArrowDriveY)
 			
 			If (Self.optionUpArrowAvailable) Then
 				Self.optionArrowUpDrawer.draw(g, (SCREEN_WIDTH Shr 1) + Def.TOUCH_OPTION_ARROW_OFFSET_X, (SCREEN_HEIGHT Shr 1) - 19)
@@ -1795,11 +1789,12 @@ Class TitleState Extends State
 			
 			Self.optionOffsetX -= STATE_START_GAME
 			Self.optionOffsetX Mod= OPTION_MOVING_INTERVAL
-			muiAniDrawer.setActionId(MAIN_MENU_CENTER_X)
-			For (Int x1 = Self.optionOffsetX; x1 < SCREEN_WIDTH * 2; x1 += OPTION_MOVING_INTERVAL)
-				muiAniDrawer.draw(g, x1, 0)
+			
+			animationDrawer.setActionId(MAIN_MENU_CENTER_X)
+			
+			For Local x1:= Self.optionOffsetX Until (SCREEN_WIDTH * 2) Step OPTION_MOVING_INTERVAL
+				animationDrawer.draw(g, x1, 0)
 			Next
-			animationDrawer = muiAniDrawer
 			
 			If (Key.touchmenuoptionreturn.Isin()) Then
 				i = STATE_GOTO_GAME
@@ -1808,7 +1803,8 @@ Class TitleState Extends State
 			EndIf
 			
 			animationDrawer.setActionId(i + 61)
-			muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
+			animationDrawer.draw(g, 0, SCREEN_HEIGHT)
+			
 			State.drawFade(g)
 		End
 		

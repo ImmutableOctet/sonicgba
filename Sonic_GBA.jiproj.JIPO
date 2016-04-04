@@ -783,8 +783,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>5</X>
-        <Y>1625</Y>
+        <X>19</X>
+        <Y>1627</Y>
       </CursorPos>
       <DocGUID>c56a8fa0-c6b4-4779-9eeb-f2a47d843950</DocGUID>
       <Bookmarks />
@@ -806,6 +806,7 @@
     </DocUserOptions>
   </Files>
   <Folders>
+    <FolderStatus NodePath="Sonic_GBA\__backup" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\etc" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\etc\SAdv" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\etc\text_manipulate" Expanded="false" />
