@@ -2413,8 +2413,9 @@ Class TitleState Extends State
 			Key.touchMainMenuInit2()
 		End
 		
-		Private Method drawTitleBg:Void(g:MFGraphics)
+		Method drawTitleBg:Void(g:MFGraphics)
 			g.setColor(0)
+			
 			Self.titleAniDrawer.setActionId(0)
 			
 			If (state = ZONE_NUM_OFFSET) Then
@@ -2422,7 +2423,6 @@ Class TitleState Extends State
 					Self.titleAniDrawer.setActionId(STATE_MOVING)
 					Self.titleAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + STATE_OPTION_LANGUAGE)
 				EndIf
-				
 			ElseIf (state = STATE_EXIT And Self.quitFlag = ZONE_NUM_OFFSET) Then
 				Self.titleAniDrawer.setActionId(STATE_MOVING)
 				Self.titleAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + STATE_OPTION_LANGUAGE)
@@ -2432,110 +2432,103 @@ Class TitleState Extends State
 			drawTitleName(g)
 		End
 		
-		Private Method drawMainMenuNormal:Void(g:MFGraphics)
-			
+		Method drawMainMenuNormal:Void(g:MFGraphics)
 			If (state = STATE_MOVING) Then
 				Self.isAtMainMenu = True
 			Else
 				Self.isAtMainMenu = False
 			EndIf
 			
-			AnimationDrawer animationDrawer = Self.titleAniDrawer
-			Int i = Self.isAtMainMenu ? (Key.touchmainmenustart.Isin() And Self.cursor = 0) ? ZONE_NUM_OFFSET : 0 : 0
+			Local animationDrawer:= Self.titleAniDrawer
+			
+			Local i:Int
+			
+			i = PickValue(Self.isAtMainMenu, PickValue((Key.touchmainmenustart.Isin() And Self.cursor = 0), 1, 0), 0)
 			animationDrawer.setActionId(i + STATE_OPENING)
 			Self.titleAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + STATE_EXIT)
-			animationDrawer = Self.titleAniDrawer
-			i = Self.isAtMainMenu ? (Key.touchmainmenurace.Isin() And Self.cursor = ZONE_NUM_OFFSET) ? ZONE_NUM_OFFSET : 0 : 0
+			
+			i = PickValue(Self.isAtMainMenu, PickValue((Key.touchmainmenustart.Isin() And Self.cursor = 1), 1, 0), 0)
 			animationDrawer.setActionId(i + STATE_GOTO_GAME)
 			Self.titleAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + STATE_OPTION_SP_SET)
-			animationDrawer = Self.titleAniDrawer
-			i = Self.isAtMainMenu ? (Key.touchmainmenuoption.Isin() And Self.cursor = STATE_MOVING) ? ZONE_NUM_OFFSET : 0 : 0
+			
+			i = PickValue(Self.isAtMainMenu, PickValue((Key.touchmainmenustart.Isin() And Self.cursor = 2), ZONE_NUM_OFFSET, 0), 0)
 			animationDrawer.setActionId(i + STATE_MORE_GAME)
 			Self.titleAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + 52)
-			animationDrawer = Self.titleAniDrawer
-			i = Self.isAtMainMenu ? (Key.touchmainmenuend.Isin() And Self.cursor = STATE_OPENING) ? ZONE_NUM_OFFSET : 0 : 0
+			
+			i = PickValue(Self.isAtMainMenu, PickValue((Key.touchmainmenustart.Isin() And Self.cursor = 3), ZONE_NUM_OFFSET, 0), 0)
 			animationDrawer.setActionId(i + VISIBLE_OPTION_ITEMS_NUM)
 			Self.titleAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + 72)
 			
 			If (muiAniDrawer = Null) Then
 				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
+				
 				Return
 			EndIf
 			
 			animationDrawer = muiAniDrawer
 			
 			If (Key.touchmainmenureturn.Isin()) Then
-				i = STATE_GOTO_GAME
+				i = 5
 			Else
 				i = 0
 			EndIf
 			
 			animationDrawer.setActionId(i + 61)
-			muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
+			animationDrawer.draw(g, 0, SCREEN_HEIGHT)
 		End
 		
-		Private Method drawMainMenuMultiItems:Void(g:MFGraphics)
-			
+		Method drawMainMenuMultiItems:Void(g:MFGraphics)
 			If (state = STATE_MOVING) Then
 				Self.isAtMainMenu = True
 			Else
 				Self.isAtMainMenu = False
 			EndIf
 			
-			Self.degree = MyAPI.calNextPosition((double) Self.degree, 0.0d, ZONE_NUM_OFFSET, STATE_OPENING)
+			Self.degree = MyAPI.calNextPosition(Double(Self.degree), 0.0, 1, 3)
 			
 			If (Self.degree = 0) Then
 				Self.menuMoving = False
 			EndIf
 			
-			Self.titleAniDrawer.setActionId(STATE_STAGE_SELECT)
-			Self.titleAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + STATE_OPTION_SENSOR_SET)
-			Int startCursor = (((Self.mainMenuItemCursor + ELEMENT_OFFSET) - 1) + Self.currentElement.Length) Mod Self.currentElement.Length
-			For (Int i = 0; i < STATE_START_GAME; i += 1)
-				Int elementId = (startCursor + i) Mod Self.currentElement.Length
-				Int y = (Self.degree + STATE_RETURN_TO_LOGO_1) + ((i - 1) * STATE_RETURN_TO_LOGO_1)
+			Local animationDrawer:= Self.titleAniDrawer
+			
+			animationDrawer.setActionId(STATE_STAGE_SELECT)
+			animationDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + STATE_OPTION_SENSOR_SET)
+			
+			Local startCursor:= (((Self.mainMenuItemCursor + ELEMENT_OFFSET) - 1) + Self.currentElement.Length) Mod Self.currentElement.Length
+			
+			For Local i:= 0 Until 4
+				Local elementId:= (startCursor + i) Mod Self.currentElement.Length
+				Local y:= (Self.degree + STATE_RETURN_TO_LOGO_1) + ((i - 1) * STATE_RETURN_TO_LOGO_1)
 				
 				If (y >= TOTAL_OPTION_ITEMS_NUM And y <= 70) Then
-					Int i2
-					AnimationDrawer animationDrawer = Self.titleAniDrawer
-					Int i3 = Self.currentElement[elementId]
-					
-					If (Self.mainMenuEnsureFlag And Self.mainMenuItemCursor = elementId) Then
-						i2 = ZONE_NUM_OFFSET
-					Else
-						i2 = 0
-					EndIf
-					
-					animationDrawer.setActionId(i3 + i2)
-					Self.titleAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + y)
+					animationDrawer.setActionId(Self.currentElement[elementId] + Int((Self.mainMenuEnsureFlag And Self.mainMenuItemCursor = elementId)))
+					animationDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + y)
 				EndIf
-				
 			Next
-			Self.titleAniDrawer.setActionId(STATE_GAMEOVER_RANKING)
-			Self.titleAniDrawer.draw(g, 0, SCREEN_HEIGHT Shr 1)
+			
+			animationDrawer.setActionId(STATE_GAMEOVER_RANKING)
+			animationDrawer.draw(g, 0, SCREEN_HEIGHT Shr 1)
+			
 			drawSegaLogo(g)
 			drawTitleName(g)
-			Self.titleAniDrawer.setActionId(STATE_INTERRUPT)
-			Self.titleAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + STATE_OPTION_SENSOR_SET)
+			
+			animationDrawer.setActionId(STATE_INTERRUPT)
+			animationDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + STATE_OPTION_SENSOR_SET)
 			
 			If (muiAniDrawer = Null) Then
 				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
+				
 				Return
 			EndIf
 			
 			animationDrawer = muiAniDrawer
 			
-			If (Key.touchmainmenureturn.Isin()) Then
-				i3 = STATE_GOTO_GAME
-			Else
-				i3 = 0
-			EndIf
-			
-			animationDrawer.setActionId(i3 + 61)
-			muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
+			animationDrawer.setActionId(PickValue(Key.touchmainmenureturn.Isin(), 5, 0) + 61)
+			animationDrawer.draw(g, 0, SCREEN_HEIGHT)
 		End
 		
-		Private Method drawMainMenu:Void(g:MFGraphics)
+		Method drawMainMenu:Void(g:MFGraphics)
 			drawMainMenuNormal(g)
 		End
 		
