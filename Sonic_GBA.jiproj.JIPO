@@ -207,8 +207,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animation.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>21</X>
-        <Y>15</Y>
+        <X>12</X>
+        <Y>341</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -254,12 +254,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>17</X>
-        <Y>18</Y>
+        <X>8</X>
+        <Y>75</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>071850d3-29ef-4f54-bea2-e129c07fecf2</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -479,10 +480,10 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>9</X>
+        <Y>76</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -766,13 +767,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\state\state.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\state\state.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>24</X>
         <Y>300</Y>
       </CursorPos>
-      <DocGUID>92da4b06-d5bf-44ac-b796-7be48be3c7c2</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\stringindex.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -783,8 +783,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>19</X>
-        <Y>1627</Y>
+        <X>3</X>
+        <Y>2411</Y>
       </CursorPos>
       <DocGUID>c56a8fa0-c6b4-4779-9eeb-f2a47d843950</DocGUID>
       <Bookmarks />
@@ -826,7 +826,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\android" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\device" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\lib\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\mflib" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data" Expanded="false" />
