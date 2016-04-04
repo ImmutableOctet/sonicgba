@@ -2532,8 +2532,7 @@ Class TitleState Extends State
 			drawMainMenuNormal(g)
 		End
 		
-		Private Method initCharacterSelectRes:Void()
-			
+		Method initCharacterSelectRes:Void()
 			If (Self.charSelAni = Null Or Self.charSelFilAni = Null) Then
 				Self.charSelAni = Animation.getInstanceFromQi("/animation/utl_res/character_select.dat")
 				Self.charSelAniDrawer = Self.charSelAni[0].getDrawer(0, False, 0)
@@ -2566,16 +2565,19 @@ Class TitleState Extends State
 			Self.character_sel_offset_x = 0
 			Self.character_idchangeFlag = False
 			Self.character_offset_state = 0
+			
 			Key.touchCharacterSelectModeInit()
+			
 			Self.returnCursor = 0
 		End
 		
-		Private Method characterSelectLogic:Void()
+		Method characterSelectLogic:Void()
 			Self.character_sel_frame_cnt += 1
 			
 			If (Self.character_sel_frame_cnt = ZONE_NUM_OFFSET) Then
 				Self.charSelAniDrawer.setActionId(0)
 				Self.arrowPressState = 0
+				
 				SoundSystem.getInstance().playBgm(STATE_MOVING)
 			EndIf
 			
@@ -2615,24 +2617,26 @@ Class TitleState Extends State
 				EndIf
 				
 				If (Key.touchcharselreturn <> Null And Key.touchcharsel.IsClick() And Key.touchcharselreturn.Isin()) Then
-					Self.returnCursor = ZONE_NUM_OFFSET
+					Self.returnCursor = 1
 				EndIf
 				
 				If (Not Self.character_outer) Then
 					If (Key.touchcharselleftarrow.IsButtonPress() And Self.cursor = STATE_OPENING) Then
-						Self.arrowPressState = ZONE_NUM_OFFSET
-						Self.character_offset_state = ZONE_NUM_OFFSET
+						Self.arrowPressState = 1
+						Self.character_offset_state = 1
+						
 						Key.touchcharselleftarrow.resetKeyState()
 					EndIf
 					
 					If (Key.touchcharselrightarrow.IsButtonPress() And Self.cursor = STATE_START_GAME) Then
 						Self.arrowPressState = STATE_MOVING
 						Self.character_offset_state = STATE_MOVING
+						
 						Key.touchcharselrightarrow.resetKeyState()
 					EndIf
 					
 					If (Key.slidesensorcharsel.isSliding()) Then
-						Bool idChanged = False
+						Local idChanged:Bool = False
 						
 						If (Self.arrowPressState = 0) Then
 							If (Not Key.slidesensorcharsel.isSlide(Key.DIR_LEFT)) Then
@@ -2641,56 +2645,58 @@ Class TitleState Extends State
 										Case STATE_SEGA_LOGO
 											Self.character_id -= ZONE_NUM_OFFSET
 											Self.character_circleturnright = False
+											
 											idChanged = True
+											
 											Self.character_offset_state = STATE_MOVING
-											break
 										Case STATE_SELECT
 											Self.character_id -= ZONE_NUM_OFFSET
 											Self.character_circleturnright = False
+											
 											idChanged = True
+											
 											Self.character_offset_state = 0
-											break
 										Case STATE_MOVING
 											Self.character_offset_state = 0
-											break
 										Default
-											break
+											' Nothing so far.
 									End Select
 								EndIf
 							EndIf
 							
+							' These are probably supposed to be character IDs:
 							Select (Self.character_offset_state)
 								Case STATE_SEGA_LOGO
 									Self.character_id += 1
 									Self.character_circleturnright = True
+									
 									idChanged = True
+									
 									Self.character_offset_state = ZONE_NUM_OFFSET
-									break
 								Case STATE_SELECT
 									Self.character_offset_state = 0
-									break
 								Case STATE_MOVING
 									Self.character_id += 1
 									Self.character_circleturnright = True
+									
 									idChanged = True
+									
 									Self.character_offset_state = 0
-									break
 							End Select
+							
 							Select (Self.character_offset_state)
 								Case STATE_SEGA_LOGO
 									Self.character_sel_offset_x = Key.slidesensorcharsel.getOffsetX()
-									break
 								Case STATE_SELECT
 									Self.character_sel_offset_x = Key.slidesensorcharsel.getOffsetX() + 64
-									break
 								Case STATE_MOVING
 									Self.character_sel_offset_x = Key.slidesensorcharsel.getOffsetX() - 64
-									break
 							End Select
 							
 							If (idChanged) Then
 								Self.character_id += PlayerObject.CHARACTER_LIST.Length
 								Self.character_id Mod= PlayerObject.CHARACTER_LIST.Length
+								
 								Self.charSelRoleDrawer.setLoop(False)
 								Self.charSelRoleDrawer.setActionId(Self.character_id + STATE_OPTION_SOUND)
 								Self.character_idchangeFlag = True
@@ -2702,7 +2708,6 @@ Class TitleState Extends State
 								EndIf
 							EndIf
 						EndIf
-						
 					Else
 						Self.character_offset_state = 0
 						
@@ -2738,7 +2743,9 @@ Class TitleState Extends State
 									Self.charSelRoleDrawer.setLoop(False)
 									Self.charSelRoleDrawer.setActionId(Self.character_id + STATE_OPTION_SOUND)
 									Self.character_idchangeFlag = True
+									
 									Self.arrowPressState = 0
+									
 									Self.character_reback = True
 									Self.character_sel_offset_x = 0
 								EndIf
@@ -2747,28 +2754,25 @@ Class TitleState Extends State
 						
 						If (Self.character_idchangeFlag And Self.character_sel_offset_x = 0) Then
 							If (Self.character_reback) Then
-								Int i
 								Self.character_move = True
-								AnimationDrawer animationDrawer = Self.charSelAniDrawer
 								
-								If (Self.character_circleturnright) Then
-									i = ZONE_NUM_OFFSET
-								Else
-									i = STATE_MOVING
-								EndIf
+								Local animationDrawer:= Self.charSelAniDrawer
 								
-								animationDrawer.setActionId(i)
-								Self.charSelAniDrawer.restart()
+								animationDrawer.setActionId(PickValue(Self.character_circleturnright, 1, 2))
+								animationDrawer.restart()
 							EndIf
 							
 							Self.charSelFilAniDrawer.setActionId(Self.character_id + ZONE_NUM_OFFSET)
 							Self.character_idchangeFlag = False
+							
 							Key.touchcharsElselect.reset()
+							
 							SoundSystem.getInstance().playSe(0)
 						EndIf
 						
 						If (Not Self.character_idchangeFlag And Self.character_sel_offset_x < STATE_RANKING And Self.character_sel_offset_x > INTERGRADE_RECORD_STAGE_NAME_SPEED And Key.touchcharsElselect.IsButtonPress() And Self.cursor = STATE_MOVING) Then
 							SoundSystem.getInstance().playSe(ZONE_NUM_OFFSET)
+							
 							Self.charSelTitleDrawer.setActionId(STATE_OPTION_DIFF)
 							Self.character_arrow_display = False
 							Self.charSelRoleDrawer.setActionId(Self.character_id + VISIBLE_OPTION_ITEMS_NUM)
@@ -2781,18 +2785,20 @@ Class TitleState Extends State
 					
 					If (Self.character_sel_offset_x = 0 And ((Key.press(Key.B_BACK) Or (Key.touchcharselreturn.IsButtonPress() And Self.returnCursor = ZONE_NUM_OFFSET)) And State.fadeChangeOver())) Then
 						changeStateWithFade(Self.preCharaterSelectState)
+						
 						Select (Self.preCharaterSelectState)
 							Case STATE_MOVING
 								Self.isTitleBGMPlay = False
+								
 								Key.touchMainMenuInit2()
 								initTitleRes2()
+								
 								SoundSystem.getInstance().stopBgm(False)
-								break
 							Case STATE_PRO_RACE_MODE
 								Key.touchProRaceModeInit()
 								initTimeStageRes()
-								break
 						End Select
+						
 						SoundSystem.getInstance().playSe(STATE_MOVING)
 					EndIf
 				EndIf
@@ -2816,12 +2822,13 @@ Class TitleState Extends State
 					Key.touchCharacterSelectModeClose()
 				EndIf
 			EndIf
-			
 		End
 		
-		Private Method drawCharacterSelect:Void(g:MFGraphics)
+		Method drawCharacterSelect:Void(g:MFGraphics)
 			g.setColor(MapManager.END_COLOR)
+			
 			MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+			
 			Self.charSelAniDrawer.draw(g, SCREEN_WIDTH Shr 1, SCREEN_HEIGHT Shr 1)
 			
 			If (Self.character_sel_frame_cnt > STATE_START_GAME And Self.character_sel_frame_cnt <= STATE_INTERRUPT) Then
@@ -2854,40 +2861,32 @@ Class TitleState Extends State
 			If (muiAniDrawer = Null) Then
 				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
 			Else
+				Local animationDrawer:= muiAniDrawer
 				
 				If (Key.touchcharselreturn <> Null) Then
-					Int i
-					AnimationDrawer animationDrawer = muiAniDrawer
-					
-					If (Key.touchcharselreturn.Isin()) Then
-						i = STATE_GOTO_GAME
-					Else
-						i = 0
-					EndIf
-					
-					animationDrawer.setActionId(i + 61)
+					animationDrawer.setActionId(PickValue(Key.touchcharselreturn.Isin(), 5, 0) + 61)
 				EndIf
 				
-				muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
+				animationDrawer.draw(g, 0, SCREEN_HEIGHT)
 			EndIf
 			
 			State.drawFade(g)
 		End
 		
-		Private Method initTimeStageRes:Void()
-			
+		Method initTimeStageRes:Void()
 			If (Self.timeAttAni = Null) Then
 				Self.timeAttAni = Animation.getInstanceFromQi("/animation/utl_res/time_attack.dat")
 				Self.timeAttAniDrawer = Self.timeAttAni[0].getDrawer(0, True, 0)
 			EndIf
 			
 			Key.touchProRaceModeInit()
+			
 			SoundSystem.getInstance().playBgm(STATE_MOVING)
+			
 			Self.isRaceModeItemsSelected = False
 		End
 		
-		Private Method proRaceModeLogic:Void()
-			
+		Method proRaceModeLogic:Void()
 			If (State.fadeChangeOver()) Then
 				If (Key.touchproracemodestart.Isin() And Key.touchproracemode.IsClick()) Then
 					Self.cursor = 0
@@ -2900,29 +2899,41 @@ Class TitleState Extends State
 				If (Key.touchproracemodestart.IsButtonPress() And Self.cursor = 0 And Not Self.isRaceModeItemsSelected) Then
 					Self.isRaceModeItemsSelected = True
 					Self.stage_sel_key = ZONE_NUM_OFFSET
+					
 					changeStateWithFade(STATE_CHARACTER_SELECT)
+					
 					Self.preCharaterSelectState = STATE_PRO_RACE_MODE
+					
 					initCharacterSelectRes()
+					
 					SoundSystem.getInstance().playSe(ZONE_NUM_OFFSET)
 				ElseIf (Key.touchproracemoderecord.IsButtonPress() And Self.cursor = ZONE_NUM_OFFSET And Not Self.isRaceModeItemsSelected) Then
 					Self.isRaceModeItemsSelected = True
 					Self.stage_sel_key = 0
+					
 					changeStateWithFade(STATE_STAGE_SELECT)
+					
 					preStageSelectState = STATE_PRO_RACE_MODE
+					
 					initStageSelectRes()
+					
 					SoundSystem.getInstance().playSe(ZONE_NUM_OFFSET)
 				EndIf
 				
 				If ((Key.press(Key.B_BACK) Or (Key.touchproracemodereturn.IsButtonPress() And Self.cursor = STATE_MOVING)) And State.fadeChangeOver()) Then
 					changeStateWithFade(STATE_MOVING)
+					
 					Self.isTitleBGMPlay = False
+					
 					Key.touchMainMenuInit2()
 					initTitleRes2()
+					
 					Self.returnCursor = 0
+					
 					SoundSystem.getInstance().playSe(STATE_MOVING)
 					SoundSystem.getInstance().stopBgm(False)
+					
 					menuInit(Self.multiMainItems)
-					Return
 				EndIf
 				
 				Return
@@ -2932,30 +2943,35 @@ Class TitleState Extends State
 			Key.touchproracemoderecord.reset()
 		End
 		
-		Private Method drawProTimeAttack:Void(g:MFGraphics)
+		Method drawProTimeAttack:Void(g:MFGraphics)
 			g.setColor(MapManager.END_COLOR)
+			
 			MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+			
 			Self.timeAttAniDrawer.setActionId(0)
 			Self.timeAttAniDrawer.draw(g, 0, 0)
 			Self.timeAttAniDrawer.setActionId(ZONE_NUM_OFFSET)
 			Self.timeAttAniDrawer.draw(g, SCREEN_WIDTH, SCREEN_HEIGHT Shr 1)
-			Int x
 			
 			If ((Key.touchproracemodestart.Isin() Or Self.isRaceModeItemsSelected) And Self.cursor = 0) Then
 				Self.timeAttackOffsetX += TIME_ATTACK_SPEED_X
 				Self.timeAttackOffsetX Mod= TIME_ATTACK_WIDTH
 				Self.timeAttAniDrawer.setActionId(STATE_MOVING)
-				For (x = Self.timeAttackOffsetX; x < (SCREEN_WIDTH * STATE_OPENING) / STATE_MOVING; x += TIME_ATTACK_WIDTH)
+				
+				For Local x:= Self.timeAttackOffsetX Until ((SCREEN_WIDTH * STATE_OPENING) / STATE_MOVING) Step TIME_ATTACK_WIDTH
 					Self.timeAttAniDrawer.draw(g, ((SCREEN_WIDTH Shr 1) + x) - STATE_RANKING, SCREEN_HEIGHT Shr 1)
 				Next
+				
 				Self.timeAttAniDrawer.draw(g, ((Self.timeAttackOffsetX - TIME_ATTACK_WIDTH) + (SCREEN_WIDTH Shr 1)) - STATE_RANKING, SCREEN_HEIGHT Shr 1)
 			ElseIf ((Key.touchproracemoderecord.Isin() Or Self.isRaceModeItemsSelected) And Self.cursor = ZONE_NUM_OFFSET) Then
 				Self.timeAttackOffsetX += TIME_ATTACK_SPEED_X
 				Self.timeAttackOffsetX Mod= TIME_ATTACK_WIDTH
 				Self.timeAttAniDrawer.setActionId(STATE_OPENING)
-				For (x = Self.timeAttackOffsetX; x < (SCREEN_WIDTH * STATE_OPENING) / STATE_MOVING; x += TIME_ATTACK_WIDTH)
+				
+				For Local x:= Self.timeAttackOffsetX Until ((SCREEN_WIDTH * STATE_OPENING) / STATE_MOVING) Step TIME_ATTACK_WIDTH
 					Self.timeAttAniDrawer.draw(g, ((SCREEN_WIDTH Shr 1) + x) - STATE_RANKING, SCREEN_HEIGHT Shr 1)
 				Next
+				
 				Self.timeAttAniDrawer.draw(g, ((Self.timeAttackOffsetX - TIME_ATTACK_WIDTH) + (SCREEN_WIDTH Shr 1)) - STATE_RANKING, SCREEN_HEIGHT Shr 1)
 			Else
 				Self.timeAttackOffsetX = 0
@@ -2963,24 +2979,15 @@ Class TitleState Extends State
 			
 			If (muiAniDrawer = Null) Then
 				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
+				
 				Return
 			EndIf
 			
-			Int i
-			AnimationDrawer animationDrawer = muiAniDrawer
-			
-			If (Key.touchproracemodereturn.Isin()) Then
-				i = STATE_GOTO_GAME
-			Else
-				i = 0
-			EndIf
-			
-			animationDrawer.setActionId(i + 61)
+			muiAniDrawer.setActionId(PickValue(Key.touchproracemodereturn.Isin(), 5, 0) + 61)
 			muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
 		End
 		
-		Private Method initStageSelectRes:Void()
-			
+		Method initStageSelectRes:Void()
 			If (Self.stageSelAni = Null) Then
 				Self.stageSelAni = Animation.getInstanceFromQi("/animation/utl_res/stage_select.dat")
 				Self.stageSelAniDrawer = Self.stageSelAni[0].getDrawer(0, True, 0)
@@ -2993,6 +3000,7 @@ Class TitleState Extends State
 			EndIf
 			
 			Key.touchStageSelectModeInit()
+			
 			Self.stageItemNumForShow = STATE_RACE_MODE
 			Self.stageDrawEndY = (Self.stageDrawStartY + (Self.stageItemNumForShow * ITEM_SPACE)) - (ITEM_SPACE Shr 1)
 			Self.stageStartIndex = 0
@@ -3001,17 +3009,19 @@ Class TitleState Extends State
 			Self.vY = New Int[Self.STAGE_TOTAL_NUM]
 			Self.offsetY[0] = SCREEN_HEIGHT Shr 1
 			Self.vY[0] = STATE_RACE_MODE
-			For (Int i = ZONE_NUM_OFFSET; i < Self.STAGE_TOTAL_NUM; i += 1)
+			
+			For Local i:= 1 Until Self.STAGE_TOTAL_NUM
 				Self.offsetY[i] = Self.offsetY[i - 1] * 2
 				Self.vY[i] = Self.vY[i - 1] * 2
 			Next
+			
 			Self.stage_select_state = 0
 			Self.stageSelectReturnFlag = False
 			Self.optionMenuCursor = ELEMENT_OFFSET
 		End
 		
 		Private Method stageSelectLogic:Void()
-			Int i
+			Local i:Int
 			
 			If (Self.stage_select_state = 0) Then
 				Key.touchstageselectreturn.resetKeyState()
@@ -3023,14 +3033,16 @@ Class TitleState Extends State
 				EndIf
 				
 				If (Self.offsetY[0] - Self.vY[0] <= 0) Then
-					For (i = 0; i < Self.STAGE_TOTAL_NUM; i += 1)
+					For i:= 0 Until Self.STAGE_TOTAL_NUM
 						Self.offsetY[i] = 0
 					Next
+					
 					Self.stage_select_state = ZONE_NUM_OFFSET
 				Else
-					For (i = 0; i < Self.STAGE_TOTAL_NUM; i += 1)
-						Int[] iArr = Self.offsetY
-						iArr[i] = iArr[i] - Self.vY[i]
+					For i:= 0 Until Self.STAGE_TOTAL_NUM
+						Local iArr:= Self.offsetY
+						
+						iArr[i] -= Self.vY[i]
 					Next
 				EndIf
 				
@@ -3091,7 +3103,6 @@ Class TitleState Extends State
 							Self.stageSelectArrowDriveY = 0
 							Self.stageSelectArrowMoveable = False
 						EndIf
-						
 					ElseIf (Self.stageSelectArrowDriveOffsetY < 0 And Self.stageSelectArrowDriveY <= -24) Then
 						Self.stageSelectArrowDriveY = -24
 						Self.stageDrawOffsetY += Self.stageSelectArrowDriveY
@@ -3132,7 +3143,6 @@ Class TitleState Extends State
 					Else
 						Self.gestureSlideSpeed = ((Self.currentStageSelectSlidePointY - Self.firstStageSelectSlidePointY) / Self.stageSelectSlideFrame) * 2
 					EndIf
-					
 				ElseIf (Self.stageYDirect = 0) Then
 					If (Self.gestureSlideSpeed > 0) Then
 						Self.gestureSlideSpeed -= STATE_OPENING
@@ -3161,38 +3171,39 @@ Class TitleState Extends State
 					EndIf
 				EndIf
 				
-				For (i = 0; i < Key.touchstageselectitem.Length; i += 1)
+				For i = 0 Until Key.touchstageselectitem.Length
 					Key.touchstageselectitem[i].setStartY((((Self.stageDrawStartY + ((i + ZONE_NUM_OFFSET) * STATE_PRO_RACE_MODE)) + Self.offsetY[i]) + Self.stageDrawOffsetY) + Self.stageselectslide_y)
 				Next
 				
 				If (Self.isSelectable And Self.stageYDirect = 0) Then
 					i = 0
-					While (i < Key.touchstageselectitem.Length) {
-						
+					
+					While (i < Key.touchstageselectitem.Length)
 						If (Key.touchstageselectitem[i].IsButtonPress() And Self.optionMenuCursor = i And State.fadeChangeOver() And Not Key.touchstageselect.Isin()) Then
 							Select (Self.stage_sel_key)
 								Case STATE_SEGA_LOGO
 									changeStateWithFade(STATE_CHARACTER_RECORD)
+									
 									Self.stage_characterRecord_ID = Self.optionMenuCursor
+									
 									initRecordRes()
-									break
 								Case STATE_SELECT
 									changeStateWithFade(STATE_INTERGRADE_RECORD)
+									
 									Self.stage_characterRecord_ID = Self.optionMenuCursor
+									
 									initIntergradeRecordRes()
-									break
 								Case STATE_MOVING
 									StageManager.setStageID(Self.optionMenuCursor)
 									StageManager.setStartStageID(Self.optionMenuCursor)
 									State.setState(ZONE_NUM_OFFSET)
-									break
 							End Select
+							
 							SoundSystem.getInstance().playSe(ZONE_NUM_OFFSET)
 						Else
 							i += 1
 						EndIf
-						
-					}
+					Wend
 				EndIf
 				
 				If (Key.slidesensorstagesel.isSliding()) Then
@@ -3215,9 +3226,7 @@ Class TitleState Extends State
 						Self.isStageSelectChange = True
 						Self.isSelectable = False
 					EndIf
-					
 				Else
-					
 					If (Self.isStageSelectChange And Self.stageselectslide_y = 0) Then
 						Self.stageDrawOffsetY = Self.stageDrawOffsetTmpY1
 						Self.isStageSelectChange = False
@@ -3225,10 +3234,11 @@ Class TitleState Extends State
 					EndIf
 					
 					If (Not Self.isStageSelectChange) Then
-						Int speed
+						Local speed:Int
 						
 						If (Self.stageDrawOffsetY > 0) Then
 							Self.stageYDirect = ZONE_NUM_OFFSET
+							
 							speed = (-Self.stageDrawOffsetY) Shr 1
 							
 							If (speed > TIME_ATTACK_SPEED_X) Then
@@ -3245,6 +3255,7 @@ Class TitleState Extends State
 							
 						ElseIf (Self.stageDrawOffsetY < Self.stageDrawOffsetBottomY) Then
 							Self.stageYDirect = STATE_MOVING
+							
 							speed = (Self.stageDrawOffsetBottomY - Self.stageDrawOffsetY) Shr 1
 							
 							If (speed < STATE_MOVING) Then
@@ -3271,46 +3282,47 @@ Class TitleState Extends State
 					
 					If (Self.isSelectable) Then
 						i = 0
-						While (i < Key.touchstageselectitem.Length) {
-							
+						
+						While (i < Key.touchstageselectitem.Length)
 							If (Key.touchstageselectitem[i].Isin() And Key.touchstageselect.IsClick() And i <= StageManager.getOpenedStageId()) Then
 								Self.optionMenuCursor = i
 								Self.returnCursor = 0
 							Else
 								i += 1
 							EndIf
-							
-						}
+						Wend
 					EndIf
 				EndIf
 				
 				If ((Key.press(Key.B_BACK) Or (Key.touchstageselectreturn.IsButtonPress() And Self.returnCursor = ZONE_NUM_OFFSET)) And State.fadeChangeOver()) Then
 					SoundSystem.getInstance().stopBgm(False)
+					
 					changeStateWithFade(preStageSelectState)
+					
 					Select (preStageSelectState)
 						Case STATE_MOVING
 							Self.isTitleBGMPlay = False
+							
 							Key.touchMainMenuInit2()
-							break
 						Case STATE_CHARACTER_SELECT
 							Key.touchCharacterSelectModeInit()
+							
 							initCharacterSelectRes()
-							break
 						Case STATE_PRO_RACE_MODE
 							Key.touchProRaceModeInit()
+							
 							initTimeStageRes()
-							break
 					End Select
+					
 					SoundSystem.getInstance().playSe(STATE_MOVING)
 				EndIf
 				
 				Self.stageselectslide_getprey = Self.stageselectslide_gety
 			EndIf
-			
 		End
 		
-		Private Method releaseAllStageSelectItemsTouchKey:Void()
-			For (Int i = 0; i < Key.touchstageselectitem.Length; i += 1)
+		Method releaseAllStageSelectItemsTouchKey:Void()
+			For Local i:= 0 Until Key.touchstageselectitem.Length
 				Key.touchstageselectitem[i].resetKeyState()
 			Next
 		End
