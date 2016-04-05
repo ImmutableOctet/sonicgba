@@ -8,5 +8,5 @@ Public
 ' Classes:
 Class SonicDebug
 	' Global variable(s):
-	Global showCollisionRect:Bool = False
+	Global showCollisionRect:Bool = False ' True
 End
