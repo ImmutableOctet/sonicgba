@@ -338,16 +338,16 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 					
 					If (Self.state = STATE_DASH) Then
 						If (Self.state <> STATE_SPRING) Then
-							Self.velX = (Cos(degree) * MOVE_VELOCITY) / 100
+							Self.velX = ((Cos(degree) * MOVE_VELOCITY) / 100)
 						ElseIf (Self.count >= SSSpringCount) Then
-							Self.velX = (Cos(degree) * MOVE_VELOCITY) / 100
+							Self.velX = ((Cos(degree) * MOVE_VELOCITY) / 100)
 						EndIf
 					ElseIf (Self.state <> STATE_SPRING) Then
-						Self.velX = (Cos(degree) * MOVE_VELOCITY) / 100
-						Self.velY = (Sin(degree) * MOVE_VELOCITY) / 100
+						Self.velX = ((Cos(degree) * MOVE_VELOCITY) / 100)
+						Self.velY = ((Sin(degree) * MOVE_VELOCITY) / 100)
 					ElseIf (Self.count >= SSSpringCount) Then
-						Self.velX = (Cos(degree) * MOVE_VELOCITY) / 100
-						Self.velY = (Sin(degree) * MOVE_VELOCITY) / 100
+						Self.velX = ((Cos(degree) * MOVE_VELOCITY) / 100)
+						Self.velY = ((Sin(degree) * MOVE_VELOCITY) / 100)
 					EndIf
 				EndIf
 			EndIf
@@ -429,14 +429,11 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 						If (GlobalResource.spsetConfig = 1) Then
 							Select (Self.acc_value)
 								Case STATE_DASH
-									Self.posX = MyAPI.calNextPosition(Double(Self.posX), 0.0, STATE_VICTORY, ANI_MOVE_LEFT_DOWN)
-									break
+									Self.posX = MyAPI.calNextPosition(Double(Self.posX), 0.0, 3, 16)
 								Case STATE_DEAD
-									Self.posX = MyAPI.calNextPosition(Double(Self.posX), 0.0, STATE_VICTORY, STATE_INIT)
-									break
+									Self.posX = MyAPI.calNextPosition(Double(Self.posX), 0.0, 3, 8)
 								Case STATE_GOAL
-									Self.posX = MyAPI.calNextPosition(Double(Self.posX), 0.0, STATE_OVER, ANI_MOVE_LEFT_DOWN)
-									break
+									Self.posX = MyAPI.calNextPosition(Double(Self.posX), 0.0, 9, 16)
 							End Select
 						EndIf
 						
@@ -451,23 +448,24 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 					Self.posX = preX
 					Self.posY = preY
 					
-					If (Self.velZ > STATE_DEAD) Then
-						Self.velZ = MyAPI.calNextPosition(Double(Self).velZ, 4.0, 1, 4)
+					If (Self.velZ > ACC_NORMAL) Then
+						Self.velZ = MyAPI.calNextPosition(Double(Self.velZ), 4.0, 1, 4)
 					EndIf
 					
 					moveToCenter()
+					
 					Self.checkCount += 1
 					
 					If (Not isInCenter() Or Self.checkCount <= WHITE_BAR_HEIGHT) Then
 						Self.count = 0
 						Self.actionID = ANI_STAND
-						Self.checkSuccess = (Self.ringNum >= Self.targetRingNum ? STATE_SKILLING : 0) | Self.debugPassStage
+						Self.checkSuccess = (Int(Self.ringNum >= Self.targetRingNum) | Self.debugPassStage)
 					ElseIf (Self.checkSuccess) Then
 						If (Not (Self.actionID = ANI_VICTORY_1 Or Self.actionID = ANI_VICTORY_2)) Then
 							Self.actionID = ANI_VICTORY_1
 							
 							If (Self.isGoal) Then
-								SoundSystem.getInstance().playBgmSequence(37, 35)
+								SoundSystem.getInstance().playBgmSequence(SoundSystem.BGM_SP_CLEAR, SoundSystem.BGM_SP)
 							EndIf
 						EndIf
 						
@@ -477,32 +475,33 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 							EndIf
 							
 							If (Self.count = WHITE_BAR_HEIGHT) Then
-								Self.targetRingNum = RING_TARGET[SpecialMap.specialStageID][STATE_SKILLING]
+								Self.targetRingNum = RING_TARGET[SpecialMap.specialStageID][1]
+								
 								WhiteBarDrawer.getInstance().initBar(Self, 0)
 							EndIf
 							
-							If (Self.whiteBar.getState() = STATE_DASH And Self.whiteBar.getCount() > ANI_WELCOME_4) Then
+							If (Self.whiteBar.getState() = STATE_DASH And Self.whiteBar.getCount() > 30) Then
 								Self.state = STATE_READY
 							EndIf
-							
 						ElseIf (Self.count > 48) Then
 							Self.state = STATE_OVER
+							
 							Self.count = 0
 						EndIf
-						
 					Else
-						Self.boardOffsetZ -= ANI_WELCOME_4
-						Self.boardOffsetX -= ANI_WELCOME_4
+						Self.boardOffsetZ -= 30
+						Self.boardOffsetX -= 30
+						
 						Self.actionID = ANI_DIE_BODY
 						
 						If (Self.count > 48) Then
 							Self.state = STATE_OVER
+							
 							Self.count = 0
 						EndIf
 					EndIf
 					
 					setStayAnimation()
-					break
 				Case STATE_INIT
 					Self.preState = Self.state
 					Self.ringNum = 0
@@ -510,43 +509,45 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 					Self.state = STATE_READY
 					Self.whiteBar.initBar(Self, 0)
 					Self.startFlag = False
-					Self.startX = SCREEN_WIDTH Shr 1
-					Self.startY = SCREEN_HEIGHT Shr 1
+					Self.startX = (SCREEN_WIDTH / 2) ' Shr 1
+					Self.startY = (SCREEN_HEIGHT / 2) ' Shr 1
 					Self.noMoving = True
+					
 					initScoreBase()
 					
 					If (Not showTutorial Or GlobalResource.spsetConfig <> STATE_SKILLING) Then
 						Self.isNeedTouchPad = True
-						break
+					Else
+						Self.state = STATE_TUTORIAL
+						Self.actionID = ANI_STAND
+						
+						Self.count += 1
+						
+						Self.tutorX = (SCREEN_WIDTH * 2) ' Shl 1
+						Self.tutorSkip = New MFTouchKey(0, MyAPI.zoomOut(Def.SCREEN_HEIGHT) - WHITE_BAR_HEIGHT, 30, WHITE_BAR_HEIGHT, 1)
+						
+						MFDevice.addComponent(Self.tutorSkip)
+						
+						Self.skipOffsetY = WHITE_BAR_HEIGHT
+						
+						showTutorial = False
 					EndIf
-					
-					Self.state = STATE_TUTORIAL
-					Self.actionID = ANI_STAND
-					Self.count += 1
-					Self.tutorX = SCREEN_WIDTH Shl STATE_SKILLING
-					Self.tutorSkip = New MFTouchKey(0, MyAPI.zoomOut(Def.SCREEN_HEIGHT) - WHITE_BAR_HEIGHT, ANI_WELCOME_4, WHITE_BAR_HEIGHT, STATE_SKILLING)
-					MFDevice.addComponent(Self.tutorSkip)
-					Self.skipOffsetY = WHITE_BAR_HEIGHT
-					showTutorial = False
-					break
-					break
 				Case STATE_OVER
 					Self.posX = preX
 					Self.posY = preY
-					Self.isNeedTouchPad = False
-					break
-				Case STATE_SPRING
 					
+					Self.isNeedTouchPad = False
+				Case STATE_SPRING
 					If (Self.count >= SSSpringCount) Then
-						Self.velX = MyAPI.calNextPosition(Double(Self.velX), 0.0, STATE_SKILLING, STATE_DEAD, 3.0)
-						Self.velY = MyAPI.calNextPosition(Double(Self.velY), 0.0, STATE_SKILLING, STATE_DEAD, 3.0)
+						Self.velX = MyAPI.calNextPosition(Double(Self.velX), 0.0, 1, 4, 3.0)
+						Self.velY = MyAPI.calNextPosition(Double(Self.velY), 0.0, 1, 4, 3.0)
 						
-						If (Self.velZ > STATE_DEAD) Then
+						If (Self.velZ > ACC_NORMAL) Then
 							Self.velZ = MyAPI.calNextPosition(Double(Self.velZ), 4.0, 1, 4)
 						EndIf
 					EndIf
 					
-					If (Self.velZ < STATE_DEAD) Then
+					If (Self.velZ < ACC_NORMAL) Then
 						Self.velZ += 1
 					EndIf
 					
@@ -563,14 +564,15 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 					EndIf
 					
 					Self.actionID = ANI_STAND
+					
 					setStayAnimation()
-					break
 				Case STATE_TUTORIAL
 					Self.posX = preX
 					Self.posY = preY
+					
 					setStayAnimation()
 					
-					If (Self.count = STATE_SPRING) Then
+					If (Self.count = 10) Then
 						State.fadeInit(0, 200)
 					EndIf
 					
@@ -579,47 +581,47 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 							Case 0
 								Self.tutorID = 1
 								Self.tutorMoving = True
-								break
 							Case 1
-								Self.tutorID = STATE_DASH
+								Self.tutorID = 2
 								Self.tutorMoving = True
-								break
 						End Select
 					EndIf
 					
 					If (Self.tutorID = STATE_DASH And Not Self.tutorMoving And State.fadeChangeOver()) Then
 						If (Not Self.changingState) Then
 							State.fadeInit(200, 0)
+							
 							Self.changingState = True
-							break
 						EndIf
 						
 						Self.preState = Self.state
 						Self.state = STATE_READY
+						
 						Self.isNeedTouchPad = True
 						Self.changingState = False
+						
 						MFDevice.removeComponent(Self.tutorSkip)
-						break
 					EndIf
-					
 			End Select
 			
-			If (Self.posX < -9600) Then
-				Self.posX = -9600
+			Const MAX_VEL_Y:= 7680 ' (MOVE_VELOCITY * 8) ' MOVE_RIGHT
+			Const MAX_VEL_X:= 9600 ' (MOVE_VELOCITY * (MOVE_LEFT + MOVE_RIGHT))
+			
+			If (Self.posX < -MAX_VEL_X) Then
+				Self.posX = -MAX_VEL_X
 			EndIf
 			
-			If (Self.posX > 9600) Then
-				Self.posX = 9600
+			If (Self.posX > MAX_VEL_X) Then
+				Self.posX = MAX_VEL_X
 			EndIf
 			
-			If (Self.posY < -7680) Then
-				Self.posY = -7680
+			If (Self.posY < -MAX_VEL_Y) Then
+				Self.posY = -MAX_VEL_Y
 			EndIf
 			
-			If (Self.posY > 7680) Then
-				Self.posY = 7680
+			If (Self.posY > MAX_VEL_Y) Then
+				Self.posY = MAX_VEL_Y
 			EndIf
-			
 		End
 		
 		Public Method draw:Void(g:MFGraphics)
@@ -627,7 +629,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 			SpecialObject.calDrawPosition(Self.posX Shr STATE_GOAL, (-Self.posY) Shr STATE_GOAL, Self.posZ - (Self.boardOffsetX Shr STATE_GOAL))
 			
 			If (Not Self.isPause) Then
-				If (Self.state <> STATE_SPRING And Self.state <> STATE_DEAD And ((Self.state <> STATE_CHECK_POINT Or Not isInCenter() Or Self.checkCount <= WHITE_BAR_HEIGHT) And Self.state <> STATE_OVER)) Then
+				If (Self.state <> STATE_SPRING And Self.state <> 4 And ((Self.state <> STATE_CHECK_POINT Or Not isInCenter() Or Self.checkCount <= WHITE_BAR_HEIGHT) And Self.state <> STATE_OVER)) Then
 					i = Self.scaleCount
 					Self.scaleCount = i + 1
 					
@@ -895,7 +897,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 			Self.rect2 = Self.drawer.getARect()
 			
 			If (Self.rect1 <> Null) Then
-				Self.collisionRect.setTwoPosition((x Shr STATE_GOAL) + Self.rect1[0], ((-y) Shr STATE_GOAL) - Self.rect1[STATE_SKILLING], ((x Shr STATE_GOAL) + Self.rect1[0]) + Self.rect1[STATE_DASH], (((-y) Shr STATE_GOAL) - Self.rect1[STATE_SKILLING]) - Self.rect1[STATE_VICTORY])
+				Self.collisionRect.setTwoPosition((x Shr STATE_GOAL) + Self.rect1[0], ((-y) Shr STATE_GOAL) - Self.rect1[1], ((x Shr STATE_GOAL) + Self.rect1[0]) + Self.rect1[STATE_DASH], (((-y) Shr STATE_GOAL) - Self.rect1[1]) - Self.rect1[STATE_VICTORY])
 			EndIf
 			
 			If (Self.rect2 <> Null) Then
@@ -903,7 +905,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 					Self.attackCollisionRect = New CollisionRect()
 				EndIf
 				
-				Self.attackCollisionRect.setTwoPosition((x Shr STATE_GOAL) + Self.rect2[0], ((-y) Shr STATE_GOAL) - Self.rect2[STATE_SKILLING], ((x Shr STATE_GOAL) + Self.rect2[0]) + Self.rect2[STATE_DASH], (((-y) Shr STATE_GOAL) - Self.rect2[STATE_SKILLING]) - Self.rect2[STATE_VICTORY])
+				Self.attackCollisionRect.setTwoPosition((x Shr STATE_GOAL) + Self.rect2[0], ((-y) Shr STATE_GOAL) - Self.rect2[1], ((x Shr STATE_GOAL) + Self.rect2[0]) + Self.rect2[STATE_DASH], (((-y) Shr STATE_GOAL) - Self.rect2[1]) - Self.rect2[STATE_VICTORY])
 			EndIf
 			
 		End
@@ -912,12 +914,12 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 			
 			If (Self.rect1 <> Null And SonicDebug.showCollisionRect) Then
 				g.setColor(16711680)
-				g.drawRect(((drawX + (SCREEN_WIDTH Shr 1)) - SpecialMap.getCameraOffsetX()) + Self.rect1[0], ((drawY + (SCREEN_HEIGHT Shr 1)) - SpecialMap.getCameraOffsetY()) + Self.rect1[STATE_SKILLING], Self.rect1[STATE_DASH], Self.rect1[STATE_VICTORY])
+				g.drawRect(((drawX + (SCREEN_WIDTH Shr 1)) - SpecialMap.getCameraOffsetX()) + Self.rect1[0], ((drawY + (SCREEN_HEIGHT Shr 1)) - SpecialMap.getCameraOffsetY()) + Self.rect1[1], Self.rect1[STATE_DASH], Self.rect1[STATE_VICTORY])
 			EndIf
 			
 			If (Self.rect2 <> Null And SonicDebug.showCollisionRect) Then
 				g.setColor(65280)
-				g.drawRect(((drawX + (SCREEN_WIDTH Shr 1)) - SpecialMap.getCameraOffsetX()) + Self.rect2[0], ((drawY + (SCREEN_HEIGHT Shr 1)) - SpecialMap.getCameraOffsetY()) + Self.rect2[STATE_SKILLING], Self.rect2[STATE_DASH], Self.rect2[STATE_VICTORY])
+				g.drawRect(((drawX + (SCREEN_WIDTH Shr 1)) - SpecialMap.getCameraOffsetX()) + Self.rect2[0], ((drawY + (SCREEN_HEIGHT Shr 1)) - SpecialMap.getCameraOffsetY()) + Self.rect2[1], Self.rect2[STATE_DASH], Self.rect2[STATE_VICTORY])
 			EndIf
 			
 		End
@@ -964,7 +966,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 				For (i = 0; i < STATE_SPRING; i += 1)
 					ringDirection[i] = i
 					ringVel[i][0] = (Cos(i * 36) * 800) / 100
-					ringVel[i][STATE_SKILLING] = (Sin(i * 36) * 800) / 100
+					ringVel[i][1] = (Sin(i * 36) * 800) / 100
 				Next
 				For (i = 0; i < STATE_SPRING; i += 1)
 					Int pos = MyRandom.nextInt(0, STATE_OVER)
@@ -973,7 +975,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 					ringDirection[i] = tmp
 				Next
 				For (i = 0; i < lostnum; i += 1)
-					SpecialObject.addExtraObject(New SSLostRing(Self.posX, -Self.posY, Self.posZ, ringVel[ringDirection[i]][0], ringVel[ringDirection[i]][STATE_SKILLING], Self.velZ))
+					SpecialObject.addExtraObject(New SSLostRing(Self.posX, -Self.posY, Self.posZ, ringVel[ringDirection[i]][0], ringVel[ringDirection[i]][1], Self.velZ))
 				Next
 			EndIf
 			
