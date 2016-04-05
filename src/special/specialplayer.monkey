@@ -127,8 +127,8 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 		
 		Const SSSpringCount:Int = 15
 		
-		Const START_POS_X:Int = ((SCREEN_WIDTH Shl STATE_GOAL) Shr 1)
-		Const START_POS_Y:Int = ((SCREEN_HEIGHT Shl STATE_GOAL) Shr 1)
+		Const START_POS_X:Int = ((SCREEN_WIDTH Shl 6) Shr 1)
+		Const START_POS_Y:Int = ((SCREEN_HEIGHT Shl 6) Shr 1)
 		
 		Const STATE_CHECK_POINT:Int = 5
 		Const STATE_DASH:Int = 2
@@ -625,8 +625,9 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 		End
 		
 		Public Method draw:Void(g:MFGraphics)
-			Int i
-			SpecialObject.calDrawPosition(Self.posX Shr STATE_GOAL, (-Self.posY) Shr STATE_GOAL, Self.posZ - (Self.boardOffsetX Shr STATE_GOAL))
+			Local i:Int
+			
+			SpecialObject.calDrawPosition(Self.posX Shr 6, (-Self.posY) Shr 6, Self.posZ - (Self.boardOffsetX Shr 6))
 			
 			If (Not Self.isPause) Then
 				If (Self.state <> STATE_SPRING And Self.state <> 4 And ((Self.state <> STATE_CHECK_POINT Or Not isInCenter() Or Self.checkCount <= WHITE_BAR_HEIGHT) And Self.state <> STATE_OVER)) Then
@@ -702,7 +703,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 			
 			Self.drawer.setActionId(Self.actionID)
 			Self.drawer.setLoop(ANI_LOOP[Self.actionID])
-			drawObj(g, Self.drawer, ((((Int) ((((Float) Self.posX) * scale) - ((Float) Self.posX))) * STATE_SKILLING) / STATE_DEAD) Shr STATE_GOAL, ((((Int) ((((Float) Self.posY) * scale) - ((Float) Self.posY))) * STATE_SKILLING) / STATE_DEAD) Shr STATE_GOAL)
+			drawObj(g, Self.drawer, ((((Int) ((((Float) Self.posX) * scale) - ((Float) Self.posX))) * STATE_SKILLING) / STATE_DEAD) Shr 6, ((((Int) ((((Float) Self.posY) * scale) - ((Float) Self.posY))) * STATE_SKILLING) / STATE_DEAD) Shr 6)
 			
 			If (Self.drawer.checkEnd()) Then
 				Select (Self.actionID)
@@ -735,7 +736,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 							animationDrawer.draw(g, i3, SCREEN_WIDTH Shr 1, SCREEN_HEIGHT Shr 1, False, 0)
 							
 							If (Not Self.checkSuccess) Then
-								SpecialObject.calDrawPosition((Self.posX + Self.boardOffsetX) Shr STATE_GOAL, ((-Self.posY) - Self.boardOffsetY) Shr STATE_GOAL, Self.posZ + (Self.boardOffsetZ Shr STATE_GOAL))
+								SpecialObject.calDrawPosition((Self.posX + Self.boardOffsetX) Shr 6, ((-Self.posY) - Self.boardOffsetY) Shr 6, Self.posZ + (Self.boardOffsetZ Shr 6))
 								drawObj(g, Self.characterBoardDrawer, 0, 0)
 							EndIf
 						EndIf
@@ -846,8 +847,8 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 		End
 		
 		Public Method initWelcome:Void()
-			Self.welcomeX = ((SCREEN_WIDTH Shr 1) + 50) Shl STATE_GOAL
-			Self.welcomeY = (SCREEN_HEIGHT + 160) Shl STATE_GOAL
+			Self.welcomeX = ((SCREEN_WIDTH Shr 1) + 50) Shl 6
+			Self.welcomeY = (SCREEN_HEIGHT + 160) Shl 6
 			Self.welcomeVelY = -2500
 		End
 		
@@ -876,12 +877,12 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 				actioID = ANI_WELCOME_7
 			EndIf
 			
-			Self.drawer.draw(g, actioID, Self.welcomeX Shr STATE_GOAL, Self.welcomeY Shr STATE_GOAL, True, 0)
+			Self.drawer.draw(g, actioID, Self.welcomeX Shr 6, Self.welcomeY Shr 6, True, 0)
 			Self.fontAnimationDrawer.draw(g, 0, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + 40, True, 0)
 		End
 		
 		Public Method isWelcomeOver:Bool()
-			Return Self.welcomeY > ((SCREEN_HEIGHT + STAY_TIME) Shl STATE_GOAL)
+			Return Self.welcomeY > ((SCREEN_HEIGHT + STAY_TIME) Shl 6)
 		End
 		
 		Public Method close:Void()
@@ -897,7 +898,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 			Self.rect2 = Self.drawer.getARect()
 			
 			If (Self.rect1 <> Null) Then
-				Self.collisionRect.setTwoPosition((x Shr STATE_GOAL) + Self.rect1[0], ((-y) Shr STATE_GOAL) - Self.rect1[1], ((x Shr STATE_GOAL) + Self.rect1[0]) + Self.rect1[STATE_DASH], (((-y) Shr STATE_GOAL) - Self.rect1[1]) - Self.rect1[STATE_VICTORY])
+				Self.collisionRect.setTwoPosition((x Shr 6) + Self.rect1[0], ((-y) Shr 6) - Self.rect1[1], ((x Shr 6) + Self.rect1[0]) + Self.rect1[STATE_DASH], (((-y) Shr 6) - Self.rect1[1]) - Self.rect1[STATE_VICTORY])
 			EndIf
 			
 			If (Self.rect2 <> Null) Then
@@ -905,7 +906,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 					Self.attackCollisionRect = New CollisionRect()
 				EndIf
 				
-				Self.attackCollisionRect.setTwoPosition((x Shr STATE_GOAL) + Self.rect2[0], ((-y) Shr STATE_GOAL) - Self.rect2[1], ((x Shr STATE_GOAL) + Self.rect2[0]) + Self.rect2[STATE_DASH], (((-y) Shr STATE_GOAL) - Self.rect2[1]) - Self.rect2[STATE_VICTORY])
+				Self.attackCollisionRect.setTwoPosition((x Shr 6) + Self.rect2[0], ((-y) Shr 6) - Self.rect2[1], ((x Shr 6) + Self.rect2[0]) + Self.rect2[STATE_DASH], (((-y) Shr 6) - Self.rect2[1]) - Self.rect2[STATE_VICTORY])
 			EndIf
 			
 		End
@@ -925,13 +926,13 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 		End
 		
 		Public Method beSpringX:Void(velX:Int)
-			Self.velX = velX Shl STATE_GOAL
+			Self.velX = velX Shl 6
 			Self.state = STATE_SPRING
 			Self.count = 0
 		End
 		
 		Public Method beSpringY:Void(velY:Int)
-			Self.velY = velY Shl STATE_GOAL
+			Self.velY = velY Shl 6
 			Self.state = STATE_SPRING
 			Self.count = 0
 		End

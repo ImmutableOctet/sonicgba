@@ -777,8 +777,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\specialplayer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
-        <Y>299</Y>
+        <X>2</X>
+        <Y>153</Y>
       </CursorPos>
       <DocGUID>5ba6761e-a012-4773-a9f5-d283fd3e768f</DocGUID>
       <Bookmarks />
