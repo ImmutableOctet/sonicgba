@@ -256,9 +256,9 @@
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>14</X>
-        <Y>114</Y>
+        <Y>112</Y>
       </CursorPos>
-      <DocGUID>9bb77cb3-7e12-4c97-9832-8b0e5cac4165</DocGUID>
+      <DocGUID>45c02d60-8b42-4167-9466-4d8157389e22</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
@@ -480,8 +480,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>28</X>
-        <Y>188</Y>
+        <X>47</X>
+        <Y>670</Y>
       </CursorPos>
       <DocGUID>c45afcfd-53eb-4764-9d86-e848b97d78ea</DocGUID>
       <Bookmarks />
@@ -784,7 +784,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>21</X>
+        <X>29</X>
         <Y>29</Y>
       </CursorPos>
       <DocGUID>e35a6e18-881c-4940-a7a5-f21c639dc4d3</DocGUID>
@@ -815,10 +815,18 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssring.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>32</X>
-        <Y>22</Y>
+        <X>1</X>
+        <Y>9</Y>
       </CursorPos>
       <DocGUID>4ec6d152-d53f-4d4d-87e1-938d73eb1cc4</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\special\ssspring.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>14</X>
+        <Y>14</Y>
+      </CursorPos>
+      <DocGUID>9d355924-6a18-42a3-a478-12b10d12f8e0</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssusableobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
@@ -829,13 +837,12 @@
       <DocGUID>56d6b6e3-3a91-4854-b0be-1f888707c5bb</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\special\trickring.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\special\trickring.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>15</X>
-        <Y>15</Y>
+        <X>33</X>
+        <Y>19</Y>
       </CursorPos>
-      <DocGUID>b5f831ae-3c7b-41ac-8ddd-3019e039020e</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\endingstate.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>

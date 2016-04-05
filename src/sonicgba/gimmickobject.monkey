@@ -668,7 +668,7 @@ Class GimmickObject Extends GameObject
 					Case GIMMICK_MOVE
 						If (Not Self.used And player.setRailLine(New Line(Self.posX, Self.posY, Self.posX + Self.iLeft, Self.posY + Self.iTop), Self.posX, Self.posY, Self.iLeft, Self.iTop, Self.iWidth, Self.iHeight, Self)) Then
 							Self.used = True
-							soundInstance.playSe(37)
+							soundInstance.playSe(SoundSystem.SE_148)
 						EndIf
 					Case 66
 						If (Self.firstTouch And StageManager.getCurrentZoneId() <> 3) Then
@@ -727,7 +727,7 @@ Class GimmickObject Extends GameObject
 							player.setAnimationId(4)
 							SoundSystem soundSystem = soundInstance
 							SoundSystem soundSystem2 = soundInstance
-							soundSystem.playSe(37)
+							soundSystem.playSe(SoundSystem.SE_148)
 							Self.used = True
 						End
 					Default
@@ -755,7 +755,7 @@ Class GimmickObject Extends GameObject
 				Case GIMMICK_MOVE
 					If (Not Self.used And player.setRailLine(New Line(Self.posX, Self.posY, Self.posX + Self.iLeft, Self.posY + Self.iTop), Self.posX, Self.posY, Self.iLeft, Self.iTop, Self.iWidth, Self.iHeight, Self)) Then
 						Self.used = True
-						soundInstance.playSe(37)
+						soundInstance.playSe(SoundSystem.SE_148)
 					End
 				Case 66
 					If (Self.firstTouch) Then
@@ -775,7 +775,7 @@ Class GimmickObject Extends GameObject
 						player.setAnimationId(4)
 						SoundSystem soundSystem = soundInstance
 						SoundSystem soundSystem2 = soundInstance
-						soundSystem.playSe(37)
+						soundSystem.playSe(SoundSystem.SE_148)
 						Self.used = True
 					End
 				Default

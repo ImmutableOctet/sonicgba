@@ -63,7 +63,7 @@ Class UnseenSpring Extends GimmickObject ' Spring
 				' ID, but the second is probably a sound-effect ID.
 				Self.drawer.setActionId(17)
 				
-				soundInstance.playSe(37)
+				soundInstance.playSe(SoundSystem.SE_148)
 			EndIf
 		End
 		

@@ -4482,7 +4482,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			If (characterID = CHARACTER_AMY) Then
 				soundInstance.playSe(25)
 			Else
-				soundInstance.playSe(37)
+				soundInstance.playSe(SoundSystem.SE_148)
 			EndIf
 		End
 		
@@ -6769,7 +6769,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.enteringSP = True
 			
 			' Magic number: 37 (Sound-effect ID)
-			soundInstance.playSe(37)
+			soundInstance.playSe(SoundSystem.SE_148)
 		End
 		
 		Method setStagePassRunOutofScreen:Void()

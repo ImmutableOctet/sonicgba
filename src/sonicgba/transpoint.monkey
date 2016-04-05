@@ -52,7 +52,7 @@ Class TransPoint Extends GimmickObject
 			player.pipeOut()
 			
 			' Magic number; likely the sound effect number.
-			SoundSystem.getInstance().playSe(37)
+			SoundSystem.getInstance().playSe(SoundSystem.SE_148)
 			
 			player.setVelX(0)
 			player.setVelY(0)
