@@ -178,8 +178,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>34</X>
+        <Y>231</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -768,8 +768,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\specialobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>272</Y>
+        <X>19</X>
+        <Y>35</Y>
       </CursorPos>
       <DocGUID>d27403c9-94c1-44c3-8a8a-34d454626507</DocGUID>
       <Bookmarks />
@@ -819,12 +819,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\special\ssring.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\special\ssring.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>69</Y>
+        <X>16</X>
+        <Y>71</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>c5f8af8a-af37-434b-9926-d1dc5689d0d6</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssspring.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>

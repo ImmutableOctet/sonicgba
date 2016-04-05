@@ -223,7 +223,7 @@ Class MFGraphics Implements GRAPHICS_MACROS
 			Self.context.translate(Float(dx), Float(dy))
 		End
 		
-		Method getSystemgraphics:Graphics() Final
+		Method getSystemGraphics:Graphics() Final
 			Return Self.context
 		End
 	

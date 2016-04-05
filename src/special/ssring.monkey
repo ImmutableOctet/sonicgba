@@ -8,6 +8,7 @@ Private
 	Import lib.soundsystem
 	
 	Import special.specialobject
+	Import special.specialplayer
 	
 	Import com.sega.mobile.framework.device.mfgraphics
 Public
@@ -61,6 +62,14 @@ Class SSRing Extends SpecialObject
 				player.getRing(1)
 				
 				SoundSystem.getInstance().playSe(12)
+			EndIf
+		End
+		
+		Method doCollisionCheckWith:Void(obj:SpecialPlayer)
+			Super.doCollisionCheckWith(obj)
+			
+			If (Self.collisionRect.collisionChk(obj.attackCollisionRect)) Then
+				doWhileCollision(obj)
 			EndIf
 		End
 		

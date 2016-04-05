@@ -289,43 +289,46 @@ Class SpecialObject Implements SSDef Abstract
 		Method logic:Void() Abstract
 		Method refreshCollision:Void(x:Int, y:Int) Abstract
 		
-		Public Method SpecialObject:public(id:Int, x:Int, y:Int, z:Int)
+		' Constructor(s):
+		Method New(id:Int, x:Int, y:Int, z:Int)
 			Self.objID = id
+			
 			Self.posX = x
 			Self.posY = y
-			Self.posZ = z Shr Z_ZOOM
+			Self.posZ = (z Shr Z_ZOOM)
+			
 			Self.collisionRect = New CollisionRect()
 		End
 		
-		Public Method chkDestroy:Bool()
+		' Methods (Implemented):
+		Method chkDestroy:Bool()
 			Return False
 		End
 		
-		Public Method doCollisionCheckWith:Void(obj:SpecialPlayer)
-			
+		Method doCollisionCheckWith:Void(obj:SpecialPlayer)
 			If (Self.collisionRect.collisionChk(obj.collisionRect)) Then
 				doWhileCollision(obj)
 			EndIf
-			
-			If ((Self instanceof SSRing) And Self.collisionRect.collisionChk(obj.attackCollisionRect)) Then
-				doWhileCollision(obj)
-			EndIf
-			
 		End
 		
-		Public Method refreshCollisionWrap:Void()
+		Method refreshCollisionWrap:Void()
 			refreshCollision(Self.posX, Self.posY)
 		End
 		
-		Public Method drawObj:Void(g:MFGraphics, drawer:AnimationDrawer, xOffset:Int, yOffset:Int)
-			Graphics g2 = (Graphics) g.getSystemGraphics()
-			g2.save()
-			g2.translate((Float) ((drawX + (SCREEN_WIDTH Shr 1)) - SpecialMap.getCameraOffsetX()), (Float) ((drawY + (SCREEN_HEIGHT Shr 1)) - SpecialMap.getCameraOffsetY()))
-			g2.scale(scale, scale)
+		Method drawObj:Void(g:MFGraphics, drawer:AnimationDrawer, xOffset:Int, yOffset:Int)
+			Local nativeContext:= g.getSystemGraphics()
+			
+			nativeContext.save()
+			
+			nativeContext.translate(Float((drawX + (SCREEN_WIDTH Shr 1)) - SpecialMap.getCameraOffsetX()), Float((drawY + (SCREEN_HEIGHT Shr 1)) - SpecialMap.getCameraOffsetY()))
+			nativeContext.scale(scale, scale)
+			
 			drawer.draw(g, xOffset, yOffset)
-			g2.restore()
+			
+			nativeContext.restore()
 		End
 		
-		Public Method drawCollisionRect:Void(g:MFGraphics)
+		Method drawCollisionRect:Void(g:MFGraphics)
+			' Empty implementation.
 		End
 End
