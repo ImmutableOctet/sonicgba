@@ -8,15 +8,15 @@ Private
 Public
 
 ' Classes:
-Class SSGoal Extends UsableObject
+Class SSCheckPoint Extends UsableObject
 	Public
 		' Constructor(s):
 		Method New(x:Int, y:Int, z:Int)
-			Super.New(SSOBJ_GOAL, x, y, z)
+			Super.New(SSOBJ_CHECKPT, x, y, z)
 		End
 		
 		' Methods:
 		Method onUse:Void(collisionObj:SpecialObject)
-			player.setGoal()
+			player.setCheckPoint()
 		End
 End

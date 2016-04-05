@@ -479,8 +479,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>31</X>
-        <Y>179</Y>
+        <X>28</X>
+        <Y>188</Y>
       </CursorPos>
       <DocGUID>c45afcfd-53eb-4764-9d86-e848b97d78ea</DocGUID>
       <Bookmarks />
@@ -766,20 +766,36 @@
       <DocGUID>63dfe4c9-02be-4c5a-b116-f97f4a42d501</DocGUID>
       <Bookmarks />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\special\sscheckpoint.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>5</X>
+        <Y>20</Y>
+      </CursorPos>
+      <DocGUID>c76caeaf-ee54-48d9-b772-5a1ec3e2088e</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>22</Y>
+        <X>21</X>
+        <Y>38</Y>
       </CursorPos>
-      <DocGUID>6168b085-6280-4050-8625-2c4fde3d3736</DocGUID>
+      <DocGUID>e35a6e18-881c-4940-a7a5-f21c639dc4d3</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssgoal.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>12</X>
-        <Y>13</Y>
+        <X>46</X>
+        <Y>18</Y>
       </CursorPos>
-      <DocGUID>e562a3c2-832f-4d48-926e-c10305dc21bc</DocGUID>
+      <DocGUID>91954fdc-e4a0-4128-8202-ef8351318869</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\special\usableobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>18</X>
+        <Y>11</Y>
+      </CursorPos>
+      <DocGUID>799f5cca-054f-4fba-b25d-11d549835235</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\endingstate.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
