@@ -108,55 +108,44 @@ Class SpecialObject Implements SSDef Abstract
 			objectArray = tmpVector.ToArray()
 		End
 		
-		Public Function closeObjects:Void()
-			extraObjects.removeAllElements()
-			paintObjects.removeAllElements()
-			decideObjects.removeAllElements()
+		Function closeObjects:Void()
+			extraObjects.Clear()
+			paintObjects.Clear()
+			decideObjects.Clear()
 			
-			If (objectArray <> Null) Then
-				For (Int i = 0; i < objectArray.length; i += 1)
-					
+			If (objectArray.Length > 0) Then
+				For Local i:= 0 Until objectArray.Length
 					If (objectArray[i] <> Null) Then
 						objectArray[i].close()
 					EndIf
-					
 				Next
-				objectArray = Null
+				
+				objectArray = []
 			EndIf
 			
 			If (player <> Null) Then
 				player.close()
+				
 				player = Null
 			EndIf
-			
-		}
+		End
 		
-		Public Function getNewInstance:SpecialObject(id:Int, x:Int, y:Int, z:Int)
-			SpecialObject re = Null
+		Function getNewInstance:SpecialObject(id:Int, x:Int, y:Int, z:Int)
+			Local re:SpecialObject = Null
+			
 			Select (id)
-				Case TitleState.STAGE_SELECT_KEY_RECORD_1
+				Case SSOBJ_RING_ID
 					re = New SSRing(x, y, z)
-					break
-				Case TitleState.STAGE_SELECT_KEY_RECORD_2
+				Case SSOBJ_TRIC_ID
 					re = New TrickRing(x, y, z)
-					break
-				Case TitleState.STAGE_SELECT_KEY_DIRECT_PLAY
-				Case Z_ZOOM
-				Case TitleState.CHARACTER_RECORD_BG_SPEED
-				Case SSDef.SSOBJ_BNRU_ID
-				Case CAMERA_TO_PLAYER
-				Case SSDef.SSOBJ_BNRD_ID
+				Case SSOBJ_BNBK_ID, SSOBJ_BNGO_ID, SSOBJ_BNLU_ID, SSOBJ_BNRU_ID, SSOBJ_BNLD_ID, SSOBJ_BNRD_ID
 					re = New SSSpring(id, x, y, z)
-					break
-				Case SSDef.SSOBJ_BOMB_ID
+				Case SSOBJ_BOMB_ID
 					re = New SSBomb(x, y, z)
-					break
-				Case SSDef.SSOBJ_CHECKPT
+				Case SSOBJ_CHECKPT
 					re = New SSCheckPoint(x, y, z)
-					break
-				Case SSDef.SSOBJ_GOAL
+				Case SSOBJ_GOAL
 					re = New SSGoal(x, y, z)
-					break
 			End Select
 			
 			If (re <> Null) Then
@@ -164,16 +153,17 @@ Class SpecialObject Implements SSDef Abstract
 			EndIf
 			
 			Return re
-		}
+		End
 		
-		Public Function objectLogic:Void()
-			Int i
-			Int startZ = ((player.posZ - CAMERA_TO_PLAYER) - 15) + 1
-			Int endZ = startZ + SHOW_RANGE
+		Function objectLogic:Void()
+			Local startZ:= (((player.posZ - CAMERA_TO_PLAYER) - 15) + 1)
+			Local endZ:= (startZ + SHOW_RANGE)
+			
 			firstObj = -1
 			lastObj = 0
-			For (i = 0; i < objectArray.length; i += 1)
-				Int objZ
+			
+			For Local i:= 0 Until objectArray.Length
+				Local objZ:Int
 				
 				If (objectArray[i] <> Null) Then
 					objZ = objectArray[i].posZ
@@ -181,18 +171,18 @@ Class SpecialObject Implements SSDef Abstract
 					If (startZ <= objZ And endZ > objZ) Then
 						firstObj = i
 						lastObj = i
-						break
+						
+						Exit
 					EndIf
 				EndIf
-				
 			Next
-			paintObjects.removeAllElements()
+			
+			paintObjects.Clear()
 			
 			If (firstObj = -1) Then
-				paintObjects.addElement(player)
+				paintObjects.Push(player)
 			Else
-				For (i = firstObj; i < objectArray.length; i += 1)
-					
+				For Local i:= firstObj Until objectArray.Length
 					If (objectArray[i] <> Null) Then
 						objZ = objectArray[i].posZ
 						
@@ -200,88 +190,88 @@ Class SpecialObject Implements SSDef Abstract
 							lastObj = i
 						EndIf
 					EndIf
-					
 				Next
-				Bool firstAdd = False
-				i = firstObj
-				While (i <= lastObj) {
-					
+				
+				Local firstAdd:Bool = False
+				
+				For Local i:= firstObj To lastObj
 					If (objectArray[i] <> Null) Then
 						objectArray[i].logic()
 						
 						If (Not firstAdd And player.posZ < objectArray[i].posZ) Then
 							firstAdd = True
-							paintObjects.addElement(player)
+							
+							paintObjects.Push(player)
 						EndIf
 						
-						paintObjects.addElement(objectArray[i])
+						paintObjects.Push(objectArray[i])
 					EndIf
-					
-					i += 1
-				}
+				Next
 				
 				If (Not firstAdd) Then
-					paintObjects.addElement(player)
+					paintObjects.Push(player)
 				EndIf
 			EndIf
 			
-			i = 0
-			While (i < extraObjects.size()) {
-				SpecialObject obj = (SpecialObject) extraObjects.elementAt(i)
+			Local i:= 0
+			
+			While (i < extraObjects.Length)
+				Local obj:= extraObjects.Get(i)
+				
 				obj.logic()
 				
 				If (obj.chkDestroy()) Then
-					extraObjects.removeElementAt(i)
+					extraObjects.Remove(i)
+					
 					i -= 1
 				Else
-					Bool added = False
-					For (Int j = 0; j < paintObjects.size(); j += 1)
-						
-						If (obj.posZ < ((SpecialObject) paintObjects.elementAt(j)).posZ) Then
+					Local added:Bool = False
+					
+					For Local j:= 0 Until paintObjects.Length
+						If (obj.posZ < (paintObjects.Get(j)).posZ) Then
 							added = True
-							paintObjects.insertElementAt(obj, j)
-							break
+							
+							paintObjects.Insert(j, obj)
+							
+							Exit
 						EndIf
-						
 					Next
 					
 					If (Not added) Then
-						paintObjects.addElement(obj)
+						paintObjects.Push(obj)
 					EndIf
 				EndIf
 				
 				i += 1
-			}
+			Wend
+			
 			player.refreshCollisionWrap()
-			For (i = 0; i < paintObjects.size(); i += 1)
-				obj = (SpecialObject) paintObjects.elementAt(i)
-				
-				If (obj <> player And obj.posZ >= player.posZ - COLLISION_RANGE_Z) Then
+			
+			For Local obj:= EachIn paintObjects
+				If (obj <> player And obj.posZ >= (player.posZ - COLLISION_RANGE_Z)) Then
 					If (obj.posZ <= player.posZ + COLLISION_RANGE_Z) Then
 						obj.refreshCollisionWrap()
 						obj.doCollisionCheckWith(player)
 					Else
-						Return
+						Exit
 					EndIf
 				EndIf
-				
 			Next
-		}
+		End
 		
-		Public Function drawObjects:Void(g:MFGraphics)
-			
+		Function drawObjects:Void(g:MFGraphics)
 			If (Not (ringDrawer = Null Or AnimationDrawer.isAllPause())) Then
 				ringDrawer.moveOn()
 			EndIf
 			
-			For (Int i = paintObjects.size() - 1; i >= 0; i -= 1)
-				((SpecialObject) paintObjects.elementAt(i)).draw(g)
+			For Local obj:= EachIn paintObjects
+				obj.draw(g)
 			Next
-		}
+		End
 		
-		Public Function addExtraObject:Void(object:SpecialObject)
-			extraObjects.addElement(object)
-		}
+		Function addExtraObject:Void(obj:SpecialObject)
+			extraObjects.Push(obj)
+		End
 	Protected
 		' Functions:
 		Function calDrawPosition:Void(x:Int, y:Int, z:Int)

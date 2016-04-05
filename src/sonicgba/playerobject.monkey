@@ -702,10 +702,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			If (Key.press(Key.gLeft)) Then
 				characterID -= 1
-				characterID Mod= CHARACTER_LIST.length
+				characterID Mod= CHARACTER_LIST.Length
 			ElseIf (Key.press(Key.gRight)) Then
 				characterID += 1
-				characterID Mod= CHARACTER_LIST.length
+				characterID Mod= CHARACTER_LIST.Length
 			EndIf
 			
 			Return False
@@ -2110,7 +2110,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method getAnimationOffset:Int(degree:Int)
-			For Local result:= 0 Until DEGREE_DIVIDE.length
+			For Local result:= 0 Until DEGREE_DIVIDE.Length
 				If (degree < DEGREE_DIVIDE[result]) Then
 					Return (result Mod 2)
 				EndIf
@@ -2122,7 +2122,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Method getTransId:Int(degree:Int)
 			Local result:= 0
 			
-			While (result < DEGREE_DIVIDE.length)
+			While (result < DEGREE_DIVIDE.Length)
 				If (degree < DEGREE_DIVIDE[result]) Then
 					result Mod= (DEGREE_DIVIDE.Length-1)
 					
@@ -5178,7 +5178,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Function getTmpRing:Void(itemId:Int)
 			Select (itemId)
 				Case 5
-					ringTmpNum = RANDOM_RING_NUM[MyRandom.nextInt(RANDOM_RING_NUM.length)]
+					ringTmpNum = RANDOM_RING_NUM[MyRandom.nextInt(RANDOM_RING_NUM.Length)]
 					ringRandomNum = ringTmpNum
 				Case 6
 					ringTmpNum = 5
@@ -6165,7 +6165,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				currentPauseMenuItem = PAUSE_MENU_RACE_ITEM
 			EndIf
 			
-			If (currentPauseMenuItem.length <= 4) Then
+			If (currentPauseMenuItem.Length <= 4) Then
 				cursorIndex = 0
 			ElseIf (cursorIndex > cursor) Then
 				cursorIndex = cursor
@@ -6180,13 +6180,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				State.drawMenuFontById(g, currentPauseMenuItem[I], SCREEN_WIDTH / 2, (((((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * (I - cursorIndex)))
 			Next
 			
-			If (currentPauseMenuItem.length > 4) Then
+			If (currentPauseMenuItem.Length > 4) Then
 				If (cursorIndex = 0) Then
 					State.drawMenuFontById(g, 96, SCREEN_WIDTH / 2, ((SCREEN_HEIGHT / 2) - PAUSE_FRAME_OFFSET_Y) + (MENU_SPACE / 2))
 					
 					GameState.IsSingleUp = False
 					GameState.IsSingleDown = True
-				ElseIf (cursorIndex = currentPauseMenuItem.length - 4) Then
+				ElseIf (cursorIndex = currentPauseMenuItem.Length - 4) Then
 					State.drawMenuFontById(g, 95, SCREEN_WIDTH / 2, ((SCREEN_HEIGHT / 2) - PAUSE_FRAME_OFFSET_Y) + (MENU_SPACE / 2))
 					
 					GameState.IsSingleUp = True

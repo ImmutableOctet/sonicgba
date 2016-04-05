@@ -617,19 +617,19 @@ Class MFGraphics Implements GRAPHICS_MACROS
 			If (Self.effectFlag) Then
 				If (Self.alphaValue <> 0) Then
 					If (Not (Self.redValue = 0 And Self.greenValue = 0 And Self.blueValue = 0)) Then
-						For Local i:= 0 Until rgbData.length
+						For Local i:= 0 Until rgbData.Length
 							rgbData[i] = caculateColorValue(rgbData[i])
 						Next
 					EndIf
 					
 					If (Self.grayValue <> 0) Then
-						For Local i:= 0 Until rgbData.length
+						For Local i:= 0 Until rgbData.Length
 							rgbData[i] = caculateGray(rgbData[i])
 						Next
 					EndIf
 					
 					If (Self.alphaValue <> 255) Then
-						For Local i:= 0 Until rgbData.length
+						For Local i:= 0 Until rgbData.Length
 							rgbData[i] = caculateAlpha(rgbData[i])
 						Next
 					EndIf
@@ -828,7 +828,7 @@ Class MFGraphics Implements GRAPHICS_MACROS
 					
 					Local i2:Int = 0
 					
-					For Local i2:= 0 Until Self.fillRectRGB.length
+					For Local i2:= 0 Until Self.fillRectRGB.Length
 						Self.fillRectRGB[i2] = Self.fillRectRGB[0]
 					Next
 					
@@ -1181,19 +1181,19 @@ Class MFGraphics Implements GRAPHICS_MACROS
 				image.getRGB(Self.drawEffectRGB, TRANS_NONE, image.getWidth(), TRANS_NONE, TRANS_NONE, image.getWidth(), image.getHeight()) ' 0, 0, 0
 				
 				If (Not (Self.alphaValue = 0 Or (Self.redValue = 0 And Self.greenValue = 0 And Self.blueValue = 0))) Then
-					For Local i:= 0 Until Self.drawEffectRGB.length
+					For Local i:= 0 Until Self.drawEffectRGB.Length
 						Self.drawEffectRGB[i] = caculateColorValue(Self.drawEffectRGB[i])
 					Next
 				EndIf
 				
 				If (Not (Self.alphaValue = 0 Or Self.grayValue = 0)) Then
-					For Local i:= 0 Until Self.drawEffectRGB.length
+					For Local i:= 0 Until Self.drawEffectRGB.Length
 						Self.drawEffectRGB[i] = caculateGray(Self.drawEffectRGB[i])
 					Next
 				EndIf
 				
 				If (Not (Self.alphaValue = 255 Or Self.alphaValue = 0)) Then
-					For Local i:= 0 Until Self.drawEffectRGB.length
+					For Local i:= 0 Until Self.drawEffectRGB.Length
 						Self.drawEffectRGB[i] = caculateAlpha(Self.drawEffectRGB[i])
 					Next
 				EndIf
@@ -1220,19 +1220,19 @@ Class MFGraphics Implements GRAPHICS_MACROS
 				image.getRGB(Self.drawEffectRGB, TRANS_NONE, regionW, regionX, regionY, regionW, regionH) ' 0
 				
 				If (Not (Self.redValue = 0 And Self.greenValue = 0 And Self.blueValue = 0)) Then
-					For Local i:= 0 Until Self.drawEffectRGB.length
+					For Local i:= 0 Until Self.drawEffectRGB.Length
 						Self.drawEffectRGB[i] = caculateColorValue(Self.drawEffectRGB[i])
 					Next
 				EndIf
 				
 				If (Self.grayValue <> 0) Then
-					For Local i:= 0 Until Self.drawEffectRGB.length
+					For Local i:= 0 Until Self.drawEffectRGB.Length
 						Self.drawEffectRGB[i] = caculateGray(Self.drawEffectRGB[i])
 					Next
 				EndIf
 				
 				If (Self.alphaValue <> 255) Then
-					For Local i:= 0 Until Self.drawEffectRGB.length
+					For Local i:= 0 Until Self.drawEffectRGB.Length
 						Self.drawEffectRGB[i] = caculateAlpha(Self.drawEffectRGB[i])
 					Next
 				EndIf

@@ -1064,8 +1064,8 @@ Class State Implements SonicDef, StringIndex Abstract
 				SoundSystem.getInstance().playSe(STATE_SELECT_RACE_STAGE)
 				
 				Self.helpIndex -= 1
-				Self.helpIndex += helpStrings.length
-				Self.helpIndex Mod= helpStrings.length
+				Self.helpIndex += helpStrings.Length
+				Self.helpIndex Mod= helpStrings.Length
 				
 				MyAPI.initString()
 				
@@ -1074,7 +1074,7 @@ Class State Implements SonicDef, StringIndex Abstract
 				SoundSystem.getInstance().playSe(STATE_SELECT_RACE_STAGE)
 				
 				Self.helpIndex += 1
-				Self.helpIndex Mod= helpStrings.length
+				Self.helpIndex Mod= helpStrings.Length
 				
 				MyAPI.initString()
 				
@@ -1165,7 +1165,7 @@ Class State Implements SonicDef, StringIndex Abstract
 			Self.cursor = 0
 			Self.mainMenuItemCursor = 0
 			Self.menuMoving = True
-			Self.elementNum = Self.currentElement.length
+			Self.elementNum = Self.currentElement.Length
 			Self.selectMenuOffsetX = 0
 			Self.cursor = Self.returnCursor
 			Self.mainMenuItemCursor = Self.returnCursor
