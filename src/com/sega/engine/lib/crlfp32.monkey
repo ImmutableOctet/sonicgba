@@ -29,7 +29,7 @@ Class CrlFP32 ' Final
 		Const SHIFT_SCALE:Int = 18
 		
 		' Global variable(s):
-		Global DIGIT_0ot28:Int = div(1792, 6400)
+		Global DIGIT_0Dot28d:Int = div(1792, 6400)
 		Global errorCode:Int = PI
 		Global objCount:Int
 		
@@ -232,10 +232,10 @@ Class CrlFP32 ' Final
 	
 		Function actTan:Int(radian:Int)
 			If (Abs(radian) <= FIXED_1) Then
-				Return div(radian, mul(DIGIT_0ot28, sqr(radian)) + FIXED_1)
+				Return div(radian, mul(DIGIT_0Dot28d, sqr(radian)) + FIXED_1)
 			EndIf
 			
-			Local retval:= div(-radian, sqr(radian) + DIGIT_0ot28)
+			Local retval:= div(-radian, sqr(radian) + DIGIT_0Dot28d)
 			
 			If (radian < -1) Then
 				Return retval - (PI / ERROR_OVERFLOW)
