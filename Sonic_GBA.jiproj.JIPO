@@ -766,6 +766,14 @@
       <DocGUID>63dfe4c9-02be-4c5a-b116-f97f4a42d501</DocGUID>
       <Bookmarks />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\special\ssdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>12</X>
+        <Y>16</Y>
+      </CursorPos>
+      <DocGUID>6168b085-6280-4050-8625-2c4fde3d3736</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssgoal.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>12</X>
