@@ -9,7 +9,7 @@ Import special.ssdef
 Import com.sega.mobile.framework.device.mfgraphics
 
 ' Classes:
-Class UsableObject Extends SpecialObject Implements SSDef Abstract
+Class SSUsableObject Extends SpecialObject Implements SSDef Abstract
 	Protected
 		' Fields:
 		Field used:Bool

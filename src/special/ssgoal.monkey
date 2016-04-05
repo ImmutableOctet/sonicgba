@@ -4,11 +4,11 @@ Public
 
 ' Imports:
 Private
-	Import special.usableobject
+	Import special.ssusableobject
 Public
 
 ' Classes:
-Class SSGoal Extends UsableObject
+Class SSGoal Extends SSUsableObject
 	Public
 		' Constructor(s):
 		Method New(x:Int, y:Int, z:Int)

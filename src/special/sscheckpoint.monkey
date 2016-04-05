@@ -4,11 +4,11 @@ Public
 
 ' Imports:
 Private
-	Import special.usableobject
+	Import special.ssusableobject
 Public
 
 ' Classes:
-Class SSCheckPoint Extends UsableObject
+Class SSCheckPoint Extends SSUsableObject
 	Public
 		' Constructor(s):
 		Method New(x:Int, y:Int, z:Int)

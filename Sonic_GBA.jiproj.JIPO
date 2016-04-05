@@ -768,8 +768,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\sscheckpoint.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>5</X>
-        <Y>20</Y>
+        <X>18</X>
+        <Y>6</Y>
       </CursorPos>
       <DocGUID>c76caeaf-ee54-48d9-b772-5a1ec3e2088e</DocGUID>
       <Bookmarks />
@@ -784,18 +784,26 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssgoal.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>46</X>
-        <Y>18</Y>
+        <X>18</X>
+        <Y>6</Y>
       </CursorPos>
       <DocGUID>91954fdc-e4a0-4128-8202-ef8351318869</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\special\usableobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\special\sslostring.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>18</X>
-        <Y>11</Y>
+        <X>0</X>
+        <Y>0</Y>
       </CursorPos>
-      <DocGUID>799f5cca-054f-4fba-b25d-11d549835235</DocGUID>
+      <DocGUID>6321384d-106a-4195-be3b-e74563e0c98a</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\special\ssusableobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="0">
+      <CursorPos>
+        <X>0</X>
+        <Y>0</Y>
+      </CursorPos>
+      <DocGUID />
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\endingstate.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
