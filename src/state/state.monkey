@@ -1156,7 +1156,7 @@ Class State Implements SonicDef, StringIndex Abstract
 		Method pauseoptionDraw:Void(g:MFGraphics)
 			drawMenuTitle(g, 5, 0) ' (10 / 2)
 			drawMenuFontById(g, 54, (SCREEN_WIDTH Shr 1) - 32, SCREEN_HEIGHT Shr 1)
-			drawMenuFontById(g, StringIndex.STR_RIGHT_ARROW, (SCREEN_WIDTH Shr 1) - 76, SCREEN_HEIGHT Shr 1)
+			drawMenuFontById(g, 113, (SCREEN_WIDTH Shr 1) - 76, SCREEN_HEIGHT Shr 1)
 			drawMenuFontById(g, OPTION_SOUND[Self.pauseoptionCursor] + 55, (SCREEN_WIDTH Shr 1) + 32, SCREEN_HEIGHT Shr 1)
 		End
 		

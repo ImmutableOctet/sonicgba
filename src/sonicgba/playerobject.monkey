@@ -6067,8 +6067,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 								scoreNum = MyAPI.calNextPosition(Double(scoreNum), Double(totalPlusscore), 1, 5)
 							EndIf
 							
-							score1 = MyAPI.calNextPosition((double) score1, 0.0d, 1, 5)
-							score2 = MyAPI.calNextPosition((double) score2, 0.0d, 1, 5)
+							score1 = MyAPI.calNextPosition((double) score1, 0.0, 1, 5)
+							score2 = MyAPI.calNextPosition((double) score2, 0.0, 1, 5)
 							
 							drawNum(g, score1, ((SCREEN_WIDTH / 2) + NUM_DISTANCE) + stagePassResultOutOffsetX, SCREEN_HEIGHT / 2, 2, 0)
 							drawNum(g, score2, ((SCREEN_WIDTH / 2) + NUM_DISTANCE) + stagePassResultOutOffsetX, (SCREEN_HEIGHT / 2) + MENU_SPACE, 2, 0)
@@ -6174,7 +6174,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 			
 			State.drawMenuFontById(g, 119, SCREEN_WIDTH / 2, (((((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * (cursor - cursorIndex)))
-			State.drawMenuFontById(g, StringIndex.STR_RIGHT_ARROW, ((SCREEN_WIDTH / 2) - 56) - 0, (((((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * (cursor - cursorIndex)))
+			State.drawMenuFontById(g, 113, ((SCREEN_WIDTH / 2) - 56) - 0, (((((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * (cursor - cursorIndex)))
 			
 			For Local I:= cursorIndex Until (cursorIndex + 4) ' currentPauseMenuItem.Length
 				State.drawMenuFontById(g, currentPauseMenuItem[I], SCREEN_WIDTH / 2, (((((SCREEN_HEIGHT / 2) + PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * (I - cursorIndex)))

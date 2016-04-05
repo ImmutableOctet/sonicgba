@@ -1411,7 +1411,7 @@ Class TitleState Extends State
 		Method mainMenuDraw2:Void(g:MFGraphics)
 			MENU_OFFSET_X = (SCREEN_WIDTH Shr 1) + STATE_INTERRUPT
 			
-			Self.degree = MyAPI.calNextPosition(Double(Self.degree), 0.0d, ZONE_NUM_OFFSET, STATE_OPENING)
+			Self.degree = MyAPI.calNextPosition(Double(Self.degree), 0.0, ZONE_NUM_OFFSET, STATE_OPENING)
 			
 			If (Self.degree = 0) Then
 				Self.menuMoving = False
@@ -2824,11 +2824,11 @@ Class TitleState Extends State
 						Self.character_offset_state = 0
 						
 						If (Self.arrowPressState = 0) Then
-							Self.character_sel_offset_x = MyAPI.calNextPosition((double) Self.character_sel_offset_x, 0.0d, ZONE_NUM_OFFSET, STATE_MOVING)
+							Self.character_sel_offset_x = MyAPI.calNextPosition((double) Self.character_sel_offset_x, 0.0, ZONE_NUM_OFFSET, STATE_MOVING)
 						Else
 							
 							If (Self.arrowPressstate = STATE_PRESS_START) Then
-								Self.character_sel_offset_x = MyAPI.calNextPosition((double) Self.character_sel_offset_x, 128.0d, ZONE_NUM_OFFSET, STATE_MOVING)
+								Self.character_sel_offset_x = MyAPI.calNextPosition((double) Self.character_sel_offset_x, 128.0, ZONE_NUM_OFFSET, STATE_MOVING)
 								
 								If (Self.character_sel_offset_x = TIME_ATTACK_WIDTH) Then
 									Self.character_id -= 1
@@ -2845,7 +2845,7 @@ Class TitleState Extends State
 							EndIf
 							
 							If (Self.arrowPressState = STATE_MOVING) Then
-								Self.character_sel_offset_x = MyAPI.calNextPosition((double) Self.character_sel_offset_x, -128.0d, ZONE_NUM_OFFSET, STATE_MOVING)
+								Self.character_sel_offset_x = MyAPI.calNextPosition((double) Self.character_sel_offset_x, -128.0, ZONE_NUM_OFFSET, STATE_MOVING)
 								
 								If (Self.character_sel_offset_x = Def.TOUCH_HELP_LEFT_X) Then
 									Self.character_id += 1
@@ -3779,7 +3779,7 @@ Class TitleState Extends State
 		End
 		
 		Method drawTitle1:Void(g:MFGraphics)
-			Self.copyOffsetX = MyAPI.calNextPosition((double) Self.copyOffsetX, 0.0d, ZONE_NUM_OFFSET, STATE_MOVING)
+			Self.copyOffsetX = MyAPI.calNextPosition((double) Self.copyOffsetX, 0.0, ZONE_NUM_OFFSET, STATE_MOVING)
 			
 			MyAPI.drawImage(g, Self.sonicBigImage, Self.sonicBigX - Self.cameraX, SONIC_BIG_Y, STATE_RETURN_TO_LOGO_1)
 		End
