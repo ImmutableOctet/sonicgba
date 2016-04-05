@@ -777,18 +777,17 @@
     <DocUserOptions Filename=".\src\special\ssdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>21</X>
-        <Y>38</Y>
+        <Y>28</Y>
       </CursorPos>
       <DocGUID>e35a6e18-881c-4940-a7a5-f21c639dc4d3</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\special\ssfollowring.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\special\ssfollowring.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>12</X>
         <Y>35</Y>
       </CursorPos>
-      <DocGUID>1e67307a-801d-4608-aa57-4fe724159598</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssgoal.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -800,10 +799,18 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\sslostring.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>27</X>
+        <Y>25</Y>
       </CursorPos>
       <DocGUID>6321384d-106a-4195-be3b-e74563e0c98a</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\special\ssring.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>12</X>
+        <Y>15</Y>
+      </CursorPos>
+      <DocGUID>4ec6d152-d53f-4d4d-87e1-938d73eb1cc4</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssusableobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
