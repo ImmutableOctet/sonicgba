@@ -325,7 +325,7 @@ Class Frame
 							g.saveCanvas()
 							
 							g.translateCanvas(x, y)
-							g.scaleCanvas(0.5f, 0.5f)
+							g.scaleCanvas(0.5, 0.5)
 							DrawImage(g, i, 0, 0, attr)
 							
 							g.restoreCanvas()
@@ -346,7 +346,7 @@ Class Frame
 							g.saveCanvas()
 							
 							g.translateCanvas(x + tmp_x, y + tmp_y)
-							g.scaleCanvas(0.5f, 0.5f)
+							g.scaleCanvas(0.5, 0.5)
 							m_Ani.qiAnimationArray[Self.m_ClipInfo[i][2]].m_Frames[Self.m_ClipInfo[i][3]].Draw(g, 0, 0, attr)
 							
 							g.restoreCanvas()

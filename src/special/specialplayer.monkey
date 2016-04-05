@@ -639,25 +639,25 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 					EndIf
 					
 					If (Self.scaleCount < STATE_CHECK_POINT) Then
-						scale = 0.92f
+						scale = 0.92
 					ElseIf (Self.scaleCount < STATE_GOAL) Then
-						scale = 0.952f
+						scale = 0.952
 					ElseIf (Self.scaleCount < STATE_READY) Then
-						scale = 0.984f
+						scale = 0.984
 					ElseIf (Self.scaleCount < STATE_INIT) Then
-						scale = 1.016f
+						scale = 1.016
 					ElseIf (Self.scaleCount < STATE_OVER) Then
-						scale = 1.048f
+						scale = 1.048
 					ElseIf (Self.scaleCount < WORDS_INIT_X) Then
-						scale = 1.08f
+						scale = 1.08
 					ElseIf (Self.scaleCount < SSSpringCount) Then
-						scale = 1.048f
+						scale = 1.048
 					ElseIf (Self.scaleCount < ANI_MOVE_LEFT_DOWN) Then
-						scale = 1.016f
+						scale = 1.016
 					ElseIf (Self.scaleCount < ANI_MOVE_RIGHT_DOWN) Then
-						scale = 0.984f
+						scale = 0.984
 					ElseIf (Self.scaleCount < TOTAL_COUNT_SCALE_ZOOM) Then
-						scale = 0.952f
+						scale = 0.952
 					EndIf
 					
 				ElseIf (Self.checkSuccess) Then
@@ -669,25 +669,25 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 					EndIf
 					
 					If (Self.scaleCount < STATE_CHECK_POINT) Then
-						scale = 0.92f
+						scale = 0.92
 					ElseIf (Self.scaleCount < STATE_GOAL) Then
-						scale = 0.952f
+						scale = 0.952
 					ElseIf (Self.scaleCount < STATE_READY) Then
-						scale = 0.984f
+						scale = 0.984
 					ElseIf (Self.scaleCount < STATE_INIT) Then
-						scale = 1.016f
+						scale = 1.016
 					ElseIf (Self.scaleCount < STATE_OVER) Then
-						scale = 1.048f
+						scale = 1.048
 					ElseIf (Self.scaleCount < WORDS_INIT_X) Then
-						scale = 1.08f
+						scale = 1.08
 					ElseIf (Self.scaleCount < SSSpringCount) Then
-						scale = 1.048f
+						scale = 1.048
 					ElseIf (Self.scaleCount < ANI_MOVE_LEFT_DOWN) Then
-						scale = 1.016f
+						scale = 1.016
 					ElseIf (Self.scaleCount < ANI_MOVE_RIGHT_DOWN) Then
-						scale = 0.984f
+						scale = 0.984
 					ElseIf (Self.scaleCount < TOTAL_COUNT_SCALE_ZOOM) Then
-						scale = 0.952f
+						scale = 0.952
 					EndIf
 					
 				Else

@@ -62,7 +62,7 @@ Class SpecialObject Implements SSDef Abstract
 	Protected
 		' Constant variable(s):
 		Const CAMERA_TO_PLAYER:Int = 6
-		Const f27D:Int = 30
+		Const f27:Int = 30
 		
 		' Global variable(s):
 		Global decideObjects:Stack<SpecialObject> = New Stack<SpecialObject>()
@@ -277,9 +277,9 @@ Class SpecialObject Implements SSDef Abstract
 		Function calDrawPosition:Void(x:Int, y:Int, z:Int)
 			z = -(z - (player.posZ - CAMERA_TO_PLAYER))
 			y = -y
-			drawX = (x * f27D) / (f27D - z)
-			drawY = (y * f27D) / (f27D - z)
-			scale = ((Float((7200 / (f27D - z)) - (-7200 / (f27D - z)))) / SCALE_PARAM_1)
+			drawX = (x * f27) / (f27 - z)
+			drawY = (y * f27) / (f27 - z)
+			scale = ((Float((7200 / (f27 - z)) - (-7200 / (f27 - z)))) / SCALE_PARAM_1)
 		End
 	Public
 		' Methods (Abstract):

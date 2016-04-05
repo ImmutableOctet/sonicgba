@@ -769,16 +769,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\specialobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>58</Y>
+        <X>11</X>
+        <Y>64</Y>
       </CursorPos>
       <DocGUID>d27403c9-94c1-44c3-8a8a-34d454626507</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\specialplayer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>153</Y>
+        <X>19</X>
+        <Y>649</Y>
       </CursorPos>
       <DocGUID>5ba6761e-a012-4773-a9f5-d283fd3e768f</DocGUID>
       <Bookmarks />
@@ -889,8 +889,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>63</X>
-        <Y>1413</Y>
+        <X>26</X>
+        <Y>1305</Y>
       </CursorPos>
       <DocGUID>b7e15a43-1324-4410-81c5-66f79a23e3a8</DocGUID>
       <Bookmarks />
