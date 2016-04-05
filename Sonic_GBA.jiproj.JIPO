@@ -768,8 +768,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>12</X>
-        <Y>16</Y>
+        <X>2</X>
+        <Y>22</Y>
       </CursorPos>
       <DocGUID>6168b085-6280-4050-8625-2c4fde3d3736</DocGUID>
       <Bookmarks />
