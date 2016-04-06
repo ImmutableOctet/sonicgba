@@ -9,4 +9,5 @@ stylistic issues to being completely broken.
 * 'sonicgba.gimmickobject'
 
 ## Long-term Requirements
-* All files relating to 'PlayerObject'.
+* 'state.gamestate' needs to be ported in order to finish the 'state' module.
+* All supporting files relating to 'PlayerObject', as well as syntactic fixes to 'sonicgba.playerobject'.
