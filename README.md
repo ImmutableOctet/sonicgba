@@ -15,9 +15,9 @@ without making any claim to parody the original behavior in any way.
 * Implement 'ending'. (Ending animation behavior?)
 * Implement 'pyxanimation' / 'pyxeditor'.
 * Implement 'platformstandard'.
-* Implement 'common'. (Utilities)
 * Properly implement sound behavior.
 * Finish missing parts of 'MFLib'.
 * Resolve foreign text.
 
 * **~~Implement 'special'.~~** (Special Stage objects)
+* **~~Implement 'common'.~~** (Utilities)
