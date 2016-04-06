@@ -125,10 +125,12 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 		Const SCALE_ZOOM_OFFSET:Float = 0.0
 		Const SCALE_ZOOM_OUT:Int = 9
 		
+		Const TOTAL_COUNT_SCALE_ZOOM:Int = 18
+		
 		Const SSSpringCount:Int = 15
 		
-		Const START_POS_X:Int = ((SCREEN_WIDTH Shl 6) Shr 1)
-		Const START_POS_Y:Int = ((SCREEN_HEIGHT Shl 6) Shr 1)
+		Const START_POS_X:Int = ((SCREEN_WIDTH Shl 6) Shr 1) ' / 2
+		Const START_POS_Y:Int = ((SCREEN_HEIGHT Shl 6) Shr 1) ' / 2
 		
 		Const STATE_CHECK_POINT:Int = 5
 		Const STATE_DASH:Int = 2
@@ -144,8 +146,6 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 		Const STATE_VICTORY:Int = 3
 		
 		Const STAY_TIME:Int = 60
-		
-		Const TOTAL_COUNT_SCALE_ZOOM:Int = 18
 		
 		Global TUTORIAL_ANIMATION_ID:Int[][] = [[0, 6, 4, 1], [2, 6, 5, 3]] ' Const
 		
@@ -247,6 +247,49 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 		
 		Field wordX:Int
 	Public
+		' Functions:
+		Function updateScale:Void()
+			Local previousCount:= Self.scaleCount
+			
+			Self.scaleCount += 1 ' i + 1
+			
+			If (previousCount >= (TOTAL_COUNT_SCALE_ZOOM-1)) Then
+				Self.scaleCount = 0
+			EndIf
+			
+			If (Self.scaleCount < SCALE_ZOOM_0_FRAME_COUNT) Then
+				'scale = 0.92
+				scale = 1.0+SCALE_ZOOM_0
+			ElseIf (Self.scaleCount < (SCALE_ZOOM_0_FRAME_COUNT+SCALE_ZOOM_1_FRAME_COUNT)) Then
+				'scale = 0.952
+				scale = 1.0+SCALE_ZOOM_1
+			ElseIf (Self.scaleCount < (SCALE_ZOOM_0_FRAME_COUNT+SCALE_ZOOM_1_FRAME_COUNT+SCALE_ZOOM_2_FRAME_COUNT)) Then
+				'scale = 0.984
+				scale = 1.0+SCALE_ZOOM_2
+			ElseIf (Self.scaleCount < (SCALE_ZOOM_0_FRAME_COUNT+SCALE_ZOOM_1_FRAME_COUNT+SCALE_ZOOM_2_FRAME_COUNT+SCALE_ZOOM_3_FRAME_COUNT)) Then
+				'scale = 1.016
+				scale = 1.0+SCALE_ZOOM_3
+			ElseIf (Self.scaleCount < (SCALE_ZOOM_0_FRAME_COUNT+SCALE_ZOOM_1_FRAME_COUNT+SCALE_ZOOM_2_FRAME_COUNT+SCALE_ZOOM_3_FRAME_COUNT+SCALE_ZOOM_4_FRAME_COUNT)) Then
+				'scale = 1.048
+				scale = 1.0+SCALE_ZOOM_4
+			ElseIf (Self.scaleCount < (SCALE_ZOOM_IN+SCALE_ZOOM_0_FRAME_COUNT)) Then
+				'scale = 1.08
+				scale = 1.0+SCALE_ZOOM_5
+			ElseIf (Self.scaleCount < (SCALE_ZOOM_IN+SCALE_ZOOM_0_FRAME_COUNT+SCALE_ZOOM_1_FRAME_COUNT)) Then
+				'scale = 1.048
+				scale = 1.0+SCALE_ZOOM_4
+			ElseIf (Self.scaleCount < (SCALE_ZOOM_IN+SCALE_ZOOM_0_FRAME_COUNT+SCALE_ZOOM_1_FRAME_COUNT+SCALE_ZOOM_2_FRAME_COUNT)) Then
+				'scale = 1.016
+				scale = 1.0+SCALE_ZOOM_3
+			ElseIf (Self.scaleCount < (SCALE_ZOOM_IN+SCALE_ZOOM_0_FRAME_COUNT+SCALE_ZOOM_1_FRAME_COUNT+SCALE_ZOOM_2_FRAME_COUNT+SCALE_ZOOM_3_FRAME_COUNT)) Then
+				'scale = 0.984
+				scale = 1.0+SCALE_ZOOM_2
+			ElseIf (Self.scaleCount < TOTAL_COUNT_SCALE_ZOOM) Then
+				'scale = 0.952
+				scale = 1.0+SCALE_ZOOM_1
+			EndIf
+		End
+		
 		' Constructor(s):
 		Method New(characterID:Int)
 			Super.New(-1, 0, 0, 0)
@@ -515,7 +558,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 					
 					initScoreBase()
 					
-					If (Not showTutorial Or GlobalResource.spsetConfig <> STATE_SKILLING) Then
+					If (Not showTutorial Or GlobalResource.spsetConfig <> 1) Then
 						Self.isNeedTouchPad = True
 					Else
 						Self.state = STATE_TUTORIAL
@@ -624,72 +667,14 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 			EndIf
 		End
 		
-		Public Method draw:Void(g:MFGraphics)
-			Local i:Int
-			
+		Method draw:Void(g:MFGraphics)
 			SpecialObject.calDrawPosition(Self.posX Shr 6, (-Self.posY) Shr 6, Self.posZ - (Self.boardOffsetX Shr 6))
 			
 			If (Not Self.isPause) Then
 				If (Self.state <> STATE_SPRING And Self.state <> 4 And ((Self.state <> STATE_CHECK_POINT Or Not isInCenter() Or Self.checkCount <= WHITE_BAR_HEIGHT) And Self.state <> STATE_OVER)) Then
-					i = Self.scaleCount
-					Self.scaleCount = i + 1
-					
-					If (i >= ANI_MOVE_RIGHT_DOWN) Then
-						Self.scaleCount = 0
-					EndIf
-					
-					If (Self.scaleCount < STATE_CHECK_POINT) Then
-						scale = 0.92
-					ElseIf (Self.scaleCount < STATE_GOAL) Then
-						scale = 0.952
-					ElseIf (Self.scaleCount < STATE_READY) Then
-						scale = 0.984
-					ElseIf (Self.scaleCount < STATE_INIT) Then
-						scale = 1.016
-					ElseIf (Self.scaleCount < STATE_OVER) Then
-						scale = 1.048
-					ElseIf (Self.scaleCount < WORDS_INIT_X) Then
-						scale = 1.08
-					ElseIf (Self.scaleCount < SSSpringCount) Then
-						scale = 1.048
-					ElseIf (Self.scaleCount < ANI_MOVE_LEFT_DOWN) Then
-						scale = 1.016
-					ElseIf (Self.scaleCount < ANI_MOVE_RIGHT_DOWN) Then
-						scale = 0.984
-					ElseIf (Self.scaleCount < TOTAL_COUNT_SCALE_ZOOM) Then
-						scale = 0.952
-					EndIf
-					
+					updateScale()
 				ElseIf (Self.checkSuccess) Then
-					i = Self.scaleCount
-					Self.scaleCount = i + 1
-					
-					If (i >= ANI_MOVE_RIGHT_DOWN) Then
-						Self.scaleCount = 0
-					EndIf
-					
-					If (Self.scaleCount < STATE_CHECK_POINT) Then
-						scale = 0.92
-					ElseIf (Self.scaleCount < STATE_GOAL) Then
-						scale = 0.952
-					ElseIf (Self.scaleCount < STATE_READY) Then
-						scale = 0.984
-					ElseIf (Self.scaleCount < STATE_INIT) Then
-						scale = 1.016
-					ElseIf (Self.scaleCount < STATE_OVER) Then
-						scale = 1.048
-					ElseIf (Self.scaleCount < WORDS_INIT_X) Then
-						scale = 1.08
-					ElseIf (Self.scaleCount < SSSpringCount) Then
-						scale = 1.048
-					ElseIf (Self.scaleCount < ANI_MOVE_LEFT_DOWN) Then
-						scale = 1.016
-					ElseIf (Self.scaleCount < ANI_MOVE_RIGHT_DOWN) Then
-						scale = 0.984
-					ElseIf (Self.scaleCount < TOTAL_COUNT_SCALE_ZOOM) Then
-						scale = 0.952
-					EndIf
-					
+					updateScale()
 				Else
 					scale *= SCALE_ZOOM_BASE
 				EndIf
@@ -703,78 +688,73 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 			
 			Self.drawer.setActionId(Self.actionID)
 			Self.drawer.setLoop(ANI_LOOP[Self.actionID])
-			drawObj(g, Self.drawer, ((((Int) ((((Float) Self.posX) * scale) - ((Float) Self.posX))) * STATE_SKILLING) / STATE_DEAD) Shr 6, ((((Int) ((((Float) Self.posY) * scale) - ((Float) Self.posY))) * STATE_SKILLING) / STATE_DEAD) Shr 6)
+			
+			drawObj(g, Self.drawer, (((Int((Float(Self.posX) * scale) - Float(Self.posX)))) / 4) Shr 6, (((Int((Float(Self.posY) * scale) - Float(Self.posY)))) / 4) Shr 6)
 			
 			If (Self.drawer.checkEnd()) Then
 				Select (Self.actionID)
 					Case ANI_VICTORY_1
 						Self.actionID = ANI_VICTORY_2
-						break
 					Case ANI_DAMAGE
 						Self.actionID = ANI_STAND
-						break
 				End Select
 			EndIf
 			
 			Select (Self.state)
 				Case STATE_CHECK_POINT
-					
-					If (Self.count > STATE_SKILLING) Then
-						i = Self.count
-						Int i2 = (Self.isGoal Or Not Self.checkSuccess) ? 48 : ANI_NICE_SKILL
-						
-						If (i < i2) Then
-							Int i3
-							AnimationDrawer animationDrawer = Self.spObjDrawer
+					If (Self.count > 1) Then
+						If (Self.count < PickValue((Self.isGoal Or Not Self.checkSuccess), 48, 26)) Then
+							Local ani:Int
 							
 							If (Self.checkSuccess) Then
-								i3 = STATE_SPRING
+								ani = ANI_MOVE_UP ' 10
 							Else
-								i3 = STATE_TUTORIAL
+								ani = ANI_MOVE_DOWN ' 11
 							EndIf
 							
-							animationDrawer.draw(g, i3, SCREEN_WIDTH Shr 1, SCREEN_HEIGHT Shr 1, False, 0)
+							Local animationDrawer:= Self.spObjDrawer
+							
+							animationDrawer.draw(g, ani, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), False, 0) ' Shr 1
 							
 							If (Not Self.checkSuccess) Then
 								SpecialObject.calDrawPosition((Self.posX + Self.boardOffsetX) Shr 6, ((-Self.posY) - Self.boardOffsetY) Shr 6, Self.posZ + (Self.boardOffsetZ Shr 6))
+								
 								drawObj(g, Self.characterBoardDrawer, 0, 0)
 							EndIf
 						EndIf
 					EndIf
 					
 					If (Self.count = 0 And Not Self.checkSuccess) Then
-						Self.fontAnimationDrawer.draw(g, STATE_READY, SCREEN_WIDTH Shr 1, SCREEN_HEIGHT Shr 1, False, 0)
-						break
+						Self.fontAnimationDrawer.draw(g, ANI_STAND_RIGHT_UP, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), False, 0) ' Shr 1
 					EndIf
-					
-					break
 				Case STATE_TUTORIAL
 					State.drawFade(g)
 					
 					If (Self.count > STATE_SPRING And State.fadeChangeOver()) Then
-						Int tutorDesX = (SCREEN_WIDTH Shr 1) - (SCREEN_WIDTH * Self.tutorID)
+						Local tutorDesX:= (SCREEN_WIDTH / 2) - (SCREEN_WIDTH * Self.tutorID) ' Shr 1
+						
 						Self.tutorX = MyAPI.calNextPosition(Double(Self.tutorX), Double(tutorDesX), 1, 3)
-						For (Int i4 = 0; i4 < Self.tutorialDrawer.Length; i4 += 1)
-							Self.tutorialDrawer[i4].setPause(True)
+						
+						For Local i:= 0 Until Self.tutorialDrawer.Length
+							Self.tutorialDrawer[i].setPause(True)
 							
 							If (Self.tutorX = tutorDesX) Then
-								Self.tutorialDrawer[i4].setPause(False)
+								Self.tutorialDrawer[i].setPause(False)
 								Self.tutorMoving = False
 							ElseIf (Self.tutorID >= 1) Then
-								Self.tutorialDrawer[i4].draw(g, TUTORIAL_ANIMATION_ID[Self.tutorID - 1][i4], ((Self.tutorID - 1) * SCREEN_WIDTH) + Self.tutorX, SCREEN_HEIGHT Shr 1, True, 0)
+								Self.tutorialDrawer[i].draw(g, TUTORIAL_ANIMATION_ID[Self.tutorID - 1][i], ((Self.tutorID - 1) * SCREEN_WIDTH) + Self.tutorX, (SCREEN_HEIGHT / 2), True, 0) ' Shr 1
 							EndIf
 							
 							If (Self.tutorID <= 1) Then
-								Self.tutorialDrawer[i4].draw(g, TUTORIAL_ANIMATION_ID[Self.tutorID][i4], (Self.tutorID * SCREEN_WIDTH) + Self.tutorX, SCREEN_HEIGHT Shr 1, True, 0)
+								Self.tutorialDrawer[i].draw(g, TUTORIAL_ANIMATION_ID[Self.tutorID][i], (Self.tutorID * SCREEN_WIDTH) + Self.tutorX, (SCREEN_HEIGHT / 2), True, 0) ' Shr 1
 							EndIf
-							
 						Next
-						Self.skipOffsetY = MyAPI.calNextPosition(Double(Self.skipOffsetY), Double(Self.tutorID > STATE_SKILLING ? WHITE_BAR_HEIGHT : 0), 1, 3)
-						Self.tutorialSkipDrawer.draw(g, Key.repeated(Key.B_S1) ? STATE_SKILLING : 0, 0, Self.skipOffsetY + (SCREEN_HEIGHT - 1), True, 0)
-						break
+						
+						Self.skipOffsetY = MyAPI.calNextPosition(Double(Self.skipOffsetY), Double(PickValue((Self.tutorID > 1), WHITE_BAR_HEIGHT, 0)), 1, 3)
+						Self.tutorialSkipDrawer.draw(g, Int(Key.repeated(Key.B_S1)), 0, Self.skipOffsetY + (SCREEN_HEIGHT - 1), True, 0)
 					EndIf
-					
 			End Select
+			
 			drawcollisionRect(g)
 		End
 		
@@ -824,9 +804,9 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 			End Select
 			
 			If (Not (Self.state = STATE_INIT Or Self.state = STATE_READY)) Then
-				Self.spObjDrawer.draw(g, ANI_MOVE_LEFT, SCREEN_WIDTH Shr 1, Self.ringHudY, False, 0)
-				NumberDrawer.drawNum(g, 0, Self.targetRingNum, (SCREEN_WIDTH Shr 1) + ANI_MOVE_LEFT, Self.ringNumY, STATE_DASH)
-				NumberDrawer.drawNum(g, 0, Self.ringNum, (SCREEN_WIDTH Shr 1) - ANI_MOVE_LEFT, Self.ringNumY - ANI_MOVE_LEFT, STATE_DASH)
+				Self.spObjDrawer.draw(g, ANI_MOVE_LEFT, (SCREEN_WIDTH / 2), Self.ringHudY, False, 0) ' Shr 1
+				NumberDrawer.drawNum(g, 0, Self.targetRingNum, (SCREEN_WIDTH / 2) + 12, Self.ringNumY, 2) ' Shr 1
+				NumberDrawer.drawNum(g, 0, Self.ringNum, (SCREEN_WIDTH  / 2) - 12, Self.ringNumY - 12, 2) ' Shr 1
 			EndIf
 			
 			If (Self.triking And Self.trikCount = 0 And Self.trickCount2 < ANI_MOVE_LEFT_DOWN) Then
@@ -987,7 +967,8 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 		End
 		
 		Public Method setCheckPoint:Void()
-			Self.checkSuccess = (Self.ringNum >= Self.targetRingNum ? STATE_SKILLING : 0) | Self.debugPassStage
+			Self.checkSuccess = (Int(Self.ringNum >= Self.targetRingNum) | Self.debugPassStage)
+			
 			Self.noMoving = True
 			Self.state = STATE_CHECK_POINT
 			Self.count = 0

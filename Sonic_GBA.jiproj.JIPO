@@ -777,8 +777,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\specialplayer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>10</X>
-        <Y>638</Y>
+        <X>13</X>
+        <Y>669</Y>
       </CursorPos>
       <DocGUID>5ba6761e-a012-4773-a9f5-d283fd3e768f</DocGUID>
       <Bookmarks />
@@ -873,13 +873,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\state\state.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\state\state.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>1869</Y>
+        <X>9</X>
+        <Y>1835</Y>
       </CursorPos>
-      <DocGUID>f7be17f7-e1be-4561-91dd-1b5603e4862e</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\stringindex.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
