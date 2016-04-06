@@ -830,16 +830,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssmapdata.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>26</X>
-        <Y>957</Y>
+        <X>29</X>
+        <Y>934</Y>
       </CursorPos>
       <DocGUID>e7927691-cba5-4ac7-a985-587867eef20b</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssmapdata2.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>6</Y>
+        <X>28</X>
+        <Y>318</Y>
       </CursorPos>
       <DocGUID>f1c2f658-d1f8-499c-93b3-e07081a6130e</DocGUID>
       <Bookmarks />
