@@ -825,140 +825,117 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 			EndIf
 		End
 		
-		Public Method initWelcome:Void()
-			Self.welcomeX = ((SCREEN_WIDTH Shr 1) + 50) Shl 6
+		Method initWelcome:Void()
+			' Magic numbers: 50, 160, -2500
+			Self.welcomeX = ((SCREEN_WIDTH / 2) + 50) Shl 6 ' (SCREEN_WIDTH Shr 1)
 			Self.welcomeY = (SCREEN_HEIGHT + 160) Shl 6
-			Self.welcomeVelY = -2500
+			
+			Self.welcomeVelY = -2500 ' WELCOMT_VEL_Y
 		End
 		
-		Public Method logicWelcome:Void()
+		Method logicWelcome:Void()
 			Self.welcomeVelY += GRAVITY
 			Self.welcomeY += Self.welcomeVelY
 			Self.welcomeX += WELCOMT_VEL_X
 		End
 		
-		Public Method drawWelcome:Void(g:MFGraphics)
-			Int actioID
+		Method drawWelcome:Void(g:MFGraphics)
+			Local action:Int
 			
 			If (Self.welcomeVelY < -500) Then
-				actioID = ANI_WELCOME_1
+				action = ANI_WELCOME_1
 			ElseIf (Self.welcomeVelY < -333) Then
-				actioID = ANI_WELCOME_2
+				action = ANI_WELCOME_2
 			ElseIf (Self.welcomeVelY < -166) Then
-				actioID = ANI_WELCOME_3
+				action = ANI_WELCOME_3
 			ElseIf (Self.welcomeVelY < 166) Then
-				actioID = ANI_WELCOME_4
+				action = ANI_WELCOME_4
 			ElseIf (Self.welcomeVelY < 333) Then
-				actioID = ANI_WELCOME_5
+				action = ANI_WELCOME_5
 			ElseIf (Self.welcomeVelY < WELCOME_ANI_CHANGE_RANGE) Then
-				actioID = ANI_WELCOME_6
+				action = ANI_WELCOME_6
 			Else
-				actioID = ANI_WELCOME_7
+				action = ANI_WELCOME_7
 			EndIf
 			
-			Self.drawer.draw(g, actioID, Self.welcomeX Shr 6, Self.welcomeY Shr 6, True, 0)
-			Self.fontAnimationDrawer.draw(g, 0, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + 40, True, 0)
+			Self.drawer.draw(g, action, Self.welcomeX Shr 6, Self.welcomeY Shr 6, True, 0)
+			Self.fontAnimationDrawer.draw(g, 0, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) + 40, True, 0) ' Shr 1
 		End
 		
-		Public Method isWelcomeOver:Bool()
-			Return Self.welcomeY > ((SCREEN_HEIGHT + STAY_TIME) Shl 6)
+		Method isWelcomeOver:Bool()
+			Return (Self.welcomeY > ((SCREEN_HEIGHT + STAY_TIME) Shl 6))
 		End
 		
-		Public Method close:Void()
+		Method close:Void()
 			Animation.closeAnimationDrawerArray(Self.tutorialDrawer)
-			Self.tutorialDrawer = Null
+			
+			Self.tutorialDrawer = []
 		End
 		
-		Public Method doWhileCollision:Void(collisionObj:SpecialObject)
+		Method doWhileCollision:Void(collisionObj:SpecialObject)
+			' Empty implementation.
 		End
 		
-		Public Method refreshCollision:Void(x:Int, y:Int)
-			Self.rect1 = Self.drawer.getCRect()
-			Self.rect2 = Self.drawer.getARect()
-			
-			If (Self.rect1 <> Null) Then
-				Self.collisionRect.setTwoPosition((x Shr 6) + Self.rect1[0], ((-y) Shr 6) - Self.rect1[1], ((x Shr 6) + Self.rect1[0]) + Self.rect1[STATE_DASH], (((-y) Shr 6) - Self.rect1[1]) - Self.rect1[STATE_VICTORY])
-			EndIf
-			
-			If (Self.rect2 <> Null) Then
-				If (Self.attackCollisionRect = Null) Then
-					Self.attackCollisionRect = New CollisionRect()
-				EndIf
-				
-				Self.attackCollisionRect.setTwoPosition((x Shr 6) + Self.rect2[0], ((-y) Shr 6) - Self.rect2[1], ((x Shr 6) + Self.rect2[0]) + Self.rect2[STATE_DASH], (((-y) Shr 6) - Self.rect2[1]) - Self.rect2[STATE_VICTORY])
-			EndIf
-			
-		End
-		
-		Private Method drawcollisionRect:Void(g:MFGraphics)
-			
-			If (Self.rect1 <> Null And SonicDebug.showCollisionRect) Then
-				g.setColor(16711680)
-				g.drawRect(((drawX + (SCREEN_WIDTH Shr 1)) - SpecialMap.getCameraOffsetX()) + Self.rect1[0], ((drawY + (SCREEN_HEIGHT Shr 1)) - SpecialMap.getCameraOffsetY()) + Self.rect1[1], Self.rect1[STATE_DASH], Self.rect1[STATE_VICTORY])
-			EndIf
-			
-			If (Self.rect2 <> Null And SonicDebug.showCollisionRect) Then
-				g.setColor(65280)
-				g.drawRect(((drawX + (SCREEN_WIDTH Shr 1)) - SpecialMap.getCameraOffsetX()) + Self.rect2[0], ((drawY + (SCREEN_HEIGHT Shr 1)) - SpecialMap.getCameraOffsetY()) + Self.rect2[1], Self.rect2[STATE_DASH], Self.rect2[STATE_VICTORY])
-			EndIf
-			
-		End
-		
-		Public Method beSpringX:Void(velX:Int)
-			Self.velX = velX Shl 6
+		Method beSpringX:Void(velX:Int)
+			Self.velX = (velX Shl 6)
 			Self.state = STATE_SPRING
 			Self.count = 0
 		End
 		
-		Public Method beSpringY:Void(velY:Int)
-			Self.velY = velY Shl 6
+		Method beSpringY:Void(velY:Int)
+			Self.velY = (velY Shl 6)
 			Self.state = STATE_SPRING
 			Self.count = 0
 		End
 		
-		Public Method beSpringZ:Void(velZ:Int)
+		Method beSpringZ:Void(velZ:Int)
 			Self.velZ = velZ
 			Self.state = STATE_SPRING
 			Self.count = 0
 		End
 		
-		Public Method beHurt:Void()
-			
+		Method beHurt:Void()
 			If (Self.actionID <> ANI_DAMAGE) Then
-				Int i
 				Self.actionID = ANI_DAMAGE
+				
 				Self.state = STATE_NORMAL
 				
 				If (Self.ringNum = 0) Then
-					SoundSystem.getInstance().playSe(35)
+					SoundSystem.getInstance().playSe(SoundSystem.SE_144)
 				Else
-					SoundSystem.getInstance().playSe(ANI_MOVE_RIGHT)
+					SoundSystem.getInstance().playSe(SoundSystem.SE_118)
 				EndIf
 				
-				Int lostnum = STATE_SPRING
-				Self.ringNum -= STATE_SPRING
+				Local lostnum:= ringDirection.Length
+				
+				Self.ringNum -= ringDirection.Length
 				
 				If (Self.ringNum < 0) Then
-					lostnum = STATE_SPRING + Self.ringNum
+					lostnum = (ringDirection.Length + Self.ringNum)
+					
 					Self.ringNum = 0
 				EndIf
 				
-				For (i = 0; i < STATE_SPRING; i += 1)
+				For Local i:= 0 Until ringDirection.Length ' 10
 					ringDirection[i] = i
-					ringVel[i][0] = (Cos(i * 36) * 800) / 100
-					ringVel[i][1] = (Sin(i * 36) * 800) / 100
+					
+					ringVel[i][0] = ((Cos(i * 36) * 800) / 100)
+					ringVel[i][1] = ((Sin(i * 36) * 800) / 100)
 				Next
-				For (i = 0; i < STATE_SPRING; i += 1)
-					Int pos = MyRandom.nextInt(0, STATE_OVER)
-					Int tmp = ringDirection[pos]
+				
+				For Local i:= 0 Until ringDirection.Length ' 10
+					Local pos:= MyRandom.nextInt(0, ringDirection.Length - 1)
+					Local tmp:= ringDirection[pos]
+					
 					ringDirection[pos] = ringDirection[i]
 					ringDirection[i] = tmp
 				Next
-				For (i = 0; i < lostnum; i += 1)
+				
+				' Create "lost ring" objects to represent the rings we lost:
+				For Local i:= 0 Until lostnum
 					SpecialObject.addExtraObject(New SSLostRing(Self.posX, -Self.posY, Self.posZ, ringVel[ringDirection[i]][0], ringVel[ringDirection[i]][1], Self.velZ))
 				Next
 			EndIf
-			
 		End
 		
 		Public Method getRing:Void(ringNum:Int)
@@ -983,40 +960,6 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 		
 		Public Method isTricking:Bool()
 			Return Self.state = STATE_SKILLING
-		End
-		
-		Private Method calSensor:Void()
-			Float accX = MFSensor.getAccX()
-			Float accY = MFSensor.getAccY()
-			Select (GlobalResource.sensorConfig)
-				Case 0
-					Self.acc_value = STATE_DASH
-					break
-				Case STATE_SKILLING
-					Self.acc_value = STATE_DEAD
-					break
-				Case STATE_DASH
-					Self.acc_value = STATE_GOAL
-					break
-			End Select
-			accX = Max(Min(accX, (Float) (Self.acc_value + STATE_CHECK_POINT)), (Float) (STATE_CHECK_POINT - Self.acc_value))
-			accY = Max(Min(accY, (Float) Self.acc_value), (Float) (-Self.acc_value))
-			
-			If (Self.state = STATE_DASH) Then
-				If (Self.state <> STATE_SPRING) Then
-					Self.velX = (Int) ((accY * 3600.0) / 10.0)
-				ElseIf (Self.count >= SSSpringCount) Then
-					Self.velX = (Int) ((accY * 3600.0) / 10.0)
-				EndIf
-				
-			ElseIf (Self.state <> STATE_SPRING) Then
-				Self.velX = (Int) ((accY * 3600.0) / 10.0)
-				Self.velY = (Int) (((accX - 5.0) * 3600.0) / 10.0)
-			ElseIf (Self.count >= SSSpringCount) Then
-				Self.velX = (Int) ((accY * 3600.0) / 10.0)
-				Self.velY = (Int) (((accX - 5.0) * 3600.0) / 10.0)
-			EndIf
-			
 		End
 		
 		Public Method moveToCenter:Void()
@@ -1072,11 +1015,6 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 			
 		End
 		
-		Private Method initScoreBase:Void()
-			Self.ringHudY = RING_HUD_ORIGINAL
-			Self.ringNumY = RING_NUM_ORIGINAL
-		End
-		
 		Public Method isOver:Bool()
 			Return Self.state = STATE_OVER And Self.count > WHITE_BAR_HEIGHT
 		End
@@ -1115,5 +1053,73 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 		
 		Public Method setPause:Void(statePause:Bool)
 			Self.isPause = statePause
+		End
+	Private
+		' Methods:
+		Method refreshCollision:Void(x:Int, y:Int)
+			Self.rect1 = Self.drawer.getCRect()
+			Self.rect2 = Self.drawer.getARect()
+			
+			If (Self.rect1 <> Null) Then
+				Self.collisionRect.setTwoPosition((x Shr 6) + Self.rect1[0], ((-y) Shr 6) - Self.rect1[1], ((x Shr 6) + Self.rect1[0]) + Self.rect1[2], (((-y) Shr 6) - Self.rect1[1]) - Self.rect1[3])
+			EndIf
+			
+			If (Self.rect2 <> Null) Then
+				If (Self.attackCollisionRect = Null) Then
+					Self.attackCollisionRect = New CollisionRect()
+				EndIf
+				
+				Self.attackCollisionRect.setTwoPosition((x Shr 6) + Self.rect2[0], ((-y) Shr 6) - Self.rect2[1], ((x Shr 6) + Self.rect2[0]) + Self.rect2[2], (((-y) Shr 6) - Self.rect2[1]) - Self.rect2[3])
+			EndIf
+		End
+		
+		Method drawcollisionRect:Void(g:MFGraphics)
+			If (Self.rect1 <> Null And SonicDebug.showCollisionRect) Then
+				g.setColor(16711680)
+				
+				g.drawRect(((drawX + (SCREEN_WIDTH / 2)) - SpecialMap.getCameraOffsetX()) + Self.rect1[0], ((drawY + (SCREEN_HEIGHT / 2)) - SpecialMap.getCameraOffsetY()) + Self.rect1[1], Self.rect1[2], Self.rect1[3]) ' Shr 1
+			EndIf
+			
+			If (Self.rect2 <> Null And SonicDebug.showCollisionRect) Then
+				g.setColor(65280)
+				
+				g.drawRect(((drawX + (SCREEN_WIDTH / 2)) - SpecialMap.getCameraOffsetX()) + Self.rect2[0], ((drawY + (SCREEN_HEIGHT / 2)) - SpecialMap.getCameraOffsetY()) + Self.rect2[1], Self.rect2[2], Self.rect2[3])
+			EndIf
+		End
+		
+		Method calSensor:Void()
+			Local accX:= MFSensor.getAccX()
+			Local accY:= MFSensor.getAccY()
+			
+			Select (GlobalResource.sensorConfig)
+				Case 0
+					Self.acc_value = ACC_SLOW
+				Case 1
+					Self.acc_value = ACC_NORMAL
+				Case 2
+					Self.acc_value = ACC_FAST
+			End Select
+			
+			accX = Max(Min(accX, Float(Self.acc_value + CENTER_ACC_X)), Float(CENTER_ACC_X - Self.acc_value))
+			accY = Max(Min(accY, Float(Self.acc_value)), Float(-Self.acc_value))
+			
+			If (Self.state = STATE_DASH) Then
+				If (Self.state <> STATE_SPRING) Then
+					Self.velX = Int((accY * 3600.0) / 10.0)
+				ElseIf (Self.count >= SSSpringCount) Then
+					Self.velX = Int((accY * 3600.0) / 10.0)
+				EndIf
+			ElseIf (Self.state <> STATE_SPRING) Then
+				Self.velX = Int((accY * 3600.0) / 10.0)
+				Self.velY = Int(((accX - 5.0) * 3600.0) / 10.0)
+			ElseIf (Self.count >= SSSpringCount) Then
+				Self.velX = Int((accY * 3600.0) / 10.0)
+				Self.velY = Int(((accX - 5.0) * 3600.0) / 10.0)
+			EndIf
+		End
+		
+		Method initScoreBase:Void()
+			Self.ringHudY = RING_HUD_ORIGINAL
+			Self.ringNumY = RING_NUM_ORIGINAL
 		End
 End

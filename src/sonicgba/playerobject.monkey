@@ -1207,7 +1207,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						Self.breatheFrame += 1
 						Self.breatheFrame Mod= ANI_WAITING_2 ' 51 ' 50
 						
-						If (Self.breatheFrame = MyRandom.nextInt(1, ANI_PUSH_WALL) * 6) Then
+						If (Self.breatheFrame = MyRandom.nextInt(1, 8) * 6) Then
 							Local xOff:Int
 							
 							If (Self.faceDirection) Then

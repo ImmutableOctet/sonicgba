@@ -255,8 +255,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>20</X>
-        <Y>46</Y>
+        <X>14</X>
+        <Y>110</Y>
       </CursorPos>
       <DocGUID>07a307bf-1aea-45eb-b736-8eb6aa4cb09f</DocGUID>
       <Bookmarks />
@@ -587,7 +587,7 @@
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>51</X>
-        <Y>760</Y>
+        <Y>1209</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -777,8 +777,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\specialplayer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>17</X>
-        <Y>760</Y>
+        <X>8</X>
+        <Y>904</Y>
       </CursorPos>
       <DocGUID>5ba6761e-a012-4773-a9f5-d283fd3e768f</DocGUID>
       <Bookmarks />
@@ -969,7 +969,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\title" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\tuch" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\water" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonicgba" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonicgba" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\special" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\state" Expanded="true" />
   </Folders>
