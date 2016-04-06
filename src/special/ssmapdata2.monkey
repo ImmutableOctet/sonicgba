@@ -4,6 +4,7 @@ Public
 
 ' Imports:
 Private
+	'Import special.specialobject
 	Import special.ssdef
 Public
 

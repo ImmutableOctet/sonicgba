@@ -769,8 +769,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\specialobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>32</X>
-        <Y>281</Y>
+        <X>35</X>
+        <Y>36</Y>
       </CursorPos>
       <DocGUID>d27403c9-94c1-44c3-8a8a-34d454626507</DocGUID>
       <Bookmarks />
@@ -801,7 +801,7 @@
     <DocUserOptions Filename=".\src\special\ssdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>21</X>
-        <Y>29</Y>
+        <Y>28</Y>
       </CursorPos>
       <DocGUID>e35a6e18-881c-4940-a7a5-f21c639dc4d3</DocGUID>
       <Bookmarks />
@@ -830,16 +830,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssmapdata.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>15</X>
-        <Y>12</Y>
+        <X>27</X>
+        <Y>194</Y>
       </CursorPos>
       <DocGUID>e7927691-cba5-4ac7-a985-587867eef20b</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssmapdata2.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>11</Y>
+        <X>2</X>
+        <Y>6</Y>
       </CursorPos>
       <DocGUID>f1c2f658-d1f8-499c-93b3-e07081a6130e</DocGUID>
       <Bookmarks />

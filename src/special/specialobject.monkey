@@ -278,8 +278,10 @@ Class SpecialObject Implements SSDef Abstract
 		Function calDrawPosition:Void(x:Int, y:Int, z:Int)
 			z = -(z - (player.posZ - CAMERA_TO_PLAYER))
 			y = -y
+			
 			drawX = (x * f27) / (f27 - z)
 			drawY = (y * f27) / (f27 - z)
+			
 			scale = ((Float((7200 / (f27 - z)) - (-7200 / (f27 - z)))) / SCALE_PARAM_1)
 		End
 	Public
