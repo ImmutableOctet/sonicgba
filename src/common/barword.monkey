@@ -10,6 +10,6 @@ Public
 ' Interfaces:
 Interface BarWord
 	' Methods:
-	Method drawWord:Void(mFGraphics:MFGraphics, i:Int, i2:Int, i3:Int)
-	Method getWordLength:Int(i:Int)
+	Method drawWord:Void(mFGraphics:MFGraphics, wordID:Int, x:Int, y:Int)
+	Method getWordLength:Int(wordID:Int)
 End

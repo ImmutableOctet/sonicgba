@@ -206,8 +206,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\common\barword.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>17</X>
-        <Y>10</Y>
+        <X>36</X>
+        <Y>13</Y>
       </CursorPos>
       <DocGUID>c4894597-8d3d-4bd7-945d-7aab62e0bbf6</DocGUID>
       <Bookmarks />
@@ -892,12 +892,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\state\specialstagestate.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\state\specialstagestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>37</X>
+        <Y>719</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>f43156de-77c6-45a9-bdac-056a1d77aeb3</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\state.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -997,6 +998,6 @@
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\water" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonicgba" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\special" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\state" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\state" Expanded="true" />
   </Folders>
 </JiProjUserOptions>
