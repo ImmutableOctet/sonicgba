@@ -769,8 +769,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\specialobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>37</X>
-        <Y>68</Y>
+        <X>32</X>
+        <Y>281</Y>
       </CursorPos>
       <DocGUID>d27403c9-94c1-44c3-8a8a-34d454626507</DocGUID>
       <Bookmarks />
@@ -830,15 +830,15 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssmapdata.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>11</Y>
+        <X>15</X>
+        <Y>12</Y>
       </CursorPos>
       <DocGUID>e7927691-cba5-4ac7-a985-587867eef20b</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssmapdata2.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>1</X>
+        <X>24</X>
         <Y>11</Y>
       </CursorPos>
       <DocGUID>f1c2f658-d1f8-499c-93b3-e07081a6130e</DocGUID>
@@ -846,8 +846,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssring.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>16</X>
-        <Y>71</Y>
+        <X>27</X>
+        <Y>48</Y>
       </CursorPos>
       <DocGUID>c5f8af8a-af37-434b-9926-d1dc5689d0d6</DocGUID>
       <Bookmarks />
@@ -882,12 +882,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\state\specialstagestate.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\state\specialstagestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>10</X>
-        <Y>57</Y>
+        <X>33</X>
+        <Y>555</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>41c31ae8-cc43-4ba2-b76f-87c17be084f7</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\state.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
