@@ -777,8 +777,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\specialplayer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>19</X>
-        <Y>44</Y>
+        <X>27</X>
+        <Y>56</Y>
       </CursorPos>
       <DocGUID>5ba6761e-a012-4773-a9f5-d283fd3e768f</DocGUID>
       <Bookmarks />
@@ -827,6 +827,14 @@
         <Y>25</Y>
       </CursorPos>
       <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\special\ssmapdata.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>34</X>
+        <Y>10</Y>
+      </CursorPos>
+      <DocGUID>e7927691-cba5-4ac7-a985-587867eef20b</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssring.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>

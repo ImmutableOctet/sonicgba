@@ -820,6 +820,13 @@
         <Y>0</Y>
       </CursorPos>
     </Document>
+    <Document Filename=".\src\special\ssmapdata.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="150">
+      <DocGUID />
+      <CursorPos>
+        <X>0</X>
+        <Y>0</Y>
+      </CursorPos>
+    </Document>
     <Document Filename=".\src\special\ssring.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="150">
       <DocGUID />
       <CursorPos>
