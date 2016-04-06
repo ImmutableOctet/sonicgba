@@ -6,7 +6,7 @@
   &lt;Toolbar Guid="7744ce20-d644-484f-883c-664df7de60db" DockLine="26" DockOffset="420" Visible="True" Container="14d63946-e878-43aa-846d-2bd57dd548b7" /&gt;
   &lt;Toolbar Guid="b49a093f-0429-412a-87ef-7b440df02e1a" DockLine="26" DockOffset="0" Visible="True" Container="14d63946-e878-43aa-846d-2bd57dd548b7" /&gt;
   &lt;Toolbar Guid="b3791344-3e54-4183-a30e-fa40a25cdbd6" DockLine="26" DockOffset="145" Visible="True" Container="14d63946-e878-43aa-846d-2bd57dd548b7" /&gt;
-  &lt;Toolbar Guid="20451fc7-90c7-4fe7-9eca-116a89c0dc04" DockLine="26" DockOffset="692" Visible="True" Container="14d63946-e878-43aa-846d-2bd57dd548b7" /&gt;
+  &lt;Toolbar Guid="20451fc7-90c7-4fe7-9eca-116a89c0dc04" DockLine="26" DockOffset="689" Visible="True" Container="14d63946-e878-43aa-846d-2bd57dd548b7" /&gt;
 &lt;/Layout&gt;</ToolBarLayout>
   <PanelsLayout>&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;Layout&gt;
