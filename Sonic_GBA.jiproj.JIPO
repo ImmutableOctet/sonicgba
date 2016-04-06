@@ -214,8 +214,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\common\numberdrawer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>10</X>
-        <Y>14</Y>
+        <X>2</X>
+        <Y>30</Y>
       </CursorPos>
       <DocGUID>5700f38e-3bfd-45b5-908f-837b97c87b96</DocGUID>
       <Bookmarks />
@@ -226,6 +226,14 @@
         <Y>31</Y>
       </CursorPos>
       <DocGUID>169b15e4-0213-4372-baa7-e567f2839d89</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\common\whitebardrawer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>20</X>
+        <Y>18</Y>
+      </CursorPos>
+      <DocGUID>4ee5e536-3687-4707-807d-59b781cc6ab9</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\gameengine\def.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
