@@ -19,6 +19,7 @@ Private
 	Import special.ssgoal
 	Import special.ssmapdata
 	Import special.ssring
+	Import special.ssfollowring
 	Import special.ssspring
 	Import special.specialmap
 	Import special.specialplayer
@@ -65,7 +66,7 @@ Class SpecialObject Implements SSDef Abstract
 		Const f27:Int = 30
 		
 		' Global variable(s):
-		Global decideObjects:Stack<SpecialObject> = New Stack<SpecialObject>()
+		Global decideObjects:Stack<SSFollowRing> = New Stack<SSFollowRing>() ' SpecialObject
 		Global drawX:Int
 		Global drawY:Int
 		Global objAnimation:Animation

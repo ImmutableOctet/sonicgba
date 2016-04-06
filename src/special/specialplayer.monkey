@@ -95,10 +95,12 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 		
 		Const MAX_VELOCITY:Int = 3600
 		
-		Const MOVE_DOWN:Int = 4
-		Const MOVE_LEFT:Int = 2
-		Const MOVE_RIGHT:Int = 8
+		' Movement flags:
 		Const MOVE_UP:Int = 1
+		Const MOVE_LEFT:Int = 2
+		Const MOVE_DOWN:Int = 4
+		Const MOVE_RIGHT:Int = 8
+		
 		Const MOVE_VELOCITY:Int = 960
 		
 		Const RATIO:Float = 0.16
@@ -938,11 +940,11 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 			EndIf
 		End
 		
-		Public Method getRing:Void(ringNum:Int)
+		Method getRing:Void(ringNum:Int)
 			Self.ringNum += ringNum
 		End
 		
-		Public Method setCheckPoint:Void()
+		Method setCheckPoint:Void()
 			Self.checkSuccess = (Int(Self.ringNum >= Self.targetRingNum) | Self.debugPassStage)
 			
 			Self.noMoving = True
@@ -953,105 +955,104 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 			Self.velZ = ACC_NORMAL
 		End
 		
-		Public Method setGoal:Void()
+		Method setGoal:Void()
 			setCheckPoint()
+			
 			Self.isGoal = True
 		End
 		
-		Public Method isTricking:Bool()
-			Return Self.state = STATE_SKILLING
+		Method isTricking:Bool()
+			Return (Self.state = STATE_SKILLING)
 		End
 		
-		Public Method moveToCenter:Void()
-			Self.posX = MyAPI.calNextPosition(Double(Self.posX), 0.0, STATE_DASH, ANI_VICTORY_2)
-			Self.posY = MyAPI.calNextPosition(Double(Self.posY), 0.0, STATE_DASH, ANI_VICTORY_2)
+		Method moveToCenter:Void()
+			Self.posX = MyAPI.calNextPosition(Double(Self.posX), 0.0, 2, 24)
+			Self.posY = MyAPI.calNextPosition(Double(Self.posY), 0.0, 2, 24)
 		End
 		
-		Public Method isInCenter:Bool()
-			Return Self.posY = 0 And Self.posX = 0
+		Method isInCenter:Bool()
+			Return (Self.posY = 0 And Self.posX = 0)
 		End
 		
-		Public Method setStayAnimation:Void()
-			
+		Method setStayAnimation:Void()
 			If (Self.actionID = ANI_STAND) Then
 				Self.moveDistance = 0
 				
+				' Magic numbers: 2560/-2560 (Size? - Screen size, likely; restricts movement):
 				If (Self.posX < -2560) Then
-					Self.moveDistance |= STATE_DASH
-				ElseIf (Self.posX > BarHorbinV.COLLISION_WIDTH) Then
-					Self.moveDistance |= STATE_INIT
+					Self.moveDistance |= MOVE_LEFT
+				ElseIf (Self.posX > 2560) Then ' Obviously incorrect: BarHorbinV.COLLISION_WIDTH
+					Self.moveDistance |= MOVE_RIGHT
 				EndIf
 				
 				If (Self.posY < -2560) Then
-					Self.moveDistance |= 1
-				ElseIf (Self.posY > BarHorbinV.COLLISION_WIDTH) Then
-					Self.moveDistance |= STATE_DEAD
+					Self.moveDistance |= MOVE_UP
+				ElseIf (Self.posY > 2560) Then ' Obviously incorrect: BarHorbinV.COLLISION_WIDTH
+					Self.moveDistance |= MOVE_DOWN
 				EndIf
 				
-				If ((Self.moveDistance & STATE_SKILLING) <> 0) Then
-					Self.actionID = STATE_DASH
+				If ((Self.moveDistance & MOVE_UP) <> 0) Then
+					Self.actionID = ANI_STAND_UP
 					
-					If ((Self.moveDistance & STATE_DASH) <> 0) Then
-						Self.actionID = STATE_GOAL
-					ElseIf ((Self.moveDistance & STATE_INIT) <> 0) Then
-						Self.actionID = STATE_READY
+					If ((Self.moveDistance & MOVE_LEFT) <> 0) Then
+						Self.actionID = ANI_STAND_LEFT_UP
+					ElseIf ((Self.moveDistance & MOVE_RIGHT) <> 0) Then
+						Self.actionID = ANI_STAND_RIGHT_UP
 					EndIf
+				ElseIf ((Self.moveDistance & MOVE_DOWN) <> 0) Then
+					Self.actionID = ANI_STAND_DOWN
 					
-				ElseIf ((Self.moveDistance & STATE_DEAD) <> 0) Then
-					Self.actionID = STATE_VICTORY
-					
-					If ((Self.moveDistance & STATE_DASH) <> 0) Then
-						Self.actionID = STATE_INIT
-					ElseIf ((Self.moveDistance & STATE_INIT) <> 0) Then
-						Self.actionID = STATE_OVER
+					If ((Self.moveDistance & MOVE_LEFT) <> 0) Then
+						Self.actionID = ANI_STAND_LEFT_DOWN
+					ElseIf ((Self.moveDistance & MOVE_RIGHT) <> 0) Then
+						Self.actionID = ANI_STAND_RIGHT_DOWN
 					EndIf
-					
-				ElseIf ((Self.moveDistance & STATE_DASH) <> 0) Then
-					Self.actionID = STATE_DEAD
-				ElseIf ((Self.moveDistance & STATE_INIT) <> 0) Then
-					Self.actionID = STATE_CHECK_POINT
+				ElseIf ((Self.moveDistance & MOVE_LEFT) <> 0) Then
+					Self.actionID = ANI_STAND_LEFT
+				ElseIf ((Self.moveDistance & MOVE_RIGHT) <> 0) Then
+					Self.actionID = ANI_STAND_RIGHT
 				EndIf
 			EndIf
-			
 		End
 		
-		Public Method isOver:Bool()
-			Return Self.state = STATE_OVER And Self.count > WHITE_BAR_HEIGHT
+		Method isOver:Bool()
+			Return ((Self.state = STATE_OVER) And Self.count > 20) ' WHITE_BAR_HEIGHT
 		End
 		
-		Public Method drawWord:Void(g:MFGraphics, wordID:Int, x:Int, y:Int)
-			Self.fontAnimationDrawer.draw(g, STATE_DASH, x, y, False, 0)
-			MFGraphics mFGraphics = g
-			Self.fontAnimationDrawer.draw(g, STATE_VICTORY, NumberDrawer.drawNum(mFGraphics, STATE_VICTORY, Self.targetRingNum, x + 50, y, STATE_SKILLING) + STATE_INIT, y, False, 0)
+		Method drawWord:Void(g:MFGraphics, wordID:Int, x:Int, y:Int)
+			Self.fontAnimationDrawer.draw(g, 2, x, y, False, 0)
+			Self.fontAnimationDrawer.draw(g, 3, NumberDrawer.drawNum(g, 3, Self.targetRingNum, x + 50, y, 1) - WORDS_VEL_X, y, False, 0)
 		End
 		
-		Public Method getWordLength:Int(wordID:Int)
+		Method getWordLength:Int(wordID:Int)
 			Return WORD_DISTANCE
 		End
 		
-		Public Method getRingNum:Int()
+		Method getRingNum:Int()
 			Return Self.ringNum
 		End
 		
-		Public Method setTrikCount:Void()
+		Method setTrikCount:Void()
 			Self.triking = True
 			Self.niceTriking = False
-			Self.trikCount = STATE_GOAL
+			
+			Self.trikCount = 6
 			Self.trickCount2 = 0
 		End
 		
-		Public Method devcideRingFollow:Void(flag:Bool)
-			For (Int i = 0; i < decideObjects.size(); i += 1)
-				((SSFollowRing) decideObjects.elementAt(i)).setFollowOrNot(flag)
+		Method devcideRingFollow:Void(flag:Bool)
+			For Local fRing:= EachIn decideObjects
+				fRing.setFollowOrNot(flag)
 			Next
-			decideObjects.removeAllElements()
+			
+			decideObjects.Clear()
 		End
 		
-		Public Method isNeedTouchPad:Bool()
+		Method isNeedTouchPad:Bool()
 			Return Self.isNeedTouchPad
 		End
 		
-		Public Method setPause:Void(statePause:Bool)
+		Method setPause:Void(statePause:Bool)
 			Self.isPause = statePause
 		End
 	Private
