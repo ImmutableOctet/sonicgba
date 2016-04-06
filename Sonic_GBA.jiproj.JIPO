@@ -206,10 +206,18 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\common\barword.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>36</X>
-        <Y>13</Y>
+        <X>3</X>
+        <Y>14</Y>
       </CursorPos>
       <DocGUID>c4894597-8d3d-4bd7-945d-7aab62e0bbf6</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\common\waveinverteffect.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>14</X>
+        <Y>31</Y>
+      </CursorPos>
+      <DocGUID>169b15e4-0213-4372-baa7-e567f2839d89</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\gameengine\def.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
