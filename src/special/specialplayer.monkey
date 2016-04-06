@@ -758,26 +758,25 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 			drawcollisionRect(g)
 		End
 		
-		Public Method drawInfo:Void(g:MFGraphics)
+		Method drawInfo:Void(g:MFGraphics)
 			Self.whiteBar.setPauseCount(Self.isPause)
+			
 			Select (Self.state)
 				Case STATE_CHECK_POINT
 					WhiteBarDrawer.getInstance().drawBar(g)
-					break
 				Case STATE_READY
-					
 					If (Self.whiteBar.getState() = STATE_DASH Or Self.whiteBar.getState() = STATE_VICTORY Or Self.whiteBar.getState() = STATE_DEAD) Then
 						If (Not Self.isPause) Then
 							State.staticDrawFadeSlow(g)
 						EndIf
-						
 					ElseIf (Self.preState = STATE_INIT) Then
 						g.setColor(0)
+						
 						MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 					EndIf
 					
 					If (Self.startFlag) Then
-						Self.fontAnimationDrawer.draw(g, STATE_DEAD, Self.startX, Self.startY, False, 0)
+						Self.fontAnimationDrawer.draw(g, 4, Self.startX, Self.startY, False, 0) ' ANI_STAND_LEFT
 						
 						If (Self.whiteBar.getState() = STATE_VICTORY) Then
 							Self.startX += WHITE_BAR_VEL_X
@@ -792,38 +791,38 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 					
 					If (Self.whiteBar.getState() = STATE_DEAD) Then
 						Self.state = STATE_NORMAL
+						
 						Self.noMoving = False
-						break
 					EndIf
-					
-					break
 				Case STATE_INIT
 					g.setColor(0)
+					
 					MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
-					break
 			End Select
 			
 			If (Not (Self.state = STATE_INIT Or Self.state = STATE_READY)) Then
 				Self.spObjDrawer.draw(g, ANI_MOVE_LEFT, (SCREEN_WIDTH / 2), Self.ringHudY, False, 0) ' Shr 1
+				
 				NumberDrawer.drawNum(g, 0, Self.targetRingNum, (SCREEN_WIDTH / 2) + 12, Self.ringNumY, 2) ' Shr 1
 				NumberDrawer.drawNum(g, 0, Self.ringNum, (SCREEN_WIDTH  / 2) - 12, Self.ringNumY - 12, 2) ' Shr 1
 			EndIf
 			
-			If (Self.triking And Self.trikCount = 0 And Self.trickCount2 < ANI_MOVE_LEFT_DOWN) Then
+			' Magic number: 16 ("Trick count")
+			If (Self.triking And Self.trikCount = 0 And Self.trickCount2 < 16) Then
 				Self.trickCount2 += 1
 				
 				If (Self.actionID = ANI_NICE_SKILL Or Self.niceTriking) Then
-					Self.fontAnimationDrawer.draw(g, STATE_CHECK_POINT, SCREEN_WIDTH Shr 1, SCREEN_HEIGHT Shr 1, False, 0)
+					Self.fontAnimationDrawer.draw(g, 5, SCREEN_WIDTH Shr 1, SCREEN_HEIGHT Shr 1, False, 0)
+					
 					Self.niceTriking = True
 				Else
-					Self.fontAnimationDrawer.draw(g, STATE_GOAL, SCREEN_WIDTH Shr 1, SCREEN_HEIGHT Shr 1, False, 0)
+					Self.fontAnimationDrawer.draw(g, 6, SCREEN_WIDTH Shr 1, SCREEN_HEIGHT Shr 1, False, 0)
 				EndIf
 				
-				If (Self.trikCount >= ANI_MOVE_LEFT_DOWN) Then
+				If (Self.trikCount >= 16) Then
 					Self.triking = False
 				EndIf
 			EndIf
-			
 		End
 		
 		Public Method initWelcome:Void()
