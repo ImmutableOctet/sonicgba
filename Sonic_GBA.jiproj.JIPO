@@ -212,6 +212,14 @@
       <DocGUID>c4894597-8d3d-4bd7-945d-7aab62e0bbf6</DocGUID>
       <Bookmarks />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\common\numberdrawer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>10</X>
+        <Y>14</Y>
+      </CursorPos>
+      <DocGUID>5700f38e-3bfd-45b5-908f-837b97c87b96</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\common\waveinverteffect.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>14</X>
