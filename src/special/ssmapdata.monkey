@@ -9,6 +9,7 @@ Public
 
 ' Classes / Interfaces:
 Class SSMapData Extends SSMapData2 ' Interface
+	' Constant variable(s):
 	Global STAGE_1:Int[][] = [[]] ' Const
 	Global STAGE_2:Int[][] = [[]] ' Const
 	Global STAGE_3:Int[][] = [[]] ' Const
