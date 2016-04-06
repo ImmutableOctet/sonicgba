@@ -569,7 +569,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 						Self.count += 1
 						
 						Self.tutorX = (SCREEN_WIDTH * 2) ' Shl 1
-						Self.tutorSkip = New MFTouchKey(0, MyAPI.zoomOut(Def.SCREEN_HEIGHT) - WHITE_BAR_HEIGHT, 30, WHITE_BAR_HEIGHT, 1)
+						Self.tutorSkip = New MFTouchKey(0, MyAPI.zoomOut(SCREEN_HEIGHT) - WHITE_BAR_HEIGHT, 30, WHITE_BAR_HEIGHT, 1)
 						
 						MFDevice.addComponent(Self.tutorSkip)
 						

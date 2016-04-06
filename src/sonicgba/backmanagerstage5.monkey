@@ -52,7 +52,7 @@ Class BackManagerStage5 Extends BackGroundManager
 			' Not sure what "anchor" actually is, but it's the name of the final argument.
 			MyAPI.drawImage(graphics, Self.backImage, CLOUD_X, CLOUD_Y, CLOUD_ANCHOR)
 			
-			If (BG_WIDTH < Def.SCREEN_WIDTH) Then
+			If (BG_WIDTH < SCREEN_WIDTH) Then
 				MyAPI.drawImage(graphics, Self.backImage, BG_WIDTH, CLOUD_Y, CLOUD_ANCHOR)
 			EndIf
 			

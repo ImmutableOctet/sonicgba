@@ -4663,17 +4663,17 @@ Class TitleState Extends State
 			GameState.guiAniDrawer.setActionId(STATE_RESET_RECORD_ASK)
 			GameState.guiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 37)
 			
-			PlayerObject.drawRecordTime(g, StageManager.getTimeModeScore(PlayerObject.getCharacterID()), (Def.SCREEN_WIDTH Shr 1) + 54, (Def.SCREEN_HEIGHT Shr 1) - 10, STATE_MOVING, STATE_MOVING)
+			PlayerObject.drawRecordTime(g, StageManager.getTimeModeScore(PlayerObject.getCharacterID()), (SCREEN_WIDTH Shr 1) + 54, (SCREEN_HEIGHT Shr 1) - 10, STATE_MOVING, STATE_MOVING)
 			
 			animationDrawer.setActionId(Int(Key.touchscoreupdateyes.Isin()) + 55)
-			animationDrawer.draw(g, (Def.SCREEN_WIDTH Shr 1) - 60, (Def.SCREEN_HEIGHT Shr 1) + STATE_OPTION_SOUND)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 60, (SCREEN_HEIGHT Shr 1) + STATE_OPTION_SOUND)
 			animationDrawer.setActionId(StringIndex.BLUE_BACKGROUND_ID)
-			animationDrawer.draw(g, (Def.SCREEN_WIDTH Shr 1) - 60, (Def.SCREEN_HEIGHT Shr 1) + STATE_OPTION_SOUND)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 60, (SCREEN_HEIGHT Shr 1) + STATE_OPTION_SOUND)
 			
 			animationDrawer.setActionId(Int(Key.touchscoreupdateno.Isin()) + 55)
-			animationDrawer.draw(g, (Def.SCREEN_WIDTH Shr 1) + STAGE_SELECT_SIDE_BAR_WIDTH, (Def.SCREEN_HEIGHT Shr 1) + STATE_OPTION_SOUND)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + STAGE_SELECT_SIDE_BAR_WIDTH, (SCREEN_HEIGHT Shr 1) + STATE_OPTION_SOUND)
 			animationDrawer.setActionId(104)
-			animationDrawer.draw(g, (Def.SCREEN_WIDTH Shr 1) + STAGE_SELECT_SIDE_BAR_WIDTH, (Def.SCREEN_HEIGHT Shr 1) + STATE_OPTION_SOUND)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + STAGE_SELECT_SIDE_BAR_WIDTH, (SCREEN_HEIGHT Shr 1) + STATE_OPTION_SOUND)
 			
 			animationDrawer.setActionId(PickValue(Key.touchscoreupdatereturn.Isin(), 5, 0) + 61)
 			

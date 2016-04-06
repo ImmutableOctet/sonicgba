@@ -186,11 +186,11 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 			Self.barDrawer = WhiteBarDrawer.getInstance()
 			
 			If (GlobalResource.spsetConfig = 1) Then
-				bButton = New MFTouchKey(0, 0, MyAPI.zoomOut(Def.SCREEN_WIDTH) Shr 1, MyAPI.zoomOut(Def.SCREEN_HEIGHT), Key.B_SEL)
+				bButton = New MFTouchKey(0, 0, MyAPI.zoomOut(SCREEN_WIDTH) Shr 1, MyAPI.zoomOut(SCREEN_HEIGHT), Key.B_SEL)
 				
 				MFDevice.addComponent(bButton)
 				
-				aButton = New MFTouchKey(MyAPI.zoomOut(Def.SCREEN_WIDTH) Shr 1, 0, MyAPI.zoomOut(Def.SCREEN_WIDTH) Shr 1, MyAPI.zoomOut(Def.SCREEN_HEIGHT), Key.B_HIGH_JUMP)
+				aButton = New MFTouchKey(MyAPI.zoomOut(SCREEN_WIDTH) Shr 1, 0, MyAPI.zoomOut(SCREEN_WIDTH) Shr 1, MyAPI.zoomOut(SCREEN_HEIGHT), Key.B_HIGH_JUMP)
 				
 				MFDevice.addComponent(aButton)
 			ElseIf (GlobalResource.spsetConfig = 0) Then
@@ -948,13 +948,13 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 					Key.touchkeyboardClose()
 					
 					If (bButton = Null) Then
-						bButton = New MFTouchKey(0, 0, MyAPI.zoomOut(Def.SCREEN_WIDTH) Shr 1, MyAPI.zoomOut(Def.SCREEN_HEIGHT), Key.B_SEL)
+						bButton = New MFTouchKey(0, 0, MyAPI.zoomOut(SCREEN_WIDTH) Shr 1, MyAPI.zoomOut(SCREEN_HEIGHT), Key.B_SEL)
 						
 						MFDevice.addComponent(bButton)
 					EndIf
 					
 					If (aButton = Null) Then
-						aButton = New MFTouchKey(MyAPI.zoomOut(Def.SCREEN_WIDTH) Shr 1, 0, MyAPI.zoomOut(Def.SCREEN_WIDTH) Shr 1, MyAPI.zoomOut(Def.SCREEN_HEIGHT), Key.B_HIGH_JUMP)
+						aButton = New MFTouchKey(MyAPI.zoomOut(SCREEN_WIDTH) Shr 1, 0, MyAPI.zoomOut(SCREEN_WIDTH) Shr 1, MyAPI.zoomOut(SCREEN_HEIGHT), Key.B_HIGH_JUMP)
 						
 						MFDevice.addComponent(aButton)
 					EndIf
