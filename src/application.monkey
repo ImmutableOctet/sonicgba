@@ -3,9 +3,12 @@
 Public
 
 ' Preprocessor related:
+#ALLOW_FORCE_EXIT = False ' True
+
+' GLFW Configuration:
 #GLFW_WINDOW_TITLE = "Sonic Advance"
-#GLFW_WINDOW_WIDTH = 360
-#GLFW_WINDOW_HEIGHT = 640
+#GLFW_WINDOW_WIDTH = 360 ' 640
+#GLFW_WINDOW_HEIGHT = 640 ' 360
 #GLFW_WINDOW_SAMPLES = 0
 #GLFW_WINDOW_RESIZABLE = False ' True
 #GLFW_WINDOW_DECORATED = True
@@ -119,6 +122,12 @@ Class Main Extends App ' Main Extends MFMain
 			
 			MFDevice.handleInput()
 			MFDevice.Update()
+			
+			#If ALLOW_FORCE_EXIT
+				If (MFDevice.exitFlag) Then
+					Return OnClose()
+				EndIf
+			#End
 			
 			Return 0
 		End
