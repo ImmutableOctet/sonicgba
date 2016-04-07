@@ -312,11 +312,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Global timeStopped:Bool = False
 	Public
 		' Constant variable(s):
-		Const CHARACTER_SONIC:Int = 0
-		Const CHARACTER_TAILS:Int = 1
-		Const CHARACTER_KNUCKLES:Int = 2
-		Const CHARACTER_AMY:Int = 3
-		
 		Const WIDTH:Int = 1024
 		Const HEIGHT:Int = 1536
 		

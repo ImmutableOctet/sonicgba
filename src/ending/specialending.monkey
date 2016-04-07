@@ -147,7 +147,7 @@ Class SpecialEnding Extends State Implements SonicDef
 			Self.planeX = PLANE_START_X
 			Self.planeY = PLANE_STABLE_Y
 			
-			Self.pilotHeadID = PickValue((characterID = 0), 2, 0)
+			Self.pilotHeadID = PickValue((characterID = CHARACTER_SONIC), PILOT_TAILS, PILOT_SONIC)
 			
 			Self.isOverFromInterrupt = False
 		End

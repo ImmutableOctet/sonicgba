@@ -13,6 +13,12 @@ Interface SonicDef Extends Def
 	Const ALPHA_CHANGE_STATE:= True
 	Const ANIMATION_PATH:= "/animation"
 	
+	' Character IDs:
+	Const CHARACTER_SONIC:Int = 0
+	Const CHARACTER_TAILS:Int = 1
+	Const CHARACTER_KNUCKLES:Int = 2
+	Const CHARACTER_AMY:Int = 3
+	
 	' Directions:
 	Const DIRECTION_UP:=			0
 	Const DIRECTION_DOWN:=			1
