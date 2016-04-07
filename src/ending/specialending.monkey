@@ -153,7 +153,7 @@ Class SpecialEnding Extends State Implements SonicDef
 		End
 		
 		' Methods:
-		Public Method logic:Void()
+		Method logic:Void()
 			Self.count += STATE_PLANE_IN
 			
 			If (Self.planeShocking) Then
@@ -168,42 +168,47 @@ Class SpecialEnding Extends State Implements SonicDef
 			
 			Select (Self.state)
 				Case STATE_INIT
-					Self.playerX = TOUCH_POINT_X
+					Self.playerX = TOUCH_POINT_X ' PLAYER_START_X
 					Self.playerY = PLAYER_START_Y
+					
 					Self.playerActionID = 0
+					
 					Self.state = STATE_PLANE_IN
 				Case STATE_PLANE_IN
 					Self.planeX += PLANE_VELOCITY
 					
 					If (Self.planeX <= PLANE_START_TO_TOUCH_X) Then
-						Self.playerX += Self.planeX - PLANE_START_TO_TOUCH_X
+						Self.playerX += (Self.planeX - PLANE_START_TO_TOUCH_X)
+						
 						Self.state = STATE_PLAYER_IN
+						
 						Self.count = 0
 					EndIf
-					
 				Case STATE_PLAYER_IN
 					Self.planeX += PLANE_VELOCITY
-					Self.playerY = ((Self.count * (TOUCH_POINT_Y - PLAYER_START_Y)) / TOUCH_FRAME) + PLAYER_START_Y
+					
+					Self.playerY = (((Self.count * (TOUCH_POINT_Y - PLAYER_START_Y)) / TOUCH_FRAME) + PLAYER_START_Y)
 					
 					If (Self.count >= TOUCH_FRAME) Then
 						Self.state = STATE_TOUCH
+						
 						Self.dusting = True
-						Self.playerActionID = STATE_PLANE_IN
+						
+						Self.playerActionID = SP_ANIMATION ' 1
+						
 						Self.planeVelY = PLANE_TOUCH_VELOCITY
 						Self.planeShocking = True
-						SoundSystem.getInstance().playBgm(38, False)
+						
+						SoundSystem.getInstance().playBgm(SoundSystem.BGM_SP_EMERALD, False)
 					EndIf
+				Case STATE_TOUCH, STATE_SHOW_EMERALD
+					Self.planeX += PLANE_VELOCITY
 					
-				Case STATE_TOUCH
-					Self.planeX += PLANE_VELOCITY
-					Self.playerX = Self.planeX - PLAYER_OFFSET_TO_PLANE_X
-					Self.playerY = Self.planeY - PLAYER_OFFSET_TO_PLANE_Y
-				Case STATE_SHOW_EMERALD
-					Self.planeX += PLANE_VELOCITY
-					Self.playerX = Self.planeX - PLAYER_OFFSET_TO_PLANE_X
-					Self.playerY = Self.planeY - PLAYER_OFFSET_TO_PLANE_Y
+					Self.playerX = (Self.planeX - PLAYER_OFFSET_TO_PLANE_X)
+					Self.playerY = (Self.planeY - PLAYER_OFFSET_TO_PLANE_Y)
 				Default
-			EndIf
+					' Nothing so far.
+			End Select
 		End
 		
 		Public Method isOver:Bool()
