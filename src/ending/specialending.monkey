@@ -4,40 +4,26 @@ Public
 
 ' Imports:
 Private
-	Import lib.animation
-	Import lib.animationdrawer
-	Import lib.myrandom
-	Import lib.soundsystem
-	Import lib.constutil
-	
-	Import sonicgba.sonicdef
-	
-	Import state.state
-	
-	Import com.sega.mobile.framework.device.mfgraphics
-	Import com.sega.mobile.framework.device.mfimage
+	'Import ending.baseending
+	Import ending.plainending
 Public
 
 ' Classes:
-Class SpecialEnding Extends State Implements SonicDef
+Class SpecialEnding Extends PlainEnding
 	Private
 		' Constant variable(s):
-		Global ANIMATION_LOOP:Bool[] = [True, False, True, False, True, True, False, True] ' Const
-		Global CHARACTER_ANIMATION_NAME:String[] = ["/sonic_ed", "/tails_ed", "/knuckles_ed", "/amy_ed"] ' Const
 		Global CHARACTER_SP_ANIMATION_NAME:String[] = ["/sonic_sp_ed", "/tails_sp_ed", "/knuckles_sp_ed", "/amy_sp_ed"] ' Const
 		Global CLOUD_VELOCITY:Int[] = [5, 4, 3] ' Const
 		Global PALETTE_IMAGE_NAME:String[] = ["/sonic_", "/tails_", "/knuckles_", "/amy_"] ' Const
 		Global PLAYER_TO_ANIMATION:Int[][][] = [ [[0, 0, 0], [1, 0, 1], [1, 0, 1], [1, 1, 0]], [[1, 2, 0], [0, 1, 1], [1, 0, 1], [1, 1, 0]], [[0, 0, 0], [0, 1, 1], [1, 0, 1], [1, 1, 0]], [[1, 2, 0], [1, 3, 1], [1, 0, 1], [1, 1, 0]] ] ' Const
 		Global SP_ANIMATION_LOOP:Bool[] = [False, True, False, False] ' Const
 		
+		Const NORMAL_ANIMATION:Int = 0
+		
 		Const CLOUD_NUM:Int = 10
 		Const CLOUD_TYPE:Int = 0
 		Const CLOUD_X:Int = 1
 		Const CLOUD_Y:Int = 2
-		
-		Const ENDING_ANIMATION_PATH:String = "/animation/ending"
-		
-		Const NORMAL_ANIMATION:Int = 0
 		
 		Const LOOP:Int = 0
 		Const NO_LOOP:Int = 1
@@ -46,17 +32,15 @@ Class SpecialEnding Extends State Implements SonicDef
 		Const PILOT_TAILS:Int = 2
 		
 		Const PLANE_ACC_POWER:Int = 3
+		
 		Global PLANE_STABLE_Y:Int = ((SCREEN_HEIGHT / 2) + 30) ' Const
-		Const PLANE_START_TO_TOUCH_X:Int = (PLAYER_OFFSET_TO_PLANE_X + TOUCH_POINT_X + 21)
-		Global PLANE_START_X:Int = (SCREEN_WIDTH + 70) ' Const
+		Global PLANE_START_TO_TOUCH_X:Int = (PLAYER_OFFSET_TO_PLANE_X + TOUCH_POINT_X + 21) ' Const
 		Const PLANE_TOUCH_VELOCITY:Int = 10
 		Const PLANE_VELOCITY:Int = -3
 		
 		Const PLAYER_EMERALD:Int = 3
 		Const PLAYER_EMERALD_INTRO:Int = 2
 		Const PLAYER_FALLING:Int = 0
-		Const PLAYER_OFFSET_TO_PLANE_X:Int = 11
-		Const PLAYER_OFFSET_TO_PLANE_Y:Int = 34
 		Const PLAYER_START_Y:Int = -10
 		Const PLAYER_TOUCHING:Int = 1
 		
@@ -65,7 +49,7 @@ Class SpecialEnding Extends State Implements SonicDef
 		Const TOUCH_FRAME:Int = 7
 		
 		' States:
-		Const STATE_INIT:Int = 0
+		'Const STATE_INIT:Int = 0
 		Const STATE_PLANE_IN:Int = 1
 		Const STATE_PLAYER_IN:Int = 2
 		Const STATE_TOUCH:Int = 3
@@ -79,30 +63,16 @@ Class SpecialEnding Extends State Implements SonicDef
 		Field dusting:Bool
 		Field planeShocking:Bool
 		Field isOverFromInterrupt:Bool
-		Field pilotSmile:Bool
 		
-		Field characterID:Int
-		
-		Field state:Int
-		
-		Field count:Int
 		Field cloudCount:Int
-		
-		Field pilotHeadID:Int
 		
 		Field planeVelY:Int
 		
 		Field planeX:Int
 		Field planeY:Int
 		
-		Field playerActionID:Int
-		
-		Field playerX:Int
-		Field playerY:Int
-		
 		Field endingBackGround:MFImage
 		
-		Field characterDrawer:AnimationDrawer
 		Field characterSpDrawer:AnimationDrawer
 		
 		Field cloudDrawer:AnimationDrawer
@@ -112,12 +82,14 @@ Class SpecialEnding Extends State Implements SonicDef
 		Field planeDrawer:AnimationDrawer
 		Field planeHeadDrawer:AnimationDrawer
 		
-		' These may be stored as Y, X, Z.
-		' I could be wrong, though.
+		' Possibly stored as: Type, X, Y?
+		' Not completely sure about this one.
 		Field cloudInfo:Int[][]
 	Public
 		' Constructor(s):
 		Method New(characterID:Int, emeraldID:Int)
+			Self.characterID = characterID
+			
 			Self.dusting = False
 			
 			' Allocate clouds:
@@ -129,22 +101,21 @@ Class SpecialEnding Extends State Implements SonicDef
 			
 			Self.cloudCount = 0
 			
-			Self.characterID = characterID
-			
-			Self.characterDrawer = New Animation(ENDING_ANIMATION_PATH + CHARACTER_ANIMATION_NAME[characterID]).getDrawer()
-			
 			If (emeraldID > 0) Then
 				Self.characterSpDrawer = New Animation(MFImage.createPaletteImage(ENDING_ANIMATION_PATH + PALETTE_IMAGE_NAME[characterID] + String(emeraldID + 1) + ".pal"), ENDING_ANIMATION_PATH + CHARACTER_SP_ANIMATION_NAME[characterID]).getDrawer()
 			Else
 				Self.characterSpDrawer = New Animation(ENDING_ANIMATION_PATH + CHARACTER_SP_ANIMATION_NAME[characterID]).getDrawer()
 			EndIf
 			
-			Self.endingBackGround = MFImage.createImage("/animation/ending/ending_bg.png")
+			Self.characterDrawer = New Animation(ENDING_ANIMATION_PATH + CHARACTER_ANIMATION_NAME[characterID]).getDrawer()
 			
 			Self.planeDrawer = New Animation("/animation/ending/ending_plane").getDrawer()
 			Self.cloudDrawer = New Animation("/animation/ending/ending_cloud").getDrawer()
+			
 			Self.planeHeadDrawer = New Animation("/animation/ending/plane_head").getDrawer()
 			Self.dustDrawer = New Animation("/animation/ending/effect_dust").getDrawer(STATE_TOUCH, False, 0)
+			
+			Self.endingBackGround = MFImage.createImage("/animation/ending/ending_bg.png")
 			
 			Self.planeX = PLANE_START_X
 			Self.planeY = PLANE_STABLE_Y
@@ -316,7 +287,7 @@ Class SpecialEnding Extends State Implements SonicDef
 			EndIf
 			
 			For Local cloud:= EachIn Self.cloudInfo
-				If (cloud[0] <> 0) Then
+				If (cloud[0] <> CLOUD_TYPE) Then
 					cloud[1] += CLOUD_VELOCITY[cloud[0] - 1]
 					
 					' Magic number: 75
@@ -325,7 +296,7 @@ Class SpecialEnding Extends State Implements SonicDef
 					EndIf
 				EndIf
 				
-				If (cloud[0] = 0 And Self.cloudCount = 0) Then
+				If (cloud[0] = CLOUD_TYPE And Self.cloudCount = 0) Then
 					' Magic numbers: 1, 3, -60, 20, 40, 8, 20
 					cloud[0] = MyRandom.nextInt(1, 3) ' PLANE_ACC_POWER
 					cloud[1] = -60
@@ -338,7 +309,7 @@ Class SpecialEnding Extends State Implements SonicDef
 		
 		Method cloudDraw:Void(g:MFGraphics)
 			For Local cloud:= EachIn Self.cloudInfo
-				If (cloud[0] <> 0) Then
+				If (cloud[0] <> CLOUD_TYPE) Then
 					Self.cloudDrawer.setActionId(cloud[0] - 1)
 					Self.cloudDrawer.draw(g, cloud[1], cloud[2])
 				EndIf
