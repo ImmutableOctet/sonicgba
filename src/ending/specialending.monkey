@@ -112,6 +112,8 @@ Class SpecialEnding Extends State Implements SonicDef
 		Field planeDrawer:AnimationDrawer
 		Field planeHeadDrawer:AnimationDrawer
 		
+		' These may be stored as Y, X, Z.
+		' I could be wrong, though.
 		Field cloudInfo:Int[][]
 	Public
 		' Constructor(s):
@@ -211,129 +213,135 @@ Class SpecialEnding Extends State Implements SonicDef
 			End Select
 		End
 		
-		Public Method isOver:Bool()
-			Return Self.playerX < -110 Or Self.isOverFromInterrupt
+		Method isOver:Bool()
+			' Magic number: -110 (Position; X)
+			Return (Self.playerX < -110 Or Self.isOverFromInterrupt)
 		End
 		
-		Public Method draw:Void(g:MFGraphics)
+		Method draw:Void(g:MFGraphics)
+			' Magic number: -135
 			g.drawImage(Self.endingBackGround, 0, -135, 0)
+			
+			' Update and draw clouds:
 			cloudLogic()
 			cloudDraw(g)
+			
+			' Draw the plane.
 			drawPlane(g)
 		End
 		
-		Private Method drawPlane:Void(g:MFGraphics)
-			Int i
-			Bool z = True
+		Method close:Void()
+			Self.endingBackGround = Null
+			
+			Animation.closeAnimationDrawer(Self.characterDrawer)
+			Self.characterDrawer = Null
+			
+			Animation.closeAnimationDrawer(Self.characterSpDrawer)
+			Self.characterSpDrawer = Null
+			
+			Animation.closeAnimationDrawer(Self.dustDrawer)
+			Self.dustDrawer = Null
+			
+			Animation.closeAnimationDrawer(Self.planeDrawer)
+			Self.planeDrawer = Null
+			
+			Animation.closeAnimationDrawer(Self.cloudDrawer)
+			Self.cloudDrawer = Null
+			
+			Animation.closeAnimationDrawer(Self.planeHeadDrawer)
+			Self.planeHeadDrawer = Null
+			
+			'System.gc()
+			'Thread.sleep(100)
+		End
+		
+		Method init:Void()
+			' Empty implementation.
+		End
+		
+		Method pause:Void()
+			Self.state = STATE_INTERRUPT
+		End
+		
+		Method setOverFromInterrupt:Void()
+			Self.isOverFromInterrupt = True
+		End
+	Private
+		' Methods:
+		Method drawPlane:Void(g:MFGraphics)
 			Self.planeDrawer.draw(g, Self.planeX, Self.planeY)
-			AnimationDrawer animationDrawer = Self.planeHeadDrawer
 			
-			If (Self.pilotSmile) Then
-				i = STATE_PLANE_IN
+			Local animationDrawer:= Self.planeHeadDrawer
+			
+			animationDrawer.draw(g, Self.pilotHeadID + Int(Self.pilotSmile), Self.planeX + PLANE_ACC_POWER, Self.planeY - 22, True, 0)
+			
+			If (PLAYER_TO_ANIMATION[Self.characterID][Self.playerActionID][0] = 0) Then
+				animationDrawer = Self.characterDrawer
 			Else
-				i = 0
+				animationDrawer = Self.characterSpDrawer
 			EndIf
 			
-			animationDrawer.draw(g, Self.pilotHeadID + i, Self.planeX + STATE_TOUCH, Self.planeY - 22, True, 0)
-			animationDrawer = PLAYER_TO_ANIMATION[Self.characterID][Self.playerActionID][0] = 0 ? Self.characterDrawer : Self.characterSpDrawer
-			Int i2 = PLAYER_TO_ANIMATION[Self.characterID][Self.playerActionID][STATE_PLANE_IN]
-			Int i3 = Self.playerX
-			Int i4 = Self.playerY
+			Local actionID:= PLAYER_TO_ANIMATION[Self.characterID][Self.playerActionID][1]
 			
-			If (PLAYER_TO_ANIMATION[Self.characterID][Self.playerActionID][STATE_PLAYER_IN] <> 0) Then
-				z = False
-			EndIf
+			Local x:= Self.playerX
+			Local y:= Self.playerY
 			
-			animationDrawer.draw(g, i2, i3, i4, z, 0)
+			Local z:Bool = (PLAYER_TO_ANIMATION[Self.characterID][Self.playerActionID][2] <> 0)
+			
+			animationDrawer.draw(g, i2, x, y, z, 0)
 			
 			If (animationDrawer.checkEnd()) Then
 				Select (Self.playerActionID)
-					Case STATE_PLANE_IN
+					Case 1
 						Self.state = STATE_SHOW_EMERALD
-						Self.playerActionID = STATE_PLAYER_IN
-						break
-					Case STATE_PLAYER_IN
-						Self.playerActionID = STATE_TOUCH
-						break
-				EndIf
+						
+						Self.playerActionID = 2
+					Case 2
+						Self.playerActionID = 3
+				End Select
 			EndIf
 			
 			If (Self.dusting) Then
-				Self.dustDrawer.draw(g, Self.playerX, Self.playerY)
+				Self.dustDrawer.draw(g, x, y)
 				
 				If (Self.dustDrawer.checkEnd()) Then
 					Self.dusting = False
 				EndIf
 			EndIf
-			
 		End
 		
-		Private Method cloudLogic:Void()
-			
+		Method cloudLogic:Void()
 			If (Self.cloudCount > 0) Then
-				Self.cloudCount -= STATE_PLANE_IN
+				Self.cloudCount -= 1
 			EndIf
 			
-			For (Int i = 0; i < PLANE_TOUCH_VELOCITY; i += STATE_PLANE_IN)
-				
-				If (Self.cloudInfo[i][0] <> 0) Then
-					Int[] iArr = Self.cloudInfo[i]
-					iArr[STATE_PLANE_IN] = iArr[STATE_PLANE_IN] + CLOUD_VELOCITY[Self.cloudInfo[i][0] - STATE_PLANE_IN]
+			For Local cloud:= EachIn Self.cloudInfo
+				If (cloud[0] <> 0) Then
+					cloud[1] += CLOUD_VELOCITY[cloud[0] - 1]
 					
-					If (Self.cloudInfo[i][STATE_PLANE_IN] >= SCREEN_WIDTH + 75) Then
-						Self.cloudInfo[i][0] = 0
+					' Magic number: 75
+					If (cloud[1] >= (SCREEN_WIDTH + 75)) Then
+						cloud[0] = 0
 					EndIf
 				EndIf
 				
-				If (Self.cloudInfo[i][0] = 0 And Self.cloudCount = 0) Then
-					Self.cloudInfo[i][0] = MyRandom.nextInt(STATE_PLANE_IN, STATE_TOUCH)
-					Self.cloudInfo[i][STATE_PLANE_IN] = -60
-					Self.cloudInfo[i][STATE_PLAYER_IN] = MyRandom.nextInt(20, SCREEN_HEIGHT - 40)
+				If (cloud[0] = 0 And Self.cloudCount = 0) Then
+					' Magic numbers: 1, 3, -60, 20, 40, 8, 20
+					cloud[0] = MyRandom.nextInt(1, 3) ' PLANE_ACC_POWER
+					cloud[1] = -60
+					cloud[2] = MyRandom.nextInt(20, SCREEN_HEIGHT - 40)
+					
 					Self.cloudCount = MyRandom.nextInt(8, 20)
 				EndIf
 			EndIf
 		End
 		
-		Private Method cloudDraw:Void(g:MFGraphics)
-			For (Int i = 0; i < PLANE_TOUCH_VELOCITY; i += STATE_PLANE_IN)
-				
-				If (Self.cloudInfo[i][0] <> 0) Then
-					Self.cloudDrawer.setActionId(Self.cloudInfo[i][0] - STATE_PLANE_IN)
-					Self.cloudDrawer.draw(g, Self.cloudInfo[i][STATE_PLANE_IN], Self.cloudInfo[i][STATE_PLAYER_IN])
+		Method cloudDraw:Void(g:MFGraphics)
+			For Local cloud:= EachIn Self.cloudInfo
+				If (cloud[0] <> 0) Then
+					Self.cloudDrawer.setActionId(cloud[0] - 1)
+					Self.cloudDrawer.draw(g, cloud[1], cloud[2])
 				EndIf
-			EndIf
-		End
-		
-		Public Method close:Void()
-			Self.endingBackGround = Null
-			Animation.closeAnimationDrawer(Self.characterDrawer)
-			Self.characterDrawer = Null
-			Animation.closeAnimationDrawer(Self.characterSpDrawer)
-			Self.characterSpDrawer = Null
-			Animation.closeAnimationDrawer(Self.dustDrawer)
-			Self.dustDrawer = Null
-			Animation.closeAnimationDrawer(Self.planeDrawer)
-			Self.planeDrawer = Null
-			Animation.closeAnimationDrawer(Self.cloudDrawer)
-			Self.cloudDrawer = Null
-			Animation.closeAnimationDrawer(Self.planeHeadDrawer)
-			Self.planeHeadDrawer = Null
-			'System.gc()
-			try {
-				Thread.sleep(100)
-			} catch (Exception e) {
-				e.printStackTrace()
-			EndIf
-		End
-		
-		Public Method init:Void()
-		End
-		
-		Public Method pause:Void()
-			Self.state = STATE_INTERRUPT
-		End
-		
-		Public Method setOverFromInterrupt:Void()
-			Self.isOverFromInterrupt = True
+			Next
 		End
 End
