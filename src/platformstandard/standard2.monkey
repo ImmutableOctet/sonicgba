@@ -41,6 +41,7 @@ Class Standard2 Implements Def ' Final
 		
 		Const FRAME_DIFF:Int = 8
 		
+		' Splash-screen states:
 		Const SPLASH_INIT:Int = 0
 		Const SPLASH_SOUND:Int = 1
 		Const SPLASH_SEGA:Int = 2
@@ -53,6 +54,7 @@ Class Standard2 Implements Def ' Final
 		
 		Const STANDARD_RES:String = "/standard"
 		
+		' States:
 		Const STATE_INIT:Int = 0
 		Const STATE_LOGO_IN:Int = 1
 		Const STATE_SHOW:Int = 2
@@ -304,7 +306,7 @@ Class Standard2 Implements Def ' Final
 			confirmcursor = 0
 			
 			If (muiAniDrawer = Null) Then
-				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, STATE_INIT)
+				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
 			EndIf
 			
 			Key.touchSecondEnsureClose()
@@ -353,16 +355,16 @@ Class Standard2 Implements Def ' Final
 		Public Function SecondEnsurePanelDraw:Void(g:MFGraphics, ani_id:Int)
 			
 			If (muiAniDrawer = Null) Then
-				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, STATE_INIT)
+				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
 				Return
 			EndIf
 			
 			muiAniDrawer.setActionId(54)
-			muiAniDrawer.draw(g, SCREEN_WIDTH Shr STATE_LOGO_IN, (SCREEN_HEIGHT Shr STATE_LOGO_IN) - 20)
+			muiAniDrawer.draw(g, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - 20) ' Shr 1
 			AnimationDrawer animationDrawer = muiAniDrawer
 			Int i = (Key.touchsecondensureyes.Isin() And confirmcursor = 0) ? STATE_LOGO_IN : STATE_INIT
 			animationDrawer.setActionId(i + 59)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr STATE_LOGO_IN) - FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr STATE_LOGO_IN) + FADE_FILL_WIDTH)
+			muiAniDrawer.draw(g, (SCREEN_WIDTH / 2) - FADE_FILL_WIDTH, (SCREEN_HEIGHT / 2) + FADE_FILL_WIDTH) ' Shr 1
 			animationDrawer = muiAniDrawer
 			
 			If (Key.touchsecondensureno.Isin() And confirmcursor = STATE_LOGO_IN) Then
@@ -372,13 +374,13 @@ Class Standard2 Implements Def ' Final
 			EndIf
 			
 			animationDrawer.setActionId(i + 59)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr STATE_LOGO_IN) + FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr STATE_LOGO_IN) + FADE_FILL_WIDTH)
+			muiAniDrawer.draw(g, (SCREEN_WIDTH / 2) + FADE_FILL_WIDTH, (SCREEN_HEIGHT / 2) + FADE_FILL_WIDTH) ' Shr 1
 			muiAniDrawer.setActionId(46)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr STATE_LOGO_IN) - FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr STATE_LOGO_IN) + FADE_FILL_WIDTH)
+			muiAniDrawer.draw(g, (SCREEN_WIDTH / 2) - FADE_FILL_WIDTH, (SCREEN_HEIGHT / 2) + FADE_FILL_WIDTH) ' Shr 1
 			muiAniDrawer.setActionId(47)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr STATE_LOGO_IN) + FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr STATE_LOGO_IN) + FADE_FILL_WIDTH)
+			muiAniDrawer.draw(g, (SCREEN_WIDTH / 2) + FADE_FILL_WIDTH, (SCREEN_HEIGHT / 2) + FADE_FILL_WIDTH) ' Shr 1
 			muiAniDrawer.setActionId(ani_id)
-			muiAniDrawer.draw(g, SCREEN_WIDTH Shr STATE_LOGO_IN, (SCREEN_HEIGHT Shr STATE_LOGO_IN) - 20)
+			muiAniDrawer.draw(g, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - 20) ' Shr 1
 			animationDrawer = muiAniDrawer
 			
 			If (Key.touchsecondensurereturn.Isin()) Then
@@ -465,18 +467,19 @@ Class Standard2 Implements Def ' Final
 			
 			Select (state)
 				Case STATE_LOGO_IN
-					drawSplashEffect1(g, splashImage1, screenWidth Shr STATE_LOGO_IN, (screenHeight Shr STATE_LOGO_IN) - (splashImage1.getHeight() Shr STATE_LOGO_IN), count)
+					drawSplashEffect1(g, splashImage1, (screenWidth / 2), (screenHeight / 2) - (splashImage1.getHeight() / 2), count) ' Shr 1
 				Case STATE_SHOW
-					MyAPI.drawImage(g, splashImage1, screenWidth Shr STATE_LOGO_IN, (screenHeight Shr STATE_LOGO_IN) - (splashImage1.getHeight() Shr STATE_LOGO_IN), 17)
+					MyAPI.drawImage(g, splashImage1, (screenWidth / 2), (screenHeight / 2) - (splashImage1.getHeight() / 2), 17) ' Shr 1
 				Case STATE_LOGO_OUT
-					drawSplashEffect2(g, splashImage1, screenWidth Shr STATE_LOGO_IN, (screenHeight Shr STATE_LOGO_IN) - (splashImage1.getHeight() Shr STATE_LOGO_IN), count, screenHeight)
+					drawSplashEffect2(g, splashImage1, (screenWidth / 2), (screenHeight / 2) - (splashImage1.getHeight() / 2), count, screenHeight) ' Shr 1
 				Default
+					' Nothing so far.
 			End Select
-		}
+		End
 		
 		Private Function splashIsOver1:Bool()
 			Return state = STATE_OVER And count >= 20
-		}
+		End
 		
 		Private Function drawSplashEffect1:Void(g:MFGraphics, image:MFImage, x:Int, y:Int, count:Int)
 			For (Int i = 0; i < (image.getHeight() + y) - ((image.getHeight() * count) / 16); i += 1)
@@ -527,16 +530,18 @@ Class Standard2 Implements Def ' Final
 		
 		Private Function splashDraw2:Void(g:MFGraphics, screenWidth:Int, screenHeight:Int)
 			g.setColor(MapManager.END_COLOR)
+			
 			g.fillRect(1, 1, screenWidth, screenHeight)
+			
 			Select (state)
 				Case STATE_LOGO_IN
-					drawSplash2Effect(g, splashImage2, screenWidth Shr STATE_LOGO_IN, (screenHeight Shr STATE_LOGO_IN) - (splashImage2.getHeight() Shr STATE_LOGO_IN), count, screenWidth)
-				Case STATE_SHOW
-				Case STATE_OVER
-					MyAPI.drawImage(g, splashImage2, screenWidth Shr STATE_LOGO_IN, (screenHeight Shr STATE_LOGO_IN) - (splashImage2.getHeight() Shr STATE_LOGO_IN), 17)
+					drawSplash2Effect(g, splashImage2, (screenWidth / 2), (screenHeight / 2) - (splashImage2.getHeight() / 2), count, screenWidth) ' Shr 1
+				Case STATE_SHOW, STATE_OVER
+					MyAPI.drawImage(g, splashImage2, (screenWidth / 2), (screenHeight / 2) - (splashImage2.getHeight() / 2), 17) ' Shr 1
 				Default
+					' Nothing so far.
 			End Select
-		}
+		End
 		
 		Private Function splash2IsOver:Bool()
 			Return state = STATE_OVER
@@ -567,11 +572,13 @@ Class Standard2 Implements Def ' Final
 		
 		Private Function soundInit:Void()
 			soundUIDrawer = Animation.getInstanceFromQi("/standard/enable_sound.dat")[STATE_INIT].getDrawer()
-			yesButton = New MFButton((SCREEN_WIDTH Shr STATE_LOGO_IN) - 72, (SCREEN_HEIGHT Shr STATE_LOGO_IN) + 28, 64, 24)
-			noButton = New MFButton((SCREEN_WIDTH Shr STATE_LOGO_IN) + FRAME_DIFF, (SCREEN_HEIGHT Shr STATE_LOGO_IN) + 28, 64, 24)
+			
+			yesButton = New MFButton((SCREEN_WIDTH / 2) - 72, (SCREEN_HEIGHT / 2) + 28, 64, 24) ' Shr 1
+			noButton = New MFButton((SCREEN_WIDTH / 2) + FRAME_DIFF, (SCREEN_HEIGHT / 2) + 28, 64, 24) ' Shr 1
+			
 			MFDevice.addComponent(yesButton)
 			MFDevice.addComponent(noButton)
-		}
+		End
 		
 		Private Function soundLogic:Bool()
 			
@@ -605,6 +612,6 @@ Class Standard2 Implements Def ' Final
 				EndIf
 			EndIf
 			
-			soundUIDrawer.draw(g, actionID, screenWidth Shr STATE_LOGO_IN, screenHeight Shr STATE_LOGO_IN, False, STATE_INIT)
-		}
+			soundUIDrawer.draw(g, actionID, (screenWidth / 2), (screenHeight / 2), False, 0) ' Shr 1
+		End
 End
