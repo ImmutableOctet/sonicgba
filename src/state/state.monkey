@@ -162,7 +162,7 @@ Class State Implements SonicDef, StringIndex Abstract
 		Const PAGE_BACKGROUND_HEIGHT:Int = 56
 		Const PAGE_BACKGROUND_SPEED:Int = 1
 		Const QUIT_COMFIRM:Int = 9
-		Global RESET_STR:String[] = MyAPI.getStrings("History reset!", WARNING_FONT_WIDTH) ' \u8bb0\u5f55\u5df2\u91cd\u7f6e\uff01
+		Global RESET_STR:String[] = MyAPI.getStrings("History reset!", WARNING_FONT_WIDTH) ' ~u8bb0~u5f55~u5df2~u91cd~u7f6e~uff01
 		Global RESET_HEIGHT:Int = (RESET_STR.Length * LINE_SPACE) + BAR_HEIGHT ' Const
 		Const RESET_Y_DES:Int = (SCREEN_HEIGHT - RESET_HEIGHT)
 		Const RETURN_PRESSED:Int = 400
@@ -1135,11 +1135,11 @@ Class State Implements SonicDef, StringIndex Abstract
 			drawMenuTitle(g, STATE_SELECT_RACE_STAGE, 0)
 			fillMenuRect(g, Self.MORE_GAME_START_X, Self.MORE_GAME_START_Y, Self.MORE_GAME_WIDTH, Self.MORE_GAME_HEIGHT)
 			
-			MyAPI.drawBoldString(g, "Whether to exit the game", SCREEN_WIDTH Shr 1, Self.MORE_GAME_START_Y + 10, 17, MENU_BG_COLOR_1, 0) ' "\u662f\u5426\u9000\u51fa\u6e38\u620f"
+			MyAPI.drawBoldString(g, "Whether to exit the game", SCREEN_WIDTH Shr 1, Self.MORE_GAME_START_Y + 10, 17, MENU_BG_COLOR_1, 0) ' "~u662f~u5426~u9000~u51fa~u6e38~u620f"
 			
 			Local i:= MENU_SPACE + (Self.MORE_GAME_START_Y + 10)
 			
-			MyAPI.drawBoldString(g, "And connect to the network", SCREEN_WIDTH Shr 1, i, 17, MENU_BG_COLOR_1, 0) ' "\u5e76\u8fde\u63a5\u7f51\u7edc"
+			MyAPI.drawBoldString(g, "And connect to the network", SCREEN_WIDTH Shr 1, i, 17, MENU_BG_COLOR_1, 0) ' "~u5e76~u8fde~u63a5~u7f51~u7edc"
 			
 			drawMenuFontById(g, 101, ((Self.cursor * FADE_FILL_WIDTH) + COMFIRM_X) - BAR_HEIGHT, ((Self.MORE_GAME_START_Y + 10) + (MENU_SPACE * 3)) + FONT_H_HALF)
 			drawMenuFontById(g, 10, COMFIRM_X, ((Self.MORE_GAME_START_Y + 10) + (MENU_SPACE * 3)) + FONT_H_HALF)
