@@ -307,8 +307,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>86</Y>
+        <X>14</X>
+        <Y>87</Y>
       </CursorPos>
       <DocGUID>cc935e65-ab3f-4584-ac73-44ded5717223</DocGUID>
       <Bookmarks />
@@ -329,8 +329,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\platformstandard\standard2.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>80</X>
-        <Y>321</Y>
+        <X>8</X>
+        <Y>569</Y>
       </CursorPos>
       <DocGUID>d973a9e5-5316-43d5-88f9-a34a8229a12c</DocGUID>
       <Bookmarks />
