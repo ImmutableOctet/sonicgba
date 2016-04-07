@@ -16,7 +16,9 @@ Private
 	Import platformstandard.standard
 	
 	Import sonicgba.globalresource
-	'Import sonicgba.mapmanager
+	
+	' Used for the 'end-color'.
+	Import sonicgba.mapmanager
 	
 	'Import android.os.message
 	
@@ -64,9 +66,12 @@ Class Standard2 Implements Def ' Final
 		
 		Global fadeAlpha:Int = FADE_FILL_WIDTH
 		Global fadeFromValue:Int = 0
-		Global fadeRGB:Int[] = New Int[1600] ' <-- This will eventually be replaced.
+		
+		' This will eventually be replaced for hardware fading.
+		Global fadeRGB:Int[] = New Int[FADE_FILL_WIDTH*FADE_FILL_HEIGHT]
+		
 		Global fadeToValue:Int
-		Global preFadeAlpha:Int
+		Global preFadeAlpha:Int = 0 ' -1
 		
 		Global yesButton:MFButton
 		Global noButton:MFButton
@@ -140,7 +145,7 @@ Class Standard2 Implements Def ' Final
 						
 						fadeInit(STATE_INIT, 220)
 						
-						SoundSystem.getInstance().playSe(STATE_LOGO_IN)
+						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					Else
 						state = STATE_INIT
 						splashState = SPLASH_SEGA
@@ -214,254 +219,75 @@ Class Standard2 Implements Def ' Final
 			Return returnValue
 		End
 		
-		Public Function splashDraw:Void(g:MFGraphics, SCREEN_WIDTH:Int, SCREEN_HEIGHT:Int)
+		Function splashDraw:Void(g:MFGraphics, SCREEN_WIDTH:Int, SCREEN_HEIGHT:Int)
 			Select (splashState)
-				Case STATE_LOGO_IN
+				Case SPLASH_SOUND
 					soundDraw(g, SCREEN_WIDTH, SCREEN_HEIGHT)
-				Case STATE_SHOW
+				Case SPLASH_SEGA
 					splashDraw1(g, SCREEN_WIDTH, SCREEN_HEIGHT)
-				Case STATE_LOGO_OUT
+				Case SPLASH_SONIC_TEAM
 					splashDraw2(g, SCREEN_WIDTH, SCREEN_HEIGHT)
-				Case STATE_OVER
+				Case SPLASH_OVER
 					splashDraw2(g, SCREEN_WIDTH, SCREEN_HEIGHT)
 				Case SPLASH_EXIT
 					soundDraw(g, SCREEN_WIDTH, SCREEN_HEIGHT)
+					
 					drawFade(g)
+					
 					SecondEnsurePanelDraw(g, 14)
 				Default
+					' Nothing so far.
 			End Select
-		}
+		End
 		
-		Public Function splashOver:Bool()
-			Return splashState = STATE_OVER
-		}
+		Function splashOver:Bool()
+			Return (splashState = SPLASH_OVER)
+		End
 		
-		Public Function close:Void()
+		Function close:Void()
 			splashImage1 = Null
 			splashImage2 = Null
-		}
+		End
 		
-		Private Function splashInit1:Void()
-			splashImage1 = MFImage.createImage("/standard/sega_logo.png")
-			count = 0
-		}
-		
-		Private Function splashLogic1:Void()
-			count += STATE_LOGO_IN
-			Select (state)
-				Case STATE_INIT
-					splashInit1()
-					state = STATE_LOGO_IN
-				Case STATE_LOGO_IN
-					
-					If (count = 16) Then
-						state = STATE_SHOW
-						count = 0
-					EndIf
-					
-				Case STATE_SHOW
-					
-					If (count = 60) Then
-						state = STATE_LOGO_OUT
-						count = 0
-					EndIf
-					
-				Case STATE_LOGO_OUT
-					
-					If (count = 16) Then
-						state = STATE_OVER
-						count = 0
-					EndIf
-					
-				Default
-			End Select
-		}
-		
-		Private Function splashDraw1:Void(g:MFGraphics, screenWidth:Int, screenHeight:Int)
-			g.setColor(MapManager.END_COLOR)
-			g.fillRect(STATE_INIT, STATE_INIT, screenWidth, screenHeight)
-			Select (state)
-				Case STATE_LOGO_IN
-					drawSplashEffect1(g, splashImage1, screenWidth Shr STATE_LOGO_IN, (screenHeight Shr STATE_LOGO_IN) - (splashImage1.getHeight() Shr STATE_LOGO_IN), count)
-				Case STATE_SHOW
-					MyAPI.drawImage(g, splashImage1, screenWidth Shr STATE_LOGO_IN, (screenHeight Shr STATE_LOGO_IN) - (splashImage1.getHeight() Shr STATE_LOGO_IN), 17)
-				Case STATE_LOGO_OUT
-					drawSplashEffect2(g, splashImage1, screenWidth Shr STATE_LOGO_IN, (screenHeight Shr STATE_LOGO_IN) - (splashImage1.getHeight() Shr STATE_LOGO_IN), count, screenHeight)
-				Default
-			End Select
-		}
-		
-		Private Function splashIsOver1:Bool()
-			Return state = STATE_OVER And count >= 20
-		}
-		
-		Private Function drawSplashEffect1:Void(g:MFGraphics, image:MFImage, x:Int, y:Int, count:Int)
-			For (Int i = 0; i < (image.getHeight() + y) - ((image.getHeight() * count) / 16); i += STATE_LOGO_IN)
-				MyAPI.drawImage(g, image, STATE_INIT, (image.getHeight() - ((image.getHeight() * count) / 16)) - STATE_LOGO_IN, image.getWidth(), STATE_LOGO_IN, STATE_INIT, x, i, 17)
-			Next
-			MyAPI.drawImage(g, image, STATE_INIT, image.getHeight() - ((image.getHeight() * count) / 16), image.getWidth(), (image.getHeight() * count) / 16, STATE_INIT, x, (y + image.getHeight()) - ((count * image.getHeight()) / 16), 17)
-		}
-		
-		Private Function drawSplashEffect2:Void(g:MFGraphics, image:MFImage, x:Int, y:Int, count:Int, screenHeight:Int)
-			For (Int i = (image.getHeight() + y) - ((image.getHeight() * count) / 16); i < screenHeight; i += STATE_LOGO_IN)
-				MyAPI.drawImage(g, image, STATE_INIT, (image.getHeight() - ((image.getHeight() * count) / 16)) - STATE_LOGO_IN, image.getWidth(), STATE_LOGO_IN, STATE_INIT, x, i, 17)
-			Next
-			MyAPI.drawImage(g, image, STATE_INIT, STATE_INIT, image.getWidth(), image.getHeight() - ((count * image.getHeight()) / 16), STATE_INIT, x, y, 17)
-		}
-		
-		Private Function splashInit2:Void()
-			splashImage2 = MFImage.createImage("/standard/sonic_team.png")
-			count = 0
-		}
-		
-		Private Function splashLogic2:Void()
-			count += STATE_LOGO_IN
-			Select (state)
-				Case STATE_INIT
-					splashInit2()
-					state = STATE_LOGO_IN
-					SoundSystem.getInstance().preLoadSequenceSe(12)
-				Case STATE_LOGO_IN
-					
-					If (count = SPLASH_2_COME_IN_COUNT) Then
-						state = STATE_SHOW
-						SoundSystem.getInstance().playSequenceSeSingle()
-						count = 0
-					EndIf
-					
-				Case STATE_SHOW
-					
-					If (count = 36) Then
-						state = STATE_OVER
-						count = 0
-					EndIf
-					
-				Default
-			End Select
-		}
-		
-		Private Function splashDraw2:Void(g:MFGraphics, screenWidth:Int, screenHeight:Int)
-			g.setColor(MapManager.END_COLOR)
-			g.fillRect(STATE_INIT, STATE_INIT, screenWidth, screenHeight)
-			Select (state)
-				Case STATE_LOGO_IN
-					drawSplash2Effect(g, splashImage2, screenWidth Shr STATE_LOGO_IN, (screenHeight Shr STATE_LOGO_IN) - (splashImage2.getHeight() Shr STATE_LOGO_IN), count, screenWidth)
-				Case STATE_SHOW
-				Case STATE_OVER
-					MyAPI.drawImage(g, splashImage2, screenWidth Shr STATE_LOGO_IN, (screenHeight Shr STATE_LOGO_IN) - (splashImage2.getHeight() Shr STATE_LOGO_IN), 17)
-				Default
-			End Select
-		}
-		
-		Private Function splash2IsOver:Bool()
-			Return state = STATE_OVER
-		}
-		
-		Private Function drawSplash2Effect:Void(g:MFGraphics, image:MFImage, x:Int, y:Int, count:Int, screenWidth:Int)
-			Int space = image.getHeight() / CLIP_NUM
-			Int clipHeight = (image.getHeight() / CLIP_NUM) / STATE_SHOW
-			For (Int i = 0; i < CLIP_NUM; i += STATE_LOGO_IN)
-				Int countDiff
-				Int countBase = (SPLASH_2_COME_IN_COUNT - ((i * FRAME_DIFF) / CLIP_NUM)) - STATE_LOGO_IN
-				Int countDiff2 = countBase - count
-				
-				If (countDiff2 < 0) Then
-					countDiff = 0
-				Else
-					countDiff = countDiff2
-				EndIf
-				
-				countDiff2 = g
-				MFImage mFImage = image
-				MyAPI.drawImage(countDiff2, mFImage, STATE_INIT, i * space, image.getWidth(), clipHeight + STATE_LOGO_IN, STATE_INIT, x + ((((-screenWidth) - ((24 - i) * STATE_OVER)) * countDiff) / countBase), y + (i * space), 17)
-				countDiff2 = g
-				mFImage = image
-				MyAPI.drawImage(countDiff2, mFImage, STATE_INIT, (i * space) + clipHeight, image.getWidth(), clipHeight + STATE_LOGO_IN, STATE_INIT, x + (((((24 - i) * STATE_OVER) + screenWidth) * countDiff) / countBase), ((i * space) + y) + clipHeight, 17)
-			Next
-		}
-		
-		Private Function soundInit:Void()
-			soundUIDrawer = Animation.getInstanceFromQi("/standard/enable_sound.dat")[STATE_INIT].getDrawer()
-			yesButton = New MFButton((SCREEN_WIDTH Shr STATE_LOGO_IN) - 72, (SCREEN_HEIGHT Shr STATE_LOGO_IN) + 28, 64, 24)
-			noButton = New MFButton((SCREEN_WIDTH Shr STATE_LOGO_IN) + FRAME_DIFF, (SCREEN_HEIGHT Shr STATE_LOGO_IN) + 28, 64, 24)
-			MFDevice.addComponent(yesButton)
-			MFDevice.addComponent(noButton)
-		}
-		
-		Private Function soundLogic:Bool()
-			
-			If (yesButton.isRelease() And Not noButton.isRepeat()) Then
-				pressConfirm()
-				returnValue = STATE_LOGO_IN
-				SoundSystem.getInstance().playSe(STATE_LOGO_IN)
-				Return True
-			ElseIf (Not noButton.isRelease() Or yesButton.isRepeat()) Then
-				Return False
-			Else
-				pressCancel()
-				returnValue = STATE_SHOW
-				Return True
-			EndIf
-			
-		}
-		
-		Private Function soundDraw:Void(g:MFGraphics, screenWidth:Int, screenHeight:Int)
-			g.setColor(STATE_INIT)
-			g.fillRect(STATE_INIT, STATE_INIT, screenWidth, screenHeight)
-			Int actionID = 0
-			
-			If (Not (yesButton.isRepeat() And noButton.isRepeat())) Then
-				If (yesButton.isRepeat()) Then
-					actionID = STATE_LOGO_IN
-				EndIf
-				
-				If (noButton.isRepeat()) Then
-					actionID = STATE_SHOW
-				EndIf
-			EndIf
-			
-			soundUIDrawer.draw(g, actionID, screenWidth Shr STATE_LOGO_IN, screenHeight Shr STATE_LOGO_IN, False, STATE_INIT)
-		}
-		
-		Public Function pressConfirm:Void()
+		Function pressConfirm:Void()
 			keyConfirm = True
-		}
+		End
 		
-		Public Function pressCancel:Void()
+		Function pressCancel:Void()
 			keyCancel = True
-		}
+		End
 		
-		Public Function fadeInit:Void(from:Int, to:Int)
+		Function fadeInit:Void(from:Int, dest:Int)
 			fadeFromValue = from
-			fadeToValue = to
+			fadeToValue = dest
+			
 			fadeAlpha = fadeFromValue
+			
 			preFadeAlpha = -1
-		}
+		End
 		
-		Public Function drawFade:Void(g:MFGraphics)
-			fadeAlpha = MyAPI.calNextPosition((double) fadeAlpha, (double) fadeToValue, STATE_LOGO_IN, STATE_LOGO_OUT, 3.0)
+		' This behavior will change in the future. (Software fade)
+		Function drawFade:Void(g:MFGraphics)
+			fadeAlpha = MyAPI.calNextPosition(Double(fadeAlpha), Double(fadeToValue), 1, 3, 3.0)
 			
 			If (fadeAlpha <> 0) Then
-				Int w
-				Int h
-				
 				If (preFadeAlpha <> fadeAlpha) Then
-					For (w = 0; w < FADE_FILL_WIDTH; w += STATE_LOGO_IN)
-						For (h = 0; h < FADE_FILL_WIDTH; h += STATE_LOGO_IN)
-							fadeRGB[(h * FADE_FILL_WIDTH) + w] = ((fadeAlpha Shl 24) & -16777216) | (fadeRGB[(h * FADE_FILL_WIDTH) + w] & MapManager.END_COLOR)
-						EndIf
-					EndIf
+					For Local w:= 0 Until FADE_FILL_WIDTH
+						For Local h:= 0 Until FADE_FILL_HEIGHT
+							fadeRGB[(h * FADE_FILL_WIDTH) + w] = ((fadeAlpha Shl 24) & -16777216) | (fadeRGB[(h * FADE_FILL_WIDTH) + w] & MapManager.END_COLOR) ' FADE_FILL_HEIGHT
+						Next
+					Next
+					
 					preFadeAlpha = fadeAlpha
 				EndIf
 				
-				For (w = 0; w < MyAPI.zoomOut(SCREEN_WIDTH); w += FADE_FILL_WIDTH)
-					For (h = 0; h < MyAPI.zoomOut(SCREEN_HEIGHT); h += FADE_FILL_WIDTH)
-						g.drawRGB(fadeRGB, STATE_INIT, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_WIDTH, True)
-					EndIf
-				EndIf
+				For Local w:= 0 Until MyAPI.zoomOut(SCREEN_WIDTH) Step FADE_FILL_WIDTH
+					For Local h:= 0 Until MyAPI.zoomOut(SCREEN_HEIGHT) Step FADE_FILL_HEIGHT
+						g.drawRGB(fadeRGB, STATE_INIT, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_HEIGHT, True)
+					Next
+				Next
 			EndIf
-			
-		}
+		End
 		
 		Public Function setFadeOver:Void()
 			fadeAlpha = fadeToValue
@@ -499,7 +325,7 @@ Class Standard2 Implements Def ' Final
 			EndIf
 			
 			If (isConfirm) Then
-				confirmframe += STATE_LOGO_IN
+				confirmframe += 1
 				
 				If (confirmframe > FRAME_DIFF) Then
 					Return STATE_LOGO_IN
@@ -509,15 +335,15 @@ Class Standard2 Implements Def ' Final
 			If (Key.touchsecondensureyes.IsButtonPress() And confirmcursor = 0 And Not isConfirm) Then
 				isConfirm = True
 				confirmframe = 0
-				SoundSystem.getInstance().playSe(STATE_LOGO_IN)
+				SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 				Return STATE_INIT
 			ElseIf (Key.touchsecondensureno.IsButtonPress() And confirmcursor = STATE_LOGO_IN And Not isConfirm) Then
-				SoundSystem.getInstance().playSe(STATE_SHOW)
+				SoundSystem.getInstance().playSe(SoundSystem.SE_107)
 				Return STATE_SHOW
 			ElseIf ((Not Key.press(Key.B_BACK) And Not Key.touchsecondensurereturn.IsButtonPress()) Or Not fadeChangeOver() Or isConfirm) Then
 				Return STATE_INIT
 			Else
-				SoundSystem.getInstance().playSe(STATE_SHOW)
+				SoundSystem.getInstance().playSe(SoundSystem.SE_107)
 				Return STATE_SHOW
 			EndIf
 			
@@ -571,21 +397,213 @@ Class Standard2 Implements Def ' Final
 				drawFade(g)
 				
 				If (confirmframe > FRAME_DIFF) Then
-					g.setColor(STATE_INIT)
-					MyAPI.fillRect(g, STATE_INIT, STATE_INIT, SCREEN_WIDTH, SCREEN_HEIGHT)
+					g.setColor(0)
+					
+					MyAPI.fillRect(g, 1, 1, SCREEN_WIDTH, SCREEN_HEIGHT)
 				EndIf
 			EndIf
-			
-		}
+		End
 		
-		Public Function getMain:Void(main:Main)
+		Function getMain:Void(main:Main)
 			activity = main
-		}
+		End
 		
 		#Rem
-			Public Function sendMessage:Void(msg:Message, id:Int)
+			Function sendMessage:Void(msg:Message, id:Int)
 				'msg.what = id
 				'activity.handler.handleMessage(msg)
 			End
 		#End
+	Private
+		' Functions:
+		Function splashInit1:Void()
+			splashImage1 = MFImage.createImage("/standard/sega_logo.png")
+			
+			count = 0
+		End
+		
+		Function splashLogic1:Void()
+			' Constant variable(s):
+			Const LOGO_TRANSITION_TIME:= 16
+			Const LOGO_SHOW_TIME:= 60
+			
+			count += 1
+			
+			Select (state)
+				Case STATE_INIT
+					splashInit1()
+					
+					state = STATE_LOGO_IN
+				Case STATE_LOGO_IN
+					If (count >= LOGO_TRANSITION_TIME) Then
+						state = STATE_SHOW
+						
+						count = 0
+					EndIf
+				Case STATE_SHOW
+					If (count >= LOGO_SHOW_TIME) Then
+						state = STATE_LOGO_OUT
+						
+						count = 0
+					EndIf
+				Case STATE_LOGO_OUT
+					If (count >= LOGO_TRANSITION_TIME) Then
+						state = STATE_OVER
+						
+						count = 0
+					EndIf
+				Default
+					' Nothing so far.
+			End Select
+		End
+		
+		Private Function splashDraw1:Void(g:MFGraphics, screenWidth:Int, screenHeight:Int)
+			g.setColor(MapManager.END_COLOR)
+			
+			g.fillRect(1, 1, screenWidth, screenHeight)
+			
+			Select (state)
+				Case STATE_LOGO_IN
+					drawSplashEffect1(g, splashImage1, screenWidth Shr STATE_LOGO_IN, (screenHeight Shr STATE_LOGO_IN) - (splashImage1.getHeight() Shr STATE_LOGO_IN), count)
+				Case STATE_SHOW
+					MyAPI.drawImage(g, splashImage1, screenWidth Shr STATE_LOGO_IN, (screenHeight Shr STATE_LOGO_IN) - (splashImage1.getHeight() Shr STATE_LOGO_IN), 17)
+				Case STATE_LOGO_OUT
+					drawSplashEffect2(g, splashImage1, screenWidth Shr STATE_LOGO_IN, (screenHeight Shr STATE_LOGO_IN) - (splashImage1.getHeight() Shr STATE_LOGO_IN), count, screenHeight)
+				Default
+			End Select
+		}
+		
+		Private Function splashIsOver1:Bool()
+			Return state = STATE_OVER And count >= 20
+		}
+		
+		Private Function drawSplashEffect1:Void(g:MFGraphics, image:MFImage, x:Int, y:Int, count:Int)
+			For (Int i = 0; i < (image.getHeight() + y) - ((image.getHeight() * count) / 16); i += 1)
+				MyAPI.drawImage(g, image, STATE_INIT, (image.getHeight() - ((image.getHeight() * count) / 16)) - STATE_LOGO_IN, image.getWidth(), STATE_LOGO_IN, STATE_INIT, x, i, 17)
+			Next
+			MyAPI.drawImage(g, image, STATE_INIT, image.getHeight() - ((image.getHeight() * count) / 16), image.getWidth(), (image.getHeight() * count) / 16, STATE_INIT, x, (y + image.getHeight()) - ((count * image.getHeight()) / 16), 17)
+		}
+		
+		Private Function drawSplashEffect2:Void(g:MFGraphics, image:MFImage, x:Int, y:Int, count:Int, screenHeight:Int)
+			For (Int i = (image.getHeight() + y) - ((image.getHeight() * count) / 16); i < screenHeight; i += 1)
+				MyAPI.drawImage(g, image, STATE_INIT, (image.getHeight() - ((image.getHeight() * count) / 16)) - STATE_LOGO_IN, image.getWidth(), STATE_LOGO_IN, STATE_INIT, x, i, 17)
+			Next
+			MyAPI.drawImage(g, image, 1, 1, image.getWidth(), image.getHeight() - ((count * image.getHeight()) / 16), STATE_INIT, x, y, 17)
+		}
+		
+		Private Function splashInit2:Void()
+			splashImage2 = MFImage.createImage("/standard/sonic_team.png")
+			count = 0
+		}
+		
+		Private Function splashLogic2:Void()
+			count += 1
+			Select (state)
+				Case STATE_INIT
+					splashInit2()
+					state = STATE_LOGO_IN
+					SoundSystem.getInstance().preLoadSequenceSe(12)
+				Case STATE_LOGO_IN
+					
+					If (count = SPLASH_2_COME_IN_COUNT) Then
+						state = STATE_SHOW
+						
+						SoundSystem.getInstance().playSequenceSeSingle()
+						
+						count = 0
+					EndIf
+					
+				Case STATE_SHOW
+					
+					If (count = 36) Then
+						state = STATE_OVER
+						count = 0
+					EndIf
+					
+				Default
+			End Select
+		}
+		
+		Private Function splashDraw2:Void(g:MFGraphics, screenWidth:Int, screenHeight:Int)
+			g.setColor(MapManager.END_COLOR)
+			g.fillRect(1, 1, screenWidth, screenHeight)
+			Select (state)
+				Case STATE_LOGO_IN
+					drawSplash2Effect(g, splashImage2, screenWidth Shr STATE_LOGO_IN, (screenHeight Shr STATE_LOGO_IN) - (splashImage2.getHeight() Shr STATE_LOGO_IN), count, screenWidth)
+				Case STATE_SHOW
+				Case STATE_OVER
+					MyAPI.drawImage(g, splashImage2, screenWidth Shr STATE_LOGO_IN, (screenHeight Shr STATE_LOGO_IN) - (splashImage2.getHeight() Shr STATE_LOGO_IN), 17)
+				Default
+			End Select
+		}
+		
+		Private Function splash2IsOver:Bool()
+			Return state = STATE_OVER
+		}
+		
+		Private Function drawSplash2Effect:Void(g:MFGraphics, image:MFImage, x:Int, y:Int, count:Int, screenWidth:Int)
+			Int space = image.getHeight() / CLIP_NUM
+			Int clipHeight = (image.getHeight() / CLIP_NUM) / STATE_SHOW
+			For (Int i = 0; i < CLIP_NUM; i += 1)
+				Int countDiff
+				Int countBase = (SPLASH_2_COME_IN_COUNT - ((i * FRAME_DIFF) / CLIP_NUM)) - STATE_LOGO_IN
+				Int countDiff2 = countBase - count
+				
+				If (countDiff2 < 0) Then
+					countDiff = 0
+				Else
+					countDiff = countDiff2
+				EndIf
+				
+				countDiff2 = g
+				MFImage mFImage = image
+				MyAPI.drawImage(countDiff2, mFImage, STATE_INIT, i * space, image.getWidth(), clipHeight + STATE_LOGO_IN, STATE_INIT, x + ((((-screenWidth) - ((24 - i) * STATE_OVER)) * countDiff) / countBase), y + (i * space), 17)
+				countDiff2 = g
+				mFImage = image
+				MyAPI.drawImage(countDiff2, mFImage, STATE_INIT, (i * space) + clipHeight, image.getWidth(), clipHeight + STATE_LOGO_IN, STATE_INIT, x + (((((24 - i) * STATE_OVER) + screenWidth) * countDiff) / countBase), ((i * space) + y) + clipHeight, 17)
+			Next
+		}
+		
+		Private Function soundInit:Void()
+			soundUIDrawer = Animation.getInstanceFromQi("/standard/enable_sound.dat")[STATE_INIT].getDrawer()
+			yesButton = New MFButton((SCREEN_WIDTH Shr STATE_LOGO_IN) - 72, (SCREEN_HEIGHT Shr STATE_LOGO_IN) + 28, 64, 24)
+			noButton = New MFButton((SCREEN_WIDTH Shr STATE_LOGO_IN) + FRAME_DIFF, (SCREEN_HEIGHT Shr STATE_LOGO_IN) + 28, 64, 24)
+			MFDevice.addComponent(yesButton)
+			MFDevice.addComponent(noButton)
+		}
+		
+		Private Function soundLogic:Bool()
+			
+			If (yesButton.isRelease() And Not noButton.isRepeat()) Then
+				pressConfirm()
+				returnValue = STATE_LOGO_IN
+				SoundSystem.getInstance().playSe(SoundSystem.SE_106)
+				Return True
+			ElseIf (Not noButton.isRelease() Or yesButton.isRepeat()) Then
+				Return False
+			Else
+				pressCancel()
+				returnValue = STATE_SHOW
+				Return True
+			EndIf
+			
+		}
+		
+		Private Function soundDraw:Void(g:MFGraphics, screenWidth:Int, screenHeight:Int)
+			g.setColor(0)
+			g.fillRect(1, 1, screenWidth, screenHeight)
+			Int actionID = 0
+			
+			If (Not (yesButton.isRepeat() And noButton.isRepeat())) Then
+				If (yesButton.isRepeat()) Then
+					actionID = STATE_LOGO_IN
+				EndIf
+				
+				If (noButton.isRepeat()) Then
+					actionID = STATE_SHOW
+				EndIf
+			EndIf
+			
+			soundUIDrawer.draw(g, actionID, screenWidth Shr STATE_LOGO_IN, screenHeight Shr STATE_LOGO_IN, False, STATE_INIT)
+		}
 End
