@@ -143,7 +143,7 @@ Class Standard2 Implements Def ' Final
 						
 						secondEnsureInit()
 						
-						fadeInit(STATE_INIT, 220)
+						fadeInit(0, 220)
 						
 						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					Else
@@ -283,27 +283,28 @@ Class Standard2 Implements Def ' Final
 				
 				For Local w:= 0 Until MyAPI.zoomOut(SCREEN_WIDTH) Step FADE_FILL_WIDTH
 					For Local h:= 0 Until MyAPI.zoomOut(SCREEN_HEIGHT) Step FADE_FILL_HEIGHT
-						g.drawRGB(fadeRGB, STATE_INIT, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_HEIGHT, True)
+						g.drawRGB(fadeRGB, 0, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_HEIGHT, True)
 					Next
 				Next
 			EndIf
 		End
 		
-		Public Function setFadeOver:Void()
+		Function setFadeOver:Void()
 			fadeAlpha = fadeToValue
-		}
+		End
 		
-		Public Function fadeChangeOver:Bool()
-			Return fadeAlpha = fadeToValue
-		}
+		Function fadeChangeOver:Bool()
+			Return (fadeAlpha = fadeToValue)
+		End
 		
-		Public Function secondEnsureInit:Void()
+		Function secondEnsureInit:Void()
 			isConfirm = False
+			
 			confirmframe = 0
 			confirmcursor = 0
 			
 			If (muiAniDrawer = Null) Then
-				muiAniDrawer = New Animation("/animation/mui").getDrawer(STATE_INIT, False, STATE_INIT)
+				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, STATE_INIT)
 			EndIf
 			
 			Key.touchSecondEnsureClose()
@@ -352,7 +353,7 @@ Class Standard2 Implements Def ' Final
 		Public Function SecondEnsurePanelDraw:Void(g:MFGraphics, ani_id:Int)
 			
 			If (muiAniDrawer = Null) Then
-				muiAniDrawer = New Animation("/animation/mui").getDrawer(STATE_INIT, False, STATE_INIT)
+				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, STATE_INIT)
 				Return
 			EndIf
 			
@@ -387,7 +388,7 @@ Class Standard2 Implements Def ' Final
 			EndIf
 			
 			animationDrawer.setActionId(i + 61)
-			muiAniDrawer.draw(g, STATE_INIT, SCREEN_HEIGHT)
+			muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
 			
 			If (isConfirm) Then
 				If (confirmframe = STATE_LOGO_IN) Then
@@ -479,16 +480,16 @@ Class Standard2 Implements Def ' Final
 		
 		Private Function drawSplashEffect1:Void(g:MFGraphics, image:MFImage, x:Int, y:Int, count:Int)
 			For (Int i = 0; i < (image.getHeight() + y) - ((image.getHeight() * count) / 16); i += 1)
-				MyAPI.drawImage(g, image, STATE_INIT, (image.getHeight() - ((image.getHeight() * count) / 16)) - STATE_LOGO_IN, image.getWidth(), STATE_LOGO_IN, STATE_INIT, x, i, 17)
+				MyAPI.drawImage(g, image, 0, (image.getHeight() - ((image.getHeight() * count) / 16)) - STATE_LOGO_IN, image.getWidth(), STATE_LOGO_IN, 0, x, i, 17)
 			Next
-			MyAPI.drawImage(g, image, STATE_INIT, image.getHeight() - ((image.getHeight() * count) / 16), image.getWidth(), (image.getHeight() * count) / 16, STATE_INIT, x, (y + image.getHeight()) - ((count * image.getHeight()) / 16), 17)
+			MyAPI.drawImage(g, image, 0, image.getHeight() - ((image.getHeight() * count) / 16), image.getWidth(), (image.getHeight() * count) / 16, 0, x, (y + image.getHeight()) - ((count * image.getHeight()) / 16), 17)
 		}
 		
 		Private Function drawSplashEffect2:Void(g:MFGraphics, image:MFImage, x:Int, y:Int, count:Int, screenHeight:Int)
 			For (Int i = (image.getHeight() + y) - ((image.getHeight() * count) / 16); i < screenHeight; i += 1)
-				MyAPI.drawImage(g, image, STATE_INIT, (image.getHeight() - ((image.getHeight() * count) / 16)) - STATE_LOGO_IN, image.getWidth(), STATE_LOGO_IN, STATE_INIT, x, i, 17)
+				MyAPI.drawImage(g, image, 0, (image.getHeight() - ((image.getHeight() * count) / 16)) - STATE_LOGO_IN, image.getWidth(), STATE_LOGO_IN, 0, x, i, 17)
 			Next
-			MyAPI.drawImage(g, image, 1, 1, image.getWidth(), image.getHeight() - ((count * image.getHeight()) / 16), STATE_INIT, x, y, 17)
+			MyAPI.drawImage(g, image, 1, 1, image.getWidth(), image.getHeight() - ((count * image.getHeight()) / 16), 0, x, y, 17)
 		}
 		
 		Private Function splashInit2:Void()
@@ -557,10 +558,10 @@ Class Standard2 Implements Def ' Final
 				
 				countDiff2 = g
 				MFImage mFImage = image
-				MyAPI.drawImage(countDiff2, mFImage, STATE_INIT, i * space, image.getWidth(), clipHeight + STATE_LOGO_IN, STATE_INIT, x + ((((-screenWidth) - ((24 - i) * STATE_OVER)) * countDiff) / countBase), y + (i * space), 17)
+				MyAPI.drawImage(countDiff2, mFImage, 0, i * space, image.getWidth(), clipHeight + STATE_LOGO_IN, 0, x + ((((-screenWidth) - ((24 - i) * STATE_OVER)) * countDiff) / countBase), y + (i * space), 17)
 				countDiff2 = g
 				mFImage = image
-				MyAPI.drawImage(countDiff2, mFImage, STATE_INIT, (i * space) + clipHeight, image.getWidth(), clipHeight + STATE_LOGO_IN, STATE_INIT, x + (((((24 - i) * STATE_OVER) + screenWidth) * countDiff) / countBase), ((i * space) + y) + clipHeight, 17)
+				MyAPI.drawImage(countDiff2, mFImage, 0, (i * space) + clipHeight, image.getWidth(), clipHeight + STATE_LOGO_IN, 0, x + (((((24 - i) * STATE_OVER) + screenWidth) * countDiff) / countBase), ((i * space) + y) + clipHeight, 17)
 			Next
 		}
 		
