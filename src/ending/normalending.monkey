@@ -302,6 +302,64 @@ Class NormalEnding Extends PlainEnding ' Final
 			Self.pilotHeadID = getPilot(characterID)
 		End
 		
+		Method close:Void()
+			Animation.closeAnimationDrawer(Self.interruptDrawer)
+			Self.interruptDrawer = Null
+			
+			Animation.closeAnimationDrawer(planeDrawer)
+			planeDrawer = Null
+			
+			Animation.closeAnimationDrawer(cloudDrawer)
+			cloudDrawer = Null
+			
+			Animation.closeAnimationDrawer(planeHeadDrawer)
+			planeHeadDrawer = Null
+			
+			Animation.closeAnimationDrawerArray(birdDrawer)
+			birdDrawer = Null
+			
+			Animation.closeAnimationDrawer(needEmeraldDrawer)
+			needEmeraldDrawer = Null
+			
+			Animation.closeAnimationDrawer(skipDrawer)
+			skipDrawer = Null
+			
+			endingBackGround = Null
+			endingWordImage = Null
+			creditImage = Null
+			
+			'System.gc()
+			'Thread.sleep(100)
+		End
+		
+		Method init:Void()
+			' Empty implementation.
+		End
+		
+		Method pause:Void()
+			If (Self.state = STATE_INTERRUPT) Then
+				'Self.state = STATE_INTERRUPT
+				
+				interruptInit()
+				
+				Return
+			EndIf
+			
+			Self.interrupt_state = Self.state
+			Self.state = STATE_INTERRUPT
+			
+			If (Self.interrupt_state = STATE_NEED_EMERALD) Then
+				Self.needEmeraldCount = Self.endcount
+			EndIf
+			
+			interruptInit()
+			
+			Key.touchInterruptInit()
+			Key.touchkeyboardInit()
+			
+			SoundSystem.getInstance().stopBgm(False)
+		End
+		
 		Method logic:Void()
 			If (Self.state <> STATE_INTERRUPT) Then
 				Self.count += 1
@@ -880,56 +938,6 @@ Class NormalEnding Extends PlainEnding ' Final
 			Key.touchOpeningInit()
 			Self.endcount = 0
 			Self.isSkipPressed = False
-		End
-		
-		Public Method close:Void()
-			Animation.closeAnimationDrawer(Self.interruptDrawer)
-			Self.interruptDrawer = Null
-			Animation.closeAnimationDrawer(planeDrawer)
-			planeDrawer = Null
-			Animation.closeAnimationDrawer(cloudDrawer)
-			cloudDrawer = Null
-			Animation.closeAnimationDrawer(planeHeadDrawer)
-			planeHeadDrawer = Null
-			Animation.closeAnimationDrawerArray(birdDrawer)
-			birdDrawer = Null
-			endingBackGround = Null
-			endingWordImage = Null
-			Animation.closeAnimationDrawer(needEmeraldDrawer)
-			needEmeraldDrawer = Null
-			creditImage = Null
-			Animation.closeAnimationDrawer(skipDrawer)
-			skipDrawer = Null
-			'System.gc()
-			try {
-				Thread.sleep(100)
-			} catch (Exception e) {
-				e.printStackTrace()
-			EndIf
-		End
-		
-		Public Method init:Void()
-		End
-		
-		Public Method pause:Void()
-			
-			If (Self.state = STATE_INTERRUPT) Then
-				Self.state = STATE_INTERRUPT
-				interruptInit()
-				Return
-			EndIf
-			
-			Self.interrupt_state = Self.state
-			Self.state = STATE_INTERRUPT
-			
-			If (Self.interrupt_state = STATE_NEED_EMERALD) Then
-				Self.needEmeraldCount = Self.endcount
-			EndIf
-			
-			interruptInit()
-			Key.touchInterruptInit()
-			Key.touchkeyboardInit()
-			SoundSystem.getInstance().stopBgm(False)
 		End
 		
 		Private Method interruptInit:Void()
