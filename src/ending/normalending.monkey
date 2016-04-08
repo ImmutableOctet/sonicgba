@@ -277,7 +277,7 @@ Class NormalEnding Extends PlainEnding ' Final
 					cloudInfoArray[0][0] = (SCREEN_WIDTH * STATE_PLANE_INIT) / STATE_PLANE_INIT
 					cloudInfoArray[1][0] = (SCREEN_WIDTH * STATE_CLOUD_MOVE_RIGHT) / STATE_PLANE_INIT
 					cloudInfoArray[2][0] = (SCREEN_WIDTH * STATE_FALLING) / STATE_PLANE_INIT
-					cloudInfoArray[STATE_CLOUD_MOVE_RIGHT][0] = (SCREEN_WIDTH * 2) / STATE_PLANE_INIT
+					cloudInfoArray[3][0] = (SCREEN_WIDTH * 2) / STATE_PLANE_INIT
 					
 					Self.cloudAppearFlag = True
 					
@@ -649,8 +649,8 @@ Class NormalEnding Extends PlainEnding ' Final
 					EndIf
 					
 					If (Self.state = STATE_PLANE_JUMPING) Then
-						MyAPI.drawImage(g, endingWordImage, WORD_PARAM[0][0], WORD_PARAM[0][1], WORD_PARAM[0][2], WORD_PARAM[0][STATE_CLOUD_MOVE_RIGHT], 0, (SCREEN_WIDTH / 2), Self.word1Y, 17) ' Shr 1
-						MyAPI.drawImage(g, endingWordImage, WORD_PARAM[1][0], WORD_PARAM[1][1], WORD_PARAM[1][2], WORD_PARAM[1][STATE_CLOUD_MOVE_RIGHT], 0, (SCREEN_WIDTH / 2), Self.word2Y, 17) ' Shr 1
+						MyAPI.drawImage(g, endingWordImage, WORD_PARAM[0][0], WORD_PARAM[0][1], WORD_PARAM[0][2], WORD_PARAM[0][3], 0, (SCREEN_WIDTH / 2), Self.word1Y, 17) ' Shr 1
+						MyAPI.drawImage(g, endingWordImage, WORD_PARAM[1][0], WORD_PARAM[1][1], WORD_PARAM[1][2], WORD_PARAM[1][3], 0, (SCREEN_WIDTH / 2), Self.word2Y, 17) ' Shr 1
 						break
 					EndIf
 					
@@ -669,8 +669,8 @@ Class NormalEnding Extends PlainEnding ' Final
 					EndIf
 					
 					MyAPI.drawImage(g, Self.bigPoseImage, (Self.characterID Mod 2) * 128, (Self.characterID / 2) * 128, 128, 128, 0, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), STATE_CLOUD_MOVE_RIGHT) ' Shr 1
-					MyAPI.drawImage(g, endingWordImage, WORD_PARAM[0][0], WORD_PARAM[0][1], WORD_PARAM[0][2], WORD_PARAM[0][STATE_CLOUD_MOVE_RIGHT], 0, (SCREEN_WIDTH / 2), Self.word1Y, 17) ' Shr 1
-					MyAPI.drawImage(g, endingWordImage, WORD_PARAM[1][0], WORD_PARAM[1][1], WORD_PARAM[1][2], WORD_PARAM[1][STATE_CLOUD_MOVE_RIGHT], 0, (SCREEN_WIDTH / 2), Self.word2Y, 17) ' Shr 1
+					MyAPI.drawImage(g, endingWordImage, WORD_PARAM[0][0], WORD_PARAM[0][1], WORD_PARAM[0][2], WORD_PARAM[0][3], 0, (SCREEN_WIDTH / 2), Self.word1Y, 17) ' Shr 1
+					MyAPI.drawImage(g, endingWordImage, WORD_PARAM[1][0], WORD_PARAM[1][1], WORD_PARAM[1][2], WORD_PARAM[1][3], 0, (SCREEN_WIDTH / 2), Self.word2Y, 17) ' Shr 1
 					drawFade(g)
 					break
 				Case STATE_CREDIT
