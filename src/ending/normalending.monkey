@@ -186,6 +186,48 @@ Class NormalEnding Extends PlainEnding ' Final
 		
 		Field birdInfo:Int[][]
 	Public
+		' Functions:
+		Function fadeInitAndStart:Void(from:Int, dest:Int)
+			fadeFromValue = from
+			fadeToValue = dest
+			fadeAlpha = fadeFromValue
+			
+			preFadeAlpha = -1
+			
+			fading = True
+		End
+		
+		' This implementation will be replaced eventually. (Software)
+		Function drawFadeBase:Void(g:MFGraphics, vel2:Int)
+			fadeAlpha = MyAPI.calNextPosition(Double(fadeAlpha), Double(fadeToValue), 1, vel2, 3.0)
+			
+			If (fadeAlpha <> 0) Then
+				If (preFadeAlpha <> fadeAlpha) Then
+					For Local w:= 0 Until FADE_FILL_WIDTH
+						For Local h:= 0 Until FADE_FILL_HEIGHT
+							fadeRGB[(h * FADE_FILL_WIDTH) + w] = ((fadeAlpha Shl 24) & -16777216) | (fadeRGB[(h * FADE_FILL_HEIGHT) + w] & MapManager.END_COLOR) ' FADE_FILL_WIDTH
+						Next
+					Next
+					
+					preFadeAlpha = fadeAlpha
+				EndIf
+				
+				For Local w:= 0 Until MyAPI.zoomOut(SCREEN_WIDTH) Step FADE_FILL_WIDTH
+					For Local h:= 0 Until MyAPI.zoomOut(SCREEN_HEIGHT) Step FADE_FILL_WIDTH
+						g.drawRGB(fadeRGB, 0, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_WIDTH, True)
+					Next
+				Next
+			EndIf
+		End
+		
+		Function drawFade:Void(g:MFGraphics)
+			drawFadeBase(g, 3)
+		End
+		
+		Function fadeChangeOver:Bool()
+			Return (fadeAlpha = fadeToValue)
+		End
+		
 		' Constructor(s):
 		Method New()
 			Self.birdInfo = New Int[BIRD_NUM][]
@@ -710,7 +752,8 @@ Class NormalEnding Extends PlainEnding ' Final
 			
 			speedLightLogic(g)
 		End
-		
+	Private
+		' Methods:
 		Private Method speedLightLogic:Void(g:MFGraphics)
 			Int i = 0
 			While (i < speedLightVec.size()) {
@@ -829,47 +872,6 @@ Class NormalEnding Extends PlainEnding ' Final
 		Private Method getOffsetY:Int(degreeOffset:Int)
 			Return (Sin(Self.degree + degreeOffset) * STATE_PLANE_JUMPING) / 100
 		End
-		
-		Public Function fadeInitAndStart:Void(from:Int, to:Int)
-			fadeFromValue = from
-			fadeToValue = to
-			fadeAlpha = fadeFromValue
-			preFadeAlpha = -1
-			fading = True
-		}
-		
-		Public Function drawFadeBase:Void(g:MFGraphics, vel2:Int)
-			fadeAlpha = MyAPI.calNextPosition((double) fadeAlpha, (double) fadeToValue, STATE_FALLING, vel2, 3.0)
-			
-			If (fadeAlpha <> 0) Then
-				Int w
-				Int h
-				
-				If (preFadeAlpha <> fadeAlpha) Then
-					For (w = 0; w < FADE_FILL_WIDTH; w += 1)
-						For (h = 0; h < FADE_FILL_WIDTH; h += 1)
-							fadeRGB[(h * FADE_FILL_WIDTH) + w] = ((fadeAlpha Shl 24) & -16777216) | (fadeRGB[(h * FADE_FILL_WIDTH) + w] & MapManager.END_COLOR)
-						EndIf
-					EndIf
-					preFadeAlpha = fadeAlpha
-				EndIf
-				
-				For (w = 0; w < MyAPI.zoomOut(SCREEN_WIDTH); w += FADE_FILL_WIDTH)
-					For (h = 0; h < MyAPI.zoomOut(SCREEN_HEIGHT); h += FADE_FILL_WIDTH)
-						g.drawRGB(fadeRGB, 0, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_WIDTH, True)
-					EndIf
-				EndIf
-			EndIf
-			
-		}
-		
-		Public Function drawFade:Void(g:MFGraphics)
-			drawFadeBase(g, STATE_CLOUD_MOVE_RIGHT)
-		}
-		
-		Public Function fadeChangeOver:Bool()
-			Return fadeAlpha = fadeToValue
-		}
 		
 		Private Method creditInit:Void()
 			fadeInitAndStart(0, 0)
