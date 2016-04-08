@@ -249,8 +249,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\ending\normalending.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>26</X>
-        <Y>250</Y>
+        <X>34</X>
+        <Y>572</Y>
       </CursorPos>
       <DocGUID>ae354888-a449-4de5-8e61-095db5ac26ab</DocGUID>
       <Bookmarks />
@@ -265,7 +265,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\ending\specialending.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>22</X>
+        <X>40</X>
         <Y>120</Y>
       </CursorPos>
       <DocGUID>7d81f433-63c2-496b-ab58-9b1779cfc2b2</DocGUID>
@@ -341,12 +341,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>22</X>
-        <Y>47</Y>
+        <X>8</X>
+        <Y>38</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>b0854342-1a36-4604-8f3b-c181dc75e5e0</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -985,12 +986,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\state\state.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\state\state.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>1835</Y>
+        <X>8</X>
+        <Y>181</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>a357f0b1-b67b-4079-a849-ca3bdf693ceb</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\stringindex.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1027,7 +1029,7 @@
     <FolderStatus NodePath="Sonic_GBA\etc\SAdv" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\etc\text_manipulate" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\com" Expanded="true" />
+    <FolderStatus NodePath="Sonic_GBA\src\com" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\action" Expanded="true" />
@@ -1045,7 +1047,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\common" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\ending" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\gameengine" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\lib\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\mflib" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\platformstandard" Expanded="false" />

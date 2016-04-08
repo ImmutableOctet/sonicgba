@@ -48,12 +48,16 @@ Class NormalEnding Extends PlainEnding ' Final
 		Const CLOUD_GROUP_COUNT:Int = 3
 		
 		Const DEGREE_VELOCITY:Int = 10
-		Const EMERALD_DISPLAY_COUNT:Float = 80.0
+		
+		Const EMERALD_DISPLAY_COUNT:Int = 80
+		Const END_DISPLAY_COUNT:Int = 45
+		
 		Const ENDING_NORMAL:Int = 0
-		Const END_DISPLAY_COUNT:Float = 45.0
 		Const FADE_FILL_HEIGHT:Int = 40
 		Const FADE_FILL_WIDTH:Int = 40
+		
 		Const FALL_COUNT:Int = 60
+		
 		Const FLOAT_RANGE:Int = 10
 		
 		Const OFFSET_RANGE:Int = 12
@@ -256,173 +260,215 @@ Class NormalEnding Extends PlainEnding ' Final
 			Self.pilotHeadID = getPilot(characterID)
 		End
 		
-		Public Method logic:Void()
-			
+		Method logic:Void()
 			If (Self.state <> STATE_INTERRUPT) Then
 				Self.count += 1
 			EndIf
 			
 			degreeLogic()
-			Int i
+			
 			Select (Self.state)
-				Case 0
+				Case STATE_INIT
 					Self.characterX = (SCREEN_WIDTH / 2) ' Shr 1
 					Self.characterY = (SCREEN_HEIGHT / 2) ' Shr 1
+					
 					Self.state = STATE_FALLING
+					
 					cloudInfoArray[0][0] = (SCREEN_WIDTH * STATE_PLANE_INIT) / STATE_PLANE_INIT
-					cloudInfoArray[STATE_FALLING][0] = (SCREEN_WIDTH * STATE_CLOUD_MOVE_RIGHT) / STATE_PLANE_INIT
-					cloudInfoArray[STATE_TOUCH_DOWN][0] = (SCREEN_WIDTH * STATE_FALLING) / STATE_PLANE_INIT
-					cloudInfoArray[STATE_CLOUD_MOVE_RIGHT][0] = (SCREEN_WIDTH * STATE_TOUCH_DOWN) / STATE_PLANE_INIT
+					cloudInfoArray[1][0] = (SCREEN_WIDTH * STATE_CLOUD_MOVE_RIGHT) / STATE_PLANE_INIT
+					cloudInfoArray[2][0] = (SCREEN_WIDTH * STATE_FALLING) / STATE_PLANE_INIT
+					cloudInfoArray[STATE_CLOUD_MOVE_RIGHT][0] = (SCREEN_WIDTH * 2) / STATE_PLANE_INIT
+					
 					Self.cloudAppearFlag = True
+					
 					Self.planeX = PLANE_START_X
 					Self.planeY = PLANE_START_Y
+					
 					Self.count = 0
-					SoundSystem.getInstance().playBgm(31, False)
+					
+					SoundSystem.getInstance().playBgm(SoundSystem.BGM_ENDING_FINAL, False)
 				Case STATE_FALLING
-					Self.backGroundY = ((Self.count * BACK_GROUND_STOP_Y) / SPEED_LIGHT_VELOCITY) + 0
-					For (i = 0; i < STATE_TOUCH_DOWN; i += 1)
-						Int[] position = New Int[STATE_TOUCH_DOWN]
+					Self.backGroundY = ((Self.count * BACK_GROUND_STOP_Y) / SPEED_LIGHT_VELOCITY)
+					
+					' From what I under stand, this generates the "light lines" in the scene:
+					For Local i:= 0 Until SPEED_LIGHT_NUM_PER_FRAME
+						Local position:= New Int[2]
+						
+						' X, Y:
 						position[0] = MyRandom.nextInt(0, SCREEN_WIDTH)
-						position[STATE_FALLING] = 0 - (i * 30)
-						speedLightVec.addElement(position)
+						position[1] = 0 - (i * (-CLOUD_GROUP_START_Y)) ' 30
+						
+						speedLightVec.Push(position)
 					Next
 					
-					If (Self.count > 36) Then
+					If (Self.count > (FALL_COUNT / 2) + 6) Then ' 36
 						Self.cloudAppearFlag = False
 					EndIf
 					
-					If (Self.count >= SPEED_LIGHT_VELOCITY) Then
+					If (Self.count >= FALL_COUNT) Then
 						Self.state = STATE_TOUCH_DOWN
 					EndIf
 					
-					If (Self.count >= 58) Then
+					If (Self.count >= (FALL_COUNT-2)) Then
 						Self.planeX += PLANE_VEL_X
 					EndIf
-					
 				Case STATE_TOUCH_DOWN
 					Self.planeX += PLANE_VEL_X
 					
 					If (Self.characterDrawer.checkEnd()) Then
 						Self.planeY += PLANE_FLY_OUT_VEL_Y
-						Self.characterX = Self.planeX - STATE_PLANE_JUMPING
+						
+						Self.characterX = Self.planeX - PLAYER_OFFSET_TO_PLANE_X
 						Self.characterY = Self.planeY - PLAYER_OFFSET_TO_PLANE_Y
 					EndIf
 					
 					If (Self.planeX < PLANE_DES_X) Then
 						Self.state = STATE_CLOUD_MOVE_RIGHT
+						
 						Self.cloudGroupX = CLOUD_GROUP_START_X
 						Self.cloudGroupY = CLOUD_GROUP_START_Y
-						For (i = 0; i < cloudInfoArray.Length; i += 1)
-							cloudInfoArray[i][0] = False
-							cloudInfoArray[i][STATE_FALLING] = CLOUD_GROUP_OFFSET[i]
+						
+						For Local i:= 0 Until cloudInfoArray.Length
+							cloudInfoArray[i][0] = 0 ' False
+							cloudInfoArray[i][1] = CLOUD_GROUP_OFFSET[i]
 						Next
+						
 						Self.cloudGroupCount = 0
 					EndIf
-					
 				Case STATE_CLOUD_MOVE_RIGHT
 					Self.cloudGroupX += CLOUD_GROUP_VEL_X
 					Self.cloudGroupY += CLOUD_GROUP_VEL_Y
 					
-					If (Self.cloudGroupCount = STATE_TOUCH_DOWN) Then
-						Bool nextState = False
+					If (Self.cloudGroupCount = (CLOUD_GROUP_COUNT-1)) Then
+						Local nextState:Bool = False
 						
-						If (Self.cloudGroupY >= (SCREEN_HEIGHT * STATE_TOUCH_DOWN) / STATE_CLOUD_MOVE_RIGHT) Then
-							Self.cloudGroupY = (SCREEN_HEIGHT * STATE_TOUCH_DOWN) / STATE_CLOUD_MOVE_RIGHT
+						If (Self.cloudGroupY >= (SCREEN_HEIGHT * 2) / (CLOUD_NUM-1)) Then ' 3
+							Self.cloudGroupY = (SCREEN_HEIGHT * 2) / (CLOUD_NUM-1) ' 3
 						EndIf
 						
-						If (Self.cloudGroupX >= (SCREEN_WIDTH / 2) + STATE_PLANE_JUMPING) Then ' Shr 1
-							Self.cloudGroupX = (SCREEN_WIDTH / 2) + STATE_PLANE_JUMPING ' Shr 1
+						If (Self.cloudGroupX >= (SCREEN_WIDTH / 2) + DEGREE_VELOCITY) Then ' Shr 1
+							Self.cloudGroupX = (SCREEN_WIDTH / 2) + DEGREE_VELOCITY ' Shr 1
+							
 							nextState = True
 						EndIf
 						
 						If (nextState) Then
 							Self.state = STATE_PLANE_INIT
-							Self.planeX = Self.cloudGroupX - STATE_PLANE_JUMPING
-							Self.planeY = Self.cloudGroupY + 20
+							
+							Self.planeX = Self.cloudGroupX - DEGREE_VELOCITY
+							Self.planeY = Self.cloudGroupY + DEGREE_VELOCITY
+							
 							Self.count = 0
-							Self.playerActionID = STATE_TOUCH_DOWN
+							
+							' Magic number: 2 (Animation ID)
+							' Not sure if this is right, but it should still work.
+							Self.playerActionID = PLANE_FLY_IN_FRAME ' 2
+							
 							Return
 						EndIf
 						
-						Self.planeX = Self.cloudGroupX - STATE_PLANE_JUMPING
-						Self.planeY = Self.cloudGroupY + STATE_PLANE_JUMPING
+						Self.planeX = (Self.cloudGroupX - DEGREE_VELOCITY)
+						Self.planeY = (Self.cloudGroupY + DEGREE_VELOCITY)
 					EndIf
 					
-					If (Self.cloudGroupX > SCREEN_WIDTH And Self.cloudGroupCount <> STATE_TOUCH_DOWN) Then
+					If (Self.cloudGroupX > SCREEN_WIDTH And Self.cloudGroupCount <> (CLOUD_GROUP_COUNT-1)) Then
 						Self.cloudGroupX = CLOUD_GROUP_START_X
 						Self.cloudGroupY = CLOUD_GROUP_START_Y
+						
 						Self.cloudGroupCount += 1
 					EndIf
-					
 				Case STATE_PLANE_INIT
-					
+					' Magic number: 80
 					If (Self.count = 80) Then
-						Self.playerActionID = STATE_CLOUD_MOVE_RIGHT
+						' Magic number: 3 (Animation ID)
+						' Not sure if this is right, but it'll work for now.
+						Self.playerActionID = (PLANE_FLY_IN_FRAME+1) ' 3
+						
 						Self.state = STATE_PLANE_SMILE
+						
 						Self.count = 0
+						
 						Self.pilotSmile = True
 					EndIf
-					
 				Case STATE_PLANE_SMILE
-					
+					' Magic number: 29
 					If (Self.count = 29) Then
 						Self.state = STATE_PLANE_BIRD
+						
 						birdInit()
+						
 						Self.count = 0
 					EndIf
-					
 				Case STATE_PLANE_BIRD
-					
 					If (birdLogic() And Self.count >= 72) Then
 						Self.state = STATE_PLANE_LOOK_UP_1
-						Self.playerActionID = STATE_PLANE_SMILE
+						
+						' Magic number: 5 (Animation ID)
+						' No idea if this is right, but it works for now.
+						Self.playerActionID = (PLANE_FLY_IN_FRAME+2) ' 5
+						
 						Self.count = 0
+						
 						Self.pilotSmile = False
 					EndIf
-					
 				Case STATE_PLANE_LOOK_UP_1
-					
+					' Magic number: 64
 					If (Self.count >= 64) Then
 						Self.count = 0
+						
 						Self.state = STATE_PLANE_LOOK_UP_2
 					EndIf
-					
 				Case STATE_PLANE_LOOK_UP_2
-					
+					' Magic number: 64
 					If (Self.count >= 64) Then
-						Self.playerActionID = STATE_PLANE_BIRD
+						' Magic number: 6 (Animation ID)
+						' Again, no idea about this, but it works for now.
+						Self.playerActionID = (PLANE_FLY_IN_FRAME+3) ' 6
+						
 						Self.count = 0
+						
 						Self.state = STATE_PLANE_LAST_WAIT
 					EndIf
-					
 				Case STATE_PLANE_LAST_WAIT
-					
+					' Magic number: 16
 					If (Self.count >= 16) Then
-						Self.playerActionID = STATE_PLANE_LOOK_UP_1
+						' Magic number: 7 (Animation ID)
+						Self.playerActionID = (PLANE_FLY_IN_FRAME+4) ' 7
+						
+						' Magic numbers: {18, -18}, {-2, 2} (X, Y)
 						Self.playerVelX = 18
 						Self.playerVelY = -18
+						
 						Self.playerAccX = -2
-						Self.playerAccY = STATE_TOUCH_DOWN
-						Self.preCharacterX = Self.characterX + Self.playerVelX
-						Self.preCharacterY = Self.characterY + Self.playerVelY
+						Self.playerAccY = 2
+						
+						Self.preCharacterX = (Self.characterX + Self.playerVelX)
+						Self.preCharacterY = (Self.characterY + Self.playerVelY)
+						
 						Self.state = STATE_PLANE_JUMPING
+						
 						Self.word1Y = 0
 						Self.word2Y = 0
+						
 						Self.count = 0
+						
 						Self.playerScale = 1.0
 					EndIf
-					
 				Case STATE_PLANE_JUMPING
 					Self.playerVelX += Self.playerAccX
 					Self.playerVelY += Self.playerAccY
+					
 					Self.characterX += Self.playerVelX
 					Self.characterY += Self.playerVelY
+					
 					Self.playerScale += SCALE_VELOCITY
 					
 					If (Self.characterX < Self.preCharacterX And Self.playerVelX < 0) Then
 						Self.state = STATE_SHOW_BIG_IMAGE
+						
 						Self.characterX -= Self.playerVelX
 						Self.characterY -= Self.playerVelY
+						
 						fadeInitAndStart(0, 0)
 					EndIf
 					
@@ -432,6 +478,7 @@ Class NormalEnding Extends PlainEnding ' Final
 						Self.word1Y = WORD_DESTINY_1
 					EndIf
 					
+					' Magic number: 70
 					If (Self.count > 70) Then
 						Self.word2Y += WORD_VELOCITY
 						
@@ -439,7 +486,6 @@ Class NormalEnding Extends PlainEnding ' Final
 							Self.word2Y = WORD_DESTINY_2
 						EndIf
 					EndIf
-					
 				Case STATE_SHOW_BIG_IMAGE
 					Self.word1Y += WORD_VELOCITY
 					
@@ -447,79 +493,91 @@ Class NormalEnding Extends PlainEnding ' Final
 						Self.word1Y = WORD_DESTINY_1
 					EndIf
 					
+					' Magic numbers: 70, 16
 					If (Self.count > 70) Then
 						If (Self.word2Y <= WORD_DESTINY_2) Then
 							Self.word2Y = WORD_DESTINY_2
 						Else
 							Self.word2Y += WORD_VELOCITY
+							
 							Self.endcount = 0
 						EndIf
 						
 						If (Self.word2Y = WORD_DESTINY_2) Then
 							Self.endcount += 1
 							
-							If (((Float) Self.endcount) = END_DISPLAY_COUNT) Then
+							If (Self.endcount = END_DISPLAY_COUNT) Then
 								fadeInitAndStart(0, 255)
-							ElseIf (((Float) Self.endcount) > 61.0 And fadeChangeOver()) Then
+							ElseIf (Self.endcount > (END_DISPLAY_COUNT + 16) And fadeChangeOver()) Then ' (END_DISPLAY_COUNT + ?)
 								Self.state = STATE_CREDIT
+								
 								creditInit()
 							EndIf
 						EndIf
 					EndIf
-					
 				Case STATE_CREDIT
-					
 					If (Key.touchopeningskip.IsButtonPress() And Not Self.isSkipPressed) Then
 						Self.isSkipPressed = True
+						
 						SoundSystem.getInstance().stopBgm(False)
 						
 						If (SpecialStageState.emeraldMissed()) Then
 							fadeInitAndStart(0, 255)
+							
+							' Magic number: 30
 							Self.endcount = 30
 						Else
 							fadeInitAndStart(0, 255)
-							Self.endcount = STATE_PLANE_JUMPING
+							
+							' Magic number: 10
+							Self.endcount = 10
 						EndIf
 					EndIf
 					
-					If (Self.endcount >= STATE_PLANE_JUMPING And Self.endcount < 26) Then
+					' Magic numbers: 10, 26
+					If (Self.endcount >= 10 And Self.endcount < 26) Then
 						Self.endcount += 1
 						
 						If (Self.endcount >= 26 And fadeChangeOver()) Then
 							Standard2.splashinit(True)
-							State.setState(0)
+							
+							State.setState(STATE_TITLE)
 						EndIf
 					EndIf
 					
+					' Magic numbers: 30, 46
 					If (Self.endcount >= 30) Then
 						Self.endcount += 1
 						
 						If (Self.endcount >= 46 And fadeChangeOver()) Then
 							Self.state = STATE_NEED_EMERALD
+							
 							fadeInitAndStart(255, 0)
+							
 							Self.endcount = 0
 						EndIf
 					EndIf
-					
 				Case STATE_NEED_EMERALD
-					
 					If (fadeChangeOver()) Then
 						Self.endcount += 1
 						
-						If (((Float) Self.endcount) = EMERALD_DISPLAY_COUNT) Then
+						If (Self.endcount = EMERALD_DISPLAY_COUNT) Then
 							fadeInitAndStart(0, 255)
+							
 							Key.touchOpeningClose()
-						ElseIf (((Float) Self.endcount) > EMERALD_DISPLAY_COUNT And fadeChangeOver()) Then
+						ElseIf ((Self.endcount > EMERALD_DISPLAY_COUNT) And fadeChangeOver()) Then
 							SoundSystem.getInstance().stopBgm(False)
+							
 							Standard2.splashinit(True)
-							State.setState(0)
+							
+							State.setState(STATE_TITLE)
 						EndIf
 					EndIf
-					
 				Case STATE_INTERRUPT
 					interruptLogic()
 				Default
-			EndIf
+					' Nothing so far.
+			End Select
 		End
 		
 		Public Method draw:Void(g:MFGraphics)
@@ -537,7 +595,7 @@ Class NormalEnding Extends PlainEnding ' Final
 					For (Int i = 0; i < cloudInfoArray.Length; i += 1)
 						Int[] iArr = cloudInfoArray[i]
 						iArr[0] = iArr[0] + CLOUD_RIGHT_SPEED[i]
-						cloudDrawer.draw(g, i, cloudInfoArray[i][0] + Self.cloudGroupX, cloudInfoArray[i][STATE_FALLING] + Self.cloudGroupY, False, 0)
+						cloudDrawer.draw(g, i, cloudInfoArray[i][0] + Self.cloudGroupX, cloudInfoArray[i][1] + Self.cloudGroupY, False, 0)
 					EndIf
 					drawPlane(g)
 					Self.characterX = Self.planeX - STATE_PLANE_JUMPING
@@ -591,8 +649,8 @@ Class NormalEnding Extends PlainEnding ' Final
 					EndIf
 					
 					If (Self.state = STATE_PLANE_JUMPING) Then
-						MyAPI.drawImage(g, endingWordImage, WORD_PARAM[0][0], WORD_PARAM[0][STATE_FALLING], WORD_PARAM[0][STATE_TOUCH_DOWN], WORD_PARAM[0][STATE_CLOUD_MOVE_RIGHT], 0, (SCREEN_WIDTH / 2), Self.word1Y, 17) ' Shr 1
-						MyAPI.drawImage(g, endingWordImage, WORD_PARAM[STATE_FALLING][0], WORD_PARAM[STATE_FALLING][STATE_FALLING], WORD_PARAM[STATE_FALLING][STATE_TOUCH_DOWN], WORD_PARAM[STATE_FALLING][STATE_CLOUD_MOVE_RIGHT], 0, (SCREEN_WIDTH / 2), Self.word2Y, 17) ' Shr 1
+						MyAPI.drawImage(g, endingWordImage, WORD_PARAM[0][0], WORD_PARAM[0][1], WORD_PARAM[0][2], WORD_PARAM[0][STATE_CLOUD_MOVE_RIGHT], 0, (SCREEN_WIDTH / 2), Self.word1Y, 17) ' Shr 1
+						MyAPI.drawImage(g, endingWordImage, WORD_PARAM[1][0], WORD_PARAM[1][1], WORD_PARAM[1][2], WORD_PARAM[1][STATE_CLOUD_MOVE_RIGHT], 0, (SCREEN_WIDTH / 2), Self.word2Y, 17) ' Shr 1
 						break
 					EndIf
 					
@@ -610,16 +668,16 @@ Class NormalEnding Extends PlainEnding ' Final
 						birdDraw2(g)
 					EndIf
 					
-					MyAPI.drawImage(g, Self.bigPoseImage, (Self.characterID Mod STATE_TOUCH_DOWN) * 128, (Self.characterID / STATE_TOUCH_DOWN) * 128, 128, 128, 0, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), STATE_CLOUD_MOVE_RIGHT) ' Shr 1
-					MyAPI.drawImage(g, endingWordImage, WORD_PARAM[0][0], WORD_PARAM[0][STATE_FALLING], WORD_PARAM[0][STATE_TOUCH_DOWN], WORD_PARAM[0][STATE_CLOUD_MOVE_RIGHT], 0, (SCREEN_WIDTH / 2), Self.word1Y, 17) ' Shr 1
-					MyAPI.drawImage(g, endingWordImage, WORD_PARAM[STATE_FALLING][0], WORD_PARAM[STATE_FALLING][STATE_FALLING], WORD_PARAM[STATE_FALLING][STATE_TOUCH_DOWN], WORD_PARAM[STATE_FALLING][STATE_CLOUD_MOVE_RIGHT], 0, (SCREEN_WIDTH / 2), Self.word2Y, 17) ' Shr 1
+					MyAPI.drawImage(g, Self.bigPoseImage, (Self.characterID Mod 2) * 128, (Self.characterID / 2) * 128, 128, 128, 0, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), STATE_CLOUD_MOVE_RIGHT) ' Shr 1
+					MyAPI.drawImage(g, endingWordImage, WORD_PARAM[0][0], WORD_PARAM[0][1], WORD_PARAM[0][2], WORD_PARAM[0][STATE_CLOUD_MOVE_RIGHT], 0, (SCREEN_WIDTH / 2), Self.word1Y, 17) ' Shr 1
+					MyAPI.drawImage(g, endingWordImage, WORD_PARAM[1][0], WORD_PARAM[1][1], WORD_PARAM[1][2], WORD_PARAM[1][STATE_CLOUD_MOVE_RIGHT], 0, (SCREEN_WIDTH / 2), Self.word2Y, 17) ' Shr 1
 					drawFade(g)
 					break
 				Case STATE_CREDIT
 					g.setColor(0)
 					MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 					MyAPI.drawImage(g, creditImage, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), STATE_CLOUD_MOVE_RIGHT) ' Shr 1
-					skipDrawer.setActionId((Key.touchopeningskip.Isin() ? STATE_FALLING : 0) + 0)
+					skipDrawer.setActionId((Key.touchopeningskip.Isin() ? 1 : 0) + 0)
 					skipDrawer.draw(g, 0, SCREEN_HEIGHT)
 					drawFade(g)
 					break
@@ -647,13 +705,13 @@ Class NormalEnding Extends PlainEnding ' Final
 			Int i = 0
 			While (i < speedLightVec.size()) {
 				Int[] position = (Int[]) speedLightVec.elementAt(i)
-				position[STATE_FALLING] = position[STATE_FALLING] + SPEED_LIGHT_VELOCITY
+				position[1] = position[1] + SPEED_LIGHT_VELOCITY
 				
-				If (position[STATE_FALLING] > SCREEN_HEIGHT + speedLight.getHeight()) Then
-					speedLightVec.removeElementAt(i)
+				If (position[1] > SCREEN_HEIGHT + speedLight.getHeight()) Then
+					speedLightVec.Remove(i)
 					i -= 1
 				Else
-					MyAPI.drawImage(g, speedLight, position[0], SCREEN_HEIGHT - position[STATE_FALLING], 17)
+					MyAPI.drawImage(g, speedLight, position[0], SCREEN_HEIGHT - position[1], 17)
 				EndIf
 				
 				i += 1
@@ -663,14 +721,14 @@ Class NormalEnding Extends PlainEnding ' Final
 		Private Method cloudUpLogic:Void(g:MFGraphics)
 			For (Int i = 0; i < cloudInfoArray.Length; i += 1)
 				Int[] position = cloudInfoArray[i]
-				position[STATE_FALLING] = position[STATE_FALLING] + CLOUD_UP_SPEED[i]
+				position[1] = position[1] + CLOUD_UP_SPEED[i]
 				
-				If (position[STATE_FALLING] > SCREEN_HEIGHT + FADE_FILL_WIDTH And Self.cloudAppearFlag) Then
-					position[STATE_FALLING] = -20
+				If (position[1] > SCREEN_HEIGHT + FADE_FILL_WIDTH And Self.cloudAppearFlag) Then
+					position[1] = -20
 					position[0] = MyRandom.nextInt(0, SCREEN_WIDTH)
 				EndIf
 				
-				cloudDrawer.draw(g, i, position[0], SCREEN_HEIGHT - position[STATE_FALLING], False, 0)
+				cloudDrawer.draw(g, i, position[0], SCREEN_HEIGHT - position[1], False, 0)
 			EndIf
 		End
 		
@@ -684,7 +742,7 @@ Class NormalEnding Extends PlainEnding ' Final
 					cloudInfoArray[i][0] = ((-cloudDrawer.getCurrentFrameWidth()) / 2) - Self.cloudGroupX ' Shr 1
 				EndIf
 				
-				cloudDrawer.draw(g, i, cloudInfoArray[i][0] + Self.cloudGroupX, cloudInfoArray[i][STATE_FALLING] + Self.cloudGroupY, False, 0)
+				cloudDrawer.draw(g, i, cloudInfoArray[i][0] + Self.cloudGroupX, cloudInfoArray[i][1] + Self.cloudGroupY, False, 0)
 			EndIf
 		End
 		
@@ -717,14 +775,14 @@ Class NormalEnding Extends PlainEnding ' Final
 		Private Method birdInit:Void()
 			Int i
 			For (i = STATE_PLANE_INIT; i >= 0; i -= 1)
-				Self.birdInfo[i][STATE_FALLING] = ((Self.planeY - ((STATE_PLANE_SMILE - i) * STATE_PLANE_JUMPING)) - 30) - 20
+				Self.birdInfo[i][1] = ((Self.planeY - ((STATE_PLANE_SMILE - i) * STATE_PLANE_JUMPING)) - 30) - 20
 				Self.birdInfo[i][0] = (STATE_PLANE_SMILE - i) * STATE_PLANE_JUMPING
-				Self.birdInfo[i][STATE_TOUCH_DOWN] = MyRandom.nextInt(MDPhone.SCREEN_WIDTH)
+				Self.birdInfo[i][2] = MyRandom.nextInt(MDPhone.SCREEN_WIDTH)
 			EndIf
 			For (i = STATE_PLANE_SMILE; i < STATE_PLANE_JUMPING; i += 1)
-				Self.birdInfo[i][STATE_FALLING] = ((Self.planeY - ((STATE_PLANE_INIT - i) * STATE_INTERRUPT)) - 15) - 20
+				Self.birdInfo[i][1] = ((Self.planeY - ((STATE_PLANE_INIT - i) * STATE_INTERRUPT)) - 15) - 20
 				Self.birdInfo[i][0] = (STATE_PLANE_INIT - i) * -14
-				Self.birdInfo[i][STATE_TOUCH_DOWN] = MyRandom.nextInt(MDPhone.SCREEN_WIDTH)
+				Self.birdInfo[i][2] = MyRandom.nextInt(MDPhone.SCREEN_WIDTH)
 			EndIf
 			Self.birdX = SCREEN_WIDTH + 30
 		End
@@ -743,13 +801,13 @@ Class NormalEnding Extends PlainEnding ' Final
 		
 		Private Method birdDraw1:Void(g:MFGraphics)
 			For (Int i = 0; i < STATE_PLANE_SMILE; i += 1)
-				birdDrawer[i].draw(g, Self.birdX + Self.birdInfo[i][0], Self.birdInfo[i][STATE_FALLING] + getOffsetY(Self.birdInfo[i][STATE_TOUCH_DOWN]))
+				birdDrawer[i].draw(g, Self.birdX + Self.birdInfo[i][0], Self.birdInfo[i][1] + getOffsetY(Self.birdInfo[i][2]))
 			EndIf
 		End
 		
 		Private Method birdDraw2:Void(g:MFGraphics)
 			For (Int i = STATE_PLANE_SMILE; i < STATE_PLANE_JUMPING; i += 1)
-				birdDrawer[i].draw(g, Self.birdX + Self.birdInfo[i][0], Self.birdInfo[i][STATE_FALLING] + getOffsetY(Self.birdInfo[i][STATE_TOUCH_DOWN]))
+				birdDrawer[i].draw(g, Self.birdX + Self.birdInfo[i][0], Self.birdInfo[i][1] + getOffsetY(Self.birdInfo[i][2]))
 			EndIf
 		End
 		
@@ -898,7 +956,7 @@ Class NormalEnding Extends PlainEnding ' Final
 		End
 		
 		Private Method interruptDraw:Void(g:MFGraphics)
-			Self.interruptDrawer.setActionId((Key.touchinterruptreturn.Isin() ? STATE_FALLING : 0) + 0)
+			Self.interruptDrawer.setActionId((Key.touchinterruptreturn.Isin() ? 1 : 0) + 0)
 			Self.interruptDrawer.draw(g, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2)) ' Shr 1
 		End
 End
