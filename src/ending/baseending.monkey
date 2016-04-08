@@ -25,8 +25,17 @@ Class BaseEnding Extends State Implements SonicDef Abstract
 		' Constant variable(s):
 		Const ENDING_ANIMATION_PATH:String = "/animation/ending"
 		
+		' These may end up being moved to 'PlainEnding'.
+		Const PILOT_SONIC:Int = 0
+		Const PILOT_TAILS:Int = 2
+		
 		' States:
 		Const STATE_INIT:Int = 0
+		
+		' Functions:
+		Function getPilot:Int(characterID:Int)
+			Return PickValue((characterID = CHARACTER_SONIC), PILOT_TAILS, PILOT_SONIC)
+		End
 		
 		' Fields:
 		Field state:Int

@@ -28,9 +28,6 @@ Class SpecialEnding Extends PlainEnding
 		Const LOOP:Int = 0
 		Const NO_LOOP:Int = 1
 		
-		Const PILOT_SONIC:Int = 0
-		Const PILOT_TAILS:Int = 2
-		
 		Const PLANE_ACC_POWER:Int = 3
 		
 		Global PLANE_STABLE_Y:Int = ((SCREEN_HEIGHT / 2) + 30) ' Const
@@ -120,7 +117,8 @@ Class SpecialEnding Extends PlainEnding
 			Self.planeX = PLANE_START_X
 			Self.planeY = PLANE_STABLE_Y
 			
-			Self.pilotHeadID = PickValue((characterID = CHARACTER_SONIC), PILOT_TAILS, PILOT_SONIC)
+			' Choose who's driving the plane.
+			Self.pilotHeadID = getPilot(characterID)
 			
 			Self.isOverFromInterrupt = False
 		End

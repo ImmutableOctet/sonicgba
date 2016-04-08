@@ -242,21 +242,18 @@ Class NormalEnding Extends PlainEnding ' Final
 		End
 		
 		' Methods:
-		Public Method init:Void(type:Int, characterID:Int)
-			Int i
-			Self.characterDrawer = New Animation(New StringBuilder(ENDING_ANIMATION_PATH).append(CHARACTER_ANIMATION_NAME[characterID]).toString()).getDrawer()
-			Self.lookUpImage = MFImage.createImage(New StringBuilder(ENDING_ANIMATION_PATH).append(LOOK_UP_IMAGE_NAME[characterID]).toString())
+		Method init:Void(type:Int, characterID:Int)
+			Self.characterDrawer = New Animation(ENDING_ANIMATION_PATH + CHARACTER_ANIMATION_NAME[characterID]).getDrawer()
+			
+			Self.lookUpImage = MFImage.createImage(ENDING_ANIMATION_PATH + LOOK_UP_IMAGE_NAME[characterID])
 			Self.bigPoseImage = MFImage.createImage("/animation/ending/big_show.png")
-			Self.state = 0
+			
+			Self.state = STATE_INIT
+			
 			Self.characterID = characterID
 			
-			If (characterID = 0) Then
-				i = STATE_TOUCH_DOWN
-			Else
-				i = 0
-			EndIf
-			
-			Self.pilotHeadID = i
+			' Choose who's driving the plane.
+			Self.pilotHeadID = getPilot(characterID)
 		End
 		
 		Public Method logic:Void()

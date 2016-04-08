@@ -241,37 +241,32 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\ending\baseending.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>18</X>
-        <Y>28</Y>
+        <X>19</X>
+        <Y>35</Y>
       </CursorPos>
       <DocGUID>d448111f-57b6-4025-ad5f-ada1ea5b1e2a</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\ending\normalending.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>12</X>
-        <Y>243</Y>
+        <X>26</X>
+        <Y>250</Y>
       </CursorPos>
       <DocGUID>ae354888-a449-4de5-8e61-095db5ac26ab</DocGUID>
-      <Bookmarks>
-        <Point>
-          <X>0</X>
-          <Y>246</Y>
-        </Point>
-      </Bookmarks>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\ending\plainending.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>33</X>
-        <Y>14</Y>
+        <X>2</X>
+        <Y>21</Y>
       </CursorPos>
       <DocGUID>66eacb6a-d758-461e-a351-8bd8e3b3e842</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\ending\specialending.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>20</X>
-        <Y>95</Y>
+        <X>22</X>
+        <Y>120</Y>
       </CursorPos>
       <DocGUID>7d81f433-63c2-496b-ab58-9b1779cfc2b2</DocGUID>
       <Bookmarks />
@@ -803,8 +798,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>11</Y>
+        <X>22</X>
+        <Y>16</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -1088,7 +1083,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\title" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\tuch" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\water" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonicgba" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonicgba" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\special" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\state" Expanded="true" />
   </Folders>
