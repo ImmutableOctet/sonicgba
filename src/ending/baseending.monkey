@@ -16,6 +16,8 @@ Import state.state
 Import com.sega.mobile.framework.device.mfgraphics
 Import com.sega.mobile.framework.device.mfimage
 
+Import regal.typetool
+
 ' Classes:
 
 ' Custom/extended base-class for all "ending types".
