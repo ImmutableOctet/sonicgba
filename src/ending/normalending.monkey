@@ -61,7 +61,7 @@ Class NormalEnding Extends PlainEnding ' Final
 		Const FLOAT_RANGE:Int = 10
 		
 		Const OFFSET_RANGE:Int = 12
-		Const OFFSET_SPEED:Int = 10
+		Const OFFSET_SPEED:Int = DEGREE_VELOCITY ' 10
 		
 		Const PLANE_FLY_IN_FRAME:Int = 2
 		Const PLANE_FLY_OUT_VEL_Y:Int = -10
@@ -812,30 +812,34 @@ Class NormalEnding Extends PlainEnding ' Final
 		End
 	Private
 		' Methods:
-		Private Method speedLightLogic:Void(g:MFGraphics)
-			Int i = 0
-			While (i < speedLightVec.size()) {
-				Int[] position = (Int[]) speedLightVec.elementAt(i)
-				position[1] = position[1] + SPEED_LIGHT_VELOCITY
+		Method speedLightLogic:Void(g:MFGraphics)
+			Local i:= 0
+			
+			While (i < speedLightVec.Length)
+				Local position:= speedLightVec.Get(i)
+				position[1] += SPEED_LIGHT_VELOCITY
 				
 				If (position[1] > SCREEN_HEIGHT + speedLight.getHeight()) Then
 					speedLightVec.Remove(i)
+					
 					i -= 1
 				Else
 					MyAPI.drawImage(g, speedLight, position[0], SCREEN_HEIGHT - position[1], 17)
 				EndIf
 				
 				i += 1
-			EndIf
+			Wend
 		End
 		
-		Private Method cloudUpLogic:Void(g:MFGraphics)
-			For (Int i = 0; i < cloudInfoArray.Length; i += 1)
-				Int[] position = cloudInfoArray[i]
-				position[1] = position[1] + CLOUD_UP_SPEED[i]
+		Method cloudUpLogic:Void(g:MFGraphics)
+			For Local i:= 0 Until cloudInfoArray.Length
+				Local position:= cloudInfoArray[i]
+				
+				position[1] += CLOUD_UP_SPEED[i]
 				
 				If (position[1] > SCREEN_HEIGHT + FADE_FILL_WIDTH And Self.cloudAppearFlag) Then
-					position[1] = -20
+					position[1] = -CLOUD_GROUP_VEL_Y
+					
 					position[0] = MyRandom.nextInt(0, SCREEN_WIDTH)
 				EndIf
 				
@@ -843,140 +847,157 @@ Class NormalEnding Extends PlainEnding ' Final
 			EndIf
 		End
 		
-		Private Method cloudRightLogic:Void(g:MFGraphics)
-			For (Int i = 0; i < cloudInfoArray.Length; i += 1)
-				Int[] iArr = cloudInfoArray[i]
-				iArr[0] = iArr[0] + CLOUD_RIGHT_SPEED[i]
+		Method cloudRightLogic:Void(g:MFGraphics)
+			For Local i:= 0 Until cloudInfoArray.Length
+				Local cloud:= cloudInfoArray[i]
+				
+				cloud[0] += CLOUD_RIGHT_SPEED[i]
+				
 				cloudDrawer.setActionId(i)
 				
-				If (Self.cloudGroupX + cloudInfoArray[i][0] > SCREEN_WIDTH + cloudDrawer.getCurrentFrameWidth()) Then
-					cloudInfoArray[i][0] = ((-cloudDrawer.getCurrentFrameWidth()) / 2) - Self.cloudGroupX ' Shr 1
+				If (Self.cloudGroupX + cloud[0] > SCREEN_WIDTH + cloudDrawer.getCurrentFrameWidth()) Then
+					cloud[0] = ((-cloudDrawer.getCurrentFrameWidth()) / 2) - Self.cloudGroupX ' Shr 1
 				EndIf
 				
-				cloudDrawer.draw(g, i, cloudInfoArray[i][0] + Self.cloudGroupX, cloudInfoArray[i][1] + Self.cloudGroupY, False, 0)
-			EndIf
+				cloudDrawer.draw(g, i, cloud[0] + Self.cloudGroupX, cloud[1] + Self.cloudGroupY, False, 0)
+			Next
 		End
 		
-		Private Method drawPlane:Void(g:MFGraphics)
-			Int i
-			
+		Method drawPlane:Void(g:MFGraphics)
 			If (Self.state >= STATE_PLANE_INIT) Then
 				Self.planeOffsetY = getPlaneOffset()
 			Else
 				Self.planeOffsetY = 0
 			EndIf
 			
+			' Draw the plane.
 			planeDrawer.draw(g, Self.planeX, Self.planeY + Self.planeOffsetY)
-			AnimationDrawer animationDrawer = planeHeadDrawer
 			
-			If (Self.pilotSmile) Then
-				i = STATE_FALLING
-			Else
-				i = 0
-			EndIf
-			
-			animationDrawer.draw(g, Self.pilotHeadID + i, Self.planeX + STATE_CLOUD_MOVE_RIGHT, Self.planeOffsetY + (Self.planeY - 22), True, 0)
+			' Draw the pilot's head. (The X and Y offsets seem to just be there to position the head properly)
+			planeHeadDrawer.draw(g, Self.pilotHeadID + Int(Self.pilotSmile), Self.planeX + 3, Self.planeOffsetY + (Self.planeY - 22), True, 0)
 		End
 		
-		Private Method getPlaneOffset:Int()
-			Self.planeOffsetDegree += STATE_PLANE_JUMPING
-			Return ((Sin(Self.planeOffsetDegree) * STATE_CREDIT) / 100) + STATE_CREDIT
+		Method getPlaneOffset:Int()
+			Self.planeOffsetDegree += OFFSET_SPEED
+			
+			Return ((Sin(Self.planeOffsetDegree) * OFFSET_RANGE) / 100) + OFFSET_SPEED
 		End
 		
-		Private Method birdInit:Void()
-			Int i
-			For (i = STATE_PLANE_INIT; i >= 0; i -= 1)
-				Self.birdInfo[i][1] = ((Self.planeY - ((STATE_PLANE_SMILE - i) * STATE_PLANE_JUMPING)) - 30) - 20
-				Self.birdInfo[i][0] = (STATE_PLANE_SMILE - i) * STATE_PLANE_JUMPING
+		' This could use some work, but it should work fine.
+		Method birdInit:Void()
+			Const HALF_BIRD_NUM:= (BIRD_NUM/2) ' 5
+			Const HALF_BIRD_NUM_INDEX:= (HALF_BIRD_NUM-1) ' 4 ' ((BIRD_NUM-BIRD_OFFSET) / 2)
+			
+			' Magic numbers: 30, 20, 15, -14
+			
+			' Top half?
+			For Local i:= HALF_BIRD_NUM_INDEX To 0 Step -1 ' Until 0
+				Self.birdInfo[i][1] = ((Self.planeY - ((HALF_BIRD_NUM - i) * BIRD_SPACE_1)) - 30) - 20
+				Self.birdInfo[i][0] = (HALF_BIRD_NUM - i) * BIRD_SPACE_1 ' ((BIRD_SPACE_1 / 2) - i)
 				Self.birdInfo[i][2] = MyRandom.nextInt(MDPhone.SCREEN_WIDTH)
 			EndIf
-			For (i = STATE_PLANE_SMILE; i < STATE_PLANE_JUMPING; i += 1)
-				Self.birdInfo[i][1] = ((Self.planeY - ((STATE_PLANE_INIT - i) * STATE_INTERRUPT)) - 15) - 20
-				Self.birdInfo[i][0] = (STATE_PLANE_INIT - i) * -14
+			
+			' Bottom half?
+			For Local i:= HALF_BIRD_NUM Until BIRD_NUM
+				Self.birdInfo[i][1] = ((Self.planeY - ((HALF_BIRD_NUM_INDEX - i) * BIRD_SPACE_2)) - 15) - 20 ' (BIRD_SPACE_2 + BIRD_Y) ' 15
+				Self.birdInfo[i][0] = (HALF_BIRD_NUM_INDEX - i) * -BIRD_SPACE_2
 				Self.birdInfo[i][2] = MyRandom.nextInt(MDPhone.SCREEN_WIDTH)
-			EndIf
+			Next
+			
 			Self.birdX = SCREEN_WIDTH + 30
 		End
 		
-		Private Method birdLogic:Bool()
-			Self.birdX -= STATE_TOUCH_DOWN
+		Method birdLogic:Bool()
+			Self.birdX -= BIRD_VELOCITY
 			
-			If (Self.birdX >= (SCREEN_WIDTH / 2) + FADE_FILL_WIDTH) Then ' Shr 1
+			' Magic number: 40
+			If (Self.birdX >= (SCREEN_WIDTH / 2) + 40) Then ' Shr 1 ' FADE_FILL_WIDTH
 				Return False
 			EndIf
 			
-			Self.birdX = (SCREEN_WIDTH / 2) + FADE_FILL_WIDTH ' Shr 1
+			Self.birdX = (SCREEN_WIDTH / 2) + 40 ' Shr 1 ' FADE_FILL_WIDTH
 			
 			Return True
 		End
 		
-		Private Method birdDraw1:Void(g:MFGraphics)
-			For (Int i = 0; i < STATE_PLANE_SMILE; i += 1)
-				birdDrawer[i].draw(g, Self.birdX + Self.birdInfo[i][0], Self.birdInfo[i][1] + getOffsetY(Self.birdInfo[i][2]))
+		Method birdDraw1:Void(g:MFGraphics)
+			For Local i:= 0 Until (BIRD_NUM / 2)
+				Local bird:= Self.birdInfo[i]
+				
+				birdDrawer[i].draw(g, Self.birdX + bird[0], bird[1] + getOffsetY(bird[2]))
+			Next
+		End
+		
+		Method birdDraw2:Void(g:MFGraphics)
+			For Local i:= (BIRD_NUM / 2) Until BIRD_NUM
+				Local bird:= Self.birdInfo[i]
+				
+				birdDrawer[i].draw(g, Self.birdX + bird[0], bird[1] + getOffsetY(bird[2]))
 			EndIf
 		End
 		
-		Private Method birdDraw2:Void(g:MFGraphics)
-			For (Int i = STATE_PLANE_SMILE; i < STATE_PLANE_JUMPING; i += 1)
-				birdDrawer[i].draw(g, Self.birdX + Self.birdInfo[i][0], Self.birdInfo[i][1] + getOffsetY(Self.birdInfo[i][2]))
-			EndIf
-		End
-		
-		Private Method degreeLogic:Void()
-			Self.degree += STATE_PLANE_JUMPING
+		Method degreeLogic:Void()
+			Self.degree += DEGREE_VELOCITY
 			Self.degree Mod= MDPhone.SCREEN_WIDTH
 		End
 		
-		Private Method getOffsetY:Int(degreeOffset:Int)
-			Return (Sin(Self.degree + degreeOffset) * STATE_PLANE_JUMPING) / 100
+		Method getOffsetY:Int(degreeOffset:Int)
+			Return (Sin(Self.degree + degreeOffset) * DEGREE_VELOCITY) / 100 ' * 10
 		End
 		
-		Private Method creditInit:Void()
+		Method creditInit:Void()
 			fadeInitAndStart(0, 0)
+			
 			SoundSystem.getInstance().stopBgm(False)
-			SoundSystem.getInstance().playBgm(33)
+			SoundSystem.getInstance().playBgm(SoundSystem.BGM_CREDIT)
+			
 			Key.touchOpeningInit()
+			
 			Self.endcount = 0
 			Self.isSkipPressed = False
 		End
 		
-		Private Method interruptInit:Void()
-			
+		Method interruptInit:Void()
 			If (Self.interruptDrawer = Null) Then
 				Key.touchInterruptInit()
+				
 				Self.interruptDrawer = Animation.getInstanceFromQi("/animation/utl_res/suspend_resume.dat")[0].getDrawer(0, True, 0)
 			EndIf
-			
 		End
 		
-		Private Method interruptLogic:Void()
+		Method interruptLogic:Void()
 			State.fadeInitAndStart(0, 0)
+			
 			SoundSystem.getInstance().stopBgm(False)
 			
-			If (Key.press(STATE_TOUCH_DOWN)) Then
+			If (Key.press(Key.B_S2)) Then
+				' Nothing so far.
 			EndIf
 			
 			If (Key.press(Key.B_BACK) Or (Key.touchinterruptreturn <> Null And Key.touchinterruptreturn.IsButtonPress())) Then
-				SoundSystem.getInstance().playSe(STATE_TOUCH_DOWN)
+				SoundSystem.getInstance().playSe(SoundSystem.SE_107)
+				
 				Key.touchInterruptClose()
 				Key.touchkeyboardClose()
 				
 				If (Self.interrupt_state <= STATE_CREDIT) Then
 					Self.state = STATE_CREDIT
+					
 					creditInit()
 				ElseIf (Self.interrupt_state = STATE_NEED_EMERALD) Then
 					fadeInitAndStart(0, 0)
+					
 					Self.state = STATE_NEED_EMERALD
+					
 					Self.endcount = Self.needEmeraldCount
 				EndIf
 				
 				Key.clear()
 			EndIf
-			
 		End
 		
-		Private Method interruptDraw:Void(g:MFGraphics)
-			Self.interruptDrawer.setActionId((Key.touchinterruptreturn.Isin() ? 1 : 0) + 0)
+		Method interruptDraw:Void(g:MFGraphics)
+			Self.interruptDrawer.setActionId(Int(Key.touchinterruptreturn.Isin()))
 			Self.interruptDrawer.draw(g, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2)) ' Shr 1
 		End
 End

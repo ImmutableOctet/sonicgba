@@ -186,7 +186,7 @@ Class MFDevice Final
 			
 			If (Not interruptPauseFlag) Then
 				If (Not exitFlag) Then
-					For Local i:= preLayerImage.Length Until 0 Step -1 ' MAX_LAYER
+					For Local i:= preLayerImage.Length Until 0 Step -1 ' MAX_LAYER ' To 0
 						If (preLayerGraphics[i - 1] <> Null) Then
 							currentState.onRender(preLayerGraphics[i - 1], -i)
 						EndIf
@@ -204,7 +204,7 @@ Class MFDevice Final
 		End
 		
 		Function deviceDraw:Void(g:Graphics)
-			For Local i:= preLayerImage.Length Until 0 Step -1 ' MAX_LAYER
+			For Local i:= preLayerImage.Length Until 0 Step -1 ' MAX_LAYER ' To 0
 				If (preLayerImage[i - preLayerImage.Length] <> Null) Then
 					g.drawImage(preLayerImage[i - preLayerImage.Length], 0, 0, 0)
 				EndIf
@@ -337,7 +337,7 @@ Class MFDevice Final
 		End
 		
 		Function clearScreen:Void()
-			For Local i:= preLayerImage.Length Until 0 Step -1 ' MAX_LAYER
+			For Local i:= preLayerImage.Length Until 0 Step -1 ' MAX_LAYER ' To 0
 				Local revIndex:= (i - MAX_LAYER) ' preLayerImage.Length
 				Local img:= preLayerImage[revIndex]
 				
