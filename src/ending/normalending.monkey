@@ -580,37 +580,35 @@ Class NormalEnding Extends PlainEnding ' Final
 			End Select
 		End
 		
-		Public Method draw:Void(g:MFGraphics)
+		Method draw:Void(g:MFGraphics)
 			MyAPI.drawImage(g, endingBackGround, (SCREEN_WIDTH / 2), Self.backGroundY, 17) ' Shr 1
 			
 			Select (Self.state)
 				Case STATE_FALLING
 					Self.characterDrawer.draw(g, 0, Self.characterX, Self.characterY, True, 0)
-					break
 				Case STATE_TOUCH_DOWN
 					drawPlane(g)
+					
 					Self.characterDrawer.draw(g, STATE_FALLING, Self.characterX, Self.characterY, False, 0)
-					break
 				Case STATE_CLOUD_MOVE_RIGHT
-					For (Int i = 0; i < cloudInfoArray.Length; i += 1)
-						Int[] iArr = cloudInfoArray[i]
-						iArr[0] = iArr[0] + CLOUD_RIGHT_SPEED[i]
-						cloudDrawer.draw(g, i, cloudInfoArray[i][0] + Self.cloudGroupX, cloudInfoArray[i][1] + Self.cloudGroupY, False, 0)
-					EndIf
+					For Local i:= 0 Until cloudInfoArray.Length
+						Local cloud:= cloudInfoArray[i]
+						
+						cloud[0] += CLOUD_RIGHT_SPEED[i]
+						
+						cloudDrawer.draw(g, i, cloud[0] + Self.cloudGroupX, cloud[1] + Self.cloudGroupY, False, 0)
+					Next
+					
 					drawPlane(g)
-					Self.characterX = Self.planeX - STATE_PLANE_JUMPING
-					Self.characterY = Self.planeY - PLAYER_OFFSET_TO_PLANE_Y
-					Self.characterDrawer.draw(g, STATE_TOUCH_DOWN, Self.characterX, Self.characterY, True, 0)
-					break
-				Case STATE_PLANE_INIT
-				Case STATE_PLANE_SMILE
-				Case STATE_PLANE_BIRD
-				Case STATE_PLANE_LOOK_UP_1
-				Case STATE_PLANE_LOOK_UP_2
-				Case STATE_PLANE_LAST_WAIT
-				Case STATE_PLANE_JUMPING
+					
+					Self.characterX = (Self.planeX - PLAYER_OFFSET_TO_PLANE_X)
+					Self.characterY = (Self.planeY - PLAYER_OFFSET_TO_PLANE_Y)
+					
+					Self.characterDrawer.draw(g, 2, Self.characterX, Self.characterY, True, 0) ' (g, PLANE_FLY_IN_FRAME, ...)
+				Case STATE_PLANE_INIT, STATE_PLANE_SMILE, STATE_PLANE_BIRD, STATE_PLANE_LOOK_UP_1, STATE_PLANE_LOOK_UP_2, STATE_PLANE_LAST_WAIT, STATE_PLANE_JUMPING
 					cloudRightLogic(g)
 					
+					' Check if the birds exist yet:
 					If (Self.state >= STATE_PLANE_BIRD) Then
 						birdDraw1(g)
 					EndIf
@@ -618,15 +616,18 @@ Class NormalEnding Extends PlainEnding ' Final
 					drawPlane(g)
 					
 					If (Self.state <> STATE_PLANE_JUMPING) Then
-						Self.characterX = Self.planeX - STATE_PLANE_JUMPING
+						Self.characterX = (Self.planeX - PLAYER_OFFSET_TO_PLANE_X)
 						Self.characterY = (Self.planeY - PLAYER_OFFSET_TO_PLANE_Y) + Self.planeOffsetY
 					EndIf
 					
 					If (Self.state = STATE_PLANE_JUMPING) Then
 						g.saveCanvas()
+						
 						g.translateCanvas(Self.characterX, Self.characterY)
 						g.scaleCanvas(Self.playerScale, Self.playerScale)
+						
 						Self.characterDrawer.draw(g, Self.playerActionID, 0, 0, ANIMATION_LOOP[Self.playerActionID], 0)
+						
 						g.restoreCanvas()
 					Else
 						Self.characterDrawer.draw(g, Self.playerActionID, Self.characterX, Self.characterY, ANIMATION_LOOP[Self.playerActionID], 0)
@@ -635,9 +636,10 @@ Class NormalEnding Extends PlainEnding ' Final
 					If (Self.characterDrawer.checkEnd()) Then
 						Select (Self.playerActionID)
 							Case STATE_CLOUD_MOVE_RIGHT
-								Self.playerActionID = STATE_PLANE_INIT
-								break
-						EndIf
+								' Magic number: 4 (Animation ID)
+								' I have no idea if this is correct or not.
+								Self.playerActionID = (PLANE_FLY_IN_FRAME+1) ' 4
+						End Select
 					EndIf
 					
 					If (Self.state >= STATE_PLANE_BIRD) Then
@@ -645,16 +647,15 @@ Class NormalEnding Extends PlainEnding ' Final
 					EndIf
 					
 					If (Self.state = STATE_PLANE_LOOK_UP_1) Then
-						MyAPI.drawImage(g, Self.lookUpImage, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), STATE_CLOUD_MOVE_RIGHT) ' Shr 1
+						' Magic number: 3 (Animation ID)
+						' Again, not sure about this one.
+						MyAPI.drawImage(g, Self.lookUpImage, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), PLANE_FLY_IN_FRAME) ' 3 ' Shr 1
 					EndIf
 					
 					If (Self.state = STATE_PLANE_JUMPING) Then
 						MyAPI.drawImage(g, endingWordImage, WORD_PARAM[0][0], WORD_PARAM[0][1], WORD_PARAM[0][2], WORD_PARAM[0][3], 0, (SCREEN_WIDTH / 2), Self.word1Y, 17) ' Shr 1
 						MyAPI.drawImage(g, endingWordImage, WORD_PARAM[1][0], WORD_PARAM[1][1], WORD_PARAM[1][2], WORD_PARAM[1][3], 0, (SCREEN_WIDTH / 2), Self.word2Y, 17) ' Shr 1
-						break
 					EndIf
-					
-					break
 				Case STATE_SHOW_BIG_IMAGE
 					cloudRightLogic(g)
 					
@@ -668,32 +669,41 @@ Class NormalEnding Extends PlainEnding ' Final
 						birdDraw2(g)
 					EndIf
 					
-					MyAPI.drawImage(g, Self.bigPoseImage, (Self.characterID Mod 2) * 128, (Self.characterID / 2) * 128, 128, 128, 0, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), STATE_CLOUD_MOVE_RIGHT) ' Shr 1
+					' Magic numnber: 3
+					MyAPI.drawImage(g, Self.bigPoseImage, (Self.characterID Mod 2) * 128, (Self.characterID / 2) * 128, 128, 128, 0, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 3) ' Shr 1
+					
 					MyAPI.drawImage(g, endingWordImage, WORD_PARAM[0][0], WORD_PARAM[0][1], WORD_PARAM[0][2], WORD_PARAM[0][3], 0, (SCREEN_WIDTH / 2), Self.word1Y, 17) ' Shr 1
 					MyAPI.drawImage(g, endingWordImage, WORD_PARAM[1][0], WORD_PARAM[1][1], WORD_PARAM[1][2], WORD_PARAM[1][3], 0, (SCREEN_WIDTH / 2), Self.word2Y, 17) ' Shr 1
+					
 					drawFade(g)
-					break
 				Case STATE_CREDIT
 					g.setColor(0)
+					
 					MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
-					MyAPI.drawImage(g, creditImage, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), STATE_CLOUD_MOVE_RIGHT) ' Shr 1
-					skipDrawer.setActionId((Key.touchopeningskip.Isin() ? 1 : 0) + 0)
+					
+					' Magic number: 3
+					MyAPI.drawImage(g, creditImage, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 3) ' Shr 1
+					
+					skipDrawer.setActionId(Int(Key.touchopeningskip.Isin()))
 					skipDrawer.draw(g, 0, SCREEN_HEIGHT)
+					
 					drawFade(g)
-					break
 				Case STATE_NEED_EMERALD
 					g.setColor(0)
+					
 					MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+					
 					needEmeraldDrawer.setActionId(0)
 					needEmeraldDrawer.draw(g, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2) ' Shr 1
-					needEmeraldDrawer.setActionId(STATE_FALLING)
+					
+					needEmeraldDrawer.setActionId(1)
 					needEmeraldDrawer.draw(g, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2)) ' Shr 1
+					
 					drawFade(g)
-					break
 				Case STATE_INTERRUPT
 					interruptDraw(g)
-					break
 			EndIf
+			
 			If ((Self.state = STATE_FALLING Or Self.state = STATE_TOUCH_DOWN) And Self.backGroundY < CLOUD_APPEAR_Y) Then
 				cloudUpLogic(g)
 			EndIf
