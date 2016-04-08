@@ -274,10 +274,10 @@ Class NormalEnding Extends PlainEnding ' Final
 					
 					Self.state = STATE_FALLING
 					
-					cloudInfoArray[0][0] = (SCREEN_WIDTH * STATE_PLANE_INIT) / STATE_PLANE_INIT
-					cloudInfoArray[1][0] = (SCREEN_WIDTH * STATE_CLOUD_MOVE_RIGHT) / STATE_PLANE_INIT
-					cloudInfoArray[2][0] = (SCREEN_WIDTH * STATE_FALLING) / STATE_PLANE_INIT
-					cloudInfoArray[3][0] = (SCREEN_WIDTH * 2) / STATE_PLANE_INIT
+					cloudInfoArray[0][0] = (SCREEN_WIDTH * 4) / 4
+					cloudInfoArray[1][0] = (SCREEN_WIDTH * 3) / 4
+					cloudInfoArray[2][0] = (SCREEN_WIDTH * 1) / 4
+					cloudInfoArray[3][0] = (SCREEN_WIDTH * 2) / 4
 					
 					Self.cloudAppearFlag = True
 					
