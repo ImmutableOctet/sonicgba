@@ -353,8 +353,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>220</Y>
+        <X>63</X>
+        <Y>290</Y>
       </CursorPos>
       <DocGUID>15cecb5d-bc4c-49f9-ac92-71874cf9b00c</DocGUID>
       <Bookmarks />

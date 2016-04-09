@@ -288,7 +288,7 @@ Class MyAPI Implements Def
 			
 			Local isSpace:Bool = False
 			
-			While (endOfCurrentWord >= 0 And endOfCurrentWord < s.Length())
+			While (endOfCurrentWord >= 0 And endOfCurrentWord < s.Length)
 				endOfCurrentWord += 1
 				
 				Local nextWord:= s[currentPosition, endOfCurrentWord]
@@ -316,7 +316,7 @@ Class MyAPI Implements Def
 							If (nextWord.charAt(0) = Symbol[currentPosition]) Then
 								currentPosition = endOfCurrentWord
 								
-								If (endOfCurrentWord = s.Length()) Then
+								If (endOfCurrentWord = s.Length) Then
 									strings.addElement(answerWord)
 								EndIf
 								
@@ -334,11 +334,11 @@ Class MyAPI Implements Def
 					currentPosition -= getStringWidth(14, "<H>")
 				EndIf
 				
-				If (currentPosition >= lineLength And endOfCurrentWord < s.Length()) Then
+				If (currentPosition >= lineLength And endOfCurrentWord < s.Length) Then
 					If (ConcealEnterPosition = 0) Then
 						try {
-							strings.addElement(answerWord[0, (answerWord.Length() - 1)])
-							answerWord = answerWord[(answerWord.Length() - 1)..]
+							strings.addElement(answerWord[0, (answerWord.Length - 1)])
+							answerWord = answerWord[(answerWord.Length - 1)..]
 							startOfLine2 = endOfCurrentWord - 1
 						} catch (Exception e) {
 							SystemOut("answerWord" + answerWord)
@@ -362,7 +362,7 @@ Class MyAPI Implements Def
 					startOfLine = startOfLine2
 					
 					func = False
-				ElseIf (endOfCurrentWord = s.Length()) Then
+				ElseIf (endOfCurrentWord = s.Length) Then
 					strings.addElement(answerWord)
 				EndIf
 				
@@ -387,7 +387,7 @@ Class MyAPI Implements Def
 			Int ConcealEnterPosition = 0
 			Int startOfLine = 0
 			Bool isSpace = False
-			While (endOfCurrentWord >= 0 And endOfCurrentWord < s.Length()) {
+			While (endOfCurrentWord >= 0 And endOfCurrentWord < s.Length) {
 				endOfCurrentWord += 1
 				String nextWord = s[(currentPosition)..(endOfCurrentWord)]
 				
@@ -414,7 +414,7 @@ Class MyAPI Implements Def
 							If (nextWord.charAt(0) = Symbol[currentPosition]) Then
 								currentPosition = endOfCurrentWord
 								
-								If (endOfCurrentWord = s.Length()) Then
+								If (endOfCurrentWord = s.Length) Then
 									strings.addElement(answerWord)
 								EndIf
 								
@@ -432,11 +432,11 @@ Class MyAPI Implements Def
 					currentPosition -= getStringWidth(fontid, "<H>")
 				EndIf
 				
-				If (currentPosition >= lineLength And endOfCurrentWord < s.Length()) Then
+				If (currentPosition >= lineLength And endOfCurrentWord < s.Length) Then
 					If (ConcealEnterPosition = 0) Then
 						try {
-							strings.addElement(answerWord[(0)..(answerWord.Length() - 1))]
-							answerWord = answerWord[(answerWord.Length() - 1)..]
+							strings.addElement(answerWord[(0)..(answerWord.Length - 1))]
+							answerWord = answerWord[(answerWord.Length - 1)..]
 							startOfLine2 = endOfCurrentWord - 1
 						} catch (Exception e) {
 							SystemOut("answerWord" + answerWord)
@@ -458,7 +458,7 @@ Class MyAPI Implements Def
 					
 					startOfLine = startOfLine2
 					function = False
-				ElseIf (endOfCurrentWord = s.Length()) Then
+				ElseIf (endOfCurrentWord = s.Length) Then
 					strings.addElement(answerWord)
 				EndIf
 				
@@ -475,7 +475,7 @@ Class MyAPI Implements Def
 			Int currentPosition = 0
 			Int endOfCurrentWord = 0
 			Int startOfLine = 0
-			While (endOfCurrentWord >= 0 And endOfCurrentWord < s.Length()) {
+			While (endOfCurrentWord >= 0 And endOfCurrentWord < s.Length) {
 				endOfCurrentWord += 1
 				String nextWord = s[(currentPosition)..(endOfCurrentWord)]
 				
@@ -495,7 +495,7 @@ Class MyAPI Implements Def
 							If (nextWord.charAt(0) = Symbol[i]) Then
 								currentPosition = endOfCurrentWord
 								
-								If (endOfCurrentWord = s.Length()) Then
+								If (endOfCurrentWord = s.Length) Then
 									strings.addElement(answerWord)
 								EndIf
 								
@@ -1213,7 +1213,7 @@ Class MyAPI Implements Def
 				j = x + 2
 				k = k2
 			EndIf
-			If (re[BMF_COLOR_WHITE] <> Null And re[BMF_COLOR_WHITE].Length() > 0) Then
+			If (re[BMF_COLOR_WHITE] <> Null And re[BMF_COLOR_WHITE].Length > 0) Then
 				StringBuffer b = New StringBuffer(New String(re[BMF_COLOR_WHITE].toCharArray()))
 				Integer ascii = New Integer(b.charAt(0))
 				
