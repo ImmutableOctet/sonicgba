@@ -10,7 +10,6 @@ without making any claim to parody the original behavior in any way.
 ## TODO
 * **Finish implementing 'sonicgba'**.
 * Implement the missing portions of 'lib'.
-* Implement 'pyxanimation' / 'pyxeditor'.
 * Properly implement sound behavior.
 * Finish missing parts of 'MFLib'.
 * Implement font behavior.
@@ -21,3 +20,4 @@ without making any claim to parody the original behavior in any way.
 * **~~Implement 'platformstandard'~~**
 * **~~Implement 'ending'~~** (Ending animations, credits, etc)
 * **~~Implement 'gameengine'~~** (Input systems, etc)
+* **~~Implement 'pyxanimation' / 'pyxeditor'~~**
