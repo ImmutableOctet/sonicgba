@@ -195,7 +195,7 @@ Class Standard ' Final
 			Local ry:= 0
 			
 			Local x:= (SCREEN_W / 2) ' Shr 1
-			Local y:= (SCREEN_H / 2) - (g.charHeight() * SPLASH_ROLL) ' Shr 1
+			Local y:= (SCREEN_H / 2) - (g.charHeight() * 3) ' Shr 1
 			
 			Local charH:= g.charHeight()
 			
