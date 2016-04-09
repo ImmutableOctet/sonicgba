@@ -371,59 +371,52 @@ Class SuperSonicEnding Extends BaseEnding ' Final
 			End Select
 		End
 		
-		Public Method draw:Void(g:MFGraphics)
-			Int i
+		Method draw:Void(g:MFGraphics)
 			Select (Self.state)
-				Case STATE_INIT
-				Case STATE_PRE_INIT
-					For (i = 0; i < STATE_MOON_MOVE; i += 1)
+				Case STATE_INIT, STATE_PRE_INIT
+					For Local i:= 0 Until Self.moonImage.Length ' Self.moonOffset.Length
 						MyAPI.drawImage(g, Self.moonImage[i], (SCREEN_WIDTH / 2), Self.moonOffset[i], 17) ' Shr 1
-					EndIf
-				Case STATE_MOON_START
-				Case STATE_MOON_STAR_SHINING
-				Case STATE_MOON_MOVE
-				Case STATE_MOON_END
-					For (i = 0; i < STATE_MOON_MOVE; i += 1)
+					Next
+				Case STATE_MOON_START, STATE_MOON_STAR_SHINING, STATE_MOON_MOVE, STATE_MOON_END
+					For Local i:= 0 Until Self.moonImage.Length ' Self.moonOffset.Length
 						MyAPI.drawImage(g, Self.moonImage[i], (SCREEN_WIDTH / 2), Self.moonOffset[i], 17) ' Shr 1
-					EndIf
+					Next
+					
 					If (Self.state = STATE_MOON_STAR_SHINING) Then
 						Select (Self.starCount)
 							Case 0
-								Self.starDrawer[STATE_INIT].draw(g, (SCREEN_WIDTH / 2) + STAR_POSITION[STATE_INIT][STATE_INIT], STAR_POSITION[STATE_INIT][1]) ' Shr 1
+								Self.starDrawer[0].draw(g, (SCREEN_WIDTH / 2) + STAR_POSITION[0][0], STAR_POSITION[0][1]) ' Shr 1
 								
-								If (Self.starDrawer[STATE_INIT].checkEnd()) Then
+								If (Self.starDrawer[0].checkEnd()) Then
 									Self.starCount = 1
 								EndIf
-								
 							Case 1
-								Self.starDrawer[1].draw(g, (SCREEN_WIDTH / 2) + STAR_POSITION[1][STATE_INIT], STAR_POSITION[1][1]) ' Shr 1
-								Self.starDrawer[STATE_MOON_STAR_SHINING].draw(g, (SCREEN_WIDTH / 2) + STAR_POSITION[STATE_MOON_STAR_SHINING][STATE_INIT], STAR_POSITION[STATE_MOON_STAR_SHINING][1]) ' Shr 1
+								Self.starDrawer[1].draw(g, (SCREEN_WIDTH / 2) + STAR_POSITION[1][0], STAR_POSITION[1][1]) ' Shr 1
+								Self.starDrawer[2].draw(g, (SCREEN_WIDTH / 2) + STAR_POSITION[2][0], STAR_POSITION[2][1]) ' Shr 1
 								
 								If (Self.starDrawer[1].checkEnd()) Then
 									Self.starCount = 2
 								EndIf
-								
 							Case 2
-								Self.starDrawer[3].draw(g, (SCREEN_WIDTH / 2) + STAR_POSITION[3][STATE_INIT], STAR_POSITION[3][1]) ' Shr 1
+								Self.starDrawer[3].draw(g, (SCREEN_WIDTH / 2) + STAR_POSITION[3][0], STAR_POSITION[3][1]) ' Shr 1
 								
 								If (Self.starDrawer[3].checkEndTrigger()) Then
 									Self.count = 0
 								EndIf
-								
 							Default
-						EndIf
+								' Nothing so far.
+						End Select
 					EndIf
-					
 				Case STATE_AFTER_THAT
-					g.setColor(STATE_INIT)
-					MyAPI.fillRect(g, STATE_INIT, STATE_INIT, SCREEN_WIDTH, SCREEN_HEIGHT)
-					MyAPI.drawImage(g, Self.daysLaterImage, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), STATE_MOON_MOVE) ' Shr 1
-				Case STATE_TAILS_FLYING
-				Case STATE_TAILS_SEARCHING
-				Case STATE_TAILS_FIND
-				Case STATE_TAILS_PULL_DOWN
+					g.setColor(0)
+					
+					MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+					MyAPI.drawImage(g, Self.daysLaterImage, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 3) ' Shr 1
+				Case STATE_TAILS_FLYING, STATE_TAILS_SEARCHING, STATE_TAILS_FIND, STATE_TAILS_PULL_DOWN
 					drawBG(g)
-					Self.SuperSonicShiningDrawer.draw(g, Self.shiningX Shr STATE_MOON_STAR_SHINING, Self.shiningY Shr STATE_MOON_STAR_SHINING)
+					
+					Self.SuperSonicShiningDrawer.draw(g, (Self.shiningX Shr 2), (Self.shiningY Shr 2))
+					
 					cloudLogic()
 					cloudDraw(g)
 					drawPlane(g)
@@ -433,42 +426,45 @@ Class SuperSonicEnding Extends BaseEnding ' Final
 					cloudDraw(g)
 					drawCatchPlane(g)
 				Case STATE_CATCH
-					g.setColor(STATE_INIT)
-					MyAPI.fillRect(g, STATE_INIT, STATE_INIT, SCREEN_WIDTH, SCREEN_HEIGHT)
-					MyAPI.drawImage(g, Self.catchImage[Self.catchID], (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), STATE_MOON_MOVE) ' Shr 1
+					g.setColor(0)
+					
+					MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+					MyAPI.drawImage(g, Self.catchImage[Self.catchID], (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 3) ' Shr 1
 				Case STATE_CHANGING_FACE
-					g.setColor(STATE_INIT)
-					MyAPI.fillRect(g, STATE_INIT, STATE_INIT, SCREEN_WIDTH, SCREEN_HEIGHT)
+					g.setColor(0)
+					
+					MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+					
 					Self.faceChangeDrawer.draw(g, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2)) ' Shr 1
 					
 					If (Self.faceChangeDrawer.checkEnd()) Then
 						Self.faceChangeDrawer.setActionId(1)
 					EndIf
-					
 				Case STATE_CONGRATULATION
-					g.setColor(STATE_INIT)
-					MyAPI.fillRect(g, STATE_INIT, STATE_INIT, SCREEN_WIDTH, SCREEN_HEIGHT)
+					g.setColor(0)
+					
+					MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+					
 					Self.faceChangeDrawer.draw(g, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2)) ' Shr 1
-					MyAPI.drawImage(g, Self.endingWordImage, WORD_PARAM[STATE_INIT][STATE_INIT], WORD_PARAM[STATE_INIT][1], WORD_PARAM[STATE_INIT][STATE_MOON_STAR_SHINING], WORD_PARAM[STATE_INIT][3], STATE_INIT, (SCREEN_WIDTH / 2), Self.congratulationY, 17) ' Shr 1
-					MyAPI.drawImage(g, Self.endingWordImage, WORD_PARAM[1][STATE_INIT], WORD_PARAM[1][1], WORD_PARAM[1][STATE_MOON_STAR_SHINING], WORD_PARAM[1][3], STATE_INIT, (SCREEN_WIDTH / 2), Self.thankY, 17) ' Shr 1
+					
+					MyAPI.drawImage(g, Self.endingWordImage, WORD_PARAM[0][0], WORD_PARAM[0][1], WORD_PARAM[0][2], WORD_PARAM[0][3], 0, (SCREEN_WIDTH / 2), Self.congratulationY, 17) ' Shr 1
+					MyAPI.drawImage(g, Self.endingWordImage, WORD_PARAM[1][0], WORD_PARAM[1][1], WORD_PARAM[1][2], WORD_PARAM[1][3], 0, (SCREEN_WIDTH / 2), Self.thankY, 17) ' Shr 1
 				Case STATE_CREDIT
-					Int i2
-					g.setColor(STATE_INIT)
-					MyAPI.fillRect(g, STATE_INIT, STATE_INIT, SCREEN_WIDTH, SCREEN_HEIGHT)
-					MyAPI.drawImage(g, creditImage, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), STATE_MOON_MOVE) ' Shr 1
-					AnimationDrawer animationDrawer = skipDrawer
+					g.setColor(0)
 					
-					If (Key.touchopeningskip.Isin()) Then
-						i2 = 1
-					Else
-						i2 = 0
-					EndIf
+					MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 					
-					animationDrawer.setActionId(i2)
-					skipDrawer.draw(g, STATE_INIT, SCREEN_HEIGHT)
+					MyAPI.drawImage(g, creditImage, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2), 3) ' Shr 1
+					
+					Local animationDrawer:= skipDrawer
+					
+					animationDrawer.setActionId(Int(Key.touchopeningskip.Isin()))
+					
+					animationDrawer.draw(g, 0, SCREEN_HEIGHT)
 				Case STATE_INTERRUPT
 					interruptDraw(g)
 				Default
+					' Nothing so far.
 			End Select
 		End
 		
@@ -498,7 +494,7 @@ Class SuperSonicEnding Extends BaseEnding ' Final
 			g.translateCanvas(Self.planeX, Self.planeY)
 			g.scaleCanvas((Float) Self.planeScale, (Float) Self.planeScale)
 			g.rotateCanvas((Float) Self.planeDegree)
-			Self.planeDrawer.draw(g, 1, STATE_INIT, STATE_INIT, True, 0)
+			Self.planeDrawer.draw(g, 1, 0, 0, True, 0)
 			g.restoreCanvas()
 		End
 		
@@ -510,19 +506,19 @@ Class SuperSonicEnding Extends BaseEnding ' Final
 			
 			For (Int i = 0; i < STATE_TAILS_CATCH_UP; i += 1)
 				
-				If (Self.cloudInfo[i][STATE_INIT] <> 0) Then
+				If (Self.cloudInfo[i][0] <> 0) Then
 					Int[] iArr = Self.cloudInfo[i]
-					iArr[1] = iArr[1] + CLOUD_VELOCITY[Self.cloudInfo[i][STATE_INIT] - 1]
+					iArr[1] = iArr[1] + CLOUD_VELOCITY[Self.cloudInfo[i][0] - 1]
 					
 					If (Self.cloudInfo[i][1] >= SCREEN_WIDTH + 75) Then
-						Self.cloudInfo[i][STATE_INIT] = 0
+						Self.cloudInfo[i][0] = 0
 					EndIf
 				EndIf
 				
-				If (Self.cloudInfo[i][STATE_INIT] = 0 And Self.cloudCount = 0) Then
-					Self.cloudInfo[i][STATE_INIT] = MyRandom.nextInt(1, STATE_MOON_MOVE)
+				If (Self.cloudInfo[i][0] = 0 And Self.cloudCount = 0) Then
+					Self.cloudInfo[i][0] = MyRandom.nextInt(1, 3)
 					Self.cloudInfo[i][1] = -60
-					Self.cloudInfo[i][STATE_MOON_STAR_SHINING] = MyRandom.nextInt(20, SCREEN_HEIGHT - 40)
+					Self.cloudInfo[i][2] = MyRandom.nextInt(20, SCREEN_HEIGHT - 40)
 					Self.cloudCount = MyRandom.nextInt(STATE_TAILS_FIND, 20)
 				EndIf
 			EndIf
@@ -531,15 +527,15 @@ Class SuperSonicEnding Extends BaseEnding ' Final
 		Private Method cloudDraw:Void(g:MFGraphics)
 			For (Int i = 0; i < STATE_TAILS_CATCH_UP; i += 1)
 				
-				If (Self.cloudInfo[i][STATE_INIT] <> 0) Then
-					Self.cloudDrawer.setActionId(Self.cloudInfo[i][STATE_INIT] - 1)
-					Self.cloudDrawer.draw(g, Self.cloudInfo[i][1], Self.cloudInfo[i][STATE_MOON_STAR_SHINING])
+				If (Self.cloudInfo[i][0] <> 0) Then
+					Self.cloudDrawer.setActionId(Self.cloudInfo[i][0] - 1)
+					Self.cloudDrawer.draw(g, Self.cloudInfo[i][1], Self.cloudInfo[i][2])
 				EndIf
 			EndIf
 		End
 		
 		Private Method drawBG:Void(g:MFGraphics)
-			MyAPI.drawImage(g, Self.endingBgImage, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - PLANE_CATCH_UP_FRAME, STATE_MOON_MOVE) ' Shr 1
+			MyAPI.drawImage(g, Self.endingBgImage, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - PLANE_CATCH_UP_FRAME, 3) ' Shr 1
 		End
 		
 		Public Method close:Void()
@@ -620,7 +616,7 @@ Class SuperSonicEnding Extends BaseEnding ' Final
 		Private Method interruptInit:Void()
 			
 			If (Self.interruptDrawer = Null) Then
-				Self.interruptDrawer = Animation.getInstanceFromQi("/animation/utl_res/suspend_resume.dat")[STATE_INIT].getDrawer(0, True, 0)
+				Self.interruptDrawer = Animation.getInstanceFromQi("/animation/utl_res/suspend_resume.dat")[0].getDrawer(0, True, 0)
 			EndIf
 			
 		End
