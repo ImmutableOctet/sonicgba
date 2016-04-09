@@ -234,9 +234,9 @@ Class GimmickObject Extends GameObject
 			y Shl= 6
 			
 			Select (id)
-				Case TitleState.STAGE_SELECT_KEY_RECORD_1
+				Case GIMMICK_GOAL
 					reElement = New Terminal(id, x, y, left, top, width, height)
-				Case TitleState.STAGE_SELECT_KEY_RECORD_2, TitleState.STAGE_SELECT_KEY_DIRECT_PLAY, SpecialObject.Z_ZOOM, TitleState.CHARACTER_RECORD_BG_SPEED, SSDef.SSOBJ_BNRU_ID, SSDef.SSOBJ_BNLD_ID
+				Case GIMMICK_HARI_UP, GIMMICK_HARI_DOWN, GIMMICK_HARI_LEFT, TitleState.CHARACTER_RECORD_BG_SPEED, SSDef.SSOBJ_BNRU_ID, SSDef.SSOBJ_BNLD_ID
 					reElement = New Hari(id, x, y, left, top, width, height)
 				Case SSDef.SSOBJ_BNRD_ID
 					reElement = New Marker(id, x, y, left, top, width, height)

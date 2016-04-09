@@ -41,7 +41,7 @@ Class EndingState Extends State
 					PlayerObject.resetGameParam()
 					
 					Self.SuperSonicEndingInstance = New SuperSonicEnding()
-				Case TitleState.STAGE_SELECT_KEY_DIRECT_PLAY
+				Case 2
 					Self.specialEndingInstance = New SpecialEnding(3, 5)
 				Default
 					' Nothing so far.
@@ -59,7 +59,7 @@ Class EndingState Extends State
 					Self.normalEndingInstance.draw(g)
 				Case TitleState.STAGE_SELECT_KEY_RECORD_2
 					Self.SuperSonicEndingInstance.draw(g)
-				Case TitleState.STAGE_SELECT_KEY_DIRECT_PLAY
+				Case 2
 					Self.specialEndingInstance.draw(g)
 				Default
 					' Nothing so far.
@@ -76,7 +76,7 @@ Class EndingState Extends State
 					Self.normalEndingInstance.logic()
 				Case TitleState.STAGE_SELECT_KEY_RECORD_2
 					Self.SuperSonicEndingInstance.logic()
-				Case TitleState.STAGE_SELECT_KEY_DIRECT_PLAY
+				Case 2
 					Self.specialEndingInstance.logic()
 				Default
 					' Nothing so far.
@@ -89,7 +89,7 @@ Class EndingState Extends State
 					Self.normalEndingInstance.pause()
 				Case TitleState.STAGE_SELECT_KEY_RECORD_2
 					Self.SuperSonicEndingInstance.pause()
-				Case TitleState.STAGE_SELECT_KEY_DIRECT_PLAY
+				Case 2
 					Self.specialEndingInstance.pause()
 				Default
 					' Nothing so far.

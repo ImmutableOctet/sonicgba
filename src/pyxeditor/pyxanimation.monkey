@@ -23,7 +23,7 @@ Public
 Class PyxAnimation
 	Public
 		' Constant variable(s):
-		Public Const ZOOM:Int = 6
+		Const ZOOM:Int = 6
 	Private
 		' Global variable(s):
 		Global pauseFlag:Bool = False

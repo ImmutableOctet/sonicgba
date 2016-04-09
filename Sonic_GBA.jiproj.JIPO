@@ -169,13 +169,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>2</X>
         <Y>498</Y>
       </CursorPos>
-      <DocGUID>22abda07-4bb7-496c-83f2-1eadf6811dcc</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgamepad.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -317,6 +316,14 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\lib\animationdrawer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>5</X>
+        <Y>131</Y>
+      </CursorPos>
+      <DocGUID>b592c66a-e4c9-4990-94cf-36c67904b47d</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationframe.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>1</X>
@@ -331,12 +338,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\constutil.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\lib\constutil.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>18</X>
-        <Y>31</Y>
+        <X>15</X>
+        <Y>40</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>9d2f24cc-5dc0-43fc-86b9-c0852983e76f</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\def.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -387,13 +395,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\pyxeditor\pyxanimation.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\pyxeditor\pyxanimation.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>18</X>
-        <Y>22</Y>
+        <X>2</X>
+        <Y>25</Y>
       </CursorPos>
-      <DocGUID>eb0ac2af-e29d-4fe9-ab42-ab2a1156f134</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\antigravity.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -605,12 +612,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>62</X>
+        <Y>238</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>da74a7e9-42c0-45d7-bad4-02bea58220c2</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\globalresource.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -668,10 +676,10 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\movecalculator.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\movecalculator.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>33</X>
+        <Y>82</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -899,12 +907,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\special\specialobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\special\specialobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>22</X>
-        <Y>15</Y>
+        <X>9</X>
+        <Y>40</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>eebd4602-1c00-4abb-bf18-d3358f7af85f</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\specialplayer.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -1025,12 +1034,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>9</X>
+        <Y>239</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>88def278-b9d9-4c0e-a2a7-fa23661dd48d</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\application.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1053,7 +1063,7 @@
     <FolderStatus NodePath="Sonic_GBA\etc\SAdv" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\etc\text_manipulate" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\com" Expanded="true" />
+    <FolderStatus NodePath="Sonic_GBA\src\com" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\action" Expanded="false" />
@@ -1062,7 +1072,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\lib" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mflib" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mflib\__test" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile" Expanded="true" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\define" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\__test" Expanded="false" />
@@ -1071,11 +1081,11 @@
     <FolderStatus NodePath="Sonic_GBA\src\common" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\ending" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\gameengine" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\lib\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\mflib" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\platformstandard" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\pyxeditor" Expanded="true" />
+    <FolderStatus NodePath="Sonic_GBA\src\pyxeditor" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\animation" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\animation\ending" Expanded="false" />
@@ -1110,7 +1120,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\title" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\tuch" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\water" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonicgba" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonicgba" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\special" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\state" Expanded="true" />
   </Folders>
