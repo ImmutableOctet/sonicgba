@@ -136,6 +136,80 @@ Class SuperSonicEnding Extends BaseEnding ' Final
 		End
 		
 		' Methods:
+		Method close:Void()
+			Animation.closeAnimationDrawer(Self.interruptDrawer)
+			Self.interruptDrawer = Null
+			
+			If (Self.moonImage <> Null) Then
+				For Local i:= 0 Until Self.moonImage.Length
+					Self.moonImage[i] = Null
+				Next
+			EndIf
+			
+			Self.moonImage = Null
+			
+			If (Self.catchImage <> Null) Then
+				For Local i:= 0 Until Self.catchImage.Length
+					Self.catchImage[i] = Null
+				Next
+			EndIf
+			
+			Self.catchImage = Null
+			Self.daysLaterImage = Null
+			Self.endingWordImage = Null
+			Self.endingBgImage = Null
+			
+			Animation.closeAnimationDrawer(Self.planeDrawer)
+			Self.planeDrawer = Null
+			
+			Animation.closeAnimationDrawer(Self.planeHeadDrawer)
+			Self.planeHeadDrawer = Null
+			
+			Animation.closeAnimationDrawer(Self.cloudDrawer)
+			Self.cloudDrawer = Null
+			
+			Animation.closeAnimationDrawer(Self.SuperSonicShiningDrawer)
+			Self.SuperSonicShiningDrawer = Null
+			
+			Animation.closeAnimationDrawer(Self.faceChangeDrawer)
+			Self.faceChangeDrawer = Null
+			
+			Animation.closeAnimationDrawerArray(Self.starDrawer)
+			Self.starDrawer = Null
+			
+			creditImage = Null
+			
+			Animation.closeAnimationDrawer(skipDrawer)
+			skipDrawer = Null
+			
+			'System.gc()
+			'Thread.sleep(100)
+		End
+		
+		Method init:Void()
+			' Nothing so far.
+		End
+		
+		Method pause:Void()
+			If (Self.state = STATE_INTERRUPT) Then
+				Self.state = STATE_INTERRUPT
+				
+				interruptInit()
+				
+				Return
+			EndIf
+			
+			Self.interrupt_state = Self.state
+			Self.state = STATE_INTERRUPT
+			
+			interruptInit()
+			
+			Key.touchInterruptInit()
+			Key.touchkeyboardInit()
+			
+			SoundSystem.getInstance().stopBgm(False)
+		End
+		
 		Method logic:Void()
 			If (Self.state <> STATE_INTERRUPT) Then
 				Self.count += 1
@@ -468,8 +542,8 @@ Class SuperSonicEnding Extends BaseEnding ' Final
 			End Select
 		End
 		
-		Public Method isOver:Bool()
-			Return Self.state = STATE_CONGRATULATION And Self.count > BGM_ENDING_COUNT
+		Method isOver:Bool()
+			Return (Self.state = STATE_CONGRATULATION And Self.count > BGM_ENDING_COUNT)
 		End
 		
 		Private Method drawPlane:Void(g:MFGraphics)
@@ -481,7 +555,7 @@ Class SuperSonicEnding Extends BaseEnding ' Final
 			EndIf
 			
 			Self.planeDrawer.draw(g, Self.planeX, Self.planeY + Self.planeOffsetY)
-			Self.planeHeadDrawer.draw(g, Self.pilotHeadID, Self.planeX + STATE_MOON_MOVE, Self.planeOffsetY + (Self.planeY - 22), True, 0)
+			Self.planeHeadDrawer.draw(g, Self.pilotHeadID, Self.planeX + 3, Self.planeOffsetY + (Self.planeY - 22), True, 0)
 		End
 		
 		Private Method getPlaneOffset:Int()
@@ -536,71 +610,6 @@ Class SuperSonicEnding Extends BaseEnding ' Final
 		
 		Private Method drawBG:Void(g:MFGraphics)
 			MyAPI.drawImage(g, Self.endingBgImage, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - PLANE_CATCH_UP_FRAME, 3) ' Shr 1
-		End
-		
-		Public Method close:Void()
-			Int i
-			Animation.closeAnimationDrawer(Self.interruptDrawer)
-			Self.interruptDrawer = Null
-			
-			If (Self.moonImage <> Null) Then
-				For (i = 0; i < Self.moonImage.Length; i += 1)
-					Self.moonImage[i] = Null
-				EndIf
-			EndIf
-			
-			Self.moonImage = Null
-			
-			If (Self.catchImage <> Null) Then
-				For (i = 0; i < Self.catchImage.Length; i += 1)
-					Self.catchImage[i] = Null
-				EndIf
-			EndIf
-			
-			Self.catchImage = Null
-			Self.daysLaterImage = Null
-			Self.endingWordImage = Null
-			Animation.closeAnimationDrawer(Self.planeDrawer)
-			Self.planeDrawer = Null
-			Animation.closeAnimationDrawer(Self.planeHeadDrawer)
-			Self.planeHeadDrawer = Null
-			Animation.closeAnimationDrawer(Self.cloudDrawer)
-			Self.cloudDrawer = Null
-			Self.endingBgImage = Null
-			Animation.closeAnimationDrawer(Self.SuperSonicShiningDrawer)
-			Self.SuperSonicShiningDrawer = Null
-			Animation.closeAnimationDrawer(Self.faceChangeDrawer)
-			Self.faceChangeDrawer = Null
-			creditImage = Null
-			Animation.closeAnimationDrawer(skipDrawer)
-			skipDrawer = Null
-			Animation.closeAnimationDrawerArray(Self.starDrawer)
-			Self.starDrawer = Null
-			'System.gc()
-			try {
-				Thread.sleep(100)
-			} catch (Exception e) {
-				e.printStackTrace()
-			EndIf
-		End
-		
-		Public Method init:Void()
-		End
-		
-		Public Method pause:Void()
-			
-			If (Self.state = STATE_INTERRUPT) Then
-				Self.state = STATE_INTERRUPT
-				interruptInit()
-				Return
-			EndIf
-			
-			Self.interrupt_state = Self.state
-			Self.state = STATE_INTERRUPT
-			interruptInit()
-			Key.touchInterruptInit()
-			Key.touchkeyboardInit()
-			SoundSystem.getInstance().stopBgm(False)
 		End
 		
 		Private Method creditInit:Void()
