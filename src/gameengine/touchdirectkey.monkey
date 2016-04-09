@@ -24,11 +24,11 @@ Class TouchDirectKey Implements MFComponent
 		' Global variable(s):
 		Global B_NONE:Int = 1073741824
 		
-		Global IsDragged:Bool
-		Global IsPressed:Bool
-		Global IsReleased:Bool
-		Global PressedX:Int
-		Global PressedY:Int
+		Global IsDragged:Bool = False
+		Global IsPressed:Bool = False
+		Global IsReleased:Bool = False
+		Global PressedX:Int = 0
+		Global PressedY:Int = 0
 		Global posID:Int = -1
 		Global type:Int = -1
 		
