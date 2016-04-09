@@ -199,7 +199,7 @@ Class Standard ' Final
 			
 			Local charH:= g.charHeight()
 			
-			While (content.indexOf("|") <> -1) {
+			While (content.indexOf("|") <> -1)
 				Local showStr:String
 				
 				Local i:= content.indexOf("|")
@@ -215,7 +215,7 @@ Class Standard ' Final
 				g.drawString(showStr, x, (charH * ry) + y, SOFT_KEY_HEIGHT)
 				
 				ry += 1
-			EndIf
+			Wend
 			
 			g.drawString(content, x, (charH * ry) + y, SOFT_KEY_HEIGHT)
 		End
