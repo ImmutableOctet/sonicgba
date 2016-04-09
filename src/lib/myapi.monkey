@@ -125,8 +125,8 @@ Class MyAPI Implements Def
 		Function getStringToDraw:String(str:String)
 			Local stringToDraw:String = ""
 			
-			Local startPos:= str.indexOf("<")
-			Local endPos:= str.indexOf(">")
+			Local startPos:= str.Find("<")
+			Local endPos:= str.Find(">")
 			
 			If (startPos = -1 Or endPos = -1) Then
 				Return str
@@ -217,54 +217,56 @@ Class MyAPI Implements Def
 			borderColor = color
 		End
 		
-		Function drawSelectBox:Void(g2:MFGraphics, selector:Object[], x:Int, y:Int, w:Int, maxLine:Int, cursol:Int)
-			fillRectBold(g2, x, y, w, (LINE_SPACE * maxLine))
-			
-			If (selector.Length = 0) Then
-				g2.drawString("No options.", x + (w / 2), y + ((LINE_SPACE * maxLine) / 2), 17) ' "~u65e0~u53ef~u9009~u9879"
-			ElseIf (selector.Length <= maxLine) Then
-				For Local w:= 0 Until selector.Length
-					If (cursol = w) Then
-						g2.setColor(16711680)
-					Else
-						g2.setColor(16777215)
-					EndIf
-					
-					g2.drawString(selector[w].toString(), x + 8, (LINE_SPACE * w) + y, 20)
-				Next
-			Else
-				Local scrollBarHeight:= (((LINE_SPACE * maxLine) * maxLine) / selector.Length)
+		#Rem
+			Function drawSelectBox:Void(g2:MFGraphics, selector:Object[], x:Int, y:Int, w:Int, maxLine:Int, cursol:Int)
+				fillRectBold(g2, x, y, w, (LINE_SPACE * maxLine))
 				
-				Local startFrom:Int
-				
-				If (cursol < maxLine / 2) Then
-					startFrom = 0
-				ElseIf (((maxLine / 2) + cursol) < selector.Length) Then
-					startFrom = (cursol - (maxLine / 2))
+				If (selector.Length = 0) Then
+					g2.drawString("No options.", x + (w / 2), y + ((LINE_SPACE * maxLine) / 2), 17) ' "~u65e0~u53ef~u9009~u9879"
+				ElseIf (selector.Length <= maxLine) Then
+					For Local w:= 0 Until selector.Length
+						If (cursol = w) Then
+							g2.setColor(16711680)
+						Else
+							g2.setColor(16777215)
+						EndIf
+						
+						g2.drawString(selector[w].ToString(), x + 8, (LINE_SPACE * w) + y, 20)
+					Next
 				Else
-					startFrom = (selector.Length - maxLine)
-				EndIf
-				
-				For Local i:= 0 Until maxLine
-					If (cursol = (i + startFrom)) Then
-						g2.setColor(16711680)
+					Local scrollBarHeight:= (((LINE_SPACE * maxLine) * maxLine) / selector.Length)
+					
+					Local startFrom:Int
+					
+					If (cursol < maxLine / 2) Then
+						startFrom = 0
+					ElseIf (((maxLine / 2) + cursol) < selector.Length) Then
+						startFrom = (cursol - (maxLine / 2))
 					Else
-						g2.setColor(16777215)
+						startFrom = (selector.Length - maxLine)
 					EndIf
 					
-					g2.drawString(selector[i + startFrom].toString(), x + 8, (LINE_SPACE * i) + y, 20)
-				Next
-				
-				g2.setColor(16777215)
-				g2.fillRect(w - 8, y, 8, LINE_SPACE * maxLine)
-				
-				g2.setColor(8421504)
-				g2.fillRect(w - FIXED_TWO_BASE, (((LINE_SPACE * maxLine) * startFrom) / selector.Length) + y, 6, scrollBarHeight)
-				
-				g2.setColor(16777215)
-				g2.drawRect(w - 8, y, FIXED_TWO_BASE, (LINE_SPACE * maxLine) - 1)
-			EndIf
-		End
+					For Local i:= 0 Until maxLine
+						If (cursol = (i + startFrom)) Then
+							g2.setColor(16711680)
+						Else
+							g2.setColor(16777215)
+						EndIf
+						
+						g2.drawString(selector[i + startFrom].toString(), x + 8, (LINE_SPACE * i) + y, 20)
+					Next
+					
+					g2.setColor(16777215)
+					g2.fillRect(w - 8, y, 8, LINE_SPACE * maxLine)
+					
+					g2.setColor(8421504)
+					g2.fillRect(w - FIXED_TWO_BASE, (((LINE_SPACE * maxLine) * startFrom) / selector.Length) + y, 6, scrollBarHeight)
+					
+					g2.setColor(16777215)
+					g2.drawRect(w - 8, y, FIXED_TWO_BASE, (LINE_SPACE * maxLine) - 1)
+				EndIf
+			End
+		#End
 		
 		Function getStrings:String[](s:String, lineLength:Int)
 			lineLength = zoomOut(lineLength)
@@ -434,7 +436,7 @@ Class MyAPI Implements Def
 					If (ConcealEnterPosition = 0) Then
 						try {
 							strings.addElement(answerWord[(0)..(answerWord.Length() - 1))]
-							answerWord = answerWord.substring(answerWord.Length() - 1)
+							answerWord = answerWord[(answerWord.Length() - 1)..]
 							startOfLine2 = endOfCurrentWord - 1
 						} catch (Exception e) {
 							SystemOut("answerWord" + answerWord)
@@ -443,7 +445,7 @@ Class MyAPI Implements Def
 					Else
 						try {
 							strings.addElement(answerWord[(0)..(ConcealEnterPosition))]
-							answerWord = answerWord.substring((isSpace ? 1 : 0) + ConcealEnterPosition)
+							answerWord = answerWord[((isSpace ? 1 : 0) + ConcealEnterPosition)..]
 							currentPosition = (ConcealEnterPosition + (isSpace ? 1 : 0)) + startOfLine
 						} catch (Exception e2) {
 							SystemOut("answerWord" + answerWord)
@@ -569,8 +571,8 @@ Class MyAPI Implements Def
 		Public Function getTypeName:String(fileName:String, type:String)
 			String re = ""
 			
-			If (fileName.indexOf(".") <> -1) Then
-				Return fileName[(0)..(fileName.indexOf("."))] + type
+			If (fileName.Find(".") <> -1) Then
+				Return fileName[(0)..(fileName.Find("."))] + type
 			EndIf
 			
 			Return New StringBuilder(String.valueOf(fileName)).append(type).toString()
@@ -646,19 +648,19 @@ Class MyAPI Implements Def
 						Return
 					EndIf
 					
-					If (drawString[i].indexOf("<") = -1 Or drawString[i].indexOf(">") = -1) Then
+					If (drawString[i].Find("<") = -1 Or drawString[i].Find(">") = -1) Then
 						stringToDraw = drawString[i]
 					Else
-						anchor = drawString[i][(drawString[i].indexOf("<") + 1)..(drawString[i].indexOf(">"))]
-						stringToDraw = drawString[i].substring(drawString[i].indexOf(">") + 1)
+						anchor = drawString[i][(drawString[i].Find("<") + 1)..(drawString[i].Find(">"))]
+						stringToDraw = drawString[i][(drawString[i].Find(">") + 1)..]
 					EndIf
 					
 					If (i - beginPosition >= stringCursol) Then
-						If (anchor.indexOf("H") <> -1) Then
+						If (anchor.Find("H") <> -1) Then
 							x2 = x + ((width - zoomIn(getStringWidth(14, stringToDraw))) / 2)
-						ElseIf (anchor.indexOf("L") <> -1) Then
+						ElseIf (anchor.Find("L") <> -1) Then
 							x2 = x
-						ElseIf (anchor.indexOf("R") <> -1) Then
+						ElseIf (anchor.Find("R") <> -1) Then
 							x2 = (x + width) - zoomIn(getStringWidth(14, stringToDraw))
 						EndIf
 						
@@ -696,19 +698,19 @@ Class MyAPI Implements Def
 						Return
 					EndIf
 					
-					If (drawString[i].indexOf("<") = -1 Or drawString[i].indexOf(">") = -1) Then
+					If (drawString[i].Find("<") = -1 Or drawString[i].Find(">") = -1) Then
 						stringToDraw = drawString[i]
 					Else
-						anchor = drawString[i][(drawString[i].indexOf("<") + 1)..(drawString[i].indexOf(">"))]
-						stringToDraw = drawString[i].substring(drawString[i].indexOf(">") + 1)
+						anchor = drawString[i][(drawString[i].Find("<") + 1)..(drawString[i].Find(">"))]
+						stringToDraw = drawString[i][(drawString[i].Find(">") + 1)..]
 					EndIf
 					
 					If (i - beginPosition >= stringCursol) Then
-						If (anchor.indexOf("H") <> -1) Then
+						If (anchor.Find("H") <> -1) Then
 							x2 = x + ((width - zoomIn(getStringWidth(font, stringToDraw))) / 2)
-						ElseIf (anchor.indexOf("L") <> -1) Then
+						ElseIf (anchor.Find("L") <> -1) Then
 							x2 = x
-						ElseIf (anchor.indexOf("R") <> -1) Then
+						ElseIf (anchor.Find("R") <> -1) Then
 							x2 = (x + width) - zoomIn(getStringWidth(font, stringToDraw))
 						EndIf
 						
@@ -746,19 +748,19 @@ Class MyAPI Implements Def
 						Return
 					EndIf
 					
-					If (drawString[i].indexOf("<") = -1 Or drawString[i].indexOf(">") = -1) Then
+					If (drawString[i].Find("<") = -1 Or drawString[i].Find(">") = -1) Then
 						stringToDraw = drawString[i]
 					Else
-						anchor = drawString[i][(drawString[i].indexOf("<") + 1)..(drawString[i].indexOf(">"))]
-						stringToDraw = drawString[i].substring(drawString[i].indexOf(">") + 1)
+						anchor = drawString[i][(drawString[i].Find("<") + 1)..(drawString[i].Find(">"))]
+						stringToDraw = drawString[i][(drawString[i].Find(">") + 1)..]
 					EndIf
 					
 					If (i - beginPosition >= stringCursol) Then
-						If (anchor.indexOf("H") <> -1) Then
+						If (anchor.Find("H") <> -1) Then
 							x2 = x + ((width - zoomIn(getStringWidth(14, stringToDraw))) / 2)
-						ElseIf (anchor.indexOf("L") <> -1) Then
+						ElseIf (anchor.Find("L") <> -1) Then
 							x2 = x
-						ElseIf (anchor.indexOf("R") <> -1) Then
+						ElseIf (anchor.Find("R") <> -1) Then
 							x2 = (x + width) - zoomIn(getStringWidth(14, stringToDraw))
 						EndIf
 						
@@ -791,18 +793,18 @@ Class MyAPI Implements Def
 				height = beginPosition
 				While (height < drawString.Length) {
 					
-					If (drawString[height].indexOf("<") = -1 Or drawString[height].indexOf(">") = -1) Then
+					If (drawString[height].Find("<") = -1 Or drawString[height].Find(">") = -1) Then
 						stringToDraw = drawString[height]
 					Else
-						anchor = drawString[height][(drawString[height].indexOf("<") + 1)..(drawString[height].indexOf(">"))]
-						stringToDraw = drawString[height].substring(drawString[height].indexOf(">") + 1)
+						anchor = drawString[height][(drawString[height].Find("<") + 1)..(drawString[height].Find(">"))]
+						stringToDraw = drawString[height][(drawString[height].Find(">") + 1)..]
 					EndIf
 					
-					If (anchor.indexOf("H") <> -1) Then
+					If (anchor.Find("H") <> -1) Then
 						x2 = x + ((width - zoomIn(getStringWidth(14, stringToDraw))) / 2)
-					ElseIf (anchor.indexOf("L") <> -1) Then
+					ElseIf (anchor.Find("L") <> -1) Then
 						x2 = x
-					ElseIf (anchor.indexOf("R") <> -1) Then
+					ElseIf (anchor.Find("R") <> -1) Then
 						x2 = (x + width) - zoomIn(getStringWidth(14, stringToDraw))
 					EndIf
 					
@@ -839,19 +841,19 @@ Class MyAPI Implements Def
 						Return
 					EndIf
 					
-					If (drawString[i].indexOf("<") = -1 Or drawString[i].indexOf(">") = -1) Then
+					If (drawString[i].Find("<") = -1 Or drawString[i].Find(">") = -1) Then
 						stringToDraw = drawString[i]
 					Else
-						anchor = drawString[i][(drawString[i].indexOf("<") + 1)..(drawString[i].indexOf(">"))]
-						stringToDraw = drawString[i].substring(drawString[i].indexOf(">") + 1)
+						anchor = drawString[i][(drawString[i].Find("<") + 1)..(drawString[i].Find(">"))]
+						stringToDraw = drawString[i][(drawString[i].Find(">") + 1)..]
 					EndIf
 					
 					If (i - beginPosition >= stringCursol) Then
-						If (anchor.indexOf("H") <> -1) Then
+						If (anchor.Find("H") <> -1) Then
 							x2 = x + ((width - zoomIn(getStringWidth(14, stringToDraw))) / 2)
-						ElseIf (anchor.indexOf("L") <> -1) Then
+						ElseIf (anchor.Find("L") <> -1) Then
 							x2 = x
-						ElseIf (anchor.indexOf("R") <> -1) Then
+						ElseIf (anchor.Find("R") <> -1) Then
 							x2 = (x + width) - zoomIn(getStringWidth(14, stringToDraw))
 						EndIf
 						
@@ -1178,7 +1180,7 @@ Class MyAPI Implements Def
 			Int ret = 0
 			Int j = 0
 			While (True) {
-				Int x = org.indexOf("\n", j)
+				Int x = org.Find("\n", j)
 				
 				If (x = -1) Then
 					Return ret
@@ -1200,7 +1202,7 @@ Class MyAPI Implements Def
 			Int k = 0
 			Int j = 0
 			While (True) {
-				Int x = string.indexOf(13, j)
+				Int x = string.Find(13, j)
 				
 				If (x = -1) Then
 					break
@@ -1354,18 +1356,18 @@ Class MyAPI Implements Def
 		
 		Public Function getPath:String(path:String)
 			String path2 = ""
-			While (path.indexOf("/") <> -1) {
-				path2 = New StringBuilder(String.valueOf(path2)).append(path[(0)..(path.indexOf("/") + 1)).toString()]
-				path = path.substring(path.indexOf("/") + 1)
+			While (path.Find("/") <> -1) {
+				path2 = New StringBuilder(String.valueOf(path2)).append(path[(0)..(path.Find("/") + 1)).toString()]
+				path = path[(path.Find("/") + 1)..]
 			EndIf
 			Return path2
 		}
 		
 		Public Function getFileName:String(path:String)
 			String path2 = ""
-			While (path.indexOf("/") <> -1) {
-				path2 = New StringBuilder(String.valueOf(path2)).append(path[(0)..(path.indexOf("/") + 1)).toString()]
-				path = path.substring(path.indexOf("/") + 1)
+			While (path.Find("/") <> -1) {
+				path2 = New StringBuilder(String.valueOf(path2)).append(path[(0)..(path.Find("/") + 1)).toString()]
+				path = path[(path.Find("/") + 1)..]
 			EndIf
 			Return path
 		}
