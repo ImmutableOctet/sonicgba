@@ -2,6 +2,9 @@ Strict
 
 Public
 
+' Preprocessor related:
+#MONKEYLANG_EXTENSION_WIDECHARACTERS = True
+
 ' Imports:
 Import application
 
