@@ -614,8 +614,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>62</X>
-        <Y>238</Y>
+        <X>25</X>
+        <Y>229</Y>
       </CursorPos>
       <DocGUID>da74a7e9-42c0-45d7-bad4-02bea58220c2</DocGUID>
       <Bookmarks />
@@ -938,8 +938,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssdef.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>28</X>
-        <Y>16</Y>
+        <X>9</X>
+        <Y>34</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -1037,7 +1037,7 @@
     <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>9</X>
-        <Y>239</Y>
+        <Y>235</Y>
       </CursorPos>
       <DocGUID>88def278-b9d9-4c0e-a2a7-fa23661dd48d</DocGUID>
       <Bookmarks />
@@ -1121,7 +1121,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\tuch" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\water" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonicgba" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\special" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\special" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\state" Expanded="true" />
   </Folders>
 </JiProjUserOptions>
