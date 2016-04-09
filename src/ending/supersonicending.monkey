@@ -192,7 +192,7 @@ Class SuperSonicEnding Extends BaseEnding ' Final
 		
 		Method pause:Void()
 			If (Self.state = STATE_INTERRUPT) Then
-				Self.state = STATE_INTERRUPT
+				'Self.state = STATE_INTERRUPT
 				
 				interruptInit()
 				
@@ -545,9 +545,9 @@ Class SuperSonicEnding Extends BaseEnding ' Final
 		Method isOver:Bool()
 			Return (Self.state = STATE_CONGRATULATION And Self.count > BGM_ENDING_COUNT)
 		End
-		
-		Private Method drawPlane:Void(g:MFGraphics)
-			
+	Private
+		' Methods:
+		Method drawPlane:Void(g:MFGraphics)
 			If (Self.state < STATE_TAILS_PULL_DOWN) Then
 				Self.planeOffsetY = getPlaneOffset()
 			Else
@@ -558,101 +558,107 @@ Class SuperSonicEnding Extends BaseEnding ' Final
 			Self.planeHeadDrawer.draw(g, Self.pilotHeadID, Self.planeX + 3, Self.planeOffsetY + (Self.planeY - 22), True, 0)
 		End
 		
-		Private Method getPlaneOffset:Int()
-			Self.planeOffsetDegree += STATE_AFTER_THAT
-			Return ((Sin(Self.planeOffsetDegree) * STATE_TAILS_FIND) / 100) + STATE_TAILS_FIND
+		Method getPlaneOffset:Int()
+			Self.planeOffsetDegree += OFFSET_SPEED
+			
+			Return ((Sin(Self.planeOffsetDegree) * OFFSET_RANGE) / 100) + OFFSET_RANGE
 		End
 		
-		Private Method drawCatchPlane:Void(g:MFGraphics)
+		Method drawCatchPlane:Void(g:MFGraphics)
 			g.saveCanvas()
+			
 			g.translateCanvas(Self.planeX, Self.planeY)
-			g.scaleCanvas((Float) Self.planeScale, (Float) Self.planeScale)
-			g.rotateCanvas((Float) Self.planeDegree)
+			g.scaleCanvas(Float(Self.planeScale), Float(Self.planeScale))
+			g.rotateCanvas(Float(Self.planeDegree))
+			
 			Self.planeDrawer.draw(g, 1, 0, 0, True, 0)
+			
 			g.restoreCanvas()
 		End
 		
-		Private Method cloudLogic:Void()
-			
+		Method cloudLogic:Void()
 			If (Self.cloudCount > 0) Then
 				Self.cloudCount -= 1
 			EndIf
 			
-			For (Int i = 0; i < STATE_TAILS_CATCH_UP; i += 1)
-				
-				If (Self.cloudInfo[i][0] <> 0) Then
-					Int[] iArr = Self.cloudInfo[i]
-					iArr[1] = iArr[1] + CLOUD_VELOCITY[Self.cloudInfo[i][0] - 1]
+			For Local cloud:= EachIn Self.cloudInfo
+				If (cloud[0] <> 0) Then
+					cloud[1] += CLOUD_VELOCITY[cloud[0] - 1]
 					
-					If (Self.cloudInfo[i][1] >= SCREEN_WIDTH + 75) Then
-						Self.cloudInfo[i][0] = 0
+					If (cloud[1] >= SCREEN_WIDTH + 75) Then
+						cloud[0] = 0
 					EndIf
 				EndIf
 				
-				If (Self.cloudInfo[i][0] = 0 And Self.cloudCount = 0) Then
-					Self.cloudInfo[i][0] = MyRandom.nextInt(1, 3)
-					Self.cloudInfo[i][1] = -60
-					Self.cloudInfo[i][2] = MyRandom.nextInt(20, SCREEN_HEIGHT - 40)
-					Self.cloudCount = MyRandom.nextInt(STATE_TAILS_FIND, 20)
+				If (cloud[0] = 0 And Self.cloudCount = 0) Then
+					cloud[0] = MyRandom.nextInt(1, 3)
+					cloud[1] = -60
+					cloud[2] = MyRandom.nextInt(20, SCREEN_HEIGHT - 40)
+					
+					Self.cloudCount = MyRandom.nextInt(8, 20)
 				EndIf
-			EndIf
+			Next
 		End
 		
-		Private Method cloudDraw:Void(g:MFGraphics)
-			For (Int i = 0; i < STATE_TAILS_CATCH_UP; i += 1)
-				
-				If (Self.cloudInfo[i][0] <> 0) Then
-					Self.cloudDrawer.setActionId(Self.cloudInfo[i][0] - 1)
-					Self.cloudDrawer.draw(g, Self.cloudInfo[i][1], Self.cloudInfo[i][2])
+		Method cloudDraw:Void(g:MFGraphics)
+			For Local cloud:= EachIn Self.cloudInfo
+				If (cloud[0] <> 0) Then
+					Self.cloudDrawer.setActionId(cloud[0] - 1)
+					Self.cloudDrawer.draw(g, cloud[1], cloud[2])
 				EndIf
-			EndIf
+			Next
 		End
 		
-		Private Method drawBG:Void(g:MFGraphics)
-			MyAPI.drawImage(g, Self.endingBgImage, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - PLANE_CATCH_UP_FRAME, 3) ' Shr 1
+		Method drawBG:Void(g:MFGraphics)
+			MyAPI.drawImage(g, Self.endingBgImage, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - 30, 3) ' Shr 1
 		End
 		
-		Private Method creditInit:Void()
+		Method creditInit:Void()
 			Self.isSkipPressed = False
+			
 			State.fadeInitAndStart(0, 0)
+			
 			SoundSystem.getInstance().stopBgm(False)
-			SoundSystem.getInstance().playBgm(33)
+			SoundSystem.getInstance().playBgm(SoundSystem.BGM_CREDIT)
+			
 			Key.touchOpeningInit()
+			
 			Self.count = 0
 			Self.count2 = 0
 		End
 		
-		Private Method interruptInit:Void()
-			
+		Method interruptInit:Void()
 			If (Self.interruptDrawer = Null) Then
 				Self.interruptDrawer = Animation.getInstanceFromQi("/animation/utl_res/suspend_resume.dat")[0].getDrawer(0, True, 0)
 			EndIf
-			
 		End
 		
-		Private Method interruptLogic:Void()
+		Method interruptLogic:Void()
 			State.fadeInitAndStart(0, 0)
+			
 			SoundSystem.getInstance().stopBgm(False)
 			
-			If (Key.press(STATE_MOON_STAR_SHINING)) Then
+			If (Key.press(Key.B_S2)) Then
+				' Nothing so far.
 			EndIf
 			
 			If (Key.press(Key.B_BACK) Or (Key.touchinterruptreturn <> Null And Key.touchinterruptreturn.IsButtonPress())) Then
-				SoundSystem.getInstance().playSe(STATE_MOON_STAR_SHINING)
+				SoundSystem.getInstance().playSe(SoundSystem.SE_107)
+				
 				Key.touchInterruptClose()
 				Key.touchkeyboardClose()
 				
 				If (Self.interrupt_state <= STATE_CREDIT) Then
 					Self.state = STATE_CREDIT
+					
 					creditInit()
 				EndIf
 				
 				Key.clear()
 			EndIf
-			
 		End
 		
-		Private Method interruptDraw:Void(g:MFGraphics)
+		Method interruptDraw:Void(g:MFGraphics)
 			Self.interruptDrawer.setActionId(Int(Key.touchinterruptreturn.Isin()))
 			Self.interruptDrawer.draw(g, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2)) ' Shr 1
 		End

@@ -270,8 +270,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\ending\supersonicending.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
-        <Y>138</Y>
+        <X>22</X>
+        <Y>14</Y>
       </CursorPos>
       <DocGUID>99c5a8a1-5bfa-4fdd-9cd8-564bf01a4080</DocGUID>
       <Bookmarks />
@@ -341,8 +341,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>37</Y>
+        <X>14</X>
+        <Y>76</Y>
       </CursorPos>
       <DocGUID>b0854342-1a36-4604-8f3b-c181dc75e5e0</DocGUID>
       <Bookmarks />
