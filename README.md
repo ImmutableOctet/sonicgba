@@ -11,7 +11,6 @@ without making any claim to parody the original behavior in any way.
 * **Finish implementing 'sonicgba'**.
 * Implement 'gameengine'. (Input systems, etc)
 * Implement the missing portions of 'lib'.
-* Implement 'ending'. (Ending animation behavior?)
 * Implement 'pyxanimation' / 'pyxeditor'.
 * Properly implement sound behavior.
 * Finish missing parts of 'MFLib'.
@@ -21,3 +20,4 @@ without making any claim to parody the original behavior in any way.
 * **~~Implement 'special'~~** (Special Stage objects)
 * **~~Implement 'common'~~** (Utilities)
 * **~~Implement 'platformstandard'~~**
+* **~~Implement 'ending'~~** (Ending animations, credits, etc)
