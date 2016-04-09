@@ -227,6 +227,7 @@ Class GimmickObject Extends GameObject
 		
 		Field used:Bool
 	Public
+		' Functions:
 		Function getNewInstance:GameObject(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
 			Local reElement:GameObject = Null
 			
@@ -238,7 +239,7 @@ Class GimmickObject Extends GameObject
 					reElement = New Terminal(id, x, y, left, top, width, height)
 				Case GIMMICK_HARI_UP, GIMMICK_HARI_DOWN, GIMMICK_HARI_LEFT, GIMMICK_HARI_RIGHT, GIMMICK_HARI_MOVE_UP, GIMMICK_HARI_MOVE_DOWN
 					reElement = New Hari(id, x, y, left, top, width, height)
-				Case SSDef.SSOBJ_BNRD_ID
+				Case GIMMICK_MARKER
 					reElement = New Marker(id, x, y, left, top, width, height)
 				Case GIMMICK_SPRING_UP, GIMMICK_SPRING_DOWN, GIMMICK_SPRING_LEFT, GIMMICK_SPRING_RIGHT, GIMMICK_SPRING_LEFT_UP, GIMMICK_SPRING_RIGHT_UP, GIMMICK_SPRING_LEFT_UP_BURY, GIMMICK_SPRING_RIGHT_UP_BURY
 					reElement = New Spring(id, x, y, left, top, width, height)

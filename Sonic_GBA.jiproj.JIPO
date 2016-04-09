@@ -614,8 +614,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>25</X>
-        <Y>229</Y>
+        <X>11</X>
+        <Y>257</Y>
       </CursorPos>
       <DocGUID>da74a7e9-42c0-45d7-bad4-02bea58220c2</DocGUID>
       <Bookmarks />
@@ -939,7 +939,7 @@
     <DocUserOptions Filename=".\src\special\ssdef.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>9</X>
-        <Y>34</Y>
+        <Y>35</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
