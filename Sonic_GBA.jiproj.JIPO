@@ -353,8 +353,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>11</X>
-        <Y>27</Y>
+        <X>3</X>
+        <Y>1391</Y>
       </CursorPos>
       <DocGUID>15cecb5d-bc4c-49f9-ac92-71874cf9b00c</DocGUID>
       <Bookmarks />
@@ -1053,13 +1053,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonic.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonic.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>43</X>
         <Y>5</Y>
       </CursorPos>
-      <DocGUID>cd117f64-8ec4-4a8e-b11c-d6735d420603</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
   </Files>
   <Folders>

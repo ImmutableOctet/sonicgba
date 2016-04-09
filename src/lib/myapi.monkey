@@ -266,46 +266,52 @@ Class MyAPI Implements Def
 			EndIf
 		End
 		
-		Public Function getStrings:String[](s:String, lineLength:Int)
+		Function getStrings:String[](s:String, lineLength:Int)
 			lineLength = zoomOut(lineLength)
 			
 			If (lineLength > 8) Then
 				lineLength -= 8
 			EndIf
 			
-			Vector strings = New Vector()
-			String answerWord = ""
-			Bool function = RGB_DRAW
-			Int currentPosition = 0
-			Int endOfCurrentWord = 0
-			Int ConcealEnterPosition = 0
-			Int startOfLine = 0
-			Bool isSpace = RGB_DRAW
-			While (endOfCurrentWord >= 0 And endOfCurrentWord < s.Length()) {
+			Local strings:= New StringStack()
+			
+			Local answerWord:String
+			
+			Local func:Bool = False
+			
+			Local currentPosition:= 0
+			Local endOfCurrentWord:= 0
+			Local ConcealEnterPosition = 0
+			Local startOfLine = 0
+			
+			Local isSpace:Bool = False
+			
+			While (endOfCurrentWord >= 0 And endOfCurrentWord < s.Length())
 				endOfCurrentWord += 1
-				String nextWord = s.substring(currentPosition, endOfCurrentWord)
+				
+				Local nextWord:= s[currentPosition, endOfCurrentWord]
 				
 				If (nextWord.equals("~")) Then
 					ConcealEnterPosition = currentPosition - startOfLine
-					isSpace = RGB_DRAW
+					isSpace = False
 				ElseIf (nextWord.equals("|") Or nextWord.equals("\n")) Then
 					ConcealEnterPosition = 0
 					Int startOfLine2 = endOfCurrentWord
 					strings.addElement(answerWord)
 					answerWord = ""
 					startOfLine = startOfLine2
-					function = RGB_DRAW
+					func = False
 				Else
 					answerWord = New StringBuilder(String.valueOf(answerWord)).append(nextWord).toString()
 					
 					If (nextWord.equals("<")) Then
-						function = True
+						func = True
 						currentPosition = endOfCurrentWord
 					Else
 						currentPosition = 0
 						While (currentPosition < Symbol.Length) {
 							
-							If (nextWord.charAt(BMF_COLOR_WHITE) = Symbol[currentPosition]) Then
+							If (nextWord.charAt(0) = Symbol[currentPosition]) Then
 								currentPosition = endOfCurrentWord
 								
 								If (endOfCurrentWord = s.Length()) Then
@@ -322,15 +328,15 @@ Class MyAPI Implements Def
 				
 				currentPosition = getStringWidth(14, answerWord)
 				
-				If (function) Then
+				If (func) Then
 					currentPosition -= getStringWidth(14, "<H>")
 				EndIf
 				
 				If (currentPosition >= lineLength And endOfCurrentWord < s.Length()) Then
 					If (ConcealEnterPosition = 0) Then
 						try {
-							strings.addElement(answerWord.substring(BMF_COLOR_WHITE, answerWord.Length() - 1))
-							answerWord = answerWord.substring(answerWord.Length() - 1)
+							strings.addElement(answerWord[0, (answerWord.Length() - 1)])
+							answerWord = answerWord[(answerWord.Length() - 1)..]
 							startOfLine2 = endOfCurrentWord - 1
 						} catch (Exception e) {
 							SystemOut("answerWord" + answerWord)
@@ -338,29 +344,30 @@ Class MyAPI Implements Def
 						}
 					Else
 						try {
-							strings.addElement(answerWord.substring(BMF_COLOR_WHITE, ConcealEnterPosition))
-							answerWord = answerWord.substring((isSpace ? ROTATE_90 : BMF_COLOR_WHITE) + ConcealEnterPosition)
-							currentPosition = (ConcealEnterPosition + (isSpace ? ROTATE_90 : BMF_COLOR_WHITE)) + startOfLine
+							strings.addElement(answerWord[..ConcealEnterPosition])
+							answerWord = answerWord[(Int(isSpace) + ConcealEnterPosition)..]
+							currentPosition = (ConcealEnterPosition + Int(isSpace) + startOfLine
 						} catch (Exception e2) {
 							SystemOut("answerWord" + answerWord)
 							SystemOut("ConcealEnterPosition" + ConcealEnterPosition)
 							currentPosition = startOfLine
 						}
+						
 						ConcealEnterPosition = 0
 						startOfLine2 = currentPosition
 					EndIf
 					
 					startOfLine = startOfLine2
-					function = RGB_DRAW
+					
+					func = False
 				ElseIf (endOfCurrentWord = s.Length()) Then
 					strings.addElement(answerWord)
 				EndIf
 				
 				currentPosition = endOfCurrentWord
-			EndIf
-			s = New String[strings.size()]
-			strings.copyInto(s)
-			Return s
+			Wend
+			
+			Return strings.ToArray()
 		}
 		
 		Public Function getStrings:String[](s:String, fontid:Int, lineLength:Int)
@@ -372,26 +379,26 @@ Class MyAPI Implements Def
 			
 			Vector strings = New Vector()
 			String answerWord = ""
-			Bool function = RGB_DRAW
+			Bool function = False
 			Int currentPosition = 0
 			Int endOfCurrentWord = 0
 			Int ConcealEnterPosition = 0
 			Int startOfLine = 0
-			Bool isSpace = RGB_DRAW
+			Bool isSpace = False
 			While (endOfCurrentWord >= 0 And endOfCurrentWord < s.Length()) {
 				endOfCurrentWord += 1
-				String nextWord = s.substring(currentPosition, endOfCurrentWord)
+				String nextWord = s[(currentPosition)..(endOfCurrentWord)]
 				
 				If (nextWord.equals("~")) Then
 					ConcealEnterPosition = currentPosition - startOfLine
-					isSpace = RGB_DRAW
+					isSpace = False
 				ElseIf (nextWord.equals("|") Or nextWord.equals("\n")) Then
 					ConcealEnterPosition = 0
 					Int startOfLine2 = endOfCurrentWord
 					strings.addElement(answerWord)
 					answerWord = ""
 					startOfLine = startOfLine2
-					function = RGB_DRAW
+					function = False
 				Else
 					answerWord = New StringBuilder(String.valueOf(answerWord)).append(nextWord).toString()
 					
@@ -402,7 +409,7 @@ Class MyAPI Implements Def
 						currentPosition = 0
 						While (currentPosition < Symbol.Length) {
 							
-							If (nextWord.charAt(BMF_COLOR_WHITE) = Symbol[currentPosition]) Then
+							If (nextWord.charAt(0) = Symbol[currentPosition]) Then
 								currentPosition = endOfCurrentWord
 								
 								If (endOfCurrentWord = s.Length()) Then
@@ -426,7 +433,7 @@ Class MyAPI Implements Def
 				If (currentPosition >= lineLength And endOfCurrentWord < s.Length()) Then
 					If (ConcealEnterPosition = 0) Then
 						try {
-							strings.addElement(answerWord.substring(BMF_COLOR_WHITE, answerWord.Length() - 1))
+							strings.addElement(answerWord[(0)..(answerWord.Length() - 1))]
 							answerWord = answerWord.substring(answerWord.Length() - 1)
 							startOfLine2 = endOfCurrentWord - 1
 						} catch (Exception e) {
@@ -435,9 +442,9 @@ Class MyAPI Implements Def
 						}
 					Else
 						try {
-							strings.addElement(answerWord.substring(BMF_COLOR_WHITE, ConcealEnterPosition))
-							answerWord = answerWord.substring((isSpace ? ROTATE_90 : BMF_COLOR_WHITE) + ConcealEnterPosition)
-							currentPosition = (ConcealEnterPosition + (isSpace ? ROTATE_90 : BMF_COLOR_WHITE)) + startOfLine
+							strings.addElement(answerWord[(0)..(ConcealEnterPosition))]
+							answerWord = answerWord.substring((isSpace ? 1 : 0) + ConcealEnterPosition)
+							currentPosition = (ConcealEnterPosition + (isSpace ? 1 : 0)) + startOfLine
 						} catch (Exception e2) {
 							SystemOut("answerWord" + answerWord)
 							SystemOut("ConcealEnterPosition" + ConcealEnterPosition)
@@ -448,7 +455,7 @@ Class MyAPI Implements Def
 					EndIf
 					
 					startOfLine = startOfLine2
-					function = RGB_DRAW
+					function = False
 				ElseIf (endOfCurrentWord = s.Length()) Then
 					strings.addElement(answerWord)
 				EndIf
@@ -468,7 +475,7 @@ Class MyAPI Implements Def
 			Int startOfLine = 0
 			While (endOfCurrentWord >= 0 And endOfCurrentWord < s.Length()) {
 				endOfCurrentWord += 1
-				String nextWord = s.substring(currentPosition, endOfCurrentWord)
+				String nextWord = s[(currentPosition)..(endOfCurrentWord)]
 				
 				If (nextWord.equals("~") Or nextWord.equals(" ")) Then
 					Int ConcealEnterPosition = currentPosition - startOfLine
@@ -483,7 +490,7 @@ Class MyAPI Implements Def
 						Int i = 0
 						While (i < Symbol.Length) {
 							
-							If (nextWord.charAt(BMF_COLOR_WHITE) = Symbol[i]) Then
+							If (nextWord.charAt(0) = Symbol[i]) Then
 								currentPosition = endOfCurrentWord
 								
 								If (endOfCurrentWord = s.Length()) Then
@@ -519,7 +526,10 @@ Class MyAPI Implements Def
 		}
 		
 		Public Function SystemOut:Void(a:String)
-		}
+			#If CONFIG = "debug"
+				Print(a)
+			#End
+		End
 		
 		Public Function FillQua:Void(g2:MFGraphics, x0:Int, y0:Int, x1:Int, y1:Int, x2:Int, y2:Int, x3:Int, y3:Int)
 			g2.fillTriangle(x0, y0, x1, y1, x2, y2)
@@ -560,7 +570,7 @@ Class MyAPI Implements Def
 			String re = ""
 			
 			If (fileName.indexOf(".") <> -1) Then
-				Return fileName.substring(BMF_COLOR_WHITE, fileName.indexOf(".")) + type
+				Return fileName[(0)..(fileName.indexOf("."))] + type
 			EndIf
 			
 			Return New StringBuilder(String.valueOf(fileName)).append(type).toString()
@@ -620,12 +630,12 @@ Class MyAPI Implements Def
 			If (drawString <> Null) Then
 				Int x2 = x
 				String stringToDraw = ""
-				downPermit = RGB_DRAW
+				downPermit = False
 				
 				If (stringCursol > 0) Then
 					upPermit = True
 				Else
-					upPermit = RGB_DRAW
+					upPermit = False
 				EndIf
 				
 				Int i = beginPosition
@@ -639,7 +649,7 @@ Class MyAPI Implements Def
 					If (drawString[i].indexOf("<") = -1 Or drawString[i].indexOf(">") = -1) Then
 						stringToDraw = drawString[i]
 					Else
-						anchor = drawString[i].substring(drawString[i].indexOf("<") + 1, drawString[i].indexOf(">"))
+						anchor = drawString[i][(drawString[i].indexOf("<") + 1)..(drawString[i].indexOf(">"))]
 						stringToDraw = drawString[i].substring(drawString[i].indexOf(">") + 1)
 					EndIf
 					
@@ -670,12 +680,12 @@ Class MyAPI Implements Def
 			If (drawString <> Null) Then
 				Int x2 = x
 				String stringToDraw = ""
-				downPermit = RGB_DRAW
+				downPermit = False
 				
 				If (stringCursol > 0) Then
 					upPermit = True
 				Else
-					upPermit = RGB_DRAW
+					upPermit = False
 				EndIf
 				
 				Int i = beginPosition
@@ -689,7 +699,7 @@ Class MyAPI Implements Def
 					If (drawString[i].indexOf("<") = -1 Or drawString[i].indexOf(">") = -1) Then
 						stringToDraw = drawString[i]
 					Else
-						anchor = drawString[i].substring(drawString[i].indexOf("<") + 1, drawString[i].indexOf(">"))
+						anchor = drawString[i][(drawString[i].indexOf("<") + 1)..(drawString[i].indexOf(">"))]
 						stringToDraw = drawString[i].substring(drawString[i].indexOf(">") + 1)
 					EndIf
 					
@@ -720,12 +730,12 @@ Class MyAPI Implements Def
 			If (drawString <> Null) Then
 				Int x2 = x
 				String stringToDraw = ""
-				downPermit = RGB_DRAW
+				downPermit = False
 				
 				If (stringCursol > 0) Then
 					upPermit = True
 				Else
-					upPermit = RGB_DRAW
+					upPermit = False
 				EndIf
 				
 				Int i = beginPosition
@@ -739,7 +749,7 @@ Class MyAPI Implements Def
 					If (drawString[i].indexOf("<") = -1 Or drawString[i].indexOf(">") = -1) Then
 						stringToDraw = drawString[i]
 					Else
-						anchor = drawString[i].substring(drawString[i].indexOf("<") + 1, drawString[i].indexOf(">"))
+						anchor = drawString[i][(drawString[i].indexOf("<") + 1)..(drawString[i].indexOf(">"))]
 						stringToDraw = drawString[i].substring(drawString[i].indexOf(">") + 1)
 					EndIf
 					
@@ -770,12 +780,12 @@ Class MyAPI Implements Def
 			If (drawString <> Null) Then
 				Int x2 = x
 				String stringToDraw = ""
-				downPermit = RGB_DRAW
+				downPermit = False
 				
 				If (stringCursol > 0) Then
 					upPermit = True
 				Else
-					upPermit = RGB_DRAW
+					upPermit = False
 				EndIf
 				
 				height = beginPosition
@@ -784,7 +794,7 @@ Class MyAPI Implements Def
 					If (drawString[height].indexOf("<") = -1 Or drawString[height].indexOf(">") = -1) Then
 						stringToDraw = drawString[height]
 					Else
-						anchor = drawString[height].substring(drawString[height].indexOf("<") + 1, drawString[height].indexOf(">"))
+						anchor = drawString[height][(drawString[height].indexOf("<") + 1)..(drawString[height].indexOf(">"))]
 						stringToDraw = drawString[height].substring(drawString[height].indexOf(">") + 1)
 					EndIf
 					
@@ -813,12 +823,12 @@ Class MyAPI Implements Def
 			If (drawString <> Null) Then
 				Int x2 = x
 				String stringToDraw = ""
-				downPermit = RGB_DRAW
+				downPermit = False
 				
 				If (stringCursol > 0) Then
 					upPermit = True
 				Else
-					upPermit = RGB_DRAW
+					upPermit = False
 				EndIf
 				
 				Int i = beginPosition
@@ -832,7 +842,7 @@ Class MyAPI Implements Def
 					If (drawString[i].indexOf("<") = -1 Or drawString[i].indexOf(">") = -1) Then
 						stringToDraw = drawString[i]
 					Else
-						anchor = drawString[i].substring(drawString[i].indexOf("<") + 1, drawString[i].indexOf(">"))
+						anchor = drawString[i][(drawString[i].indexOf("<") + 1)..(drawString[i].indexOf(">"))]
 						stringToDraw = drawString[i].substring(drawString[i].indexOf(">") + 1)
 					EndIf
 					
@@ -859,7 +869,7 @@ Class MyAPI Implements Def
 		}
 		
 		Public Function drawStrings:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int)
-			drawStrings(g2, drawString, x, y, width, height, BMF_COLOR_WHITE, RGB_DRAW, BMF_COLOR_WHITE, BMF_COLOR_WHITE, BMF_COLOR_WHITE)
+			drawStrings(g2, drawString, x, y, width, height, BMF_COLOR_WHITE, False, BMF_COLOR_WHITE, BMF_COLOR_WHITE, BMF_COLOR_WHITE)
 		}
 		
 		Public Function drawBoldStrings:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, color1:Int, color2:Int, color3:Int)
@@ -908,11 +918,11 @@ Class MyAPI Implements Def
 		Public Function drawTxtArrows:Void(g:MFGraphics, x:Int, y:Int)
 			
 			If (downPermit) Then
-				drawArrow(g, x + 10, y, RGB_DRAW, RGB_DRAW)
+				drawArrow(g, x + 10, y, False, False)
 			EndIf
 			
 			If (stringCursol > 0) Then
-				drawArrow(g, x - 10, y, True, RGB_DRAW)
+				drawArrow(g, x - 10, y, True, False)
 			EndIf
 			
 		}
@@ -1025,7 +1035,7 @@ Class MyAPI Implements Def
 			
 			g.setClip(Max(dx, BMF_COLOR_WHITE), Max(dy, BMF_COLOR_WHITE), Min(sw + dx, BMF_COLOR_WHITE + SSDef.PLAYER_MOVE_HEIGHT) - Max(dx, BMF_COLOR_WHITE), Min(sh + dy, BMF_COLOR_WHITE + 320) - Max(dy, BMF_COLOR_WHITE))
 			g.drawImage(image, dx - sx, dy - sy, BMF_COLOR_WHITE)
-			g.setClip(BMF_COLOR_WHITE, BMF_COLOR_WHITE, SSDef.PLAYER_MOVE_HEIGHT, 320)
+			g.setClip(0, BMF_COLOR_WHITE, SSDef.PLAYER_MOVE_HEIGHT, 320)
 		}
 		
 		Public Function drawRegionDebug:Void(g:MFGraphics, img:MFImage, sx:Int, sy:Int, w:Int, he:Int, rot:Int, x:Int, y:Int, anchor:Int)
@@ -1197,16 +1207,16 @@ Class MyAPI Implements Def
 				EndIf
 				
 				Int k2 = k + 1
-				re[k] = string.substring(j, x)
+				re[k] = string[(j)..(x)]
 				j = x + 2
 				k = k2
 			EndIf
 			If (re[BMF_COLOR_WHITE] <> Null And re[BMF_COLOR_WHITE].Length() > 0) Then
 				StringBuffer b = New StringBuffer(New String(re[BMF_COLOR_WHITE].toCharArray()))
-				Integer ascii = New Integer(b.charAt(BMF_COLOR_WHITE))
+				Integer ascii = New Integer(b.charAt(0))
 				
 				If (ascii.hashCode() = 63 Or ascii.hashCode() = 65279 Or ascii.hashCode() = -257) Then
-					b.deleteCharAt(BMF_COLOR_WHITE)
+					b.deleteCharAt(0)
 				EndIf
 				
 				re[BMF_COLOR_WHITE] = b.toString()
@@ -1345,7 +1355,7 @@ Class MyAPI Implements Def
 		Public Function getPath:String(path:String)
 			String path2 = ""
 			While (path.indexOf("/") <> -1) {
-				path2 = New StringBuilder(String.valueOf(path2)).append(path.substring(BMF_COLOR_WHITE, path.indexOf("/") + 1)).toString()
+				path2 = New StringBuilder(String.valueOf(path2)).append(path[(0)..(path.indexOf("/") + 1)).toString()]
 				path = path.substring(path.indexOf("/") + 1)
 			EndIf
 			Return path2
@@ -1354,7 +1364,7 @@ Class MyAPI Implements Def
 		Public Function getFileName:String(path:String)
 			String path2 = ""
 			While (path.indexOf("/") <> -1) {
-				path2 = New StringBuilder(String.valueOf(path2)).append(path.substring(BMF_COLOR_WHITE, path.indexOf("/") + 1)).toString()
+				path2 = New StringBuilder(String.valueOf(path2)).append(path[(0)..(path.indexOf("/") + 1)).toString()]
 				path = path.substring(path.indexOf("/") + 1)
 			EndIf
 			Return path
