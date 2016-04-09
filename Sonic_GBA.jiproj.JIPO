@@ -241,8 +241,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\ending\baseending.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>8</X>
-        <Y>34</Y>
+        <X>9</X>
+        <Y>31</Y>
       </CursorPos>
       <DocGUID>d448111f-57b6-4025-ad5f-ada1ea5b1e2a</DocGUID>
       <Bookmarks />
@@ -270,8 +270,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\ending\supersonicending.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>22</X>
-        <Y>14</Y>
+        <X>14</X>
+        <Y>138</Y>
       </CursorPos>
       <DocGUID>99c5a8a1-5bfa-4fdd-9cd8-564bf01a4080</DocGUID>
       <Bookmarks />
@@ -341,8 +341,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
-        <Y>76</Y>
+        <X>24</X>
+        <Y>37</Y>
       </CursorPos>
       <DocGUID>b0854342-1a36-4604-8f3b-c181dc75e5e0</DocGUID>
       <Bookmarks />
@@ -986,7 +986,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\state.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>8</X>
+        <X>9</X>
         <Y>181</Y>
       </CursorPos>
       <DocGUID />
