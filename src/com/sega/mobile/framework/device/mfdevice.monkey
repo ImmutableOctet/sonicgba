@@ -373,6 +373,7 @@ Class MFDevice Final
 		
 		Function deleteRecord:Void(recordName:String)
 			records.Remove(recordName)
+			
 			updateRecords()
 		End
 		
@@ -504,12 +505,7 @@ Class MFDevice Final
 				
 				'Local assets:AssetManager = MFMain.getInstance().getAssets()
 				
-				If (url.StartsWith("/")) Then
-					' Skip the first slash.
-					substring = url[1..]
-				Else
-					substring = url
-				EndIf
+				url = FixResourcePath(url)
 				
 				'ret = assets.open(substring)
 				
@@ -573,6 +569,15 @@ Class MFDevice Final
 		' Record-related:
 		Function ToRecordPath:String(name:String)
 			Return ("records/" + name + ".rms")
+		End
+		
+		Function FixResourcePath:String(url:String)
+			If (url.StartsWith("/")) Then
+				' Skip the first slash.
+				Return url[1..]
+			EndIf
+			
+			Return url
 		End
 		
 		Function readRecord:DataBuffer(dis:Stream)

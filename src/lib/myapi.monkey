@@ -59,10 +59,10 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 		Global rayRGB:Int[] = New Int[RAY_WIDTH*RAY_HEIGHT]
 	Public
 		' Constant variable(s):
-		Const BMF_COLOR_GRAY:Int = 3
-		Const BMF_COLOR_GREEN:Int = 2
 		Const BMF_COLOR_WHITE:Int = 0
 		Const BMF_COLOR_YELLOW:Int = 1
+		Const BMF_COLOR_GREEN:Int = 2
+		Const BMF_COLOR_GRAY:Int = 3
 		
 		Const FIXED_TWO_BASE:Int = 7
 		
@@ -103,8 +103,72 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 					Return Coordinate.returnCoordinate(x, y)
 			End Select
 		End
+		
+		Function getResource:DataBuffer(fileName:String)
+			Return DataBuffer.Load(MFDevice.FixResourcePath(fileName))
+		End
+		
+		Function getTextLineNum:Int(org:String)
+			Local ret:= 0
+			Local j:= 0
+			
+			While (True)
+				Local x:= org.Find("~n", j)
+				
+				If (x = -1) Then
+					Exit
+				EndIf
+				
+				j = (x + 1)
+				
+				ret += 1
+			Wend
+			
+			Return ret
+		End
+		
+		Function divideText:String[](string:String)
+			If (string.Length = 0) Then
+				Return []
+			EndIf
+			
+			Local lineNum:= getTextLineNum(string)
+			
+			Local re:String[] = New String[lineNum]
+			
+			Local k:= 0
+			Local j:= 0
+			
+			While (True)
+				Local x:= string.Find("~r", j)
+				
+				If (x = -1) Then
+					Exit
+				EndIf
+				
+				Local k2:= (k + 1)
+				
+				re[k] = string[j..x]
+				
+				j = (x + 2)
+				
+				k = k2
+			Wend
+			
+			Local firstEntry:= re[0]
+			
+			If (firstEntry.Length > 0) Then
+				Local firstChar:= firstEntry[0]
+				
+				If (firstChar = $3F Or firstChar = $FEFF Or firstChar = $FFFFFFFFFFFFFEFF) Then
+					re[0] = firstEntry[1..]
+				EndIf
+			EndIf
+			
+			Return re
+		End
 	Public
-		' Functions:		
+		' Functions:
 		Function drawRegion:Void(g2:MFGraphics, img:MFImage, sx:Int, sy:Int, sw:Int, sh:Int, trans:Int, dx:Int, dy:Int, anchor:Int)
 			drawImage(g2, img, sx, sy, sw, sh, trans, dx, dy, anchor)
 		End
@@ -1024,218 +1088,119 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 			g.setClip(0, 0, SSDef.PLAYER_MOVE_HEIGHT, 320)
 		End
 		
-		Public Function drawRegionDebug:Void(g:MFGraphics, img:MFImage, sx:Int, sy:Int, w:Int, he:Int, rot:Int, x:Int, y:Int, anchor:Int)
-			
-			If ((anchor & HCENTER) <> 0) Then
-				x -= w / 2
-			ElseIf ((anchor & RIGHT) <> 0) Then
-				x -= w
-			EndIf
-			
-			If ((anchor & BOTTOM) <> 0) Then
-				y -= he
-			ElseIf ((anchor & VCENTER) <> 0) Then
-				y -= he / 2
-			EndIf
-			
-			If (rot = 0) Then
-				g.drawRegion(img, sx, sy, w, he, rot, x, y, 20)
-				Return
-			EndIf
-			
-			Int[] RGB = New Int[(w * he)]
-			Int[] mRGB = New Int[(w * he)]
-			img.getRGB(RGB, 0, w, sx, sy, w, he)
-			Int i
-			
-			If (rot = FLIP_X) Then
-				For (i = 0; i < w; i += 1)
-					For (sy = 0; sy < he; sy += 1)
-						mRGB[((w - i) - 1) + (sy * w)] = RGB[(sy * w) + i]
+		#Rem
+			Function drawRegionDebug:Void(g:MFGraphics, img:MFImage, sx:Int, sy:Int, w:Int, he:Int, rot:Int, x:Int, y:Int, anchor:Int)
+				If ((anchor & HCENTER) <> 0) Then
+					x -= (w / 2)
+				ElseIf ((anchor & RIGHT) <> 0) Then
+					x -= w
+				EndIf
+				
+				If ((anchor & BOTTOM) <> 0) Then
+					y -= he
+				ElseIf ((anchor & VCENTER) <> 0) Then
+					y -= (he / 2)
+				EndIf
+				
+				If (rot = 0) Then
+					g.drawRegion(img, sx, sy, w, he, rot, x, y, 20)
+					
+					Return
+				EndIf
+				
+				Local RGB:= New Int[(w * he)]
+				Local mRGB:= New Int[(w * he)]
+				
+				img.getRGB(RGB, 0, w, sx, sy, w, he)
+				
+				Local i:Int
+				
+				If (rot = FLIP_X) Then
+					For (i = 0; i < w; i += 1)
+						For (sy = 0; sy < he; sy += 1)
+							mRGB[((w - i) - 1) + (sy * w)] = RGB[(sy * w) + i]
+						EndIf
+					EndIf
+				ElseIf (rot = PAGE_WAIT) Then
+					For (i = 0; i < w; i += 1)
+						For (sy = 0; sy < he; sy += 1)
+							mRGB[((he - sy) - 1) + (i * he)] = RGB[(sy * w) + i]
+						EndIf
+					EndIf
+				ElseIf (rot = RAY_HEIGHT) Then
+					For (i = 0; i < w; i += 1)
+						For (sy = 0; sy < he; sy += 1)
+							mRGB[((w - i) - 1) + (((he - sy) - 1) * w)] = RGB[(sy * w) + i]
+						EndIf
+					EndIf
+				ElseIf (rot = 6) Then
+					For (i = 0; i < w; i += 1)
+						For (sy = 0; sy < he; sy += 1)
+							mRGB[sy + (((w - i) - 1) * he)] = RGB[(sy * w) + i]
+						EndIf
+					EndIf
+				ElseIf (rot = FIXED_TWO_BASE) Then
+					For (i = 0; i < w; i += 1)
+						For (sy = 0; sy < he; sy += 1)
+							mRGB[((he - sy) - 1) + (((w - i) - 1) * he)] = RGB[(sy * w) + i]
+						EndIf
+					EndIf
+				ElseIf (rot = ROTATE_90) Then
+					For (i = 0; i < w; i += 1)
+						For (sy = 0; sy < he; sy += 1)
+							mRGB[i + (((he - sy) - 1) * w)] = RGB[(sy * w) + i]
+						EndIf
+					EndIf
+				ElseIf (rot = FLIP_Y) Then
+					For (i = 0; i < w; i += 1)
+						For (sy = 0; sy < he; sy += 1)
+							mRGB[sy + (i * he)] = RGB[(sy * w) + i]
+						EndIf
 					EndIf
 				EndIf
-			ElseIf (rot = PAGE_WAIT) Then
-				For (i = 0; i < w; i += 1)
-					For (sy = 0; sy < he; sy += 1)
-						mRGB[((he - sy) - 1) + (i * he)] = RGB[(sy * w) + i]
-					EndIf
+				
+				Select (rot)
+					Case FLIP_Y
+					Case PAGE_WAIT
+					Case SSDef.SSOBJ_BNLD_ID
+					Case FIXED_TWO_BASE
+						g.drawRGB(mRGB, 0, he, x, y, he, w, True)
+					Default
+						g.drawRGB(mRGB, 0, w, x, y, w, he, True)
 				EndIf
-			ElseIf (rot = RAY_HEIGHT) Then
-				For (i = 0; i < w; i += 1)
-					For (sy = 0; sy < he; sy += 1)
-						mRGB[((w - i) - 1) + (((he - sy) - 1) * w)] = RGB[(sy * w) + i]
-					EndIf
-				EndIf
-			ElseIf (rot = 6) Then
-				For (i = 0; i < w; i += 1)
-					For (sy = 0; sy < he; sy += 1)
-						mRGB[sy + (((w - i) - 1) * he)] = RGB[(sy * w) + i]
-					EndIf
-				EndIf
-			ElseIf (rot = FIXED_TWO_BASE) Then
-				For (i = 0; i < w; i += 1)
-					For (sy = 0; sy < he; sy += 1)
-						mRGB[((he - sy) - 1) + (((w - i) - 1) * he)] = RGB[(sy * w) + i]
-					EndIf
-				EndIf
-			ElseIf (rot = ROTATE_90) Then
-				For (i = 0; i < w; i += 1)
-					For (sy = 0; sy < he; sy += 1)
-						mRGB[i + (((he - sy) - 1) * w)] = RGB[(sy * w) + i]
-					EndIf
-				EndIf
-			ElseIf (rot = FLIP_Y) Then
-				For (i = 0; i < w; i += 1)
-					For (sy = 0; sy < he; sy += 1)
-						mRGB[sy + (i * he)] = RGB[(sy * w) + i]
-					EndIf
-				EndIf
-			EndIf
-			
-			Select (rot)
-				Case FLIP_Y
-				Case PAGE_WAIT
-				Case SSDef.SSOBJ_BNLD_ID
-				Case FIXED_TWO_BASE
-					g.drawRGB(mRGB, 0, he, x, y, he, w, True)
-				Default
-					g.drawRGB(mRGB, 0, w, x, y, w, he, True)
-			EndIf
-		}
+			End
+		#End
 		
-		Public Function loadText:String[](fileName:String) Final
-			try {
-				Return divideText(New String(getResource(fileName), "UTF-8"))
-			} catch (Exception e) {
-				e.printStackTrace()
-				Return Null
-			EndIf
-		}
+		Function loadText:String[](fileName:String)
+			Return divideText(getResource(fileName).PeekString(0, "utf8"))
+		End
 		
-		Private Function getResource:Byte[](fileName:String)
-			InputStream is = Null
-			Byte[] re = Null
-			try {
-				is = MFDevice.getResourceAsStream(fileName)
-				
-				If (is <> Null) Then
-					ByteArrayOutputStream bs = New ByteArrayOutputStream()
-					DataOutputStream ds = New DataOutputStream(bs)
-					For (Int readByte = is.read(); readByte >= 0; readByte = is.read())
-						ds.writeByte(readByte)
-					EndIf
-					re = bs.toByteArray()
-					bs.close()
-				EndIf
-				
-				If (is <> Null) Then
-					try {
-						is.close()
-					} catch (Exception e) {
-						e.printStackTrace()
-					EndIf
-				EndIf
-				
-			} catch (Exception e2) {
-				e2.printStackTrace()
-				
-				If (is <> Null) Then
-					try {
-						is.close()
-					} catch (Exception e3) {
-						e3.printStackTrace()
-					EndIf
-				EndIf
-				
-			} catch (Throwable th) {
-				
-				If (is <> Null) Then
-					try {
-						is.close()
-					} catch (Exception e32) {
-						e32.printStackTrace()
-					EndIf
-				EndIf
-			EndIf
-			Return re
-		}
+		Function calNextPositionD:Double(current:Double, destiny:Double, velocity1:Int, velocity2:Int)
+			Return Double(calNextPosition(current, destiny, velocity1, velocity2, 1.0))
+		End
 		
-		Private Function getTextLineNum:Int(org:String)
-			Int ret = 0
-			Int j = 0
-			While (True) {
-				Int x = org.Find("~n", j)
-				
-				If (x = -1) Then
-					Return ret
-				EndIf
-				
-				j = x + 1
-				ret += 1
-			EndIf
-		}
+		Function calNextPositionF:Float(current:Double, destiny:Double, velocity1:Int, velocity2:Int, deviation:Double)
+			Return Float(calNextPositionD(current, destiny, velocity1, velocity2, deviation))
+		End
 		
-		Private Function divideText:String[](string:String)
-			
-			If (string = Null) Then
-				Return Null
-			EndIf
-			
-			String[] re = (String[]) BMF_COLOR_WHITE
-			re = New String[getTextLineNum(string)]
-			Int k = 0
-			Int j = 0
-			While (True) {
-				Int x = string.Find(13, j)
-				
-				If (x = -1) Then
-					break
-				EndIf
-				
-				Int k2 = k + 1
-				re[k] = string[(j)..(x)]
-				j = x + 2
-				k = k2
-			EndIf
-			If (re[0] <> Null And re[0].Length > 0) Then
-				StringBuffer b = New StringBuffer(New String(re[0].toCharArray()))
-				Integer ascii = New Integer(b[0])
-				
-				If (ascii.hashCode() = 63 Or ascii.hashCode() = 65279 Or ascii.hashCode() = -257) Then
-					b.deleteCharAt(0)
-				EndIf
-				
-				re[0] = b.toString()
-			EndIf
-			
-			Return re
-		}
-		
-		Public Function calNextPositionD:double(current:double, destiny:double, velocity1:Int, velocity2:Int)
-			Return (double) calNextPosition(current, destiny, velocity1, velocity2, 1.0)
-		}
-		
-		Public Function calNextPositionF:Float(current:double, destiny:double, velocity1:Int, velocity2:Int, deviation:double)
-			Return (Float) calNextPositionD(current, destiny, velocity1, velocity2, deviation)
-		}
-		
-		Public Function calNextPosition:Int(current:double, destiny:double, velocity1:Int, velocity2:Int)
+		Function calNextPosition:Int(current:Double, destiny:Double, velocity1:Int, velocity2:Int)
 			Return calNextPosition(current, destiny, velocity1, velocity2, 1.0)
-		}
+		End
 		
-		Public Function calNextPosition:Int(current:double, destiny:double, velocity1:Int, velocity2:Int, deviation:double)
-			Return (Int) calNextPositionD(current, destiny, velocity1, velocity2, deviation)
-		}
+		Function calNextPosition:Int(current:Double, destiny:Double, velocity1:Int, velocity2:Int, deviation:Double)
+			Return Int(calNextPositionD(current, destiny, velocity1, velocity2, deviation))
+		End
 		
-		Public Function calNextPositionD:double(current:double, destiny:double, velocity1:Int, velocity2:Int, deviation:double)
-			double re = current
+		Function calNextPositionD:Double(current:Double, destiny:Double, velocity1:Int, velocity2:Int, deviation:Double)
+			Local re:= current
 			
 			If (velocity2 <= velocity1) Then
 				Return re
 			EndIf
 			
-			double distance = (((destiny - current) * 100.0) * ((double) velocity1)) / ((double) velocity2)
-			current += distance / 100.0
+			Local distance:Double = ((((destiny - current) * 100.0) * Double(velocity1)) / Double(velocity2))
+			
+			current += (distance / 100.0)
 			
 			If (distance = 0.0) Then
 				deviation = 0.0
@@ -1245,19 +1210,19 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 			
 			current += deviation
 			
-			If (((Long) distance) * ((((Long) destiny) * 100) - (((Long) current) * 100)) <= 0) Then
+			If (Long(distance) * ((Long(destiny) * 100) - (Long(current) * 100)) <= 0) Then
 				current = destiny
 			EndIf
 			
 			Return current
-		}
+		End
 		
-		Public Function calNextPositionReverse:Int(current:Int, start:Int, destiny:Int, velocity1:Int, velocity2:Int)
-			Return calNextPositionReverse(current, start, destiny, velocity1, velocity2, ROTATE_90)
-		}
+		Function calNextPositionReverse:Int(current:Int, start:Int, destiny:Int, velocity1:Int, velocity2:Int)
+			Return calNextPositionReverse(current, start, destiny, velocity1, velocity2, 1)
+		End
 		
-		Public Function calNextPositionReverse:Int(current:Int, start:Int, destiny:Int, velocity1:Int, velocity2:Int, deviation:Int)
-			Int re = current
+		Function calNextPositionReverse:Int(current:Int, start:Int, destiny:Int, velocity1:Int, velocity2:Int, deviation:Int)
+			Local re:= current
 			
 			If (velocity2 <= velocity1) Then
 				Return re
@@ -1267,7 +1232,7 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 				Return re
 			EndIf
 			
-			Int moveChange = ((Abs(current - start) * velocity2) / (velocity2 - velocity1)) Shr ROTATE_90
+			Local moveChange:= ((Abs(current - start) * velocity2) / (velocity2 - velocity1)) Shr 1 ' / 2
 			
 			If (moveChange = 0) Then
 				moveChange = deviation
@@ -1279,7 +1244,6 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 				If (re > destiny) Then
 					re = destiny
 				EndIf
-				
 			Else
 				re -= moveChange
 				
@@ -1289,36 +1253,34 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 			EndIf
 			
 			Return re
-		}
+		End
 		
-		Public Function drawFadeRange:Void(g:MFGraphics, fadevalue:Int, x:Int, y:Int, type:Int)
-			Int i
-			For (i = 0; i < 864; i += 1)
+		' This implementation will be replaced eventually. (Software fade)
+		Function drawFadeRange:Void(g:MFGraphics, fadevalue:Int, x:Int, y:Int, type:Int)
+			For Local i:= 0 Until rayRGB.Length ' RAY_WIDTH*RAY_HEIGHT
 				rayRGB[i] = 16777215
-			EndIf
-			For (Int w = 0; w < RAY_WIDTH; w += 1)
-				For (i = 0; i < RAY_HEIGHT; i += 1)
-					rayRGB[(i * RAY_WIDTH) + w] = ((fadevalue Shl 24) & -16777216) | (rayRGB[(i * RAY_WIDTH) + w] & 16777215)
-				EndIf
-			EndIf
+			Next
+			
+			For Local w:= 0 Until RAY_WIDTH
+				For Local h:= 0 Until RAY_HEIGHT
+					rayRGB[(h * RAY_WIDTH) + w] = ((fadevalue Shl 24) & -16777216) | (rayRGB[(h * RAY_WIDTH) + w] & 16777215)
+				Next
+			Next
+			
 			Select (type)
-				Case BMF_COLOR_WHITE
-				Case FIXED_TWO_BASE
+				Case 0, 7
 					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y, RAY_WIDTH, RAY_HEIGHT, True)
-				Case ROTATE_90
-				Case SSDef.SSOBJ_BNLD_ID
+				Case 1, 6
 					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y, RAY_WIDTH, RAY_HEIGHT, True)
 					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y - RAY_HEIGHT, RAY_WIDTH, RAY_HEIGHT, True)
 					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y + RAY_HEIGHT, RAY_WIDTH, RAY_HEIGHT, True)
-				Case FLIP_X
-				Case PAGE_WAIT
+				Case 2, 5
 					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y, RAY_WIDTH, RAY_HEIGHT, True)
 					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y - RAY_HEIGHT, RAY_WIDTH, RAY_HEIGHT, True)
 					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y + RAY_HEIGHT, RAY_WIDTH, RAY_HEIGHT, True)
 					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y - 6, RAY_WIDTH, RAY_HEIGHT, True)
 					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y + 6, RAY_WIDTH, RAY_HEIGHT, True)
-				Case RAY_HEIGHT
-				Case FLIP_Y
+				Case 3, 4
 					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y, RAY_WIDTH, RAY_HEIGHT, True)
 					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y - RAY_HEIGHT, RAY_WIDTH, RAY_HEIGHT, True)
 					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y + RAY_HEIGHT, RAY_WIDTH, RAY_HEIGHT, True)
@@ -1327,52 +1289,57 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y - 9, RAY_WIDTH, RAY_HEIGHT, True)
 					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y + 9, RAY_WIDTH, RAY_HEIGHT, True)
 				Default
-			EndIf
-		}
+					' Nothing so far.
+			End Select
+		End
 		
-		Public Function getRelativePointX:Int(originalX:Int, offsetX:Int, offsetY:Int, degree:Int)
+		Function getRelativePointX:Int(originalX:Int, offsetX:Int, offsetY:Int, degree:Int)
 			Return (((dCos(degree) * offsetX) / 100) + originalX) - ((dSin(degree) * offsetY) / 100)
-		}
+		End
 		
-		Public Function getRelativePointY:Int(originalY:Int, offsetX:Int, offsetY:Int, degree:Int)
+		Function getRelativePointY:Int(originalY:Int, offsetX:Int, offsetY:Int, degree:Int)
 			Return (((dSin(degree) * offsetX) / 100) + originalY) + ((dCos(degree) * offsetY) / 100)
-		}
+		End
 		
-		Public Function getPath:String(path:String)
-			String path2 = ""
-			While (path.Find("/") <> -1) {
-				path2 = New StringBuilder(String.valueOf(path2)).append(path[..(path.Find("/") + 1)).toString()]
-				path = path[(path.Find("/") + 1)..]
-			EndIf
-			Return path2
-		}
-		
-		Public Function getFileName:String(path:String)
-			String path2 = ""
-			While (path.Find("/") <> -1) {
-				path2 = New StringBuilder(String.valueOf(path2)).append(path[..(path.Find("/") + 1)).toString()]
-				path = path[(path.Find("/") + 1)..]
-			EndIf
-			Return path
-		}
-		
-		Public Function vibrate:Void()
+		Function getPath:String(path:String)
+			Local out:String
 			
-			If (GlobalResource.vibrationConfig = ROTATE_90) Then
+			While (path.Find("/") <> -1)
+				Local pos:= (path.Find("/") + 1)
+				
+				out += path[..pos]
+				
+				path = path[(pos..]
+			Wend
+			
+			Return out
+		End
+		
+		Function getFileName:String(path:String)
+			Return getPath(path)
+		End
+		
+		Function vibrate:Void()
+			If (GlobalResource.vibrationConfig = 1) Then
 				MFDevice.vibrateByTime(100)
 			EndIf
-			
-		}
+		End
 		
-		Public Function drawScaleAni:Void(g:MFGraphics, drawer:AnimationDrawer, id:Int, x:Int, y:Int, scalex:Float, scaley:Float, pointx:Float, pointy:Float)
+		Function drawScaleAni:Void(g:MFGraphics, drawer:AnimationDrawer, id:Int, x:Int, y:Int, scalex:Float, scaley:Float, pointx:Float, pointy:Float)
 			drawer.setActionId(id)
-			Graphics g2 = (Graphics) g.getSystemGraphics()
+			
+			Local g2:= g.getSystemGraphics()
+			
 			g2.save()
-			g2.translate((Float) x, (Float) y)
+			
+			g2.translate(Float(x), Float(y))
 			g2.scale(scalex, scaley, pointx, pointy)
+			
 			drawer.draw(g, 0, 0)
+			
 			g2.scale(1.0 / scalex, 1.0 / scaley)
-			g2.translate((Float) (-x), (Float) (-y))
+			g2.translate(Float(-x), Float(-y))
+			
 			g2.restore()
-		}
+		End
 End
