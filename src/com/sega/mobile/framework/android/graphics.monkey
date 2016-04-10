@@ -28,12 +28,11 @@ Public
 Interface GRAPHICS_MACROS
 	' Constant variable(s):
 	Const HCENTER:Int = 1
+	Const VCENTER:Int = 2
 	Const LEFT:Int = 4
 	Const RIGHT:Int = 8
 	Const TOP:Int = 16
 	Const BOTTOM:Int = 32
-	
-	Const VCENTER:Int = 2
 	
 	Const TRANS_NONE:Int = 0
 	Const TRANS_MIRROR_ROT180:Int = 1

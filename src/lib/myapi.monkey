@@ -20,12 +20,13 @@ Private
 	Import brl.stream
 	
 	Import monkey.stack
+	Import monkey.boxes
 	
 	Import regal.typetool
 Public
 
 ' Classes:
-Class MyAPI Implements Def
+Class MyAPI Implements Def, GRAPHICS_MACROS
 	Private
 		' Constant variable(s):
 		Const ROTATE_90:Int = 1
@@ -62,7 +63,9 @@ Class MyAPI Implements Def
 		Const BMF_COLOR_GREEN:Int = 2
 		Const BMF_COLOR_WHITE:Int = 0
 		Const BMF_COLOR_YELLOW:Int = 1
+		
 		Const FIXED_TWO_BASE:Int = 7
+		
 		Const ZOOM_OUT_MOVE:Int = 0
 		
 		Const NOKIA_DRAW:Bool = False
@@ -293,38 +296,43 @@ Class MyAPI Implements Def
 				
 				Local nextWord:= s[currentPosition, endOfCurrentWord]
 				
-				If (nextWord.equals("~")) Then
-					ConcealEnterPosition = currentPosition - startOfLine
+				If (nextWord.Equals("\")) Then ' "~~"
+					ConcealEnterPosition = (currentPosition - startOfLine)
+					
 					isSpace = False
-				ElseIf (nextWord.equals("|") Or nextWord.equals("\n")) Then
+				ElseIf (nextWord.Equals("|") Or nextWord.Equals("~n")) Then
 					ConcealEnterPosition = 0
-					Int startOfLine2 = endOfCurrentWord
-					strings.addElement(answerWord)
+					
+					Local startOfLine2:= endOfCurrentWord
+					
+					strings.Push(answerWord)
+					
 					answerWord = ""
+					
 					startOfLine = startOfLine2
+					
 					func = False
 				Else
-					answerWord = New StringBuilder(String.valueOf(answerWord)).append(nextWord).toString()
+					answerWord = (answerWord + nextWord)
 					
-					If (nextWord.equals("<")) Then
+					If (nextWord.Equals("<")) Then
 						func = True
+						
 						currentPosition = endOfCurrentWord
 					Else
 						currentPosition = 0
+						
 						While (currentPosition < Symbol.Length) {
-							
-							If (nextWord.charAt(0) = Symbol[currentPosition]) Then
+							If (nextWord[0] = Symbol[currentPosition]) Then
 								currentPosition = endOfCurrentWord
 								
 								If (endOfCurrentWord = s.Length) Then
-									strings.addElement(answerWord)
+									strings.Push(answerWord)
 								EndIf
-								
 							Else
 								currentPosition += 1
 							EndIf
-							
-						}
+						Wend
 					EndIf
 				EndIf
 				
@@ -336,24 +344,15 @@ Class MyAPI Implements Def
 				
 				If (currentPosition >= lineLength And endOfCurrentWord < s.Length) Then
 					If (ConcealEnterPosition = 0) Then
-						try {
-							strings.addElement(answerWord[0, (answerWord.Length - 1)])
-							answerWord = answerWord[(answerWord.Length - 1)..]
-							startOfLine2 = endOfCurrentWord - 1
-						} catch (Exception e) {
-							SystemOut("answerWord" + answerWord)
-							startOfLine2 = startOfLine
-						}
+						strings.Push(answerWord[..(answerWord.Length - 1)])
+						
+						answerWord = answerWord[(answerWord.Length - 1)..]
+						startOfLine2 = endOfCurrentWord - 1
 					Else
-						try {
-							strings.addElement(answerWord[..ConcealEnterPosition])
-							answerWord = answerWord[(Int(isSpace) + ConcealEnterPosition)..]
-							currentPosition = (ConcealEnterPosition + Int(isSpace) + startOfLine
-						} catch (Exception e2) {
-							SystemOut("answerWord" + answerWord)
-							SystemOut("ConcealEnterPosition" + ConcealEnterPosition)
-							currentPosition = startOfLine
-						}
+						strings.Push(answerWord[..ConcealEnterPosition])
+						
+						answerWord = answerWord[(Int(isSpace) + ConcealEnterPosition)..]
+						currentPosition = (ConcealEnterPosition + Int(isSpace) + startOfLine
 						
 						ConcealEnterPosition = 0
 						startOfLine2 = currentPosition
@@ -363,275 +362,254 @@ Class MyAPI Implements Def
 					
 					func = False
 				ElseIf (endOfCurrentWord = s.Length) Then
-					strings.addElement(answerWord)
+					strings.Push(answerWord)
 				EndIf
 				
 				currentPosition = endOfCurrentWord
 			Wend
 			
 			Return strings.ToArray()
-		}
+		End
 		
-		Public Function getStrings:String[](s:String, fontid:Int, lineLength:Int)
+		Function getStrings:String[](s:String, fontid:Int, lineLength:Int)
 			lineLength = zoomOut(lineLength)
 			
 			If (lineLength > 8) Then
 				lineLength -= 8
 			EndIf
 			
-			Vector strings = New Vector()
-			String answerWord = ""
-			Bool function = False
-			Int currentPosition = 0
-			Int endOfCurrentWord = 0
-			Int ConcealEnterPosition = 0
-			Int startOfLine = 0
-			Bool isSpace = False
-			While (endOfCurrentWord >= 0 And endOfCurrentWord < s.Length) {
+			Local strings:= New StringStack()
+			
+			Local answerWord:String
+			
+			Local func:Bool = False
+			
+			Local currentPosition:= 0
+			Local endOfCurrentWord:= 0
+			Local ConcealEnterPosition:= 0
+			Local startOfLine:= 0
+			
+			Local isSpace:Bool = False
+			
+			While (endOfCurrentWord >= 0 And endOfCurrentWord < s.Length)
 				endOfCurrentWord += 1
-				String nextWord = s[(currentPosition)..(endOfCurrentWord)]
 				
-				If (nextWord.equals("~")) Then
-					ConcealEnterPosition = currentPosition - startOfLine
-					isSpace = False
-				ElseIf (nextWord.equals("|") Or nextWord.equals("\n")) Then
-					ConcealEnterPosition = 0
-					Int startOfLine2 = endOfCurrentWord
-					strings.addElement(answerWord)
-					answerWord = ""
-					startOfLine = startOfLine2
-					function = False
-				Else
-					answerWord = New StringBuilder(String.valueOf(answerWord)).append(nextWord).toString()
+				Local nextWord:= s[(currentPosition)..(endOfCurrentWord)]
+				
+				If (nextWord.Equals("~")) Then
+					ConcealEnterPosition = (currentPosition - startOfLine)
 					
-					If (nextWord.equals("<")) Then
-						function = True
+					isSpace = False
+				ElseIf (nextWord.Equals("|") Or nextWord.Equals("~n")) Then
+					ConcealEnterPosition = 0
+					
+					Local startOfLine2:= endOfCurrentWord
+					
+					strings.Push(answerWord)
+					
+					answerWord = ""
+					
+					startOfLine = startOfLine2
+					
+					func = False
+				Else
+					answerWord += nextWord
+					
+					If (nextWord.Equals("<")) Then
+						func = True
+						
 						currentPosition = endOfCurrentWord
 					Else
 						currentPosition = 0
-						While (currentPosition < Symbol.Length) {
-							
-							If (nextWord.charAt(0) = Symbol[currentPosition]) Then
+						
+						While (currentPosition < Symbol.Length)
+							If (nextWord[0] = Symbol[currentPosition]) Then
 								currentPosition = endOfCurrentWord
 								
 								If (endOfCurrentWord = s.Length) Then
-									strings.addElement(answerWord)
+									strings.Push(answerWord)
 								EndIf
-								
 							Else
 								currentPosition += 1
 							EndIf
-							
-						}
+						Wend
 					EndIf
 				EndIf
 				
 				currentPosition = getStringWidth(fontid, answerWord)
 				
-				If (function) Then
+				If (func) Then
 					currentPosition -= getStringWidth(fontid, "<H>")
 				EndIf
 				
 				If (currentPosition >= lineLength And endOfCurrentWord < s.Length) Then
 					If (ConcealEnterPosition = 0) Then
-						try {
-							strings.addElement(answerWord[(0)..(answerWord.Length - 1))]
-							answerWord = answerWord[(answerWord.Length - 1)..]
-							startOfLine2 = endOfCurrentWord - 1
-						} catch (Exception e) {
-							SystemOut("answerWord" + answerWord)
-							startOfLine2 = startOfLine
-						}
+						strings.Push(answerWord[..(answerWord.Length - 1))]
+						
+						answerWord = answerWord[(answerWord.Length - 1)..]
+						
+						startOfLine2 = endOfCurrentWord - 1
 					Else
-						try {
-							strings.addElement(answerWord[(0)..(ConcealEnterPosition))]
-							answerWord = answerWord[((isSpace ? 1 : 0) + ConcealEnterPosition)..]
-							currentPosition = (ConcealEnterPosition + (isSpace ? 1 : 0)) + startOfLine
-						} catch (Exception e2) {
-							SystemOut("answerWord" + answerWord)
-							SystemOut("ConcealEnterPosition" + ConcealEnterPosition)
-							currentPosition = startOfLine
-						}
+						strings.Push(answerWord[..(ConcealEnterPosition))]
+						
+						answerWord = answerWord[(Int(isSpace) + ConcealEnterPosition)..]
+						
+						currentPosition = ((ConcealEnterPosition + Int(isSpace)) + startOfLine)
+						
 						ConcealEnterPosition = 0
+						
 						startOfLine2 = currentPosition
 					EndIf
 					
 					startOfLine = startOfLine2
-					function = False
+					
+					func = False
 				ElseIf (endOfCurrentWord = s.Length) Then
-					strings.addElement(answerWord)
+					strings.Push(answerWord)
 				EndIf
 				
 				currentPosition = endOfCurrentWord
-			EndIf
-			s = New String[strings.size()]
-			strings.copyInto(s)
-			Return s
-		}
+			Wend
+			
+			Return strings.ToArray()
+		End
 		
-		Public Function getEnStrings:String[](s:String, lineLength:Int)
-			Vector strings = New Vector()
-			String answerWord = ""
-			Int currentPosition = 0
-			Int endOfCurrentWord = 0
-			Int startOfLine = 0
+		Function getEnStrings:String[](s:String, lineLength:Int)
+			Local strings:= New StringStack()
+			
+			Local answerWord:String
+			
+			Local currentPosition:= 0
+			Local endOfCurrentWord:= 0
+			Local startOfLine:= 0
+			
 			While (endOfCurrentWord >= 0 And endOfCurrentWord < s.Length) {
 				endOfCurrentWord += 1
-				String nextWord = s[(currentPosition)..(endOfCurrentWord)]
 				
-				If (nextWord.equals("~") Or nextWord.equals(" ")) Then
-					Int ConcealEnterPosition = currentPosition - startOfLine
-				ElseIf (nextWord.equals("|") Or nextWord.equals("\n")) Then
+				Local nextWord:= s[(currentPosition)..(endOfCurrentWord)]
+				
+				If (nextWord.Equals("~") Or nextWord.Equals(" ")) Then
+					'Local ConcealEnterPosition:= (currentPosition - startOfLine)
+				ElseIf (nextWord.Equals("|") Or nextWord.Equals("~n")) Then
 					startOfLine = endOfCurrentWord
-					strings.addElement(answerWord)
+					
+					strings.Push(answerWord)
+					
 					answerWord = ""
 				Else
-					answerWord = New StringBuilder(String.valueOf(answerWord)).append(nextWord).toString()
+					answerWord = answerWord + nextWord
 					
-					If (Not nextWord.equals("<")) Then
-						Int i = 0
-						While (i < Symbol.Length) {
-							
-							If (nextWord.charAt(0) = Symbol[i]) Then
+					If (Not nextWord.Equals("<")) Then
+						Local i:= 0
+						
+						While (i < Symbol.Length)
+							If (nextWord[0] = Symbol[i]) Then
 								currentPosition = endOfCurrentWord
 								
 								If (endOfCurrentWord = s.Length) Then
-									strings.addElement(answerWord)
+									strings.Push(answerWord)
 								EndIf
-								
 							Else
 								i += 1
 							EndIf
-							
-						}
+						Wend
 					EndIf
 				EndIf
 			EndIf
-			String[] stringsToDraw = New String[strings.size()]
-			strings.copyInto(stringsToDraw)
-			Return stringsToDraw
-		}
+			
+			Return strings.ToArray()
+		End
 		
-		Public Function getStringWidth:Int(fontID:Int, answerWord:String)
+		Function getStringWidth:Int(fontID:Int, answerWord:String)
 			Return MFGraphics.stringWidth(fontID, answerWord)
-		}
+		End
 		
-		Public Function getArray:Object[](vec:Vector)
-			
-			If (vec.size() = 0) Then
-				Return Null
-			EndIf
-			
-			Object[] re = New Object[vec.size()]
-			vec.copyInto(re)
-			Return re
-		}
-		
-		Public Function SystemOut:Void(a:String)
+		Function SystemOut:Void(a:String)
 			#If CONFIG = "debug"
 				Print(a)
 			#End
 		End
 		
-		Public Function FillQua:Void(g2:MFGraphics, x0:Int, y0:Int, x1:Int, y1:Int, x2:Int, y2:Int, x3:Int, y3:Int)
+		Function FillQua:Void(g2:MFGraphics, x0:Int, y0:Int, x1:Int, y1:Int, x2:Int, y2:Int, x3:Int, y3:Int)
 			g2.fillTriangle(x0, y0, x1, y1, x2, y2)
 			g2.fillTriangle(x0, y0, x2, y2, x3, y3)
 			g2.fillTriangle(x0, y0, x1, y1, x3, y3)
-		}
+		End
 		
-		Public Function dSin:Int(tDeg:Int)
-			While (tDeg < 0) {
-				tDeg += MDPhone.SCREEN_WIDTH
-			EndIf
-			Int tsh = tDeg Mod MDPhone.SCREEN_WIDTH
+		Function dSin:Int(tDeg:Int)
+			While (tDeg < 0)
+				tDeg += 360
+			Wend
+			
+			'Return Int(Sin(Float(tDeg)))
+			
+			Local tsh:= (tDeg Mod 360)
 			
 			If (tsh >= 0 And tsh <= 90) Then
-				Return sinData2[tsh] >>> FIXED_TWO_BASE
+				Return sinData2[tsh] Shr FIXED_TWO_BASE ' >>>
 			EndIf
 			
 			If (tsh > 90 And tsh <= 180) Then
-				Return sinData2[90 - (tsh - 90)] >>> FIXED_TWO_BASE
+				Return sinData2[90 - (tsh - 90)] Shr FIXED_TWO_BASE ' >>>
 			EndIf
 			
 			If (tsh > 180 And tsh <= 270) Then
-				Return (sinData2[tsh - 180] >>> FIXED_TWO_BASE) * -1
+				Return (sinData2[tsh - 180] Shr FIXED_TWO_BASE) * -1 ' >>>
 			EndIf
 			
 			If (tsh <= 270 Or tsh > 359) Then
 				Return BMF_COLOR_WHITE
 			EndIf
 			
-			Return (sinData2[90 - (tsh - 270)] >>> FIXED_TWO_BASE) * -1
-		}
+			Return (sinData2[90 - (tsh - 270)] Shr FIXED_TWO_BASE) * -1 ' >>>
+		End
 		
-		Public Function dCos:Int(tDeg:Int)
+		Function dCos:Int(tDeg:Int)
 			Return dSin(90 - tDeg)
-		}
+		End
 		
-		Public Function getTypeName:String(fileName:String, type:String)
-			String re = ""
+		Function getTypeName:String(fileName:String, type:String)
+			Local re:String
 			
-			If (fileName.Find(".") <> -1) Then
-				Return fileName[(0)..(fileName.Find("."))] + type
+			Local sepPos:= fileName.Find(".")
+			
+			If (sepPos <> -1) Then
+				Return fileName[..sepPos] + type
 			EndIf
 			
-			Return New StringBuilder(String.valueOf(fileName)).append(type).toString()
-		}
+			Return fileName + type
+		End
 		
-		Public Function loadString:String[](filename:String)
-			Throwable th
-			DataInputStream in = Null
-			String[] outdata = Null
-			try {
-				DataInputStream in2 = New DataInputStream(MFDevice.getResourceAsStream(filename))
-				try {
-					outdata = New String[in2.readInt()]
-					For (Int i = 0; i < outdata.Length; i += 1)
-						outdata[i] = in2.readUTF()
-					EndIf
-					If (in2 <> Null) Then
-						try {
-							in2.close()
-						} catch (Exception e) {
-						}
-					EndIf
+		Function loadString:String[](filename:String)
+			Local output:String[]
+			
+			Try
+				Local input:= MFDevice.getResourceAsStream(filename)
+				
+				Local outSize:= input.ReadInt()
+				
+				output = New String[outSize]
+				
+				For Local i:= 0 Until outSize
+					Local strLength:= input.ReadShort()
 					
-				} catch (Exception e2) {
-					in = in2
-				} catch (Throwable th2) {
-					th = th2
-					in = in2
-				EndIf
-			} catch (Exception e3) {
+					output[i] = input.ReadString(strLength, "utf8")
+				Next
 				
-				If (in <> Null) Then
-					try {
-						in.close()
-					} catch (Exception e4) {
-					EndIf
-				EndIf
-				
-				Return outdata
-			} catch (Throwable th3) {
-				th = th3
-				
-				If (in <> Null) Then
-					try {
-						in.close()
-					} catch (Exception e5) {
-					EndIf
-				EndIf
-				
-				throw th
-			EndIf
-			Return outdata
-		}
-		
-		Public Function drawStrings:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, beginPosition:Int, bold:Bool, color1:Int, color2:Int, color3:Int)
+				input.Close()
+			Catch E:StreamError
+				' Nothing so far.
+			End Try
 			
+			Return output
+		End
+		
+		Function drawStrings:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, beginPosition:Int, bold:Bool, color1:Int, color2:Int, color3:Int)
 			If (drawString <> Null) Then
-				Int x2 = x
-				String stringToDraw = ""
+				Local x2:= x
+				
+				Local stringToDraw:String
+				
 				downPermit = False
 				
 				If (stringCursol > 0) Then
@@ -640,11 +618,12 @@ Class MyAPI Implements Def
 					upPermit = False
 				EndIf
 				
-				Int i = beginPosition
-				While (i < drawString.Length) {
-					
+				Local i:= beginPosition
+				
+				While (i < drawString.Length)
 					If ((((i - stringCursol) - beginPosition) * LINE_SPACE) + FONT_H > height) Then
 						downPermit = True
+						
 						Return
 					EndIf
 					
@@ -652,6 +631,7 @@ Class MyAPI Implements Def
 						stringToDraw = drawString[i]
 					Else
 						anchor = drawString[i][(drawString[i].Find("<") + 1)..(drawString[i].Find(">"))]
+						
 						stringToDraw = drawString[i][(drawString[i].Find(">") + 1)..]
 					EndIf
 					
@@ -672,16 +652,16 @@ Class MyAPI Implements Def
 					EndIf
 					
 					i += 1
-				EndIf
+				Wend
 			EndIf
-			
-		}
+		End
 		
-		Public Function drawStrings:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, beginPosition:Int, bold:Bool, color1:Int, color2:Int, color3:Int, font:Int)
-			
+		Function drawStrings:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, beginPosition:Int, bold:Bool, color1:Int, color2:Int, color3:Int, font:Int)
 			If (drawString <> Null) Then
-				Int x2 = x
-				String stringToDraw = ""
+				Local x2:= x
+				
+				Local stringToDraw:String
+				
 				downPermit = False
 				
 				If (stringCursol > 0) Then
@@ -690,12 +670,13 @@ Class MyAPI Implements Def
 					upPermit = False
 				EndIf
 				
-				Int i = beginPosition
-				While (i < drawString.Length) {
-					
+				Local i:= beginPosition
+				
+				While (i < drawString.Length)
 					If ((((i - stringCursol) - beginPosition) * LINE_SPACE) + FONT_H > height) Then
 						downPermit = True
-						Return
+						
+						Exit
 					EndIf
 					
 					If (drawString[i].Find("<") = -1 Or drawString[i].Find(">") = -1) Then
@@ -722,16 +703,16 @@ Class MyAPI Implements Def
 					EndIf
 					
 					i += 1
-				EndIf
+				Wend
 			EndIf
-			
-		}
+		End
 		
-		Public Function drawStrings:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, fontH:Int, beginPosition:Int, bold:Bool, color1:Int, color2:Int, color3:Int)
-			
+		Function drawStrings:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, fontH:Int, beginPosition:Int, bold:Bool, color1:Int, color2:Int, color3:Int)
 			If (drawString <> Null) Then
-				Int x2 = x
-				String stringToDraw = ""
+				Local x2:= x
+				
+				Local stringToDraw:String
+				
 				downPermit = False
 				
 				If (stringCursol > 0) Then
@@ -740,12 +721,13 @@ Class MyAPI Implements Def
 					upPermit = False
 				EndIf
 				
-				Int i = beginPosition
-				While (i < drawString.Length) {
-					
+				Local i:= beginPosition
+				
+				While (i < drawString.Length)
 					If ((((i - stringCursol) - beginPosition) * LINE_SPACE) + FONT_H > height) Then
 						downPermit = True
-						Return
+						
+						Exit
 					EndIf
 					
 					If (drawString[i].Find("<") = -1 Or drawString[i].Find(">") = -1) Then
@@ -772,16 +754,16 @@ Class MyAPI Implements Def
 					EndIf
 					
 					i += 1
-				EndIf
+				Wend
 			EndIf
-			
-		}
+		End
 		
-		Public Function drawStringsContinue:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, beginPosition:Int, bold:Bool, color1:Int, color2:Int, color3:Int)
-			
+		Function drawStringsContinue:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, beginPosition:Int, bold:Bool, color1:Int, color2:Int, color3:Int)
 			If (drawString <> Null) Then
-				Int x2 = x
-				String stringToDraw = ""
+				Local x2:= x
+				
+				Local stringToDraw:String
+				
 				downPermit = False
 				
 				If (stringCursol > 0) Then
@@ -791,8 +773,8 @@ Class MyAPI Implements Def
 				EndIf
 				
 				height = beginPosition
-				While (height < drawString.Length) {
-					
+				
+				While (height < drawString.Length)
 					If (drawString[height].Find("<") = -1 Or drawString[height].Find(">") = -1) Then
 						stringToDraw = drawString[height]
 					Else
@@ -815,16 +797,16 @@ Class MyAPI Implements Def
 					EndIf
 					
 					height += 1
-				EndIf
+				Wend
 			EndIf
-			
-		}
+		End
 		
-		Public Function drawStringsNarrow:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, interval:Int, beginPosition:Int, bold:Bool, color1:Int, color2:Int, color3:Int)
-			
+		Function drawStringsNarrow:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, interval:Int, beginPosition:Int, bold:Bool, color1:Int, color2:Int, color3:Int)
 			If (drawString <> Null) Then
-				Int x2 = x
-				String stringToDraw = ""
+				Local x2:= x
+				
+				Local stringToDraw:String
+				
 				downPermit = False
 				
 				If (stringCursol > 0) Then
@@ -833,12 +815,13 @@ Class MyAPI Implements Def
 					upPermit = False
 				EndIf
 				
-				Int i = beginPosition
-				While (i < drawString.Length) {
-					
+				Local i:= beginPosition
+				
+				While (i < drawString.Length)
 					If ((((i - stringCursol) - beginPosition) * interval) + FONT_H > height) Then
 						downPermit = True
-						Return
+						
+						Exit
 					EndIf
 					
 					If (drawString[i].Find("<") = -1 Or drawString[i].Find(">") = -1) Then
@@ -865,29 +848,27 @@ Class MyAPI Implements Def
 					EndIf
 					
 					i += 1
-				EndIf
+				Wend
 			EndIf
-			
-		}
+		End
 		
-		Public Function drawStrings:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int)
-			drawStrings(g2, drawString, x, y, width, height, BMF_COLOR_WHITE, False, BMF_COLOR_WHITE, BMF_COLOR_WHITE, BMF_COLOR_WHITE)
-		}
+		Function drawStrings:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int)
+			drawStrings(g2, drawString, x, y, width, height, 0, False, 0, 0, 0)
+		End
 		
-		Public Function drawBoldStrings:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, color1:Int, color2:Int, color3:Int)
-			drawStrings(g2, drawString, x, y, width, height, BMF_COLOR_WHITE, True, color1, color2, color3)
-		}
+		Function drawBoldStrings:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, color1:Int, color2:Int, color3:Int)
+			drawStrings(g2, drawString, x, y, width, height, 0, True, color1, color2, color3)
+		End
 		
-		Public Function drawBoldStringsNarrow:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, interval:Int, color1:Int, color2:Int, color3:Int)
-			drawStringsNarrow(g2, drawString, x, y, width, height, interval, BMF_COLOR_WHITE, True, color1, color2, color3)
-		}
+		Function drawBoldStringsNarrow:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, interval:Int, color1:Int, color2:Int, color3:Int)
+			drawStringsNarrow(g2, drawString, x, y, width, height, interval, 0, True, color1, color2, color3)
+		End
 		
-		Public Function drawStrings:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, fontH:Int, color1:Int, color2:Int, color3:Int)
+		Function drawStrings:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, fontH:Int, color1:Int, color2:Int, color3:Int)
 			drawStrings(g2, drawString, x, y, width, height, fontH, (Int) BMF_COLOR_WHITE, True, color1, color2, color3)
-		}
+		End
 		
-		Public Function logicString:Void(keyDown:Bool, keyUp:Bool)
-			
+		Function logicString:Void(keyDown:Bool, keyUp:Bool)
 			If (keyDown) Then
 				If (downPermit And (scrollPageWait = PAGE_WAIT Or scrollPageWait = 0)) Then
 					stringCursol += 1
@@ -896,7 +877,6 @@ Class MyAPI Implements Def
 				If (scrollPageWait > 0) Then
 					scrollPageWait -= 1
 				EndIf
-				
 			ElseIf (keyUp) Then
 				If (upPermit And (scrollPageWait = PAGE_WAIT Or scrollPageWait = 0)) Then
 					stringCursol -= 1
@@ -905,20 +885,18 @@ Class MyAPI Implements Def
 				If (scrollPageWait > 0) Then
 					scrollPageWait -= 1
 				EndIf
-				
 			Else
 				scrollPageWait = PAGE_WAIT
 			EndIf
-			
-		}
+		End
 		
-		Public Function initString:Void()
+		Function initString:Void()
 			stringCursol = 0
-			anchor = ""
-		}
-		
-		Public Function drawTxtArrows:Void(g:MFGraphics, x:Int, y:Int)
 			
+			anchor = ""
+		End
+		
+		Function drawTxtArrows:Void(g:MFGraphics, x:Int, y:Int)
 			If (downPermit) Then
 				drawArrow(g, x + 10, y, False, False)
 			EndIf
@@ -926,14 +904,14 @@ Class MyAPI Implements Def
 			If (stringCursol > 0) Then
 				drawArrow(g, x - 10, y, True, False)
 			EndIf
-			
-		}
+		End
 		
-		Public Function drawArrow:Void(g:MFGraphics, x:Int, y:Int, isLeft:Bool, isHorizontal:Bool)
+		Function drawArrow:Void(g:MFGraphics, x:Int, y:Int, isLeft:Bool, isHorizontal:Bool)
 			x = zoomOut(x)
 			y = zoomOut(y)
-			For (Int i = 0; i < ARROW.Length; i += 1)
-				Int arrowHeight
+			
+			For Local i:= 0 Until ARROW.Length
+				Local arrowHeight:Int
 				
 				If (isLeft) Then
 					arrowHeight = ARROW[i]
@@ -947,110 +925,116 @@ Class MyAPI Implements Def
 					g.drawLine((x - (arrowHeight / 2)) - 1, (y - (ARROW.Length / 2)) + i, ((x - (arrowHeight / 2)) - 1) + arrowHeight, (y - (ARROW.Length / 2)) + i)
 				EndIf
 			EndIf
-		}
+		End
 		
-		Public Function drawBoldString:Void(g2:MFGraphics, a:String, x:Int, y:Int, anchor:Int, color:Int)
-			drawBoldString(g2, a, x, y, anchor, color, BMF_COLOR_WHITE, color)
-		}
+		Function drawBoldString:Void(g2:MFGraphics, a:String, x:Int, y:Int, anchor:Int, color:Int)
+			drawBoldString(g2, a, x, y, anchor, color, 0, color)
+		End
 		
-		Public Function drawBoldString:Void(g2:MFGraphics, a:String, x:Int, y:Int, anchor:Int, color1:Int, color2:Int)
+		Function drawBoldString:Void(g2:MFGraphics, a:String, x:Int, y:Int, anchor:Int, color1:Int, color2:Int)
 			drawBoldString(g2, a, x, y, anchor, color1, color2, color1)
-		}
+		End
 		
-		Public Function setBmfColor:Void(colorID:Int)
+		Function setBmfColor:Void(colorID:Int)
 			Select (colorID)
 				Case BMF_COLOR_WHITE
 					currentBmFont = bmFont
-				Case ROTATE_90
+				Case BMF_COLOR_YELLOW
 					currentBmFont = bmFontYellow
-				Case FLIP_X
+				Case BMF_COLOR_GREEN
 					currentBmFont = bmFontGreen
-				Case RAY_HEIGHT
+				Case BMF_COLOR_GRAY
 					currentBmFont = bmFontGray
 				Default
-			EndIf
-		}
+					' Nothing so far.
+			End Select
+		End
 		
-		Public Function drawBoldString:Void(g2:MFGraphics, a:String, x:Int, y:Int, anchor:Int, color:Int, color2:Int, color3:Int)
-			
+		Function drawBoldString:Void(g2:MFGraphics, a:String, x:Int, y:Int, anchor:Int, color:Int, color2:Int, color3:Int)
 			If (a <> Null) Then
 				x = zoomOut(x)
 				y = zoomOut(y)
+				
 				g2.setColor(color2)
-				For (Int i = 0; i < OFFSET.Length; i += 1)
-					g2.drawString(a, OFFSET[i][BMF_COLOR_WHITE] + x, OFFSET[i][1] + y, anchor)
-				EndIf
+				
+				For Local i:= 0 Until OFFSET.Length
+					g2.drawString(a, OFFSET[i][0] + x, OFFSET[i][1] + y, anchor)
+				Next
+				
 				g2.setColor(color)
+				
 				g2.drawString(a, x, y, anchor)
 			EndIf
-			
-		}
+		End
 		
-		Public Function drawBoldString2:Void(g2:MFGraphics, a:String, x:Int, y:Int, anchor:Int, color:Int, color2:Int, color3:Int)
-			
+		Function drawBoldString2:Void(g2:MFGraphics, a:String, x:Int, y:Int, anchor:Int, color:Int, color2:Int, color3:Int)
 			If (a <> Null) Then
 				x = zoomOut(x)
 				y = zoomOut(y)
+				
 				g2.setColor(color2)
-				For (Int i = 0; i < OFFSET2.Length; i += 1)
-					g2.drawString(a, OFFSET2[i][BMF_COLOR_WHITE] + x, OFFSET2[i][1] + y, anchor)
-				EndIf
+				
+				For Local i:= 0 Until OFFSET2.Length
+					g2.drawString(a, OFFSET2[i][0] + x, OFFSET2[i][1] + y, anchor)
+				Next
+				
 				g2.setColor(color)
+				
 				g2.drawString(a, x, y, anchor)
 			EndIf
-			
-		}
+		End
 		
-		Public Function zoomOut:Int(x:Int)
-			Return x Shr BMF_COLOR_WHITE
-		}
+		Function zoomOut:Int(x:Int)
+			Return (x Shr ZOOM_OUT_MOVE)
+		End
 		
-		Public Function zoomIn:Int(x:Int)
-			Return x Shl BMF_COLOR_WHITE
-		}
+		Function zoomIn:Int(x:Int)
+			Return (x Shl ZOOM_OUT_MOVE)
+		End
 		
-		Public Function zoomIn:Int(x:Int, bFlag:Bool)
-			
+		Function zoomIn:Int(x:Int, bFlag:Bool)
 			If (bFlag) Then
-				Return x Shl BMF_COLOR_WHITE
+				Return (x Shl ZOOM_OUT_MOVE)
 			EndIf
 			
 			Return zoomIn(x)
-		}
+		End
 		
-		Public Function drawRegionNokia:Void(g:MFGraphics, image:MFImage, sx:Int, sy:Int, cx:Int, cy:Int, attr:Int, dx:Int, dy:Int)
-		}
+		Function drawRegionNokia:Void(g:MFGraphics, image:MFImage, sx:Int, sy:Int, cx:Int, cy:Int, attr:Int, dx:Int, dy:Int)
+			' Empty implementation.
+		End
 		
-		Public Function drawImageSetClip:Void(g:MFGraphics, image:MFImage, sx:Int, sy:Int, sw:Int, sh:Int, dx:Int, dy:Int, anchor:Int)
-			
-			If ((anchor & ROTATE_90) <> 0) Then
+		Function drawImageSetClip:Void(g:MFGraphics, image:MFImage, sx:Int, sy:Int, sw:Int, sh:Int, dx:Int, dy:Int, anchor:Int)
+			If ((anchor & HCENTER) <> 0) Then
 				dx -= sw / 2
-			ElseIf ((anchor & 8) <> 0) Then
+			ElseIf ((anchor & RIGHT) <> 0) Then
 				dx -= sw
 			EndIf
 			
-			If ((anchor & 32) <> 0) Then
+			If ((anchor & BOTTOM) <> 0) Then
 				dy -= sh
-			ElseIf ((anchor & FLIP_X) <> 0) Then
+			ElseIf ((anchor & VCENTER) <> 0) Then
 				dy -= sh / 2
 			EndIf
 			
-			g.setClip(Max(dx, BMF_COLOR_WHITE), Max(dy, BMF_COLOR_WHITE), Min(sw + dx, BMF_COLOR_WHITE + SSDef.PLAYER_MOVE_HEIGHT) - Max(dx, BMF_COLOR_WHITE), Min(sh + dy, BMF_COLOR_WHITE + 320) - Max(dy, BMF_COLOR_WHITE))
-			g.drawImage(image, dx - sx, dy - sy, BMF_COLOR_WHITE)
-			g.setClip(0, BMF_COLOR_WHITE, SSDef.PLAYER_MOVE_HEIGHT, 320)
-		}
+			g.setClip(Max(dx, 0), Max(dy, 0), Min(sw + dx, 0 + SSDef.PLAYER_MOVE_HEIGHT) - Max(dx, 0), Min(sh + dy, 0 + 320) - Max(dy, 0))
+			
+			g.drawImage(image, dx - sx, dy - sy, 0)
+			
+			g.setClip(0, 0, SSDef.PLAYER_MOVE_HEIGHT, 320)
+		End
 		
 		Public Function drawRegionDebug:Void(g:MFGraphics, img:MFImage, sx:Int, sy:Int, w:Int, he:Int, rot:Int, x:Int, y:Int, anchor:Int)
 			
-			If ((anchor & ROTATE_90) <> 0) Then
+			If ((anchor & HCENTER) <> 0) Then
 				x -= w / 2
-			ElseIf ((anchor & 8) <> 0) Then
+			ElseIf ((anchor & RIGHT) <> 0) Then
 				x -= w
 			EndIf
 			
-			If ((anchor & 32) <> 0) Then
+			If ((anchor & BOTTOM) <> 0) Then
 				y -= he
-			ElseIf ((anchor & FLIP_X) <> 0) Then
+			ElseIf ((anchor & VCENTER) <> 0) Then
 				y -= he / 2
 			EndIf
 			
@@ -1061,7 +1045,7 @@ Class MyAPI Implements Def
 			
 			Int[] RGB = New Int[(w * he)]
 			Int[] mRGB = New Int[(w * he)]
-			img.getRGB(RGB, BMF_COLOR_WHITE, w, sx, sy, w, he)
+			img.getRGB(RGB, 0, w, sx, sy, w, he)
 			Int i
 			
 			If (rot = FLIP_X) Then
@@ -1113,9 +1097,9 @@ Class MyAPI Implements Def
 				Case PAGE_WAIT
 				Case SSDef.SSOBJ_BNLD_ID
 				Case FIXED_TWO_BASE
-					g.drawRGB(mRGB, BMF_COLOR_WHITE, he, x, y, he, w, True)
+					g.drawRGB(mRGB, 0, he, x, y, he, w, True)
 				Default
-					g.drawRGB(mRGB, BMF_COLOR_WHITE, w, x, y, w, he, True)
+					g.drawRGB(mRGB, 0, w, x, y, w, he, True)
 			EndIf
 		}
 		
@@ -1180,7 +1164,7 @@ Class MyAPI Implements Def
 			Int ret = 0
 			Int j = 0
 			While (True) {
-				Int x = org.Find("\n", j)
+				Int x = org.Find("~n", j)
 				
 				If (x = -1) Then
 					Return ret
@@ -1213,15 +1197,15 @@ Class MyAPI Implements Def
 				j = x + 2
 				k = k2
 			EndIf
-			If (re[BMF_COLOR_WHITE] <> Null And re[BMF_COLOR_WHITE].Length > 0) Then
-				StringBuffer b = New StringBuffer(New String(re[BMF_COLOR_WHITE].toCharArray()))
-				Integer ascii = New Integer(b.charAt(0))
+			If (re[0] <> Null And re[0].Length > 0) Then
+				StringBuffer b = New StringBuffer(New String(re[0].toCharArray()))
+				Integer ascii = New Integer(b[0])
 				
 				If (ascii.hashCode() = 63 Or ascii.hashCode() = 65279 Or ascii.hashCode() = -257) Then
 					b.deleteCharAt(0)
 				EndIf
 				
-				re[BMF_COLOR_WHITE] = b.toString()
+				re[0] = b.toString()
 			EndIf
 			
 			Return re
@@ -1320,28 +1304,28 @@ Class MyAPI Implements Def
 			Select (type)
 				Case BMF_COLOR_WHITE
 				Case FIXED_TWO_BASE
-					g.drawRGB(rayRGB, BMF_COLOR_WHITE, RAY_WIDTH, x, y, RAY_WIDTH, RAY_HEIGHT, True)
+					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y, RAY_WIDTH, RAY_HEIGHT, True)
 				Case ROTATE_90
 				Case SSDef.SSOBJ_BNLD_ID
-					g.drawRGB(rayRGB, BMF_COLOR_WHITE, RAY_WIDTH, x, y, RAY_WIDTH, RAY_HEIGHT, True)
-					g.drawRGB(rayRGB, BMF_COLOR_WHITE, RAY_WIDTH, x, y - RAY_HEIGHT, RAY_WIDTH, RAY_HEIGHT, True)
-					g.drawRGB(rayRGB, BMF_COLOR_WHITE, RAY_WIDTH, x, y + RAY_HEIGHT, RAY_WIDTH, RAY_HEIGHT, True)
+					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y, RAY_WIDTH, RAY_HEIGHT, True)
+					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y - RAY_HEIGHT, RAY_WIDTH, RAY_HEIGHT, True)
+					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y + RAY_HEIGHT, RAY_WIDTH, RAY_HEIGHT, True)
 				Case FLIP_X
 				Case PAGE_WAIT
-					g.drawRGB(rayRGB, BMF_COLOR_WHITE, RAY_WIDTH, x, y, RAY_WIDTH, RAY_HEIGHT, True)
-					g.drawRGB(rayRGB, BMF_COLOR_WHITE, RAY_WIDTH, x, y - RAY_HEIGHT, RAY_WIDTH, RAY_HEIGHT, True)
-					g.drawRGB(rayRGB, BMF_COLOR_WHITE, RAY_WIDTH, x, y + RAY_HEIGHT, RAY_WIDTH, RAY_HEIGHT, True)
-					g.drawRGB(rayRGB, BMF_COLOR_WHITE, RAY_WIDTH, x, y - 6, RAY_WIDTH, RAY_HEIGHT, True)
-					g.drawRGB(rayRGB, BMF_COLOR_WHITE, RAY_WIDTH, x, y + 6, RAY_WIDTH, RAY_HEIGHT, True)
+					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y, RAY_WIDTH, RAY_HEIGHT, True)
+					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y - RAY_HEIGHT, RAY_WIDTH, RAY_HEIGHT, True)
+					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y + RAY_HEIGHT, RAY_WIDTH, RAY_HEIGHT, True)
+					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y - 6, RAY_WIDTH, RAY_HEIGHT, True)
+					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y + 6, RAY_WIDTH, RAY_HEIGHT, True)
 				Case RAY_HEIGHT
 				Case FLIP_Y
-					g.drawRGB(rayRGB, BMF_COLOR_WHITE, RAY_WIDTH, x, y, RAY_WIDTH, RAY_HEIGHT, True)
-					g.drawRGB(rayRGB, BMF_COLOR_WHITE, RAY_WIDTH, x, y - RAY_HEIGHT, RAY_WIDTH, RAY_HEIGHT, True)
-					g.drawRGB(rayRGB, BMF_COLOR_WHITE, RAY_WIDTH, x, y + RAY_HEIGHT, RAY_WIDTH, RAY_HEIGHT, True)
-					g.drawRGB(rayRGB, BMF_COLOR_WHITE, RAY_WIDTH, x, y - 6, RAY_WIDTH, RAY_HEIGHT, True)
-					g.drawRGB(rayRGB, BMF_COLOR_WHITE, RAY_WIDTH, x, y + 6, RAY_WIDTH, RAY_HEIGHT, True)
-					g.drawRGB(rayRGB, BMF_COLOR_WHITE, RAY_WIDTH, x, y - 9, RAY_WIDTH, RAY_HEIGHT, True)
-					g.drawRGB(rayRGB, BMF_COLOR_WHITE, RAY_WIDTH, x, y + 9, RAY_WIDTH, RAY_HEIGHT, True)
+					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y, RAY_WIDTH, RAY_HEIGHT, True)
+					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y - RAY_HEIGHT, RAY_WIDTH, RAY_HEIGHT, True)
+					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y + RAY_HEIGHT, RAY_WIDTH, RAY_HEIGHT, True)
+					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y - 6, RAY_WIDTH, RAY_HEIGHT, True)
+					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y + 6, RAY_WIDTH, RAY_HEIGHT, True)
+					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y - 9, RAY_WIDTH, RAY_HEIGHT, True)
+					g.drawRGB(rayRGB, 0, RAY_WIDTH, x, y + 9, RAY_WIDTH, RAY_HEIGHT, True)
 				Default
 			EndIf
 		}
@@ -1357,7 +1341,7 @@ Class MyAPI Implements Def
 		Public Function getPath:String(path:String)
 			String path2 = ""
 			While (path.Find("/") <> -1) {
-				path2 = New StringBuilder(String.valueOf(path2)).append(path[(0)..(path.Find("/") + 1)).toString()]
+				path2 = New StringBuilder(String.valueOf(path2)).append(path[..(path.Find("/") + 1)).toString()]
 				path = path[(path.Find("/") + 1)..]
 			EndIf
 			Return path2
@@ -1366,7 +1350,7 @@ Class MyAPI Implements Def
 		Public Function getFileName:String(path:String)
 			String path2 = ""
 			While (path.Find("/") <> -1) {
-				path2 = New StringBuilder(String.valueOf(path2)).append(path[(0)..(path.Find("/") + 1)).toString()]
+				path2 = New StringBuilder(String.valueOf(path2)).append(path[..(path.Find("/") + 1)).toString()]
 				path = path[(path.Find("/") + 1)..]
 			EndIf
 			Return path
@@ -1386,7 +1370,7 @@ Class MyAPI Implements Def
 			g2.save()
 			g2.translate((Float) x, (Float) y)
 			g2.scale(scalex, scaley, pointx, pointy)
-			drawer.draw(g, BMF_COLOR_WHITE, BMF_COLOR_WHITE)
+			drawer.draw(g, 0, 0)
 			g2.scale(1.0 / scalex, 1.0 / scaley)
 			g2.translate((Float) (-x), (Float) (-y))
 			g2.restore()
