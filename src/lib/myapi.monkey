@@ -53,7 +53,7 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 		Global YELLOW_PALETTE_PARAM:Int[] = [16777215, 16763904, 16776960, 0] ' Const
 		
 		' Global variable(s):
-		Global currentBmFont:BitmapFont
+		'Global currentBmFont:BitmapFont
 		
 		' This may be removed at a later date.
 		Global rayRGB:Int[] = New Int[RAY_WIDTH*RAY_HEIGHT]
@@ -75,11 +75,14 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 		
 		' Global variable(s):
 		Global anchor:String
+		
 		Global backColor:Int = BMF_COLOR_WHITE
-		Global bmFont:BitmapFont
-		Global bmFontGray:BitmapFont
-		Global bmFontGreen:BitmapFont
-		Global bmFontYellow:BitmapFont
+		
+		'Global bmFont:BitmapFont
+		'Global bmFontGray:BitmapFont
+		'Global bmFontGreen:BitmapFont
+		'Global bmFontYellow:BitmapFont
+		
 		Global borderColor:Int = BMF_COLOR_WHITE
 		Global downPermit:Bool
 		Global scrollPageWait:Int
