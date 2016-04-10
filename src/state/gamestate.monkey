@@ -372,96 +372,102 @@ Class GameState Extends State
 		Field planeDrawer:AnimationDrawer
 		Field stageInfoActNumDrawer:AnimationDrawer
 		Field stageInfoPlayerNameDrawer:AnimationDrawer
-		
-		' Methods:
-		Private Method initTips:Void()
-			
-			If (Self.loadingWordsDrawer = Null Or Self.loadingDrawer = Null) Then
-				Animation animation = New Animation("/animation/loading")
-				Self.loadingWordsDrawer = animation.getDrawer(0, True, 0)
-				Self.loadingDrawer = animation.getDrawer(0, False, 0)
-			EndIf
-			
-			Self.TIPS = Null
-			Select (PlayerObject.getCharacterID())
-				Case 0
-					
-					If (StageManager.getCurrentZoneId() <> 8) Then
-						Self.TIPS = MyAPI.loadText("/tip/tips_sonic")
-						break
-					Else
-						Self.TIPS = MyAPI.loadText("/tip/tips_ssonic")
-						break
-					EndIf
-					
-				Case 1
-					Self.TIPS = MyAPI.loadText("/tip/tips_tails")
-					break
-				Case PLANE_VELOCITY
-					Self.TIPS = MyAPI.loadText("/tip/tips_knuckles")
-					break
-				Case PAUSE_RACE_TO_TITLE
-					Self.TIPS = MyAPI.loadText("/tip/tips_amy")
-					break
-			End Select
-			MyAPI.initString()
-			Self.loadingStartTime = Millisecs()
-			tipsForShow = Null
-			State.fadeInit(255, 0)
-		End
-		
-		Public Method GameState:public()
+	Protected
+		' Constructor(s):
+		Method Construct_GameState:Void() ' Final
 			Self.state = STATE_STAGE_SELECT
+			
 			Self.overtitleID = 0
+			
 			Self.movingTitleX = 0
 			Self.movingTitleSpeedX = 0
-			Self.display = (Int[][]) Array.newInstance(Integer.TYPE, New Int[]{PAUSE_OPTION_ITEMS_NUM, PAUSE_RACE_OPTION})
-			Self.TIPS = Null
+			
+			Self.display = New Int[6][] ' NUM
+			
+			For Local i:= 0 Until Self.display.Length ' 6 ' NUM
+				Self.display[i] = New Int[4]
+			Next
+			
 			Self.loadingStartTime = 0
+			
 			Self.TIPS_OFFSET_X = 16
 			Self.TIPS_TITLE_OFFSET_Y = 0
-			Self.TIPS_TEXT_OFFSET_Y = (FONT_H - 0) - 0
-			Self.TIPS_TEXT_INTERVAL_Y = (FONT_H - 0) - 0
+			
+			Self.TIPS_TEXT_OFFSET_Y = (FONT_H)
+			Self.TIPS_TEXT_INTERVAL_Y = (FONT_H)
+			
 			Self.racemode_cnt = 60
+			
 			Self.optionCursor = New Int[OPTION_ELEMENT_NUM]
+			
 			Self.isOptionDisFlag = False
+			
 			Self.optionslide_getprey = -1
 			Self.optionslide_gety = -1
+			
 			Self.offsetOfVolumeInterface = 0
-			Self.pressDelay = STATE_STAGE_LOADING
-			Self.cloudInfo = (Int[][]) Array.newInstance(Integer.TYPE, New Int[]{LOADING_TIME_LIMIT, PAUSE_RACE_TO_TITLE})
+			
+			Self.pressDelay = PRESS_DELAY
+			
+			Self.cloudInfo = New Int[CLOUD_NUM][]
+			
+			For Local i:= 0 Until CLOUD_NUM ' Self.cloudInfo.Length
+				Self.cloudInfo[i] = New Int[3]
+			Next
+			
 			Self.cloudCount = 0
-			Self.birdInfo = (Int[][]) Array.newInstance(Integer.TYPE, New Int[]{LOADING_TIME_LIMIT, PAUSE_RACE_TO_TITLE})
+			
+			Self.birdInfo = New Int[BIRD_NUM][]
+			
+			For Local i:= 0 Until BIRD_NUM ' Self.birdInfo.Length
+				Self.birdInfo[i] = New Int[3]
+			Next
+			
 			Self.BP_IsFromContinueTry = False
+			
 			Self.BP_CONTINUETRY_MENU_START_X = FRAME_X
 			Self.BP_CONTINUETRY_MENU_START_Y = Self.MORE_GAME_START_Y
+			
 			Self.BP_CONTINUETRY_MENU_WIDTH = FRAME_WIDTH
 			Self.BP_CONTINUETRY_MENU_HEIGHT = Self.MORE_GAME_HEIGHT
+			
 			Self.overcnt = 0
-			Self.IsPlayerNameDrawable = False
+			
+			Self.IsPlayerNameDrawable = False ' True
 			Self.IsActNumDrawable = False
-			Self.state = PAUSE_RACE_INSTRUCTION
+			
+			Self.state = STAGE_NAME_S
+			
+			' Magic number: 0
 			loadingType = 0
+			
 			State.fadeInit(255, 0)
+			
 			fading = False
+			
 			isBackFromSpStage = False
+			
 			initTips()
 		End
+	Public
+		' Constructor(s):
+		Method New()
+			Construct_GameState()
+		End
 		
-		Public Method GameState:public(stateID:Int)
-			Self()
+		Method New(stateID:Int)
+			Construct_GameState()
+			
 			Select (stateID)
-				Case SSDef.SSOBJ_BNRD_ID
+				Case STATE_PAUSE_OPTION
 					isBackFromSpStage = True
 					isThroughGame = True
 				Default
+					' Nothing so far.
 			End Select
 		End
 		
-		Private Method loadingEnd:Bool()
-			Return (Millisecs() - Self.loadingStartTime < 10000 Or Not StageManager.loadStageStep()) ? False : True
-		End
-		
+		' Methods:
 		Public Method logic:Void()
 			
 			If (Self.state <> 18) Then
@@ -674,7 +680,7 @@ Class GameState Extends State
 						Self.isOptionDisFlag = False
 					EndIf
 					
-				Case SSDef.SSOBJ_BNRD_ID
+				Case STATE_PAUSE_OPTION
 					optionLogic()
 					
 					If (Key.press(PLANE_VELOCITY)) Then
@@ -1310,7 +1316,7 @@ Class GameState Extends State
 				Case PAUSE_OPTION_ITEMS_NUM
 					helpDraw(g)
 					break
-				Case SSDef.SSOBJ_BNRD_ID
+				Case STATE_PAUSE_OPTION
 					optionDraw(g)
 					break
 				Case PlayerTails.TAILS_ANI_FLY_2
@@ -1793,6 +1799,53 @@ Class GameState Extends State
 			EndIf
 			
 		End
+	Private
+		' Methods:
+		
+		' Extensions:
+		Method LoadingInProgress:Bool()
+			Return ((Millisecs() - Self.loadingStartTime) < (LOADING_TIME_LIMIT * 1000) Or Not StageManager.loadStageStep())
+		End
+		
+		Method loadingEnd:Bool()
+			Return (Not LoadingInProgress())
+		End
+		
+		Private Method initTips:Void()
+			
+			If (Self.loadingWordsDrawer = Null Or Self.loadingDrawer = Null) Then
+				Animation animation = New Animation("/animation/loading")
+				Self.loadingWordsDrawer = animation.getDrawer(0, True, 0)
+				Self.loadingDrawer = animation.getDrawer(0, False, 0)
+			EndIf
+			
+			Self.TIPS = Null
+			Select (PlayerObject.getCharacterID())
+				Case 0
+					
+					If (StageManager.getCurrentZoneId() <> 8) Then
+						Self.TIPS = MyAPI.loadText("/tip/tips_sonic")
+						break
+					Else
+						Self.TIPS = MyAPI.loadText("/tip/tips_ssonic")
+						break
+					EndIf
+					
+				Case 1
+					Self.TIPS = MyAPI.loadText("/tip/tips_tails")
+					break
+				Case PLANE_VELOCITY
+					Self.TIPS = MyAPI.loadText("/tip/tips_knuckles")
+					break
+				Case PAUSE_RACE_TO_TITLE
+					Self.TIPS = MyAPI.loadText("/tip/tips_amy")
+					break
+			End Select
+			MyAPI.initString()
+			Self.loadingStartTime = Millisecs()
+			tipsForShow = Null
+			State.fadeInit(255, 0)
+		End
 		
 		Private Method doReturnGameStuff:Void()
 			Self.state = 0
@@ -2104,7 +2157,7 @@ Class GameState Extends State
 					Case PlayerTails.TAILS_ANI_POLE_V
 						isDrawTouchPad = False
 						break
-					Case SSDef.SSOBJ_BNRD_ID
+					Case STATE_PAUSE_OPTION
 						optionInit()
 						State.fadeInit(0, 0)
 						Key.touchkeyboardClose()
