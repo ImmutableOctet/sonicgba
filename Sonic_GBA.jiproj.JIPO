@@ -359,6 +359,14 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\lib\direction.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>31</X>
+        <Y>43</Y>
+      </CursorPos>
+      <DocGUID>9eb3fa72-f6ac-466f-b6fa-67549980eded</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\line.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>31</X>
