@@ -276,8 +276,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\gameengine\def.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>8</X>
-        <Y>138</Y>
+        <X>9</X>
+        <Y>200</Y>
       </CursorPos>
       <DocGUID>2e79f6e7-ae92-4546-8dd0-c830aea9ba29</DocGUID>
       <Bookmarks />
@@ -1057,8 +1057,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\gamestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>34</X>
-        <Y>1188</Y>
+        <X>2</X>
+        <Y>4006</Y>
       </CursorPos>
       <DocGUID>0e670923-8241-4759-9607-d0ad92d193ae</DocGUID>
       <Bookmarks />
