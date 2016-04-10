@@ -44,11 +44,14 @@ Private
 	'Import month.monthcertificationstate
 	
 	Import mojo.app
+	
 	Import mojo2.graphics
 	
 	#If TARGET = "glfw"
 		Import brl.requesters
 	#End
+	
+	Import monkey.random
 Public
 
 ' Aliases:
