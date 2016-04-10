@@ -4,8 +4,6 @@ Public
 
 ' Imports:
 Private
-	Import com.sega.mobile.define.mdphone
-	
 	Import sonicgba.ballhobin
 Public
 
@@ -35,7 +33,7 @@ Class RollHobin Extends BallHobin
 			
 			calHobinPosition()
 			
-			Self.degreeOffset = ((Self.iLeft * MDPhone.SCREEN_WIDTH) / 8)
+			Self.degreeOffset = ((Self.iLeft * 360) / 8)
 		End
 	Private
 		' Methods:
