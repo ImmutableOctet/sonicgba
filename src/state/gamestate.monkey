@@ -470,11 +470,9 @@ Class GameState Extends State
 		
 		' Methods:
 		Public Method logic:Void()
-			If (Self.state <> 18) Then
+			If (Self.state <> STATE_INTERRUPT) Then
 				fadeStateLogic()
 			EndIf
-			
-			Int[] iArr
 			
 			Select (Self.state)
 				Case STATE_GAME
@@ -664,6 +662,7 @@ Class GameState Extends State
 						If (Not (isBackFromSpStage Or GameObject.stageModeState = 1)) Then
 							StageManager.characterFromGame = PlayerObject.getCharacterID()
 							StageManager.stageIDFromGame = StageManager.getStageID()
+							
 							StageManager.saveStageRecord()
 						EndIf
 						
@@ -858,7 +857,9 @@ Class GameState Extends State
 						Self.stageInfoActNumDrawer.restart()
 					EndIf
 					
-					Local iArr:= Self.display[0]
+					Local iArr:Int[]
+					
+					iArr = Self.display[0]
 					
 					If ((iArr[0] + iArr[2]) > 0) Then
 						iArr[0] = 0
@@ -892,8 +893,8 @@ Class GameState Extends State
 					iArr = Self.display[2]
 					iArr[1] += Self.display[2][3]
 					
-					iArr = Self.display[PAUSE_RACE_OPTION]
-					iArr[0] += Self.display[PAUSE_RACE_OPTION][2]
+					iArr = Self.display[4]
+					iArr[0] += Self.display[4][2]
 					
 					If (Self.display[5][0] + Self.display[5][2] < SCREEN_WIDTH - 112) Then ' Def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1
 						Self.display[5][0] = SCREEN_WIDTH - 112 ' Def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1
@@ -918,8 +919,10 @@ Class GameState Extends State
 						Key.touchanykeyClose()
 					EndIf
 					
+					Local iArr:Int[]
+					
 					Self.display[2][2] = -7
-					Self.display[PAUSE_RACE_OPTION][3] = False
+					Self.display[4][3] = 0
 					
 					iArr = Self.display[0]
 					iArr[0] += Self.display[0][2]
@@ -932,30 +935,36 @@ Class GameState Extends State
 					iArr = Self.display[2]
 					iArr[0] += Self.display[2][2]
 					
-					While (Self.display[2][0] < 0)
-						iArr = Self.display[2]
+					iArr = Self.display[2]
+					
+					While (iArr[0] < 0)
 						iArr[0] += STAGE_MOVE_DIRECTION
 					Wend
 					
-					iArr = Self.display[2]
 					iArr[0] Mod= STAGE_MOVE_DIRECTION
-					iArr = Self.display[2]
-					iArr[1] += Self.display[2][3]
+					
+					iArr[1] += iArr[3]
+					
 					iArr = Self.display[3]
+					
 					iArr[0] += Self.display[3][2]
-					iArr = Self.display[3]
 					iArr[1] += Self.display[3][3]
-					iArr = Self.display[PAUSE_RACE_OPTION]
-					iArr[0] += Self.display[PAUSE_RACE_OPTION][2]
-					iArr = Self.display[PAUSE_RACE_OPTION]
-					iArr[1] += Self.display[PAUSE_RACE_OPTION][3]
+					
+					iArr = Self.display[4]
+					
+					iArr[0] += Self.display[4][2]
+					iArr[1] += Self.display[4][3]
+					
 					iArr = Self.display[5]
+					
 					iArr[0] += Self.display[5][2]
 					
 					If (Key.press(Key.B_SEL)) Then
 						Self.state = STATE_PRE_GAME_3
+						
 						Key.clear()
 						Key.touchanykeyClose()
+						
 						State.fadeInit(State.getCurrentFade(), 0)
 					EndIf
 					
@@ -965,13 +974,14 @@ Class GameState Extends State
 					
 					GameObject.setNoInput()
 					GameObject.logicObjects()
-				Case PlayerTails.TAILS_ANI_DEAD_1
-					
+				Case STATE_PRE_GAME_3
 					If (Self.frameCount < 3) Then
 						Self.frameCount += 1
 					Else
 						PlayerObject.isNeedPlayWaterSE = True
+						
 						Self.state = STATE_GAME
+						
 						PreGame = False
 					EndIf
 					
@@ -980,53 +990,69 @@ Class GameState Extends State
 					Self.display[2][2] = -105
 					Self.display[5][2] = -105
 					Self.display[3][3] = -75
-					Self.display[PAUSE_RACE_OPTION][3] = STAFF_SHOW_TIME
+					Self.display[4][3] = 45
+					
+					Local iArr:Int[]
+					
 					iArr = Self.display[0]
+					
 					iArr[0] += Self.display[0][2]
-					iArr = Self.display[0]
 					iArr[1] += Self.display[0][3]
+					
 					iArr = Self.display[1]
+					
 					iArr[0] += Self.display[1][2]
-					iArr = Self.display[1]
 					iArr[1] += Self.display[1][3]
+					
 					iArr = Self.display[2]
+					
 					iArr[0] += Self.display[2][2]
+					
 					iArr = Self.display[5]
+					
 					iArr[0] += Self.display[5][2]
+					
 					iArr = Self.display[2]
+					
 					iArr[1] += Self.display[2][3]
+					
 					iArr = Self.display[3]
+					
 					iArr[0] += Self.display[3][2]
-					iArr = Self.display[3]
 					iArr[1] += Self.display[3][3]
-					iArr = Self.display[PAUSE_RACE_OPTION]
-					iArr[0] += Self.display[PAUSE_RACE_OPTION][2]
-					iArr = Self.display[PAUSE_RACE_OPTION]
-					iArr[1] += Self.display[PAUSE_RACE_OPTION][3]
+					
+					iArr = Self.display[4]
+					
+					iArr[0] += Self.display[4][2]
+					iArr[1] += Self.display[4][3]
 					
 					If (Self.state = STATE_GAME) Then
 						isDrawTouchPad = True
+						
 						Self.frameCount = 0
+						
 						State.fadeInit(102, 0)
 						State.setFadeOver()
 					EndIf
 					
 					GameObject.setNoInput()
 					GameObject.logicObjects()
-				Case PlayerTails.TAILS_ANI_DEAD_2
+				Case STATE_INTERRUPT
 					interruptLogic()
-				Case PlayerTails.TAILS_ANI_CELEBRATE_1
-					
+				Case STATE_PRE_GAME_1_TYPE2
 					If (Self.frameCount < 18) Then
 						Self.frameCount += 1
 					Else
 						releaseTips()
+						
 						Self.state = STATE_PRE_GAME_2
+						
 						Key.touchanykeyInit()
+						
 						State.fadeInit(204, 0)
 					EndIf
 					
-					If (Self.frameCount < VISIBLE_OPTION_ITEMS_NUM Or Self.frameCount > 11) Then
+					If (Self.frameCount < 9 Or Self.frameCount > 11) Then
 						Self.display[0][2] = False
 					Else
 						Self.display[0][2] = 30
@@ -1044,7 +1070,7 @@ Class GameState Extends State
 						Self.display[2][2] = -104
 					EndIf
 					
-					If (Self.frameCount < BIRD_SPACE_2 Or Self.frameCount > 15) Then
+					If (Self.frameCount < 14 Or Self.frameCount > 15) Then
 						Self.display[5][2] = 0
 					Else
 						Self.display[5][2] = -104
@@ -1060,15 +1086,18 @@ Class GameState Extends State
 						Self.stageInfoActNumDrawer.restart()
 					EndIf
 					
+					Local iArr:Int[]
+					
+					iArr = Self.display[0]
+					
 					If (Self.display[0][0] + Self.display[0][2] > 0) Then
 						Self.display[0][0] = 0
 					Else
-						iArr = Self.display[0]
 						iArr[0] += Self.display[0][2]
 					EndIf
 					
-					iArr = Self.display[0]
 					iArr[1] += Self.display[0][3]
+					
 					iArr = Self.display[1]
 					iArr[0] += Self.display[1][2]
 					
@@ -1076,30 +1105,33 @@ Class GameState Extends State
 						Self.display[1][0] = 0
 					EndIf
 					
-					If (Self.display[1][1] + Self.display[1][3] > (SCREEN_HEIGHT Shr 1) + 48) Then
-						Self.display[1][1] = (SCREEN_HEIGHT Shr 1) + 48
+					If (Self.display[1][1] + Self.display[1][3] > (SCREEN_HEIGHT / 2) + 48) Then ' Shr 1
+						Self.display[1][1] = (SCREEN_HEIGHT / 2) + 48 ' Shr 1
 					Else
 						iArr = Self.display[1]
 						iArr[1] += Self.display[1][3]
 					EndIf
 					
 					iArr = Self.display[2]
+					
 					iArr[0] += Self.display[2][2]
-					While (Self.display[2][0] < 0) {
-						iArr = Self.display[2]
+					
+					While (Self.display[2][0] < 0)
 						iArr[0] += STAGE_MOVE_DIRECTION
-					}
-					iArr = Self.display[2]
+					Wend
+					
 					iArr[0] Mod= STAGE_MOVE_DIRECTION
-					iArr = Self.display[2]
 					iArr[1] += Self.display[2][3]
-					iArr = Self.display[PAUSE_RACE_OPTION]
-					iArr[0] += Self.display[PAUSE_RACE_OPTION][2]
+					
+					iArr = Self.display[4]
+					
+					iArr[0] += Self.display[4][2]
 					
 					If (Self.display[5][0] + Self.display[5][2] < SCREEN_WIDTH - 112) Then ' Def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1
 						Self.display[5][0] = SCREEN_WIDTH - 112 ' Def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1
 					Else
 						iArr = Self.display[5]
+						
 						iArr[0] += Self.display[5][2]
 					EndIf
 					
@@ -1109,7 +1141,7 @@ Class GameState Extends State
 					
 					GameObject.setNoInput()
 					GameObject.logicObjects()
-				Case PlayerTails.TAILS_ANI_CELEBRATE_2
+				Case STATE_GAME_OVER_PRE
 					Self.overcnt += 1
 					
 					If (Self.overcnt = 20) Then
@@ -1120,148 +1152,156 @@ Class GameState Extends State
 						If (Self.overcnt = 36) Then
 							Self.state = 41
 						EndIf
-						
 					ElseIf (Self.overtitleID = 136 And Self.overcnt = 28) Then ' Def.TOUCH_HELP_HEIGHT
-						Self.state = 11
+						Self.state = STATE_TIME_OVER_0
 					EndIf
-					
-				Case PlayerTails.TAILS_ANI_CELEBRATE_3
+				Case STATE_PAUSE_SELECT_CHARACTER
 					pausetoSelectCharacterLogic()
-				Case PlayerTails.TAILS_ANI_CELEBRATE_4
+				Case STATE_PAUSE_OPTION_SOUND
 					pauseOptionSoundLogic()
-				Case PlayerTails.TAILS_ANI_BANK_1
+				Case STATE_PAUSE_OPTION_VIB
 					pauseOptionVibrationLogic()
-				Case PlayerTails.TAILS_ANI_BANK_3
+				Case STATE_PAUSE_OPTION_SP_SET
 					pauseOptionSpSetLogic()
-				Case PlayerTails.TAILS_ANI_UP_ARM
+				Case STATE_PAUSE_OPTION_HELP
 					helpLogic()
 					
 					If ((Key.press(Key.B_BACK) Or (Key.touchhelpreturn.IsButtonPress() And Self.returnPageCursor = 1)) And State.fadeChangeOver()) Then
-						changeStateWithFade(7)
+						changeStateWithFade(STATE_PAUSE_OPTION)
+						
 						GameObject.IsGamePause = True
+						
 						Self.isOptionDisFlag = False
-						SoundSystem.getInstance().playSe(PLANE_VELOCITY)
+						
+						SoundSystem.getInstance().playSe(SoundSystem.SE_107)
+						
 						Self.returnCursor = 0
 					EndIf
-					
-				Case PlayerTails.TAILS_ANI_POLE_V
-					
+				Case STATE_STAGE_LOADING_TURN
 					If (State.fadeChangeOver()) Then
 						Self.state = STATE_STAGE_LOADING
+						
 						MapManager.closeMap()
+						
 						initTips()
 					EndIf
-					
-				Case PlayerTails.TAILS_ANI_POLE_H
-					
+				Case STATE_PRE_GAME_0
 					If (State.fadeChangeOver()) Then
-						Self.state = 15
+						Self.state = STATE_PRE_GAME_1
+						
 						State.fadeInit(255, 204)
 					EndIf
-					
-				Case PlayerTails.TAILS_ANI_ROLL_V_1
-					
+				Case STATE_PRE_GAME_0_TYPE2
 					If (State.fadeChangeOver()) Then
-						Self.state = 27
+						Self.state = STATE_PRE_GAME_1_TYPE2
+						
 						State.fadeInit(255, 204)
 					EndIf
-					
-				Case PlayerTails.TAILS_ANI_ROLL_V_2
+				Case STATE_PAUSE_OPTION_SOUND_VOLUMN
 					Select (soundVolumnLogic())
-						Case PLANE_VELOCITY
+						Case 2
+							' Go back to the main "options menu":
 							State.fadeInit(190, 0)
-							Self.state = 7
+							
+							Self.state = STATE_PAUSE_OPTION
+							
 							Self.returnCursor = 0
 						Default
+							' Nothing so far.
 					End Select
-				Case PlayerTails.TAILS_ANI_ROLL_H_1
-					Select (spSenorSetLogic())
-						Case STATE_PAUSE
-							GlobalResource.sensorConfig = 0
-							State.fadeInit(190, 0)
-							Self.state = 7
-							Self.returnCursor = 0
-						Case PLANE_VELOCITY
-							GlobalResource.sensorConfig = 1
-							State.fadeInit(190, 0)
-							Self.state = 7
-							Self.returnCursor = 0
-						Case PAUSE_RACE_TO_TITLE
-							State.fadeInit(190, 0)
-							Self.state = 7
-							Self.returnCursor = 0
-						Case STATE_STAGE_PASS
-							GlobalResource.sensorConfig = PLANE_VELOCITY
-							State.fadeInit(190, 0)
-							Self.state = 7
-							Self.returnCursor = 0
-						Default
-					End Select
-				Case PlayerTails.TAILS_ANI_ROLL_H_2
+				Case STATE_PAUSE_OPTION_SENSOR
+					Local cleanup:Bool = True
 					
+					Select (spSenorSetLogic())
+						Case 1
+							GlobalResource.sensorConfig = 0
+						Case 2
+							GlobalResource.sensorConfig = 1
+						Case 3
+							' Nothing so far.
+						Case STATE_STAGE_PASS
+							GlobalResource.sensorConfig = 2
+						Default
+							cleanup = False
+					End Select
+					
+					If (cleanup) Then
+						State.fadeInit(190, 0)
+						
+						Self.state = STATE_PAUSE_OPTION
+						
+						Self.returnCursor = 0
+					EndIf
+				Case STATE_PRE_ALL_CLEAR
 					If (State.fadeChangeOver()) Then
 						PlayerObject.calculateScore()
+						
 						Self.state = STATE_ALL_CLEAR
+						
 						State.fadeInit(255, 0)
+						
+						' This is necessary in case a call to 'createImage' throws an exception:
 						Self.exendBgImage = Null
 						Self.exendBg1Image = Null
+						
 						Self.exendBgImage = MFImage.createImage("/animation/ending/ed_ex_moon_bg.png")
 						Self.exendBg1Image = MFImage.createImage("/animation/ending/ed_ex_forest.png")
+						
 						SoundSystem.getInstance().stopBgm(False)
+						
 						Self.allclearFrame = 0
 					EndIf
-					
-				Case PlayerTails.TAILS_ANI_BAR_STAY
-					
-					If (Self.movingTitleX - Self.movingTitleSpeedX < (SCREEN_WIDTH Shr 1)) Then
+				Case STATE_CONTINUE_0
+					If (Self.movingTitleX - Self.movingTitleSpeedX < (SCREEN_WIDTH / 2)) Then ' Shr 1
 						Self.movingTitleX = SCREEN_WIDTH
+						
 						State.fadeInit(0, 102)
+						
 						continueInit()
+						
 						Return
 					EndIf
 					
 					Self.movingTitleX -= Self.movingTitleSpeedX
-				Case PlayerTails.TAILS_ANI_BAR_MOVE
+				Case STATE_CONTINUE_1
 					Self.continueFrame += 1
 					
-					If (Self.continueFrame <= PAUSE_RACE_INSTRUCTION) Then
-						Self.continueScale -= 0.2f
-					ElseIf (Self.continueFrame <= LOADING_TIME_LIMIT) Then
-						Self.continueScale += 0.2f
+					If (Self.continueFrame <= 5) Then
+						Self.continueScale -= 0.2
+					ElseIf (Self.continueFrame <= 10) Then
+						Self.continueScale += 0.2
 						
 						If (Self.continueScale > 1.0) Then
 							Self.continueScale = 1.0
 						EndIf
 						
-					ElseIf (Self.continueFrame > LOADING_TIME_LIMIT) Then
-						If (Self.continueMoveBlackBarX + (SCREEN_WIDTH / PAUSE_OPTION_ITEMS_NUM) > 0) Then
+					ElseIf (Self.continueFrame > 10) Then
+						If (Self.continueMoveBlackBarX + (SCREEN_WIDTH / 6) > 0) Then
 							Self.continueMoveBlackBarX = 0
 						Else
-							Self.continueMoveBlackBarX += SCREEN_WIDTH / PAUSE_OPTION_ITEMS_NUM
+							Self.continueMoveBlackBarX += (SCREEN_WIDTH / 6)
 						EndIf
 						
 						If (Self.continueMoveBlackBarX = 0) Then
 							If (Self.continueNumberState = 0) Then
-								Self.continueMoveNumberX += SCREEN_WIDTH / 12
+								Self.continueMoveNumberX += (SCREEN_WIDTH / 12)
 								
-								If (Self.continueMoveNumberX >= (SCREEN_WIDTH Shr 1)) Then
-									Self.continueMoveNumberX = SCREEN_WIDTH Shr 1
+								If (Self.continueMoveNumberX >= (SCREEN_WIDTH / 2)) Then ' Shr 1
+									Self.continueMoveNumberX = (SCREEN_WIDTH / 2) ' Shr 1
 									Self.continueNumberState = 1
 									Self.continueNumberScale = 2.0
 								EndIf
-								
 							ElseIf (Self.continueNumberState = 1) Then
 								Self.continueNumberScale -= 0.125f
 								
 								If (Self.continueNumberScale <= 1.0) Then
 									Self.continueNumberScale = 1.0
-									Self.continueNumberState = PLANE_VELOCITY
+									Self.continueNumberState = 2
 								EndIf
+							ElseIf (Self.continueNumberState = 2) Then
+								Self.continueMoveNumberX += (SCREEN_WIDTH / 12)
 								
-							ElseIf (Self.continueNumberState = PLANE_VELOCITY) Then
-								Self.continueMoveNumberX += SCREEN_WIDTH / 12
-								
-								If (Self.continueMoveNumberX >= SCREEN_WIDTH + 30) Then
+								If (Self.continueMoveNumberX >= (SCREEN_WIDTH + 30)) Then
 									Self.continueMoveNumberX = -30
 									Self.continueNumberState = 0
 									Self.continueNumber -= 1
@@ -1270,11 +1310,10 @@ Class GameState Extends State
 										continueEnd()
 									EndIf
 								EndIf
-								
-							ElseIf (Self.continueNumberState = PAUSE_RACE_TO_TITLE) Then
-								If (Self.continueFrame = Self.continueStartEndFrame + PAUSE_RACE_TO_TITLE) Then
+							ElseIf (Self.continueNumberState = 3) Then
+								If (Self.continueFrame = (Self.continueStartEndFrame + 3)) Then
 									State.fadeInit(102, 255)
-								ElseIf (Self.continueFrame > Self.continueStartEndFrame + PAUSE_RACE_TO_TITLE And State.fadeChangeOver()) Then
+								ElseIf (Self.continueFrame > (Self.continueStartEndFrame + 3) And State.fadeChangeOver()) Then
 									If (Self.continueScale - 0.2f > 0.0) Then
 										Self.continueScale -= 0.2f
 									Else
@@ -1283,34 +1322,35 @@ Class GameState Extends State
 									
 									If (Self.continueScale = 0.0) Then
 										Standard2.splashinit(True)
-										State.setState(0)
+										
+										State.setState(State.STATE_TITLE)
 									EndIf
 								EndIf
+							ElseIf (Self.continueNumberState = 4) Then
+								Self.continueMoveNumberX += (SCREEN_WIDTH / 12)
 								
-							ElseIf (Self.continueNumberState = PAUSE_RACE_OPTION) Then
-								Self.continueMoveNumberX += SCREEN_WIDTH / 12
-								
-								If (Self.continueMoveNumberX >= (SCREEN_WIDTH Shr 1)) Then
-									Self.continueMoveNumberX = SCREEN_WIDTH Shr 1
-									Self.continueNumberState = PAUSE_RACE_INSTRUCTION
+								If (Self.continueMoveNumberX >= (SCREEN_WIDTH / 2)) Then ' Shr 1
+									Self.continueMoveNumberX = (SCREEN_WIDTH / 2) ' Shr 1
+									Self.continueNumberState = 4
 									Self.continueNumberScale = 2.0
 								EndIf
-								
-							ElseIf (Self.continueNumberState = PAUSE_RACE_INSTRUCTION) Then
+							ElseIf (Self.continueNumberState = 4) Then
 								Self.continueNumberScale -= 0.125f
 								
 								If (Self.continueNumberScale <= 1.0) Then
 									Self.continueNumberScale = 1.0
-									Self.continueNumberState = PAUSE_OPTION_ITEMS_NUM
+									Self.continueNumberState = 4
 								EndIf
+							ElseIf (Self.continueNumberState = 4) Then
+								Self.continueMoveNumberX += (SCREEN_WIDTH / 12)
 								
-							ElseIf (Self.continueNumberState = PAUSE_OPTION_ITEMS_NUM) Then
-								Self.continueMoveNumberX += SCREEN_WIDTH / 12
-								
-								If (Self.continueMoveNumberX >= SCREEN_WIDTH + 30) Then
+								If (Self.continueMoveNumberX >= (SCREEN_WIDTH + 30)) Then
 									Self.state = STATE_STAGE_LOADING
+									
 									loadingType = 0
+									
 									initTips()
+									
 									PlayerObject.resetGameParam()
 								EndIf
 							EndIf
@@ -1325,35 +1365,39 @@ Class GameState Extends State
 								EndIf
 								
 								If (Key.touchgameoveryres.IsButtonPress() And Self.continueCursor = 0) Then
-									Self.continueNumberState = PAUSE_RACE_OPTION
+									Self.continueNumberState = 4
+									
 									Self.continueMoveNumberX = -30
 									Self.continueNumberScale = 1.0
-									SoundSystem.getInstance().playSe(1)
+									
+									SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 								EndIf
 								
 								If (Key.touchgameoverno.IsButtonPress() And Self.continueCursor = 1) Then
 									continueEnd()
-									SoundSystem.getInstance().playSe(PLANE_VELOCITY)
+									
+									SoundSystem.getInstance().playSe(SoundSystem.SE_107)
 								EndIf
 							EndIf
 						EndIf
 					EndIf
-					
 				Default
+					' Nothing so far.
 			End Select
 		End
 		
 		Public Method draw:Void(g:MFGraphics)
 			Select (Self.state)
-				Case PlayerTails.TAILS_ANI_UP_ARM
+				Case STATE_PAUSE_OPTION_HELP
 					g.setFont(11)
 					break
 				Default
 					g.setFont(BIRD_SPACE_2)
 					break
 			End Select
+			
 			Select (Self.state)
-				Case PLANE_VELOCITY
+				Case 2
 					StageManager.draw(g)
 					break
 				Case PAUSE_RACE_TO_TITLE
@@ -1392,32 +1436,32 @@ Class GameState Extends State
 						break
 					EndIf
 					
-				Case PlayerTails.TAILS_ANI_DEAD_2
+				Case STATE_INTERRUPT
 					interruptDraw(g)
 					break
-				Case PlayerTails.TAILS_ANI_CELEBRATE_4
+				Case STATE_PAUSE_OPTION_SOUND
 					optionDraw(g)
 					itemsSelect2Draw(g, 35, 36)
 					break
-				Case PlayerTails.TAILS_ANI_BANK_1
+				Case STATE_PAUSE_OPTION_VIB
 					optionDraw(g)
 					itemsSelect2Draw(g, 35, 36)
 					break
 				Case PlayerTails.TAILS_ANI_BANK_2
 					optionDraw(g)
 					break
-				Case PlayerTails.TAILS_ANI_BANK_3
+				Case STATE_PAUSE_OPTION_SP_SET
 					optionDraw(g)
 					itemsSelect2Draw(g, 37, 38)
 					break
-				Case PlayerTails.TAILS_ANI_UP_ARM
+				Case STATE_PAUSE_OPTION_HELP
 					helpDraw(g)
 					break
-				Case PlayerTails.TAILS_ANI_ROLL_V_2
+				Case STATE_PAUSE_OPTION_SOUND_VOLUMN
 					optionDraw(g)
 					soundVolumnDraw(g)
 					break
-				Case PlayerTails.TAILS_ANI_ROLL_H_1
+				Case STATE_PAUSE_OPTION_SENSOR
 					optionDraw(g)
 					spSenorSetDraw(g)
 					break
@@ -1435,7 +1479,7 @@ Class GameState Extends State
 						AnimationDrawer.setAllPause(False)
 					EndIf
 					
-					If (Not (Self.state = 15 Or Self.state = STATE_PRE_GAME_2 Or Self.state = STATE_PRE_GAME_3 Or Self.state = 27)) Then
+					If (Not (Self.state = STATE_PRE_GAME_1 Or Self.state = STATE_PRE_GAME_2 Or Self.state = STATE_PRE_GAME_3 Or Self.state = STATE_PRE_GAME_1_TYPE2)) Then
 						PlayerObject.drawGameUI(g)
 						drawGameSoftKey(g)
 					EndIf
@@ -1455,8 +1499,8 @@ Class GameState Extends State
 						BP_ensureToolsUseDraw(g)
 					EndIf
 					
-					If (Self.state = 15 Or Self.state = 27 Or Self.state = STATE_PRE_GAME_2 Or Self.state = STATE_PRE_GAME_3) Then
-						If (Self.state = 15 Or Self.state = 27) Then
+					If (Self.state = STATE_PRE_GAME_1 Or Self.state = STATE_PRE_GAME_1_TYPE2 Or Self.state = STATE_PRE_GAME_2 Or Self.state = STATE_PRE_GAME_3) Then
+						If (Self.state = STATE_PRE_GAME_1 Or Self.state = STATE_PRE_GAME_1_TYPE2) Then
 							State.drawFadeInSpeed(g, PAUSE_RACE_OPTION)
 						ElseIf (Self.state = STATE_PRE_GAME_2) Then
 							State.drawFadeInSpeed(g, 12)
@@ -1471,14 +1515,14 @@ Class GameState Extends State
 						drawHugeStageName(g, StageManager.getStageID(), Self.display[2][0], Self.display[2][1])
 						g.setClip(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 						drawSonic(g, Self.display[3][0], Self.display[3][1])
-						drawAction(g, StageManager.getStageID(), Self.display[PAUSE_RACE_OPTION][0], Self.display[PAUSE_RACE_OPTION][1])
+						drawAction(g, StageManager.getStageID(), Self.display[4][0], Self.display[4][1])
 					EndIf
 					
 					If (Self.state = STATE_PRE_GAME_0 Or Self.state = 37) Then
 						g.setColor(0)
 						MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 						
-						If (loadingType = PLANE_VELOCITY) Then
+						If (loadingType = 2) Then
 							g.setColor(MapManager.END_COLOR)
 							MyAPI.fillRect(g, 0, ((SCREEN_HEIGHT Shr 1) - 36) - 10, SCREEN_WIDTH, 20)
 						EndIf
@@ -1508,7 +1552,7 @@ Class GameState Extends State
 						SecondEnsurePanelDraw(g, 18)
 					EndIf
 					
-					If (Self.state = 11 Or Self.state = 41) Then
+					If (Self.state = STATE_TIME_OVER_0 Or Self.state = 41) Then
 						drawTimeOver(g, Self.movingTitleX, (SCREEN_HEIGHT Shr 1) - 28)
 					EndIf
 					
@@ -1533,7 +1577,7 @@ Class GameState Extends State
 					If (Self.state = 35) Then
 						State.drawFade(g)
 						
-						If (loadingType = PLANE_VELOCITY) Then
+						If (loadingType = 2) Then
 							g.setColor(MapManager.END_COLOR)
 							MyAPI.fillRect(g, 0, ((SCREEN_HEIGHT Shr 1) - 36) - 10, SCREEN_WIDTH, 20)
 							break
@@ -1582,12 +1626,12 @@ Class GameState Extends State
 		
 		Public Method drawGameSoftKey:Void(g:MFGraphics)
 			
-			If (Self.state <> 1 And Self.state <> LOADING_TIME_LIMIT And Self.state <> 8 And Self.state <> VISIBLE_OPTION_ITEMS_NUM And Self.state <> 29 And Self.state <> 25 And Self.state <> 26 And Self.state <> 41 And Self.state <> 42 And Self.state <> 11 And Self.state <> 12 And Self.state <> 13 And Not StageManager.isStagePassTimePause()) Then
+			If (Self.state <> 1 And Self.state <> 10 And Self.state <> 8 And Self.state <> VISIBLE_OPTION_ITEMS_NUM And Self.state <> 29 And Self.state <> 25 And Self.state <> 26 And Self.state <> 41 And Self.state <> 42 And Self.state <> 11 And Self.state <> 12 And Self.state <> 13 And Not StageManager.isStagePassTimePause()) Then
 				If (Not GameObject.player.isDead) Then
 					State.drawSoftKeyPause(g)
 				EndIf
 				
-				If (Self.state <> 25 And Self.state <> 26 And Self.state <> 1 And Self.state <> PAUSE_OPTION_ITEMS_NUM And Self.state <> 7 And Self.state <> 8 And Self.state <> VISIBLE_OPTION_ITEMS_NUM And Self.state <> 29 And Self.state <> LOADING_TIME_LIMIT And State.IsToolsCharge() And GameObject.stageModeState = 0 And Not GameObject.player.isDead) Then
+				If (Self.state <> 25 And Self.state <> 26 And Self.state <> 1 And Self.state <> PAUSE_OPTION_ITEMS_NUM And Self.state <> 7 And Self.state <> 8 And Self.state <> VISIBLE_OPTION_ITEMS_NUM And Self.state <> 29 And Self.state <> 10 And State.IsToolsCharge() And GameObject.stageModeState = 0 And Not GameObject.player.isDead) Then
 					MyAPI.drawImage(g, BP_wordsImg, 0, BP_wordsHeight, BP_wordsWidth, BP_wordsHeight, 0, tool_x, tool_y, 36)
 				EndIf
 			EndIf
@@ -1684,7 +1728,7 @@ Class GameState Extends State
 			EndIf
 			
 			If (PlayerObject.stageModeState = 0) Then
-				If ((Key.touchpause1.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 0) Or ((Key.touchpause2.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 1) Or ((Key.touchpause3.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + PLANE_VELOCITY) Or (Key.touchpause4.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + PAUSE_RACE_TO_TITLE)))) Then
+				If ((Key.touchpause1.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 0) Or ((Key.touchpause2.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 1) Or ((Key.touchpause3.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 2) Or (Key.touchpause4.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 3)))) Then
 					Select (PAUSE_NORMAL_MODE[PlayerObject.cursor])
 						Case STATE_GAME
 							BacktoGame()
@@ -1693,12 +1737,12 @@ Class GameState Extends State
 							Self.state = LOADING_TIME_LIMIT
 							Self.cursor = 1
 							break
-						Case PLANE_VELOCITY
+						Case 2
 							shopInit(True)
 							break
 						Case PAUSE_RACE_TO_TITLE
 							optionInit()
-							Self.state = 7
+							Self.state = STATE_PAUSE_OPTION
 							break
 						Case STATE_STAGE_PASS
 							helpInit()
@@ -1713,15 +1757,15 @@ Class GameState Extends State
 					PlayerObject.cursor = PlayerObject.cursorIndex + 1
 					Key.touchpause2.reset()
 				ElseIf (Key.touchpause3.IsClick()) Then
-					PlayerObject.cursor = PlayerObject.cursorIndex + PLANE_VELOCITY
+					PlayerObject.cursor = PlayerObject.cursorIndex + 2
 					Key.touchpause3.reset()
 				ElseIf (Key.touchpause4.IsClick()) Then
-					PlayerObject.cursor = PlayerObject.cursorIndex + PAUSE_RACE_TO_TITLE
+					PlayerObject.cursor = PlayerObject.cursorIndex + 3
 					Key.touchpause4.reset()
 				EndIf
 				
 			ElseIf (PlayerObject.stageModeState = 1) Then
-				If ((Key.touchpause1.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 0) Or ((Key.touchpause2.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 1) Or ((Key.touchpause3.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + PLANE_VELOCITY) Or (Key.touchpause4.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + PAUSE_RACE_TO_TITLE)))) Then
+				If ((Key.touchpause1.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 0) Or ((Key.touchpause2.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 1) Or ((Key.touchpause3.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 2) Or (Key.touchpause4.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 3)))) Then
 					Select (PlayerObject.cursor)
 						Case STATE_GAME
 							BacktoGame()
@@ -1730,7 +1774,7 @@ Class GameState Extends State
 							Self.state = STATE_PAUSE_RETRY
 							Self.cursor = 1
 							break
-						Case PLANE_VELOCITY
+						Case 2
 							Self.state = VISIBLE_OPTION_ITEMS_NUM
 							Self.cursor = 0
 							break
@@ -1740,7 +1784,7 @@ Class GameState Extends State
 							break
 						Case STATE_STAGE_PASS
 							optionInit()
-							Self.state = 7
+							Self.state = STATE_PAUSE_OPTION
 							Self.cursor = 0
 							break
 						Case STATE_STAGE_LOADING
@@ -1748,7 +1792,7 @@ Class GameState Extends State
 							Self.state = PAUSE_OPTION_ITEMS_NUM
 							Self.cursor = 0
 							break
-						Case PlayerTails.TAILS_ANI_CELEBRATE_3
+						Case STATE_PAUSE_SELECT_CHARACTER
 							Self.state = 29
 							Self.cursor = 0
 							break
@@ -1761,10 +1805,10 @@ Class GameState Extends State
 					PlayerObject.cursor = PlayerObject.cursorIndex + 1
 					Key.touchpause2.reset()
 				ElseIf (Key.touchpause3.IsClick()) Then
-					PlayerObject.cursor = PlayerObject.cursorIndex + PLANE_VELOCITY
+					PlayerObject.cursor = PlayerObject.cursorIndex + 2
 					Key.touchpause3.reset()
 				ElseIf (Key.touchpause4.IsClick()) Then
-					PlayerObject.cursor = PlayerObject.cursorIndex + PAUSE_RACE_TO_TITLE
+					PlayerObject.cursor = PlayerObject.cursorIndex + 3
 					Key.touchpause4.reset()
 				EndIf
 			EndIf
@@ -1787,7 +1831,7 @@ Class GameState Extends State
 								Self.state = STATE_PAUSE_RETRY
 								Self.cursor = 1
 								break
-							Case PLANE_VELOCITY
+							Case 2
 								Self.state = VISIBLE_OPTION_ITEMS_NUM
 								Self.cursor = 0
 								break
@@ -1797,7 +1841,7 @@ Class GameState Extends State
 								break
 							Case STATE_STAGE_PASS
 								optionInit()
-								Self.state = 7
+								Self.state = STATE_PAUSE_OPTION
 								Self.cursor = 0
 								break
 							Case STATE_STAGE_LOADING
@@ -1805,7 +1849,7 @@ Class GameState Extends State
 								Self.state = PAUSE_OPTION_ITEMS_NUM
 								Self.cursor = 0
 								break
-							Case PlayerTails.TAILS_ANI_CELEBRATE_3
+							Case STATE_PAUSE_SELECT_CHARACTER
 								Self.state = 29
 								Self.cursor = 0
 								break
@@ -1823,12 +1867,12 @@ Class GameState Extends State
 						Self.state = LOADING_TIME_LIMIT
 						Self.cursor = 1
 						break
-					Case PLANE_VELOCITY
+					Case 2
 						shopInit(True)
 						break
 					Case PAUSE_RACE_TO_TITLE
 						optionInit()
-						Self.state = 7
+						Self.state = STATE_PAUSE_OPTION
 						break
 					Case STATE_STAGE_PASS
 						helpInit()
@@ -1892,7 +1936,7 @@ Class GameState Extends State
 				Case STATE_PAUSE
 					Self.TIPS = MyAPI.loadText("/tip/tips_tails")
 					break
-				Case PLANE_VELOCITY
+				Case 2
 					Self.TIPS = MyAPI.loadText("/tip/tips_knuckles")
 					break
 				Case PAUSE_RACE_TO_TITLE
@@ -1932,16 +1976,16 @@ Class GameState Extends State
 						Case PlayerTails.TAILS_ANI_CLIFF_1
 							SoundSystem.getInstance().playBgm(22)
 							break
-						Case PlayerTails.TAILS_ANI_CELEBRATE_1
+						Case STATE_PRE_GAME_1_TYPE2
 							SoundSystem.getInstance().playBgm(25)
 							break
-						Case PlayerTails.TAILS_ANI_CELEBRATE_2
+						Case STATE_GAME_OVER_PRE
 							SoundSystem.getInstance().playBgm(46)
 							break
-						Case PlayerTails.TAILS_ANI_CELEBRATE_3
+						Case STATE_PAUSE_SELECT_CHARACTER
 							SoundSystem.getInstance().playBgm(47)
 							break
-						Case PlayerTails.TAILS_ANI_CELEBRATE_4
+						Case STATE_PAUSE_OPTION_SOUND
 							SoundSystem.getInstance().playBgm(19, True)
 							break
 						Default
@@ -1970,7 +2014,7 @@ Class GameState Extends State
 		End
 		
 		Private Method drawTips:Void(g:MFGraphics, endy:Int)
-			State.fillMenuRect(g, ((SCREEN_WIDTH - MENU_RECT_WIDTH) - 0) Shr 1, (SCREEN_HEIGHT Shr PLANE_VELOCITY) - 16, MENU_RECT_WIDTH + 0, (SCREEN_HEIGHT Shr 1) + 16)
+			State.fillMenuRect(g, ((SCREEN_WIDTH - MENU_RECT_WIDTH) - 0) Shr 1, (SCREEN_HEIGHT Shr 2) - 16, MENU_RECT_WIDTH + 0, (SCREEN_HEIGHT Shr 1) + 16)
 			
 			If (tipsForShow = Null) Then
 				tipsForShow = MyAPI.getStrings(tipsString[MyRandom.nextInt(0, tipsString.Length - 1)], MENU_RECT_WIDTH - Self.TIPS_OFFSET_X)
@@ -1979,10 +2023,10 @@ Class GameState Extends State
 			EndIf
 			
 			g.setColor(0)
-			Int i = Self.TIPS_TITLE_OFFSET_Y + ((SCREEN_HEIGHT Shr PLANE_VELOCITY) - 8)
+			Int i = Self.TIPS_TITLE_OFFSET_Y + ((SCREEN_HEIGHT Shr 2) - 8)
 			MFGraphics mFGraphics = g
 			MyAPI.drawBoldString(mFGraphics, "~u5c0f~u63d0~u793a", ((SCREEN_WIDTH - MENU_RECT_WIDTH) + Self.TIPS_OFFSET_X) Shr 1, i, 0, MapManager.END_COLOR, 4656650, 0)
-			MyAPI.drawBoldStrings(g, tipsForShow, ((SCREEN_WIDTH - MENU_RECT_WIDTH) + Self.TIPS_OFFSET_X) Shr 1, LINE_SPACE + ((SCREEN_HEIGHT Shr PLANE_VELOCITY) - 8), MENU_RECT_WIDTH - Self.TIPS_OFFSET_X, (SCREEN_HEIGHT Shr 1) - LINE_SPACE, MapManager.END_COLOR, 4656650, 0)
+			MyAPI.drawBoldStrings(g, tipsForShow, ((SCREEN_WIDTH - MENU_RECT_WIDTH) + Self.TIPS_OFFSET_X) Shr 1, LINE_SPACE + ((SCREEN_HEIGHT Shr 2) - 8), MENU_RECT_WIDTH - Self.TIPS_OFFSET_X, (SCREEN_HEIGHT Shr 1) - LINE_SPACE, MapManager.END_COLOR, 4656650, 0)
 		End
 		
 		Private Method releaseTips:Void()
@@ -2010,7 +2054,7 @@ Class GameState Extends State
 					PlayerObject.isbarOut = True
 				EndIf
 				
-				If (Self.cnt = PLANE_VELOCITY) Then
+				If (Self.cnt = 2) Then
 					SoundSystem.getInstance().playSe(32, False)
 				EndIf
 				
@@ -2096,9 +2140,9 @@ Class GameState Extends State
 				stage_id = PAUSE_OPTION_ITEMS_NUM
 			EndIf
 			
-			For (Int x1 = Self.selectMenuOffsetX - 294; x1 < SCREEN_WIDTH * PLANE_VELOCITY; x1 += STAGE_MOVE_DIRECTION)
+			For (Int x1 = Self.selectMenuOffsetX - 294; x1 < SCREEN_WIDTH * 2; x1 += STAGE_MOVE_DIRECTION)
 				MFGraphics mFGraphics = g
-				stageInfoAniDrawer.draw(mFGraphics, stage_id + PAUSE_RACE_INSTRUCTION, x1, (y - 10) + PLANE_VELOCITY, False, 0)
+				stageInfoAniDrawer.draw(mFGraphics, stage_id + PAUSE_RACE_INSTRUCTION, x1, (y - 10) + 2, False, 0)
 			Next
 		End
 		
@@ -2125,21 +2169,21 @@ Class GameState Extends State
 		Private Method drawAction:Void(g:MFGraphics, id:Int, x:Int, y:Int)
 			
 			If (Self.IsActNumDrawable And StageManager.getStageID() < 12) Then
-				Self.stageInfoActNumDrawer.draw(g, (StageManager.getStageID() Mod PLANE_VELOCITY) + 27, x, y, False, 0)
+				Self.stageInfoActNumDrawer.draw(g, (StageManager.getStageID() Mod 2) + 27, x, y, False, 0)
 			EndIf
 			
 		End
 		
 		Public Method pause:Void()
 			
-			If (Self.state <> STAFF_SHOW_TIME And Self.state <> 18 And Self.state <> 1 And Self.state <> 20 And Self.state <> 23 And Self.state <> 21) Then
+			If (Self.state <> STAFF_SHOW_TIME And Self.state <> STATE_INTERRUPT And Self.state <> 1 And Self.state <> 20 And Self.state <> 23 And Self.state <> 21) Then
 				If (Self.state = STATE_GAME And GameObject.player.isDead) Then
 					Self.interrupt_state = Self.state
-					Self.state = 18
+					Self.state = STATE_INTERRUPT
 					interruptInit()
-				ElseIf (Self.state = STATE_STAGE_LOADING Or Self.state = 35 Or Self.state = STATE_ALL_CLEAR Or Self.state = STATE_STAGE_PASS Or Self.state = 7 Or Self.state = STATE_PAUSE_RETRY Or Self.state = VISIBLE_OPTION_ITEMS_NUM Or Self.state = 29 Or Self.state = LOADING_TIME_LIMIT Or Self.state = PAUSE_OPTION_ITEMS_NUM Or Self.state = 29 Or Self.state = 41 Or Self.state = 42 Or Self.state = STATE_GAME_OVER_PRE Or Self.state = 11 Or Self.state = STATE_GAME_OVER_1 Or Self.state = STATE_GAME_OVER_2 Or Self.state = 30 Or Self.state = 31 Or Self.state = 32 Or Self.state = 33 Or Self.state = 34 Or Self.state = 38 Or Self.state = 39 Or Self.state = 43 Or Self.state = 44 Or Self.state = STAFF_SHOW_TIME) Then
+				ElseIf (Self.state = STATE_STAGE_LOADING Or Self.state = 35 Or Self.state = STATE_ALL_CLEAR Or Self.state = STATE_STAGE_PASS Or Self.state = STATE_PAUSE_OPTION Or Self.state = STATE_PAUSE_RETRY Or Self.state = VISIBLE_OPTION_ITEMS_NUM Or Self.state = 29 Or Self.state = LOADING_TIME_LIMIT Or Self.state = PAUSE_OPTION_ITEMS_NUM Or Self.state = 29 Or Self.state = 41 Or Self.state = 42 Or Self.state = STATE_GAME_OVER_PRE Or Self.state = STATE_TIME_OVER_0 Or Self.state = STATE_GAME_OVER_1 Or Self.state = STATE_GAME_OVER_2 Or Self.state = 30 Or Self.state = 31 Or Self.state = 32 Or Self.state = 33 Or Self.state = 34 Or Self.state = 38 Or Self.state = 39 Or Self.state = 43 Or Self.state = 44 Or Self.state = STAFF_SHOW_TIME) Then
 					Self.interrupt_state = Self.state
-					Self.state = 18
+					Self.state = STATE_INTERRUPT
 					interruptInit()
 					Print("interrupt")
 				Else
@@ -2183,7 +2227,7 @@ Class GameState Extends State
 			
 			If (Key.press(Key.B_BACK) Or (Key.touchinterruptreturn <> Null And Key.touchinterruptreturn.IsButtonPress())) Then
 				fading = lastFading
-				SoundSystem.getInstance().playSe(PLANE_VELOCITY)
+				SoundSystem.getInstance().playSe(SoundSystem.SE_107)
 				Key.touchInterruptClose()
 				Self.state = Self.interrupt_state
 				Self.interrupt_state = -1
@@ -2212,7 +2256,7 @@ Class GameState Extends State
 				isDrawTouchPad = True
 				Select (Self.state)
 					Case STATE_STAGE_PASS
-					Case PlayerTails.TAILS_ANI_POLE_V
+					Case STATE_STAGE_LOADING_TURN
 						isDrawTouchPad = False
 						break
 					Case STATE_PAUSE_OPTION
@@ -2225,7 +2269,7 @@ Class GameState Extends State
 					Case STATE_PAUSE_RETRY
 					Case STATE_PAUSE_SELECT_STAGE
 					Case STATE_PAUSE_TO_TITLE
-					Case PlayerTails.TAILS_ANI_CELEBRATE_3
+					Case STATE_PAUSE_SELECT_CHARACTER
 						isDrawTouchPad = False
 						break
 					Case STATE_TIME_OVER_0
@@ -2233,17 +2277,17 @@ Class GameState Extends State
 					Case STATE_GAME_OVER_2
 						break
 					Case STATE_ALL_CLEAR
-					Case PlayerTails.TAILS_ANI_BAR_STAY
-					Case PlayerTails.TAILS_ANI_BAR_MOVE
+					Case STATE_CONTINUE_0
+					Case STATE_CONTINUE_1
 						isDrawTouchPad = False
 						break
-					Case PlayerTails.TAILS_ANI_CELEBRATE_4
-					Case PlayerTails.TAILS_ANI_BANK_1
+					Case STATE_PAUSE_OPTION_SOUND
+					Case STATE_PAUSE_OPTION_VIB
 					Case PlayerTails.TAILS_ANI_BANK_2
-					Case PlayerTails.TAILS_ANI_BANK_3
-					Case PlayerTails.TAILS_ANI_UP_ARM
-					Case PlayerTails.TAILS_ANI_ROLL_V_2
-					Case PlayerTails.TAILS_ANI_ROLL_H_1
+					Case STATE_PAUSE_OPTION_SP_SET
+					Case STATE_PAUSE_OPTION_HELP
+					Case STATE_PAUSE_OPTION_SOUND_VOLUMN
+					Case STATE_PAUSE_OPTION_SENSOR
 						isDrawTouchPad = False
 						SoundSystem.getInstance().playBgm(PAUSE_RACE_INSTRUCTION)
 						break
@@ -2293,7 +2337,7 @@ Class GameState Extends State
 		End
 		
 		Private Method itemsid:Int(id:Int)
-			Int itemsidoffset = (Self.optionOffsetY / 24) * PLANE_VELOCITY
+			Int itemsidoffset = (Self.optionOffsetY / 24) * 2
 			
 			If (id + itemsidoffset < 0) Then
 				Return 0
@@ -2324,15 +2368,15 @@ Class GameState Extends State
 				Self.optionslide_y = 0
 				Self.optionslidefirsty = 0
 				For (i = 0; i < (Key.touchmenuoptionitems.Length Shr 1); i += 1)
-					Key.touchmenuoptionitems[i * PLANE_VELOCITY].setStartY((((i * 24) + 28) + Self.optionDrawOffsetY) + Self.optionslide_y)
-					Key.touchmenuoptionitems[(i * PLANE_VELOCITY) + 1].setStartY((((i * 24) + 28) + Self.optionDrawOffsetY) + Self.optionslide_y)
+					Key.touchmenuoptionitems[i * 2].setStartY((((i * 24) + 28) + Self.optionDrawOffsetY) + Self.optionslide_y)
+					Key.touchmenuoptionitems[(i * 2) + 1].setStartY((((i * 24) + 28) + Self.optionDrawOffsetY) + Self.optionslide_y)
 				Next
 				
 				If (Self.isSelectable) Then
 					For (i = 0; i < Key.touchmenuoptionitems.Length; i += 1)
 						
 						If (Key.touchmenuoptionitems[i].Isin() And Key.touchmenuoption.IsClick()) Then
-							Self.pauseOptionCursor = i / PLANE_VELOCITY
+							Self.pauseOptionCursor = i / 2
 							Self.returnCursor = 0
 							break
 						EndIf
@@ -2347,7 +2391,7 @@ Class GameState Extends State
 				If ((Key.press(Key.B_BACK) Or (Key.touchmenuoptionreturn.IsButtonPress() And Self.returnCursor = 1)) And State.fadeChangeOver()) Then
 					changeStateWithFade(1)
 					SoundSystem.getInstance().stopBgm(False)
-					SoundSystem.getInstance().playSe(PLANE_VELOCITY)
+					SoundSystem.getInstance().playSe(SoundSystem.SE_107)
 					GlobalResource.saveSystemConfig()
 				EndIf
 				
@@ -2380,11 +2424,11 @@ Class GameState Extends State
 							EndIf
 							
 						ElseIf (Self.optionDrawOffsetY < Self.optionDrawOffsetBottomY) Then
-							Self.optionYDirect = PLANE_VELOCITY
+							Self.optionYDirect = 2
 							speed = (Self.optionDrawOffsetBottomY - Self.optionDrawOffsetY) Shr 1
 							
-							If (speed < PLANE_VELOCITY) Then
-								speed = PLANE_VELOCITY
+							If (speed < 2) Then
+								speed = 2
 							EndIf
 							
 							If (Self.optionDrawOffsetY + speed >= Self.optionDrawOffsetBottomY) Then
@@ -2406,7 +2450,7 @@ Class GameState Extends State
 						Self.state = 31
 						itemsSelect2Init()
 						SoundSystem.getInstance().playSe(1)
-					ElseIf (Key.touchmenuoptionitems[5].IsButtonPress() And Self.pauseOptionCursor = PLANE_VELOCITY And State.fadeChangeOver()) Then
+					ElseIf (Key.touchmenuoptionitems[5].IsButtonPress() And Self.pauseOptionCursor = 2 And State.fadeChangeOver()) Then
 						Self.state = 33
 						itemsSelect2Init()
 						SoundSystem.getInstance().playSe(1)
@@ -2416,7 +2460,7 @@ Class GameState Extends State
 							spSenorSetInit()
 							SoundSystem.getInstance().playSe(1)
 						Else
-							SoundSystem.getInstance().playSe(PLANE_VELOCITY)
+							SoundSystem.getInstance().playSe(SoundSystem.SE_107)
 						EndIf
 						
 					ElseIf (Key.touchmenuoptionitems[8].IsButtonPress() And Self.pauseOptionCursor = PAUSE_RACE_OPTION And State.fadeChangeOver()) Then
@@ -2497,7 +2541,7 @@ Class GameState Extends State
 			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 48)
 			animationDrawer = muiAniDrawer
 			
-			If (Key.touchmenuoptionitems[5].Isin() And Self.pauseOptionCursor = PLANE_VELOCITY And Self.isSelectable) Then
+			If (Key.touchmenuoptionitems[5].Isin() And Self.pauseOptionCursor = 2 And Self.isSelectable) Then
 				i = 1
 			Else
 				i = 0
@@ -2535,7 +2579,7 @@ Class GameState Extends State
 				Case STATE_PAUSE
 					muiAniDrawer.setActionId(69)
 					break
-				Case PLANE_VELOCITY
+				Case 2
 					muiAniDrawer.setActionId(68)
 					break
 			End Select
@@ -2553,7 +2597,7 @@ Class GameState Extends State
 			Self.optionOffsetX -= PAUSE_RACE_OPTION
 			Self.optionOffsetX Mod= OPTION_MOVING_INTERVAL
 			muiAniDrawer.setActionId(51)
-			For (Int x1 = Self.optionOffsetX; x1 < SCREEN_WIDTH * PLANE_VELOCITY; x1 += OPTION_MOVING_INTERVAL)
+			For (Int x1 = Self.optionOffsetX; x1 < SCREEN_WIDTH * 2; x1 += OPTION_MOVING_INTERVAL)
 				muiAniDrawer.draw(g, x1, 0)
 			Next
 			animationDrawer = muiAniDrawer
@@ -2586,7 +2630,7 @@ Class GameState Extends State
 			If (Not fading) Then
 				fading = True
 				
-				If (nState = 7) Then
+				If (nstate = STATE_PAUSE_OPTION) Then
 					State.fadeInit(102, 255)
 				Else
 					State.fadeInit(0, 255)
@@ -2662,7 +2706,7 @@ Class GameState Extends State
 						Self.endingState = VX
 					EndIf
 					
-				Case PLANE_VELOCITY
+				Case 2
 					
 					If (birdLogic()) Then
 						Self.endingState = VY
@@ -2786,7 +2830,7 @@ Class GameState Extends State
 		End
 		
 		Private Method planeLogic:Void()
-			Self.planeX -= PLANE_VELOCITY
+			Self.planeX -= 2
 			
 			If (Self.planeX < (SCREEN_WIDTH Shr 1)) Then
 				Self.planeX = SCREEN_WIDTH Shr 1
@@ -2817,7 +2861,7 @@ Class GameState Extends State
 		End
 		
 		Private Method birdLogic:Bool()
-			Self.birdX -= PLANE_VELOCITY
+			Self.birdX -= 2
 			
 			If (Self.birdX >= (SCREEN_WIDTH Shr 1) + 30) Then
 				Return False
@@ -2929,7 +2973,7 @@ Class GameState Extends State
 			While (x - Self.itemOffsetX > 0) {
 				x -= space
 			}
-			Int drawNum = (((SCREEN_WIDTH + space) - 1) / space) + PLANE_VELOCITY
+			Int drawNum = (((SCREEN_WIDTH + space) - 1) / space) + 2
 			For (Int i = 0; i < drawNum; i += 1)
 				MyAPI.drawBoldString(g, string, (x + (i * space)) - Self.itemOffsetX, y, 17, color1, color2, color3)
 			Next
@@ -2941,7 +2985,7 @@ Class GameState Extends State
 				BP_continueTryInit()
 			EndIf
 			
-			If (StageManager.getStageID() = PLANE_VELOCITY And Not IsPaid) Then
+			If (StageManager.getStageID() = 2 And Not IsPaid) Then
 				Self.state = 20
 				BP_enteredPaying = False
 				Self.BP_IsFromContinueTry = False
@@ -2969,7 +3013,7 @@ Class GameState Extends State
 			Bool IsUp
 			Bool IsDown
 			Key.touchkeyboardInit()
-			PlayerObject.cursorMax = PLANE_VELOCITY
+			PlayerObject.cursorMax = 2
 			
 			If (Key.press(Key.gUp)) Then
 				IsUp = True
@@ -3012,10 +3056,10 @@ Class GameState Extends State
 			State.fillMenuRect(g, Self.BP_CONTINUETRY_MENU_START_X, Self.BP_CONTINUETRY_MENU_START_Y, Self.BP_CONTINUETRY_MENU_WIDTH, Self.BP_CONTINUETRY_MENU_HEIGHT)
 			g.setColor(0)
 			MyAPI.drawBoldStrings(g, strForShow, Self.BP_CONTINUETRY_MENU_START_X + 20, Self.BP_CONTINUETRY_MENU_START_Y + LOADING_TIME_LIMIT, Self.BP_CONTINUETRY_MENU_WIDTH - 20, Self.BP_CONTINUETRY_MENU_HEIGHT - 20, MapManager.END_COLOR, 4656650, 0)
-			State.drawMenuFontById(g, 119, SCREEN_WIDTH Shr 1, ((Self.BP_CONTINUETRY_MENU_START_Y + 15) + ((MENU_SPACE * PAUSE_RACE_TO_TITLE) / PLANE_VELOCITY)) + (MENU_SPACE * ((PlayerObject.cursor + strForShow.Length) - 1)))
-			State.drawMenuFontById(g, 113, (SCREEN_WIDTH Shr 1) - 56, ((Self.BP_CONTINUETRY_MENU_START_Y + 15) + ((MENU_SPACE * PAUSE_RACE_TO_TITLE) / PLANE_VELOCITY)) + (MENU_SPACE * ((PlayerObject.cursor + strForShow.Length) - 1)))
+			State.drawMenuFontById(g, 119, SCREEN_WIDTH Shr 1, ((Self.BP_CONTINUETRY_MENU_START_Y + 15) + ((MENU_SPACE * PAUSE_RACE_TO_TITLE) / 2)) + (MENU_SPACE * ((PlayerObject.cursor + strForShow.Length) - 1)))
+			State.drawMenuFontById(g, 113, (SCREEN_WIDTH Shr 1) - 56, ((Self.BP_CONTINUETRY_MENU_START_Y + 15) + ((MENU_SPACE * PAUSE_RACE_TO_TITLE) / 2)) + (MENU_SPACE * ((PlayerObject.cursor + strForShow.Length) - 1)))
 			MyAPI.drawBoldString(g, BPstrings[1], SCREEN_WIDTH Shr 1, (Self.BP_CONTINUETRY_MENU_START_Y + 15) + (MENU_SPACE * ((strForShow.Length - 1) + 1)), 17, MapManager.END_COLOR, 0)
-			MyAPI.drawBoldString(g, BPstrings[2], SCREEN_WIDTH Shr 1, (Self.BP_CONTINUETRY_MENU_START_Y + 15) + (MENU_SPACE * ((strForShow.Length - 1) + PLANE_VELOCITY)), 17, MapManager.END_COLOR, 0)
+			MyAPI.drawBoldString(g, BPstrings[2], SCREEN_WIDTH Shr 1, (Self.BP_CONTINUETRY_MENU_START_Y + 15) + (MENU_SPACE * ((strForShow.Length - 1) + 2)), 17, MapManager.END_COLOR, 0)
 			State.drawSoftKey(g, True, False)
 		End
 		
@@ -3078,7 +3122,7 @@ Class GameState Extends State
 				
 				StageManager.resetStageIdforTry()
 				State.saveBPRecord()
-				State.setState(PLANE_VELOCITY)
+				State.setState(2)
 			EndIf
 			
 		End
@@ -3148,7 +3192,7 @@ Class GameState Extends State
 			ElseIf (Key.press(Key.B_S2)) Then
 				Self.state = STATE_PAUSE
 				GameObject.IsGamePause = True
-				PlayerObject.cursor = PLANE_VELOCITY
+				PlayerObject.cursor = 2
 				Key.clear()
 			EndIf
 			
@@ -3168,14 +3212,14 @@ Class GameState Extends State
 			menuBgDraw(g)
 			State.fillMenuRect(g, CASE_X, 30, CASE_WIDTH, CASE_HEIGHT)
 			MyAPI.drawImage(g, BP_wordsImg, 0, 0, BP_wordsWidth, BP_wordsHeight, 0, SCREEN_WIDTH Shr 1, 40, 17)
-			MyAPI.drawBoldString(g, BPstrings[LOADING_TIME_LIMIT], (CASE_WIDTH Shr PLANE_VELOCITY) + CASE_X, LINE_SPACE + 40, 17, MapManager.END_COLOR, 4656650)
-			MyAPI.drawBoldString(g, BPstrings[11], ((CASE_WIDTH * PAUSE_RACE_TO_TITLE) Shr PLANE_VELOCITY) + CASE_X, LINE_SPACE + 40, 17, MapManager.END_COLOR, 4656650)
+			MyAPI.drawBoldString(g, BPstrings[LOADING_TIME_LIMIT], (CASE_WIDTH Shr 2) + CASE_X, LINE_SPACE + 40, 17, MapManager.END_COLOR, 4656650)
+			MyAPI.drawBoldString(g, BPstrings[11], ((CASE_WIDTH * PAUSE_RACE_TO_TITLE) Shr 2) + CASE_X, LINE_SPACE + 40, 17, MapManager.END_COLOR, 4656650)
 			For (Int i = 0; i < currentBPItems.Length; i += 1)
-				MyAPI.drawImage(g, BP_itemsImg, BP_itemsWidth * currentBPItems[i], 0, BP_itemsWidth, BP_itemsHeight, 0, (CASE_X + (CASE_WIDTH Shr PLANE_VELOCITY)) - (LINE_SPACE Shr 1), (LINE_SPACE * (i + PAUSE_RACE_TO_TITLE)) + 30, PAUSE_RACE_TO_TITLE)
-				MyAPI.drawBoldString(g, "~u00d7 " + currentBPItemsNormalNum[i], BP_itemsWidth + ((CASE_X + (CASE_WIDTH Shr PLANE_VELOCITY)) - (LINE_SPACE Shr 1)), ((LINE_SPACE * (i + PAUSE_RACE_TO_TITLE)) + 30) - FONT_H_HALF, 20, MapManager.END_COLOR, 4656650)
-				MyAPI.drawBoldString(g, BP_items_num[currentBPItems[i]], (FONT_WIDTH_NUM * PLANE_VELOCITY) + (CASE_X + ((CASE_WIDTH * PAUSE_RACE_TO_TITLE) Shr PLANE_VELOCITY)), ((LINE_SPACE * (i + PAUSE_RACE_TO_TITLE)) + 30) - FONT_H_HALF, 24, MapManager.END_COLOR, 4656650)
+				MyAPI.drawImage(g, BP_itemsImg, BP_itemsWidth * currentBPItems[i], 0, BP_itemsWidth, BP_itemsHeight, 0, (CASE_X + (CASE_WIDTH Shr 2)) - (LINE_SPACE Shr 1), (LINE_SPACE * (i + 3)) + 30, PAUSE_RACE_TO_TITLE)
+				MyAPI.drawBoldString(g, "~u00d7 " + currentBPItemsNormalNum[i], BP_itemsWidth + ((CASE_X + (CASE_WIDTH Shr 2)) - (LINE_SPACE Shr 1)), ((LINE_SPACE * (i + 3)) + 30) - FONT_H_HALF, 20, MapManager.END_COLOR, 4656650)
+				MyAPI.drawBoldString(g, BP_items_num[currentBPItems[i]], (FONT_WIDTH_NUM * 2) + (CASE_X + ((CASE_WIDTH * PAUSE_RACE_TO_TITLE) Shr 2)), ((LINE_SPACE * (i + 3)) + 30) - FONT_H_HALF, 24, MapManager.END_COLOR, 4656650)
 			Next
-			State.drawMenuFontById(g, 113, ((CASE_X + (CASE_WIDTH Shr PLANE_VELOCITY)) - (LINE_SPACE Shr 1)) - (BP_itemsWidth * PLANE_VELOCITY), (LINE_SPACE * (PlayerObject.cursor + PAUSE_RACE_TO_TITLE)) + 30)
+			State.drawMenuFontById(g, 113, ((CASE_X + (CASE_WIDTH Shr 2)) - (LINE_SPACE Shr 1)) - (BP_itemsWidth * 2), (LINE_SPACE * (PlayerObject.cursor + 3)) + 30)
 			MyAPI.drawBoldString(g, BPstrings[12], BP_itemsWidth + CASE_X, (LINE_SPACE * 7) + 30, 20, MapManager.END_COLOR, 4656650)
 			g.setColor(0)
 			MyAPI.drawBoldStrings(g, BPEffectStrings[PlayerObject.cursor], BP_itemsWidth + CASE_X, (LINE_SPACE * 8) + 30, MENU_RECT_WIDTH - 20, CASE_HEIGHT - 20, MapManager.END_COLOR, 4656650, 0)
@@ -3191,7 +3235,7 @@ Class GameState Extends State
 		
 		Public Method BP_buyLogic:Void()
 			
-			If (State.BP_chargeLogic(PLANE_VELOCITY)) Then
+			If (State.BP_chargeLogic(2)) Then
 				BP_toolsAdd()
 				shopInit(False)
 				Return
@@ -3221,7 +3265,7 @@ Class GameState Extends State
 				Case STATE_GAME
 					Return PlayerObject.IsInvincibility()
 				Case STATE_PAUSE
-				Case PLANE_VELOCITY
+				Case 2
 					Return PlayerObject.IsUnderSheild()
 				Case PAUSE_RACE_TO_TITLE
 					Return PlayerObject.IsSpeedUp()
@@ -3276,9 +3320,9 @@ Class GameState Extends State
 							GameObject.player.getItem(PAUSE_RACE_TO_TITLE)
 							break
 						Case STATE_PAUSE
-							GameObject.player.getItem(PLANE_VELOCITY)
+							GameObject.player.getItem(2)
 							break
-						Case PLANE_VELOCITY
+						Case 2
 							GameObject.player.getItem(1)
 							break
 						Case PAUSE_RACE_TO_TITLE
@@ -3319,11 +3363,11 @@ Class GameState Extends State
 					i2 = 0
 				EndIf
 				
-				MyAPI.drawImage(g, mFImage, i3, i2, BP_itemsWidth, BP_itemsHeight, 0, (SCREEN_WIDTH Shr 1) - (BP_itemsWidth * PLANE_VELOCITY), (MENU_SPACE * i) + (((((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + LOADING_TIME_LIMIT) + (MENU_SPACE Shr 1)) + MENU_SPACE), PAUSE_OPTION_ITEMS_NUM)
+				MyAPI.drawImage(g, mFImage, i3, i2, BP_itemsWidth, BP_itemsHeight, 0, (SCREEN_WIDTH Shr 1) - (BP_itemsWidth * 2), (MENU_SPACE * i) + (((((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + LOADING_TIME_LIMIT) + (MENU_SPACE Shr 1)) + MENU_SPACE), PAUSE_OPTION_ITEMS_NUM)
 				g.setColor(0)
 				MFGraphics mFGraphics = g
 				MyAPI.drawBoldString(mFGraphics, "~u00d7", SCREEN_WIDTH Shr 1, ((((((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + LOADING_TIME_LIMIT) + (MENU_SPACE Shr 1)) + MENU_SPACE) + (MENU_SPACE * i)) - FONT_H_HALF, 17, MapManager.END_COLOR, 4656650)
-				MyAPI.drawBoldString(g, BP_items_num[currentBPItems[i]], (BP_itemsWidth * PLANE_VELOCITY) + (SCREEN_WIDTH Shr 1), ((((((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + LOADING_TIME_LIMIT) + (MENU_SPACE Shr 1)) + MENU_SPACE) + (MENU_SPACE * i)) - FONT_H_HALF, 24, MapManager.END_COLOR, 4656650)
+				MyAPI.drawBoldString(g, BP_items_num[currentBPItems[i]], (BP_itemsWidth * 2) + (SCREEN_WIDTH Shr 1), ((((((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + LOADING_TIME_LIMIT) + (MENU_SPACE Shr 1)) + MENU_SPACE) + (MENU_SPACE * i)) - FONT_H_HALF, 24, MapManager.END_COLOR, 4656650)
 				i += 1
 			}
 			
@@ -3369,7 +3413,7 @@ Class GameState Extends State
 					g.setColor(MapManager.END_COLOR)
 					MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 					break
-				Case PLANE_VELOCITY
+				Case 2
 					g.setColor(0)
 					MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 					g.setColor(MapManager.END_COLOR)
@@ -3386,7 +3430,7 @@ Class GameState Extends State
 				Return
 			EndIf
 			
-			MyAPI.drawStrings(g, tipsForShow, (SCREEN_WIDTH Shr 1) - 72, ((SCREEN_HEIGHT Shr 1) - 50) - PLANE_VELOCITY, 132, OPTION_MOVING_INTERVAL, 20, MapManager.END_COLOR, 4656650, 0)
+			MyAPI.drawStrings(g, tipsForShow, (SCREEN_WIDTH Shr 1) - 72, ((SCREEN_HEIGHT Shr 1) - 50) - 2, 132, OPTION_MOVING_INTERVAL, 20, MapManager.END_COLOR, 4656650, 0)
 		End
 		
 		Private Method initStageIntroType1Conf:Void()
@@ -3407,10 +3451,10 @@ Class GameState Extends State
 			Self.display[3][1] = 0
 			Self.display[3][2] = 0
 			Self.display[3][3] = 0
-			Self.display[PAUSE_RACE_OPTION][0] = SCREEN_WIDTH
-			Self.display[PAUSE_RACE_OPTION][1] = SCREEN_HEIGHT
-			Self.display[PAUSE_RACE_OPTION][2] = 0
-			Self.display[PAUSE_RACE_OPTION][3] = 0
+			Self.display[4][0] = SCREEN_WIDTH
+			Self.display[4][1] = SCREEN_HEIGHT
+			Self.display[4][2] = 0
+			Self.display[4][3] = 0
 			Self.display[5][0] = SCREEN_WIDTH
 			Self.display[5][1] = (SCREEN_HEIGHT Shr 1) - 10
 			Self.display[5][2] = 0
@@ -3435,10 +3479,10 @@ Class GameState Extends State
 			Self.display[3][1] = 0
 			Self.display[3][2] = 0
 			Self.display[3][3] = 0
-			Self.display[PAUSE_RACE_OPTION][0] = SCREEN_WIDTH
-			Self.display[PAUSE_RACE_OPTION][1] = SCREEN_HEIGHT
-			Self.display[PAUSE_RACE_OPTION][2] = 0
-			Self.display[PAUSE_RACE_OPTION][3] = 0
+			Self.display[4][0] = SCREEN_WIDTH
+			Self.display[4][1] = SCREEN_HEIGHT
+			Self.display[4][2] = 0
+			Self.display[4][3] = 0
 			Self.display[5][0] = SCREEN_WIDTH
 			Self.display[5][1] = (SCREEN_HEIGHT Shr 1) - 10
 			Self.display[5][2] = 0
@@ -3498,13 +3542,13 @@ Class GameState Extends State
 		
 		Private Method drawGameOver:Void(g:MFGraphics)
 			
-			If (Self.continueFrame <= PAUSE_RACE_INSTRUCTION) Then
+			If (Self.continueFrame <= 5) Then
 				MyAPI.drawScaleAni(g, guiAniDrawer, 11, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 28, Self.continueScale, 1.0, 0.0, 0.0)
-			ElseIf (Self.continueFrame <= LOADING_TIME_LIMIT) Then
+			ElseIf (Self.continueFrame <= 10) Then
 				MyAPI.drawScaleAni(g, guiAniDrawer, 12, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 28, Self.continueScale, 1.0, 0.0, 0.0)
 			EndIf
 			
-			If (Self.continueFrame > LOADING_TIME_LIMIT) Then
+			If (Self.continueFrame > 10) Then
 				MyAPI.drawScaleAni(g, guiAniDrawer, 12, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 28, Self.continueScale, Self.continueScale, 0.0, 8.0)
 				g.setColor(0)
 				MyAPI.fillRect(g, Self.continueMoveBlackBarX, (SCREEN_HEIGHT Shr 1) + LOADING_TIME_LIMIT, SCREEN_WIDTH, 20)
@@ -3617,14 +3661,14 @@ Class GameState Extends State
 				If ((Key.press(Key.B_BACK) Or (Key.touchgamepausereturn.IsButtonPress() And Self.pause_item_cursor = -2)) And Not Self.pause_returnFlag) Then
 					Self.pause_returnFlag = True
 					Self.pause_returnframe = Self.pausecnt
-					SoundSystem.getInstance().playSe(PLANE_VELOCITY)
+					SoundSystem.getInstance().playSe(SoundSystem.SE_107)
 				EndIf
 				
 				If (Self.pause_returnFlag) Then
-					If (Self.pausecnt > Self.pause_returnframe And Self.pausecnt <= Self.pause_returnframe + PAUSE_RACE_TO_TITLE) Then
+					If (Self.pausecnt > Self.pause_returnframe And Self.pausecnt <= Self.pause_returnframe + 3) Then
 						Self.pause_saw_x -= Self.pause_saw_speed
 						Self.pause_item_x -= Self.pause_item_speed
-					ElseIf (Self.pausecnt > Self.pause_returnframe + PAUSE_RACE_TO_TITLE) Then
+					ElseIf (Self.pausecnt > Self.pause_returnframe + 3) Then
 						BacktoGame()
 						isDrawTouchPad = True
 						Self.pause_returnFlag = False
@@ -3632,9 +3676,9 @@ Class GameState Extends State
 					EndIf
 				EndIf
 				
-				If (Self.pause_optionFlag And Self.pausecnt > Self.pause_optionframe + PAUSE_RACE_TO_TITLE) Then
+				If (Self.pause_optionFlag And Self.pausecnt > Self.pause_optionframe + 3) Then
 					optionInit()
-					Self.state = 7
+					Self.state = STATE_PAUSE_OPTION
 					Self.pause_optionFlag = False
 				EndIf
 				
@@ -3652,8 +3696,8 @@ Class GameState Extends State
 						State.fadeInit(102, 220)
 						secondEnsureInit()
 						SoundSystem.getInstance().playSe(1)
-					ElseIf (Key.touchgamepauseitem[2].IsButtonPress() And Self.pause_item_cursor = PLANE_VELOCITY And Not Self.pause_returnFlag) Then
-						changeStateWithFade(7)
+					ElseIf (Key.touchgamepauseitem[2].IsButtonPress() And Self.pause_item_cursor = 2 And Not Self.pause_returnFlag) Then
+						changeStateWithFade(STATE_PAUSE_OPTION)
 						optionInit()
 						SoundSystem.getInstance().playSe(1)
 					EndIf
@@ -3670,7 +3714,7 @@ Class GameState Extends State
 						State.fadeInit(102, 220)
 						secondEnsureInit()
 						SoundSystem.getInstance().playSe(1)
-					ElseIf (Key.touchgamepauseitem[2].IsButtonPress() And Self.pause_item_cursor = PLANE_VELOCITY And State.fadeChangeOver()) Then
+					ElseIf (Key.touchgamepauseitem[2].IsButtonPress() And Self.pause_item_cursor = 2 And State.fadeChangeOver()) Then
 						Self.state = 29
 						State.fadeInit(102, 220)
 						secondEnsureInit()
@@ -3680,13 +3724,13 @@ Class GameState Extends State
 						State.fadeInit(102, 220)
 						secondEnsureInit()
 						SoundSystem.getInstance().playSe(1)
-					ElseIf (Key.touchgamepauseitem[PAUSE_RACE_OPTION].IsButtonPress() And Self.pause_item_cursor = PAUSE_RACE_OPTION And State.fadeChangeOver()) Then
+					ElseIf (Key.touchgamepauseitem[4].IsButtonPress() And Self.pause_item_cursor = PAUSE_RACE_OPTION And State.fadeChangeOver()) Then
 						Self.state = LOADING_TIME_LIMIT
 						State.fadeInit(102, 220)
 						secondEnsureInit()
 						SoundSystem.getInstance().playSe(1)
 					ElseIf (Key.touchgamepauseitem[5].IsButtonPress() And Self.pause_item_cursor = PAUSE_RACE_INSTRUCTION And Not Self.pause_returnFlag) Then
-						changeStateWithFade(7)
+						changeStateWithFade(STATE_PAUSE_OPTION)
 						optionInit()
 						SoundSystem.getInstance().playSe(1)
 					EndIf
@@ -3707,7 +3751,7 @@ Class GameState Extends State
 				muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
 			EndIf
 			
-			If (Self.pausecnt <= PAUSE_RACE_INSTRUCTION) Then
+			If (Self.pausecnt <= 5) Then
 				Return
 			EndIf
 			
@@ -3723,7 +3767,7 @@ Class GameState Extends State
 					i = 0
 				EndIf
 				
-				animationDrawer.setActionId(i + PLANE_VELOCITY)
+				animationDrawer.setActionId(i + 2)
 				muiAniDrawer.draw(g, Self.pause_item_x, Self.pause_item_y)
 				animationDrawer = muiAniDrawer
 				
@@ -3737,7 +3781,7 @@ Class GameState Extends State
 				muiAniDrawer.draw(g, Self.pause_item_x, Self.pause_item_y + 24)
 				animationDrawer = muiAniDrawer
 				
-				If (Self.pause_item_cursor = PLANE_VELOCITY And Key.touchgamepauseitem[2].Isin()) Then
+				If (Self.pause_item_cursor = 2 And Key.touchgamepauseitem[2].Isin()) Then
 					i = 1
 				Else
 					i = 0
@@ -3750,7 +3794,7 @@ Class GameState Extends State
 				While (i2 < PAUSE_OPTION_ITEMS_NUM) {
 					Int i3
 					animationDrawer = muiAniDrawer
-					i = (i2 + 1) * PLANE_VELOCITY
+					i = (i2 + 1) * 2
 					
 					If (Self.pause_item_cursor = i2 And Key.touchgamepauseitem[i2].Isin()) Then
 						i3 = 1
@@ -3781,10 +3825,10 @@ Class GameState Extends State
 					EndIf
 					
 					StageManager.stageIDFromGame = StageManager.getStageID()
-					setStateWithFade(PLANE_VELOCITY)
+					setStateWithFade(2)
 					Key.touchanykeyInit()
 					Key.touchMainMenuInit2()
-				Case PLANE_VELOCITY
+				Case 2
 					State.fadeInit_Modify(192, 102)
 					Self.state = STATE_PAUSE
 					GameObject.IsGamePause = True
@@ -3798,7 +3842,7 @@ Class GameState Extends State
 					Self.state = STATE_STAGE_LOADING
 					loadingType = 0
 					initTips()
-				Case PLANE_VELOCITY
+				Case 2
 					State.fadeInit_Modify(192, 102)
 					Self.state = STATE_PAUSE
 					GameObject.IsGamePause = True
@@ -3810,7 +3854,7 @@ Class GameState Extends State
 			Select (secondEnsureLogic())
 				Case STATE_PAUSE
 					setStateWithFade(STATE_SET_PARAM)
-				Case PLANE_VELOCITY
+				Case 2
 					State.fadeInit(220, 102)
 					State.fadeInit_Modify(192, 102)
 					Self.state = STATE_PAUSE
@@ -3823,7 +3867,7 @@ Class GameState Extends State
 			Select (secondEnsureLogic())
 				Case STATE_PAUSE
 					setStateWithFade(VISIBLE_OPTION_ITEMS_NUM)
-				Case PLANE_VELOCITY
+				Case 2
 					State.fadeInit(220, 102)
 					State.fadeInit_Modify(192, 102)
 					Self.state = STATE_PAUSE
@@ -3837,20 +3881,20 @@ Class GameState Extends State
 				Case STATE_PAUSE
 					GlobalResource.soundSwitchConfig = 1
 					State.fadeInit(102, 0)
-					Self.state = 7
+					Self.state = STATE_PAUSE_OPTION
 					SoundSystem.getInstance().setSoundState(GlobalResource.soundConfig)
 					SoundSystem.getInstance().setSeState(GlobalResource.seConfig)
 					Self.returnCursor = 0
-				Case PLANE_VELOCITY
+				Case 2
 					GlobalResource.soundSwitchConfig = 0
 					State.fadeInit(102, 0)
-					Self.state = 7
+					Self.state = STATE_PAUSE_OPTION
 					SoundSystem.getInstance().setSoundState(0)
 					SoundSystem.getInstance().setSeState(0)
 					Self.returnCursor = 0
 				Case PAUSE_RACE_TO_TITLE
 					State.fadeInit(102, 0)
-					Self.state = 7
+					Self.state = STATE_PAUSE_OPTION
 					Self.returnCursor = 0
 				Default
 			End Select
@@ -3861,17 +3905,17 @@ Class GameState Extends State
 				Case STATE_PAUSE
 					GlobalResource.vibrationConfig = 1
 					State.fadeInit(102, 0)
-					Self.state = 7
+					Self.state = STATE_PAUSE_OPTION
 					Self.returnCursor = 0
 					MyAPI.vibrate()
-				Case PLANE_VELOCITY
+				Case 2
 					GlobalResource.vibrationConfig = 0
 					State.fadeInit(102, 0)
-					Self.state = 7
+					Self.state = STATE_PAUSE_OPTION
 					Self.returnCursor = 0
 				Case PAUSE_RACE_TO_TITLE
 					State.fadeInit(102, 0)
-					Self.state = 7
+					Self.state = STATE_PAUSE_OPTION
 					Self.returnCursor = 0
 				Default
 			End Select
@@ -3882,16 +3926,16 @@ Class GameState Extends State
 				Case STATE_PAUSE
 					GlobalResource.spsetConfig = 0
 					State.fadeInit(102, 0)
-					Self.state = 7
+					Self.state = STATE_PAUSE_OPTION
 					Self.returnCursor = 0
-				Case PLANE_VELOCITY
+				Case 2
 					GlobalResource.spsetConfig = 1
 					State.fadeInit(102, 0)
-					Self.state = 7
+					Self.state = STATE_PAUSE_OPTION
 					Self.returnCursor = 0
 				Case PAUSE_RACE_TO_TITLE
 					State.fadeInit(102, 0)
-					Self.state = 7
+					Self.state = STATE_PAUSE_OPTION
 					Self.returnCursor = 0
 				Default
 			End Select
@@ -3934,7 +3978,7 @@ Class GameState Extends State
 				If (Key.touchscoreupdateyes.Isin() And Key.touchscoreupdate.IsClick()) Then
 					Self.scoreUpdateCursor = 1
 				ElseIf (Key.touchscoreupdateno.Isin() And Key.touchscoreupdate.IsClick()) Then
-					Self.scoreUpdateCursor = PLANE_VELOCITY
+					Self.scoreUpdateCursor = 2
 				EndIf
 				
 				If (Key.touchscoreupdateyes.IsButtonPress() And Self.scoreUpdateCursor = 1) Then
@@ -3942,7 +3986,7 @@ Class GameState Extends State
 					secondEnsureInit()
 					State.fadeInit(0, GimmickObject.GIMMICK_NUM)
 					SoundSystem.getInstance().playSe(1)
-				ElseIf (Key.touchscoreupdateno.IsButtonPress() And Self.scoreUpdateCursor = PLANE_VELOCITY) Then
+				ElseIf (Key.touchscoreupdateno.IsButtonPress() And Self.scoreUpdateCursor = 2) Then
 					Standard2.splashinit(True)
 					setStateWithFade(0)
 					SoundSystem.getInstance().playSe(1)
@@ -3951,7 +3995,7 @@ Class GameState Extends State
 				If ((Key.press(Key.B_BACK) Or (Key.touchscoreupdatereturn.IsButtonPress() And Self.returnCursor = 1)) And State.fadeChangeOver()) Then
 					Standard2.splashinit(True)
 					setStateWithFade(0)
-					SoundSystem.getInstance().playSe(PLANE_VELOCITY)
+					SoundSystem.getInstance().playSe(SoundSystem.SE_107)
 				EndIf
 			EndIf
 			
@@ -3970,12 +4014,12 @@ Class GameState Extends State
 			Self.optionOffsetX -= PAUSE_RACE_OPTION
 			Self.optionOffsetX Mod= 128
 			muiAniDrawer.setActionId(102)
-			For (Int x1 = Self.optionOffsetX; x1 < SCREEN_WIDTH * PLANE_VELOCITY; x1 += 128)
+			For (Int x1 = Self.optionOffsetX; x1 < SCREEN_WIDTH * 2; x1 += 128)
 				muiAniDrawer.draw(g, x1, 0)
 			Next
 			guiAniDrawer.setActionId(17)
 			guiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 37)
-			PlayerObject.drawRecordTime(g, StageManager.getTimeModeScore(PlayerObject.getCharacterID()), (SCREEN_WIDTH Shr 1) + 54, (SCREEN_HEIGHT Shr 1) - 10, PLANE_VELOCITY, PLANE_VELOCITY)
+			PlayerObject.drawRecordTime(g, StageManager.getTimeModeScore(PlayerObject.getCharacterID()), (SCREEN_WIDTH Shr 1) + 54, (SCREEN_HEIGHT Shr 1) - 10, 2, 2)
 			muiAniDrawer.setActionId((Key.touchscoreupdateyes.Isin() ? 1 : 0) + 55)
 			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 60, (SCREEN_HEIGHT Shr 1) + 28)
 			muiAniDrawer.setActionId(StringIndex.BLUE_BACKGROUND_ID)
@@ -4012,7 +4056,7 @@ Class GameState Extends State
 					setGameScore(StageManager.getTimeModeScore(PlayerObject.getCharacterID()))
 					sendMessage(msg, PAUSE_OPTION_ITEMS_NUM)
 					Self.state = STAFF_SHOW_TIME
-				Case PLANE_VELOCITY
+				Case 2
 					Self.state = 43
 					State.fadeInit(GimmickObject.GIMMICK_NUM, 0)
 					State.setFadeOver()
