@@ -160,7 +160,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const SPIN_LV2_COUNT_CONF:Int = 36
 		
 		Const STAGE_PASS_STR_SPACE:Int = 182
-		Const STAGE_PASS_STR_SPACE_FONT:Int = MyAPI.zoomIn(MFGraphics.stringWidth(14, "索尼克完成行行")) + 20
+		Const STAGE_PASS_STR_SPACE_FONT:Int = MyAPI.zoomIn(MFGraphics.stringWidth(14, "索尼克完成行行")) + 20 ' "Sonic Completed the Level"
 		
 		Const SUPER_SONIC_CHANGING_CENTER_Y:Int = 25280
 		Const SUPER_SONIC_STAND_POS_X:Int = 235136
