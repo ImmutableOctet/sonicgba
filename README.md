@@ -9,10 +9,9 @@ without making any claim to parody the original behavior in any way.
 
 ## TODO
 * **Finish implementing 'sonicgba'**.
-* Implement the missing portions of 'lib'.
 * Properly implement sound behavior.
-* Finish missing parts of 'MFLib'.
-* Implement font behavior.
+* *Finish missing parts of 'MFLib'.*
+* *Implement font behavior.*
 * Resolve foreign text.
 
 * **~~Implement 'special'~~** (Special Stage objects)
@@ -21,3 +20,4 @@ without making any claim to parody the original behavior in any way.
 * **~~Implement 'ending'~~** (Ending animations, credits, etc)
 * **~~Implement 'gameengine'~~** (Input systems, etc)
 * **~~Implement 'pyxanimation' / 'pyxeditor'~~**
+* **~~Implement the missing portions of 'lib'~~** (Some unused features may be missing)
