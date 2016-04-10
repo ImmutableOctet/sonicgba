@@ -795,10 +795,10 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\rollhobin.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>15</X>
-        <Y>12</Y>
+        <X>26</X>
+        <Y>62</Y>
       </CursorPos>
-      <DocGUID>a60e05bf-58c4-4760-9c26-01e459d0890f</DocGUID>
+      <DocGUID>248e51c3-af3b-4691-9922-f79d6fec9ae7</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ropeend.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">

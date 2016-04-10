@@ -24,6 +24,7 @@ Class RollHobin Extends BallHobin
 		Field degreeOffset:Int
 		Field radius:Int
 	Protected
+		' Constructor(s):
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
 			Super.New(id, x, y, left, top, width, height)
 			
@@ -37,6 +38,7 @@ Class RollHobin Extends BallHobin
 			Self.degreeOffset = ((Self.iLeft * MDPhone.SCREEN_WIDTH) / 8)
 		End
 	Private
+		' Methods:
 		Method calHobinPosition:Void()
 			Self.posX = Self.centerX + ((Self.radius * MyAPI.dCos(degree + Self.degreeOffset)) / 100)
 			Self.posY = Self.centerY + ((Self.radius * MyAPI.dSin(degree + Self.degreeOffset)) / 100)
@@ -58,9 +60,11 @@ Class RollHobin Extends BallHobin
 		End
 
 		Method close:Void()
+			' Empty implementation.
 		End
 		
 		' Functions:
 		Function releaseAllResource:Void()
+			' Empty implementation.
 		End
 End
