@@ -17,14 +17,12 @@ Class RollHobin Extends BallHobin
 		
 		' Global variable(s):
 		Global degree:Int
-	Private
+		
 		' Fields:
 		Field centerX:Int
 		Field centerY:Int
 		Field degreeOffset:Int
 		Field radius:Int
-	Public
-
 	Protected
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
 			Super.New(id, x, y, left, top, width, height)
