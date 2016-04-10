@@ -10,7 +10,7 @@ Public
 Private
 	Import com.sega.mobile.define.mdphone
 	
-	'Import mojo.keycodes
+	Import mojo.keycodes
 Public
 
 ' Classes:
@@ -169,19 +169,19 @@ Class MFGamePad ' Final
 		Function decodeKey:Int(keyCode:Int)
 			' Magic numbers: 4, 19, 20, 21, 22, 52, 82 (Key-codes)
 			Select (keyCode)
-				Case 4 ' KEY_PAD_UP
-					Return KEY_JOYSTICK_O
-				Case 19
+				Case keycodes.KEY_BACK ' 4 ' KEYCODE_BACK
+					Return KEY_JOYSTICK_O ' $80000 ' KEY_JOYSTICK_SELECT
+				Case keycodes.KEY_UP ' 19 ' KEYCODE_DPAD_UP
 					Return KEY_PAD_UP
-				Case 20
+				Case keycodes.KEY_DOWN ' 20 ' KEYCODE_DPAD_DOWN
 					Return KEY_PAD_DOWN
-				Case 21
+				Case keycodes.KEY_LEFT ' 21 ' KEYCODE_DPAD_LEFT
 					Return KEY_PAD_LEFT
-				Case 22
+				Case keycodes.KEY_RIGHT ' 22 ' KEYCODE_DPAD_RIGHT
 					Return KEY_PAD_RIGHT
-				Case 52
+				Case keycodes.KEY_X ' 52 ' KEYCODE_X
 					Return KEY_S2
-				Case MDPhone.KEY_CODE_MENU ' 82
+				Case keycodes.KEY_MENU ' 82 ' MDPhone.KEY_CODE_MENU ' KEYCODE_MENU
 					Return KEY_JOYSTICK_MENU
 				Default
 					Return KEY_NULL
