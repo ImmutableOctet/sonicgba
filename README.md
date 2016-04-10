@@ -9,8 +9,10 @@ without making any claim to parody the original behavior in any way.
 
 ## TODO
 * **Finish implementing 'sonicgba'**.
+* Implement 'state.gamestate'. (Only remaining module in 'state')
 * Properly implement sound behavior.
 * *Finish missing parts of 'MFLib'.*
+* *Split supporting sub-classes into separate modules.* (Animation, etc)
 * *Implement font behavior.*
 * Resolve foreign text.
 
