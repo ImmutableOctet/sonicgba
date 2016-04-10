@@ -54,11 +54,11 @@ Class HobinCal Implements SonicDef
 		End
 		
 		Method getPosOffsetX:Int()
-			Return ((Self.distance * Cos(Self.degree)) / 100)
+			Return ((Self.distance * MyAPI.dCos(Self.degree)) / 100)
 		End
 		
 		Method getPosOffsetY:Int()
-			Return ((Self.distance * Sin(Self.degree)) / 100)
+			Return ((Self.distance * MyAPI.dSin(Self.degree)) / 100)
 		End
 		
 		Method isStop:Bool()

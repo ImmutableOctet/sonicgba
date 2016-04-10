@@ -122,7 +122,7 @@ Class RopeStart Extends GimmickObject
 					Self.initFlag = False
 				EndIf
 			Else
-				Local sDegree:= Sin(Self.degree)
+				Local sDegree:= MyAPI.dSin(Self.degree)
 			
 				If (player.outOfControl And player.outOfControlObject = Self) Then
 					Self.velocity += ((GRAVITY * sDegree) / 100)
@@ -144,7 +144,7 @@ Class RopeStart Extends GimmickObject
 						EndIf
 					EndIf
 			
-					Local cDegree:= Cos(Self.degree)
+					Local cDegree:= MyAPI.dCos(Self.degree)
 			
 					Local newVelX:= ((Self.velocity * cDegree) / 100)
 					Local newVelY:= ((Self.velocity * sDegree) / 100)

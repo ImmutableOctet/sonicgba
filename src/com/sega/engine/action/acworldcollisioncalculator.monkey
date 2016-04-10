@@ -195,7 +195,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 		End
 		
 		Method actionLogic:Void(moveDistanceX:Int, moveDistanceY:Int)
-			actionLogic(moveDistanceX, moveDistanceY, ((Cos(Self.footDegree) * moveDistanceX) + (Sin(Self.footDegree) * moveDistanceY)) / 100)
+			actionLogic(moveDistanceX, moveDistanceY, ((MyAPI.dCos(Self.footDegree) * moveDistanceX) + (MyAPI.dSin(Self.footDegree) * moveDistanceY)) / 100)
 		End
 
 		Method actionLogic:Void(moveDistanceX:Int, moveDistanceY:Int, totalVelocity:Int)
@@ -227,9 +227,9 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 			Super.stopMoveX()
 			
 			If (Self.actionState = Null) Then
-				Local tmpMoveDistanceX:= ((Self.totalDistance * Cos(Self.user.getBodyDegree())) / 100)
+				Local tmpMoveDistanceX:= ((Self.totalDistance * MyAPI.dCos(Self.user.getBodyDegree())) / 100)
 				
-				Self.totalDistance = ACUtilities.getTotalFromDegree(0, (Self.totalDistance * Sin(Self.user.getBodyDegree())) / 100, Self.user.getBodyDegree())
+				Self.totalDistance = ACUtilities.getTotalFromDegree(0, (Self.totalDistance * MyAPI.dSin(Self.user.getBodyDegree())) / 100, Self.user.getBodyDegree())
 			EndIf
 		End
 		
@@ -237,9 +237,9 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 			Super.stopMoveY()
 			
 			If (Self.actionState = Null) Then
-				Local dSin:= ((Self.totalDistance * Sin(Self.user.getBodyDegree())) / 100)
+				Local dSin:= ((Self.totalDistance * MyAPI.dSin(Self.user.getBodyDegree())) / 100)
 				
-				Self.totalDistance = ACUtilities.getTotalFromDegree(((Self.totalDistance * Cos(Self.user.getBodyDegree())) / 100), 0, Self.user.getBodyDegree())
+				Self.totalDistance = ACUtilities.getTotalFromDegree(((Self.totalDistance * MyAPI.dCos(Self.user.getBodyDegree())) / 100), 0, Self.user.getBodyDegree())
 			EndIf
 		End
 		
@@ -448,7 +448,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				degree = getDegreeFromWorld((Self.footDegree + 180) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
 				plumbDegree = ((degree + 90) Mod 360)
 				
-				If ((((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100) > 0) Then
+				If ((((Self.moveDistanceX * MyAPI.dCos(plumbDegree)) + (Self.moveDistanceY * MyAPI.dSin(plumbDegree))) / 100) > 0) Then
 					If (sideCollision) Then
 						If (isVertical) Then
 							bodyOffset = Abs(Self.collisionData.newPosX - Self.footX)
@@ -471,15 +471,15 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 						
 						Self.user.doWhileTouchWorld(DIRECTION_UP, degree)
 						
-						Local tangentDistance:= (((Self.moveDistanceX * Cos(degree)) + (Self.moveDistanceY * Sin(degree))) / 100)
+						Local tangentDistance:= (((Self.moveDistanceX * MyAPI.dCos(degree)) + (Self.moveDistanceY * MyAPI.dSin(degree))) / 100)
 						
-						Self.moveDistanceX = ((Cos(degree) * tangentDistance) / 100)
-						Self.moveDistanceY = ((Sin(degree) * tangentDistance) / 100)
+						Self.moveDistanceX = ((MyAPI.dCos(degree) * tangentDistance) / 100)
+						Self.moveDistanceY = ((MyAPI.dSin(degree) * tangentDistance) / 100)
 						
-						Local tangentVel:= (((Self.acObj.velX * Cos(degree)) + (Self.acObj.velY * Sin(degree))) / 100)
+						Local tangentVel:= (((Self.acObj.velX * MyAPI.dCos(degree)) + (Self.acObj.velY * MyAPI.dSin(degree))) / 100)
 						
-						Self.acObj.velX = ((Cos(degree) * tangentVel) / 100)
-						Self.acObj.velY = ((Sin(degree) * tangentVel) / 100)
+						Self.acObj.velX = ((MyAPI.dCos(degree) * tangentVel) / 100)
+						Self.acObj.velY = ((MyAPI.dSin(degree) * tangentVel) / 100)
 					EndIf
 				EndIf
 			EndIf
@@ -490,7 +490,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				degree = getDegreeFromWorld(Self.footDegree, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
 				plumbDegree = ((degree + 90) Mod 360)
 				
-				If ((((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100) > 0) Then
+				If ((((Self.moveDistanceX * MyAPI.dCos(plumbDegree)) + (Self.moveDistanceY * MyAPI.dSin(plumbDegree))) / 100) > 0) Then
 					If (sideCollision) Then
 						If (isVertical) Then
 							bodyOffset = Abs(Self.collisionData.newPosX - Self.footX)
@@ -547,7 +547,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 						
 						plumbDegree = ((degree + 90) Mod 360)
 						
-						If ((((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100) > 0) Then
+						If ((((Self.moveDistanceX * MyAPI.dCos(plumbDegree)) + (Self.moveDistanceY * MyAPI.dSin(plumbDegree))) / 100) > 0) Then
 							If (isVertical) Then
 								Self.footX = Self.collisionData.newPosX
 							Else
@@ -558,15 +558,15 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 							
 							Self.user.doWhileTouchWorld(DIRECTION_UP, degree)
 							
-							tangentDistance = (((Self.moveDistanceX * Cos(degree)) + (Self.moveDistanceY * Sin(degree))) / 100)
+							tangentDistance = (((Self.moveDistanceX * MyAPI.dCos(degree)) + (Self.moveDistanceY * MyAPI.dSin(degree))) / 100)
 							
-							Self.moveDistanceX = ((Cos(degree) * tangentDistance) / 100)
-							Self.moveDistanceY = ((Sin(degree) * tangentDistance) / 100)
+							Self.moveDistanceX = ((MyAPI.dCos(degree) * tangentDistance) / 100)
+							Self.moveDistanceY = ((MyAPI.dSin(degree) * tangentDistance) / 100)
 							
-							tangentVel = (((Self.acObj.velX * Cos(degree)) + (Self.acObj.velY * Sin(degree))) / 100)
+							tangentVel = (((Self.acObj.velX * MyAPI.dCos(degree)) + (Self.acObj.velY * MyAPI.dSin(degree))) / 100)
 							
-							Self.acObj.velX = ((Cos(degree) * tangentVel) / 100)
-							Self.acObj.velY = ((Sin(degree) * tangentVel) / 100)
+							Self.acObj.velX = ((MyAPI.dCos(degree) * tangentVel) / 100)
+							Self.acObj.velY = ((MyAPI.dSin(degree) * tangentVel) / 100)
 						EndIf
 					EndIf
 					
@@ -576,7 +576,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 						degree = getDegreeFromWorld(Self.footDegree, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
 						plumbDegree = ((degree + 90) Mod 360)
 						
-						If ((((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100) > 0) Then
+						If ((((Self.moveDistanceX * MyAPI.dCos(plumbDegree)) + (Self.moveDistanceY * MyAPI.dSin(plumbDegree))) / 100) > 0) Then
 							Self.actionState = WALK_ACTION_STATE
 							
 							Self.footX = ACUtilities.getRelativePointX(Self.collisionData.collisionX, -Self.footCollisionPointOffsetX[Self.collisionData.chkPointID], -Self.footCollisionPointOffsetY, degree)
@@ -612,15 +612,15 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 						
 						Self.user.doWhileTouchWorld(DIRECTION_UP, collisionDegree)
 						
-						tangentDistance = (((Self.moveDistanceX * Cos(collisionDegree)) + (Self.moveDistanceY * Sin(collisionDegree))) / 100)
+						tangentDistance = (((Self.moveDistanceX * MyAPI.dCos(collisionDegree)) + (Self.moveDistanceY * MyAPI.dSin(collisionDegree))) / 100)
 						
-						Self.moveDistanceX = (Cos(collisionDegree) * tangentDistance) / 100
-						Self.moveDistanceY = (Sin(collisionDegree) * tangentDistance) / 100
+						Self.moveDistanceX = (MyAPI.dCos(collisionDegree) * tangentDistance) / 100
+						Self.moveDistanceY = (MyAPI.dSin(collisionDegree) * tangentDistance) / 100
 						
-						tangentVel = (((Self.acObj.velX * Cos(collisionDegree)) + (Self.acObj.velY * Sin(collisionDegree))) / 100)
+						tangentVel = (((Self.acObj.velX * MyAPI.dCos(collisionDegree)) + (Self.acObj.velY * MyAPI.dSin(collisionDegree))) / 100)
 						
-						Self.acObj.velX = (Cos(collisionDegree) * tangentVel) / 100
-						Self.acObj.velY = (Sin(collisionDegree) * tangentVel) / 100
+						Self.acObj.velX = (MyAPI.dCos(collisionDegree) * tangentVel) / 100
+						Self.acObj.velY = (MyAPI.dSin(collisionDegree) * tangentVel) / 100
 					EndIf
 					
 					rightSideCollisionChk(Self.footX, Self.footY, skyDirection, Self.collisionData)
@@ -697,7 +697,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 					degree = getDegreeFromWorld(Self.footDegree + 180, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
 					plumbDegree = ((degree + 90) Mod 360)
 					
-					If (((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100 > 0) Then
+					If (((Self.moveDistanceX * MyAPI.dCos(plumbDegree)) + (Self.moveDistanceY * MyAPI.dSin(plumbDegree))) / 100 > 0) Then
 						If (isVertical) Then
 							Self.footX = Self.collisionData.newPosX
 						Else
@@ -708,15 +708,15 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 						
 						Self.user.doWhileTouchWorld(DIRECTION_UP, degree)
 						
-						tangentDistance = (((Self.moveDistanceX * Cos(degree)) + (Self.moveDistanceY * Sin(degree))) / 100)
+						tangentDistance = (((Self.moveDistanceX * MyAPI.dCos(degree)) + (Self.moveDistanceY * MyAPI.dSin(degree))) / 100)
 						
-						Self.moveDistanceX = ((Cos(degree) * tangentDistance) / 100)
-						Self.moveDistanceY = ((Sin(degree) * tangentDistance) / 100)
+						Self.moveDistanceX = ((MyAPI.dCos(degree) * tangentDistance) / 100)
+						Self.moveDistanceY = ((MyAPI.dSin(degree) * tangentDistance) / 100)
 						
-						tangentVel = (((Self.acObj.velX * Cos(degree)) + (Self.acObj.velY * Sin(degree))) / 100)
+						tangentVel = (((Self.acObj.velX * MyAPI.dCos(degree)) + (Self.acObj.velY * MyAPI.dSin(degree))) / 100)
 						
-						Self.acObj.velX = ((Cos(degree) * tangentVel) / 100)
-						Self.acObj.velY = ((Sin(degree) * tangentVel) / 100)
+						Self.acObj.velX = ((MyAPI.dCos(degree) * tangentVel) / 100)
+						Self.acObj.velY = ((MyAPI.dSin(degree) * tangentVel) / 100)
 					EndIf
 				EndIf
 				
@@ -727,7 +727,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 					
 					plumbDegree = ((degree + 90) Mod 360)
 					
-					If ((((Self.moveDistanceX * Cos(plumbDegree)) + (Self.moveDistanceY * Sin(plumbDegree))) / 100) > 0) Then
+					If ((((Self.moveDistanceX * MyAPI.dCos(plumbDegree)) + (Self.moveDistanceY * MyAPI.dSin(plumbDegree))) / 100) > 0) Then
 						Self.actionState = WALK_ACTION_STATE
 						
 						Self.footX = ACUtilities.getRelativePointX(Self.collisionData.collisionX, -Self.footCollisionPointOffsetX[Self.collisionData.chkPointID], -Self.footCollisionPointOffsetY, degree)
@@ -973,8 +973,8 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 			Local startPointX:= Self.chkPointX
 			Local startPointY:= Self.chkPointY
 			
-			Self.moveDistanceX = ((Self.totalDistance * Cos(Self.user.getBodyDegree())) / 100)
-			Self.moveDistanceY = ((Self.totalDistance * Sin(Self.user.getBodyDegree())) / 100)
+			Self.moveDistanceX = ((Self.totalDistance * MyAPI.dCos(Self.user.getBodyDegree())) / 100)
+			Self.moveDistanceY = ((Self.totalDistance * MyAPI.dSin(Self.user.getBodyDegree())) / 100)
 			
 			Local direction:= getDirectionByDegree(Self.user.getBodyDegree())
 			
@@ -1145,12 +1145,12 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 			Self.moveDistanceX -= Self.chkPointX - startPointX
 			Self.moveDistanceY -= Self.chkPointY - startPointY
 			
-			If (Self.totalDistance * (((Self.moveDistanceX * Cos(Self.user.getBodyDegree())) + (Self.moveDistanceY * Sin(Self.user.getBodyDegree()))) / 100) <= 0) Then
+			If (Self.totalDistance * (((Self.moveDistanceX * MyAPI.dCos(Self.user.getBodyDegree())) + (Self.moveDistanceY * MyAPI.dSin(Self.user.getBodyDegree()))) / 100) <= 0) Then
 				Self.moveDistanceX = 0
 				Self.moveDistanceY = 0
 			EndIf
 			
-			Self.totalDistance = (((Self.moveDistanceX * Cos(Self.user.getBodyDegree())) + (Self.moveDistanceY * Sin(Self.user.getBodyDegree()))) / 100)
+			Self.totalDistance = (((Self.moveDistanceX * MyAPI.dCos(Self.user.getBodyDegree())) + (Self.moveDistanceY * MyAPI.dSin(Self.user.getBodyDegree()))) / 100)
 		End
 		
 		Method getWorldY:Int(x:Int, y:Int, direction:Int)

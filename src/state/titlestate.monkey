@@ -1384,7 +1384,7 @@ Class TitleState Extends State
 					Local currentDegree:= (Self.degree + DEGREE_START) + ((i - 1) * STATE_START_TO_MENU_1)
 					
 					If (currentDegree >= -27 And currentDegree <= 63) Then
-						State.drawMenuFontById(g, Self.currentElement[elementId], ((Cos(currentDegree) * STAGE_TYPE_CANT_CHOOSE) + 5100) / OPTION_MOVING_INTERVAL, ((Sin(currentDegree) * STAGE_TYPE_CANT_CHOOSE) + 15900) / OPTION_MOVING_INTERVAL)
+						State.drawMenuFontById(g, Self.currentElement[elementId], ((MyAPI.dCos(currentDegree) * STAGE_TYPE_CANT_CHOOSE) + 5100) / OPTION_MOVING_INTERVAL, ((MyAPI.dSin(currentDegree) * STAGE_TYPE_CANT_CHOOSE) + 15900) / OPTION_MOVING_INTERVAL)
 					EndIf
 				Next
 			EndIf

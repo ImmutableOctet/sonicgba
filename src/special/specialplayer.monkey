@@ -383,16 +383,16 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 					
 					If (Self.state = STATE_DASH) Then
 						If (Self.state <> STATE_SPRING) Then
-							Self.velX = ((Cos(degree) * MOVE_VELOCITY) / 100)
+							Self.velX = ((MyAPI.dCos(degree) * MOVE_VELOCITY) / 100)
 						ElseIf (Self.count >= SSSpringCount) Then
-							Self.velX = ((Cos(degree) * MOVE_VELOCITY) / 100)
+							Self.velX = ((MyAPI.dCos(degree) * MOVE_VELOCITY) / 100)
 						EndIf
 					ElseIf (Self.state <> STATE_SPRING) Then
-						Self.velX = ((Cos(degree) * MOVE_VELOCITY) / 100)
-						Self.velY = ((Sin(degree) * MOVE_VELOCITY) / 100)
+						Self.velX = ((MyAPI.dCos(degree) * MOVE_VELOCITY) / 100)
+						Self.velY = ((MyAPI.dSin(degree) * MOVE_VELOCITY) / 100)
 					ElseIf (Self.count >= SSSpringCount) Then
-						Self.velX = ((Cos(degree) * MOVE_VELOCITY) / 100)
-						Self.velY = ((Sin(degree) * MOVE_VELOCITY) / 100)
+						Self.velX = ((MyAPI.dCos(degree) * MOVE_VELOCITY) / 100)
+						Self.velY = ((MyAPI.dSin(degree) * MOVE_VELOCITY) / 100)
 					EndIf
 				EndIf
 			EndIf
@@ -921,8 +921,8 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 				For Local i:= 0 Until ringDirection.Length ' 10
 					ringDirection[i] = i
 					
-					ringVel[i][0] = ((Cos(i * 36) * 800) / 100)
-					ringVel[i][1] = ((Sin(i * 36) * 800) / 100)
+					ringVel[i][0] = ((MyAPI.dCos(i * 36) * 800) / 100)
+					ringVel[i][1] = ((MyAPI.dSin(i * 36) * 800) / 100)
 				Next
 				
 				For Local i:= 0 Until ringDirection.Length ' 10

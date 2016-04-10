@@ -43,12 +43,12 @@ Class ACMoveCalculator
 		End
 		
 		Method stopMove:Void(degree:Int)
-			Local moveDistanceY2:= (((-Self.moveDistanceX) * Sin(degree)) + (Self.moveDistanceY * Cos(degree))) ' / 1
+			Local moveDistanceY2:= (((-Self.moveDistanceX) * MyAPI.dSin(degree)) + (Self.moveDistanceY * MyAPI.dCos(degree))) ' / 1
 			
-			If (((Self.moveDistanceX * Cos(degree)) + (Self.moveDistanceY * Sin(degree))) > 0) Then ' / 1
+			If (((Self.moveDistanceX * MyAPI.dCos(degree)) + (Self.moveDistanceY * MyAPI.dSin(degree))) > 0) Then ' / 1
 				' Magic number: 10000
-				Self.moveDistanceX = ((-moveDistanceY2) * Sin(degree)) / 10000
-				Self.moveDistanceY = (Cos(degree) * moveDistanceY2) / 10000
+				Self.moveDistanceX = ((-moveDistanceY2) * MyAPI.dSin(degree)) / 10000
+				Self.moveDistanceY = (MyAPI.dCos(degree) * moveDistanceY2) / 10000
 			EndIf
 		End
 	

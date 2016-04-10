@@ -88,6 +88,6 @@ Class MoveCalculator ' Extends GimmickObject
 		End
 		
 		Method getPosition:Int()
-			Return (Self.centerPosition + ((Sin(degree) * Self.radius) / 100))
+			Return (Self.centerPosition + ((MyAPI.dSin(degree) * Self.radius) / 100))
 		End
 End

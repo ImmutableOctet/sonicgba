@@ -880,7 +880,7 @@ Class NormalEnding Extends PlainEnding ' Final
 		Method getPlaneOffset:Int()
 			Self.planeOffsetDegree += OFFSET_SPEED
 			
-			Return ((Sin(Self.planeOffsetDegree) * OFFSET_RANGE) / 100) + OFFSET_SPEED
+			Return ((MyAPI.dSin(Self.planeOffsetDegree) * OFFSET_RANGE) / 100) + OFFSET_SPEED
 		End
 		
 		' This could use some work, but it should work fine.
@@ -942,7 +942,7 @@ Class NormalEnding Extends PlainEnding ' Final
 		End
 		
 		Method getOffsetY:Int(degreeOffset:Int)
-			Return (Sin(Self.degree + degreeOffset) * DEGREE_VELOCITY) / 100 ' * 10
+			Return (MyAPI.dSin(Self.degree + degreeOffset) * DEGREE_VELOCITY) / 100 ' * 10
 		End
 		
 		Method creditInit:Void()

@@ -18,6 +18,8 @@ Class MyAPI
 			tDeg += 360
 		Wend
 		
+		'Return Int(Sin(Float(tDeg)))
+		
 		Local tsh:= tDeg Mod 360
 		
 		If (tsh >= 0 And tsh <= 90) Then
@@ -40,6 +42,7 @@ Class MyAPI
 	End
 	
 	Function dCos:Int(tDeg:Int)
+		'Return Int(Cos(Float(tDeg)))
 		Return dSin(90 - tDeg)
 	End
 End

@@ -40,8 +40,8 @@ Class RollHobin Extends BallHobin
 		End
 	Private
 		Method calHobinPosition:Void()
-			Self.posX = Self.centerX + ((Self.radius * Cos(degree + Self.degreeOffset)) / 100)
-			Self.posY = Self.centerY + ((Self.radius * Sin(degree + Self.degreeOffset)) / 100)
+			Self.posX = Self.centerX + ((Self.radius * MyAPI.dCos(degree + Self.degreeOffset)) / 100)
+			Self.posY = Self.centerY + ((Self.radius * MyAPI.dSin(degree + Self.degreeOffset)) / 100)
 		End
 	Public
 		' Methods:

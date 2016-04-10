@@ -61,19 +61,19 @@ Class ShipSystem Extends GimmickObject
 		' Methods:
 		Method draw:Void(g:MFGraphics)
 			For Local i:= 0 Until RING_NUM
-				drawInMap(g, shipRingImage, Self.posX + ((((i * RADIUS) / (RING_NUM-1)) * Cos(Self.degree / RING_NUM)) / 100), Self.posY + ((((i * RADIUS) / (RING_NUM-1)) * Sin(Self.degree / RING_NUM)) / 100), 3)
+				drawInMap(g, shipRingImage, Self.posX + ((((i * RADIUS) / (RING_NUM-1)) * MyAPI.dCos(Self.degree / RING_NUM)) / 100), Self.posY + ((((i * RADIUS) / (RING_NUM-1)) * MyAPI.dSin(Self.degree / RING_NUM)) / 100), 3)
 			End
 		End
 		
 		Method getNewShipPosition:Void(ship:Ship)
-			Self.lineVelocity += (((GRAVITY * 2) * Sin((Self.degree / RING_NUM) - (DEGREE_VELOCITY/2))) / 100) / 3
+			Self.lineVelocity += (((GRAVITY * 2) * MyAPI.dSin((Self.degree / RING_NUM) - (DEGREE_VELOCITY/2))) / 100) / 3
 			Self.degree -= ((((Self.lineVelocity * RING_NUM) / RADIUS) * RING_NUM) * DEGREE_VELOCITY) / SonicDef.PI
 			
 			Local preX:= ship.posX
 			Local preY:= ship.posY
 			
-			ship.posX = Self.posX + ((Cos(Self.degree / RING_NUM) * RADIUS) / 100)
-			ship.posY = Self.posY + ((Sin(Self.degree / RING_NUM) * RADIUS) / 100)
+			ship.posX = Self.posX + ((MyAPI.dCos(Self.degree / RING_NUM) * RADIUS) / 100)
+			ship.posY = Self.posY + ((MyAPI.dSin(Self.degree / RING_NUM) * RADIUS) / 100)
 			
 			ship.checkWithPlayer(preX, preY, ship.posX, ship.posY)
 		End

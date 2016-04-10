@@ -561,7 +561,7 @@ Class SuperSonicEnding Extends BaseEnding ' Final
 		Method getPlaneOffset:Int()
 			Self.planeOffsetDegree += OFFSET_SPEED
 			
-			Return ((Sin(Self.planeOffsetDegree) * OFFSET_RANGE) / 100) + OFFSET_RANGE
+			Return ((MyAPI.dSin(Self.planeOffsetDegree) * OFFSET_RANGE) / 100) + OFFSET_RANGE
 		End
 		
 		Method drawCatchPlane:Void(g:MFGraphics)

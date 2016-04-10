@@ -826,7 +826,7 @@ Class State Implements SonicDef, StringIndex Abstract
 			Local reset_y:= (pointy - 128)
 			
 			If ((reset_x * reset_x) + (reset_y * reset_y) > RollPlatformSpeedC.COLLISION_OFFSET_Y) Then
-				Return ((Cos(directkey.getDegree()) * 16) / 100) + 32
+				Return ((MyAPI.dCos(directkey.getDegree()) * 16) / 100) + 32
 			EndIf
 			
 			Return pointx
@@ -837,7 +837,7 @@ Class State Implements SonicDef, StringIndex Abstract
 			Local reset_y:= (pointy - 128)
 			
 			If ((reset_x * reset_x) + (reset_y * reset_y) > RollPlatformSpeedC.COLLISION_OFFSET_Y) Then
-				Return ((Sin(directkey.getDegree()) * 16) / 100) + 128
+				Return ((MyAPI.dSin(directkey.getDegree()) * 16) / 100) + 128
 			EndIf
 			
 			Return pointy

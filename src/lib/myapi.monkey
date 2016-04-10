@@ -608,7 +608,7 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 				tDeg += 360
 			Wend
 			
-			'Return Int(Sin(Float(tDeg)))
+			''Return Int(Sin(Float(tDeg)))
 			
 			Local tsh:= (tDeg Mod 360)
 			
@@ -632,6 +632,7 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 		End
 		
 		Function dCos:Int(tDeg:Int)
+			'Return Int(Cos(Float(tDeg)))
 			Return dSin(90 - tDeg)
 		End
 		

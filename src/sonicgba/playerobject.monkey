@@ -2166,11 +2166,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method getNewPointX:Int(oriX:Int, xOffset:Int, yOffset:Int, degree:Int)
-			Return (((Cos(degree) * xOffset) / 100) + oriX) - ((Sin(degree) * yOffset) / 100)
+			Return (((MyAPI.dCos(degree) * xOffset) / 100) + oriX) - ((MyAPI.dSin(degree) * yOffset) / 100)
 		End
 		
 		Method getNewPointY:Int(oriY:Int, xOffset:Int, yOffset:Int, degree:Int)
-			Return (((Sin(degree) * xOffset) / 100) + oriY) + ((Cos(degree) * yOffset) / 100)
+			Return (((MyAPI.dSin(degree) * xOffset) / 100) + oriY) + ((MyAPI.dCos(degree) * yOffset) / 100)
 		End
 	Public
 		' Methods:
@@ -2266,8 +2266,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method calDivideVelocity:Void(degree:Int)
-			Self.velX = (Self.totalVelocity * Cos(degree)) / 100
-			Self.velY = (Self.totalVelocity * Sin(degree)) / 100
+			Self.velX = (Self.totalVelocity * MyAPI.dCos(degree)) / 100
+			Self.velY = (Self.totalVelocity * MyAPI.dSin(degree)) / 100
 		End
 		
 		Method calTotalVelocity:Void()
@@ -2275,7 +2275,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method calTotalVelocity:Void(degree:Int)
-			Self.totalVelocity = ((Self.velX * Cos(degree)) + (Self.velY * Sin(degree))) / 100
+			Self.totalVelocity = ((Self.velX * MyAPI.dCos(degree)) + (Self.velY * MyAPI.dSin(degree))) / 100
 		End
 	Private
 		Method faceDirectionChk:Bool()
@@ -2299,7 +2299,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method faceSlopeChk:Void()
-			'Local slopeVelocity:= (Sin(Self.faceDegree) * (getGravity() * DSgn(Self.isAntiGravity))) / 100
+			'Local slopeVelocity:= (MyAPI.dSin(Self.faceDegree) * (getGravity() * DSgn(Self.isAntiGravity))) / 100
 		End
 		
 		Method decelerate:Void()
@@ -2340,7 +2340,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					fakeGravity *= 3
 				EndIf
 				
-				Local velChange:= ((Sin(Self.faceDegree) * fakeGravity) / 100)
+				Local velChange:= ((MyAPI.dSin(Self.faceDegree) * fakeGravity) / 100)
 				
 				preTotalVelocity = Self.totalVelocity
 				
@@ -2495,7 +2495,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			waitingChk()
 			
-			Local slopeVelocity:= (Sin(Self.faceDegree) * (getGravity() * DSgn(Not Self.isAntiGravity))) / 100
+			Local slopeVelocity:= (MyAPI.dSin(Self.faceDegree) * (getGravity() * DSgn(Not Self.isAntiGravity))) / 100
 			
 			faceSlopeChk()
 			
@@ -2563,7 +2563,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Local newPointX:Int
 			
 			' Magic numbers: 4864, etc.
-			If (((Not Self.isAntiGravity And Self.faceDegree >= 90 And Self.faceDegree <= 270) Or (Self.isAntiGravity And (Self.faceDegree <= 90 Or Self.faceDegree >= 270))) And ((Abs((FAKE_GRAVITY_ON_WALK * Cos(Self.faceDegree)) / 100) >= (Self.totalVelocity * Self.totalVelocity) / 4864 And Not Self.ducting) Or Self.animationID = ANI_BRAKE)) Then
+			If (((Not Self.isAntiGravity And Self.faceDegree >= 90 And Self.faceDegree <= 270) Or (Self.isAntiGravity And (Self.faceDegree <= 90 Or Self.faceDegree >= 270))) And ((Abs((FAKE_GRAVITY_ON_WALK * MyAPI.dCos(Self.faceDegree)) / 100) >= (Self.totalVelocity * Self.totalVelocity) / 4864 And Not Self.ducting) Or Self.animationID = ANI_BRAKE)) Then
 				calDivideVelocity()
 				
 				Local bodyCenterX:= getNewPointX(Self.posX, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree)
@@ -3184,8 +3184,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				jumpVel = JUMP_START_VELOCITY
 			EndIf
 			
-			Local velY:= Self.velY + ((jumpVel * Cos(faceDegreeChk())) / 100)
-			Self.velX += ((jumpVel * (-Sin(faceDegreeChk()))) / 100)
+			Local velY:= Self.velY + ((jumpVel * MyAPI.dCos(faceDegreeChk())) / 100)
+			Self.velX += ((jumpVel * (-MyAPI.dSin(faceDegreeChk()))) / 100)
 			
 			If (Self.faceDegree >= 0 And Self.faceDegree <= 90) Then
 				If (Self.isAntiGravity) Then
@@ -3210,9 +3210,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				calDivideVelocity()
 			EndIf
 			
-			Self.velX += ((-Sin(faceDegreeChk())) * vel) / 100
+			Self.velX += ((-MyAPI.dSin(faceDegreeChk())) * vel) / 100
 			
-			Local velY:= Self.velY + (Cos(faceDegreeChk()) * vel) / 100
+			Local velY:= Self.velY + (MyAPI.dCos(faceDegreeChk()) * vel) / 100
 			
 			doJumpV(velY)
 			
@@ -3258,7 +3258,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method setFurikoOutVelX:Void(degree:Int)
-			Self.velX = ((-JUMP_PROTECT) * Cos(degree)) / 100
+			Self.velX = ((-JUMP_PROTECT) * MyAPI.dCos(degree)) / 100
 		End
 		
 		Method getCheckPositionX:Int()
@@ -3745,7 +3745,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Method getVelX:Int()
 			If (Self.collisionState = COLLISION_STATE_NONE) Then
-				Return ((Self.totalVelocity * Cos(Self.faceDegree)) / 100)
+				Return ((Self.totalVelocity * MyAPI.dCos(Self.faceDegree)) / 100)
 			EndIf
 			
 			Return Self.velX
@@ -3753,7 +3753,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Method getVelY:Int()
 			If (Self.collisionState = COLLISION_STATE_NONE) Then
-				Return ((Self.totalVelocity * Sin(Self.faceDegree)) / 100)
+				Return ((Self.totalVelocity * MyAPI.dSin(Self.faceDegree)) / 100)
 			EndIf
 			
 			Return Self.velY
@@ -3761,11 +3761,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Method setVelX:Void(mVelX:Int)
 			If (Self.collisionState = COLLISION_STATE_NONE) Then
-				Local tmpVelX:= ((Self.totalVelocity * Cos(Self.faceDegree)) / 100)
+				Local tmpVelX:= ((Self.totalVelocity * MyAPI.dCos(Self.faceDegree)) / 100)
 				
 				tmpVelX = mVelX
 				
-				Self.totalVelocity = (((Cos(Self.faceDegree) * tmpVelX) + (Sin(Self.faceDegree) * ((Self.totalVelocity * Sin(Self.faceDegree)) / 100))) / 100)
+				Self.totalVelocity = (((MyAPI.dCos(Self.faceDegree) * tmpVelX) + (MyAPI.dSin(Self.faceDegree) * ((Self.totalVelocity * MyAPI.dSin(Self.faceDegree)) / 100))) / 100)
 				
 				Return
 			EndIf
@@ -3775,9 +3775,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Method setVelY:Void(mVelY:Int)
 			If (Self.collisionState = COLLISION_STATE_NONE) Then
-				Local dSin:= ((Self.totalVelocity * Sin(Self.faceDegree)) / 100)
+				Local dSin:= ((Self.totalVelocity * MyAPI.dSin(Self.faceDegree)) / 100)
 				
-				Self.totalVelocity = (((Cos(Self.faceDegree) * ((Self.totalVelocity * Cos(Self.faceDegree)) / 100)) + (Sin(Self.faceDegree) * mVelY)) / 100)
+				Self.totalVelocity = (((MyAPI.dCos(Self.faceDegree) * ((Self.totalVelocity * MyAPI.dCos(Self.faceDegree)) / 100)) + (MyAPI.dSin(Self.faceDegree) * mVelY)) / 100)
 				
 				Return
 			EndIf
@@ -3787,11 +3787,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Method setVelXPercent:Void(percentage:Int)
 			If (Self.collisionState = COLLISION_STATE_NONE) Then
-				Local tmpVelX:= ((Self.totalVelocity * Cos(Self.faceDegree)) / 100)
+				Local tmpVelX:= ((Self.totalVelocity * MyAPI.dCos(Self.faceDegree)) / 100)
 				
 				tmpVelX = ((Self.totalVelocity * percentage) / 100)
 				
-				Self.totalVelocity = (((Cos(Self.faceDegree) * tmpVelX) + (Sin(Self.faceDegree) * ((Self.totalVelocity * Sin(Self.faceDegree)) / 100))) / 100)
+				Self.totalVelocity = (((MyAPI.dCos(Self.faceDegree) * tmpVelX) + (MyAPI.dSin(Self.faceDegree) * ((Self.totalVelocity * MyAPI.dSin(Self.faceDegree)) / 100))) / 100)
 				
 				Return
 			EndIf
@@ -3801,9 +3801,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Method setVelYPercent:Void(percentage:Int)
 			If (Self.collisionState = COLLISION_STATE_NONE) Then
-				Local tmpVelY:= ((Self.totalVelocity * Sin(Self.faceDegree)) / 100)
+				Local tmpVelY:= ((Self.totalVelocity * MyAPI.dSin(Self.faceDegree)) / 100)
 				
-				Self.totalVelocity = (((Cos(Self.faceDegree) * ((Self.totalVelocity * Cos(Self.faceDegree)) / 100)) + (Sin(Self.faceDegree) * ((Self.totalVelocity * percentage) / 100))) / 100)
+				Self.totalVelocity = (((MyAPI.dCos(Self.faceDegree) * ((Self.totalVelocity * MyAPI.dCos(Self.faceDegree)) / 100)) + (MyAPI.dSin(Self.faceDegree) * ((Self.totalVelocity * percentage) / 100))) / 100)
 				
 				Return
 			EndIf
@@ -4991,7 +4991,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					
 					Self.footPointX += Self.velX
 					
-					Local yLimit:= (CENTER_Y - (((Cos((((Self.footPointX - CENTER_X) * B_1) / B_2) Shr 6) * f24C) / 100) + f24C))
+					Local yLimit:= (CENTER_Y - (((MyAPI.dCos((((Self.footPointX - CENTER_X) * B_1) / B_2) Shr 6) * f24C) / 100) + f24C))
 					
 					decelerate()
 					
