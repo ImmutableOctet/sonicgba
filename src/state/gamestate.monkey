@@ -241,6 +241,7 @@ Class GameState Extends State
 	Private
 		' Fields:
 		Field interrupt_state:Int
+		Field nextState:Int
 		
 		Field frameCount:Int
 		Field gameoverCnt:Int
@@ -304,27 +305,37 @@ Class GameState Extends State
 		Field display:Int[][]
 		
 		Field itemOffsetX:Int
+		
 		Field loadingStartTime:Long
+		
 		Field movingTitleSpeedX:Int
 		Field movingTitleX:Int
-		Field nextState:Int
+		
 		Field offsetOfVolumeInterface:Int
+		
 		Field optionCursor:Int[]
+		
 		Field optionDrawOffsetBottomY:Int
 		Field optionDrawOffsetTmpY1:Int
 		Field optionDrawOffsetY:Int
+		
 		Field optionMenuCursor:Int
+		
 		Field optionOffsetTmp:Int
 		Field optionOffsetX:Int
 		Field optionOffsetY:Int
 		Field optionOffsetYAim:Int
 		Field optionYDirect:Int
+		
 		Field optionslide_getprey:Int
 		Field optionslide_gety:Int
 		Field optionslide_y:Int
 		Field optionslidefirsty:Int
+		
 		Field overtitleID:Int
+		
 		Field pauseOptionCursor:Int
+		
 		Field pause_item_cursor:Int
 		Field pause_item_speed:Int
 		Field pause_item_x:Int
@@ -334,7 +345,9 @@ Class GameState Extends State
 		Field pause_saw_speed:Int
 		Field pause_saw_x:Int
 		Field pause_saw_y:Int
+		
 		Field pausecnt:Int
+		
 		Field planeX:Int
 		Field planeY:Int
 		Field position:Int
