@@ -11,6 +11,8 @@ Friend lib.animationimageinfo
 Private
 	Import lib.myapi
 	
+	Import lib.animationdrawer
+	
 	Import lib.animationframe
 	Import lib.animationimageinfo
 	Import lib.constutil

@@ -1600,8 +1600,9 @@ Class GameState Extends State
 			EndIf
 		End
 		
-		Public Method drawGame:Void(g:MFGraphics)
+		Method drawGame:Void(g:MFGraphics)
 			g.setColor(MapManager.END_COLOR)
+			
 			MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 			
 			If (Not GameObject.IsGamePause) Then
@@ -1609,78 +1610,103 @@ Class GameState Extends State
 			EndIf
 			
 			BackGroundManager.frame = MapManager.gameFrame
+			
 			MapManager.drawBack(g)
+			
 			GameObject.drawObjectBeforeSonic(g)
 			GameObject.drawPlayer(g)
+			
 			Effect.draw(g, 1)
+			
 			GameObject.drawObjects(g)
+			
 			GameObject.player.drawSheild1(g)
+			
 			MapManager.drawFront(g)
+			
 			GameObject.player.draw2(g)
+			
 			GameObject.player.drawSheild2(g)
+			
 			GameObject.drawObjectAfterEveryThing(g)
+			
 			MapManager.drawFrontNatural(g)
+			
 			Effect.draw(g, 0)
+			
 			MapManager.drawMapFrame(g)
+			
 			RocketSeparateEffect.getInstance().draw(g)
 		End
 		
-		Public Method drawGameSoftKey:Void(g:MFGraphics)
-			
-			If (Self.state <> STATE_PAUSE And Self.state <> 10 And Self.state <> 8 And Self.state <> VISIBLE_OPTION_ITEMS_NUM And Self.state <> 29 And Self.state <> STATE_BP_TOOLS_USE And Self.state <> 26 And Self.state <> 41 And Self.state <> 42 And Self.state <> 11 And Self.state <> 12 And Self.state <> 13 And Not StageManager.isStagePassTimePause()) Then
+		Method drawGameSoftKey:Void(g:MFGraphics)
+			If (Self.state <> STATE_PAUSE And Self.state <> STATE_PAUSE_TO_TITLE And Self.state <> STATE_PAUSE_RETRY And Self.state <> VISIBLE_OPTION_ITEMS_NUM And Self.state <> STATE_PAUSE_SELECT_CHARACTER And Self.state <> STATE_BP_TOOLS_USE And Self.state <> STATE_BP_TOOLS_USE_ENSURE And Self.state <> STATE_CONTINUE_0 And Self.state <> STATE_CONTINUE_1 And Self.state <> STATE_TIME_OVER_0 And Self.state <> STATE_GAME_OVER_1 And Self.state <> STATE_GAME_OVER_2 And Not StageManager.isStagePassTimePause()) Then
 				If (Not GameObject.player.isDead) Then
 					State.drawSoftKeyPause(g)
 				EndIf
 				
-				If (Self.state <> STATE_BP_TOOLS_USE And Self.state <> 26 And Self.state <> STATE_PAUSE And Self.state <> STATE_PAUSE_INSTRUCTION And Self.state <> STATE_PAUSE_OPTION And Self.state <> 8 And Self.state <> VISIBLE_OPTION_ITEMS_NUM And Self.state <> 29 And Self.state <> 10 And State.IsToolsCharge() And GameObject.stageModeState = 0 And Not GameObject.player.isDead) Then
+				If (Self.state <> STATE_BP_TOOLS_USE And Self.state <> STATE_BP_TOOLS_USE_ENSURE And Self.state <> STATE_PAUSE And Self.state <> STATE_PAUSE_INSTRUCTION And Self.state <> STATE_PAUSE_OPTION And Self.state <> STATE_PAUSE_RETRY And Self.state <> VISIBLE_OPTION_ITEMS_NUM And Self.state <> STATE_PAUSE_SELECT_CHARACTER And Self.state <> STATE_PAUSE_TO_TITLE And State.IsToolsCharge() And GameObject.stageModeState = 0 And Not GameObject.player.isDead) Then
 					MyAPI.drawImage(g, BP_wordsImg, 0, BP_wordsHeight, BP_wordsWidth, BP_wordsHeight, 0, tool_x, tool_y, 36)
 				EndIf
 			EndIf
-			
 		End
 		
-		Public Method close:Void()
+		Method close:Void()
 			MapManager.closeMap()
+			
 			State.releaseTouchkeyBoard()
+			
 			Animation.closeAnimationArray(Self.stageInfoClearAni)
 			Self.stageInfoClearAni = Null
+			
 			Animation.closeAnimationDrawer(stageInfoAniDrawer)
 			stageInfoAniDrawer = Null
+			
 			Animation.closeAnimationDrawer(Self.stageInfoPlayerNameDrawer)
 			Self.stageInfoPlayerNameDrawer = Null
+			
 			Animation.closeAnimationDrawer(Self.stageInfoActNumDrawer)
 			Self.stageInfoActNumDrawer = Null
+			
 			Animation.closeAnimation(guiAnimation)
 			guiAnimation = Null
+			
 			Animation.closeAnimationDrawer(guiAniDrawer)
 			guiAniDrawer = Null
+			
 			Animation.closeAnimationDrawer(numberDrawer)
 			numberDrawer = Null
+			
 			Animation.closeAnimationDrawer(Self.planeDrawer)
 			Self.planeDrawer = Null
+			
 			Animation.closeAnimationDrawer(Self.cloudDrawer)
 			Self.cloudDrawer = Null
-			Animation.closeAnimationDrawerArray(Self.birdDrawer)
-			Self.birdDrawer = Null
-			Self.exendBgImage = Null
-			Self.exendBg1Image = Null
+			
 			Animation.closeAnimationDrawer(Self.interruptDrawer)
 			Self.interruptDrawer = Null
+			
+			Animation.closeAnimationDrawerArray(Self.birdDrawer)
+			Self.birdDrawer = []
+			
+			Self.exendBgImage = Null
+			Self.exendBg1Image = Null
+			
 			SoundSystem.getInstance().setSoundSpeed(1.0)
+			
 			Key.init()
+			
 			GameObject.quitGameState()
+			
 			'System.gc()
-			try {
-				Thread.sleep(100)
-			} catch (Exception e) {
-				e.printStackTrace()
-			}
+			'Thread.sleep(100)
 		End
 		
-		Public Method init:Void()
+		Method init:Void()
 			State.initTouchkeyBoard()
 			Key.initSonic()
-			tipsForShow = Null
+			
+			tipsForShow = []
 		End
 		
 		Public Function setPauseMenu:Void()

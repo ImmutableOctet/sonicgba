@@ -100,7 +100,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 	' Global variable(s):
 	Public
 		' Global player reference; last resort. (Terrible, but it works)
-		Global player:GameObject
+		Global player:PlayerObject ' GameObject
 		
 		' This is used to count updates for game logic.
 		' Think of it as a sort of frame counter.
