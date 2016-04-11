@@ -116,32 +116,44 @@ Class State Implements SonicDef, StringIndex Abstract
 	Public
 		' Constant variable(s):
 		Const ARROW_WAIT_FRAME:Int = 4
+		
 		Const BACKGROUND_WIDTH:Int = 80
+		
 		Const BAR_HEIGHT:Int = 20
 		Const BAR_ID_BLACK:Int = 1
 		Const BAR_ID_BLUE:Int = 0
 		Const BAR_ID_WHITE:Int = 2
+		
 		Const BG_NUM:Int = ((SCREEN_WIDTH + BACKGROUND_WIDTH) - 1) / BACKGROUND_WIDTH
-		Const CASE_HEIGHT:Int = (SCREEN_HEIGHT - 60)
+		
 		Const CASE_WIDTH:Int = MENU_RECT_WIDTH
+		Const CASE_HEIGHT:Int = (SCREEN_HEIGHT - 60)
+		
 		Const CASE_X:Int = ((SCREEN_WIDTH - MENU_RECT_WIDTH) Shr 1) ' / 2
 		Const CASE_Y:Int = 30
+		
 		Const COMFIRM_FRAME_ID:Int = 100
 		Const COMFIRM_ID:Int = 10
 		Const COMFIRM_X:Int = (SCREEN_WIDTH Shr 1) ' / 2
 		Const COMFIRM_Y:Int = (SCREEN_HEIGHT Shr 1) ' / 2
+		
 		Const DRAW_NUM:Int = 2
-		Const EMERALD_STATE_FAILD:Int = 2
+		
 		Const EMERALD_STATE_NONENTER:Int = 0
 		Const EMERALD_STATE_SUCCESS:Int = 1
+		Const EMERALD_STATE_FAILD:Int = 2
+		
 		Const FONT_MOVE_SPEED:Int = 8
+		
 		Const FRAME_HEIGHT:Int = ((SCREEN_HEIGHT - FRAME_Y) - FRAME_Y)
 		Const FRAME_WIDTH:Int = MENU_RECT_WIDTH
+		
 		Const FRAME_X:Int = ((SCREEN_WIDTH - MENU_RECT_WIDTH) Shr 1)
 		Const FRAME_Y:Int = 30
-		Const LOADING_TYPE_BAR:Int = 2
+		
 		Const LOADING_TYPE_BLACK:Int = 0
 		Const LOADING_TYPE_WHITE:Int = 1
+		Const LOADING_TYPE_BAR:Int = 2
 		
 		Global MENU_TITLE_DRAW_NUM:Int = (((SCREEN_WIDTH + MENU_TITLE_MOVE_DIRECTION) - 1) / MENU_TITLE_MOVE_DIRECTION) + 2 ' Const
 		Global MENU_TITLE_DRAW_OFFSET_Y:Int = PickValue(MOVING_TITLE_TOP, 10, PickValue(SCREEN_HEIGHT < 220, 10, FRAME_Y)) ' Const
@@ -159,30 +171,40 @@ Class State Implements SonicDef, StringIndex Abstract
 		Global MOVE_DIRECTION:Int = Max(MOVE_DIRECTION_FONT, 120) ' Const
 		
 		Const MOVE_DIRECTION_FONT:Int = BACKGROUND_WIDTH ' 80
+		
 		Const PAGE_BACKGROUND_HEIGHT:Int = 56
 		Const PAGE_BACKGROUND_SPEED:Int = 1
+		
 		Const QUIT_COMFIRM:Int = 9
+		
 		Global RESET_STR:String[] = MyAPI.getStrings("History reset!", WARNING_FONT_WIDTH) ' ~u8bb0~u5f55~u5df2~u91cd~u7f6e~uff01
 		Global RESET_HEIGHT:Int = (RESET_STR.Length * LINE_SPACE) + BAR_HEIGHT ' Const
 		Const RESET_Y_DES:Int = (SCREEN_HEIGHT - RESET_HEIGHT)
+		
 		Const RETURN_PRESSED:Int = 400
+		
 		Const STAGE_MOVE_DIRECTION:Int = 224
-		Const STATE_ENDING:Int = 8
-		Const STATE_EXTRA_ENDING:Int = 11
-		Const STATE_GAME:Int = 1
-		Const STATE_NORMAL_ENDING:Int = 10
-		Const STATE_RETURN_FROM_GAME:Int = 2
-		Const STATE_SCORE_RANKING:Int = 4
-		Const STATE_SELECT_CHARACTER:Int = 9
-		Const STATE_SELECT_NORMAL_STAGE:Int = 5
-		Const STATE_SELECT_RACE_STAGE:Int = 3
-		Const STATE_SPECIAL:Int = 6
-		Const STATE_SPECIAL_ENDING:Int = 12
-		Const STATE_SPECIAL_TO_GMAE:Int = 7
+		
+		' States:
 		Const STATE_TITLE:Int = 0
+		Const STATE_GAME:Int = 1
+		Const STATE_RETURN_FROM_GAME:Int = 2
+		Const STATE_SELECT_RACE_STAGE:Int = 3
+		Const STATE_SCORE_RANKING:Int = 4
+		Const STATE_SELECT_NORMAL_STAGE:Int = 5
+		Const STATE_SPECIAL:Int = 6
+		Const STATE_SPECIAL_TO_GMAE:Int = 7
+		Const STATE_ENDING:Int = 8
+		Const STATE_SELECT_CHARACTER:Int = 9
+		Const STATE_NORMAL_ENDING:Int = 10
+		Const STATE_EXTRA_ENDING:Int = 11
+		Const STATE_SPECIAL_ENDING:Int = 12
+		
 		Const TEXT_DISPLAY_WIDTH:Int = 188
+		
 		Const TOOL_TIP_FONT_WIDTH:Int = WARNING_FONT_WIDTH
 		Const TOOL_TIP_WIDTH:Int = WARNING_WIDTH
+		
 		Const WARNING_FONT_WIDTH:Int = (SCREEN_WIDTH - ((WARNING_X + 5) * 2)) ' (10 / 2)
 		Const WARNING_HEIGHT:Int = (WARNING_STR.Length * LINE_SPACE) + BAR_HEIGHT)
 		Global WARNING_STR:String[] = MyAPI.getStrings(WARNING_STR_ORIGNAL, WARNING_FONT_WIDTH) ' Const
@@ -191,10 +213,12 @@ Class State Implements SonicDef, StringIndex Abstract
 		Const WARNING_X:Int = PickValue(SCREEN_WIDTH > SCREEN_HEIGHT, 50, 26)
 		Const WARNING_Y_DES:Int = (SCREEN_HEIGHT - WARNING_HEIGHT)
 		Const WARNING_Y_DES_2:Int = (SCREEN_HEIGHT + FADE_FILL_WIDTH)
+		
 		Const BP_ITEM_BLUE_SHELTER:Byte = 1
 		Const BP_ITEM_GREEN_SHELTER:Byte = 2
 		Const BP_ITEM_INVINCIBILITY:Byte = 0
 		Const BP_ITEM_SPEED:Byte = 3
+		
 		Const TXT_BLUE_SHELTER_EFFECT:Byte = 14
 		Const TXT_BUY_TOOL:Byte = 18
 		Const TXT_BUY_TOOLS_TEXT:Byte = 8
