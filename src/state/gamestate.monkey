@@ -12,7 +12,7 @@ Private
 	Import lib.myapi
 	Import lib.myrandom
 	Import lib.soundsystem
-	'Import lib.constutil
+	Import lib.constutil
 	
 	Import platformstandard.standard2
 	
@@ -450,7 +450,21 @@ Class GameState Extends State
 			
 			initTips()
 		End
+	Private
+		' Functions:
+		Function drawTouchKeyPause:Void(g:MFGraphics)
+			' Empty implementation.
+		End
+		
+		Function drawTouchKeyPauseOption:Void(g:MFGraphics)
+			' Empty implementation.
+		End
 	Public
+		' Functions:
+		Function setPauseMenu:Void()
+			PAUSE_NORMAL_MODE = PickValue(State.IsToolsCharge(), PAUSE_NORMAL_MODE_SHOP, PAUSE_NORMAL_MODE_NOSHOP)
+		End
+		
 		' Constructor(s):
 		Method New()
 			Construct_GameState()
@@ -516,7 +530,7 @@ Class GameState Extends State
 							Key.touchkeygameboardClose()
 							Key.touchkeyboardInit()
 						EndIf
-					ElseIf (Not (Key.press(Key.B_0) Or Key.press(Key.B_PO) Or Not Key.press(Key.B_S1) Or Not State.IsToolsCharge() Or GameObject.stageModeState <> 0 Or GameObject.player.isDead Or StageManager.isStagePassTimePause())) Then
+					ElseIf (Not (Key.press(Key.B_0) Or Key.press(Key.B_PO) Or Not Key.press(Key.B_S1) Or Not State.IsToolsCharge() Or GameObject.stageModeState <> GameObject.STATE_NORMAL_MODE Or GameObject.player.isDead Or StageManager.isStagePassTimePause())) Then
 						PlayerObject.gamepauseInit()
 						
 						Self.state = STATE_BP_TOOLS_USE
@@ -579,7 +593,7 @@ Class GameState Extends State
 					EndIf
 					
 					If (StageManager.isStageGameover()) Then
-						If (State.IsToolsCharge() And PlayerObject.stageModeState = 0) Then
+						If (State.IsToolsCharge() And PlayerObject.stageModeState = GameObject.STATE_NORMAL_MODE) Then
 							BP_gotoRevive()
 						Else
 							gotoGameOver()
@@ -659,7 +673,7 @@ Class GameState Extends State
 							isThroughGame = False
 						EndIf
 						
-						If (Not (isBackFromSpStage Or GameObject.stageModeState = 1)) Then
+						If (Not (isBackFromSpStage Or GameObject.stageModeState = GameObject.STATE_RACE_MODE)) Then
 							StageManager.characterFromGame = PlayerObject.getCharacterID()
 							StageManager.stageIDFromGame = StageManager.getStageID()
 							
@@ -768,11 +782,11 @@ Class GameState Extends State
 							If ((SoundSystem.getInstance().bgmPlaying() Or GlobalResource.soundSwitchConfig = 0) And Not (GlobalResource.soundSwitchConfig = 0 And Self.gameoverCnt = 128)) Then
 								Self.gameoverCnt += 1
 							Else
-								If (PlayerObject.stageModeState = 0) Then
+								If (PlayerObject.stageModeState = GameObject.STATE_NORMAL_MODE) Then
 									Standard2.splashinit(True)
 									
 									setStateWithFade(0)
-								ElseIf (PlayerObject.stageModeState = 1) Then
+								ElseIf (PlayerObject.stageModeState = GameObject.STATE_RACE_MODE) Then
 									setStateWithFade(STATE_SET_PARAM)
 								EndIf
 								
@@ -1645,7 +1659,7 @@ Class GameState Extends State
 					State.drawSoftKeyPause(g)
 				EndIf
 				
-				If (Self.state <> STATE_BP_TOOLS_USE And Self.state <> STATE_BP_TOOLS_USE_ENSURE And Self.state <> STATE_PAUSE And Self.state <> STATE_PAUSE_INSTRUCTION And Self.state <> STATE_PAUSE_OPTION And Self.state <> STATE_PAUSE_RETRY And Self.state <> VISIBLE_OPTION_ITEMS_NUM And Self.state <> STATE_PAUSE_SELECT_CHARACTER And Self.state <> STATE_PAUSE_TO_TITLE And State.IsToolsCharge() And GameObject.stageModeState = 0 And Not GameObject.player.isDead) Then
+				If (Self.state <> STATE_BP_TOOLS_USE And Self.state <> STATE_BP_TOOLS_USE_ENSURE And Self.state <> STATE_PAUSE And Self.state <> STATE_PAUSE_INSTRUCTION And Self.state <> STATE_PAUSE_OPTION And Self.state <> STATE_PAUSE_RETRY And Self.state <> VISIBLE_OPTION_ITEMS_NUM And Self.state <> STATE_PAUSE_SELECT_CHARACTER And Self.state <> STATE_PAUSE_TO_TITLE And State.IsToolsCharge() And GameObject.stageModeState = GameObject.STATE_NORMAL_MODE And Not GameObject.player.isDead) Then
 					MyAPI.drawImage(g, BP_wordsImg, 0, BP_wordsHeight, BP_wordsWidth, BP_wordsHeight, 0, tool_x, tool_y, 36)
 				EndIf
 			EndIf
@@ -1709,24 +1723,23 @@ Class GameState Extends State
 			tipsForShow = []
 		End
 		
-		Public Function setPauseMenu:Void()
-			PAUSE_NORMAL_MODE = State.IsToolsCharge() ? PAUSE_NORMAL_MODE_SHOP : PAUSE_NORMAL_MODE_NOSHOP
-		}
-		
-		Public Method gamepauseLogic:Void()
-			Bool IsUp
-			Bool IsDown
+		Method gamepauseLogic:Void()
+			Local IsUp:Bool
+			Local IsDown:Bool
+			
 			Key.touchkeyboardInit()
 			
-			If (PlayerObject.stageModeState = 0) Then
-				PlayerObject.cursorMax = State.IsToolsCharge() ? PAUSE_RACE_INSTRUCTION : PAUSE_RACE_OPTION
+			If (PlayerObject.stageModeState = GameObject.STATE_NORMAL_MODE) Then
+				PlayerObject.cursorMax = PickValue(State.IsToolsCharge(), PAUSE_RACE_INSTRUCTION, PAUSE_RACE_OPTION)
+				
 				Key.touchPauseInit(False)
-			ElseIf (PlayerObject.stageModeState = 1) Then
+			ElseIf (PlayerObject.stageModeState = GameObject.STATE_RACE_MODE) Then
 				PlayerObject.cursorMax = PAUSE_OPTION_ITEMS_NUM
+				
 				Key.touchPauseInit(True)
 			EndIf
 			
-			If (PlayerObject.stageModeState = 1) Then
+			If (PlayerObject.stageModeState = GameObject.STATE_RACE_MODE) Then
 				If ((Not Key.touchpausearrowup.Isin() Or IsSingleUp Or IsSingleDown) And Not ((Key.touchpausearrowupsingle.Isin() And IsSingleUp And Not IsSingleDown) Or Key.press(Key.gUp))) Then
 					IsUp = False
 				Else
@@ -1738,9 +1751,7 @@ Class GameState Extends State
 				Else
 					IsDown = True
 				EndIf
-				
 			Else
-				
 				If (Key.press(Key.gUp)) Then
 					IsUp = True
 				Else
@@ -1754,88 +1765,95 @@ Class GameState Extends State
 				EndIf
 			EndIf
 			
-			If (PlayerObject.stageModeState = 0) Then
-				If ((Key.touchpause1.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 0) Or ((Key.touchpause2.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 1) Or ((Key.touchpause3.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 2) Or (Key.touchpause4.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 3)))) Then
+			If (PlayerObject.stageModeState = GameObject.STATE_NORMAL_MODE) Then
+				If ((Key.touchpause1.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex) Or ((Key.touchpause2.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 1) Or ((Key.touchpause3.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 2) Or (Key.touchpause4.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 3)))) Then
 					Select (PAUSE_NORMAL_MODE[PlayerObject.cursor])
-						Case STATE_GAME
+						Case PAUSE_NORMAL_RESUME
 							BacktoGame()
-							break
-						Case STATE_PAUSE
+						Case PAUSE_NORMAL_TO_TITLE
 							Self.state = STATE_PAUSE_TO_TITLE
-							Self.cursor = 1
-							break
-						Case 2
+							Self.cursor = 1 ' PAUSE_NORMAL_TO_TITLE
+						Case PAUSE_NORMAL_SHOP
 							shopInit(True)
-							break
-						Case STATE_SET_PARAM
+						Case PAUSE_NORMAL_OPTION
 							optionInit()
+							
 							Self.state = STATE_PAUSE_OPTION
-							break
-						Case STATE_STAGE_PASS
+						Case PAUSE_NORMAL_INSTRUCTION
 							helpInit()
+							
 							Self.state = STATE_PAUSE_INSTRUCTION
-							break
 					End Select
+					
 					Key.touchPauseClose(False)
 				ElseIf (Key.touchpause1.IsClick()) Then
-					PlayerObject.cursor = PlayerObject.cursorIndex + 0
+					PlayerObject.cursor = PlayerObject.cursorIndex ' + 0
+					
 					Key.touchpause1.reset()
 				ElseIf (Key.touchpause2.IsClick()) Then
-					PlayerObject.cursor = PlayerObject.cursorIndex + 1
+					PlayerObject.cursor = (PlayerObject.cursorIndex + 1)
+					
 					Key.touchpause2.reset()
 				ElseIf (Key.touchpause3.IsClick()) Then
-					PlayerObject.cursor = PlayerObject.cursorIndex + 2
+					PlayerObject.cursor = (PlayerObject.cursorIndex + 2)
+					
 					Key.touchpause3.reset()
 				ElseIf (Key.touchpause4.IsClick()) Then
-					PlayerObject.cursor = PlayerObject.cursorIndex + 3
+					PlayerObject.cursor = (PlayerObject.cursorIndex + 3)
+					
 					Key.touchpause4.reset()
 				EndIf
-				
-			ElseIf (PlayerObject.stageModeState = 1) Then
+			ElseIf (PlayerObject.stageModeState = GameObject.STATE_RACE_MODE) Then
 				If ((Key.touchpause1.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 0) Or ((Key.touchpause2.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 1) Or ((Key.touchpause3.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 2) Or (Key.touchpause4.IsClick() And PlayerObject.cursor = PlayerObject.cursorIndex + 3)))) Then
 					Select (PlayerObject.cursor)
-						Case STATE_GAME
+						Case 0
 							BacktoGame()
-							break
-						Case STATE_PAUSE
+						Case 1
 							Self.state = STATE_PAUSE_RETRY
+							
 							Self.cursor = 1
-							break
 						Case 2
 							Self.state = STATE_PAUSE_SELECT_STAGE
+							
 							Self.cursor = 0
-							break
-						Case STATE_SET_PARAM
+						Case 3
 							Self.state = STATE_PAUSE_TO_TITLE
+							
 							Self.cursor = 1
-							break
-						Case STATE_STAGE_PASS
+						Case 4
 							optionInit()
+							
 							Self.state = STATE_PAUSE_OPTION
+							
 							Self.cursor = 0
-							break
-						Case STATE_STAGE_LOADING
+						Case 5
 							helpInit()
+							
 							Self.state = STATE_PAUSE_INSTRUCTION
+							
 							Self.cursor = 0
-							break
-						Case STATE_PAUSE_SELECT_CHARACTER
+						Case 29
 							Self.state = STATE_PAUSE_SELECT_CHARACTER
+							
 							Self.cursor = 0
-							break
 					End Select
+					
 					Key.touchPauseClose(True)
 				ElseIf (Key.touchpause1.IsClick()) Then
-					PlayerObject.cursor = PlayerObject.cursorIndex + 0
+					PlayerObject.cursor = PlayerObject.cursorIndex ' + 0
+					
 					Key.touchpause1.reset()
 				ElseIf (Key.touchpause2.IsClick()) Then
-					PlayerObject.cursor = PlayerObject.cursorIndex + 1
+					PlayerObject.cursor = (PlayerObject.cursorIndex + 1)
+					
 					Key.touchpause2.reset()
 				ElseIf (Key.touchpause3.IsClick()) Then
-					PlayerObject.cursor = PlayerObject.cursorIndex + 2
+					PlayerObject.cursor = (PlayerObject.cursorIndex + 2)
+					
 					Key.touchpause3.reset()
 				ElseIf (Key.touchpause4.IsClick()) Then
-					PlayerObject.cursor = PlayerObject.cursorIndex + 3
+					PlayerObject.cursor = (PlayerObject.cursorIndex + 3)
+					
 					Key.touchpause4.reset()
 				EndIf
 			EndIf
@@ -1848,85 +1866,80 @@ Class GameState Extends State
 				PlayerObject.cursor += 1
 				PlayerObject.cursor Mod= PlayerObject.cursorMax
 			ElseIf (Key.press(Key.gSelect | Key.B_S1)) Then
-				If (PlayerObject.stageModeState <> 0) Then
-					If (PlayerObject.stageModeState = 1) Then
+				If (PlayerObject.stageModeState <> GameObject.STATE_NORMAL_MODE) Then
+					If (PlayerObject.stageModeState = GameObject.STATE_RACE_MODE) Then
 						Select (PlayerObject.cursor)
-							Case STATE_GAME
+							Case 0
 								BacktoGame()
-								break
-							Case STATE_PAUSE
+							Case 1
 								Self.state = STATE_PAUSE_RETRY
 								Self.cursor = 1
-								break
 							Case 2
 								Self.state = STATE_PAUSE_SELECT_STAGE
 								Self.cursor = 0
-								break
-							Case STATE_SET_PARAM
+							Case 3
 								Self.state = STATE_PAUSE_TO_TITLE
 								Self.cursor = 1
-								break
-							Case STATE_STAGE_PASS
+							Case 4
 								optionInit()
+								
 								Self.state = STATE_PAUSE_OPTION
 								Self.cursor = 0
-								break
-							Case STATE_STAGE_LOADING
+							Case 5
 								helpInit()
+								
 								Self.state = STATE_PAUSE_INSTRUCTION
 								Self.cursor = 0
-								break
-							Case STATE_PAUSE_SELECT_CHARACTER
+							Case 29
 								Self.state = STATE_PAUSE_SELECT_CHARACTER
 								Self.cursor = 0
-								break
 							Default
-								break
+								' Nothing so far.
 						End Select
 					EndIf
 				EndIf
 				
 				Select (PAUSE_NORMAL_MODE[PlayerObject.cursor])
-					Case STATE_GAME
+					Case PAUSE_NORMAL_RESUME
 						BacktoGame()
-						break
-					Case STATE_PAUSE
+					Case PAUSE_NORMAL_TO_TITLE
 						Self.state = STATE_PAUSE_TO_TITLE
+						
 						Self.cursor = 1
-						break
-					Case 2
+					Case PAUSE_NORMAL_SHOP
 						shopInit(True)
-						break
-					Case STATE_SET_PARAM
+					Case PAUSE_NORMAL_OPTION
 						optionInit()
+						
 						Self.state = STATE_PAUSE_OPTION
-						break
-					Case STATE_STAGE_PASS
+					Case PAUSE_NORMAL_INSTRUCTION
 						helpInit()
+						
 						Self.state = STATE_PAUSE_INSTRUCTION
-						break
 				End Select
+				
 				Key.clear()
 			EndIf
 			
 			If (Key.press(Key.B_S2)) Then
+				' Nothing so far.
 			EndIf
 			
 			If (Key.press(Key.B_BACK)) Then
 				doReturnGameStuff()
 				
-				If (PlayerObject.stageModeState = 0) Then
+				If (PlayerObject.stageModeState = GameObject.STATE_NORMAL_MODE) Then
 					Key.touchPauseClose(False)
-				ElseIf (PlayerObject.stageModeState = 1) Then
+				ElseIf (PlayerObject.stageModeState = GameObject.STATE_RACE_MODE) Then
 					Key.touchPauseClose(True)
 				EndIf
 				
 				Key.touchgamekeyInit()
 				Key.touchkeyboardClose()
 				Key.touchkeygameboardInit()
+				
 				Key.clear()
 			EndIf
-			
 		End
 	Private
 		' Methods:
@@ -1938,6 +1951,10 @@ Class GameState Extends State
 		
 		Method loadingEnd:Bool()
 			Return (Not LoadingInProgress())
+		End
+		
+		Method staffDraw:Void(g:MFGraphics)
+			' Empty implementation.
 		End
 		
 		Private Method initTips:Void()
@@ -2074,7 +2091,7 @@ Class GameState Extends State
 				Self.cnt += 1
 				
 				If (Self.cnt = 1) Then
-					If (PlayerObject.stageModeState = 1) Then
+					If (PlayerObject.stageModeState = GameObject.STATE_RACE_MODE) Then
 						GameObject.ObjectClear()
 					EndIf
 					
@@ -2082,14 +2099,14 @@ Class GameState Extends State
 				EndIf
 				
 				If (Self.cnt = 2) Then
-					SoundSystem.getInstance().playSe(32, False)
+					SoundSystem.getInstance().playSe(SoundSystem.SE_141, False)
 				EndIf
 				
 				If (Self.cnt > 20) Then
 					If (Self.cnt = 21) Then
-						If (PlayerObject.stageModeState = 0) Then
+						If (PlayerObject.stageModeState = GameObject.STATE_NORMAL_MODE) Then
 							GameObject.player.setStagePassRunOutofScreen()
-						ElseIf (PlayerObject.stageModeState = 1) Then
+						ElseIf (PlayerObject.stageModeState = GameObject.STATE_RACE_MODE) Then
 							If (PlayerObject.IsDisplayRaceModeNewRecord) Then
 								Self.racemode_cnt = 128
 							Else
@@ -2097,7 +2114,7 @@ Class GameState Extends State
 							EndIf
 						EndIf
 						
-					ElseIf (Self.cnt > 21 And PlayerObject.stageModeState = 0 And GameObject.player.stagePassRunOutofScreenLogic()) Then
+					ElseIf (Self.cnt > 21 And PlayerObject.stageModeState = GameObject.STATE_NORMAL_MODE And GameObject.player.stagePassRunOutofScreenLogic()) Then
 						If (StageManager.IsStageEnd()) Then
 							StageManager.characterFromGame = -1
 							StageManager.stageIDFromGame = -1
@@ -2129,7 +2146,7 @@ Class GameState Extends State
 					EndIf
 					
 					If (Self.cnt = Self.racemode_cnt) Then
-						If (PlayerObject.stageModeState = 1) Then
+						If (PlayerObject.stageModeState = GameObject.STATE_RACE_MODE) Then
 							setStateWithFade(STATE_SET_PARAM)
 							Key.touchgamekeyClose()
 							Key.touchkeygameboardClose()
@@ -2976,15 +2993,6 @@ Class GameState Extends State
 			
 		End
 		
-		Private Method staffDraw:Void(g:MFGraphics)
-		End
-		
-		Private Function drawTouchKeyPause:Void(g:MFGraphics)
-		}
-		
-		Private Function drawTouchKeyPauseOption:Void(g:MFGraphics)
-		}
-		
 		Public Method BacktoGame:Void()
 			doReturnGameStuff()
 			isDrawTouchPad = True
@@ -3644,10 +3652,10 @@ Class GameState Extends State
 			Self.pause_saw_speed = 30
 			Self.pause_item_x = SCREEN_WIDTH - 26
 			
-			If (PlayerObject.stageModeState = 0) Then
+			If (PlayerObject.stageModeState = GameObject.STATE_NORMAL_MODE) Then
 				Self.pause_item_y = (SCREEN_HEIGHT Shr 1) - 36
 				Key.touchGamePauseInit(0)
-			ElseIf (PlayerObject.stageModeState = 1) Then
+			ElseIf (PlayerObject.stageModeState = GameObject.STATE_RACE_MODE) Then
 				Self.pause_item_y = (SCREEN_HEIGHT Shr 1) - 60
 				Key.touchGamePauseInit(1)
 			EndIf
@@ -3679,7 +3687,7 @@ Class GameState Extends State
 				
 			ElseIf (Self.pausecnt > 7) Then
 				Int i
-				Int items = PlayerObject.stageModeState = 0 ? STATE_SET_PARAM : PAUSE_OPTION_ITEMS_NUM
+				Int items = PlayerObject.stageModeState = GameObject.STATE_NORMAL_MODE ? STATE_SET_PARAM : PAUSE_OPTION_ITEMS_NUM
 				For (i = 0; i < items; i += 1)
 					
 					If (Key.touchgamepauseitem[i].Isin() And Key.touchgamepause.IsClick()) Then
@@ -3720,7 +3728,7 @@ Class GameState Extends State
 					For (i = 0; i < items; i += 1)
 						Key.touchgamepauseitem[i].resetKeyState()
 					Next
-				ElseIf (PlayerObject.stageModeState = 0) Then
+				ElseIf (PlayerObject.stageModeState = GameObject.STATE_NORMAL_MODE) Then
 					If (Key.touchgamepauseitem[0].IsButtonPress() And Self.pause_item_cursor = 0 And Not Self.pause_returnFlag) Then
 						Self.pause_returnFlag = True
 						Self.pause_returnframe = Self.pausecnt
@@ -3792,7 +3800,7 @@ Class GameState Extends State
 			AnimationDrawer animationDrawer
 			Int i
 			
-			If (PlayerObject.stageModeState = 0) Then
+			If (PlayerObject.stageModeState = GameObject.STATE_NORMAL_MODE) Then
 				animationDrawer = muiAniDrawer
 				
 				If (Self.pause_item_cursor = 0 And Key.touchgamepauseitem[0].Isin()) Then
@@ -3823,7 +3831,7 @@ Class GameState Extends State
 				
 				animationDrawer.setActionId(i + 12)
 				muiAniDrawer.draw(g, Self.pause_item_x, Self.pause_item_y + 48)
-			ElseIf (PlayerObject.stageModeState = 1) Then
+			ElseIf (PlayerObject.stageModeState = GameObject.STATE_RACE_MODE) Then
 				Int i2 = 0
 				While (i2 < PAUSE_OPTION_ITEMS_NUM) {
 					Int i3
@@ -3848,7 +3856,7 @@ Class GameState Extends State
 			Select (secondEnsureLogic())
 				Case STATE_PAUSE
 					
-					If (GameObject.stageModeState = 1) Then
+					If (GameObject.stageModeState = GameObject.STATE_RACE_MODE) Then
 						StageManager.doWhileLeaveRace()
 					EndIf
 					
