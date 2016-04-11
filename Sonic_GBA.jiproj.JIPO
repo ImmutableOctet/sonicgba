@@ -379,12 +379,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>621</Y>
+        <X>12</X>
+        <Y>997</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>95fb0c02-0f9b-4130-8588-74c6b6695175</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\myrandom.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -409,8 +410,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>93</Y>
+        <X>8</X>
+        <Y>29</Y>
       </CursorPos>
       <DocGUID>b918b241-ff8b-4542-ab96-83e0a1b9af3d</DocGUID>
       <Bookmarks />
@@ -648,8 +649,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>23</X>
-        <Y>87</Y>
+        <X>47</X>
+        <Y>312</Y>
       </CursorPos>
       <DocGUID>0ffd70ca-1d9d-46fb-b14d-8325d9809e64</DocGUID>
       <Bookmarks />
@@ -871,12 +872,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>11</X>
+        <X>18</X>
         <Y>10</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>8c15a103-8403-47f4-b4a4-14841f0c264a</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\stareffect.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1056,7 +1058,7 @@
     <DocUserOptions Filename=".\src\state\gamestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>4</X>
-        <Y>1768</Y>
+        <Y>3470</Y>
       </CursorPos>
       <DocGUID>0e670923-8241-4759-9607-d0ad92d193ae</DocGUID>
       <Bookmarks />
@@ -1070,7 +1072,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\state.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>27</X>
+        <X>30</X>
         <Y>43</Y>
       </CursorPos>
       <DocGUID />
@@ -1167,7 +1169,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\title" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\tuch" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\water" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonicgba" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonicgba" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\special" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\state" Expanded="true" />
   </Folders>

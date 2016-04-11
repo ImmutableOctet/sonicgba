@@ -1720,7 +1720,7 @@ Class GameState Extends State
 			State.initTouchkeyBoard()
 			Key.initSonic()
 			
-			tipsForShow = []
+			releaseTips()
 		End
 		
 		Method gamepauseLogic:Void()
@@ -1957,83 +1957,72 @@ Class GameState Extends State
 			' Empty implementation.
 		End
 		
-		Private Method initTips:Void()
-			
+		Method initTips:Void()
 			If (Self.loadingWordsDrawer = Null Or Self.loadingDrawer = Null) Then
-				Animation animation = New Animation("/animation/loading")
+				Local animation:= New Animation("/animation/loading")
+				
 				Self.loadingWordsDrawer = animation.getDrawer(0, True, 0)
 				Self.loadingDrawer = animation.getDrawer(0, False, 0)
 			EndIf
 			
-			Self.TIPS = Null
+			Self.TIPS = []
+			
 			Select (PlayerObject.getCharacterID())
-				Case STATE_GAME
-					
+				Case CHARACTER_SONIC
+					' Check if we're in the "Super Sonic stage":
 					If (StageManager.getCurrentZoneId() <> 8) Then
 						Self.TIPS = MyAPI.loadText("/tip/tips_sonic")
-						break
 					Else
 						Self.TIPS = MyAPI.loadText("/tip/tips_ssonic")
-						break
 					EndIf
-					
-				Case STATE_PAUSE
+				Case CHARACTER_TAILS
 					Self.TIPS = MyAPI.loadText("/tip/tips_tails")
-					break
-				Case 2
+				Case CHARACTER_KNUCKLES
 					Self.TIPS = MyAPI.loadText("/tip/tips_knuckles")
-					break
-				Case STATE_SET_PARAM
+				Case CHARACTER_AMY
 					Self.TIPS = MyAPI.loadText("/tip/tips_amy")
-					break
 			End Select
+			
 			MyAPI.initString()
+			
 			Self.loadingStartTime = Millisecs()
-			tipsForShow = Null
+			
+			releaseTips()
+			
 			State.fadeInit(255, 0)
 		End
 		
-		Private Method doReturnGameStuff:Void()
+		Method doReturnGameStuff:Void()
 			Self.state = STATE_GAME
+			
 			GameObject.IsGamePause = False
+			
 			State.fadeInit(102, 0)
 			
 			If (Not StageManager.isStagePass()) Then
 				If (PlayerObject.IsInvincibility()) Then
-					SoundSystem.getInstance().playBgm(44)
+					SoundSystem.getInstance().playBgm(SoundSystem.BGM_INVINCIBILITY)
 				ElseIf (GameObject.bossFighting) Then
+					' Magic numbers (Boss IDs):
 					Select (GameObject.bossID)
-						Case STATE_BP_REVIVE
-						Case PlayerTails.TAILS_ANI_CLIFF_2
-							
+						Case 21, 26
 							If (Not GameObject.isBossHalf) Then
-								SoundSystem.getInstance().playBgm(23, True)
-								break
+								SoundSystem.getInstance().playBgm(SoundSystem.BGM_BOSS_02, True)
 							Else
-								SoundSystem.getInstance().playBgm(24, True)
-								break
+								SoundSystem.getInstance().playBgm(SoundSystem.BGM_BOSS_03, True)
 							EndIf
-							
-						Case STATE_BP_SHOP
-						Case STATE_BP_BUY
-						Case STATE_BP_TOOLS_MAX
-						Case PlayerTails.TAILS_ANI_CLIFF_1
-							SoundSystem.getInstance().playBgm(22)
-							break
-						Case STATE_PRE_GAME_1_TYPE2
-							SoundSystem.getInstance().playBgm(25)
-							break
-						Case STATE_GAME_OVER_PRE
-							SoundSystem.getInstance().playBgm(46)
-							break
-						Case STATE_PAUSE_SELECT_CHARACTER
-							SoundSystem.getInstance().playBgm(47)
-							break
-						Case STATE_PAUSE_OPTION_SOUND
-							SoundSystem.getInstance().playBgm(19, True)
-							break
+						Case 22, 23, 24, 25
+							SoundSystem.getInstance().playBgm(SoundSystem.BGM_BOSS_01)
+						Case 27
+							SoundSystem.getInstance().playBgm(SoundSystem.BGM_BOSS_04)
+						Case 28
+							SoundSystem.getInstance().playBgm(SoundSystem.BGM_BOSS_F1)
+						Case 29
+							SoundSystem.getInstance().playBgm(SoundSystem.BGM_BOSS_F2)
+						Case 30
+							SoundSystem.getInstance().playBgm(SoundSystem.BGM_BOSS_FINAL3, True)
 						Default
-							break
+							' Nothing so far.
 					End Select
 				Else
 					SoundSystem.getInstance().playBgm(StageManager.getBgmId(), True)
@@ -2043,38 +2032,48 @@ Class GameState Extends State
 			Key.initSonic()
 		End
 		
-		Private Method drawLoadingBar:Void(g:MFGraphics, y:Int)
+		Method drawLoadingBar:Void(g:MFGraphics, y:Int)
 			drawTips(g, y)
+			
 			State.drawBar(g, 0, y)
+			
 			Self.selectMenuOffsetX += 8
 			Self.selectMenuOffsetX Mod= MENU_TITLE_MOVE_DIRECTION
-			Int x = 0
-			While (x - Self.selectMenuOffsetX > 0) {
+			
+			Local x:= 0
+			
+			While (x - Self.selectMenuOffsetX > 0)
 				x -= MENU_TITLE_MOVE_DIRECTION
-			}
-			For (Int i = 0; i < MENU_TITLE_DRAW_NUM; i += 1)
-				Int i2 = (MENU_TITLE_MOVE_DIRECTION * i) + x
-			Next
+			Wend
+			
+			#Rem
+				For Local i:= 0 Until MENU_TITLE_DRAW_NUM
+					Local i2:= (MENU_TITLE_MOVE_DIRECTION * i) + x
+				Next
+			#End
 		End
 		
-		Private Method drawTips:Void(g:MFGraphics, endy:Int)
-			State.fillMenuRect(g, ((SCREEN_WIDTH - MENU_RECT_WIDTH) - 0) Shr 1, (SCREEN_HEIGHT Shr 2) - 16, MENU_RECT_WIDTH + 0, (SCREEN_HEIGHT Shr 1) + 16)
+		Method drawTips:Void(g:MFGraphics, endy:Int)
+			State.fillMenuRect(g, ((SCREEN_WIDTH - MENU_RECT_WIDTH) / 2), (SCREEN_HEIGHT / 4) - 16, MENU_RECT_WIDTH + 0, (SCREEN_HEIGHT / 2) + 16) ' Shr 1 ' Shr 2
 			
-			If (tipsForShow = Null) Then
+			If (tipsForShow.Length = 0) Then
 				tipsForShow = MyAPI.getStrings(tipsString[MyRandom.nextInt(0, tipsString.Length - 1)], MENU_RECT_WIDTH - Self.TIPS_OFFSET_X)
+				
 				MyAPI.initString()
+				
 				Return
 			EndIf
 			
 			g.setColor(0)
-			Int i = Self.TIPS_TITLE_OFFSET_Y + ((SCREEN_HEIGHT Shr 2) - 8)
-			MFGraphics mFGraphics = g
-			MyAPI.drawBoldString(mFGraphics, "~u5c0f~u63d0~u793a", ((SCREEN_WIDTH - MENU_RECT_WIDTH) + Self.TIPS_OFFSET_X) Shr 1, i, 0, MapManager.END_COLOR, 4656650, 0)
-			MyAPI.drawBoldStrings(g, tipsForShow, ((SCREEN_WIDTH - MENU_RECT_WIDTH) + Self.TIPS_OFFSET_X) Shr 1, LINE_SPACE + ((SCREEN_HEIGHT Shr 2) - 8), MENU_RECT_WIDTH - Self.TIPS_OFFSET_X, (SCREEN_HEIGHT Shr 1) - LINE_SPACE, MapManager.END_COLOR, 4656650, 0)
+			
+			Local y:= (Self.TIPS_TITLE_OFFSET_Y + ((SCREEN_HEIGHT / 4) - 8)) ' Shr 2
+			
+			MyAPI.drawBoldString(g, "hint", (((SCREEN_WIDTH - MENU_RECT_WIDTH) + Self.TIPS_OFFSET_X) / 2), y, 0, MapManager.END_COLOR, 4656650, 0) ' Shr 1 ' "~u5c0f~u63d0~u793a"
+			MyAPI.drawBoldStrings(g, tipsForShow, (((SCREEN_WIDTH - MENU_RECT_WIDTH) + Self.TIPS_OFFSET_X) / 2), LINE_SPACE + ((SCREEN_HEIGHT / 4) - 8), MENU_RECT_WIDTH - Self.TIPS_OFFSET_X, (SCREEN_HEIGHT / 2) - LINE_SPACE, MapManager.END_COLOR, 4656650, 0) ' Shr 2 ' Shr 1
 		End
 		
-		Private Method releaseTips:Void()
-			tipsForShow = Null
+		Method releaseTips:Void()
+			tipsForShow = []
 		End
 		
 		Private Method stagePassLogic:Void()
@@ -3466,9 +3465,11 @@ Class GameState Extends State
 			Self.loadingDrawer.setActionId(1)
 			Self.loadingDrawer.draw(g, SCREEN_WIDTH Shr 1, SCREEN_HEIGHT Shr 1)
 			
-			If (tipsForShow = Null) Then
+			If (tipsForShow.Length = 0) Then
 				tipsForShow = MyAPI.getStrings(Self.TIPS[MyRandom.nextInt(0, Self.TIPS.Length - 1)], PlayerObject.SONIC_ATTACK_LEVEL_3_V0)
+				
 				MyAPI.initString()
+				
 				Return
 			EndIf
 			
