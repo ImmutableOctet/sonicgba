@@ -2044,7 +2044,7 @@ Class GameState Extends State
 					Case STATE_PAUSE_OPTION_SOUND, STATE_PAUSE_OPTION_VIB, STATE_PAUSE_OPTION_KEY_CONTROL, STATE_PAUSE_OPTION_SP_SET, STATE_PAUSE_OPTION_HELP, STATE_PAUSE_OPTION_SOUND_VOLUMN, STATE_PAUSE_OPTION_SENSOR
 						isDrawTouchPad = False
 						
-						SoundSystem.getInstance().playBgm(PAUSE_RACE_INSTRUCTION)
+						SoundSystem.getInstance().playBgm(SoundSystem.BGM_CONTINUE)
 					Case STATE_SCORE_UPDATE, STATE_SCORE_UPDATED
 						isDrawTouchPad = False
 					Case STATE_SCORE_UPDATE_ENSURE
@@ -2059,6 +2059,48 @@ Class GameState Extends State
 		Method interruptDraw:Void(g:MFGraphics)
 			Self.interruptDrawer.setActionId(Int(Key.touchinterruptreturn.Isin()))
 			Self.interruptDrawer.draw(g, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2)) ' Shr 1
+		End
+		
+		Method changeStateWithFade:Void(nState:Int)
+			Self.isStateClassSwitch = False
+			
+			If (Not fading) Then
+				fading = True
+				
+				If (nstate = STATE_PAUSE_OPTION) Then
+					State.fadeInit(102, 255)
+				Else
+					State.fadeInit(0, 255)
+				EndIf
+				
+				Self.nextState = nState
+				
+				Self.fadeChangeState = True
+			EndIf
+		End
+		
+		Method fadeStateLogic:Void()
+			If (Not Self.isStateClassSwitch) Then
+				If (fading And Self.fadeChangeState And State.fadeChangeOver() And Self.state <> Self.nextState) Then
+					Self.state = Self.nextState
+					
+					Self.fadeChangeState = False
+					
+					If (Self.state = STATE_PAUSE) Then
+						State.fadeInit_Modify(255, 102)
+					Else
+						State.fadeInit(255, 0)
+					EndIf
+				EndIf
+				
+				If (Self.state = Self.nextState And State.fadeChangeOver()) Then
+					fading = False
+				EndIf
+			ElseIf (fading And State.fadeChangeOver()) Then
+				State.setState(Self.stateForSet)
+				
+				State.fadeInit(255, 0)
+			EndIf
 		End
 	Private
 		' Methods:
@@ -2195,7 +2237,7 @@ Class GameState Extends State
 			tipsForShow = []
 		End
 		
-		Private Method stagePassLogic:Void()
+		Method stagePassLogic:Void()
 			PlayerObject.isNeedPlayWaterSE = False
 			
 			If (StageManager.isOnlyStagePass) Then
@@ -2351,26 +2393,30 @@ Class GameState Extends State
 			EndIf
 		End
 		
-		Private Method interruptInit:Void()
-			
+		Method interruptInit:Void()
 			If (Self.interruptDrawer = Null) Then
 				Self.interruptDrawer = Animation.getInstanceFromQi("/animation/utl_res/suspend_resume.dat")[0].getDrawer(0, True, 0)
 			EndIf
 			
 			isDrawTouchPad = False
 			IsInInterrupt = True
+			
 			lastFading = fading
 			fading = False
+			
 			Key.touchkeygameboardClose()
 			Key.touchkeyboardInit()
 			Key.touchInterruptInit()
 		End
 		
-		Private Method optionInit:Void()
+		Method optionInit:Void()
 			Self.optionMenuCursor = 0
+			
 			menuInit(OPTION_ELEMENT_NUM)
+			
 			Self.optionCursor[0] = GlobalResource.soundConfig
 			Self.optionCursor[1] = GlobalResource.seConfig
+			
 			Self.offsetOfVolumeInterface = MENU_SPACE
 			
 			If (muiAniDrawer = Null) Then
@@ -2380,11 +2426,15 @@ Class GameState Extends State
 			Self.optionOffsetX = 0
 			Self.pauseOptionCursor = 0
 			Self.isOptionDisFlag = False
+			
 			State.fadeInit(102, 102)
+			
 			Key.touchMenuOptionInit()
+			
+			Self.isChanged = False
+			
 			Self.optionOffsetYAim = 0
 			Self.optionOffsetY = 0
-			Self.isChanged = False
 			Self.optionslide_getprey = -1
 			Self.optionslide_gety = -1
 			Self.optionslide_y = 0
@@ -2392,8 +2442,8 @@ Class GameState Extends State
 			Self.optionYDirect = 0
 		End
 		
-		Private Method itemsid:Int(id:Int)
-			Int itemsidoffset = (Self.optionOffsetY / 24) * 2
+		Method itemsid:Int(id:Int)
+			Local itemsidoffset:= ((Self.optionOffsetY / 24) * 2)
 			
 			If (id + itemsidoffset < 0) Then
 				Return 0
@@ -2403,17 +2453,15 @@ Class GameState Extends State
 				Return VISIBLE_OPTION_ITEMS_NUM
 			EndIf
 			
-			Return id + itemsidoffset
+			Return (id + itemsidoffset)
 		End
 		
-		Private Method optionLogic:Void()
-			
+		Method optionLogic:Void()
 			If (Not Self.isOptionDisFlag) Then
-				SoundSystem.getInstance().playBgm(PAUSE_RACE_INSTRUCTION)
+				SoundSystem.getInstance().playBgm(SoundSystem.BGM_CONTINUE)
+				
 				Self.isOptionDisFlag = True
 			EndIf
-			
-			Int i
 			
 			If (State.fadeChangeOver()) Then
 				If (Key.touchmenuoptionreturn.Isin() And Key.touchmenuoption.IsClick()) Then
@@ -2423,20 +2471,20 @@ Class GameState Extends State
 				Self.optionslide_gety = Key.slidesensormenuoption.getPointerY()
 				Self.optionslide_y = 0
 				Self.optionslidefirsty = 0
-				For (i = 0; i < (Key.touchmenuoptionitems.Length Shr 1); i += 1)
+				
+				For Local i:= 0 Until (Key.touchmenuoptionitems.Length / 2) ' Shr 1
 					Key.touchmenuoptionitems[i * 2].setStartY((((i * 24) + 28) + Self.optionDrawOffsetY) + Self.optionslide_y)
 					Key.touchmenuoptionitems[(i * 2) + 1].setStartY((((i * 24) + 28) + Self.optionDrawOffsetY) + Self.optionslide_y)
 				Next
 				
 				If (Self.isSelectable) Then
-					For (i = 0; i < Key.touchmenuoptionitems.Length; i += 1)
-						
+					For Local i:= 0 Until Key.touchmenuoptionitems.Length
 						If (Key.touchmenuoptionitems[i].Isin() And Key.touchmenuoption.IsClick()) Then
-							Self.pauseOptionCursor = i / 2
+							Self.pauseOptionCursor = (i / 2)
 							Self.returnCursor = 0
-							break
+							
+							Exit
 						EndIf
-						
 					Next
 				EndIf
 				
@@ -2445,16 +2493,17 @@ Class GameState Extends State
 				EndIf
 				
 				If ((Key.press(Key.B_BACK) Or (Key.touchmenuoptionreturn.IsButtonPress() And Self.returnCursor = 1)) And State.fadeChangeOver()) Then
-					changeStateWithFade(1)
+					changeStateWithFade(STATE_PAUSE)
+					
 					SoundSystem.getInstance().stopBgm(False)
 					SoundSystem.getInstance().playSe(SoundSystem.SE_107)
+					
 					GlobalResource.saveSystemConfig()
 				EndIf
 				
 				If (Key.slidesensormenuoption.isSliding()) Then
 					Self.isSelectable = True
 				Else
-					
 					If (Self.isOptionChange And Self.optionslide_y = 0) Then
 						Self.optionDrawOffsetY = Self.optionDrawOffsetTmpY1
 						Self.isOptionChange = False
@@ -2462,32 +2511,33 @@ Class GameState Extends State
 					EndIf
 					
 					If (Not Self.isOptionChange) Then
-						Int speed
+						Local speed:Int
 						
 						If (Self.optionDrawOffsetY > 0) Then
 							Self.optionYDirect = 1
-							speed = (-Self.optionDrawOffsetY) Shr 1
 							
-							If (speed > -2) Then
-								speed = -2
+							speed = ((-Self.optionDrawOffsetY) / VX) ' Shr 1
+							
+							If (speed > -VX) Then
+								speed = -VX
 							EndIf
 							
-							If (Self.optionDrawOffsetY + speed <= 0) Then
+							If ((Self.optionDrawOffsetY + speed) <= 0) Then
 								Self.optionDrawOffsetY = 0
 								Self.optionYDirect = 0
 							Else
 								Self.optionDrawOffsetY += speed
 							EndIf
-							
 						ElseIf (Self.optionDrawOffsetY < Self.optionDrawOffsetBottomY) Then
 							Self.optionYDirect = 2
-							speed = (Self.optionDrawOffsetBottomY - Self.optionDrawOffsetY) Shr 1
 							
-							If (speed < 2) Then
-								speed = 2
+							speed = ((Self.optionDrawOffsetBottomY - Self.optionDrawOffsetY) / VX) ' Shr 1
+							
+							If (speed < VX) Then
+								speed = VX
 							EndIf
 							
-							If (Self.optionDrawOffsetY + speed >= Self.optionDrawOffsetBottomY) Then
+							If ((Self.optionDrawOffsetY + speed) >= Self.optionDrawOffsetBottomY) Then
 								Self.optionDrawOffsetY = Self.optionDrawOffsetBottomY
 								Self.optionYDirect = 0
 							Else
@@ -2500,55 +2550,68 @@ Class GameState Extends State
 				If (Self.isSelectable And Self.optionYDirect = 0) Then
 					If (Key.touchmenuoptionitems[1].IsButtonPress() And Self.pauseOptionCursor = 0 And GlobalResource.soundSwitchConfig <> 0 And State.fadeChangeOver()) Then
 						Self.state = STATE_PAUSE_OPTION_SOUND_VOLUMN
+						
 						soundVolumnInit()
+						
 						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					ElseIf (Key.touchmenuoptionitems[3].IsButtonPress() And Self.pauseOptionCursor = 1 And State.fadeChangeOver()) Then
 						Self.state = STATE_PAUSE_OPTION_VIB
+						
 						itemsSelect2Init()
+						
 						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					ElseIf (Key.touchmenuoptionitems[5].IsButtonPress() And Self.pauseOptionCursor = 2 And State.fadeChangeOver()) Then
 						Self.state = STATE_PAUSE_OPTION_SP_SET
+						
 						itemsSelect2Init()
+						
 						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					ElseIf (Key.touchmenuoptionitems[7].IsButtonPress() And Self.pauseOptionCursor = STATE_SET_PARAM And State.fadeChangeOver()) Then
 						If (GlobalResource.spsetConfig <> 0) Then
 							Self.state = STATE_PAUSE_OPTION_SENSOR
+							
 							spSenorSetInit()
+							
 							SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 						Else
 							SoundSystem.getInstance().playSe(SoundSystem.SE_107)
 						EndIf
-						
 					ElseIf (Key.touchmenuoptionitems[8].IsButtonPress() And Self.pauseOptionCursor = PAUSE_RACE_OPTION And State.fadeChangeOver()) Then
-						changeStateWithFade(34)
+						changeStateWithFade(STATE_PAUSE_OPTION_HELP)
+						
 						helpInit()
+						
 						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					EndIf
 				EndIf
 				
 				Self.optionslide_getprey = Self.optionslide_gety
-				Return
+				
+			Else
+				For Local i:= 0 Until Key.touchmenuoptionitems.Length
+					Key.touchmenuoptionitems[i].resetKeyState()
+				Next
 			EndIf
-			
-			For (i = 0; i < Key.touchmenuoptionitems.Length; i += 1)
+		End
+		
+		Method releaseOptionItemsTouchKey:Void()
+			For Local i:= 0 Until Key.touchmenuoptionitems.Length
 				Key.touchmenuoptionitems[i].resetKeyState()
 			Next
 		End
 		
-		Private Method releaseOptionItemsTouchKey:Void()
-			For (Int i = 0; i < Key.touchmenuoptionitems.Length; i += 1)
-				Key.touchmenuoptionitems[i].resetKeyState()
-			Next
-		End
-		
-		Private Method optionDraw:Void(g:MFGraphics)
-			Int i
+		Method optionDraw:Void(g:MFGraphics)
 			g.setColor(0)
+			
 			MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
-			muiAniDrawer.setActionId(52)
-			For (Int i2 = 0; i2 < (SCREEN_WIDTH / 48) + 1; i2 += 1)
-				For (Int j = 0; j < (SCREEN_HEIGHT / 48) + 1; j += 1)
-					muiAniDrawer.draw(g, i2 * 48, j * 48)
+			
+			Local animationDrawer:= muiAniDrawer
+			
+			animationDrawer.setActionId(52)
+			
+			For Local x:= 0 To (SCREEN_WIDTH / 48)
+				For Local y:= 0 To (SCREEN_HEIGHT / 48)
+					animationDrawer.draw(g, i2 * 48, j * 48)
 				Next
 			Next
 			
@@ -2556,173 +2619,81 @@ Class GameState Extends State
 				Self.pauseOptionCursor = -2
 			EndIf
 			
-			muiAniDrawer.setActionId(25)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 0)
-			AnimationDrawer animationDrawer = muiAniDrawer
+			animationDrawer.setActionId(25)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 0)
 			
-			If (GlobalResource.soundSwitchConfig = 0) Then
-				i = 67
-			Else
-				i = (Key.touchmenuoptionitems[1].Isin() And Self.pauseOptionCursor = 0 And Self.isSelectable) ? 1 : 0
-				i += 57
-			EndIf
+			animationDrawer.setActionId(PickValue((GlobalResource.soundSwitchConfig = 0), 67, (Int(Key.touchmenuoptionitems[1].Isin() And Self.pauseOptionCursor = 0 And Self.isSelectable) + 57)))
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 0)
 			
-			animationDrawer.setActionId(i)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 0)
-			muiAniDrawer.setActionId(GlobalResource.soundConfig + 73)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 0)
-			muiAniDrawer.setActionId(21)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 24)
-			animationDrawer = muiAniDrawer
+			animationDrawer.setActionId(GlobalResource.soundConfig + 73)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 0)
 			
-			If (Key.touchmenuoptionitems[3].Isin() And Self.pauseOptionCursor = 1 And Self.isSelectable) Then
-				i = 1
-			Else
-				i = 0
-			EndIf
+			animationDrawer.setActionId(21)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 24)
 			
-			animationDrawer.setActionId(i + 57)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 24)
-			animationDrawer = muiAniDrawer
+			animationDrawer.setActionId(Int(Key.touchmenuoptionitems[3].Isin() And Self.pauseOptionCursor = 1 And Self.isSelectable) + 57)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 24)
 			
-			If (GlobalResource.vibrationConfig = 0) Then
-				i = 1
-			Else
-				i = 0
-			EndIf
+			animationDrawer.setActionId(Int(GlobalResource.vibrationConfig = 0) + 35)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 24)
 			
-			animationDrawer.setActionId(i + 35)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 24)
-			muiAniDrawer.setActionId(23)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 48)
-			animationDrawer = muiAniDrawer
+			animationDrawer.setActionId(23)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 48)
 			
-			If (Key.touchmenuoptionitems[5].Isin() And Self.pauseOptionCursor = 2 And Self.isSelectable) Then
-				i = 1
-			Else
-				i = 0
-			EndIf
+			animationDrawer.setActionId(Int(Key.touchmenuoptionitems[5].Isin() And Self.pauseOptionCursor = 2 And Self.isSelectable) + 57)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 48)
 			
-			animationDrawer.setActionId(i + 57)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 48)
-			animationDrawer = muiAniDrawer
+			animationDrawer.setActionId(Int(GlobalResource.spsetConfig <> 0) + 37)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 48)
 			
-			If (GlobalResource.spsetConfig = 0) Then
-				i = 0
-			Else
-				i = 1
-			EndIf
+			animationDrawer.setActionId(24)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 72)
 			
-			animationDrawer.setActionId(i + 37)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 48)
-			muiAniDrawer.setActionId(24)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 72)
-			animationDrawer = muiAniDrawer
+			animationDrawer.setActionId(PickValue((GlobalResource.spsetConfig = 0), 67, Int((Key.touchmenuoptionitems[7].Isin() And Self.pauseOptionCursor = 3 And Self.isSelectable)) + 57))
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 72)
 			
-			If (GlobalResource.spsetConfig = 0) Then
-				i = 67
-			Else
-				i = (Key.touchmenuoptionitems[7].Isin() And Self.pauseOptionCursor = STATE_SET_PARAM And Self.isSelectable) ? 1 : 0
-				i += 57
-			EndIf
-			
-			animationDrawer.setActionId(i)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 72)
 			Select (GlobalResource.sensorConfig)
-				Case STATE_GAME
-					muiAniDrawer.setActionId(70)
-					break
-				Case STATE_PAUSE
-					muiAniDrawer.setActionId(69)
-					break
+				Case 0
+					animationDrawer.setActionId(70)
+				Case 1
+					animationDrawer.setActionId(69)
 				Case 2
-					muiAniDrawer.setActionId(68)
-					break
+					animationDrawer.setActionId(68)
 			End Select
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 72)
-			animationDrawer = muiAniDrawer
 			
-			If (Key.touchmenuoptionitems[8].Isin() And Self.pauseOptionCursor = PAUSE_RACE_OPTION And Self.isSelectable) Then
-				i = 1
-			Else
-				i = 0
-			EndIf
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 72)
 			
-			animationDrawer.setActionId(i + 27)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 96)
-			Self.optionOffsetX -= PAUSE_RACE_OPTION
+			animationDrawer.setActionId(Int(Key.touchmenuoptionitems[8].Isin() And Self.pauseOptionCursor = PAUSE_RACE_OPTION And Self.isSelectable) + 27)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 96)
+			
+			Self.optionOffsetX -= OPTION_MOVING_SPEED
 			Self.optionOffsetX Mod= OPTION_MOVING_INTERVAL
-			muiAniDrawer.setActionId(51)
-			For (Int x1 = Self.optionOffsetX; x1 < SCREEN_WIDTH * 2; x1 += OPTION_MOVING_INTERVAL)
-				muiAniDrawer.draw(g, x1, 0)
+			
+			animationDrawer.setActionId(51)
+			
+			For Local x:= Self.optionOffsetX Until (SCREEN_WIDTH * 2) Step OPTION_MOVING_INTERVAL
+				animationDrawer.draw(g, x1, 0)
 			Next
-			animationDrawer = muiAniDrawer
 			
-			If (Key.touchmenuoptionreturn.Isin()) Then
-				i = PAUSE_RACE_INSTRUCTION
-			Else
-				i = 0
-			EndIf
+			animationDrawer.setActionId(PickValue(Key.touchmenuoptionreturn.Isin(), 66, 61))
+			animationDrawer.draw(g, 0, SCREEN_HEIGHT)
 			
-			animationDrawer.setActionId(i + 61)
-			muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
 			State.drawFade(g)
 		End
 		
-		Private Method setStateWithFade:Void(nState:Int)
+		Method setStateWithFade:Void(nState:Int)
 			Self.isStateClassSwitch = True
 			
 			If (Not fading) Then
 				fading = True
+				
 				State.fadeInit(0, 255)
+				
 				Self.stateForSet = nState
 			EndIf
-			
 		End
 		
-		Public Method changeStateWithFade:Void(nState:Int)
-			Self.isStateClassSwitch = False
-			
-			If (Not fading) Then
-				fading = True
-				
-				If (nstate = STATE_PAUSE_OPTION) Then
-					State.fadeInit(102, 255)
-				Else
-					State.fadeInit(0, 255)
-				EndIf
-				
-				Self.nextState = nState
-				Self.fadeChangeState = True
-			EndIf
-			
-		End
-		
-		Public Method fadeStateLogic:Void()
-			If (Not Self.isStateClassSwitch) Then
-				If (fading And Self.fadeChangeState And State.fadeChangeOver() And Self.state <> Self.nextState) Then
-					Self.state = Self.nextState
-					Self.fadeChangeState = False
-					
-					If (Self.state = STATE_PAUSE) Then
-						State.fadeInit_Modify(255, 102)
-					Else
-						State.fadeInit(255, 0)
-					EndIf
-				EndIf
-				
-				If (Self.state = Self.nextState And State.fadeChangeOver()) Then
-					fading = False
-				EndIf
-				
-			ElseIf (fading And State.fadeChangeOver()) Then
-				State.setState(Self.stateForSet)
-				
-				State.fadeInit(255, 0)
-			EndIf
-		End
-		
-		Private Method endingInit:Void()
+		Method endingInit:Void()
 			Self.planeDrawer = New Animation("/animation/ending/ending_plane").getDrawer()
 			Self.cloudDrawer = New Animation("/animation/ending/ending_cloud").getDrawer()
 			
@@ -2746,36 +2717,30 @@ Class GameState Extends State
 			SoundSystem.getInstance().playBgm(SoundSystem.BGM_CREDIT, False)
 		End
 		
-		Private Method endingLogic:Void()
-			
+		Method endingLogic:Void()
 			If (Self.count > 0) Then
 				Self.count -= 1
 			EndIf
 			
 			degreeLogic()
 			cloudLogic()
+			
 			Select (Self.endingState)
-				Case STATE_GAME
-					
+				Case ED_STATE_NO_PLANE
 					If (Self.count = 0) Then
 						Self.endingState = WHITE_BAR
 					EndIf
-					
-				Case STATE_PAUSE
+				Case ED_STATE_PLANE_APPEAR
 					planeLogic()
 					
-					If (Self.planeX = (SCREEN_WIDTH Shr 1)) Then
-						Self.endingState = VX
+					If (Self.planeX = (SCREEN_WIDTH / 2)) Then ' Shr 1
+						Self.endingState = ED_STATE_BIRD_APPEAR
 					EndIf
-					
-				Case 2
-					
+				Case ED_STATE_BIRD_APPEAR
 					If (birdLogic()) Then
-						Self.endingState = VY
+						Self.endingState = ED_STATE_CONGRATULATION
 					EndIf
-					
-				Case STATE_SET_PARAM
-					
+				Case ED_STATE_CONGRATULATION
 					If (Self.showCount > 0) Then
 						Self.showCount -= 1
 					EndIf
@@ -2789,43 +2754,43 @@ Class GameState Extends State
 					EndIf
 					
 					If (Self.outing) Then
-						Self.position = MyAPI.calNextPositionReverse(Self.position, SCREEN_WIDTH Shr 1, (SCREEN_WIDTH * STATE_SET_PARAM) Shr 1, 1, STATE_SET_PARAM)
+						Self.position = MyAPI.calNextPositionReverse(Self.position, (SCREEN_WIDTH / 2), ((SCREEN_WIDTH * 3) / 2), 1, 3) ' Shr 1
 						
-						If (Self.position = ((SCREEN_WIDTH * STATE_SET_PARAM) Shr 1)) Then
+						If (Self.position = ((SCREEN_WIDTH * 3) / 2)) Then ' Shr 1
 							Self.outing = False
-							Self.position = (-SCREEN_WIDTH) Shr 1
-							Self.endingState = STATE_STAGE_PASS
+							
+							Self.position = ((-SCREEN_WIDTH) / 2) ' Shr 1
+							
+							Self.endingState = ED_STATE_STAFF
+							
 							Key.touchkeyboardClose()
 							Key.touchkeyboardInit()
-							Return
 						EndIf
+					Else
+						Self.position = MyAPI.calNextPosition(Double(Self.position), Dobule(SCREEN_WIDTH / 2), 1, 3) ' Shr 1
 						
-						Return
+						If (Self.position = (SCREEN_WIDTH / 2)) Then ' Shr 1
+							Self.outing = True
+							
+							Self.showCount = STATE_SCORE_UPDATED
+							
+							Self.changing = False
+						EndIf
 					EndIf
-					
-					Self.position = MyAPI.calNextPosition((Double) Self.position, (Double) (SCREEN_WIDTH Shr 1), 1, STATE_SET_PARAM)
-					
-					If (Self.position = (SCREEN_WIDTH Shr 1)) Then
-						Self.outing = True
-						Self.showCount = STATE_SCORE_UPDATED
-						Self.changing = False
-					EndIf
-					
-				Case STATE_STAGE_PASS
+				Case ED_STATE_STAFF
 					staffLogic()
 					
 					If (Not Self.changing And Self.showCount = 0 And Self.stringCursor >= STAFF_STR.Length - 1) Then
-						Self.endingState = STATE_STAGE_LOADING
+						Self.endingState = ED_END
 					EndIf
-					
-				Case STATE_STAGE_LOADING
-					
+				Case ED_END
 					If (Key.press(Key.B_S1 | Key.gSelect)) Then
 						SoundSystem.getInstance().stopBgm(True)
+						
 						setStateWithFade(State.STATE_SCORE_RANKING)
 					EndIf
-					
 				Default
+					' Nothing so far.
 			End Select
 		End
 		
@@ -2866,7 +2831,7 @@ Class GameState Extends State
 				EndIf
 				
 				If (Self.cloudInfo[i][0] = 0 And Self.cloudCount = 0) Then
-					Self.cloudInfo[i][0] = MyRandom.nextInt(1, STATE_SET_PARAM)
+					Self.cloudInfo[i][0] = MyRandom.nextInt(1, 3)
 					Self.cloudInfo[i][1] = 0
 					Self.cloudInfo[i][2] = MyRandom.nextInt(20, SCREEN_HEIGHT - 40)
 					Self.cloudCount = MyRandom.nextInt(8, 20)
@@ -2913,7 +2878,7 @@ Class GameState Extends State
 				Self.birdInfo[i][2] = MyRandom.nextInt(360) ' MDPhone.SCREEN_WIDTH
 			Next
 			
-			For (i = PAUSE_RACE_INSTRUCTION; i < LOADING_TIME_LIMIT; i += 1)
+			For (i = 5; i < LOADING_TIME_LIMIT; i += 1)
 				Self.birdInfo[i][1] = (Self.planeY - ((PAUSE_RACE_OPTION - i) * BIRD_SPACE_2)) - 15
 				Self.birdInfo[i][0] = (PAUSE_RACE_OPTION - i) * -14
 				Self.birdInfo[i][2] = MyRandom.nextInt(360) ' MDPhone.SCREEN_WIDTH
@@ -2940,7 +2905,7 @@ Class GameState Extends State
 		End
 		
 		Private Method birdDraw2:Void(g:MFGraphics)
-			For (Int i = PAUSE_RACE_INSTRUCTION; i < LOADING_TIME_LIMIT; i += 1)
+			For (Int i = 5; i < LOADING_TIME_LIMIT; i += 1)
 				Self.birdDrawer[i].draw(g, Self.birdX + Self.birdInfo[i][0], Self.birdInfo[i][1] + getOffsetY(Self.birdInfo[i][2]))
 			Next
 		End
@@ -2980,9 +2945,9 @@ Class GameState Extends State
 			EndIf
 			
 			If (Self.outing) Then
-				Self.position = MyAPI.calNextPositionReverse(Self.position, SCREEN_WIDTH Shr 1, (SCREEN_WIDTH * STATE_SET_PARAM) Shr 1, 1, STATE_SET_PARAM)
+				Self.position = MyAPI.calNextPositionReverse(Self.position, SCREEN_WIDTH Shr 1, (SCREEN_WIDTH * 3) Shr 1, 1, 3)
 				
-				If (Self.position = ((SCREEN_WIDTH * STATE_SET_PARAM) Shr 1)) Then
+				If (Self.position = ((SCREEN_WIDTH * 3) Shr 1)) Then
 					Self.outing = False
 					Self.position = (-SCREEN_WIDTH) Shr 1
 					Self.stringCursor += 1
@@ -2994,7 +2959,7 @@ Class GameState Extends State
 				Return
 			EndIf
 			
-			Self.position = MyAPI.calNextPosition((Double) Self.position, (Double) (SCREEN_WIDTH Shr 1), 1, STATE_SET_PARAM)
+			Self.position = MyAPI.calNextPosition((Double) Self.position, (Double) (SCREEN_WIDTH Shr 1), 1, 3)
 			
 			If (Self.position = (SCREEN_WIDTH Shr 1)) Then
 				Self.changing = False
@@ -3042,7 +3007,7 @@ Class GameState Extends State
 				Self.state = 20
 				BP_enteredPaying = False
 				Self.BP_IsFromContinueTry = False
-				BP_payingInit(PAUSE_RACE_OPTION, STATE_SET_PARAM)
+				BP_payingInit(PAUSE_RACE_OPTION, 3)
 				State.fadeInit(255, 0)
 			EndIf
 			
@@ -3093,7 +3058,7 @@ Class GameState Extends State
 				If (PlayerObject.cursor = 0) Then
 					Self.state = 20
 					BP_enteredPaying = False
-					BP_payingInit(PAUSE_RACE_OPTION, STATE_SET_PARAM)
+					BP_payingInit(PAUSE_RACE_OPTION, 3)
 					Self.BP_IsFromContinueTry = True
 					State.fadeInit(255, 0)
 				ElseIf (PlayerObject.cursor = 1) Then
@@ -3109,8 +3074,8 @@ Class GameState Extends State
 			State.fillMenuRect(g, Self.BP_CONTINUETRY_MENU_START_X, Self.BP_CONTINUETRY_MENU_START_Y, Self.BP_CONTINUETRY_MENU_WIDTH, Self.BP_CONTINUETRY_MENU_HEIGHT)
 			g.setColor(0)
 			MyAPI.drawBoldStrings(g, strForShow, Self.BP_CONTINUETRY_MENU_START_X + 20, Self.BP_CONTINUETRY_MENU_START_Y + LOADING_TIME_LIMIT, Self.BP_CONTINUETRY_MENU_WIDTH - 20, Self.BP_CONTINUETRY_MENU_HEIGHT - 20, MapManager.END_COLOR, 4656650, 0)
-			State.drawMenuFontById(g, 119, SCREEN_WIDTH Shr 1, ((Self.BP_CONTINUETRY_MENU_START_Y + 15) + ((MENU_SPACE * STATE_SET_PARAM) / 2)) + (MENU_SPACE * ((PlayerObject.cursor + strForShow.Length) - 1)))
-			State.drawMenuFontById(g, 113, (SCREEN_WIDTH Shr 1) - 56, ((Self.BP_CONTINUETRY_MENU_START_Y + 15) + ((MENU_SPACE * STATE_SET_PARAM) / 2)) + (MENU_SPACE * ((PlayerObject.cursor + strForShow.Length) - 1)))
+			State.drawMenuFontById(g, 119, SCREEN_WIDTH Shr 1, ((Self.BP_CONTINUETRY_MENU_START_Y + 15) + ((MENU_SPACE * 3) / 2)) + (MENU_SPACE * ((PlayerObject.cursor + strForShow.Length) - 1)))
+			State.drawMenuFontById(g, 113, (SCREEN_WIDTH Shr 1) - 56, ((Self.BP_CONTINUETRY_MENU_START_Y + 15) + ((MENU_SPACE * 3) / 2)) + (MENU_SPACE * ((PlayerObject.cursor + strForShow.Length) - 1)))
 			MyAPI.drawBoldString(g, BPstrings[1], SCREEN_WIDTH Shr 1, (Self.BP_CONTINUETRY_MENU_START_Y + 15) + (MENU_SPACE * ((strForShow.Length - 1) + 1)), 17, MapManager.END_COLOR, 0)
 			MyAPI.drawBoldString(g, BPstrings[2], SCREEN_WIDTH Shr 1, (Self.BP_CONTINUETRY_MENU_START_Y + 15) + (MENU_SPACE * ((strForShow.Length - 1) + 2)), 17, MapManager.END_COLOR, 0)
 			State.drawSoftKey(g, True, False)
@@ -3269,11 +3234,11 @@ Class GameState Extends State
 			State.fillMenuRect(g, CASE_X, 30, CASE_WIDTH, CASE_HEIGHT)
 			MyAPI.drawImage(g, BP_wordsImg, 0, 0, BP_wordsWidth, BP_wordsHeight, 0, SCREEN_WIDTH Shr 1, 40, 17)
 			MyAPI.drawBoldString(g, BPstrings[LOADING_TIME_LIMIT], (CASE_WIDTH Shr 2) + CASE_X, LINE_SPACE + 40, 17, MapManager.END_COLOR, 4656650)
-			MyAPI.drawBoldString(g, BPstrings[11], ((CASE_WIDTH * STATE_SET_PARAM) Shr 2) + CASE_X, LINE_SPACE + 40, 17, MapManager.END_COLOR, 4656650)
+			MyAPI.drawBoldString(g, BPstrings[11], ((CASE_WIDTH * 3) Shr 2) + CASE_X, LINE_SPACE + 40, 17, MapManager.END_COLOR, 4656650)
 			For (Int i = 0; i < currentBPItems.Length; i += 1)
-				MyAPI.drawImage(g, BP_itemsImg, BP_itemsWidth * currentBPItems[i], 0, BP_itemsWidth, BP_itemsHeight, 0, (CASE_X + (CASE_WIDTH Shr 2)) - (LINE_SPACE Shr 1), (LINE_SPACE * (i + 3)) + 30, STATE_SET_PARAM)
+				MyAPI.drawImage(g, BP_itemsImg, BP_itemsWidth * currentBPItems[i], 0, BP_itemsWidth, BP_itemsHeight, 0, (CASE_X + (CASE_WIDTH Shr 2)) - (LINE_SPACE Shr 1), (LINE_SPACE * (i + 3)) + 30, 3)
 				MyAPI.drawBoldString(g, "~u00d7 " + currentBPItemsNormalNum[i], BP_itemsWidth + ((CASE_X + (CASE_WIDTH Shr 2)) - (LINE_SPACE Shr 1)), ((LINE_SPACE * (i + 3)) + 30) - FONT_H_HALF, 20, MapManager.END_COLOR, 4656650)
-				MyAPI.drawBoldString(g, BP_items_num[currentBPItems[i]], (FONT_WIDTH_NUM * 2) + (CASE_X + ((CASE_WIDTH * STATE_SET_PARAM) Shr 2)), ((LINE_SPACE * (i + 3)) + 30) - FONT_H_HALF, 24, MapManager.END_COLOR, 4656650)
+				MyAPI.drawBoldString(g, BP_items_num[currentBPItems[i]], (FONT_WIDTH_NUM * 2) + (CASE_X + ((CASE_WIDTH * 3) Shr 2)), ((LINE_SPACE * (i + 3)) + 30) - FONT_H_HALF, 24, MapManager.END_COLOR, 4656650)
 			Next
 			State.drawMenuFontById(g, 113, ((CASE_X + (CASE_WIDTH Shr 2)) - (LINE_SPACE Shr 1)) - (BP_itemsWidth * 2), (LINE_SPACE * (PlayerObject.cursor + 3)) + 30)
 			MyAPI.drawBoldString(g, BPstrings[12], BP_itemsWidth + CASE_X, (LINE_SPACE * 7) + 30, 20, MapManager.END_COLOR, 4656650)
@@ -3404,7 +3369,7 @@ Class GameState Extends State
 		
 		Public Method BP_toolsuseDraw:Void(g:MFGraphics)
 			State.fillMenuRect(g, (SCREEN_WIDTH Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_X, (SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y, PlayerObject.PAUSE_FRAME_WIDTH, PlayerObject.PAUSE_FRAME_HEIGHT)
-			MyAPI.drawImage(g, BP_wordsImg, 0, BP_wordsHeight, BP_wordsWidth, BP_wordsHeight, 0, SCREEN_WIDTH Shr 1, LINE_SPACE + ((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y), STATE_SET_PARAM)
+			MyAPI.drawImage(g, BP_wordsImg, 0, BP_wordsHeight, BP_wordsWidth, BP_wordsHeight, 0, SCREEN_WIDTH Shr 1, LINE_SPACE + ((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y), 3)
 			State.drawMenuFontById(g, 119, SCREEN_WIDTH Shr 1, (((((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + LOADING_TIME_LIMIT) + (MENU_SPACE Shr 1)) + MENU_SPACE) + (MENU_SPACE * PlayerObject.cursor))
 			State.drawMenuFontById(g, 113, (SCREEN_WIDTH Shr 1) - 56, (((((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + LOADING_TIME_LIMIT) + (MENU_SPACE Shr 1)) + MENU_SPACE) + (MENU_SPACE * PlayerObject.cursor))
 			Int i = 0
@@ -3428,9 +3393,9 @@ Class GameState Extends State
 			}
 			
 			If (BP_items_num[currentBPItems[PlayerObject.cursor]] = Null) Then
-				Self.tooltipY = MyAPI.calNextPosition((Double) Self.tooltipY, (Double) TOOL_TIP_Y_DES, 1, STATE_SET_PARAM)
+				Self.tooltipY = MyAPI.calNextPosition((Double) Self.tooltipY, (Double) TOOL_TIP_Y_DES, 1, 3)
 			Else
-				Self.tooltipY = MyAPI.calNextPositionReverse(Self.tooltipY, TOOL_TIP_Y_DES, TOOL_TIP_Y_DES_2, 1, STATE_SET_PARAM)
+				Self.tooltipY = MyAPI.calNextPositionReverse(Self.tooltipY, TOOL_TIP_Y_DES, TOOL_TIP_Y_DES_2, 1, 3)
 			EndIf
 			
 			State.fillMenuRect(g, TOOL_TIP_X, Self.tooltipY, TOOL_TIP_WIDTH, TOOL_TIP_HEIGHT)
@@ -3676,7 +3641,7 @@ Class GameState Extends State
 				Key.touchGamePauseInit(1)
 			EndIf
 			
-			Self.pause_item_speed = (-((SCREEN_WIDTH Shr 1) + BIRD_SPACE_2)) / STATE_SET_PARAM
+			Self.pause_item_speed = (-((SCREEN_WIDTH Shr 1) + BIRD_SPACE_2)) / 3
 			
 			If (muiAniDrawer = Null) Then
 				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
@@ -3756,7 +3721,9 @@ Class GameState Extends State
 						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					ElseIf (Key.touchgamepauseitem[2].IsButtonPress() And Self.pause_item_cursor = 2 And Not Self.pause_returnFlag) Then
 						changeStateWithFade(STATE_PAUSE_OPTION)
+						
 						optionInit()
+						
 						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					EndIf
 					
@@ -3789,7 +3756,9 @@ Class GameState Extends State
 						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					ElseIf (Key.touchgamepauseitem[5].IsButtonPress() And Self.pause_item_cursor = PAUSE_RACE_INSTRUCTION And Not Self.pause_returnFlag) Then
 						changeStateWithFade(STATE_PAUSE_OPTION)
+						
 						optionInit()
+						
 						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					EndIf
 				EndIf
@@ -4015,7 +3984,8 @@ Class GameState Extends State
 			Key.touchkeygameboardClose()
 			Key.touchkeyboardInit()
 			Key.touchscoreupdatekeyInit()
-			changeStateWithFade(43)
+			
+			changeStateWithFade(STATE_SCORE_UPDATE)
 			
 			If (muiAniDrawer = Null) Then
 				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
@@ -4105,7 +4075,7 @@ Class GameState Extends State
 			animationDrawer = muiAniDrawer
 			
 			If (Key.touchscoreupdatereturn.Isin()) Then
-				i = PAUSE_RACE_INSTRUCTION
+				i = 5
 			Else
 				i = 0
 			EndIf

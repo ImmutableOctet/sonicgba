@@ -410,8 +410,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
-        <Y>75</Y>
+        <X>20</X>
+        <Y>34</Y>
       </CursorPos>
       <DocGUID>b918b241-ff8b-4542-ab96-83e0a1b9af3d</DocGUID>
       <Bookmarks />
@@ -1057,8 +1057,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\gamestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>1944</Y>
+        <X>20</X>
+        <Y>2719</Y>
       </CursorPos>
       <DocGUID>0e670923-8241-4759-9607-d0ad92d193ae</DocGUID>
       <Bookmarks />
@@ -1072,8 +1072,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\state.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>185</Y>
+        <X>10</X>
+        <Y>1186</Y>
       </CursorPos>
       <DocGUID>9e9283a8-4cd2-452a-ad04-6d55eb2010b1</DocGUID>
       <Bookmarks />
