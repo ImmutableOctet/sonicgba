@@ -483,7 +483,7 @@ Class GameState Extends State
 		End
 		
 		' Methods:
-		Public Method logic:Void()
+		Method logic:Void()
 			If (Self.state <> STATE_INTERRUPT) Then
 				fadeStateLogic()
 			EndIf
@@ -785,9 +785,9 @@ Class GameState Extends State
 								If (PlayerObject.stageModeState = GameObject.STATE_NORMAL_MODE) Then
 									Standard2.splashinit(True)
 									
-									setStateWithFade(0)
+									setStateWithFade(State.STATE_TITLE)
 								ElseIf (PlayerObject.stageModeState = GameObject.STATE_RACE_MODE) Then
-									setStateWithFade(STATE_SET_PARAM)
+									setStateWithFade(State.STATE_SELECT_RACE_STAGE)
 								EndIf
 								
 								Key.touchkeyboardClose()
@@ -1446,7 +1446,7 @@ Class GameState Extends State
 					optionDraw(g)
 					
 					itemsSelect2Draw(g, 35, 36)
-				Case PlayerTails.TAILS_ANI_BANK_2
+				Case STATE_PAUSE_OPTION_KEY_CONTROL
 					optionDraw(g)
 				Case STATE_PAUSE_OPTION_SP_SET
 					optionDraw(g)
@@ -1941,6 +1941,125 @@ Class GameState Extends State
 				Key.clear()
 			EndIf
 		End
+		
+		Method pause:Void()
+			If (Self.state <> STATE_SCORE_UPDATED And Self.state <> STATE_INTERRUPT And Self.state <> STATE_PAUSE And Self.state <> 20 And Self.state <> 23 And Self.state <> 21) Then
+				If (Self.state = STATE_GAME And GameObject.player.isDead) Then
+					Self.interrupt_state = Self.state
+					Self.state = STATE_INTERRUPT
+					
+					interruptInit()
+				ElseIf (Self.state = STATE_STAGE_LOADING Or Self.state = STATE_STAGE_LOADING_TURN Or Self.state = STATE_ALL_CLEAR Or Self.state = STATE_STAGE_PASS Or Self.state = STATE_PAUSE_OPTION Or Self.state = STATE_PAUSE_RETRY Or Self.state = STATE_PAUSE_SELECT_STAGE Or Self.state = STATE_PAUSE_SELECT_CHARACTER Or Self.state = STATE_PAUSE_TO_TITLE Or Self.state = STATE_PAUSE_INSTRUCTION Or Self.state = STATE_PAUSE_SELECT_CHARACTER Or Self.state = STATE_CONTINUE_0 Or Self.state = STATE_CONTINUE_1 Or Self.state = STATE_GAME_OVER_PRE Or Self.state = STATE_TIME_OVER_0 Or Self.state = STATE_GAME_OVER_1 Or Self.state = STATE_GAME_OVER_2 Or Self.state = STATE_PAUSE_OPTION_SOUND Or Self.state = STATE_PAUSE_OPTION_VIB Or Self.state = STATE_PAUSE_OPTION_KEY_CONTROL Or Self.state = STATE_PAUSE_OPTION_SP_SET Or Self.state = STATE_PAUSE_OPTION_HELP Or Self.state = STATE_PAUSE_OPTION_SOUND_VOLUMN Or Self.state = STATE_PAUSE_OPTION_SENSOR Or Self.state = STATE_SCORE_UPDATE Or Self.state = STATE_SCORE_UPDATE_ENSURE Or Self.state = STATE_SCORE_UPDATED) Then
+					Self.interrupt_state = Self.state
+					Self.state = STATE_INTERRUPT
+					
+					interruptInit()
+					
+					Print("interrupt")
+				Else
+					PlayerObject.gamepauseInit()
+					
+					Self.state = STATE_PAUSE
+					
+					isDrawTouchPad = False
+					
+					gamePauseInit()
+					
+					Key.init()
+					
+					GameObject.IsGamePause = True
+					
+					State.fadeInit_Modify(0, 102)
+					
+					SoundSystem.getInstance().stopBgm(False)
+					SoundSystem.getInstance().stopLongSe()
+					SoundSystem.getInstance().stopLoopSe()
+					
+					Self.pauseoptionCursor = GlobalResource.soundConfig
+					
+					Key.touchgamekeyClose()
+				EndIf
+			EndIf
+		End
+		
+		Method interruptLogic:Void()
+			SoundSystem.getInstance().stopBgm(False)
+			
+			If (Key.press(Key.B_S2)) Then
+				' Nothing so far.
+			EndIf
+			
+			If (Key.press(Key.B_BACK) Or (Key.touchinterruptreturn <> Null And Key.touchinterruptreturn.IsButtonPress())) Then
+				fading = lastFading
+				
+				SoundSystem.getInstance().playSe(SoundSystem.SE_107)
+				
+				Key.touchInterruptClose()
+				
+				Self.state = Self.interrupt_state
+				Self.interrupt_state = -1
+				
+				Key.clear()
+				
+				If (Key.touchitemsselect2_1 <> Null) Then
+					Key.touchitemsselect2_1.reset()
+				EndIf
+				
+				If (Key.touchitemsselect2_2 <> Null) Then
+					Key.touchitemsselect2_2.reset()
+				EndIf
+				
+				If (Key.touchitemsselect3_1 <> Null) Then
+					Key.touchitemsselect3_1.reset()
+				EndIf
+				
+				If (Key.touchitemsselect3_2 <> Null) Then
+					Key.touchitemsselect3_2.reset()
+				EndIf
+				
+				If (Key.touchitemsselect3_3 <> Null) Then
+					Key.touchitemsselect3_3.reset()
+				EndIf
+				
+				isDrawTouchPad = True
+				
+				Select (Self.state)
+					Case STATE_STAGE_PASS, STATE_STAGE_LOADING_TURN
+						isDrawTouchPad = False
+					Case STATE_PAUSE_OPTION
+						optionInit()
+						
+						State.fadeInit(0, 0)
+						
+						Key.touchkeyboardClose()
+						Key.touchkeyboardInit()
+						
+						isDrawTouchPad = False
+					Case STATE_PAUSE_RETRY, STATE_PAUSE_SELECT_STAGE, STATE_PAUSE_TO_TITLE, STATE_PAUSE_SELECT_CHARACTER
+						isDrawTouchPad = False
+					Case STATE_TIME_OVER_0, STATE_GAME_OVER_1, STATE_GAME_OVER_2
+						' Nothing so far.
+					Case STATE_ALL_CLEAR, STATE_CONTINUE_0, STATE_CONTINUE_1
+						isDrawTouchPad = False
+					Case STATE_PAUSE_OPTION_SOUND, STATE_PAUSE_OPTION_VIB, STATE_PAUSE_OPTION_KEY_CONTROL, STATE_PAUSE_OPTION_SP_SET, STATE_PAUSE_OPTION_HELP, STATE_PAUSE_OPTION_SOUND_VOLUMN, STATE_PAUSE_OPTION_SENSOR
+						isDrawTouchPad = False
+						
+						SoundSystem.getInstance().playBgm(PAUSE_RACE_INSTRUCTION)
+					Case STATE_SCORE_UPDATE, STATE_SCORE_UPDATED
+						isDrawTouchPad = False
+					Case STATE_SCORE_UPDATE_ENSURE
+						isDrawTouchPad = False
+				End Select
+				
+				isDrawTouchPad = False
+				IsInInterrupt = False
+			EndIf
+		End
+		
+		Method interruptDraw:Void(g:MFGraphics)
+			Self.interruptDrawer.setActionId(Int(Key.touchinterruptreturn.Isin()))
+			Self.interruptDrawer.draw(g, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2)) ' Shr 1
+		End
 	Private
 		' Methods:
 		
@@ -2081,10 +2200,15 @@ Class GameState Extends State
 			
 			If (StageManager.isOnlyStagePass) Then
 				State.fadeInit(0, 255)
+				
 				Self.state = STATE_STAGE_LOADING_TURN
+				
 				isThroughGame = True
+				
 				loadingType = 0
+				
 				StageManager.addStageID()
+				
 				SoundSystem.getInstance().stopBgm(False)
 			ElseIf (PlayerObject.IsStarttoCnt) Then
 				Self.cnt += 1
@@ -2112,41 +2236,55 @@ Class GameState Extends State
 								Self.racemode_cnt = 60
 							EndIf
 						EndIf
-						
 					ElseIf (Self.cnt > 21 And PlayerObject.stageModeState = GameObject.STATE_NORMAL_MODE And GameObject.player.stagePassRunOutofScreenLogic()) Then
 						If (StageManager.IsStageEnd()) Then
 							StageManager.characterFromGame = -1
 							StageManager.stageIDFromGame = -1
+							
 							StageManager.saveStageRecord()
-							State.setState(11)
+							
+							State.setState(State.STATE_EXTRA_ENDING)
 						ElseIf (StageManager.getStageID() <> 12) Then
 							State.fadeInit(0, 255)
+							
 							Self.state = STATE_STAGE_LOADING_TURN
+							
 							isThroughGame = True
 							loadingType = 0
+							
 							StageManager.addStageID()
+							
 							StageManager.characterFromGame = PlayerObject.getCharacterID()
 							StageManager.stageIDFromGame = StageManager.getStageID()
+							
 							StageManager.saveStageRecord()
+							
 							SoundSystem.getInstance().stopBgm(False)
 						ElseIf (StageManager.isGoingToExtraStage()) Then
 							State.fadeInit(0, 255)
+							
 							Self.state = STATE_STAGE_LOADING_TURN
+							
 							isThroughGame = True
 							loadingType = 0
+							
 							StageManager.addStageID()
+							
 							SoundSystem.getInstance().stopBgm(False)
 						Else
 							StageManager.characterFromGame = -1
 							StageManager.stageIDFromGame = -1
+							
 							StageManager.saveStageRecord()
-							State.setState(LOADING_TIME_LIMIT)
+							
+							State.setState(State.STATE_NORMAL_ENDING)
 						EndIf
 					EndIf
 					
 					If (Self.cnt = Self.racemode_cnt) Then
 						If (PlayerObject.stageModeState = GameObject.STATE_RACE_MODE) Then
-							setStateWithFade(STATE_SET_PARAM)
+							setStateWithFade(State.STATE_SELECT_RACE_STAGE)
+							
 							Key.touchgamekeyClose()
 							Key.touchkeygameboardClose()
 							Key.touchkeyboardInit()
@@ -2156,25 +2294,26 @@ Class GameState Extends State
 					EndIf
 				EndIf
 			EndIf
-			
 		End
 		
-		Private Method drawSaw:Void(g:MFGraphics, x:Int, y:Int)
+		Method drawSaw:Void(g:MFGraphics, x:Int, y:Int)
 			stageInfoAniDrawer.draw(g, PlayerObject.getCharacterID(), x, y, False, 0)
 		End
 		
-		Private Method drawWhiteBar:Void(g:MFGraphics, x:Int, y:Int)
+		Method drawWhiteBar:Void(g:MFGraphics, x:Int, y:Int)
 			g.setColor(MapManager.END_COLOR)
+			
 			MyAPI.fillRect(g, x, y - 10, SCREEN_WIDTH, 20)
 		End
 		
-		Private Method drawHugeStageName:Void(g:MFGraphics, stageid:Int, x:Int, y:Int)
-			Int stage_id
+		Method drawHugeStageName:Void(g:MFGraphics, stageid:Int, x:Int, y:Int)
+			Local stage_id:Int
+			
 			Self.selectMenuOffsetX -= 8
 			Self.selectMenuOffsetX Mod= STAGE_MOVE_DIRECTION
 			
 			If (stageid < 12) Then
-				stage_id = stageid Shr 1
+				stage_id = stageid Shr 1 ' / 2
 			Else
 				stage_id = stageid - PAUSE_RACE_INSTRUCTION
 			EndIf
@@ -2183,68 +2322,33 @@ Class GameState Extends State
 				stage_id = PAUSE_OPTION_ITEMS_NUM
 			EndIf
 			
-			For (Int x1 = Self.selectMenuOffsetX - 294; x1 < SCREEN_WIDTH * 2; x1 += STAGE_MOVE_DIRECTION)
-				MFGraphics mFGraphics = g
-				stageInfoAniDrawer.draw(mFGraphics, stage_id + PAUSE_RACE_INSTRUCTION, x1, (y - 10) + 2, False, 0)
+			For Local x1:= (Self.selectMenuOffsetX - 294) Until (SCREEN_WIDTH * 2) Step STAGE_MOVE_DIRECTION
+				stageInfoAniDrawer.draw(g, stage_id + PAUSE_RACE_INSTRUCTION, x1, (y - FLOAT_RANGE) + 2, False, 0) ' (y - 10)
 			Next
 		End
 		
-		Private Method drawTinyStageName:Void(g:MFGraphics, stageid:Int, x:Int, y:Int)
-			Int stage_id
+		Method drawTinyStageName:Void(g:MFGraphics, stageid:Int, x:Int, y:Int)
+			Local stage_id:Int
 			
 			If (stageid < 11) Then
-				stage_id = stageid Shr 1
+				stage_id = (stageid Shr 1) ' / 2
 			Else
-				stage_id = stageid - PAUSE_RACE_INSTRUCTION
+				stage_id = (stageid - 5)
 			EndIf
 			
-			stageInfoAniDrawer.draw(g, stage_id + BIRD_SPACE_2, x, y, False, 0)
+			stageInfoAniDrawer.draw(g, stage_id + 14, x, y, False, 0) ' BIRD_SPACE_2
 		End
 		
-		Private Method drawSonic:Void(g:MFGraphics, x:Int, y:Int)
-			
+		Method drawSonic:Void(g:MFGraphics, x:Int, y:Int)
 			If (Self.IsPlayerNameDrawable) Then
 				Self.stageInfoPlayerNameDrawer.draw(g, PlayerObject.getCharacterID() + 23, x, y, False, 0)
 			EndIf
-			
 		End
 		
-		Private Method drawAction:Void(g:MFGraphics, id:Int, x:Int, y:Int)
-			
+		Method drawAction:Void(g:MFGraphics, id:Int, x:Int, y:Int)
 			If (Self.IsActNumDrawable And StageManager.getStageID() < 12) Then
 				Self.stageInfoActNumDrawer.draw(g, (StageManager.getStageID() Mod 2) + 27, x, y, False, 0)
 			EndIf
-			
-		End
-		
-		Public Method pause:Void()
-			
-			If (Self.state <> STATE_SCORE_UPDATED And Self.state <> STATE_INTERRUPT And Self.state <> STATE_PAUSE And Self.state <> 20 And Self.state <> 23 And Self.state <> 21) Then
-				If (Self.state = STATE_GAME And GameObject.player.isDead) Then
-					Self.interrupt_state = Self.state
-					Self.state = STATE_INTERRUPT
-					interruptInit()
-				ElseIf (Self.state = STATE_STAGE_LOADING Or Self.state = STATE_STAGE_LOADING_TURN Or Self.state = STATE_ALL_CLEAR Or Self.state = STATE_STAGE_PASS Or Self.state = STATE_PAUSE_OPTION Or Self.state = STATE_PAUSE_RETRY Or Self.state = STATE_PAUSE_SELECT_STAGE Or Self.state = STATE_PAUSE_SELECT_CHARACTER Or Self.state = STATE_PAUSE_TO_TITLE Or Self.state = STATE_PAUSE_INSTRUCTION Or Self.state = STATE_PAUSE_SELECT_CHARACTER Or Self.state = STATE_CONTINUE_0 Or Self.state = STATE_CONTINUE_1 Or Self.state = STATE_GAME_OVER_PRE Or Self.state = STATE_TIME_OVER_0 Or Self.state = STATE_GAME_OVER_1 Or Self.state = STATE_GAME_OVER_2 Or Self.state = 30 Or Self.state = 31 Or Self.state = 32 Or Self.state = 33 Or Self.state = 34 Or Self.state = 38 Or Self.state = 39 Or Self.state = 43 Or Self.state = 44 Or Self.state = STATE_SCORE_UPDATED) Then
-					Self.interrupt_state = Self.state
-					Self.state = STATE_INTERRUPT
-					interruptInit()
-					Print("interrupt")
-				Else
-					PlayerObject.gamepauseInit()
-					Self.state = STATE_PAUSE
-					isDrawTouchPad = False
-					gamePauseInit()
-					Key.init()
-					GameObject.IsGamePause = True
-					State.fadeInit_Modify(0, 102)
-					SoundSystem.getInstance().stopBgm(False)
-					SoundSystem.getInstance().stopLongSe()
-					SoundSystem.getInstance().stopLoopSe()
-					Self.pauseoptionCursor = GlobalResource.soundConfig
-					Key.touchgamekeyClose()
-				EndIf
-			EndIf
-			
 		End
 		
 		Private Method interruptInit:Void()
@@ -2260,97 +2364,6 @@ Class GameState Extends State
 			Key.touchkeygameboardClose()
 			Key.touchkeyboardInit()
 			Key.touchInterruptInit()
-		End
-		
-		Public Method interruptLogic:Void()
-			SoundSystem.getInstance().stopBgm(False)
-			
-			If (Key.press(Key.B_S2)) Then
-			EndIf
-			
-			If (Key.press(Key.B_BACK) Or (Key.touchinterruptreturn <> Null And Key.touchinterruptreturn.IsButtonPress())) Then
-				fading = lastFading
-				SoundSystem.getInstance().playSe(SoundSystem.SE_107)
-				Key.touchInterruptClose()
-				Self.state = Self.interrupt_state
-				Self.interrupt_state = -1
-				Key.clear()
-				
-				If (Key.touchitemsselect2_1 <> Null) Then
-					Key.touchitemsselect2_1.reset()
-				EndIf
-				
-				If (Key.touchitemsselect2_2 <> Null) Then
-					Key.touchitemsselect2_2.reset()
-				EndIf
-				
-				If (Key.touchitemsselect3_1 <> Null) Then
-					Key.touchitemsselect3_1.reset()
-				EndIf
-				
-				If (Key.touchitemsselect3_2 <> Null) Then
-					Key.touchitemsselect3_2.reset()
-				EndIf
-				
-				If (Key.touchitemsselect3_3 <> Null) Then
-					Key.touchitemsselect3_3.reset()
-				EndIf
-				
-				isDrawTouchPad = True
-				Select (Self.state)
-					Case STATE_STAGE_PASS
-					Case STATE_STAGE_LOADING_TURN
-						isDrawTouchPad = False
-						break
-					Case STATE_PAUSE_OPTION
-						optionInit()
-						State.fadeInit(0, 0)
-						Key.touchkeyboardClose()
-						Key.touchkeyboardInit()
-						isDrawTouchPad = False
-						break
-					Case STATE_PAUSE_RETRY
-					Case STATE_PAUSE_SELECT_STAGE
-					Case STATE_PAUSE_TO_TITLE
-					Case STATE_PAUSE_SELECT_CHARACTER
-						isDrawTouchPad = False
-						break
-					Case STATE_TIME_OVER_0
-					Case STATE_GAME_OVER_1
-					Case STATE_GAME_OVER_2
-						break
-					Case STATE_ALL_CLEAR
-					Case STATE_CONTINUE_0
-					Case STATE_CONTINUE_1
-						isDrawTouchPad = False
-						break
-					Case STATE_PAUSE_OPTION_SOUND
-					Case STATE_PAUSE_OPTION_VIB
-					Case PlayerTails.TAILS_ANI_BANK_2
-					Case STATE_PAUSE_OPTION_SP_SET
-					Case STATE_PAUSE_OPTION_HELP
-					Case STATE_PAUSE_OPTION_SOUND_VOLUMN
-					Case STATE_PAUSE_OPTION_SENSOR
-						isDrawTouchPad = False
-						SoundSystem.getInstance().playBgm(PAUSE_RACE_INSTRUCTION)
-						break
-					Case STATE_SCORE_UPDATE
-					Case STATE_SCORE_UPDATED
-						isDrawTouchPad = False
-						break
-					Case STATE_SCORE_UPDATE_ENSURE
-						isDrawTouchPad = False
-						break
-				End Select
-				isDrawTouchPad = False
-				IsInInterrupt = False
-			EndIf
-			
-		End
-		
-		Public Method interruptDraw:Void(g:MFGraphics)
-			Self.interruptDrawer.setActionId((Key.touchinterruptreturn.Isin() ? 1 : 0) + 0)
-			Self.interruptDrawer.draw(g, SCREEN_WIDTH Shr 1, SCREEN_HEIGHT Shr 1)
 		End
 		
 		Private Method optionInit:Void()
@@ -2486,22 +2499,22 @@ Class GameState Extends State
 				
 				If (Self.isSelectable And Self.optionYDirect = 0) Then
 					If (Key.touchmenuoptionitems[1].IsButtonPress() And Self.pauseOptionCursor = 0 And GlobalResource.soundSwitchConfig <> 0 And State.fadeChangeOver()) Then
-						Self.state = 38
+						Self.state = STATE_PAUSE_OPTION_SOUND_VOLUMN
 						soundVolumnInit()
-						SoundSystem.getInstance().playSe(1)
+						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					ElseIf (Key.touchmenuoptionitems[3].IsButtonPress() And Self.pauseOptionCursor = 1 And State.fadeChangeOver()) Then
-						Self.state = 31
+						Self.state = STATE_PAUSE_OPTION_VIB
 						itemsSelect2Init()
-						SoundSystem.getInstance().playSe(1)
+						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					ElseIf (Key.touchmenuoptionitems[5].IsButtonPress() And Self.pauseOptionCursor = 2 And State.fadeChangeOver()) Then
-						Self.state = 33
+						Self.state = STATE_PAUSE_OPTION_SP_SET
 						itemsSelect2Init()
-						SoundSystem.getInstance().playSe(1)
+						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					ElseIf (Key.touchmenuoptionitems[7].IsButtonPress() And Self.pauseOptionCursor = STATE_SET_PARAM And State.fadeChangeOver()) Then
 						If (GlobalResource.spsetConfig <> 0) Then
-							Self.state = 39
+							Self.state = STATE_PAUSE_OPTION_SENSOR
 							spSenorSetInit()
-							SoundSystem.getInstance().playSe(1)
+							SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 						Else
 							SoundSystem.getInstance().playSe(SoundSystem.SE_107)
 						EndIf
@@ -2509,7 +2522,7 @@ Class GameState Extends State
 					ElseIf (Key.touchmenuoptionitems[8].IsButtonPress() And Self.pauseOptionCursor = PAUSE_RACE_OPTION And State.fadeChangeOver()) Then
 						changeStateWithFade(34)
 						helpInit()
-						SoundSystem.getInstance().playSe(1)
+						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					EndIf
 				EndIf
 				
@@ -2686,7 +2699,6 @@ Class GameState Extends State
 		End
 		
 		Public Method fadeStateLogic:Void()
-			
 			If (Not Self.isStateClassSwitch) Then
 				If (fading And Self.fadeChangeState And State.fadeChangeOver() And Self.state <> Self.nextState) Then
 					Self.state = Self.nextState
@@ -2705,9 +2717,9 @@ Class GameState Extends State
 				
 			ElseIf (fading And State.fadeChangeOver()) Then
 				State.setState(Self.stateForSet)
+				
 				State.fadeInit(255, 0)
 			EndIf
-			
 		End
 		
 		Private Method endingInit:Void()
@@ -2810,7 +2822,7 @@ Class GameState Extends State
 					
 					If (Key.press(Key.B_S1 | Key.gSelect)) Then
 						SoundSystem.getInstance().stopBgm(True)
-						setStateWithFade(PAUSE_RACE_OPTION)
+						setStateWithFade(State.STATE_SCORE_RANKING)
 					EndIf
 					
 				Default
@@ -3119,7 +3131,8 @@ Class GameState Extends State
 		
 		Public Method BP_gotoRanking:Void()
 			PlayerObject.doPauseLeaveGame()
-			setStateWithFade(PAUSE_RACE_OPTION)
+			
+			setStateWithFade(State.STATE_SCORE_RANKING)
 			
 			If (IsPaid) Then
 				StageManager.addNewNormalScore(IsGameOver ? PlayerObject.getScore() : Self.preScore)
@@ -3162,8 +3175,10 @@ Class GameState Extends State
 				EndIf
 				
 				StageManager.resetStageIdforTry()
+				
 				State.saveBPRecord()
-				State.setState(2)
+				
+				State.setState(State.STATE_RETURN_FROM_GAME)
 			EndIf
 			
 		End
@@ -3733,16 +3748,16 @@ Class GameState Extends State
 					If (Key.touchgamepauseitem[0].IsButtonPress() And Self.pause_item_cursor = 0 And Not Self.pause_returnFlag) Then
 						Self.pause_returnFlag = True
 						Self.pause_returnframe = Self.pausecnt
-						SoundSystem.getInstance().playSe(1)
+						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					ElseIf (Key.touchgamepauseitem[1].IsButtonPress() And Self.pause_item_cursor = 1 And State.fadeChangeOver()) Then
 						Self.state = STATE_PAUSE_TO_TITLE
 						State.fadeInit(102, 220)
 						secondEnsureInit()
-						SoundSystem.getInstance().playSe(1)
+						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					ElseIf (Key.touchgamepauseitem[2].IsButtonPress() And Self.pause_item_cursor = 2 And Not Self.pause_returnFlag) Then
 						changeStateWithFade(STATE_PAUSE_OPTION)
 						optionInit()
-						SoundSystem.getInstance().playSe(1)
+						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					EndIf
 					
 				ElseIf (PlayerObject.stageModeState <> 1) Then
@@ -3751,31 +3766,31 @@ Class GameState Extends State
 					If (Key.touchgamepauseitem[0].IsButtonPress() And Self.pause_item_cursor = 0 And Not Self.pause_returnFlag) Then
 						Self.pause_returnFlag = True
 						Self.pause_returnframe = Self.pausecnt
-						SoundSystem.getInstance().playSe(1)
+						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					ElseIf (Key.touchgamepauseitem[1].IsButtonPress() And Self.pause_item_cursor = 1 And State.fadeChangeOver()) Then
 						Self.state = STATE_PAUSE_RETRY
 						State.fadeInit(102, 220)
 						secondEnsureInit()
-						SoundSystem.getInstance().playSe(1)
+						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					ElseIf (Key.touchgamepauseitem[2].IsButtonPress() And Self.pause_item_cursor = 2 And State.fadeChangeOver()) Then
 						Self.state = STATE_PAUSE_SELECT_CHARACTER
 						State.fadeInit(102, 220)
 						secondEnsureInit()
-						SoundSystem.getInstance().playSe(1)
+						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					ElseIf (Key.touchgamepauseitem[3].IsButtonPress() And Self.pause_item_cursor = STATE_SET_PARAM And State.fadeChangeOver()) Then
 						Self.state = STATE_PAUSE_SELECT_STAGE
 						State.fadeInit(102, 220)
 						secondEnsureInit()
-						SoundSystem.getInstance().playSe(1)
+						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					ElseIf (Key.touchgamepauseitem[4].IsButtonPress() And Self.pause_item_cursor = PAUSE_RACE_OPTION And State.fadeChangeOver()) Then
 						Self.state = STATE_PAUSE_TO_TITLE
 						State.fadeInit(102, 220)
 						secondEnsureInit()
-						SoundSystem.getInstance().playSe(1)
+						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					ElseIf (Key.touchgamepauseitem[5].IsButtonPress() And Self.pause_item_cursor = PAUSE_RACE_INSTRUCTION And Not Self.pause_returnFlag) Then
 						changeStateWithFade(STATE_PAUSE_OPTION)
 						optionInit()
-						SoundSystem.getInstance().playSe(1)
+						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					EndIf
 				EndIf
 			EndIf
@@ -3868,7 +3883,9 @@ Class GameState Extends State
 					EndIf
 					
 					StageManager.stageIDFromGame = StageManager.getStageID()
-					setStateWithFade(2)
+					
+					setStateWithFade(State.STATE_RETURN_FROM_GAME)
+					
 					Key.touchanykeyInit()
 					Key.touchMainMenuInit2()
 				Case 2
@@ -3896,11 +3913,13 @@ Class GameState Extends State
 		Private Method pausetoSelectStageLogic:Void()
 			Select (secondEnsureLogic())
 				Case STATE_PAUSE
-					setStateWithFade(STATE_SET_PARAM)
+					setStateWithFade(State.STATE_SELECT_RACE_STAGE)
 				Case 2
 					State.fadeInit(220, 102)
 					State.fadeInit_Modify(192, 102)
+					
 					Self.state = STATE_PAUSE
+					
 					GameObject.IsGamePause = True
 				Default
 			End Select
@@ -3909,7 +3928,7 @@ Class GameState Extends State
 		Private Method pausetoSelectCharacterLogic:Void()
 			Select (secondEnsureLogic())
 				Case STATE_PAUSE
-					setStateWithFade(VISIBLE_OPTION_ITEMS_NUM)
+					setStateWithFade(State.STATE_SELECT_CHARACTER)
 				Case 2
 					State.fadeInit(220, 102)
 					State.fadeInit_Modify(192, 102)
@@ -3988,7 +4007,7 @@ Class GameState Extends State
 			spReserveRingNum = ringNum
 			spCheckPointID = chekPointID
 			spTimeCount = timeCount
-			State.setState(PAUSE_OPTION_ITEMS_NUM)
+			State.setState(State.STATE_SPECIAL)
 		}
 		
 		Private Method scoreUpdateInit:Void()
@@ -4025,19 +4044,23 @@ Class GameState Extends State
 				EndIf
 				
 				If (Key.touchscoreupdateyes.IsButtonPress() And Self.scoreUpdateCursor = 1) Then
-					Self.state = 44
+					Self.state = STATE_SCORE_UPDATE_ENSURE
 					secondEnsureInit()
 					State.fadeInit(0, GimmickObject.GIMMICK_NUM)
-					SoundSystem.getInstance().playSe(1)
+					SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 				ElseIf (Key.touchscoreupdateno.IsButtonPress() And Self.scoreUpdateCursor = 2) Then
 					Standard2.splashinit(True)
-					setStateWithFade(0)
-					SoundSystem.getInstance().playSe(1)
+					
+					setStateWithFade(State.STATE_TITLE)
+					
+					SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 				EndIf
 				
 				If ((Key.press(Key.B_BACK) Or (Key.touchscoreupdatereturn.IsButtonPress() And Self.returnCursor = 1)) And State.fadeChangeOver()) Then
 					Standard2.splashinit(True)
-					setStateWithFade(0)
+					
+					setStateWithFade(State.STATE_TITLE)
+					
 					SoundSystem.getInstance().playSe(SoundSystem.SE_107)
 				EndIf
 			EndIf
@@ -4100,7 +4123,7 @@ Class GameState Extends State
 					sendMessage(msg, PAUSE_OPTION_ITEMS_NUM)
 					Self.state = STATE_SCORE_UPDATED
 				Case 2
-					Self.state = 43
+					Self.state = STATE_SCORE_UPDATE
 					State.fadeInit(GimmickObject.GIMMICK_NUM, 0)
 					State.setFadeOver()
 					Self.returnCursor = 0
@@ -4119,7 +4142,9 @@ Class GameState Extends State
 			
 			If (activity.isResumeFromOtherActivity) Then
 				Standard2.splashinit(True)
-				setStateWithFade(0)
+				
+				setStateWithFade(State.STATE_TITLE)
+				
 				activity.isResumeFromOtherActivity = False
 			EndIf
 			
