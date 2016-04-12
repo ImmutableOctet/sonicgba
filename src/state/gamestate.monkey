@@ -2794,140 +2794,147 @@ Class GameState Extends State
 			End Select
 		End
 		
-		Private Method endingDraw:Void(g:MFGraphics)
+		Method endingDraw:Void(g:MFGraphics)
 			g.setColor(35064)
+			
 			MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+			
 			cloudDraw(g)
+			
 			birdDraw1(g)
+			
 			planeDraw(g)
+			
 			birdDraw2(g)
+			
 			Select (Self.endingState)
-				Case STATE_SET_PARAM
+				Case ED_STATE_CONGRATULATION
 					State.drawMenuFontById(g, 79, Self.position, 0)
-				Case STATE_STAGE_PASS
+				Case ED_STATE_STAFF
 					staffDraw(g)
-				Case STATE_STAGE_LOADING
+				Case ED_END
 					staffDraw(g)
+					
 					State.drawSoftKey(g, True, False)
 				Default
+					' Nothing so far.
 			End Select
 		End
 		
-		Private Method cloudLogic:Void()
-			
+		Method cloudLogic:Void()
 			If (Self.cloudCount > 0) Then
 				Self.cloudCount -= 1
 			EndIf
 			
-			For (Int i = 0; i < LOADING_TIME_LIMIT; i += 1)
-				
-				If (Self.cloudInfo[i][0] <> 0) Then
-					Int[] iArr = Self.cloudInfo[i]
-					iArr[1] + CLOUD_VELOCITY[Self.cloudInfo[i][0] -= 1]
+			For Local cloud:= EachIn Self.cloudInfo
+				If (cloud[0] <> 0) Then
+					cloud[1] += CLOUD_VELOCITY[cloud[0] - 1]
 					
-					If (Self.cloudInfo[i][1] >= SCREEN_WIDTH + 75) Then
-						Self.cloudInfo[i][0] = 0
+					If (cloud[1] >= SCREEN_WIDTH + 75) Then
+						cloud[0] = 0
 					EndIf
 				EndIf
 				
-				If (Self.cloudInfo[i][0] = 0 And Self.cloudCount = 0) Then
-					Self.cloudInfo[i][0] = MyRandom.nextInt(1, 3)
-					Self.cloudInfo[i][1] = 0
-					Self.cloudInfo[i][2] = MyRandom.nextInt(20, SCREEN_HEIGHT - 40)
+				If (cloud[0] = 0 And Self.cloudCount = 0) Then
+					cloud[0] = MyRandom.nextInt(1, 3)
+					cloud[1] = 0
+					cloud[2] = MyRandom.nextInt(20, SCREEN_HEIGHT - 40)
+					
 					Self.cloudCount = MyRandom.nextInt(8, 20)
 				EndIf
-				
 			Next
 		End
 		
-		Private Method cloudDraw:Void(g:MFGraphics)
-			For (Int i = 0; i < LOADING_TIME_LIMIT; i += 1)
-				
-				If (Self.cloudInfo[i][0] <> 0) Then
-					Self.cloudDrawer.setActionId(Self.cloudInfo[i][0] - 1)
-					Self.cloudDrawer.draw(g, Self.cloudInfo[i][1], Self.cloudInfo[i][2])
+		Method cloudDraw:Void(g:MFGraphics)
+			For Local cloud:= EachIn Self.cloudInfo
+				If (cloud[0] <> 0) Then
+					Self.cloudDrawer.setActionId(cloud[0] - 1)
+					Self.cloudDrawer.draw(g, cloud[1], cloud[2])
 				EndIf
-				
 			Next
 		End
 		
-		Private Method planeInit:Void()
-			Self.planeX = SCREEN_WIDTH + 60
-			Self.planeY = (SCREEN_HEIGHT * PAUSE_RACE_OPTION) / PAUSE_RACE_INSTRUCTION
+		Method planeInit:Void()
+			Self.planeX = (SCREEN_WIDTH + 60)
+			Self.planeY = ((SCREEN_HEIGHT * 4) / 5)
 		End
 		
-		Private Method planeLogic:Void()
-			Self.planeX -= 2
+		Method planeLogic:Void()
+			Self.planeX -= PLANE_VELOCITY
 			
-			If (Self.planeX < (SCREEN_WIDTH Shr 1)) Then
-				Self.planeX = SCREEN_WIDTH Shr 1
+			If (Self.planeX < (SCREEN_WIDTH / 2)) Then ' Shr 1
+				Self.planeX = (SCREEN_WIDTH / 2) ' Shr 1
 			EndIf
-			
 		End
 		
-		Private Method planeDraw:Void(g:MFGraphics)
+		Method planeDraw:Void(g:MFGraphics)
 			Self.planeDrawer.draw(g, Self.planeX, Self.planeY + getOffsetY(0))
 		End
 		
-		Private Method birdInit:Void()
-			Int i
-			
-			For (i = PAUSE_RACE_OPTION; i >= 0; i -= 1)
-				Self.birdInfo[i][1] = (Self.planeY - ((PAUSE_RACE_INSTRUCTION - i) * LOADING_TIME_LIMIT)) - 30
-				Self.birdInfo[i][0] = (PAUSE_RACE_INSTRUCTION - i) * LOADING_TIME_LIMIT
-				Self.birdInfo[i][2] = MyRandom.nextInt(360) ' MDPhone.SCREEN_WIDTH
+		Method birdInit:Void()
+			For Local i:= BIRD_NUM To 0 Step -1
+				Local bird:= Self.birdInfo[i]
+				
+				bird[1] = (Self.planeY - (((BIRD_NUM / 2) - i) * BIRD_NUM)) - ((BIRD_SPACE_2+BIRD_Y) * 2) ' / BIRD_OFFSET
+				bird[0] = ((BIRD_NUM / 2) - i) * BIRD_NUM)
+				bird[2] = MyRandom.nextInt(360) ' MDPhone.SCREEN_WIDTH
 			Next
 			
-			For (i = 5; i < LOADING_TIME_LIMIT; i += 1)
-				Self.birdInfo[i][1] = (Self.planeY - ((PAUSE_RACE_OPTION - i) * BIRD_SPACE_2)) - 15
-				Self.birdInfo[i][0] = (PAUSE_RACE_OPTION - i) * -14
-				Self.birdInfo[i][2] = MyRandom.nextInt(360) ' MDPhone.SCREEN_WIDTH
+			For Local i:= (BIRD_NUM / 2) Until BIRD_NUM
+				Local bird:= Self.birdInfo[i]
+				
+				bird[i][1] = (Self.planeY - ((BIRD_NUM - i) * BIRD_SPACE_2)) - (BIRD_SPACE_2+BIRD_Y) ' 15
+				bird[i][0] = (BIRD_NUM - i) * -BIRD_SPACE_2
+				bird[i][2] = MyRandom.nextInt(360) ' MDPhone.SCREEN_WIDTH
 			Next
 			
-			Self.birdX = SCREEN_WIDTH + 30
+			Self.birdX = (SCREEN_WIDTH + 30) ' ((BIRD_SPACE_2+BIRD_Y) * 2)
 		End
 		
-		Private Method birdLogic:Bool()
-			Self.birdX -= 2
+		Method birdLogic:Bool()
+			Self.birdX -= BIRD_OFFSET ' 2 ' VX
 			
-			If (Self.birdX >= (SCREEN_WIDTH Shr 1) + 30) Then
+			If (Self.birdX >= (SCREEN_WIDTH / 2) + 30) Then ' Shr 1
 				Return False
 			EndIf
 			
-			Self.birdX = (SCREEN_WIDTH Shr 1) + 30
+			Self.birdX = ((SCREEN_WIDTH / 2) + 30) ' Shr 1
+			
 			Return True
 		End
 		
-		Private Method birdDraw1:Void(g:MFGraphics)
-			For (Int i = 0; i < PAUSE_RACE_INSTRUCTION; i += 1)
+		Method birdDraw1:Void(g:MFGraphics)
+			For Local i:= 0 Until (BIRD_NUM / 2)
 				Self.birdDrawer[i].draw(g, Self.birdX + Self.birdInfo[i][0], Self.birdInfo[i][1] + getOffsetY(Self.birdInfo[i][2]))
 			Next
 		End
 		
-		Private Method birdDraw2:Void(g:MFGraphics)
-			For (Int i = 5; i < LOADING_TIME_LIMIT; i += 1)
+		Method birdDraw2:Void(g:MFGraphics)
+			For Local i:= (BIRD_NUM / 2) Until BIRD_NUM
 				Self.birdDrawer[i].draw(g, Self.birdX + Self.birdInfo[i][0], Self.birdInfo[i][1] + getOffsetY(Self.birdInfo[i][2]))
 			Next
 		End
 		
-		Private Method degreeLogic:Void()
-			Self.degree += LOADING_TIME_LIMIT
+		Method degreeLogic:Void()
+			Self.degree += DEGREE_VELOCITY
 			Self.degree Mod= 360
 		End
 		
-		Private Method getOffsetY:Int(degreeOffset:Int)
-			Return (MyAPI.dSin(Self.degree + degreeOffset) * LOADING_TIME_LIMIT) / OPTION_MOVING_INTERVAL
+		Method getOffsetY:Int(degreeOffset:Int)
+			Return (MyAPI.dSin(Self.degree + degreeOffset) * DEGREE_VELOCITY) / 100
 		End
 		
-		Private Method staffInit:Void()
+		Method staffInit:Void()
 			Self.colorCursor = MyRandom.nextInt(COLOR_SEQ.Length)
+			
 			Self.stringCursor = 0
-			Self.position = (-SCREEN_WIDTH) Shr 1
+			
+			Self.position = ((-SCREEN_WIDTH) / 2) ' Shr 1
+			
 			Self.outing = False
 		End
 		
 		Private Method staffLogic:Void()
-			
 			If (Self.showCount > 0) Then
 				Self.showCount -= 1
 			EndIf
