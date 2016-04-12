@@ -234,7 +234,7 @@ Class SuperSonicEnding Extends BaseEnding ' Final
 				Case STATE_MOON_MOVE
 					For Local i:= 0 Until Self.moonOffset.Length ' 3
 						Self.moonOffset[i] = MOON_BG_OFFSET_START[i] + (((MOON_BG_OFFSET_END[i] - MOON_BG_OFFSET_START[i]) * Self.count) / MOON_BG_MOVE_FRAME)
-					EndIf
+					Next
 					
 					If (Self.count >= MOON_BG_MOVE_FRAME) Then
 						Self.state = STATE_MOON_END

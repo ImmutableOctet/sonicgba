@@ -521,6 +521,7 @@ Class GimmickObject Extends GameObject
 			shipRingImage = Null
 			platformImage = Null
 			hookImage = Null
+			
 			Hari.releaseAllResource()
 			Spring.releaseAllResource()
 			Stone.releaseAllResource()
@@ -617,68 +618,71 @@ Class GimmickObject Extends GameObject
 			If (p = player) Then
 				Select (Self.objId)
 					Case PlayerTails.TAILS_ANI_DEAD_1
-						If (Not Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
+						If (Not Self.collisionRect.collisionChk(p.getCheckPositionX(), p.getCheckPositionY())) Then
 							Self.used = False
-						End ElseIf (Not Self.used) Then
-							player.setCollisionLayer(0)
+						ElseIf (Not Self.used) Then
+							p.setCollisionLayer(0)
+							
 							Self.used = True
-						End
+						EndIf
 					Case PlayerTails.TAILS_ANI_DEAD_2
-						If (Not Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
+						If (Not Self.collisionRect.collisionChk(p.getCheckPositionX(), p.getCheckPositionY())) Then
 							Self.used = False
-						End ElseIf (Not Self.used) Then
-							player.setCollisionLayer(1)
+						ElseIf (Not Self.used) Then
+							p.setCollisionLayer(1)
+							
 							Self.used = True
-						End
+						EndIf
 					Case PlayerTails.TAILS_ANI_SPRING_1
-						If (player instanceof PlayerSonic) Then
-							player.slipEnd()
-						End ElseIf (player instanceof PlayerAmy) Then
-							player.slipEnd()
-						End
+						If (p instanceof PlayerSonic) Then
+							p.slipEnd()
+						ElseIf (p instanceof PlayerAmy) Then
+							p.slipEnd()
+						EndIf
 					Case PlayerTails.TAILS_ANI_CLIFF_2
-						If (Not Self.used And player.beUnseenPop()) Then
+						If (Not Self.used And p.beUnseenPop()) Then
 							Self.used = True
-						End
+						EndIf
 					Case PlayerTails.TAILS_ANI_UP_ARM
-						If (Not Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
+						If (Not Self.collisionRect.collisionChk(p.getCheckPositionX(), p.getCheckPositionY())) Then
 							Self.used = False
-						End ElseIf (Not Self.used) Then
-							player.ductIn()
+						ElseIf (Not Self.used) Then
+							p.ductIn()
+							
 							Self.used = True
-							If (Not (player instanceof PlayerAmy) And player.getAnimationId() <> 4) Then
+							
+							If (Not (p instanceof PlayerAmy) And p.getAnimationId() <> 4) Then
 								soundInstance.playSe(4)
-							End
-						End
+							EndIf
+						EndIf
 					Case PlayerTails.TAILS_ANI_POLE_V
-						If (Not Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
+						If (Not Self.collisionRect.collisionChk(p.getCheckPositionX(), p.getCheckPositionY())) Then
 							Self.used = False
-						End ElseIf (Not Self.used) Then
-							player.velX = 0
-							player.ductOut()
+						ElseIf (Not Self.used) Then
+							p.velX = 0
+							p.ductOut()
 							Self.used = True
 						End
 					Case PlayerTails.TAILS_ANI_POLE_H
-						If (player.isOnGound() And Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
-							player.setVelX(PlayerObject.HUGE_POWER_SPEED)
+						If (p.isOnGound() And Self.collisionRect.collisionChk(p.getCheckPositionX(), p.getCheckPositionY())) Then
+							p.setVelX(PlayerObject.HUGE_POWER_SPEED)
 						End
 					Case PlayerTails.TAILS_ANI_ROLL_V_1
-						If (player.isOnGound()) Then
-							player.setVelX(-1900)
+						If (p.isOnGound()) Then
+							p.setVelX(-1900)
 						End
-					Case PlayerTails.TAILS_ANI_ROLL_V_2
-					Case GIMMICK_MOVE
-						If (Not Self.used And player.setRailLine(New Line(Self.posX, Self.posY, Self.posX + Self.iLeft, Self.posY + Self.iTop), Self.posX, Self.posY, Self.iLeft, Self.iTop, Self.iWidth, Self.iHeight, Self)) Then
+					Case PlayerTails.TAILS_ANI_ROLL_V_2, GIMMICK_MOVE
+						If (Not Self.used And p.setRailLine(New Line(Self.posX, Self.posY, Self.posX + Self.iLeft, Self.posY + Self.iTop), Self.posX, Self.posY, Self.iLeft, Self.iTop, Self.iWidth, Self.iHeight, Self)) Then
 							Self.used = True
 							soundInstance.playSe(SoundSystem.SE_148)
 						EndIf
 					Case 66
 						If (Self.firstTouch And StageManager.getCurrentZoneId() <> 3) Then
-							player.setFall(Self.posX - RollPlatformSpeedC.COLLISION_OFFSET_Y, Self.posY, Self.iLeft, Self.iTop)
-							player.stopMove()
+							p.setFall(Self.posX - RollPlatformSpeedC.COLLISION_OFFSET_Y, Self.posY, Self.iLeft, Self.iTop)
+							p.stopMove()
 						EndIf
 					Case GIMMICK_SEE
-						If (Not Self.used And Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
+						If (Not Self.used And Self.collisionRect.collisionChk(p.getCheckPositionX(), p.getCheckPositionY())) Then
 							Local z:Bool
 							
 							If (Self.iLeft = 0) Then
@@ -693,40 +697,40 @@ Class GimmickObject Extends GameObject
 						EndIf
 					Case GIMMICK_WIND
 						framecnt += 1
-						If (Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
+						If (Self.collisionRect.collisionChk(p.getCheckPositionX(), p.getCheckPositionY())) Then
 							If (StageManager.getStageID() = 11) Then
-								player.collisionState = GIMMICK_HARI_UP
-								player.isInGravityCircle = True
+								p.collisionState = GIMMICK_HARI_UP
+								p.isInGravityCircle = True
 							End
-							If (player.collisionState = GIMMICK_HARI_UP) Then
-								player.collisionState = GIMMICK_HARI_UP
+							If (p.collisionState = GIMMICK_HARI_UP) Then
+								p.collisionState = GIMMICK_HARI_UP
 								If (StageManager.getStageID() = 11) Then
-									player.worldCal.stopMoveY()
-									ACWorldCollisionCalculator aCWorldCollisionCalculator = player.worldCal
-									ACWorldCollisionCalculator aCWorldCollisionCalculator2 = player.worldCal
+									p.worldCal.stopMoveY()
+									ACWorldCollisionCalculator aCWorldCollisionCalculator = p.worldCal
+									ACWorldCollisionCalculator aCWorldCollisionCalculator2 = p.worldCal
 									aCWorldCollisionCalculator.actionState = GIMMICK_HARI_UP
 								End
-								If (player.getVelY() > WIND_VELOCITY) Then
-									player.setVelY(player.getVelY() + WIND_ACCELERATE)
+								If (p.getVelY() > WIND_VELOCITY) Then
+									p.setVelY(p.getVelY() + WIND_ACCELERATE)
 								Else
-									player.setVelY(WIND_VELOCITY)
+									p.setVelY(WIND_VELOCITY)
 								End
 								If (StageManager.getStageID() = 11) Then
-									player.setAnimationId(9)
+									p.setAnimationId(9)
 									Return
 								Else
-									player.setAnimationId(29)
+									p.setAnimationId(29)
 									Return
 								End
 							End
 							soundInstance.stopLoopSe()
 							framecnt = 0
 							isFirstTouchedWind = False
-							player.isInGravityCircle = False
+							p.isInGravityCircle = False
 						End
 					Case Def.TOUCH_START_GAME_WIDTH
 						If (Not Self.used) Then
-							player.setAnimationId(4)
+							p.setAnimationId(4)
 							SoundSystem soundSystem = soundInstance
 							SoundSystem soundSystem2 = soundInstance
 							soundSystem.playSe(SoundSystem.SE_148)

@@ -571,7 +571,7 @@ Class SpecialStageState Extends State Implements SSDef, BarWord
 					
 					Self.barDrawer.drawBar(g)
 					
-					For Local i = 0 Until Self.bonusY.Length
+					For Local i:= 0 Until Self.bonusY.Length
 						Self.fontDrawer.draw(g, BONUS_ID[i], Self.barDrawer.getBarX() + BONUS_X, Self.bonusY[i], False, 0)
 						
 						Local drawNum:= 0

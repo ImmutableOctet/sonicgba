@@ -1346,8 +1346,8 @@ Class GameState Extends State
 								If (Self.continueFrame = (Self.continueStartEndFrame + 3)) Then
 									State.fadeInit(102, 255)
 								ElseIf (Self.continueFrame > (Self.continueStartEndFrame + 3) And State.fadeChangeOver()) Then
-									If (Self.continueScale - 0.2f > 0.0) Then
-										Self.continueScale -= 0.2f
+									If (Self.continueScale - 0.2 > 0.0) Then
+										Self.continueScale -= 0.2
 									Else
 										Self.continueScale = 0.0
 									EndIf
@@ -3350,7 +3350,7 @@ Class GameState Extends State
 				Local bird:= Self.birdInfo[i]
 				
 				bird[1] = (Self.planeY - (((BIRD_NUM / 2) - i) * BIRD_NUM)) - ((BIRD_SPACE_2+BIRD_Y) * 2) ' / BIRD_OFFSET
-				bird[0] = ((BIRD_NUM / 2) - i) * BIRD_NUM)
+				bird[0] = (((BIRD_NUM / 2) - i) * BIRD_NUM)
 				bird[2] = MyRandom.nextInt(360) ' MDPhone.SCREEN_WIDTH
 			Next
 			

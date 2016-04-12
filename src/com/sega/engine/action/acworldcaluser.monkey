@@ -10,9 +10,9 @@ Public
 ' Interfaces:
 Interface ACWorldCalUser Extends ACMoveCalUser
 	' Methods:
-	Method doWhileLand:Void(Int i)
+	Method doWhileLand:Void(i:Int)
 	Method doWhileLeaveGround:Void()
-	Method doWhileTouchWorld:Void(Int i, Int i2)
+	Method doWhileTouchWorld:Void(i:Int, i2:Int)
 	Method getBodyDegree:Int()
 	Method getBodyOffset:Int()
 	Method getFootOffset:Int()

@@ -639,7 +639,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Field piping:Bool
 		Field prefaceDirection:Bool
 		Field railing:Bool
-		Field railOut:Bool
+		Field railIsOut:Bool
 		Field rightStopped:Bool
 		Field showWaterFlush:Bool
 		Field slideSoundStart:Bool
@@ -1298,16 +1298,16 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 								directionScalar = 1
 							EndIf
 							
-							checkWithObject(Self.footPointX, Self.footPointY, Self.footPointX + (directionScalar * Self.railLine.cos(Self.totalVelocity)), Self.footPointY + directionScalar * Self.railLine.sin(Self.totalVelocity)))
+							checkWithObject(Self.footPointX, Self.footPointY, Self.footPointX + (directionScalar * Self.railLine.cos(Self.totalVelocity)), Self.footPointY + directionScalar * Self.railLine.sin(Self.totalVelocity))
 						EndIf
 						
-						If (Not (Self.railOut Or Self.railLine = Null)) Then
+						If (Not (Self.railIsOut Or Self.railLine = Null)) Then
 							Self.velX = Self.footPointX - preFootPointX
 							Self.velY = Self.footPointY - preFootPointY
 						EndIf
 					EndIf
 					
-					If (Self.railOut And Self.velY = getGravity() + RAIL_OUT_SPEED_VY0) Then
+					If (Self.railIsOut And Self.velY = getGravity() + RAIL_OUT_SPEED_VY0) Then
 						If (characterID = CHARACTER_AMY) Then
 							soundInstance.playSe(ANI_ROPE_ROLL_1)
 						Else
@@ -1315,8 +1315,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						EndIf
 					EndIf
 					
-					If (Self.railOut And Self.velY > 0) Then
-						Self.railOut = False
+					If (Self.railIsOut And Self.velY > 0) Then
+						Self.railIsOut = False
 						Self.railing = False
 						Self.collisionState = COLLISION_STATE_JUMP
 					EndIf
@@ -1785,7 +1785,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						terminalLogic_SS_Brake()
 					Case TER_STATE_LOOK_MOON
 						terminalLogic_SS_Look_Moon()
-					Case TER_STATE_LOOK_MOON_WAIT)
+					Case TER_STATE_LOOK_MOON_WAIT
 						terminalLogic_SS_Moon_Wait()
 					Case TER_STATE_CHANGE_1
 						terminalLogic_SS_Change_1()
@@ -4158,7 +4158,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 			
 			' This behavior may change in the future:
-			If (Self.collisionState = COLLISION_STATE_WALK Or Self.collisionState = COLLISION_STATE_IN_SAND) Thne
+			If (Self.collisionState = COLLISION_STATE_WALK Or Self.collisionState = COLLISION_STATE_IN_SAND) Then
 				Self.velY = 100
 			EndIf
 			
@@ -4467,7 +4467,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			Self.collisionChkBreak = True
 			Self.railing = True
-			Self.railOut = False
+			Self.railIsOut = False
 			
 			Self.animationID = ANI_RAIL_ROLL
 			
@@ -4483,7 +4483,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Method railOut:Void(x:Int, y:Int)
 			If (Self.railing) Then
-				Self.railOut = True
+				Self.railIsOut = True
 				Self.railLine = Null
 				
 				Self.velY = RAIL_OUT_SPEED_VY0
@@ -4704,9 +4704,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					preCheckX = tmpCurrentX
 					preCheckY = tmpCurrentY
 				Else
-					Return
+					Exit
 				EndIf
-			Wend
+			Next
 		End
 		
 		Method cancelFootObject:Void(obj:GameObject)
@@ -4810,7 +4810,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method inRailState:Bool()
-			Return (Self.railing Or Self.railOut)
+			Return (Self.railing Or Self.railIsOut)
 		End
 		
 		Method changeVisible:Void(mVisible:Bool)
@@ -5069,7 +5069,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					terminalState = TER_STATE_RUN
 				Default
 					' Nothing so far.
-			EndIf
+			End Select
 		End
 		
 		Method setTerminalSingle:Void(type:Int)
@@ -5357,18 +5357,24 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			ringNum = 0
 			invincibleCount = 0
 			speedCount = 0
+			
 			SoundSystem.getInstance().setSoundSpeed(1.0)
+			
 			shieldType = 0
 			timeCount = 0
+			
 			lastTimeCount = timeCount
+			
 			timeStopped = False
+			
 			raceScoreNum = 0
+			
 			preScoreNum = scoreNum
 			preLifeNum = lifeNum
 			
 			For Local I:= 0 Until itemVec.Length
 				itemVec[I][0] = -1
-			End Select
+			Next
 			
 			setOverCount(SonicDef.OVER_TIME)
 		End
@@ -5815,7 +5821,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			Local drawNum:= (((SCREEN_WIDTH + space) - 1) / space) + 2
 			
-			For For Local I:= 0 Until drawNum
+			For Local I:= 0 Until drawNum
 				Local x2:= (offsetx + (I * space))
 				
 				GameState.stageInfoAniDrawer.draw(g, getCharacterID() + ANI_WIND_JUMP, x2, (offsety - 10) + 2, False, 0)
@@ -6062,8 +6068,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 								scoreNum = MyAPI.calNextPosition(Double(scoreNum), Double(totalPlusscore), 1, 5)
 							EndIf
 							
-							score1 = MyAPI.calNextPosition((double) score1, 0.0, 1, 5)
-							score2 = MyAPI.calNextPosition((double) score2, 0.0, 1, 5)
+							score1 = MyAPI.calNextPosition(Double(score1), 0.0, 1, 5)
+							score2 = MyAPI.calNextPosition(Double(score2), 0.0, 1, 5)
 							
 							drawNum(g, score1, ((SCREEN_WIDTH / 2) + NUM_DISTANCE) + stagePassResultOutOffsetX, SCREEN_HEIGHT / 2, 2, 0)
 							drawNum(g, score2, ((SCREEN_WIDTH / 2) + NUM_DISTANCE) + stagePassResultOutOffsetX, (SCREEN_HEIGHT / 2) + MENU_SPACE, 2, 0)
@@ -6602,8 +6608,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Local w:Int, h:Int
 				
 				If (preFadeAlpha <> fadeAlpha) Then
-					For (w = 0; w < FADE_FILL_WIDTH; w += 1)
-						For (h = 0; h < FADE_FILL_WIDTH; h += 1)
+					For Local w:= 0 Until FADE_FILL_WIDTH
+						For Local h:= 0 Until FADE_FILL_WIDTH
 							fadeRGB[(h * FADE_FILL_WIDTH) + w] = ((fadeAlpha Shl ANI_PULL) & -16777216) | (fadeRGB[(h * FADE_FILL_WIDTH) + w] & MapManager.END_COLOR)
 						Next
 					Next
@@ -6611,8 +6617,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					preFadeAlpha = fadeAlpha
 				EndIf
 				
-				For (w = 0; w < MyAPI.zoomOut(SCREEN_WIDTH); w += FADE_FILL_WIDTH)
-					For (h = 0; h < MyAPI.zoomOut(SCREEN_HEIGHT); h += FADE_FILL_WIDTH)
+				For Local w:= 0 Until MyAPI.zoomOut(SCREEN_WIDTH) Step FADE_FILL_WIDTH
+					For Local h:= 0 Until MyAPI.zoomOut(SCREEN_HEIGHT) Step FADE_FILL_WIDTH
 						g.drawRGB(fadeRGB, 0, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_WIDTH, True)
 					Next
 				Next

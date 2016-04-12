@@ -70,8 +70,8 @@ Class WhiteBarDrawer Implements Def
 		
 		' Methods:
 		Method initBar:Void(wordDrawer:BarWord, wordID:Int)
-			Self.whiteBarX = (SCREEN_WIDTH - 26 ' + ((WHITE_BAR_VEL_Y / 2) + WORDS_VEL_X))
-			Self.whiteBarY = ((SCREEN_HEIGHT / 2) + 48 ' - (WHITE_BAR_VEL_X / 2))
+			Self.whiteBarX = (SCREEN_WIDTH - 26) ' + ((WHITE_BAR_VEL_Y / 2) + WORDS_VEL_X))
+			Self.whiteBarY = ((SCREEN_HEIGHT / 2) + 48) ' - (WHITE_BAR_VEL_X / 2))
 			
 			Self.tipsState = TIPS_BAR_X_IN
 			Self.tipsCount = 0

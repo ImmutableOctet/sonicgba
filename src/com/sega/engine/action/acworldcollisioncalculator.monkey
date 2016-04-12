@@ -357,12 +357,13 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 			calObjPositionFromFoot()
 			
 			Local sideCollision:Bool = False
-			Local sideOffset:= 0
-			Local sideCollisionDirection = DIRECTION_RIGHT ' DIRECTION_RIGHT
-			Local sideCollisionDegree = 0
-			Local sideNewX = 0
 			
-			Loca lheadCollision:Bool = False
+			Local sideOffset:= 0
+			Local sideCollisionDirection:= DIRECTION_RIGHT ' DIRECTION_RIGHT
+			Local sideCollisionDegree:= 0
+			Local sideNewX:= 0
+			
+			Local headCollision:Bool = False
 			
 			Local bodyOffset:= 0 ' DIRECTION_UP
 			Local bodyNewY:= 0
@@ -1607,7 +1608,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 		End
 	
 		Method getBlockRightSide:Int(blockX:Int, blockY:Int)
-			Return ((blockX + 1) * Self.worldInstance.getTileWidth()) - 1)
+			Return (((blockX + 1) * Self.worldInstance.getTileWidth()) - 1)
 		End
 	
 		Method getBlockUpSide:Int(blockX:Int, blockY:Int)
@@ -1616,7 +1617,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 		End
 	
 		Method getBlockDownSide:Int(blockX:Int, blockY:Int)
-			Return ((blockY + 1) * Self.worldInstance.getTileHeight()) - 1
+			Return (((blockY + 1) * Self.worldInstance.getTileHeight()) - 1)
 		End
 	
 		Method calObjPositionFromFoot:Void()

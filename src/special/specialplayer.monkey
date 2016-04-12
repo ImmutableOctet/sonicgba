@@ -196,7 +196,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 		Field startFlag:Bool
 		Field niceTriking:Bool
 		Field isGoal:Bool
-		Field isNeedTouchPad:Bool
+		Field _isNeedTouchPad:Bool
 		Field isPause:Bool
 		
 		Field acc_value:Int
@@ -327,7 +327,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 			Self.state = STATE_INIT
 			Self.preState = Self.state
 			
-			Self.isNeedTouchPad = False
+			Self._isNeedTouchPad = False
 			Self.whiteBar = WhiteBarDrawer.getInstance()
 			
 			Local tutorAnimation:= Animation.getInstanceFromQi("/animation/special/sp_control_change_hint.dat")[0]
@@ -561,7 +561,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 					initScoreBase()
 					
 					If (Not showTutorial Or GlobalResource.spsetConfig <> 1) Then
-						Self.isNeedTouchPad = True
+						Self._isNeedTouchPad = True
 					Else
 						Self.state = STATE_TUTORIAL
 						Self.actionID = ANI_STAND
@@ -581,7 +581,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 					Self.posX = preX
 					Self.posY = preY
 					
-					Self.isNeedTouchPad = False
+					Self._isNeedTouchPad = False
 				Case STATE_SPRING
 					If (Self.count >= SSSpringCount) Then
 						Self.velX = MyAPI.calNextPosition(Double(Self.velX), 0.0, 1, 4, 3.0)
@@ -642,7 +642,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 						Self.preState = Self.state
 						Self.state = STATE_READY
 						
-						Self.isNeedTouchPad = True
+						Self._isNeedTouchPad = True
 						Self.changingState = False
 						
 						MFDevice.removeComponent(Self.tutorSkip)
@@ -1049,7 +1049,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 		End
 		
 		Method isNeedTouchPad:Bool()
-			Return Self.isNeedTouchPad
+			Return Self._isNeedTouchPad
 		End
 		
 		Method setPause:Void(statePause:Bool)

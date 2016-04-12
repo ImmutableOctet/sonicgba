@@ -53,8 +53,8 @@ Class SpecialEnding Extends PlainEnding
 		Const STATE_SHOW_EMERALD:Int = 4
 		Const STATE_INTERRUPT:Int = 5
 		
-		Global TOUCH_POINT_X:Int = ((SCREEN_WIDTH Shr 1) + 40) ' Const
-		Global TOUCH_POINT_Y:Int ((PLANE_STABLE_Y - PLAYER_OFFSET_TO_PLANE_Y) + PLANE_TOUCH_VELOCITY) ' Const
+		Global TOUCH_POINT_X:Int = ((SCREEN_WIDTH / 2) + 40) ' Shr 1 ' Const
+		Global TOUCH_POINT_Y:Int = ((PLANE_STABLE_Y - PLAYER_OFFSET_TO_PLANE_Y) + PLANE_TOUCH_VELOCITY) ' Const
 		
 		' Fields:
 		Field dusting:Bool
@@ -302,7 +302,7 @@ Class SpecialEnding Extends PlainEnding
 					
 					Self.cloudCount = MyRandom.nextInt(8, 20)
 				EndIf
-			EndIf
+			Next
 		End
 		
 		Method cloudDraw:Void(g:MFGraphics)

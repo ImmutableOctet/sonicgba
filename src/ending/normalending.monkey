@@ -802,7 +802,7 @@ Class NormalEnding Extends PlainEnding ' Final
 					drawFade(g)
 				Case STATE_INTERRUPT
 					interruptDraw(g)
-			EndIf
+			End Select
 			
 			If ((Self.state = STATE_FALLING Or Self.state = STATE_TOUCH_DOWN) And Self.backGroundY < CLOUD_APPEAR_Y) Then
 				cloudUpLogic(g)
@@ -844,7 +844,7 @@ Class NormalEnding Extends PlainEnding ' Final
 				EndIf
 				
 				cloudDrawer.draw(g, i, position[0], SCREEN_HEIGHT - position[1], False, 0)
-			EndIf
+			Next
 		End
 		
 		Method cloudRightLogic:Void(g:MFGraphics)
@@ -895,7 +895,7 @@ Class NormalEnding Extends PlainEnding ' Final
 				Self.birdInfo[i][1] = ((Self.planeY - ((HALF_BIRD_NUM - i) * BIRD_SPACE_1)) - 30) - 20
 				Self.birdInfo[i][0] = (HALF_BIRD_NUM - i) * BIRD_SPACE_1 ' ((BIRD_SPACE_1 / 2) - i)
 				Self.birdInfo[i][2] = MyRandom.nextInt(MDPhone.SCREEN_WIDTH)
-			EndIf
+			Next
 			
 			' Bottom half?
 			For Local i:= HALF_BIRD_NUM Until BIRD_NUM
@@ -933,7 +933,7 @@ Class NormalEnding Extends PlainEnding ' Final
 				Local bird:= Self.birdInfo[i]
 				
 				birdDrawer[i].draw(g, Self.birdX + bird[0], bird[1] + getOffsetY(bird[2]))
-			EndIf
+			Next
 		End
 		
 		Method degreeLogic:Void()

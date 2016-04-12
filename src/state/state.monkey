@@ -205,14 +205,14 @@ Class State Implements SonicDef, StringIndex Abstract
 		Const TOOL_TIP_FONT_WIDTH:Int = WARNING_FONT_WIDTH
 		Const TOOL_TIP_WIDTH:Int = WARNING_WIDTH
 		
-		Const WARNING_FONT_WIDTH:Int = (SCREEN_WIDTH - ((WARNING_X + 5) * 2)) ' (10 / 2)
-		Const WARNING_HEIGHT:Int = (WARNING_STR.Length * LINE_SPACE) + BAR_HEIGHT)
+		Global WARNING_FONT_WIDTH:Int = (SCREEN_WIDTH - ((WARNING_X + 5) * 2)) ' (10 / 2) ' Const
+		Global WARNING_HEIGHT:Int = ((WARNING_STR.Length * LINE_SPACE) + BAR_HEIGHT) ' Const
 		Global WARNING_STR:String[] = MyAPI.getStrings(WARNING_STR_ORIGNAL, WARNING_FONT_WIDTH) ' Const
-		Const WARNING_STR_ORIGNAL:String = "WARNING: Starting a new game will overwrite your current game progress." ' "~u8b66~u544a~uff1a~u5f00~u59cb~u65b0~u6e38~u620f~u5c06~u8986~u76d6~u60a8~u5f53~u524d~u7684~u6e38~u620f~u8fdb~u5ea6"
-		Const WARNING_WIDTH:Int = (SCREEN_WIDTH - (WARNING_X * 2))
-		Const WARNING_X:Int = PickValue(SCREEN_WIDTH > SCREEN_HEIGHT, 50, 26)
-		Const WARNING_Y_DES:Int = (SCREEN_HEIGHT - WARNING_HEIGHT)
-		Const WARNING_Y_DES_2:Int = (SCREEN_HEIGHT + FADE_FILL_WIDTH)
+		Global WARNING_STR_ORIGNAL:String = "WARNING: Starting a new game will overwrite your current game progress." ' "~u8b66~u544a~uff1a~u5f00~u59cb~u65b0~u6e38~u620f~u5c06~u8986~u76d6~u60a8~u5f53~u524d~u7684~u6e38~u620f~u8fdb~u5ea6"
+		Global WARNING_WIDTH:Int = (SCREEN_WIDTH - (WARNING_X * 2)) ' Const
+		Global WARNING_X:Int = PickValue(SCREEN_WIDTH > SCREEN_HEIGHT, 50, 26) ' Const
+		Global WARNING_Y_DES:Int = (SCREEN_HEIGHT - WARNING_HEIGHT) ' Const
+		Global WARNING_Y_DES_2:Int = (SCREEN_HEIGHT + FADE_FILL_WIDTH) ' Const
 		
 		Const BP_ITEM_BLUE_SHELTER:Byte = 1
 		Const BP_ITEM_GREEN_SHELTER:Byte = 2
@@ -733,8 +733,8 @@ Class State Implements SonicDef, StringIndex Abstract
 			' Empty implementation.
 		End
 		
-		Function drawMenuFontByString:Void(g:MFGraphics, string:String, x:Int, y:Int, anchor:Int, color1:Int, color2:Int)
-			MyAPI.drawBoldString(g, string, x, y - FONT_H_HALF, anchor, color1, color2)
+		Function drawMenuFontByString:Void(g:MFGraphics, str:String, x:Int, y:Int, anchor:Int, color1:Int, color2:Int)
+			MyAPI.drawBoldString(g, str, x, y - FONT_H_HALF, anchor, color1, color2)
 		End
 		
 		Function drawMenuFontByString:Void(g:MFGraphics, id:Int, x:Int, y:Int)
@@ -745,8 +745,8 @@ Class State Implements SonicDef, StringIndex Abstract
 			' Empty implementation.
 		End
 		
-		Function drawMenuFontByString:Void(g:MFGraphics, string:String, x:Int, y:Int, anchor:Int)
-			drawMenuFontByString(g, string, x, y, anchor, MENU_BG_COLOR_1, 0)
+		Function drawMenuFontByString:Void(g:MFGraphics, str:String, x:Int, y:Int, anchor:Int)
+			drawMenuFontByString(g, str, x, y, anchor, MENU_BG_COLOR_1, 0)
 		End
 		
 		Function getMenuFontWidth:Int(id:Int)
@@ -781,13 +781,15 @@ Class State Implements SonicDef, StringIndex Abstract
 			
 			If (h - MENU_BG_WIDTH > 0) Then
 				MyAPI.setClip(g, x, y + MENU_BG_OFFSET, w, h - MENU_BG_WIDTH)
-				For (Int i = 0; i < h - MENU_BG_WIDTH; i += MENU_BG_OFFSET)
+				
+				For Local i:= 0 Until (h - MENU_BG_WIDTH) Step MENU_BG_OFFSET
 					drawMenuFontById(g, FRAME_MIDDLE, x, (y + MENU_BG_OFFSET) + i)
 					drawMenuFontById(g, FRAME_MIDDLE, x + w, (y + MENU_BG_OFFSET) + i, 2)
 				Next
 			EndIf
 			
 			MyAPI.setClip(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+			
 			drawMenuFontById(g, FRAME_UP, x, y)
 			drawMenuFontById(g, FRAME_UP, x + w, y, 2)
 		End
@@ -1132,31 +1134,34 @@ Class State Implements SonicDef, StringIndex Abstract
 			Next
 			
 			For Local i:= 0 Until 8
-				MyAPI.drawImage(g, Self.textBGImage, ((SCREEN_WIDTH Shr 1) - 104) + (i * 26), (SCREEN_HEIGHT Shr 1) - 72, 0)
+				MyAPI.drawImage(g, Self.textBGImage, ((SCREEN_WIDTH / 2) - 104) + (i * 26), (SCREEN_HEIGHT / 2) - 72, 0) ' Shr 1
 			Next
 			
-			MyAPI.drawStrings(g, strForShow, ((SCREEN_WIDTH Shr 1) - 104) + 10, ((SCREEN_HEIGHT Shr 1) - 72) + STATE_SELECT_NORMAL_STAGE, SCREEN_WIDTH, 131, (Int) 0, True, (Int) MENU_BG_COLOR_1, 4656650, (Int) 0, (Int) STATE_EXTRA_ENDING)
+			MyAPI.drawStrings(g, strForShow, ((SCREEN_WIDTH / 2) - 104) + 10, ((SCREEN_HEIGHT / 2) - 72) + 5, SCREEN_WIDTH, 131, 0, True, MENU_BG_COLOR_1, 4656650, 0, 11) ' Shr 1
 			
-			muiLeftArrowDrawer.draw(g, 0, (SCREEN_HEIGHT Shr 1) - STATE_SCORE_RANKING)
-			muiRightArrowDrawer.draw(g, SCREEN_WIDTH, (SCREEN_HEIGHT Shr 1) - STATE_SCORE_RANKING)
+			muiLeftArrowDrawer.draw(g, 0, (SCREEN_HEIGHT / 2) - 4) ' Shr 1
+			muiRightArrowDrawer.draw(g, SCREEN_WIDTH, (SCREEN_HEIGHT / 2) - 4) ' Shr 1
 			
 			If (MyAPI.upPermit) Then
-				muiUpArrowDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 25, SCREEN_HEIGHT)
+				muiUpArrowDrawer.draw(g, (SCREEN_WIDTH / 2) - 25, SCREEN_HEIGHT) ' Shr 1
 			EndIf
 			
 			If (MyAPI.downPermit) Then
-				muiDownArrowDrawer.draw(g, (SCREEN_WIDTH Shr 1) + MENU_BG_OFFSET, SCREEN_HEIGHT)
+				muiDownArrowDrawer.draw(g, (SCREEN_WIDTH / 2) + MENU_BG_OFFSET, SCREEN_HEIGHT) ' Shr 1
 			EndIf
 			
 			muiAniDrawer.setActionId(Self.helpIndex + 95)
 			muiAniDrawer.draw(g, SCREEN_WIDTH, SCREEN_HEIGHT)
-			muiAniDrawer.setActionId((Key.touchhelpreturn.Isin() ? STATE_SELECT_NORMAL_STAGE : 0) + 61)
+			
+			muiAniDrawer.setActionId(PickValue(Key.touchhelpreturn.Isin(), 66, 61))
 			muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
 		End
 		
 		Method moregameDraw:Void(g:MFGraphics)
 			menuBgDraw(g)
+			
 			drawMenuTitle(g, STATE_SELECT_RACE_STAGE, 0)
+			
 			fillMenuRect(g, Self.MORE_GAME_START_X, Self.MORE_GAME_START_Y, Self.MORE_GAME_WIDTH, Self.MORE_GAME_HEIGHT)
 			
 			MyAPI.drawBoldString(g, "Whether to exit the game", SCREEN_WIDTH Shr 1, Self.MORE_GAME_START_Y + 10, 17, MENU_BG_COLOR_1, 0) ' "~u662f~u5426~u9000~u51fa~u6e38~u620f"
@@ -1574,7 +1579,7 @@ Class State Implements SonicDef, StringIndex Abstract
 			animationDrawer = muiAniDrawer
 			
 			If (Key.touchitemsselect2_return.Isin()) Then
-				i = STATE_SELECT_NORMAL_STAGE
+				i = 5
 			Else
 				i = 0
 			EndIf
@@ -1743,14 +1748,14 @@ Class State Implements SonicDef, StringIndex Abstract
 			
 			For Local i2:= 0 Until GlobalResource.soundConfig
 				muiAniDrawer.draw(g, ((SCREEN_WIDTH Shr 1) - PAGE_BACKGROUND_HEIGHT) + ((i2 - 1) * STATE_ENDING), (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
-			EndIf
+			Next
 			
 			muiAniDrawer.setActionId(GlobalResource.soundConfig + 73)
 			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, SCREEN_HEIGHT Shr 1)
 			animationDrawer = muiAniDrawer
 			
 			If (Key.touchsecondensurereturn.Isin()) Then
-				i = STATE_SELECT_NORMAL_STAGE
+				i = 5
 			Else
 				i = 0
 			EndIf
@@ -1849,7 +1854,9 @@ Class State Implements SonicDef, StringIndex Abstract
 			
 			Local animationDrawer:= muiAniDrawer
 			
-			Local i = Int(Key.touchitemsselect3_1.Isin() And Self.itemsselectcursor = 0)
+			Local i:Int
+			
+			i = Int(Key.touchitemsselect3_1.Isin() And Self.itemsselectcursor = 0)
 			
 			animationDrawer.setActionId(i + 55)
 			animationDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 36)
@@ -1879,7 +1886,7 @@ Class State Implements SonicDef, StringIndex Abstract
 			animationDrawer.draw(g, SCREEN_WIDTH Shr 1, ((SCREEN_HEIGHT Shr 1) - 36) + 72)
 			
 			If (Key.touchitemsselect3_return.Isin()) Then
-				i = STATE_SELECT_NORMAL_STAGE
+				i = 5
 			Else
 				i = 0
 			EndIf
