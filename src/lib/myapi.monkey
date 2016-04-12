@@ -130,12 +130,12 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 			Return ret
 		End
 		
-		Function divideText:String[](string:String)
-			If (string.Length = 0) Then
+		Function divideText:String[](str:String)
+			If (str.Length = 0) Then
 				Return []
 			EndIf
 			
-			Local lineNum:= getTextLineNum(string)
+			Local lineNum:= getTextLineNum(str)
 			
 			Local re:String[] = New String[lineNum]
 			
@@ -143,7 +143,7 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 			Local j:= 0
 			
 			While (True)
-				Local x:= string.Find("~r", j)
+				Local x:= str.Find("~r", j)
 				
 				If (x = -1) Then
 					Exit
@@ -151,7 +151,7 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 				
 				Local k2:= (k + 1)
 				
-				re[k] = string[j..x]
+				re[k] = str[j..x]
 				
 				j = (x + 2)
 				
@@ -258,9 +258,9 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 			g2.drawString(a, zoomOut(x), zoomOut(y), anchor)
 		End
 		
-		Function drawSubstring:Void(g2:MFGraphics, a:String, start:Int, end:Int, x:Int, y:Int, anchor:Int)
-			x = zoomOut(x)
-			y = zoomOut(y)
+		Function drawSubstring:Void(g2:MFGraphics, a:String, startPoint:Int, endPoint:Int, x:Int, y:Int, anchor:Int)
+			'x = zoomOut(x)
+			'y = zoomOut(y)
 		End
 		
 		Function fillArc:Void(g2:MFGraphics, x:Int, y:Int, w:Int, h:Int, start:Int, thita:Int)
@@ -353,15 +353,15 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 			
 			Local currentPosition:= 0
 			Local endOfCurrentWord:= 0
-			Local ConcealEnterPosition = 0
-			Local startOfLine = 0
+			Local ConcealEnterPosition:= 0
+			Local startOfLine:= 0
 			
 			Local isSpace:Bool = False
 			
 			While (endOfCurrentWord >= 0 And endOfCurrentWord < s.Length)
 				endOfCurrentWord += 1
 				
-				Local nextWord:= s[currentPosition, endOfCurrentWord]
+				Local nextWord:= s[currentPosition..endOfCurrentWord]
 				
 				If (nextWord.Equals("\")) Then ' "~~"
 					ConcealEnterPosition = (currentPosition - startOfLine)
@@ -389,7 +389,7 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 					Else
 						currentPosition = 0
 						
-						While (currentPosition < Symbol.Length) {
+						While (currentPosition < Symbol.Length)
 							If (nextWord[0] = Symbol[currentPosition]) Then
 								currentPosition = endOfCurrentWord
 								
@@ -419,7 +419,7 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 						strings.Push(answerWord[..ConcealEnterPosition])
 						
 						answerWord = answerWord[(Int(isSpace) + ConcealEnterPosition)..]
-						currentPosition = (ConcealEnterPosition + Int(isSpace) + startOfLine
+						currentPosition = (ConcealEnterPosition + Int(isSpace) + startOfLine)
 						
 						ConcealEnterPosition = 0
 						startOfLine2 = currentPosition
@@ -463,7 +463,7 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 				
 				Local nextWord:= s[(currentPosition)..(endOfCurrentWord)]
 				
-				If (nextWord.Equals("~")) Then
+				If (nextWord.Equals("^")) Then
 					ConcealEnterPosition = (currentPosition - startOfLine)
 					
 					isSpace = False
@@ -511,13 +511,13 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 				
 				If (currentPosition >= lineLength And endOfCurrentWord < s.Length) Then
 					If (ConcealEnterPosition = 0) Then
-						strings.Push(answerWord[..(answerWord.Length - 1))]
+						strings.Push(answerWord[..(answerWord.Length - 1)])
 						
 						answerWord = answerWord[(answerWord.Length - 1)..]
 						
 						startOfLine2 = endOfCurrentWord - 1
 					Else
-						strings.Push(answerWord[..(ConcealEnterPosition))]
+						strings.Push(answerWord[..(ConcealEnterPosition)])
 						
 						answerWord = answerWord[(Int(isSpace) + ConcealEnterPosition)..]
 						
@@ -550,12 +550,12 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 			Local endOfCurrentWord:= 0
 			Local startOfLine:= 0
 			
-			While (endOfCurrentWord >= 0 And endOfCurrentWord < s.Length) {
+			While (endOfCurrentWord >= 0 And endOfCurrentWord < s.Length)
 				endOfCurrentWord += 1
 				
 				Local nextWord:= s[(currentPosition)..(endOfCurrentWord)]
 				
-				If (nextWord.Equals("~") Or nextWord.Equals(" ")) Then
+				If (nextWord.Equals("^") Or nextWord.Equals(" ")) Then
 					'Local ConcealEnterPosition:= (currentPosition - startOfLine)
 				ElseIf (nextWord.Equals("|") Or nextWord.Equals("~n")) Then
 					startOfLine = endOfCurrentWord
@@ -582,7 +582,7 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 						Wend
 					EndIf
 				EndIf
-			EndIf
+			Wend
 			
 			Return strings.ToArray()
 		End
@@ -933,7 +933,7 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 		End
 		
 		Function drawStrings:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, fontH:Int, color1:Int, color2:Int, color3:Int)
-			drawStrings(g2, drawString, x, y, width, height, fontH, (Int) BMF_COLOR_WHITE, True, color1, color2, color3)
+			drawStrings(g2, drawString, x, y, width, height, fontH, BMF_COLOR_WHITE, True, color1, color2, color3)
 		End
 		
 		Function logicString:Void(keyDown:Bool, keyUp:Bool)
@@ -992,7 +992,7 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 				Else
 					g.drawLine((x - (arrowHeight / 2)) - 1, (y - (ARROW.Length / 2)) + i, ((x - (arrowHeight / 2)) - 1) + arrowHeight, (y - (ARROW.Length / 2)) + i)
 				EndIf
-			EndIf
+			Next
 		End
 		
 		Function drawBoldString:Void(g2:MFGraphics, a:String, x:Int, y:Int, anchor:Int, color:Int)
@@ -1313,7 +1313,7 @@ Class MyAPI Implements Def, GRAPHICS_MACROS
 				
 				out += path[..pos]
 				
-				path = path[(pos..]
+				path = path[pos..]
 			Wend
 			
 			Return out

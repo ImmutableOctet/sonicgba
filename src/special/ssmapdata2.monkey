@@ -64,7 +64,7 @@ Class SSMapData2 Implements SSDef ' Interface
 								[75, -75, 7312, SSOBJ_RING_ID],
 								[50, -50, 7376, SSOBJ_RING_ID],
 								[25, -25, 7440, SSOBJ_RING_ID],
-								[0, 0,  7504, SSOBJ_RING_ID]
+								[0, 0,  7504, SSOBJ_RING_ID],
 								[-25, 25, 7568, SSOBJ_RING_ID],
 								[-50, 50, 7632, SSOBJ_RING_ID],
 								[-75, 75, 7696, SSOBJ_RING_ID],
@@ -152,22 +152,22 @@ Class SSMapData2 Implements SSDef ' Interface
 								[71, -71, 17152, SSOBJ_BOMB_ID],
 								[-71, 71, 17152, SSOBJ_BOMB_ID],
 								[-71, -71, 17152, SSOBJ_BOMB_ID],
-								[0, 0,  17152, SSOBJ_RING_ID]
+								[0, 0,  17152, SSOBJ_RING_ID],
 								[40, 40, 17216, SSOBJ_RING_ID],
 								[-40, 40, 17216, SSOBJ_RING_ID],
 								[40, -40, 17216, SSOBJ_RING_ID],
 								[-40, -40, 17216, SSOBJ_RING_ID],
-								[0, 0,  17280, SSOBJ_RING_ID]
+								[0, 0,  17280, SSOBJ_RING_ID],
 								[0, 0, 18112, SSOBJ_BNGO_ID],
-								[0, 0,  18672, SSOBJ_RING_ID]
-								[0, 0,  18768, SSOBJ_RING_ID]
-								[0, 0,  18768, SSOBJ_RING_ID]
-								[0, 0,  18864, SSOBJ_RING_ID]
+								[0, 0,  18672, SSOBJ_RING_ID],
+								[0, 0,  18768, SSOBJ_RING_ID],
+								[0, 0,  18768, SSOBJ_RING_ID],
+								[0, 0,  18864, SSOBJ_RING_ID],
 								[-100, 100, 19424, SSOBJ_RING_ID],
 								[-110, 90, 19520, SSOBJ_RING_ID],
 								[-90, 110, 19520, SSOBJ_RING_ID],
 								[-100, 100, 19616, SSOBJ_RING_ID],
-								[0, 0, 20480, 1SSOBJ_RING_ID],
+								[0, 0, 20480, SSOBJ_CHECKPT],
 								[100, -100, 21504, SSOBJ_RING_ID],
 								[80, -120, 21600, SSOBJ_RING_ID],
 								[120, -80, 21600, SSOBJ_RING_ID],
@@ -286,12 +286,12 @@ Class SSMapData2 Implements SSDef ' Interface
 								[0, 40, 31616, SSOBJ_BOMB_ID],
 								[-40, 0, 31616, SSOBJ_BOMB_ID],
 								[0, -40, 31616, SSOBJ_BOMB_ID],
-								[0, 0,  31872, SSOBJ_RING_ID]
+								[0, 0,  31872, SSOBJ_RING_ID],
 								[40, 40, 31936, SSOBJ_RING_ID],
 								[-40, 40, 31936, SSOBJ_RING_ID],
 								[40, -40, 31936, SSOBJ_RING_ID],
 								[-40, -40, 31936, SSOBJ_RING_ID],
-								[0, 0,  32000, SSOBJ_RING_ID]
+								[0, 0,  32000, SSOBJ_RING_ID],
 								[0, 0, 32768, SSOBJ_TRIC_ID],
 								[0, -120, 34304, SSOBJ_BNRU_ID],
 								[20, -100, 34432, SSOBJ_RING_ID],
@@ -317,7 +317,7 @@ Class SSMapData2 Implements SSDef ' Interface
 								[-100, 20, 36480, SSOBJ_RING_ID],
 								[-60, -20, 36480, SSOBJ_BOMB_ID],
 								[-120, 0, 36608, SSOBJ_BNRD_ID],
-								[0, 0, 37376, 1SSOBJ_TRIC_ID]]
+								[0, 0, 37376, SSOBJ_GOAL]]
 	
 	Global STAGE_6:Int[][] = [
 								[0, -120, 1216, SSOBJ_RING_ID],
@@ -445,7 +445,7 @@ Class SSMapData2 Implements SSDef ' Interface
 								[-60, -40, 15744, SSOBJ_RING_ID],
 								[-40, -60, 15744, SSOBJ_RING_ID],
 								[0, 0, 16896, SSOBJ_TRIC_ID],
-								[0, 0, 17920, 1SSOBJ_RING_ID],
+								[0, 0, 17920, SSOBJ_CHECKPT],
 								[-80, -120, 19040, SSOBJ_RING_ID],
 								[-120, -80, 19040, SSOBJ_RING_ID],
 								[-80, -120, 19136, SSOBJ_RING_ID],
@@ -592,7 +592,7 @@ Class SSMapData2 Implements SSDef ' Interface
 								[120, -120, 36480, SSOBJ_RING_ID],
 								[120, -120, 36608, SSOBJ_BNLU_ID],
 								[0, 0, 37632, SSOBJ_BNGO_ID],
-								[0, 0, 38912, 1SSOBJ_TRIC_ID]]
+								[0, 0, 38912, SSOBJ_GOAL]]
 	
 	Global STAGE_7:Int[][] = [
 								[-100, 40, 1216, SSOBJ_RING_ID],
@@ -670,7 +670,7 @@ Class SSMapData2 Implements SSDef ' Interface
 								[80, 80, 10336, SSOBJ_RING_ID],
 								[55, 55, 10400, SSOBJ_RING_ID],
 								[27, 27, 10464, SSOBJ_RING_ID],
-								[0, 0,  10528, SSOBJ_RING_ID]
+								[0, 0,  10528, SSOBJ_RING_ID],
 								[-27, -27, 10592, SSOBJ_RING_ID],
 								[-55, -55, 10656, SSOBJ_RING_ID],
 								[-80, -80, 10720, SSOBJ_RING_ID],
@@ -744,7 +744,7 @@ Class SSMapData2 Implements SSDef ' Interface
 								[120, -80, 18400, SSOBJ_RING_ID],
 								[80, -120, 18432, SSOBJ_BOMB_ID],
 								[120, -80, 18464, SSOBJ_RING_ID],
-								[0, 0, 20480, 1SSOBJ_RING_ID],
+								[0, 0, 20480, SSOBJ_CHECKPT],
 								[-90, 90, 21760, SSOBJ_BOMB_ID],
 								[-90, 90, 22080, SSOBJ_RING_ID],
 								[-100, 80, 22144, SSOBJ_RING_ID],
@@ -813,7 +813,7 @@ Class SSMapData2 Implements SSDef ' Interface
 								[-80, 80, 28640, SSOBJ_RING_ID],
 								[-55, 55, 28704, SSOBJ_RING_ID],
 								[-27, 27, 28768, SSOBJ_RING_ID],
-								[0, 0,  28832, SSOBJ_RING_ID]
+								[0, 0,  28832, SSOBJ_RING_ID],
 								[27, -27, 28896, SSOBJ_RING_ID],
 								[55, -55, 28960, SSOBJ_RING_ID],
 								[80, -80, 29024, SSOBJ_RING_ID],
@@ -917,5 +917,5 @@ Class SSMapData2 Implements SSDef ' Interface
 								[95, 65, 39072, SSOBJ_BOMB_ID],
 								[120, 50, 39040, SSOBJ_RING_ID],
 								[120, 30, 39040, SSOBJ_RING_ID],
-								[0, 0, 40192, 1SSOBJ_TRIC_ID]]
+								[0, 0, 40192, SSOBJ_GOAL]]
 End

@@ -23,7 +23,7 @@ Class ACWorld Implements ACParam Abstract
 		Field nextBlock:ACBlock
 	Public
 		' Methods (Abstract):
-		Method getCollisionBlock:Void(ACBlock aCBlock, Int i, Int i2, Int i3) Abstract
+		Method getCollisionBlock:Void(aCBlock:ACBlock, i:Int, i2:Int, i3:Int) Abstract
 		Method getDegreeGetterForObject:ACDegreeGetter() Abstract
 		Method getNewCollisionBlock:ACBlock() Abstract
 		Method getTileWidth:Int() Abstract

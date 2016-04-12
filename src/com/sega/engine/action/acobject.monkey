@@ -97,6 +97,6 @@ Class ACObject Implements ACParam Abstract
 				For Local j:= 0 Until objCollisionVec.Length
 					element.doCheckCollisionWithCollision(objCollisionVec.Get(j), moveDistanceX, moveDistanceY)
 				Next
-			EndIf
+			Next
 		End
 End

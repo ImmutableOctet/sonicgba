@@ -59,7 +59,7 @@ Class Standard ' Final
 		Global loadCount:Int = 0
 		Global nowTime:Long = 0
 		Global openMoreGame:Bool = False
-		Global pause:Bool = False
+		Global isPaused:Bool = False
 		Global playSound:Bool = False
 		Global rollCmccDesPos:Int = 0
 		Global rollEffectCount:Int[] = New Int[3]
@@ -125,11 +125,11 @@ Class Standard ' Final
 		End
 		
 		Function pause:Void()
-			pause = True
+			isPaused = True
 		End
 		
 		Function resume:Void()
-			pause = False
+			isPaused = False
 			
 			nowTime = Millisecs()
 			lastTime = nowTime
@@ -209,7 +209,7 @@ Class Standard ' Final
 					content = content[1..]
 				Else
 					showStr = content[..i]
-					content = content.[(i + 1)..]
+					content = content[(i + 1)..]
 				EndIf
 				
 				g.drawString(showStr, x, (charH * ry) + y, SOFT_KEY_HEIGHT)

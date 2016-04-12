@@ -277,8 +277,8 @@ Class CrlFP32 ' Final
 			
 			While (re < 0)
 				re += 360
-			EndIf
+			Wend
 			
-			Return re Mod 360
+			Return (re Mod 360)
 		End
 End

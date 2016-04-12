@@ -23,7 +23,7 @@ Class NumberDrawer Implements SonicDef
 		Const ANCHOR_TOP:Int = 8
 		Const ANCHOR_VCENTER:Int = 32
 		
-		Global NUM_DRAW_SPACE:Int[ANCHOR_RIGHT|ANCHOR_HCENTER, ANCHOR_RIGHT|ANCHOR_HCENTER, ANCHOR_RIGHT|ANCHOR_HCENTER, ANCHOR_TOP|ANCHOR_RIGHT] = ' [6, 6, 6, 12] ' Const
+		Global NUM_DRAW_SPACE:Int[] = [ANCHOR_RIGHT|ANCHOR_HCENTER, ANCHOR_RIGHT|ANCHOR_HCENTER, ANCHOR_RIGHT|ANCHOR_HCENTER, ANCHOR_TOP|ANCHOR_RIGHT] ' = [6, 6, 6, 12] ' Const
 		Global NUM_HEIGHT:Int[] = [ANCHOR_TOP|ANCHOR_RIGHT, ANCHOR_TOP|ANCHOR_RIGHT, ANCHOR_TOP|ANCHOR_RIGHT, ANCHOR_BOTTOM] ' [12, 12, 12, 16] ' Const
 		Global NUM_SPACE:Int[] = [ANCHOR_TOP, ANCHOR_TOP, ANCHOR_TOP, ANCHOR_BOTTOM] ' [8, 8, 8, 16] ' Const
 		
@@ -74,7 +74,7 @@ Class NumberDrawer Implements SonicDef
 				numberDrawer.draw(g, offsetX + x, y + offsetY)
 				
 				x += NUM_SPACE[numType]
-			EndIf
+			Next
 			
 			Return x
 		End

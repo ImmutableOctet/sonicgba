@@ -93,7 +93,7 @@ Class SSMapData Extends SSMapData2 ' Interface
 								[80, 20, 14208, SSOBJ_RING_ID],
 								[80, 0, 14208, SSOBJ_RING_ID],
 								[0, 0, 15616, SSOBJ_TRIC_ID],
-								[0, 0, 16896, 1SSOBJ_RING_ID],
+								[0, 0, 16896, SSOBJ_CHECKPT],
 								[50, -50, 18432, SSOBJ_RING_ID],
 								[30, -50, 18432, SSOBJ_RING_ID],
 								[40, -60, 18496, SSOBJ_RING_ID],
@@ -190,7 +190,7 @@ Class SSMapData Extends SSMapData2 ' Interface
 								[10, -10, 32960, SSOBJ_RING_ID],
 								[-10, -10, 32960, SSOBJ_RING_ID],
 								[0, 0, 32960, SSOBJ_BNGO_ID],
-								[0, 0, 33792, 1SSOBJ_TRIC_ID]]
+								[0, 0, 33792, SSOBJ_GOAL]]
 
 	Global STAGE_2:Int[][] = [
 								[10, 120, 2144, SSOBJ_RING_ID],
@@ -301,7 +301,7 @@ Class SSMapData Extends SSMapData2 ' Interface
 								[0, 0, 15616, SSOBJ_RING_ID],
 								[0, 0, 15648, SSOBJ_RING_ID],
 								[0, 0, 15680, SSOBJ_RING_ID],
-								[0, 0, 16896, 1SSOBJ_RING_ID],
+								[0, 0, 16896, SSOBJ_CHECKPT],
 								[-50, -50, 17920, SSOBJ_RING_ID],
 								[-30, -50, 17920, SSOBJ_RING_ID],
 								[-40, -60, 17984, SSOBJ_RING_ID],
@@ -436,7 +436,7 @@ Class SSMapData Extends SSMapData2 ' Interface
 								[-10, -10, 32896, SSOBJ_RING_ID],
 								[-10, 10, 32896, SSOBJ_RING_ID],
 								[0, 0, 33216, SSOBJ_BNGO_ID],
-								[0, 0, 33792, 1SSOBJ_TRIC_ID]]
+								[0, 0, 33792, SSOBJ_GOAL]]
 	
 	
 	Global STAGE_3:Int[][] = [
@@ -571,7 +571,7 @@ Class SSMapData Extends SSMapData2 ' Interface
 								[-20, -20, 17280, SSOBJ_RING_ID],
 								[-10, -10, 17344, SSOBJ_RING_ID],
 								[0, 0, 17408, SSOBJ_BNGO_ID],
-								[0, 0, 19200, 1SSOBJ_RING_ID],
+								[0, 0, 19200, SSOBJ_CHECKPT],
 								[70, -70, 20992, SSOBJ_RING_ID],
 								[50, -70, 20992, SSOBJ_RING_ID],
 								[60, -80, 21056, SSOBJ_RING_ID],
@@ -692,7 +692,7 @@ Class SSMapData Extends SSMapData2 ' Interface
 								[120, -120, 34304, SSOBJ_BNLU_ID],
 								[60, -60, 34688, SSOBJ_CHAO_ID],
 								[0, 0, 35328, SSOBJ_BNGO_ID],
-								[0, 0, 36352, 1SSOBJ_TRIC_ID]]
+								[0, 0, 36352, SSOBJ_GOAL]]
 	
 	Global STAGE_4:Int[][] = [
 								[0, -120, 1216, SSOBJ_RING_ID],
@@ -786,7 +786,7 @@ Class SSMapData Extends SSMapData2 ' Interface
 								[0, -90, 11648, SSOBJ_RING_ID],
 								[0, -60, 11712, SSOBJ_RING_ID],
 								[0, -30, 11776, SSOBJ_RING_ID],
-								[0, 0,  11840, SSOBJ_RING_ID]
+								[0, 0,  11840, SSOBJ_RING_ID],
 								[0, 30, 11904, SSOBJ_RING_ID],
 								[0, 60, 11968, SSOBJ_RING_ID],
 								[0, 90, 12032, SSOBJ_RING_ID],
@@ -796,14 +796,14 @@ Class SSMapData Extends SSMapData2 ' Interface
 								[-20, 20, 13632, SSOBJ_BOMB_ID],
 								[20, -20, 13632, SSOBJ_BOMB_ID],
 								[-20, -20, 13632, SSOBJ_BOMB_ID],
-								[0, 0,  13664, SSOBJ_RING_ID]
-								[0, 0,  13696, SSOBJ_RING_ID]
-								[0, 0,  13728, SSOBJ_RING_ID]
-								[0, 0,  13760, SSOBJ_RING_ID]
-								[0, 0,  13792, SSOBJ_RING_ID]
-								[0, 0,  13824, SSOBJ_RING_ID]
-								[0, 0,  13856, SSOBJ_RING_ID]
-								[0, 0,  13888, SSOBJ_RING_ID]
+								[0, 0,  13664, SSOBJ_RING_ID],
+								[0, 0,  13696, SSOBJ_RING_ID],
+								[0, 0,  13728, SSOBJ_RING_ID],
+								[0, 0,  13760, SSOBJ_RING_ID],
+								[0, 0,  13792, SSOBJ_RING_ID],
+								[0, 0,  13824, SSOBJ_RING_ID],
+								[0, 0,  13856, SSOBJ_RING_ID],
+								[0, 0,  13888, SSOBJ_RING_ID],
 								[-95, 75, 14976, SSOBJ_RING_ID],
 								[-95, 55, 14976, SSOBJ_RING_ID],
 								[-65, 95, 15104, SSOBJ_RING_ID],
@@ -816,7 +816,7 @@ Class SSMapData Extends SSMapData2 ' Interface
 								[95, 55, 15744, SSOBJ_RING_ID],
 								[120, 50, 15872, SSOBJ_RING_ID],
 								[120, 30, 15872, SSOBJ_RING_ID],
-								[0, 0, 16896, 1SSOBJ_RING_ID],
+								[0, 0, 16896, SSOBJ_CHECKPT],
 								[140, -20, 17920, SSOBJ_RING_ID],
 								[160, -10, 17984, SSOBJ_RING_ID],
 								[140, -20, 18048, SSOBJ_RING_ID],
@@ -885,7 +885,7 @@ Class SSMapData Extends SSMapData2 ' Interface
 								[0, 90, 24448, SSOBJ_RING_ID],
 								[0, 60, 24512, SSOBJ_RING_ID],
 								[0, 30, 24576, SSOBJ_RING_ID],
-								[0, 0,  24640, SSOBJ_RING_ID]
+								[0, 0,  24640, SSOBJ_RING_ID],
 								[0, -30, 24704, SSOBJ_RING_ID],
 								[0, -60, 24768, SSOBJ_RING_ID],
 								[0, -90, 24832, SSOBJ_RING_ID],
@@ -957,7 +957,7 @@ Class SSMapData Extends SSMapData2 ' Interface
 								[60, 0, 34144, SSOBJ_BOMB_ID],
 								[30, 0, 34144, SSOBJ_BOMB_ID],
 								[0, 0, 34144, SSOBJ_BOMB_ID],
-								[0, 0, 35072, 1SSOBJ_TRIC_ID]]
+								[0, 0, 35072, SSOBJ_GOAL]]
 	
 	Global STAGE_LIST:Int[][][] = [STAGE_1, STAGE_2, STAGE_3, STAGE_4, STAGE_5, STAGE_6, STAGE_SSOBJ_BNRD_ID] ' Const
 End
