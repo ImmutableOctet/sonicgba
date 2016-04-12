@@ -39,6 +39,8 @@ Private
 	Import state.stringindex
 	Import state.titlestate
 	
+	Import sonicgba.playerobject
+	
 	Import com.sega.engine.action.accollision
 	Import com.sega.engine.action.acobject
 	Import com.sega.engine.action.acworldcollisioncalculator
@@ -73,7 +75,7 @@ Class GimmickObject Extends GameObject
 	Public
 		' Constant variable(s):
 		
-		' I'm guessing this is the number of gimmicks.
+		' I'm guessing this is the number of gimmick classes...?
 		Const GIMMICK_NUM:Int = 110
 		
 		Const PLATFORM_OFFSET_Y:Int = -256
@@ -243,135 +245,136 @@ Class GimmickObject Extends GameObject
 					reElement = New Marker(id, x, y, left, top, width, height)
 				Case GIMMICK_SPRING_UP, GIMMICK_SPRING_DOWN, GIMMICK_SPRING_LEFT, GIMMICK_SPRING_RIGHT, GIMMICK_SPRING_LEFT_UP, GIMMICK_SPRING_RIGHT_UP, GIMMICK_SPRING_LEFT_UP_BURY, GIMMICK_SPRING_RIGHT_UP_BURY
 					reElement = New Spring(id, x, y, left, top, width, height)
-				Case 16
+				Case GIMMICK_STONE
 					reElement = New Stone(id, x, y, left, top, width, height)
-				Case 19
+				Case GIMMICK_SLIP_START
 					reElement = New SlipStart(id, x, y, left, top, width, height)
-				Case 21
+				Case GIMMICK_FLOATING_ISLAND
 					reElement = New Platform(id, x, y, left, top, width, height)
-				Case 22
+				Case GIMMICK_FALLING_ISLAND
 					reElement = New FallingPlatform(id, x, y, left, top, width, height)
-				Case 23
+				Case GIMMICK_CAPER_BED
 					reElement = New CaperBed(id, x, y, left, top, width, height)
-				Case 24
+				Case GIMMICK_BREAK_ISLAND
 					reElement = New BreakPlatform(id, x, y, left, top, width, height)
-				Case 25
+				Case GIMMICK_CAPER_BLOCK
 					reElement = New CaperBlock(id, x, y, left, top, width, height)
-				Case 31, 32, 33, 100
+				Case GIMMICK_ACCELERATOR_FORWARD, GIMMICK_ACCELERATOR_FORWARD_UP, GIMMICK_ACCELERATOR_FORWARD_DOWN, GIMMICK_DASH_PANEL_HIGH
 					reElement = New Accelerate(id, x, y, left, top, width, height)
-				Case 42, 44, 45
+				Case GIMMICK_POAL, GIMMICK_POAL_LEFT, GIMMICK_POAL_RIGHT
 					reElement = New Poal(id, x, y, left, top, width, height)
-				Case 69
+				Case GIMMICK_BELT
 					reElement = New Belt(id, x, y, left, top, width, height)
-				Case 71
+				Case GIMMICK_BANPER
 					reElement = New Banper(id, x, y, left, top, width, height)
-				Case 75
+				Case GIMMICK_KASSHA
 					reElement = New RopeStart(id, x, y, left, top, width, height)
-				Case 76
+				Case GIMMICK_FURIKO
 					reElement = New Furiko(id, x, y, left, top, width, height)
 					furikoEnable = True
-				Case 77
+				Case GIMMICK_SHATTER
 					reElement = New Shatter(id, x, y, left, top, width, height)
-				Case 78
+				Case GIMMICK_NEJI
 					reElement = New Neji(id, x, y, left, top, width, height)
-				Case 80
+				Case GIMMICK_ARM
 					reElement = New Arm(id, x, y, left, top, width, height)
-				Case 102
+				Case GIMMICK_SP_BANE
 					If (stageModeState = STATE_RACE_MODE) Then
 						reElement = Null
 					Else
 						reElement = New SpSpring(id, x, y, left, top, width, height)
 					EndIf
-				Case 105
+				Case GIMMICK_DAMAGE
 					reElement = New DamageArea(id, x, y, left, top, width, height)
+					
 					damageEnable = True
-				Case 106
+				Case GIMMICK_PIPE
 					reElement = New PipeSet(id, x, y, left, top, width, height)
-				Case 110
+				Case GIMMICK_PIPE_IN
 					reElement = New PipeIn(id, x, y, left, top, width, height)
-				Case 111
+				Case GIMMICK_PIPE_OUT
 					reElement = New PipeOut(id, x, y, left, top, width, height)
-				Case 116
+				Case GIMMICK_GRAPHIC_PATCH
 					reElement = New GraphicPatch(id, x, y, left, top, width, height)
-				Case 117
+				Case GIMMICK_ROPE_END
 					reElement = New RopeEnd(id, x, y, left, top, width, height)
-				Case 118
+				Case GIMMICK_ROPE_TURN
 					reElement = New RopeTurn(id, x, y, left, top, width, height)
-				Case 120
+				Case GIMMICK_TUTORIAL
 					reElement = New TutorialPoint(id, x, y, left, top, width, height)
-				Case 124
+				Case GIMMICK_CHANGE_RECT_REGION
 					reElement = New ChangeRectRegion(id, x, y, left, top, width, height)
 				Default
 					Select (id)
-						Case 27
+						Case GIMMICK_WATER_FALL
 							reElement = New WaterFall(id, x, y, left, top, width, height)
 							
 							waterFallEnable = True
-						Case 28, 29
+						Case GIMMICK_WALL_WALKER_ENTRANCE_LEFT, GIMMICK_WALL_WALKER_ENTRANCE_RIGHT
 							reElement = New Bank(id, x, y, left, top, width, height)
-						Case 40
+						Case GIMMICK_WATER_PILLAR
 							reElement = New Fountain(id, x, y, left, top, width, height)
-						Case 43
+						Case GIMMICK_WATER_PILLAR_2
 							reElement = New FallFlush(id, x, y, left, top, width, height)
-						Case 46
+						Case GIMMICK_WATER_SLIP
 							reElement = New WaterSlip(id, x, y, left, top, width, height)
 							
 							waterSlipEnable = True
-						Case 48
+						Case GIMMICK_HEX_HOBIN
 							reElement = New HexHobin(id, x, y, left, top, width, height)
-						Case 49
+						Case GIMMICK_BALL_HOBIN
 							reElement = New BallHobin(id, x, y, left, top, width, height)
-						Case 50
+						Case GIMMICK_ROLL_HOBIN
 							reElement = New RollHobin(id, x, y, left, top, width, height)
 							
 							rollHobinEnable = True
-						Case 51
+						Case GIMMICK_BAR_H
 							reElement = New BarHorbinH(id, x, y, left, top, width, height)
-						Case 52
+						Case GIMMICK_BAR_V
 							reElement = New BarHorbinV(id, x, y, left, top, width, height)
-						Case 53
+						Case GIMMICK_CORNER_BAR
 							reElement = New CornerHobin(id, x, y, left, top, width, height)
-						Case 54
+						Case GIMMICK_FLIPPER
 							reElement = New FlipH(id, x, y, left, top, width, height)
-						Case 56
+						Case GIMMICK_FLIPPER_V
 							reElement = New FlipV(id, x, y, left, top, width, height)
-						Case 57
+						Case GIMMICK_SPRING_ISLAND
 							reElement = New SpringPlatform(id, x, y, left, top, width, height)
-						Case 58
+						Case GIMMICK_VIEW_LIGHTS
 							reElement = New LightFont(id, x, y, left, top, width, height)
-						Case 59
+						Case GIMMICK_BALLOON
 							reElement = New Balloon(id, x, y, left, top, width, height)
-						Case 60
+						Case GIMMICK_SHIP
 							reElement = New ShipSystem(id, x, y, left, top, width, height)
-						Case 62
+						Case GIMMICK_TEA_CUP
 							reElement = New TeaCup(id, x, y, left, top, width, height)
-						Case 63, 64
+						Case GIMMICK_DOOR_V, GIMMICK_DOOR_H
 							reElement = New Door(id, x, y, left, top, width, height)
-						Case 67
+						Case GIMMICK_RAIL_IN
 							reElement = New RailIn(id, x, y, left, top, width, height)
-						Case 68
+						Case GIMMICK_RAIL_OUT
 							reElement = New RailOut(id, x, y, left, top, width, height)
-						Case 72
+						Case GIMMICK_WARP
 							reElement = New TransPoint(id, x, y, left, top, width, height)
-						Case 73
+						Case GIMMICK_RAIL_FLIPPER
 							reElement = New RailFlipper(id, x, y, left, top, width, height)
-						Case 74
+						Case GIMMICK_FREE_FALL
 							reElement = New FreeFallSystem(id, x, y, left, top, width, height)
-						Case 79
+						Case GIMMICK_STEAM
 							reElement = New SteamBase(id, x, y, left, top, width, height)
 							
 							steamEnable = True
-						Case 82
+						Case GIMMICK_IRON_BALL
 							reElement = New IronBall(id, x, y, left, top, width, height)
 							
 							ironBallEnable = True
-						Case 83
+						Case GIMMICK_IRON_BAR
 							reElement = New IronBar(id, x, y, left, top, width, height)
-						Case 87
+						Case GIMMICK_TAIMATU
 							reElement = New TorchFire(id, x, y, left, top, width, height)
 							
 							torchFireEnable = True
-						Case 91
+						Case GIMMICK_ROLL_SHIMA
 							If (top = 5) Then
 								reElement = New RollPlatformSpeedA(id, x, y, left, top, width, height)
 							ElseIf (top = 2) Then
@@ -381,60 +384,60 @@ Class GimmickObject Extends GameObject
 							EndIf
 							
 							rollPlatformEnable = True
-						Case 107
+						Case GIMMICK_SPLIT
 							reElement = New Split(id, x, y, left, top, width, height)
-						Case 114
+						Case GIMMICK_WALL
 							reElement = New BreakWall(id, x, y, left, top, width, height)
 					End Select
 					
 					Select (id)
-						Case 30
+						Case GIMMICK_LEAF
 							reElement = New Leaf(id, x, y, left, top, width, height)
-						Case 47
+						Case GIMMICK_DASH_PANEL_TATE
 							reElement = New Accelerate(id, x, y, left, top, width, height)
-						Case 55
+						Case GIMMICK_BIG_FLOATING_ISLAND
 							reElement = New DekaPlatform(id, x, y, left, top, width, height)
-						Case 61
+						Case GIMMICK_HARI_ISLAND
 							reElement = New HariIsland(id, x, y, left, top, width, height)
-						Case 81
+						Case GIMMICK_BANE_ISLAND
 							reElement = New SpringIsland(id, x, y, left, top, width, height)
-						Case 84
+						Case GIMMICK_SUBEYUKA
 							reElement = New Subeyuka(id, x, y, left, top, width, height)
-						Case 85
+						Case GIMMICK_DOWN_SHIMA
 							reElement = New DownIsland(id, x, y, left, top, width, height)
-						Case 86
+						Case GIMMICK_ROLL_ASHIBA
 							reElement = New RollIsland(id, x, y, left, top, width, height)
-						Case 88
+						Case GIMMICK_UP_ARM
 							reElement = New UpArm(id, x, y, left, top, width, height)
-						Case 89
+						Case GIMMICK_UP_SHIMA
 							reElement = New UpPlatform(id, x, y, left, top, width, height)
-						Case 92
+						Case GIMMICK_STONE_BALL
 							reElement = New StoneBall(id, x, y, left, top, width, height)
-						Case 93
+						Case GIMMICK_TOGE_SHIMA
 							reElement = New TogeShima(id, x, y, left, top, width, height)
-						Case StringIndex.FONT_PAUSE
+						Case GIMMICK_BUBBLE
 							reElement = New Bubble(id, x, y, left, top, width, height)
-						Case 95
+						Case GIMMICK_ICE
 							reElement = New Ice(id, x, y, left, top, width, height)
-						Case 97
+						Case GIMMICK_WIND_PARTS
 							reElement = New WindParts(id, x, y, left, top, width, height)
-						Case 98
-							If (left = GIMMICK_AROUND_EXIT Or left = 9 Or left = -21) Then
+						Case GIMMICK_FIRE_MT
+							If (left = 35 Or left = 9 Or left = -21) Then
 								reElement = New SeabedVolcanoAsynBase(id, x, y, left, top, width, height)
 							Else
 								reElement = New SeabedVolcanoBase(id, x, y, left, top, width, height)
 							EndIf
 							
 							seabedvolcanoEnable = True
-						Case 99
+						Case GIMMICK_BLOCK
 							reElement = New Block(id, x, y, left, top, width, height)
-						Case 103
+						Case GIMMICK_FAN
 							reElement = New Fan(id, x, y, left, top, width, height)
-						Case 104
+						Case GIMMICK_F_SHIMA_FALL
 							reElement = New FinalShima(id, x, y, left, top, width, height)
-						Case 108
+						Case GIMMICK_UG_BANE
 							reElement = New UnseenSpring(id, x, y, left, top, width, height)
-						Case 109
+						Case GIMMICK_GRAVITY
 							reElement = New AntiGravity(id, x, y, left, top, width, height)
 						Case GIMMICK_AIR_ROOT
 							reElement = New AirRoot(id, x, y, left, top, width, height)
@@ -597,14 +600,18 @@ Class GimmickObject Extends GameObject
 		' Constructor(s):
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
 			Self.objId = id
+			
 			Self.posX = x
 			Self.posY = y
+			
 			Self.iLeft = left
 			Self.iTop = top
 			Self.iWidth = width
 			Self.iHeight = height
-			Self.mWidth = width * BarHorbinV.COLLISION_OFFSET
-			Self.mHeight = height * BarHorbinV.COLLISION_OFFSET
+			
+			Self.mWidth = (width * 512)
+			Self.mHeight = (height * 512)
+			
 			Self.collisionRect.setRect(Self.posX, Self.posY, Self.mWidth, Self.mHeight)
 		End
 	Public
@@ -617,18 +624,20 @@ Class GimmickObject Extends GameObject
 			' This behavior may change in the future.
 			If (p = player) Then
 				Select (Self.objId)
-					Case 17
+					Case GIMMICK_CHANGE_LAYER_A
 						If (Not Self.collisionRect.collisionChk(p.getCheckPositionX(), p.getCheckPositionY())) Then
 							Self.used = False
 						ElseIf (Not Self.used) Then
+							' Magic number: 0
 							p.setCollisionLayer(0)
 							
 							Self.used = True
 						EndIf
-					Case 18
+					Case GIMMICK_CHANGE_LAYER_B
 						If (Not Self.collisionRect.collisionChk(p.getCheckPositionX(), p.getCheckPositionY())) Then
 							Self.used = False
 						ElseIf (Not Self.used) Then
+							' Magic number: 1
 							p.setCollisionLayer(1)
 							
 							Self.used = True
@@ -639,11 +648,11 @@ Class GimmickObject Extends GameObject
 						If (charID = CHARACTER_SONIC Or charID = CHARACTER_AMY) Then
 							p.slipEnd()
 						EndIf
-					Case 26
+					Case GIMMICK_INVISIBLE_CAPER
 						If (Not Self.used And p.beUnseenPop()) Then
 							Self.used = True
 						EndIf
-					Case 34
+					Case GIMMICK_AROUND_ENTRANCE
 						If (Not Self.collisionRect.collisionChk(p.getCheckPositionX(), p.getCheckPositionY())) Then
 							Self.used = False
 						ElseIf (Not Self.used) Then
@@ -655,41 +664,35 @@ Class GimmickObject Extends GameObject
 								soundInstance.playSe(4)
 							EndIf
 						EndIf
-					Case 35
+					Case GIMMICK_AROUND_EXIT
 						If (Not Self.collisionRect.collisionChk(p.getCheckPositionX(), p.getCheckPositionY())) Then
 							Self.used = False
 						ElseIf (Not Self.used) Then
 							p.velX = 0
 							p.ductOut()
 							Self.used = True
-						End
-					Case 36
+						EndIf
+					Case GIMMICK_ADD_DOUBLE_MAX_SPEED
 						If (p.isOnGound() And Self.collisionRect.collisionChk(p.getCheckPositionX(), p.getCheckPositionY())) Then
 							p.setVelX(PlayerObject.HUGE_POWER_SPEED)
-						End
-					Case 37
+						EndIf
+					Case GIMMICK_MINUS_DOUBLE_MAX_SPEED
 						If (p.isOnGound()) Then
-							p.setVelX(-1900)
-						End
-					Case 38, 65
+							p.setVelX(-PlayerObject.HUGE_POWER_SPEED)
+						EndIf
+					Case GIMMICK_DEGREE_CHANGE_180, GIMMICK_MOVE
 						If (Not Self.used And p.setRailLine(New Line(Self.posX, Self.posY, Self.posX + Self.iLeft, Self.posY + Self.iTop), Self.posX, Self.posY, Self.iLeft, Self.iTop, Self.iWidth, Self.iHeight, Self)) Then
 							Self.used = True
 							soundInstance.playSe(SoundSystem.SE_148)
 						EndIf
-					Case 66
+					Case GIMMICK_FALL
 						If (Self.firstTouch And StageManager.getCurrentZoneId() <> 3) Then
 							p.setFall(Self.posX - RollPlatformSpeedC.COLLISION_OFFSET_Y, Self.posY, Self.iLeft, Self.iTop)
 							p.stopMove()
 						EndIf
 					Case GIMMICK_SEE
 						If (Not Self.used And Self.collisionRect.collisionChk(p.getCheckPositionX(), p.getCheckPositionY())) Then
-							Local z:Bool
-							
-							If (Self.iLeft = 0) Then
-								z = True
-							Else
-								z = False
-							End
+							Local z:Bool = (Self.iLeft = 0)
 							
 							p.changeVisible(z)
 							
@@ -737,11 +740,11 @@ Class GimmickObject Extends GameObject
 								p.isInGravityCircle = False
 							EndIf
 						End
-					Case 96
+					Case GIMMICK_SPIN
 						If (Not Self.used) Then
 							p.setAnimationId(4)
 							
-							SoundSystem.getInstance().playSe(SoundSystem.SE_148)
+							soundInstance.playSe(SoundSystem.SE_148)
 							
 							Self.used = True
 						End
@@ -753,16 +756,17 @@ Class GimmickObject Extends GameObject
 	
 		Method refreshCollisionRect:Void(x:Int, y:Int)
 			Select (Self.objId)
-				Case 20
+				Case GIMMICK_SLIP_END
 					Self.collisionRect.setRect(((Self.mWidth Shr 1) + x) - MDPhone.SCREEN_HEIGHT, y, 1280, Self.mHeight)
-				Case 66
+				Case GIMMICK_FALL
 					Self.collisionRect.setRect(x - SpecialMap.MAP_LENGTH, y, PlayerObject.HEIGHT, 64)
 				Case GIMMICK_SEE
 					Self.collisionRect.setRect(x, y, Self.mWidth, Self.mHeight)
-				Case 73
-					Self.collisionRect.setRect(Self.posX, Self.posY - BarHorbinV.COLLISION_OFFSET, BarHorbinV.COLLISION_OFFSET, BarHorbinV.COLLISION_OFFSET)
-				default:
-			End
+				Case GIMMICK_RAIL_FLIPPER
+					Self.collisionRect.setRect(Self.posX, Self.posY - 512, 512, 512)
+				Default
+					' Nothing so far.
+			End Select
 		End
 	
 		Method doWhileRail:Void(player:PlayerObject, direction:Int)
@@ -770,32 +774,33 @@ Class GimmickObject Extends GameObject
 				Case GIMMICK_MOVE
 					If (Not Self.used And player.setRailLine(New Line(Self.posX, Self.posY, Self.posX + Self.iLeft, Self.posY + Self.iTop), Self.posX, Self.posY, Self.iLeft, Self.iTop, Self.iWidth, Self.iHeight, Self)) Then
 						Self.used = True
+						
 						soundInstance.playSe(SoundSystem.SE_148)
-					End
-				Case 66
+					EndIf
+				Case GIMMICK_FALL
 					If (Self.firstTouch) Then
 						player.setFall(Self.posX - RollPlatformSpeedC.COLLISION_OFFSET_Y, Self.posY, Self.iLeft, Self.iTop)
-					End
+					EndIf
 				Case GIMMICK_SEE
 					If (Not Self.used And Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
 						player.changeVisible(Self.iLeft = 0)
 						Self.used = True
-					End
-				Case 73
+					EndIf
+				Case GIMMICK_RAIL_FLIPPER
 					If (Self.firstTouch) Then
 						player.setRailFlip()
-					End
-				Case 96
+					EndIf
+				Case GIMMICK_SPIN
 					If (Not Self.used) Then
 						player.setAnimationId(4)
-						SoundSystem soundSystem = soundInstance
-						SoundSystem soundSystem2 = soundInstance
-						soundSystem.playSe(SoundSystem.SE_148)
+						
+						soundInstance.playSe(SoundSystem.SE_148)
+						
 						Self.used = True
-					End
+					EndIf
 				Default
 					' Nothing so far.
-			End
+			End Select
 		End
 	
 		Method doWhileNoCollision:Void()

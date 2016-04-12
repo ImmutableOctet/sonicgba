@@ -649,16 +649,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>51</X>
-        <Y>43</Y>
+        <X>7</X>
+        <Y>303</Y>
       </CursorPos>
       <DocGUID>cbd6019e-4ecd-4748-9cd0-2b9df2109364</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>11</X>
-        <Y>644</Y>
+        <X>2</X>
+        <Y>828</Y>
       </CursorPos>
       <DocGUID>4ba6db14-9796-4dce-aff7-18907bf4111f</DocGUID>
       <Bookmarks />
@@ -763,8 +763,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>25</X>
-        <Y>712</Y>
+        <X>9</X>
+        <Y>384</Y>
       </CursorPos>
       <DocGUID>1a2b625c-0c70-4cff-8475-b117d0fa0d7f</DocGUID>
       <Bookmarks />
@@ -1079,8 +1079,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\stringindex.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
-        <Y>11</Y>
+        <X>8</X>
+        <Y>16</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
