@@ -1,4 +1,4 @@
-Strict
+﻿Strict
 
 Public
 
@@ -458,6 +458,16 @@ Class GameState Extends State
 		
 		Function drawTouchKeyPauseOption:Void(g:MFGraphics)
 			' Empty implementation.
+		End
+		
+		Function BP_toolsAdd:Void()
+			Local bArr:= BP_items_num
+			
+			Local i:= currentBPItems[tool_id]
+			
+			bArr[i] = Byte(Int(bArr[i]) + currentBPItemsNormalNum[tool_id])
+			
+			State.saveBPRecord()
 		End
 	Public
 		' Functions:
@@ -2111,9 +2121,11 @@ Class GameState Extends State
 			EndIf
 		End
 		
-		Public Method BacktoGame:Void()
+		Method BacktoGame:Void()
 			doReturnGameStuff()
+			
 			isDrawTouchPad = True
+			
 			Key.touchgamekeyInit()
 			Key.touchkeyboardClose()
 			Key.touchkeygameboardInit()
@@ -2126,40 +2138,49 @@ Class GameState Extends State
 			Key.touchanykeyClose()
 		End
 		
-		Public Method BP_GotoTryPaying:Void()
-			
+		Method BP_GotoTryPaying:Void()
 			If (StageManager.getStageID() = 1 And Not IsPaid) Then
 				BP_continueTryInit()
 			EndIf
 			
 			If (StageManager.getStageID() = 2 And Not IsPaid) Then
-				Self.state = 20
+				Self.state = STATE_BP_TRY_PAYING
+				
 				BP_enteredPaying = False
+				
 				Self.BP_IsFromContinueTry = False
+				
 				BP_payingInit(PAUSE_RACE_OPTION, 3)
+				
 				State.fadeInit(255, 0)
 			EndIf
 			
 			If (IsPaid) Then
 				Self.state = STATE_STAGE_LOADING
 			EndIf
-			
 		End
 		
-		Public Method BP_continueTryInit:Void()
-			Self.state = 19
+		Method BP_continueTryInit:Void()
+			Self.state = STATE_BP_CONTINUE_TRY
+			
 			State.fadeInit(255, 0)
+			
 			MyAPI.initString()
+			
 			strForShow = MyAPI.getStrings(BPstrings[0], Self.BP_CONTINUETRY_MENU_WIDTH - 20)
+			
 			Self.BP_CONTINUETRY_MENU_HEIGHT = Self.MORE_GAME_HEIGHT + ((strForShow.Length - 1) * LINE_SPACE)
-			Self.BP_CONTINUETRY_MENU_START_Y = (SCREEN_HEIGHT - Self.BP_CONTINUETRY_MENU_HEIGHT) Shr 1
+			Self.BP_CONTINUETRY_MENU_START_Y = ((SCREEN_HEIGHT - Self.BP_CONTINUETRY_MENU_HEIGHT) / 2) ' Shr 1
+			
 			PlayerObject.cursor = 0
 		End
 		
-		Public Method BP_continueTryLogic:Void()
-			Bool IsUp
-			Bool IsDown
+		Method BP_continueTryLogic:Void()
+			Local IsUp:Bool
+			Local IsDown:Bool
+			
 			Key.touchkeyboardInit()
+			
 			PlayerObject.cursorMax = 2
 			
 			If (Key.press(Key.gUp)) Then
@@ -2182,64 +2203,78 @@ Class GameState Extends State
 				PlayerObject.cursor += 1
 				PlayerObject.cursor Mod= PlayerObject.cursorMax
 			ElseIf (Not Key.press(Key.B_S1 | Key.gSelect)) Then
+				' Nothing so far.
 			Else
-				
 				If (PlayerObject.cursor = 0) Then
-					Self.state = 20
+					Self.state = STATE_BP_TRY_PAYING
+					
 					BP_enteredPaying = False
+					
 					BP_payingInit(PAUSE_RACE_OPTION, 3)
+					
 					Self.BP_IsFromContinueTry = True
+					
 					State.fadeInit(255, 0)
 				ElseIf (PlayerObject.cursor = 1) Then
 					Self.state = STATE_STAGE_LOADING
+					
 					State.fadeInit(255, 0)
 				EndIf
 			EndIf
-			
 		End
 		
-		Public Method BP_continueTryDraw:Void(g:MFGraphics)
+		Method BP_continueTryDraw:Void(g:MFGraphics)
 			menuBgDraw(g)
+			
 			State.fillMenuRect(g, Self.BP_CONTINUETRY_MENU_START_X, Self.BP_CONTINUETRY_MENU_START_Y, Self.BP_CONTINUETRY_MENU_WIDTH, Self.BP_CONTINUETRY_MENU_HEIGHT)
+			
 			g.setColor(0)
+			
 			MyAPI.drawBoldStrings(g, strForShow, Self.BP_CONTINUETRY_MENU_START_X + 20, Self.BP_CONTINUETRY_MENU_START_Y + 10, Self.BP_CONTINUETRY_MENU_WIDTH - 20, Self.BP_CONTINUETRY_MENU_HEIGHT - 20, MapManager.END_COLOR, 4656650, 0)
+			
 			State.drawMenuFontById(g, 119, SCREEN_WIDTH Shr 1, ((Self.BP_CONTINUETRY_MENU_START_Y + 15) + ((MENU_SPACE * 3) / 2)) + (MENU_SPACE * ((PlayerObject.cursor + strForShow.Length) - 1)))
 			State.drawMenuFontById(g, 113, (SCREEN_WIDTH Shr 1) - 56, ((Self.BP_CONTINUETRY_MENU_START_Y + 15) + ((MENU_SPACE * 3) / 2)) + (MENU_SPACE * ((PlayerObject.cursor + strForShow.Length) - 1)))
+			
 			MyAPI.drawBoldString(g, BPstrings[1], SCREEN_WIDTH Shr 1, (Self.BP_CONTINUETRY_MENU_START_Y + 15) + (MENU_SPACE * ((strForShow.Length - 1) + 1)), 17, MapManager.END_COLOR, 0)
 			MyAPI.drawBoldString(g, BPstrings[2], SCREEN_WIDTH Shr 1, (Self.BP_CONTINUETRY_MENU_START_Y + 15) + (MENU_SPACE * ((strForShow.Length - 1) + 2)), 17, MapManager.END_COLOR, 0)
+			
 			State.drawSoftKey(g, True, False)
 		End
 		
-		Public Method gotoGameOver:Void()
+		Method gotoGameOver:Void()
 			IsGameOver = True
+			
 			Self.overcnt = 0
 			Self.state = STATE_GAME_OVER_PRE
 			Self.overtitleID = 78
+			
 			SoundSystem.getInstance().stopBgm(True)
-			SoundSystem.getInstance().playBgm(30, False)
+			SoundSystem.getInstance().playBgm(SoundSystem.BGM_GAMEOVER, False)
+			
 			Self.movingTitleX = SCREEN_WIDTH + 30
+			
 			Key.touchgamekeyClose()
 			Key.touchkeygameboardClose()
 			Key.touchkeyboardInit()
 		End
 		
-		Public Method BP_gotoRanking:Void()
+		Method BP_gotoRanking:Void()
 			PlayerObject.doPauseLeaveGame()
 			
 			setStateWithFade(State.STATE_SCORE_RANKING)
 			
 			If (IsPaid) Then
-				StageManager.addNewNormalScore(IsGameOver ? PlayerObject.getScore() : Self.preScore)
+				StageManager.addNewNormalScore(PickValue(IsGameOver, PlayerObject.getScore(), Self.preScore))
 			Else
 				StageManager.addNewNormalScore(0)
 			EndIf
 			
-			StageManager.resetOpenedStageIdforTry(IsGameOver ? StageManager.getStageID() : StageManager.getStageID() - 1)
+			StageManager.resetOpenedStageIdforTry(PickValue(IsGameOver, StageManager.getStageID(), (StageManager.getStageID() - 1)))
+			
 			Key.touchanykeyInit()
 		End
 		
-		Public Method BP_payingLogic:Void()
-			
+		Method BP_payingLogic:Void()
 			If (Not BP_enteredPaying) Then
 				If (State.BP_chargeLogic(0)) Then
 					BP_enteredPaying = True
@@ -2254,63 +2289,69 @@ Class GameState Extends State
 					
 					If (IsGameOver) Then
 						BP_gotoRanking()
-						Return
+					Else
+						Self.state = STATE_STAGE_LOADING
+						
+						State.fadeInit(255, 0)
+					EndIf
+				Else
+					BP_enteredPaying = True
+					
+					If (Not Self.BP_IsFromContinueTry) Then
+						State.setTry()
 					EndIf
 					
-					Self.state = STATE_STAGE_LOADING
-					State.fadeInit(255, 0)
-					Return
+					StageManager.resetStageIdforTry()
+					
+					State.saveBPRecord()
+					
+					State.setState(State.STATE_RETURN_FROM_GAME)
 				EndIf
-				
-				BP_enteredPaying = True
-				
-				If (Not Self.BP_IsFromContinueTry) Then
-					State.setTry()
-				EndIf
-				
-				StageManager.resetStageIdforTry()
-				
-				State.saveBPRecord()
-				
-				State.setState(State.STATE_RETURN_FROM_GAME)
 			EndIf
-			
 		End
 		
-		Public Method BP_gotoRevive:Void()
-			Self.state = 21
+		Method BP_gotoRevive:Void()
+			Self.state = STATE_BP_REVIVE
+			
 			BP_payingInit(PAUSE_OPTION_ITEMS_NUM, PAUSE_RACE_INSTRUCTION)
+			
 			State.fadeInit(255, 0)
 		End
 		
-		Public Method BP_reviveLogic:Void()
-			
+		Method BP_reviveLogic:Void()
 			If (State.BP_chargeLogic(1)) Then
 				GameObject.player.resetPlayer()
+				
 				Self.state = STATE_GAME
+				
 				State.fadeInit(255, 0)
+				
 				Return
 			EndIf
 			
 			gotoGameOver()
 		End
 		
-		Public Method shopInit:Void(IsClearCursor:Bool)
-			
+		Method shopInit:Void(IsClearCursor:Bool)
 			If (IsClearCursor) Then
 				PlayerObject.cursor = 0
 			EndIf
 			
-			Self.state = 22
+			Self.state = STATE_BP_SHOP
+			
 			MyAPI.initString()
+			
 			Key.clear()
 		End
 		
-		Public Method BP_shopLogic:Void()
-			Bool IsUp
-			Bool IsDown
+		Method BP_shopLogic:Void()
+			Local IsUp:Bool
+			Local IsDown:Bool
+			
 			Self.IsInBP = False
+			
 			Key.touchkeyboardInit()
+			
 			PlayerObject.cursorMax = STATE_SET_PARAM
 			
 			If (Key.press(Key.gUp)) Then
@@ -2334,91 +2375,101 @@ Class GameState Extends State
 				PlayerObject.cursor Mod= PlayerObject.cursorMax
 			ElseIf (Key.press(Key.B_S1 | Key.gSelect)) Then
 				If (Not BP_IsToolsNumMax()) Then
-					Self.state = 23
+					Self.state = STATE_BP_BUY
+					
 					tool_id = PlayerObject.cursor
+					
 					BP_payingInit(8, 7)
 				EndIf
-				
 			ElseIf (Key.press(Key.B_S2)) Then
 				Self.state = STATE_PAUSE
+				
 				GameObject.IsGamePause = True
+				
 				PlayerObject.cursor = 2
+				
 				Key.clear()
 			EndIf
-			
 		End
 		
-		Public Method BP_shopDraw:Void(g:MFGraphics)
+		Method BP_shopDraw:Void(g:MFGraphics)
 			menuBgDraw(g)
+			
 			State.fillMenuRect(g, CASE_X, 30, CASE_WIDTH, CASE_HEIGHT)
-			MyAPI.drawImage(g, BP_wordsImg, 0, 0, BP_wordsWidth, BP_wordsHeight, 0, SCREEN_WIDTH Shr 1, 40, 17)
-			MyAPI.drawBoldString(g, BPstrings[LOADING_TIME_LIMIT], (CASE_WIDTH Shr 2) + CASE_X, LINE_SPACE + 40, 17, MapManager.END_COLOR, 4656650)
-			MyAPI.drawBoldString(g, BPstrings[11], ((CASE_WIDTH * 3) Shr 2) + CASE_X, LINE_SPACE + 40, 17, MapManager.END_COLOR, 4656650)
-			For (Int i = 0; i < currentBPItems.Length; i += 1)
-				MyAPI.drawImage(g, BP_itemsImg, BP_itemsWidth * currentBPItems[i], 0, BP_itemsWidth, BP_itemsHeight, 0, (CASE_X + (CASE_WIDTH Shr 2)) - (LINE_SPACE Shr 1), (LINE_SPACE * (i + 3)) + 30, 3)
-				MyAPI.drawBoldString(g, "~u00d7 " + currentBPItemsNormalNum[i], BP_itemsWidth + ((CASE_X + (CASE_WIDTH Shr 2)) - (LINE_SPACE Shr 1)), ((LINE_SPACE * (i + 3)) + 30) - FONT_H_HALF, 20, MapManager.END_COLOR, 4656650)
-				MyAPI.drawBoldString(g, BP_items_num[currentBPItems[i]], (FONT_WIDTH_NUM * 2) + (CASE_X + ((CASE_WIDTH * 3) Shr 2)), ((LINE_SPACE * (i + 3)) + 30) - FONT_H_HALF, 24, MapManager.END_COLOR, 4656650)
+			
+			MyAPI.drawImage(g, BP_wordsImg, 0, 0, BP_wordsWidth, BP_wordsHeight, 0, (SCREEN_WIDTH / 2), 40, 17) ' Shr 1
+			
+			MyAPI.drawBoldString(g, BPstrings[LOADING_TIME_LIMIT], (CASE_WIDTH / 4) + CASE_X, LINE_SPACE + 40, 17, MapManager.END_COLOR, 4656650) ' Shr 2
+			MyAPI.drawBoldString(g, BPstrings[11], ((CASE_WIDTH * 3) / 4) + CASE_X, LINE_SPACE + 40, 17, MapManager.END_COLOR, 4656650) ' Shr 2
+			
+			For Local i:= 0 Until currentBPItems.Length
+				MyAPI.drawImage(g, BP_itemsImg, BP_itemsWidth * currentBPItems[i], 0, BP_itemsWidth, BP_itemsHeight, 0, (CASE_X + (CASE_WIDTH / 4)) - (LINE_SPACE / 2), (LINE_SPACE * (i + 3)) + 30, 3) ' Shr 2 ' Shr 1
+				
+				MyAPI.drawBoldString(g, "~u00d7 " + currentBPItemsNormalNum[i], BP_itemsWidth + ((CASE_X + (CASE_WIDTH / 4)) - (LINE_SPACE / 2)), ((LINE_SPACE * (i + 3)) + 30) - FONT_H_HALF, 20, MapManager.END_COLOR, 4656650) ' Shr 2 ' Shr 1
+				MyAPI.drawBoldString(g, BP_items_num[currentBPItems[i]], (FONT_WIDTH_NUM * 2) + (CASE_X + ((CASE_WIDTH * 3) / 4)), ((LINE_SPACE * (i + 3)) + 30) - FONT_H_HALF, 24, MapManager.END_COLOR, 4656650) ' Shr 2
 			Next
-			State.drawMenuFontById(g, 113, ((CASE_X + (CASE_WIDTH Shr 2)) - (LINE_SPACE Shr 1)) - (BP_itemsWidth * 2), (LINE_SPACE * (PlayerObject.cursor + 3)) + 30)
+			
+			State.drawMenuFontById(g, 113, ((CASE_X + (CASE_WIDTH / 4)) - (LINE_SPACE / 2)) - (BP_itemsWidth * 2), (LINE_SPACE * (PlayerObject.cursor + 3)) + 30) ' Shr 2 ' Shr 1
+			
 			MyAPI.drawBoldString(g, BPstrings[12], BP_itemsWidth + CASE_X, (LINE_SPACE * 7) + 30, 20, MapManager.END_COLOR, 4656650)
+			
 			g.setColor(0)
+			
 			MyAPI.drawBoldStrings(g, BPEffectStrings[PlayerObject.cursor], BP_itemsWidth + CASE_X, (LINE_SPACE * 8) + 30, MENU_RECT_WIDTH - 20, CASE_HEIGHT - 20, MapManager.END_COLOR, 4656650, 0)
+			
 			State.drawSoftKey(g, True, True)
 		End
 		
-		Public Function BP_toolsAdd:Void()
-			Byte[] bArr = BP_items_num
-			Int i = currentBPItems[tool_id]
-			bArr[i]:Byte = (bArr[i] + currentBPItemsNormalNum[tool_id])
-			State.saveBPRecord()
-		}
-		
-		Public Method BP_buyLogic:Void()
-			
+		Method BP_buyLogic:Void()
 			If (State.BP_chargeLogic(2)) Then
 				BP_toolsAdd()
+				
 				shopInit(False)
+				
 				Return
 			EndIf
 			
 			shopInit(False)
 		End
 		
-		Public Method BP_toolsmaxLogic:Void()
-			
+		Method BP_toolsmaxLogic:Void()
 			If (Key.press(Key.B_S2)) Then
 				shopInit(False)
 			EndIf
-			
 		End
 		
-		Public Method BP_toolsmaxDraw:Void(g:MFGraphics)
+		Method BP_toolsmaxDraw:Void(g:MFGraphics)
 			menuBgDraw(g)
-			State.fillMenuRect(g, FRAME_X, (SCREEN_HEIGHT Shr 1) - MENU_SPACE, FRAME_WIDTH, MENU_SPACE Shl 1)
+			
+			State.fillMenuRect(g, FRAME_X, (SCREEN_HEIGHT / 2) - MENU_SPACE, FRAME_WIDTH, (MENU_SPACE * 2)) ' Shr 1 ' Shl 1
+			
 			g.setColor(0)
-			MyAPI.drawBoldString(g, BPstrings[19], SCREEN_WIDTH Shr 1, ((SCREEN_HEIGHT Shr 1) - MENU_SPACE) + 10, 17, MapManager.END_COLOR, 4656650)
+			
+			MyAPI.drawBoldString(g, BPstrings[19], (SCREEN_WIDTH / 2), ((SCREEN_HEIGHT / 2) - MENU_SPACE) + 10, 17, MapManager.END_COLOR, 4656650) ' Shr 1
+			
 			State.drawSoftKey(g, False, True)
 		End
 		
-		Public Method IsToolsUsed:Bool(id:Int)
+		Method IsToolsUsed:Bool(id:Int)
 			Select (id)
-				Case STATE_GAME
+				Case 0
 					Return PlayerObject.IsInvincibility()
-				Case STATE_PAUSE
-				Case 2
+				Case 1, 2
 					Return PlayerObject.IsUnderSheild()
-				Case STATE_SET_PARAM
+				Case 3
 					Return PlayerObject.IsSpeedUp()
-				Default
-					Return False
 			End Select
+			
+			Return False
 		End
 		
-		Public Method BP_toolsuseLogic:Void()
-			Bool IsUp
-			Bool IsDown
+		Method BP_toolsuseLogic:Void()
+			Local IsUp:Bool
+			Local IsDown:Bool
+			
 			Key.touchkeyboardInit()
-			PlayerObject.cursorMax = STATE_SET_PARAM
+			
+			PlayerObject.cursorMax = 3
 			
 			If (Key.press(Key.gUp)) Then
 				IsUp = True
@@ -2443,84 +2494,86 @@ Class GameState Extends State
 			
 			If (Key.press(Key.B_S1 | Key.gSelect) And BP_items_num[currentBPItems[PlayerObject.cursor]] > Null And Not IsToolsUsed(currentBPItems[PlayerObject.cursor])) Then
 				Self.state = STATE_BP_TOOLS_USE_ENSURE
+				
 				Self.cursor = 0
 			EndIf
 			
 			If (Key.press(Key.B_S2)) Then
 				BacktoGame()
 			EndIf
-			
 		End
 		
-		Public Method BP_ensureToolsUseLogic:Void()
+		Method BP_ensureToolsUseLogic:Void()
 			Select (comfirmLogic())
-				Case STATE_GAME
+				Case 0
 					Select (currentBPItems[PlayerObject.cursor])
-						Case STATE_GAME
+						Case 0
 							GameObject.player.getItem(STATE_SET_PARAM)
-							break
-						Case STATE_PAUSE
+						Case 1
 							GameObject.player.getItem(2)
-							break
 						Case 2
 							GameObject.player.getItem(1)
-							break
-						Case STATE_SET_PARAM
+						Case 3
 							GameObject.player.getItem(PAUSE_RACE_OPTION)
-							break
 					End Select
-					Byte[] bArr = BP_items_num
-					Int i = currentBPItems[PlayerObject.cursor]
-					bArr[i]:Byte = (bArr[i] - 1)
+					
+					Local bArr:= BP_items_num
+					
+					Local i:= Byte(currentBPItems[PlayerObject.cursor])
+					
+					bArr[i] = (bArr[i] - 1)
+					
 					State.saveBPRecord()
+					
 					BacktoGame()
-				Case STATE_PAUSE
-				Case TitleState.RETURN_PRESSED
+				Case 1, RETURN_PRESSED
 					Self.state = STATE_BP_TOOLS_USE
 				Default
+					' Nothing so far.
 			End Select
 		End
 		
-		Public Method BP_ensureToolsUseDraw:Void(g:MFGraphics)
+		Method BP_ensureToolsUseDraw:Void(g:MFGraphics)
 			confirmDraw(g, BPstrings[currentBPItems[PlayerObject.cursor] + 20])
+			
 			State.drawSoftKey(g, True, True)
 		End
 		
-		Public Method BP_toolsuseDraw:Void(g:MFGraphics)
-			State.fillMenuRect(g, (SCREEN_WIDTH Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_X, (SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y, PlayerObject.PAUSE_FRAME_WIDTH, PlayerObject.PAUSE_FRAME_HEIGHT)
-			MyAPI.drawImage(g, BP_wordsImg, 0, BP_wordsHeight, BP_wordsWidth, BP_wordsHeight, 0, SCREEN_WIDTH Shr 1, LINE_SPACE + ((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y), 3)
-			State.drawMenuFontById(g, 119, SCREEN_WIDTH Shr 1, (((((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE Shr 1)) + MENU_SPACE) + (MENU_SPACE * PlayerObject.cursor))
-			State.drawMenuFontById(g, 113, (SCREEN_WIDTH Shr 1) - 56, (((((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE Shr 1)) + MENU_SPACE) + (MENU_SPACE * PlayerObject.cursor))
-			Int i = 0
-			While (i < currentBPItems.Length) {
-				Int i2
-				MFImage mFImage = BP_itemsImg
-				Int i3 = BP_itemsWidth * currentBPItems[i]
+		Method BP_toolsuseDraw:Void(g:MFGraphics)
+			State.fillMenuRect(g, (SCREEN_WIDTH / 2) + PlayerObject.PAUSE_FRAME_OFFSET_X, (SCREEN_HEIGHT / 2) + PlayerObject.PAUSE_FRAME_OFFSET_Y, PlayerObject.PAUSE_FRAME_WIDTH, PlayerObject.PAUSE_FRAME_HEIGHT) ' Shr 1
+			
+			MyAPI.drawImage(g, BP_wordsImg, 0, BP_wordsHeight, BP_wordsWidth, BP_wordsHeight, 0, (SCREEN_WIDTH / 2), LINE_SPACE + ((SCREEN_HEIGHT / 2) + PlayerObject.PAUSE_FRAME_OFFSET_Y), 3) ' Shr 1
+			
+			State.drawMenuFontById(g, 119, (SCREEN_WIDTH / 2), (((((SCREEN_HEIGHT / 2) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * PlayerObject.cursor)) ' Shr 1
+			State.drawMenuFontById(g, 113, (SCREEN_WIDTH / 2) - 56, (((((SCREEN_HEIGHT / 2) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * PlayerObject.cursor)) ' Shr 1
+			
+			Local i:= 0
+			
+			While (i < currentBPItems.Length)
+				Local mFImage:= BP_itemsImg
 				
-				If (BP_items_num[currentBPItems[i]] = Null Or IsToolsUsed(currentBPItems[i])) Then
-					i2 = BP_itemsHeight
-				Else
-					i2 = 0
-				EndIf
+				MyAPI.drawImage(g, mFImage, (BP_itemsWidth * currentBPItems[i]), PickValue((BP_items_num[currentBPItems[i]] = Null Or IsToolsUsed(currentBPItems[i])), BP_itemsHeight, 0), BP_itemsWidth, BP_itemsHeight, 0, (SCREEN_WIDTH / 2) - (BP_itemsWidth * 2), (MENU_SPACE * i) + (((((SCREEN_HEIGHT / 2) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE / 2)) + MENU_SPACE), PAUSE_OPTION_ITEMS_NUM) ' Shr 1
 				
-				MyAPI.drawImage(g, mFImage, i3, i2, BP_itemsWidth, BP_itemsHeight, 0, (SCREEN_WIDTH Shr 1) - (BP_itemsWidth * 2), (MENU_SPACE * i) + (((((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE Shr 1)) + MENU_SPACE), PAUSE_OPTION_ITEMS_NUM)
 				g.setColor(0)
-				MFGraphics mFGraphics = g
-				MyAPI.drawBoldString(mFGraphics, "~u00d7", SCREEN_WIDTH Shr 1, ((((((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE Shr 1)) + MENU_SPACE) + (MENU_SPACE * i)) - FONT_H_HALF, 17, MapManager.END_COLOR, 4656650)
-				MyAPI.drawBoldString(g, BP_items_num[currentBPItems[i]], (BP_itemsWidth * 2) + (SCREEN_WIDTH Shr 1), ((((((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE Shr 1)) + MENU_SPACE) + (MENU_SPACE * i)) - FONT_H_HALF, 24, MapManager.END_COLOR, 4656650)
+				
+				MyAPI.drawBoldString(g, "×", (SCREEN_WIDTH / 2), ((((((SCREEN_HEIGHT / 2) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * i)) - FONT_H_HALF, 17, MapManager.END_COLOR, 4656650) ' "~u00d7" ' Shr 1 ' "x"
+				MyAPI.drawBoldString(g, BP_items_num[currentBPItems[i]], (BP_itemsWidth * 2) + (SCREEN_WIDTH / 2), ((((((SCREEN_HEIGHT / 2) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE / 2)) + MENU_SPACE) + (MENU_SPACE * i)) - FONT_H_HALF, 24, MapManager.END_COLOR, 4656650) ' Shr 1
+				
 				i += 1
-			}
+			Wend
 			
 			If (BP_items_num[currentBPItems[PlayerObject.cursor]] = Null) Then
-				Self.tooltipY = MyAPI.calNextPosition((Double) Self.tooltipY, (Double) TOOL_TIP_Y_DES, 1, 3)
+				Self.tooltipY = MyAPI.calNextPosition(Double(Self.tooltipY), Double(TOOL_TIP_Y_DES), 1, 3)
 			Else
 				Self.tooltipY = MyAPI.calNextPositionReverse(Self.tooltipY, TOOL_TIP_Y_DES, TOOL_TIP_Y_DES_2, 1, 3)
 			EndIf
 			
 			State.fillMenuRect(g, TOOL_TIP_X, Self.tooltipY, TOOL_TIP_WIDTH, TOOL_TIP_HEIGHT)
-			For (i = 0; i < TOOL_TIP_STR.Length; i += 1)
-				MyAPI.drawBoldString(g, TOOL_TIP_STR[i], SCREEN_WIDTH Shr 1, (LINE_SPACE * i) + (Self.tooltipY + 10), 17, MapManager.END_COLOR, 4656650, 0)
+			
+			For Local i:= 0 Until TOOL_TIP_STR.Length
+				MyAPI.drawBoldString(g, TOOL_TIP_STR[i], (SCREEN_WIDTH / 2), (LINE_SPACE * i) + (Self.tooltipY + 10), 17, MapManager.END_COLOR, 4656650, 0)
 			Next
+			
 			State.drawSoftKey(g, True, True)
 		End
 	Private
