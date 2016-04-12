@@ -124,7 +124,7 @@ Class MFGraphics Implements GRAPHICS_MACROS
 			Return var
 		End
 		
-		Function stringWidth:Int(font:Int, str:String) Final
+		Function stringWidth:Int(font:Int, str:String) ' Final
 			If (MFDevice.preScaleZoomOutFlag) Then
 				If (font_type = font) Then
 					Return (currentFont.stringWidth(str) Shl MFDevice.preScaleShift)
@@ -1304,7 +1304,7 @@ Class MFGraphics Implements GRAPHICS_MACROS
 						Self.context.drawRGB(rgbData, 0, 1, ((x + height) - 1) - i, y, 1, width, True)
 					Next
 				Default
-			EndIf
+			End Select
 		End
 		
 		Method caculateColorValue:Int(argb:Int) Final
@@ -1358,6 +1358,6 @@ Class MFGraphics Implements GRAPHICS_MACROS
 		End
 		
 		Method caculateAlpha:Int(argb:Int) Final
-			Return (16777215 & argb) | (((((-16777216 & argb) >>> 24) * Self.alphaValue) Shr 8) Shl 24) ' MapManager.END_COLOR
+			Return (16777215 & argb) | (((((-16777216 & argb) Shr 24) * Self.alphaValue) Shr 8) Shl 24) ' MapManager.END_COLOR ' >>>
 		End
 End

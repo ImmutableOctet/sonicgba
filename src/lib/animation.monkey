@@ -299,7 +299,7 @@ Class Animation
 				
 				Local rectarrays:= (ds.ReadByte() & 255)
 				
-				For (k = 0; k < rectarrays; k += 1)
+				For Local k:= 0 Until rectarrays
 					Local rectsNum:= (ds.ReadByte() & 255)
 					
 					For Local l:= 0 Until rectsNum
@@ -318,7 +318,7 @@ Class Animation
 					For Local l:= 0 Until crossesNum
 						Local __0:= ds.ReadShort()
 						Local __2:= ds.ReadShort()
-					End Select
+					Next
 				Next
 			Next
 			

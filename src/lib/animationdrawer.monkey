@@ -263,7 +263,7 @@ Class AnimationDrawer
 			EndIf
 		End
 		
-		Public Method draw:Void(g:MFGraphics, x:Int, y:Int, zoomEnable:Bool)
+		Method draw:Void(g:MFGraphics, x:Int, y:Int, zoomEnable:Bool)
 			Self.ani.SetCurAni(Self.actionId)
 			Self.ani.SetLoop(Self.loop)
 			
@@ -274,12 +274,14 @@ Class AnimationDrawer
 			EndIf
 			
 			If (Self.mustKeepTime <> -1) Then
+				Local nowTime:= Long(Millisecs())
+				
 				If (Self.startTime = 0) Then
-					Self.startTime = Millisecs() - ((Long) Self.mustKeepTime)
+					Self.startTime = nowTime - Long(Self.mustKeepTime)
 				EndIf
 				
-				Long nowTime = Millisecs()
-				Self.lostFrameTime += (nowTime - Self.startTime) - ((Long) Self.mustKeepTime)
+				Self.lostFrameTime += (nowTime - Self.startTime) - Long(Self.mustKeepTime)
+				
 				Self.startTime = nowTime
 			EndIf
 			
@@ -288,81 +290,84 @@ Class AnimationDrawer
 			Else
 				moveOn()
 			EndIf
-			
 		End
 		
-		Public Method setPause:Void(pause:Bool)
+		Method setPause:Void(pause:Bool)
 			Self.m_bPause = pause
 		End
 		
-		Public Method checkEnd:Bool()
+		Method checkEnd:Bool()
 			Return Self.endChk
 		End
 		
-		Public Method checkEndTrigger:Bool()
+		Method checkEndTrigger:Bool()
 			Return Self.endTrigger
 		End
 		
-		Public Method restart:Void()
+		Method restart:Void()
 			Self.startTime = 0
+			
 			Self.endChk = False
-			Self.m_CurFrame = (Short) 0
+			
+			Self.m_CurFrame = 0
 			Self.actualTime = 0
 		End
 		
-		Public Method getCurrentFrameWidth:Int()
+		Method getCurrentFrameWidth:Int()
 			Return MyAPI.zoomIn(Self.ani.getWidthWithFrameId(Self.actionId, Self.m_CurFrame))
 		End
 		
-		Public Method getCurrentFrameHeight:Int()
+		Method getCurrentFrameHeight:Int()
 			Return MyAPI.zoomIn(Self.ani.getHeightWithFrameId(Self.actionId, Self.m_CurFrame))
 		End
 		
-		Public Method getCurrentFrame:Int()
+		Method getCurrentFrame:Int()
 			Return Self.m_CurFrame
 		End
 		
-		Public Method getAnimation:Animation()
+		Method getAnimation:Animation()
 			Return Self.ani
 		End
 		
-		Public Method setEnd:Void()
+		Method setEnd:Void()
 			Self.endChk = True
 		End
 		
-		Public Method getARect:Byte[]()
-			
-			If (Self.reARect = Null) Then
+		Method getARect:Byte[]()
+			If (Self.reARect.Length = 0) Then
 				Self.reARect = New Byte[4]
 			EndIf
 			
 			Self.ani.SetCurAni(Self.actionId)
 			Self.ani.SetCurFrame(Self.m_CurFrame)
-			Byte[] animationrect = Self.ani.GetARect()
 			
-			If (animationrect = Null) Then
-				Return Null
+			Local animationrect:= Self.ani.GetARect()
+			
+			If (animationrect.Length = 0) Then
+				Return []
 			EndIf
 			
 			getRect(Self.reARect, animationrect)
+			
 			Return Self.reARect
 		End
 		
-		Public Method getCRect:Byte[]()
-			
-			If (Self.reCRect = Null) Then
+		Method getCRect:Byte[]()
+			If (Self.reCRect.Length = 0) Then
 				Self.reCRect = New Byte[4]
 			EndIf
 			
 			Self.ani.SetCurAni(Self.actionId)
 			Self.ani.SetCurFrame(Self.m_CurFrame)
-			Byte[] animationrect = Self.ani.GetCRect()
 			
-			If (animationrect = Null) Then
-				Return Null
+			Local animationrect:= Self.ani.GetCRect()
+			
+			If (animationrect.Length = 0) Then
+				Return []
 			EndIf
 			
 			getRect(Self.reCRect, animationrect)
+			
 			Return Self.reCRect
 		End
 		

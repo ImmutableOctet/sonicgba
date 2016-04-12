@@ -7,14 +7,9 @@ Private
 	Import gameengine.def
 Public
 
-' Aliases:
-Private
-	Alias engineDef = gameengine.def.Def
-Public
-
 ' Constant variable(s):
 Global FONT:= engineDef.FONT ' Const
-Global FONT_H:= engineDef.FONT_H ' Const
+Global FONT_H:= FONT_H ' Const
 Global FONT_H_HALF:= (FONT_H / 2) ' Const
 Global LINE_SPACE:= (FONT_H + 2) ' Const
 

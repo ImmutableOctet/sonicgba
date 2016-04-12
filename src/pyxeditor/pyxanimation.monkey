@@ -86,7 +86,7 @@ Class PyxAnimation
 			
 			If (Self.rootNodeID >= 0) Then
 				Self.nodeArray[Self.rootNodeID].setRootConnectPoint(rootPointId)
-			Next
+			EndIf
 			
 			Local actionNum:= ds.ReadByte()
 			
@@ -100,7 +100,7 @@ Class PyxAnimation
 		Method calBeforeDraw:Void()
 			For Local resetForDraw:= EachIn Self.nodeArray
 				resetForDraw.resetForDraw()
-			EndIf
+			Next
 			
 			Self.nodeStack.Clear()
 			

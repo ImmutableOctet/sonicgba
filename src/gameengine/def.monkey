@@ -11,6 +11,9 @@ Private
 	Import com.sega.mobile.framework.device.mfgraphics
 Public
 
+' Aliases:
+Alias engineDef = Def
+
 ' Constant variable(s):
 Global SCREEN_WIDTH:Int = MyAPI.zoomIn(MFDevice.getScreenWidth(), True) ' Const
 Global SCREEN_HEIGHT:Int = MyAPI.zoomIn(MFDevice.getScreenHeight(), True) ' Const

@@ -720,7 +720,7 @@ Class SoundSystem
 					setSeFlag(True)
 				Default
 					' Nothing so far.
-			EndIf
+			End Select
 		End
 		
 		Method preLoadAllSe:Void()

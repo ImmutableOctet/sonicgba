@@ -27,9 +27,7 @@ Class MFImage
 		Field image:Image
 		
 		' Methods:
-		
-		' Extensions:
-		Method ensure
+		' Nothing so far.
 	Private
 		' Functions:
 		
