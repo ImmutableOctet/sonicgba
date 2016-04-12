@@ -1444,10 +1444,10 @@ Class GameState Extends State
 					
 					MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 					
-					drawTimeOver(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 28)
+					drawTimeOver(g, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - 28) ' Shr 1
 				Case STATE_ALL_CLEAR
-					MyAPI.drawImage(g, Self.exendBgImage, SCREEN_WIDTH Shr 1, 0, 17)
-					MyAPI.drawImage(g, Self.exendBg1Image, SCREEN_WIDTH Shr 1, 80, 17)
+					MyAPI.drawImage(g, Self.exendBgImage, (SCREEN_WIDTH / 2), 0, 17) ' Shr 1
+					MyAPI.drawImage(g, Self.exendBg1Image, (SCREEN_WIDTH / 2), 80, 17) ' Shr 1
 					
 					State.drawFade(g)
 					
@@ -1551,7 +1551,7 @@ Class GameState Extends State
 						If (loadingType = LOADING_TYPE_BAR) Then
 							g.setColor(MapManager.END_COLOR)
 							
-							MyAPI.fillRect(g, 0, ((SCREEN_HEIGHT Shr 1) - 36) - 10, SCREEN_WIDTH, 20)
+							MyAPI.fillRect(g, 0, ((SCREEN_HEIGHT / 2) - 36) - 10, SCREEN_WIDTH, 20) ' Shr 1
 						EndIf
 					EndIf
 					
@@ -2232,11 +2232,11 @@ Class GameState Extends State
 			
 			MyAPI.drawBoldStrings(g, strForShow, Self.BP_CONTINUETRY_MENU_START_X + 20, Self.BP_CONTINUETRY_MENU_START_Y + 10, Self.BP_CONTINUETRY_MENU_WIDTH - 20, Self.BP_CONTINUETRY_MENU_HEIGHT - 20, MapManager.END_COLOR, 4656650, 0)
 			
-			State.drawMenuFontById(g, 119, SCREEN_WIDTH Shr 1, ((Self.BP_CONTINUETRY_MENU_START_Y + 15) + ((MENU_SPACE * 3) / 2)) + (MENU_SPACE * ((PlayerObject.cursor + strForShow.Length) - 1)))
-			State.drawMenuFontById(g, 113, (SCREEN_WIDTH Shr 1) - 56, ((Self.BP_CONTINUETRY_MENU_START_Y + 15) + ((MENU_SPACE * 3) / 2)) + (MENU_SPACE * ((PlayerObject.cursor + strForShow.Length) - 1)))
+			State.drawMenuFontById(g, 119, (SCREEN_WIDTH / 2), ((Self.BP_CONTINUETRY_MENU_START_Y + 15) + ((MENU_SPACE * 3) / 2)) + (MENU_SPACE * ((PlayerObject.cursor + strForShow.Length) - 1))) ' Shr 1
+			State.drawMenuFontById(g, 113, (SCREEN_WIDTH / 2) - 56, ((Self.BP_CONTINUETRY_MENU_START_Y + 15) + ((MENU_SPACE * 3) / 2)) + (MENU_SPACE * ((PlayerObject.cursor + strForShow.Length) - 1))) ' Shr 1
 			
-			MyAPI.drawBoldString(g, BPstrings[1], SCREEN_WIDTH Shr 1, (Self.BP_CONTINUETRY_MENU_START_Y + 15) + (MENU_SPACE * ((strForShow.Length - 1) + 1)), 17, MapManager.END_COLOR, 0)
-			MyAPI.drawBoldString(g, BPstrings[2], SCREEN_WIDTH Shr 1, (Self.BP_CONTINUETRY_MENU_START_Y + 15) + (MENU_SPACE * ((strForShow.Length - 1) + 2)), 17, MapManager.END_COLOR, 0)
+			MyAPI.drawBoldString(g, BPstrings[1], (SCREEN_WIDTH / 2), (Self.BP_CONTINUETRY_MENU_START_Y + 15) + (MENU_SPACE * ((strForShow.Length - 1) + 1)), 17, MapManager.END_COLOR, 0) ' Shr 1
+			MyAPI.drawBoldString(g, BPstrings[2], (SCREEN_WIDTH / 2), (Self.BP_CONTINUETRY_MENU_START_Y + 15) + (MENU_SPACE * ((strForShow.Length - 1) + 2)), 17, MapManager.END_COLOR, 0) ' Shr 1
 			
 			State.drawSoftKey(g, True, False)
 		End
@@ -2831,15 +2831,15 @@ Class GameState Extends State
 			If (stageid < 12) Then
 				stage_id = stageid Shr 1 ' / 2
 			Else
-				stage_id = stageid - PAUSE_RACE_INSTRUCTION
+				stage_id = (stageid - 5)
 			EndIf
 			
 			If (stageid = 11) Then
-				stage_id = PAUSE_OPTION_ITEMS_NUM
+				stage_id = 6
 			EndIf
 			
 			For Local x1:= (Self.selectMenuOffsetX - 294) Until (SCREEN_WIDTH * 2) Step STAGE_MOVE_DIRECTION
-				stageInfoAniDrawer.draw(g, stage_id + PAUSE_RACE_INSTRUCTION, x1, (y - FLOAT_RANGE) + 2, False, 0) ' (y - 10)
+				stageInfoAniDrawer.draw(g, stage_id + 6, x1, (y - FLOAT_RANGE) + 2, False, 0) ' (y - 10)
 			Next
 		End
 		
@@ -3094,37 +3094,37 @@ Class GameState Extends State
 			EndIf
 			
 			animationDrawer.setActionId(25)
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 0)
+			animationDrawer.draw(g, (SCREEN_WIDTH / 2) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 0) ' Shr 1
 			
 			animationDrawer.setActionId(PickValue((GlobalResource.soundSwitchConfig = 0), 67, (Int(Key.touchmenuoptionitems[1].Isin() And Self.pauseOptionCursor = 0 And Self.isSelectable) + 57)))
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 0)
+			animationDrawer.draw(g, (SCREEN_WIDTH / 2) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 0) ' Shr 1
 			
 			animationDrawer.setActionId(GlobalResource.soundConfig + 73)
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 0)
+			animationDrawer.draw(g, (SCREEN_WIDTH / 2) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 0) ' Shr 1
 			
 			animationDrawer.setActionId(21)
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 24)
+			animationDrawer.draw(g, (SCREEN_WIDTH / 2) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 24) ' Shr 1
 			
 			animationDrawer.setActionId(Int(Key.touchmenuoptionitems[3].Isin() And Self.pauseOptionCursor = 1 And Self.isSelectable) + 57)
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 24)
+			animationDrawer.draw(g, (SCREEN_WIDTH / 2) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 24) ' Shr 1
 			
 			animationDrawer.setActionId(Int(GlobalResource.vibrationConfig = 0) + 35)
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 24)
+			animationDrawer.draw(g, (SCREEN_WIDTH / 2) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 24) ' Shr 1
 			
 			animationDrawer.setActionId(23)
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 48)
+			animationDrawer.draw(g, (SCREEN_WIDTH / 2) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 48) ' Shr 1
 			
 			animationDrawer.setActionId(Int(Key.touchmenuoptionitems[5].Isin() And Self.pauseOptionCursor = 2 And Self.isSelectable) + 57)
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 48)
+			animationDrawer.draw(g, (SCREEN_WIDTH / 2) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 48) ' Shr 1
 			
 			animationDrawer.setActionId(Int(GlobalResource.spsetConfig <> 0) + 37)
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 48)
+			animationDrawer.draw(g, (SCREEN_WIDTH / 2) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 48) ' Shr 1
 			
 			animationDrawer.setActionId(24)
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 72)
+			animationDrawer.draw(g, (SCREEN_WIDTH / 2) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 72) ' Shr 1
 			
 			animationDrawer.setActionId(PickValue((GlobalResource.spsetConfig = 0), 67, Int((Key.touchmenuoptionitems[7].Isin() And Self.pauseOptionCursor = 3 And Self.isSelectable)) + 57))
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 72)
+			animationDrawer.draw(g, (SCREEN_WIDTH / 2) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 72) ' Shr 1
 			
 			Select (GlobalResource.sensorConfig)
 				Case 0
@@ -3135,10 +3135,10 @@ Class GameState Extends State
 					animationDrawer.setActionId(68)
 			End Select
 			
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 72)
+			animationDrawer.draw(g, (SCREEN_WIDTH / 2) + 56, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 72) ' Shr 1
 			
 			animationDrawer.setActionId(Int(Key.touchmenuoptionitems[8].Isin() And Self.pauseOptionCursor = PAUSE_RACE_OPTION And Self.isSelectable) + 27)
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 96)
+			animationDrawer.draw(g, (SCREEN_WIDTH / 2) - 96, ((Self.optionDrawOffsetY + 40) + Self.optionslide_y) + 96) ' Shr 1
 			
 			Self.optionOffsetX -= OPTION_MOVING_SPEED
 			Self.optionOffsetX Mod= OPTION_MOVING_INTERVAL
@@ -3530,7 +3530,7 @@ Class GameState Extends State
 				MyAPI.initString()
 				
 			Else
-				MyAPI.drawStrings(g, tipsForShow, (SCREEN_WIDTH Shr 1) - 72, ((SCREEN_HEIGHT Shr 1) - 50) - 2, 132, OPTION_MOVING_INTERVAL, 20, MapManager.END_COLOR, 4656650, 0)
+				MyAPI.drawStrings(g, tipsForShow, (SCREEN_WIDTH / 2) - 72, ((SCREEN_HEIGHT / 2) - 50) - 2, 132, OPTION_MOVING_INTERVAL, 20, MapManager.END_COLOR, 4656650, 0) ' Shr 1
 			EndIf
 		End
 		
@@ -3668,23 +3668,23 @@ Class GameState Extends State
 		
 		Method drawGameOver:Void(g:MFGraphics)
 			If (Self.continueFrame <= 5) Then
-				MyAPI.drawScaleAni(g, guiAniDrawer, 11, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 28, Self.continueScale, 1.0, 0.0, 0.0)
+				MyAPI.drawScaleAni(g, guiAniDrawer, 11, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - 28, Self.continueScale, 1.0, 0.0, 0.0) ' Shr 1
 			ElseIf (Self.continueFrame <= 10) Then
-				MyAPI.drawScaleAni(g, guiAniDrawer, 12, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 28, Self.continueScale, 1.0, 0.0, 0.0)
+				MyAPI.drawScaleAni(g, guiAniDrawer, 12, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - 28, Self.continueScale, 1.0, 0.0, 0.0) ' Shr 1
 			EndIf
 			
 			If (Self.continueFrame > 10) Then
-				MyAPI.drawScaleAni(g, guiAniDrawer, 12, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 28, Self.continueScale, Self.continueScale, 0.0, 8.0)
+				MyAPI.drawScaleAni(g, guiAniDrawer, 12, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - 28, Self.continueScale, Self.continueScale, 0.0, 8.0) ' Shr 1
 				
 				g.setColor(0)
 				
-				MyAPI.fillRect(g, Self.continueMoveBlackBarX, (SCREEN_HEIGHT Shr 1) + 10, SCREEN_WIDTH, 20)
+				MyAPI.fillRect(g, Self.continueMoveBlackBarX, (SCREEN_HEIGHT / 2) + 10, SCREEN_WIDTH, 20) ' Shr 1
 				
 				If (Self.continueMoveBlackBarX = 0) Then
 					If (Self.continueNumberState < 3) Then
-						MyAPI.drawScaleAni(g, numberDrawer, Self.continueNumber + 32, Self.continueMoveNumberX - PAUSE_OPTION_ITEMS_NUM, (SCREEN_HEIGHT Shr 1) + 12, Self.continueNumberScale, Self.continueNumberScale, 6.0, 8.0)
+						MyAPI.drawScaleAni(g, numberDrawer, Self.continueNumber + 32, Self.continueMoveNumberX - PAUSE_OPTION_ITEMS_NUM, (SCREEN_HEIGHT / 2) + 12, Self.continueNumberScale, Self.continueNumberScale, 6.0, 8.0) ' Shr 1
 					ElseIf (Self.continueNumberState > 3) Then
-						MyAPI.drawScaleAni(g, guiAniDrawer, 13, Self.continueMoveNumberX, (SCREEN_HEIGHT Shr 1) + 20, Self.continueNumberScale, Self.continueNumberScale, 0.0, 0.0)
+						MyAPI.drawScaleAni(g, guiAniDrawer, 13, Self.continueMoveNumberX, (SCREEN_HEIGHT / 2) + 20, Self.continueNumberScale, Self.continueNumberScale, 0.0, 0.0) ' Shr 1
 					EndIf
 					
 					If (Self.continueNumberState < 3 And Key.touchgameover <> Null) Then
@@ -3765,8 +3765,8 @@ Class GameState Extends State
 					Self.pause_saw_x += Self.pause_saw_speed
 				EndIf
 				
-				If (Self.pause_item_x + Self.pause_item_speed < (SCREEN_WIDTH Shr 1) - 40) Then
-					Self.pause_item_x = (SCREEN_WIDTH Shr 1) - 40
+				If (Self.pause_item_x + Self.pause_item_speed < (SCREEN_WIDTH / 2) - 40) Then ' Shr 1
+					Self.pause_item_x = (SCREEN_WIDTH / 2) - 40 ' Shr 1
 				Else
 					Self.pause_item_x += Self.pause_item_speed
 				EndIf
