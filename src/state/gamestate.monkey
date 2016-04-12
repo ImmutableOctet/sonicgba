@@ -440,7 +440,7 @@ Class GameState Extends State
 			Self.state = STAGE_NAME_S
 			
 			' Magic number: 0
-			loadingType = 0
+			loadingType = LOADING_TYPE_BLACK
 			
 			State.fadeInit(255, 0)
 			
@@ -587,7 +587,7 @@ Class GameState Extends State
 					If (StageManager.isStageRestart()) Then
 						Self.state = STATE_STAGE_LOADING
 						
-						loadingType = 0
+						loadingType = LOADING_TYPE_BLACK
 						
 						Key.touchgamekeyClose()
 						Key.touchkeygameboardClose()
@@ -810,7 +810,7 @@ Class GameState Extends State
 						If (Self.gameoverCnt = 128) Then
 							Self.state = STATE_STAGE_LOADING
 							
-							loadingType = 0
+							loadingType = LOADING_TYPE_BLACK
 							
 							StageManager.setStageRestart()
 							StageManager.checkPointTime = 0
@@ -1369,7 +1369,7 @@ Class GameState Extends State
 								If (Self.continueMoveNumberX >= (SCREEN_WIDTH + 30)) Then
 									Self.state = STATE_STAGE_LOADING
 									
-									loadingType = 0
+									loadingType = LOADING_TYPE_BLACK
 									
 									initTips()
 									
@@ -1538,7 +1538,7 @@ Class GameState Extends State
 						
 						MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 						
-						If (loadingType = 2) Then
+						If (loadingType = LOADING_TYPE_BAR) Then
 							g.setColor(MapManager.END_COLOR)
 							
 							MyAPI.fillRect(g, 0, ((SCREEN_HEIGHT Shr 1) - 36) - 10, SCREEN_WIDTH, 20)
@@ -1604,7 +1604,7 @@ Class GameState Extends State
 					If (Self.state = STATE_STAGE_LOADING_TURN) Then
 						State.drawFade(g)
 						
-						If (loadingType = 2) Then
+						If (loadingType = LOADING_TYPE_BAR) Then
 							g.setColor(MapManager.END_COLOR)
 							MyAPI.fillRect(g, 0, ((SCREEN_HEIGHT / 2) - 36) - 10, SCREEN_WIDTH, 20) ' Shr 1
 						EndIf
@@ -2202,7 +2202,7 @@ Class GameState Extends State
 			menuBgDraw(g)
 			State.fillMenuRect(g, Self.BP_CONTINUETRY_MENU_START_X, Self.BP_CONTINUETRY_MENU_START_Y, Self.BP_CONTINUETRY_MENU_WIDTH, Self.BP_CONTINUETRY_MENU_HEIGHT)
 			g.setColor(0)
-			MyAPI.drawBoldStrings(g, strForShow, Self.BP_CONTINUETRY_MENU_START_X + 20, Self.BP_CONTINUETRY_MENU_START_Y + LOADING_TIME_LIMIT, Self.BP_CONTINUETRY_MENU_WIDTH - 20, Self.BP_CONTINUETRY_MENU_HEIGHT - 20, MapManager.END_COLOR, 4656650, 0)
+			MyAPI.drawBoldStrings(g, strForShow, Self.BP_CONTINUETRY_MENU_START_X + 20, Self.BP_CONTINUETRY_MENU_START_Y + 10, Self.BP_CONTINUETRY_MENU_WIDTH - 20, Self.BP_CONTINUETRY_MENU_HEIGHT - 20, MapManager.END_COLOR, 4656650, 0)
 			State.drawMenuFontById(g, 119, SCREEN_WIDTH Shr 1, ((Self.BP_CONTINUETRY_MENU_START_Y + 15) + ((MENU_SPACE * 3) / 2)) + (MENU_SPACE * ((PlayerObject.cursor + strForShow.Length) - 1)))
 			State.drawMenuFontById(g, 113, (SCREEN_WIDTH Shr 1) - 56, ((Self.BP_CONTINUETRY_MENU_START_Y + 15) + ((MENU_SPACE * 3) / 2)) + (MENU_SPACE * ((PlayerObject.cursor + strForShow.Length) - 1)))
 			MyAPI.drawBoldString(g, BPstrings[1], SCREEN_WIDTH Shr 1, (Self.BP_CONTINUETRY_MENU_START_Y + 15) + (MENU_SPACE * ((strForShow.Length - 1) + 1)), 17, MapManager.END_COLOR, 0)
@@ -2396,7 +2396,7 @@ Class GameState Extends State
 			menuBgDraw(g)
 			State.fillMenuRect(g, FRAME_X, (SCREEN_HEIGHT Shr 1) - MENU_SPACE, FRAME_WIDTH, MENU_SPACE Shl 1)
 			g.setColor(0)
-			MyAPI.drawBoldString(g, BPstrings[19], SCREEN_WIDTH Shr 1, ((SCREEN_HEIGHT Shr 1) - MENU_SPACE) + LOADING_TIME_LIMIT, 17, MapManager.END_COLOR, 4656650)
+			MyAPI.drawBoldString(g, BPstrings[19], SCREEN_WIDTH Shr 1, ((SCREEN_HEIGHT Shr 1) - MENU_SPACE) + 10, 17, MapManager.END_COLOR, 4656650)
 			State.drawSoftKey(g, False, True)
 		End
 		
@@ -2489,8 +2489,8 @@ Class GameState Extends State
 		Public Method BP_toolsuseDraw:Void(g:MFGraphics)
 			State.fillMenuRect(g, (SCREEN_WIDTH Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_X, (SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y, PlayerObject.PAUSE_FRAME_WIDTH, PlayerObject.PAUSE_FRAME_HEIGHT)
 			MyAPI.drawImage(g, BP_wordsImg, 0, BP_wordsHeight, BP_wordsWidth, BP_wordsHeight, 0, SCREEN_WIDTH Shr 1, LINE_SPACE + ((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y), 3)
-			State.drawMenuFontById(g, 119, SCREEN_WIDTH Shr 1, (((((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + LOADING_TIME_LIMIT) + (MENU_SPACE Shr 1)) + MENU_SPACE) + (MENU_SPACE * PlayerObject.cursor))
-			State.drawMenuFontById(g, 113, (SCREEN_WIDTH Shr 1) - 56, (((((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + LOADING_TIME_LIMIT) + (MENU_SPACE Shr 1)) + MENU_SPACE) + (MENU_SPACE * PlayerObject.cursor))
+			State.drawMenuFontById(g, 119, SCREEN_WIDTH Shr 1, (((((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE Shr 1)) + MENU_SPACE) + (MENU_SPACE * PlayerObject.cursor))
+			State.drawMenuFontById(g, 113, (SCREEN_WIDTH Shr 1) - 56, (((((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE Shr 1)) + MENU_SPACE) + (MENU_SPACE * PlayerObject.cursor))
 			Int i = 0
 			While (i < currentBPItems.Length) {
 				Int i2
@@ -2503,11 +2503,11 @@ Class GameState Extends State
 					i2 = 0
 				EndIf
 				
-				MyAPI.drawImage(g, mFImage, i3, i2, BP_itemsWidth, BP_itemsHeight, 0, (SCREEN_WIDTH Shr 1) - (BP_itemsWidth * 2), (MENU_SPACE * i) + (((((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + LOADING_TIME_LIMIT) + (MENU_SPACE Shr 1)) + MENU_SPACE), PAUSE_OPTION_ITEMS_NUM)
+				MyAPI.drawImage(g, mFImage, i3, i2, BP_itemsWidth, BP_itemsHeight, 0, (SCREEN_WIDTH Shr 1) - (BP_itemsWidth * 2), (MENU_SPACE * i) + (((((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE Shr 1)) + MENU_SPACE), PAUSE_OPTION_ITEMS_NUM)
 				g.setColor(0)
 				MFGraphics mFGraphics = g
-				MyAPI.drawBoldString(mFGraphics, "~u00d7", SCREEN_WIDTH Shr 1, ((((((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + LOADING_TIME_LIMIT) + (MENU_SPACE Shr 1)) + MENU_SPACE) + (MENU_SPACE * i)) - FONT_H_HALF, 17, MapManager.END_COLOR, 4656650)
-				MyAPI.drawBoldString(g, BP_items_num[currentBPItems[i]], (BP_itemsWidth * 2) + (SCREEN_WIDTH Shr 1), ((((((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + LOADING_TIME_LIMIT) + (MENU_SPACE Shr 1)) + MENU_SPACE) + (MENU_SPACE * i)) - FONT_H_HALF, 24, MapManager.END_COLOR, 4656650)
+				MyAPI.drawBoldString(mFGraphics, "~u00d7", SCREEN_WIDTH Shr 1, ((((((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE Shr 1)) + MENU_SPACE) + (MENU_SPACE * i)) - FONT_H_HALF, 17, MapManager.END_COLOR, 4656650)
+				MyAPI.drawBoldString(g, BP_items_num[currentBPItems[i]], (BP_itemsWidth * 2) + (SCREEN_WIDTH Shr 1), ((((((SCREEN_HEIGHT Shr 1) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE Shr 1)) + MENU_SPACE) + (MENU_SPACE * i)) - FONT_H_HALF, 24, MapManager.END_COLOR, 4656650)
 				i += 1
 			}
 			
@@ -2519,7 +2519,7 @@ Class GameState Extends State
 			
 			State.fillMenuRect(g, TOOL_TIP_X, Self.tooltipY, TOOL_TIP_WIDTH, TOOL_TIP_HEIGHT)
 			For (i = 0; i < TOOL_TIP_STR.Length; i += 1)
-				MyAPI.drawBoldString(g, TOOL_TIP_STR[i], SCREEN_WIDTH Shr 1, (LINE_SPACE * i) + (Self.tooltipY + LOADING_TIME_LIMIT), 17, MapManager.END_COLOR, 4656650, 0)
+				MyAPI.drawBoldString(g, TOOL_TIP_STR[i], SCREEN_WIDTH Shr 1, (LINE_SPACE * i) + (Self.tooltipY + 10), 17, MapManager.END_COLOR, 4656650, 0)
 			Next
 			State.drawSoftKey(g, True, True)
 		End
@@ -2668,7 +2668,7 @@ Class GameState Extends State
 				
 				isThroughGame = True
 				
-				loadingType = 0
+				loadingType = LOADING_TYPE_BLACK
 				
 				StageManager.addStageID()
 				
@@ -2713,7 +2713,7 @@ Class GameState Extends State
 							Self.state = STATE_STAGE_LOADING_TURN
 							
 							isThroughGame = True
-							loadingType = 0
+							loadingType = LOADING_TYPE_BLACK
 							
 							StageManager.addStageID()
 							
@@ -2729,7 +2729,7 @@ Class GameState Extends State
 							Self.state = STATE_STAGE_LOADING_TURN
 							
 							isThroughGame = True
-							loadingType = 0
+							loadingType = LOADING_TYPE_BLACK
 							
 							StageManager.addStageID()
 							
@@ -3355,7 +3355,7 @@ Class GameState Extends State
 			Self.outing = False
 		End
 		
-		Private Method staffLogic:Void()
+		Method staffLogic:Void()
 			If (Self.showCount > 0) Then
 				Self.showCount -= 1
 			EndIf
@@ -3364,7 +3364,7 @@ Class GameState Extends State
 				Self.showCount = 0
 			EndIf
 			
-			If (Self.showCount = 0 And Self.stringCursor < STAFF_STR.Length - 1) Then
+			If (Self.showCount = 0 And Self.stringCursor < (STAFF_STR.Length - 1)) Then
 				Self.changing = True
 			EndIf
 			
@@ -3373,59 +3373,65 @@ Class GameState Extends State
 			EndIf
 			
 			If (Self.outing) Then
-				Self.position = MyAPI.calNextPositionReverse(Self.position, SCREEN_WIDTH Shr 1, (SCREEN_WIDTH * 3) Shr 1, 1, 3)
+				Self.position = MyAPI.calNextPositionReverse(Self.position, (SCREEN_WIDTH / 2), ((SCREEN_WIDTH * 3) / 2), 1, 3) ' Shr 1
 				
-				If (Self.position = ((SCREEN_WIDTH * 3) Shr 1)) Then
+				If (Self.position = ((SCREEN_WIDTH * 3) / 2)) Then ' Shr 1
 					Self.outing = False
-					Self.position = (-SCREEN_WIDTH) Shr 1
+					
+					Self.position = ((-SCREEN_WIDTH) / 2) ' Shr 1
+					
 					Self.stringCursor += 1
+					
 					Self.colorCursor += MyRandom.nextInt(1, COLOR_SEQ.Length - 1)
 					Self.colorCursor Mod= COLOR_SEQ.Length
-					Return
 				EndIf
 				
 				Return
+			Else
+				Self.position = MyAPI.calNextPosition(Double(Self.position), Double(SCREEN_WIDTH / 2), 1, 3) ' Shr 1
+			
+				If (Self.position = (SCREEN_WIDTH / 2)) Then ' Shr 1
+					Self.changing = False
+					Self.outing = True
+					Self.showCount = STATE_SCORE_UPDATED
+				EndIf
 			EndIf
-			
-			Self.position = MyAPI.calNextPosition((Double) Self.position, (Double) (SCREEN_WIDTH Shr 1), 1, 3)
-			
-			If (Self.position = (SCREEN_WIDTH Shr 1)) Then
-				Self.changing = False
-				Self.outing = True
-				Self.showCount = STATE_SCORE_UPDATED
-			EndIf
-			
 		End
 		
-		Private Method drawScrollString:Void(g:MFGraphics, string:String, y:Int, speed:Int, space:Int, color1:Int, color2:Int, color3:Int, anchor:Int)
+		Method drawScrollString:Void(g:MFGraphics, str:String, y:Int, speed:Int, space:Int, color1:Int, color2:Int, color3:Int, anchor:Int)
 			Self.itemOffsetX += speed
 			Self.itemOffsetX Mod= space
-			Int x = 0
-			While (x - Self.itemOffsetX > 0) {
+			
+			Local x:= 0
+			
+			While (x - Self.itemOffsetX > 0)
 				x -= space
-			}
-			Int drawNum = (((SCREEN_WIDTH + space) - 1) / space) + 2
-			For (Int i = 0; i < drawNum; i += 1)
-				MyAPI.drawBoldString(g, string, (x + (i * space)) - Self.itemOffsetX, y, 17, color1, color2, color3)
+			Wend
+			
+			Local drawNum:= ((((SCREEN_WIDTH + space) - 1) / space) + 2) ' STAGE_NAME
+			
+			For Local i:= 0 Until drawNum
+				MyAPI.drawBoldString(g, str, (x + (i * space)) - Self.itemOffsetX, y, 17, color1, color2, color3)
 			Next
 		End
 		
-		Private Method BP_IsToolsNumMax:Bool()
-			
+		Method BP_IsToolsNumMax:Bool()
 			If (BP_items_num[currentBPItems[PlayerObject.cursor]] + currentBPItemsNormalNum[PlayerObject.cursor] <= 99) Then
 				Return False
 			EndIf
 			
-			Self.state = 24
+			Self.state = STATE_BP_TOOLS_MAX
+			
 			Return True
 		End
 		
-		Private Method initStageInfoClearRes:Void()
-			
+		Method initStageInfoClearRes:Void()
 			If (Self.stageInfoClearAni = Null) Then
 				Self.stageInfoClearAni = Animation.getInstanceFromQi("/animation/utl_res/stage_intro_clear.dat")
+				
 				stageInfoAniDrawer = Self.stageInfoClearAni[0].getDrawer(0, False, 0)
-				Self.stageInfoPlayerNameDrawer = Self.stageInfoClearAni[0].getDrawer(PlayerObject.getCharacterID() + 23, False, 0)
+				
+				Self.stageInfoPlayerNameDrawer = Self.stageInfoClearAni[0].getDrawer((PlayerObject.getCharacterID() + 23), False, 0)
 				Self.stageInfoActNumDrawer = Self.stageInfoClearAni[0].getDrawer(27, False, 0)
 				
 				If (guiAnimation = Null) Then
@@ -3441,99 +3447,115 @@ Class GameState Extends State
 		
 		Private Method drawLoading:Void(g:MFGraphics)
 			Select (loadingType)
-				Case STATE_GAME
+				Case LOADING_TYPE_BLACK
 					g.setColor(0)
+					
 					MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
-					break
-				Case STATE_PAUSE
+				Case LOADING_TYPE_WHITE
 					g.setColor(MapManager.END_COLOR)
+					
 					MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
-					break
-				Case 2
+				Case LOADING_TYPE_BAR
 					g.setColor(0)
+					
 					MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+					
 					g.setColor(MapManager.END_COLOR)
-					MyAPI.fillRect(g, 0, ((SCREEN_HEIGHT Shr 1) - 36) - 10, SCREEN_WIDTH, 20)
-					break
+					
+					MyAPI.fillRect(g, 0, ((SCREEN_HEIGHT / 2) - 36) - 10, SCREEN_WIDTH, 20) ' Shr 1
 			End Select
+			
 			Self.loadingWordsDrawer.draw(g, SCREEN_WIDTH, SCREEN_HEIGHT)
+			
 			Self.loadingDrawer.setActionId(1)
-			Self.loadingDrawer.draw(g, SCREEN_WIDTH Shr 1, SCREEN_HEIGHT Shr 1)
+			Self.loadingDrawer.draw(g, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2)) ' Shr 1
 			
 			If (tipsForShow.Length = 0) Then
-				tipsForShow = MyAPI.getStrings(Self.TIPS[MyRandom.nextInt(0, Self.TIPS.Length - 1)], PlayerObject.SONIC_ATTACK_LEVEL_3_V0)
+				' Magic number: 1200
+				tipsForShow = MyAPI.getStrings(Self.TIPS[MyRandom.nextInt(0, Self.TIPS.Length - 1)], 1200)
 				
 				MyAPI.initString()
 				
-				Return
+			Else
+				MyAPI.drawStrings(g, tipsForShow, (SCREEN_WIDTH Shr 1) - 72, ((SCREEN_HEIGHT Shr 1) - 50) - 2, 132, OPTION_MOVING_INTERVAL, 20, MapManager.END_COLOR, 4656650, 0)
 			EndIf
+		End
+		
+		Method initStageIntroType1Conf:Void()
+			Self.frameCount = 0
 			
-			MyAPI.drawStrings(g, tipsForShow, (SCREEN_WIDTH Shr 1) - 72, ((SCREEN_HEIGHT Shr 1) - 50) - 2, 132, OPTION_MOVING_INTERVAL, 20, MapManager.END_COLOR, 4656650, 0)
-		End
-		
-		Private Method initStageIntroType1Conf:Void()
-			Self.frameCount = 0
 			Self.display[0][0] = -50
 			Self.display[0][1] = 0
 			Self.display[0][2] = 0
 			Self.display[0][3] = 0
+			
 			Self.display[1][0] = SCREEN_WIDTH
-			Self.display[1][1] = (SCREEN_HEIGHT Shr 1) + 48
+			Self.display[1][1] = (SCREEN_HEIGHT / 2) + 48 ' Shr 1
 			Self.display[1][2] = 0
 			Self.display[1][3] = 0
+			
 			Self.display[2][0] = 48
-			Self.display[2][1] = (SCREEN_HEIGHT Shr 1) + 48
+			Self.display[2][1] = (SCREEN_HEIGHT / 2) + 48 ' Shr 1
 			Self.display[2][2] = 0
 			Self.display[2][3] = 0
+			
 			Self.display[3][0] = 0
 			Self.display[3][1] = 0
 			Self.display[3][2] = 0
 			Self.display[3][3] = 0
+			
 			Self.display[4][0] = SCREEN_WIDTH
 			Self.display[4][1] = SCREEN_HEIGHT
 			Self.display[4][2] = 0
 			Self.display[4][3] = 0
+			
 			Self.display[5][0] = SCREEN_WIDTH
-			Self.display[5][1] = (SCREEN_HEIGHT Shr 1) - 10
+			Self.display[5][1] = (SCREEN_HEIGHT / 2) - 10 ' Shr 1
 			Self.display[5][2] = 0
 			Self.display[5][3] = 0
 		End
 		
-		Private Method initStageIntroType2Conf:Void()
+		Method initStageIntroType2Conf:Void()
 			Self.frameCount = 0
+			
 			Self.display[0][0] = -50
 			Self.display[0][1] = 0
 			Self.display[0][2] = 0
 			Self.display[0][3] = 0
+			
 			Self.display[1][0] = 0
-			Self.display[1][1] = (SCREEN_HEIGHT Shr 1) - 36
+			Self.display[1][1] = (SCREEN_HEIGHT / 2) - 36 ' Shr 1
 			Self.display[1][2] = 0
 			Self.display[1][3] = 0
+			
 			Self.display[2][0] = 48
-			Self.display[2][1] = (SCREEN_HEIGHT Shr 1) + 48
+			Self.display[2][1] = (SCREEN_HEIGHT / 2) + 48 ' Shr 1
 			Self.display[2][2] = 0
 			Self.display[2][3] = 0
+			
 			Self.display[3][0] = 0
 			Self.display[3][1] = 0
 			Self.display[3][2] = 0
 			Self.display[3][3] = 0
+			
 			Self.display[4][0] = SCREEN_WIDTH
 			Self.display[4][1] = SCREEN_HEIGHT
 			Self.display[4][2] = 0
 			Self.display[4][3] = 0
+			
 			Self.display[5][0] = SCREEN_WIDTH
-			Self.display[5][1] = (SCREEN_HEIGHT Shr 1) - 10
+			Self.display[5][1] = (SCREEN_HEIGHT / 2) - 10 ' Shr 1
 			Self.display[5][2] = 0
 			Self.display[5][3] = 0
 		End
 		
-		Private Method drawTimeOver:Void(g:MFGraphics, x:Int, y:Int)
-			Int id = 11
+		Method drawTimeOver:Void(g:MFGraphics, x:Int, y:Int)
+			Local id:= 11
 			
 			If (Self.overtitleID = 78) Then
 				id = 11
 			ElseIf (Self.overtitleID = 136) Then ' Def.TOUCH_HELP_HEIGHT
-				id = LOADING_TIME_LIMIT
+				id = 10
 			EndIf
 			
 			If (guiAnimation = Null) Then
@@ -3541,20 +3563,29 @@ Class GameState Extends State
 			EndIf
 			
 			guiAniDrawer = guiAnimation.getDrawer(0, False, 0)
+			
 			guiAniDrawer.setActionId(id)
 			guiAniDrawer.draw(g, x, y)
 		End
 		
-		Private Method continueInit:Void()
+		Method continueInit:Void()
 			Self.state = STATE_CONTINUE_1
+			
 			Self.continueFrame = 0
+			
 			Self.continueScale = 1.0
+			
 			Self.continueMoveBlackBarX = -SCREEN_WIDTH
 			Self.continueMoveNumberX = -30
-			Self.continueNumber = VISIBLE_OPTION_ITEMS_NUM
+			
+			Self.continueNumber = 9 ' VISIBLE_OPTION_ITEMS_NUM
+			
 			Self.continueNumberState = 0
+			
 			Self.continueNumberScale = 1.0
+			
 			Self.continueCursor = -1
+			
 			Key.touchgameoverensurekeyInit()
 			
 			If (guiAnimation = Null) Then
@@ -3570,16 +3601,19 @@ Class GameState Extends State
 			isThroughGame = False
 		End
 		
-		Private Method continueEnd:Void()
-			Self.continueNumberState = STATE_SET_PARAM
+		Method continueEnd:Void()
+			Self.continueNumberState = 3
+			
 			Self.continueStartEndFrame = Self.continueFrame
+			
 			StageManager.resetStageIdforContinueEnd()
+			
 			Key.touchgameoverensurekeyClose()
+			
 			isThroughGame = False
 		End
 		
-		Private Method drawGameOver:Void(g:MFGraphics)
-			
+		Method drawGameOver:Void(g:MFGraphics)
 			If (Self.continueFrame <= 5) Then
 				MyAPI.drawScaleAni(g, guiAniDrawer, 11, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 28, Self.continueScale, 1.0, 0.0, 0.0)
 			ElseIf (Self.continueFrame <= 10) Then
@@ -3588,8 +3622,10 @@ Class GameState Extends State
 			
 			If (Self.continueFrame > 10) Then
 				MyAPI.drawScaleAni(g, guiAniDrawer, 12, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 28, Self.continueScale, Self.continueScale, 0.0, 8.0)
+				
 				g.setColor(0)
-				MyAPI.fillRect(g, Self.continueMoveBlackBarX, (SCREEN_HEIGHT Shr 1) + LOADING_TIME_LIMIT, SCREEN_WIDTH, 20)
+				
+				MyAPI.fillRect(g, Self.continueMoveBlackBarX, (SCREEN_HEIGHT Shr 1) + 10, SCREEN_WIDTH, 20)
 				
 				If (Self.continueMoveBlackBarX = 0) Then
 					If (Self.continueNumberState < 3) Then
@@ -3603,10 +3639,9 @@ Class GameState Extends State
 					EndIf
 				EndIf
 			EndIf
-			
 		End
 		
-		Private Method drawGameOverSingle:Void(g:MFGraphics)
+		Method drawGameOverSingle:Void(g:MFGraphics)
 			Self.continueFrame += 1
 			
 			If (Self.continueFrame >= 65) Then
@@ -3616,32 +3651,32 @@ Class GameState Extends State
 					Self.continueScale = 0.0
 				EndIf
 				
-				MyAPI.drawScaleAni(g, guiAniDrawer, 11, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 28, Self.continueScale, 1.0, 0.0, 0.0)
+				MyAPI.drawScaleAni(g, guiAniDrawer, 11, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - 28, Self.continueScale, 1.0, 0.0, 0.0) ' Shr 1
+				
 				Return
 			EndIf
 			
-			MyAPI.drawScaleAni(g, guiAniDrawer, 11, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 28, 1.0, 1.0, 0.0, 0.0)
+			MyAPI.drawScaleAni(g, guiAniDrawer, 11, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - 28, 1.0, 1.0, 0.0, 0.0) ' Shr 1
 		End
 		
-		Private Method drawGameOverTouchKey:Void(g:MFGraphics)
-			
+		Method drawGameOverTouchKey:Void(g:MFGraphics)
 			If (Key.touchgameoveryres.Isin()) Then
-				State.drawTouchGameKeyBoardById(g, LOADING_TIME_LIMIT, SCREEN_WIDTH - 22, Def.TOUCH_A_Y)
+				State.drawTouchGameKeyBoardById(g, 10, SCREEN_WIDTH - 22, Def.TOUCH_A_Y) ' 123
 			Else
-				State.drawTouchGameKeyBoardById(g, VISIBLE_OPTION_ITEMS_NUM, SCREEN_WIDTH - 22, Def.TOUCH_A_Y)
+				State.drawTouchGameKeyBoardById(g, VISIBLE_OPTION_ITEMS_NUM, SCREEN_WIDTH - 22, Def.TOUCH_A_Y) ' 123
 			EndIf
 			
 			If (Key.touchgameoverno.Isin()) Then
-				State.drawTouchGameKeyBoardById(g, 12, SCREEN_WIDTH - 67, Def.TOUCH_B_Y)
+				State.drawTouchGameKeyBoardById(g, 12, SCREEN_WIDTH - 67, Def.TOUCH_B_Y) ' 138
 			Else
-				State.drawTouchGameKeyBoardById(g, 11, SCREEN_WIDTH - 67, Def.TOUCH_B_Y)
+				State.drawTouchGameKeyBoardById(g, 11, SCREEN_WIDTH - 67, Def.TOUCH_B_Y) ' 138
 			EndIf
 			
 			guiAniDrawer.draw(g, BIRD_SPACE_2, SCREEN_WIDTH - 22, Def.TOUCH_A_Y, False, 0)
 			guiAniDrawer.draw(g, 15, SCREEN_WIDTH - 67, Def.TOUCH_B_Y, False, 0)
 		End
 		
-		Private Method gamePauseInit:Void()
+		Method gamePauseInit:Void()
 			Self.pausecnt = 0
 			Self.pause_saw_x = -50
 			Self.pause_saw_y = 0
@@ -3649,14 +3684,16 @@ Class GameState Extends State
 			Self.pause_item_x = SCREEN_WIDTH - 26
 			
 			If (PlayerObject.stageModeState = GameObject.STATE_NORMAL_MODE) Then
-				Self.pause_item_y = (SCREEN_HEIGHT Shr 1) - 36
+				Self.pause_item_y = (SCREEN_HEIGHT / 2) - 36 ' Shr 1
+				
 				Key.touchGamePauseInit(0)
 			ElseIf (PlayerObject.stageModeState = GameObject.STATE_RACE_MODE) Then
-				Self.pause_item_y = (SCREEN_HEIGHT Shr 1) - 60
+				Self.pause_item_y = (SCREEN_HEIGHT / 2) - 60 ' Shr 1
+				
 				Key.touchGamePauseInit(1)
 			EndIf
 			
-			Self.pause_item_speed = (-((SCREEN_WIDTH Shr 1) + BIRD_SPACE_2)) / 3
+			Self.pause_item_speed = (-((SCREEN_WIDTH / 2) + 14)) / 3 ' Shr 1
 			
 			If (muiAniDrawer = Null) Then
 				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
@@ -3680,16 +3717,13 @@ Class GameState Extends State
 				Else
 					Self.pause_item_x += Self.pause_item_speed
 				EndIf
-				
 			ElseIf (Self.pausecnt > 7) Then
-				Int i
-				Int items = PlayerObject.stageModeState = GameObject.STATE_NORMAL_MODE ? STATE_SET_PARAM : PAUSE_OPTION_ITEMS_NUM
-				For (i = 0; i < items; i += 1)
-					
+				Local items:= PickValue((PlayerObject.stageModeState = GameObject.STATE_NORMAL_MODE), 3, 6) ' PAUSE_OPTION_ITEMS_NUM
+				
+				For Local i:= 0 Until items
 					If (Key.touchgamepauseitem[i].Isin() And Key.touchgamepause.IsClick()) Then
 						Self.pause_item_cursor = i
 					EndIf
-					
 				Next
 				
 				If (Key.touchgamepausereturn.Isin() And Key.touchgamepause.IsClick()) Then
@@ -3699,6 +3733,7 @@ Class GameState Extends State
 				If ((Key.press(Key.B_BACK) Or (Key.touchgamepausereturn.IsButtonPress() And Self.pause_item_cursor = -2)) And Not Self.pause_returnFlag) Then
 					Self.pause_returnFlag = True
 					Self.pause_returnframe = Self.pausecnt
+					
 					SoundSystem.getInstance().playSe(SoundSystem.SE_107)
 				EndIf
 				
@@ -3708,31 +3743,41 @@ Class GameState Extends State
 						Self.pause_item_x -= Self.pause_item_speed
 					ElseIf (Self.pausecnt > Self.pause_returnframe + 3) Then
 						BacktoGame()
+						
 						isDrawTouchPad = True
+						
 						Self.pause_returnFlag = False
+						
 						State.setFadeOver()
 					EndIf
 				EndIf
 				
 				If (Self.pause_optionFlag And Self.pausecnt > Self.pause_optionframe + 3) Then
 					optionInit()
+					
 					Self.state = STATE_PAUSE_OPTION
+					
 					Self.pause_optionFlag = False
 				EndIf
 				
 				If (Not State.fadeChangeOver()) Then
-					For (i = 0; i < items; i += 1)
+					For Local i:= 0 Until items
 						Key.touchgamepauseitem[i].resetKeyState()
 					Next
 				ElseIf (PlayerObject.stageModeState = GameObject.STATE_NORMAL_MODE) Then
 					If (Key.touchgamepauseitem[0].IsButtonPress() And Self.pause_item_cursor = 0 And Not Self.pause_returnFlag) Then
 						Self.pause_returnFlag = True
+						
 						Self.pause_returnframe = Self.pausecnt
+						
 						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					ElseIf (Key.touchgamepauseitem[1].IsButtonPress() And Self.pause_item_cursor = 1 And State.fadeChangeOver()) Then
 						Self.state = STATE_PAUSE_TO_TITLE
+						
 						State.fadeInit(102, 220)
+						
 						secondEnsureInit()
+						
 						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					ElseIf (Key.touchgamepauseitem[2].IsButtonPress() And Self.pause_item_cursor = 2 And Not Self.pause_returnFlag) Then
 						changeStateWithFade(STATE_PAUSE_OPTION)
@@ -3742,34 +3787,48 @@ Class GameState Extends State
 						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					EndIf
 					
-				ElseIf (PlayerObject.stageModeState <> 1) Then
+				ElseIf (PlayerObject.stageModeState <> GameObject.STATE_RACE_MODE) Then
+					' Nothing so far.
 				Else
-					
 					If (Key.touchgamepauseitem[0].IsButtonPress() And Self.pause_item_cursor = 0 And Not Self.pause_returnFlag) Then
 						Self.pause_returnFlag = True
+						
 						Self.pause_returnframe = Self.pausecnt
+						
 						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					ElseIf (Key.touchgamepauseitem[1].IsButtonPress() And Self.pause_item_cursor = 1 And State.fadeChangeOver()) Then
 						Self.state = STATE_PAUSE_RETRY
+						
 						State.fadeInit(102, 220)
+						
 						secondEnsureInit()
+						
 						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 					ElseIf (Key.touchgamepauseitem[2].IsButtonPress() And Self.pause_item_cursor = 2 And State.fadeChangeOver()) Then
 						Self.state = STATE_PAUSE_SELECT_CHARACTER
+						
 						State.fadeInit(102, 220)
+						
 						secondEnsureInit()
+						
 						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
-					ElseIf (Key.touchgamepauseitem[3].IsButtonPress() And Self.pause_item_cursor = STATE_SET_PARAM And State.fadeChangeOver()) Then
+					ElseIf (Key.touchgamepauseitem[3].IsButtonPress() And Self.pause_item_cursor = 3 And State.fadeChangeOver()) Then
 						Self.state = STATE_PAUSE_SELECT_STAGE
+						
 						State.fadeInit(102, 220)
+						
 						secondEnsureInit()
+						
 						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
-					ElseIf (Key.touchgamepauseitem[4].IsButtonPress() And Self.pause_item_cursor = PAUSE_RACE_OPTION And State.fadeChangeOver()) Then
+					ElseIf (Key.touchgamepauseitem[4].IsButtonPress() And Self.pause_item_cursor = 4 And State.fadeChangeOver()) Then
 						Self.state = STATE_PAUSE_TO_TITLE
+						
 						State.fadeInit(102, 220)
+						
 						secondEnsureInit()
+						
 						SoundSystem.getInstance().playSe(SoundSystem.SE_106)
-					ElseIf (Key.touchgamepauseitem[5].IsButtonPress() And Self.pause_item_cursor = PAUSE_RACE_INSTRUCTION And Not Self.pause_returnFlag) Then
+					ElseIf (Key.touchgamepauseitem[5].IsButtonPress() And Self.pause_item_cursor = 5 And Not Self.pause_returnFlag) Then
 						changeStateWithFade(STATE_PAUSE_OPTION)
 						
 						optionInit()
@@ -3781,81 +3840,43 @@ Class GameState Extends State
 			
 		End
 		
-		Private Method drawGamePause:Void(g:MFGraphics)
+		Method drawGamePause:Void(g:MFGraphics)
+			Local animationDrawer:AnimationDrawer = muiAniDrawer
 			
-			If (Self.pausecnt > PAUSE_RACE_INSTRUCTION) Then
-				muiAniDrawer.setActionId(50)
-				muiAniDrawer.draw(g, Self.pause_saw_x, Self.pause_saw_y)
+			If (Self.pausecnt > 5) Then
+				animationDrawer.setActionId(50)
+				animationDrawer.draw(g, Self.pause_saw_x, Self.pause_saw_y)
 			EndIf
 			
 			If (Self.pausecnt > 7) Then
-				muiAniDrawer.setActionId((Key.touchgamepausereturn.Isin() ? PAUSE_RACE_INSTRUCTION : 0) + 61)
-				muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
+				animationDrawer.setActionId(PickValue(Key.touchgamepausereturn.Isin(), 66, 61))
+				animationDrawer.draw(g, 0, SCREEN_HEIGHT)
 			EndIf
 			
 			If (Self.pausecnt <= 5) Then
 				Return
 			EndIf
 			
-			AnimationDrawer animationDrawer
-			Int i
-			
 			If (PlayerObject.stageModeState = GameObject.STATE_NORMAL_MODE) Then
-				animationDrawer = muiAniDrawer
+				animationDrawer.setActionId(Int(Self.pause_item_cursor = 0 And Key.touchgamepauseitem[0].Isin()) + 2)
+				animationDrawer.draw(g, Self.pause_item_x, Self.pause_item_y)
 				
-				If (Self.pause_item_cursor = 0 And Key.touchgamepauseitem[0].Isin()) Then
-					i = 1
-				Else
-					i = 0
-				EndIf
+				animationDrawer.setActionId(Int(Self.pause_item_cursor = 1 And Key.touchgamepauseitem[1].Isin()) + 10)
+				animationDrawer.draw(g, Self.pause_item_x, Self.pause_item_y + 24)
 				
-				animationDrawer.setActionId(i + 2)
-				muiAniDrawer.draw(g, Self.pause_item_x, Self.pause_item_y)
-				animationDrawer = muiAniDrawer
-				
-				If (Self.pause_item_cursor = 1 And Key.touchgamepauseitem[1].Isin()) Then
-					i = 1
-				Else
-					i = 0
-				EndIf
-				
-				animationDrawer.setActionId(i + LOADING_TIME_LIMIT)
-				muiAniDrawer.draw(g, Self.pause_item_x, Self.pause_item_y + 24)
-				animationDrawer = muiAniDrawer
-				
-				If (Self.pause_item_cursor = 2 And Key.touchgamepauseitem[2].Isin()) Then
-					i = 1
-				Else
-					i = 0
-				EndIf
-				
-				animationDrawer.setActionId(i + 12)
-				muiAniDrawer.draw(g, Self.pause_item_x, Self.pause_item_y + 48)
+				animationDrawer.setActionId(Int(Self.pause_item_cursor = 2 And Key.touchgamepauseitem[2].Isin()) + 12)
+				animationDrawer.draw(g, Self.pause_item_x, Self.pause_item_y + 48)
 			ElseIf (PlayerObject.stageModeState = GameObject.STATE_RACE_MODE) Then
-				Int i2 = 0
-				While (i2 < PAUSE_OPTION_ITEMS_NUM) {
-					Int i3
-					animationDrawer = muiAniDrawer
-					i = (i2 + 1) * 2
-					
-					If (Self.pause_item_cursor = i2 And Key.touchgamepauseitem[i2].Isin()) Then
-						i3 = 1
-					Else
-						i3 = 0
-					EndIf
-					
-					animationDrawer.setActionId(i + i3)
-					muiAniDrawer.draw(g, Self.pause_item_x, Self.pause_item_y + (i2 * 24))
-					i2 += 1
-				}
+				For Local i:= 0 Until Key.touchgamepauseitem.Length
+					animationDrawer.setActionId(((i + 1) * 2) + Int(Self.pause_item_cursor = i And Key.touchgamepauseitem[i].Isin()))
+					animationDrawer.draw(g, Self.pause_item_x, Self.pause_item_y + (i * 24))
+				Next
 			EndIf
-			
 		End
 		
-		Private Method pausetoTitleLogic:Void()
+		Method pausetoTitleLogic:Void()
 			Select (secondEnsureLogic())
-				Case STATE_PAUSE
-					
+				Case 1
 					If (GameObject.stageModeState = GameObject.STATE_RACE_MODE) Then
 						StageManager.doWhileLeaveRace()
 					EndIf
@@ -3874,29 +3895,37 @@ Class GameState Extends State
 					Key.touchMainMenuInit2()
 				Case 2
 					State.fadeInit_Modify(192, 102)
+					
 					Self.state = STATE_PAUSE
+					
 					GameObject.IsGamePause = True
 				Default
+					' Nothing so far.
 			End Select
 		End
 		
-		Private Method retryStageLogic:Void()
+		Method retryStageLogic:Void()
 			Select (secondEnsureLogic())
-				Case STATE_PAUSE
+				Case 1
 					Self.state = STATE_STAGE_LOADING
-					loadingType = 0
+					
+					loadingType = LOADING_TYPE_BLACK
+					
 					initTips()
 				Case 2
 					State.fadeInit_Modify(192, 102)
+					
 					Self.state = STATE_PAUSE
+					
 					GameObject.IsGamePause = True
 				Default
+					' Nothing so far.
 			End Select
 		End
 		
-		Private Method pausetoSelectStageLogic:Void()
+		Method pausetoSelectStageLogic:Void()
 			Select (secondEnsureLogic())
-				Case STATE_PAUSE
+				Case 1
 					setStateWithFade(State.STATE_SELECT_RACE_STAGE)
 				Case 2
 					State.fadeInit(220, 102)
@@ -3906,88 +3935,122 @@ Class GameState Extends State
 					
 					GameObject.IsGamePause = True
 				Default
+					' Nothing so far.
 			End Select
 		End
 		
-		Private Method pausetoSelectCharacterLogic:Void()
+		Method pausetoSelectCharacterLogic:Void()
 			Select (secondEnsureLogic())
-				Case STATE_PAUSE
+				Case 1
 					setStateWithFade(State.STATE_SELECT_CHARACTER)
 				Case 2
 					State.fadeInit(220, 102)
 					State.fadeInit_Modify(192, 102)
+					
 					Self.state = STATE_PAUSE
+					
 					GameObject.IsGamePause = True
 				Default
+					' Nothing so far.
 			End Select
 		End
 		
-		Private Method pauseOptionSoundLogic:Void()
+		Method pauseOptionSoundLogic:Void()
 			Select (itemsSelect2Logic())
-				Case STATE_PAUSE
+				Case 1
 					GlobalResource.soundSwitchConfig = 1
+					
 					State.fadeInit(102, 0)
+					
 					Self.state = STATE_PAUSE_OPTION
+					
 					SoundSystem.getInstance().setSoundState(GlobalResource.soundConfig)
 					SoundSystem.getInstance().setSeState(GlobalResource.seConfig)
+					
 					Self.returnCursor = 0
 				Case 2
 					GlobalResource.soundSwitchConfig = 0
+					
 					State.fadeInit(102, 0)
+					
 					Self.state = STATE_PAUSE_OPTION
+					
 					SoundSystem.getInstance().setSoundState(0)
 					SoundSystem.getInstance().setSeState(0)
+					
 					Self.returnCursor = 0
-				Case STATE_SET_PARAM
+				Case 3
 					State.fadeInit(102, 0)
+					
 					Self.state = STATE_PAUSE_OPTION
+					
 					Self.returnCursor = 0
 				Default
+					' Nothing so far.
 			End Select
 		End
 		
-		Private Method pauseOptionVibrationLogic:Void()
+		Method pauseOptionVibrationLogic:Void()
 			Select (itemsSelect2Logic())
 				Case STATE_PAUSE
 					GlobalResource.vibrationConfig = 1
+					
 					State.fadeInit(102, 0)
+					
 					Self.state = STATE_PAUSE_OPTION
+					
 					Self.returnCursor = 0
+					
 					MyAPI.vibrate()
 				Case 2
 					GlobalResource.vibrationConfig = 0
+					
 					State.fadeInit(102, 0)
+					
 					Self.state = STATE_PAUSE_OPTION
+					
 					Self.returnCursor = 0
-				Case STATE_SET_PARAM
+				Case 3
 					State.fadeInit(102, 0)
+					
 					Self.state = STATE_PAUSE_OPTION
+					
 					Self.returnCursor = 0
 				Default
+					' Nothing so far.
 			End Select
 		End
 		
-		Private Method pauseOptionSpSetLogic:Void()
+		Method pauseOptionSpSetLogic:Void()
 			Select (itemsSelect2Logic())
-				Case STATE_PAUSE
+				Case 1
 					GlobalResource.spsetConfig = 0
+					
 					State.fadeInit(102, 0)
+					
 					Self.state = STATE_PAUSE_OPTION
+					
 					Self.returnCursor = 0
 				Case 2
 					GlobalResource.spsetConfig = 1
+					
 					State.fadeInit(102, 0)
+					
 					Self.state = STATE_PAUSE_OPTION
+					
 					Self.returnCursor = 0
 				Case STATE_SET_PARAM
 					State.fadeInit(102, 0)
+					
 					Self.state = STATE_PAUSE_OPTION
+					
 					Self.returnCursor = 0
 				Default
+					' Nothing so far.
 			End Select
 		End
 		
-		Private Method scoreUpdateInit:Void()
+		Method scoreUpdateInit:Void()
 			Key.touchgamekeyClose()
 			Key.touchkeygameboardClose()
 			Key.touchkeyboardInit()
@@ -4004,12 +4067,12 @@ Class GameState Extends State
 			EndIf
 			
 			guiAniDrawer = guiAnimation.getDrawer(0, False, 0)
+			
 			Self.returnCursor = 0
 			Self.scoreUpdateCursor = 0
 		End
 		
-		Private Method scoreUpdateLogic:Void()
-			
+		Method scoreUpdateLogic:Void()
 			If (State.fadeChangeOver()) Then
 				If (Key.touchscoreupdatereturn.Isin() And Key.touchscoreupdate.IsClick()) Then
 					Self.returnCursor = 1
@@ -4023,8 +4086,11 @@ Class GameState Extends State
 				
 				If (Key.touchscoreupdateyes.IsButtonPress() And Self.scoreUpdateCursor = 1) Then
 					Self.state = STATE_SCORE_UPDATE_ENSURE
+					
 					secondEnsureInit()
-					State.fadeInit(0, GimmickObject.GIMMICK_NUM)
+					
+					State.fadeInit(0, 110)
+					
 					SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 				ElseIf (Key.touchscoreupdateno.IsButtonPress() And Self.scoreUpdateCursor = 2) Then
 					Standard2.splashinit(True)
@@ -4042,82 +4108,86 @@ Class GameState Extends State
 					SoundSystem.getInstance().playSe(SoundSystem.SE_107)
 				EndIf
 			EndIf
-			
 		End
 		
-		Private Method scoreUpdateDraw:Void(g:MFGraphics)
-			Int i
+		Method scoreUpdateDraw:Void(g:MFGraphics)
 			g.setColor(0)
+			
 			MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
-			muiAniDrawer.setActionId(52)
-			For (Int i2 = 0; i2 < (SCREEN_WIDTH / 48) + 1; i2 += 1)
-				For (Int j = 0; j < (SCREEN_HEIGHT / 48) + 1; j += 1)
-					muiAniDrawer.draw(g, i2 * 48, j * 48)
+			
+			Local animationDrawer:= muiAniDrawer
+			
+			animationDrawer.setActionId(52)
+			
+			For Local i:= 0 To (SCREEN_WIDTH / 48)
+				For Local j:= 0 To (SCREEN_HEIGHT / 48)
+					animationDrawer.draw(g, i2 * 48, j * 48)
 				Next
 			Next
-			Self.optionOffsetX -= PAUSE_RACE_OPTION
+			
+			Self.optionOffsetX -= OPTION_MOVING_SPEED
 			Self.optionOffsetX Mod= 128
-			muiAniDrawer.setActionId(102)
-			For (Int x1 = Self.optionOffsetX; x1 < SCREEN_WIDTH * 2; x1 += 128)
-				muiAniDrawer.draw(g, x1, 0)
+			
+			animationDrawer.setActionId(102)
+			
+			For Local x:= Self.optionOffsetX Until (SCREEN_WIDTH * 2) Step 128
+				animationDrawer.draw(g, x1, 0)
 			Next
+			
 			guiAniDrawer.setActionId(17)
-			guiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 37)
-			PlayerObject.drawRecordTime(g, StageManager.getTimeModeScore(PlayerObject.getCharacterID()), (SCREEN_WIDTH Shr 1) + 54, (SCREEN_HEIGHT Shr 1) - 10, 2, 2)
-			muiAniDrawer.setActionId((Key.touchscoreupdateyes.Isin() ? 1 : 0) + 55)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 60, (SCREEN_HEIGHT Shr 1) + 28)
-			muiAniDrawer.setActionId(StringIndex.BLUE_BACKGROUND_ID)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 60, (SCREEN_HEIGHT Shr 1) + 28)
-			AnimationDrawer animationDrawer = muiAniDrawer
+			guiAniDrawer.draw(g, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - 37) ' Shr 1
 			
-			If (Key.touchscoreupdateno.Isin()) Then
-				i = 1
-			Else
-				i = 0
-			EndIf
+			PlayerObject.drawRecordTime(g, StageManager.getTimeModeScore(PlayerObject.getCharacterID()), (SCREEN_WIDTH / 2) + 54, (SCREEN_HEIGHT / 2) - 10, 2, 2) ' Shr 1
 			
-			animationDrawer.setActionId(i + 55)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 60, (SCREEN_HEIGHT Shr 1) + 28)
-			muiAniDrawer.setActionId(104)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 60, (SCREEN_HEIGHT Shr 1) + 28)
-			animationDrawer = muiAniDrawer
+			animationDrawer.setActionId(Int(Key.touchscoreupdateyes.Isin()) + 55)
+			animationDrawer.draw(g, (SCREEN_WIDTH / 2) - 60, (SCREEN_HEIGHT / 2) + 28) ' Shr 1
 			
-			If (Key.touchscoreupdatereturn.Isin()) Then
-				i = 5
-			Else
-				i = 0
-			EndIf
+			animationDrawer.setActionId(103)
+			animationDrawer.draw(g, (SCREEN_WIDTH / 2) - 60, (SCREEN_HEIGHT / 2) + 28) ' Shr 1
 			
-			animationDrawer.setActionId(i + 61)
-			muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
+			animationDrawer.setActionId(Int(Key.touchscoreupdateno.Isin()) + 55)
+			animationDrawer.draw(g, (SCREEN_WIDTH / 2) + 60, (SCREEN_HEIGHT / 2) + 28) ' Shr 1
+			
+			animationDrawer.setActionId(104)
+			animationDrawer.draw(g, (SCREEN_WIDTH / 2) + 60, (SCREEN_HEIGHT / 2) + 28) ' Shr 1
+			
+			animationDrawer.setActionId(PickValue(Key.touchscoreupdatereturn.Isin(), 66, 61))
+			animationDrawer.draw(g, 0, SCREEN_HEIGHT)
+			
 			State.drawFade(g)
 		End
 		
-		Private Method scoreUpdateEnsureLogic:Void()
+		Method scoreUpdateEnsureLogic:Void()
 			Select (secondEnsureLogic())
-				Case STATE_PAUSE
-					Message msg = New Message()
+				Case 1
+					'Local msg:= New Message()
 					setGameScore(StageManager.getTimeModeScore(PlayerObject.getCharacterID()))
-					sendMessage(msg, PAUSE_OPTION_ITEMS_NUM)
+					'sendMessage(msg, Standard2.MESSAGE_SAVE)
+					
 					Self.state = STATE_SCORE_UPDATED
 				Case 2
 					Self.state = STATE_SCORE_UPDATE
-					State.fadeInit(GimmickObject.GIMMICK_NUM, 0)
+					
+					State.fadeInit(110, 0)
 					State.setFadeOver()
+					
 					Self.returnCursor = 0
+					
 					Self.scoreUpdateCursor = 0
 				Default
+					' Nothing so far.
 			End Select
 		End
 		
-		Private Method scoreUpdateEnsureDraw:Void(g:MFGraphics)
+		Method scoreUpdateEnsureDraw:Void(g:MFGraphics)
 			scoreUpdateDraw(g)
+			
 			State.drawFade(g)
+			
 			SecondEnsurePanelDraw(g, 106)
 		End
 		
-		Private Method scoreUpdatedLogic:Void()
-			
+		Method scoreUpdatedLogic:Void()
 			If (activity.isResumeFromOtherActivity) Then
 				Standard2.splashinit(True)
 				
@@ -4125,9 +4195,9 @@ Class GameState Extends State
 				
 				activity.isResumeFromOtherActivity = False
 			EndIf
-			
 		End
 		
-		Private Method scoreUpdatedDraw:Void(g:MFGraphics)
+		Method scoreUpdatedDraw:Void(g:MFGraphics)
+			' Empty implementation.
 		End
 End
