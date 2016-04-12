@@ -436,7 +436,7 @@ Class GimmickObject Extends GameObject
 							reElement = New UnseenSpring(id, x, y, left, top, width, height)
 						Case 109
 							reElement = New AntiGravity(id, x, y, left, top, width, height)
-						Case Def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1
+						Case GIMMICK_AIR_ROOT
 							reElement = New AirRoot(id, x, y, left, top, width, height)
 					End Select
 					
@@ -617,7 +617,7 @@ Class GimmickObject Extends GameObject
 			' This behavior may change in the future.
 			If (p = player) Then
 				Select (Self.objId)
-					Case PlayerTails.TAILS_ANI_DEAD_1
+					Case 17
 						If (Not Self.collisionRect.collisionChk(p.getCheckPositionX(), p.getCheckPositionY())) Then
 							Self.used = False
 						ElseIf (Not Self.used) Then
@@ -625,7 +625,7 @@ Class GimmickObject Extends GameObject
 							
 							Self.used = True
 						EndIf
-					Case PlayerTails.TAILS_ANI_DEAD_2
+					Case 18
 						If (Not Self.collisionRect.collisionChk(p.getCheckPositionX(), p.getCheckPositionY())) Then
 							Self.used = False
 						ElseIf (Not Self.used) Then
@@ -633,17 +633,17 @@ Class GimmickObject Extends GameObject
 							
 							Self.used = True
 						EndIf
-					Case PlayerTails.TAILS_ANI_SPRING_1
-						If (p instanceof PlayerSonic) Then
-							p.slipEnd()
-						ElseIf (p instanceof PlayerAmy) Then
+					Case GIMMICK_SLIP_END
+						Local charID:= p.getCharacterID()
+						
+						If (charID = CHARACTER_SONIC Or charID = CHARACTER_AMY) Then
 							p.slipEnd()
 						EndIf
-					Case PlayerTails.TAILS_ANI_CLIFF_2
+					Case 26
 						If (Not Self.used And p.beUnseenPop()) Then
 							Self.used = True
 						EndIf
-					Case PlayerTails.TAILS_ANI_UP_ARM
+					Case 34
 						If (Not Self.collisionRect.collisionChk(p.getCheckPositionX(), p.getCheckPositionY())) Then
 							Self.used = False
 						ElseIf (Not Self.used) Then
@@ -651,11 +651,11 @@ Class GimmickObject Extends GameObject
 							
 							Self.used = True
 							
-							If (Not (p instanceof PlayerAmy) And p.getAnimationId() <> 4) Then
+							If ((p.getCharacterID() <> CHARACTER_AMY) And p.getAnimationId() <> 4) Then
 								soundInstance.playSe(4)
 							EndIf
 						EndIf
-					Case PlayerTails.TAILS_ANI_POLE_V
+					Case 35
 						If (Not Self.collisionRect.collisionChk(p.getCheckPositionX(), p.getCheckPositionY())) Then
 							Self.used = False
 						ElseIf (Not Self.used) Then
@@ -663,15 +663,15 @@ Class GimmickObject Extends GameObject
 							p.ductOut()
 							Self.used = True
 						End
-					Case PlayerTails.TAILS_ANI_POLE_H
+					Case 36
 						If (p.isOnGound() And Self.collisionRect.collisionChk(p.getCheckPositionX(), p.getCheckPositionY())) Then
 							p.setVelX(PlayerObject.HUGE_POWER_SPEED)
 						End
-					Case PlayerTails.TAILS_ANI_ROLL_V_1
+					Case 37
 						If (p.isOnGound()) Then
 							p.setVelX(-1900)
 						End
-					Case PlayerTails.TAILS_ANI_ROLL_V_2, GIMMICK_MOVE
+					Case 38, 65
 						If (Not Self.used And p.setRailLine(New Line(Self.posX, Self.posY, Self.posX + Self.iLeft, Self.posY + Self.iTop), Self.posX, Self.posY, Self.iLeft, Self.iTop, Self.iWidth, Self.iHeight, Self)) Then
 							Self.used = True
 							soundInstance.playSe(SoundSystem.SE_148)
@@ -697,43 +697,52 @@ Class GimmickObject Extends GameObject
 						EndIf
 					Case GIMMICK_WIND
 						framecnt += 1
+						
 						If (Self.collisionRect.collisionChk(p.getCheckPositionX(), p.getCheckPositionY())) Then
 							If (StageManager.getStageID() = 11) Then
-								p.collisionState = GIMMICK_HARI_UP
+								p.collisionState = PlayerObject.COLLISION_STATE_JUMP
+								
 								p.isInGravityCircle = True
-							End
-							If (p.collisionState = GIMMICK_HARI_UP) Then
-								p.collisionState = GIMMICK_HARI_UP
+							EndIf
+							
+							If (p.collisionState = PlayerObject.COLLISION_STATE_JUMP) Then
+								p.collisionState = PlayerObject.COLLISION_STATE_JUMP
+								
 								If (StageManager.getStageID() = 11) Then
-									p.worldCal.stopMoveY()
-									ACWorldCollisionCalculator aCWorldCollisionCalculator = p.worldCal
-									ACWorldCollisionCalculator aCWorldCollisionCalculator2 = p.worldCal
-									aCWorldCollisionCalculator.actionState = GIMMICK_HARI_UP
-								End
+									Local aCWorldCollisionCalculator:= p.worldCal
+									
+									aCWorldCollisionCalculator.stopMoveY()
+									
+									aCWorldCollisionCalculator.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE
+								EndIf
+								
 								If (p.getVelY() > WIND_VELOCITY) Then
 									p.setVelY(p.getVelY() + WIND_ACCELERATE)
 								Else
 									p.setVelY(WIND_VELOCITY)
-								End
+								EndIf
+								
 								If (StageManager.getStageID() = 11) Then
 									p.setAnimationId(9)
-									Return
 								Else
 									p.setAnimationId(29)
-									Return
-								End
-							End
-							soundInstance.stopLoopSe()
-							framecnt = 0
-							isFirstTouchedWind = False
-							p.isInGravityCircle = False
+								EndIf
+							Else
+								soundInstance.stopLoopSe()
+								
+								framecnt = 0
+								
+								isFirstTouchedWind = False
+								
+								p.isInGravityCircle = False
+							EndIf
 						End
-					Case Def.TOUCH_START_GAME_WIDTH
+					Case 96
 						If (Not Self.used) Then
 							p.setAnimationId(4)
-							SoundSystem soundSystem = soundInstance
-							SoundSystem soundSystem2 = soundInstance
-							soundSystem.playSe(SoundSystem.SE_148)
+							
+							SoundSystem.getInstance().playSe(SoundSystem.SE_148)
+							
 							Self.used = True
 						End
 					Default
@@ -744,7 +753,7 @@ Class GimmickObject Extends GameObject
 	
 		Method refreshCollisionRect:Void(x:Int, y:Int)
 			Select (Self.objId)
-				Case PlayerTails.TAILS_ANI_SPRING_1
+				Case 20
 					Self.collisionRect.setRect(((Self.mWidth Shr 1) + x) - MDPhone.SCREEN_HEIGHT, y, 1280, Self.mHeight)
 				Case 66
 					Self.collisionRect.setRect(x - SpecialMap.MAP_LENGTH, y, PlayerObject.HEIGHT, 64)
@@ -776,7 +785,7 @@ Class GimmickObject Extends GameObject
 					If (Self.firstTouch) Then
 						player.setRailFlip()
 					End
-				Case Def.TOUCH_START_GAME_WIDTH
+				Case 96
 					If (Not Self.used) Then
 						player.setAnimationId(4)
 						SoundSystem soundSystem = soundInstance
