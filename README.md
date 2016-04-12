@@ -9,7 +9,6 @@ without making any claim to parody the original behavior in any way.
 
 ## TODO
 * **Finish implementing 'sonicgba'**.
-* Implement 'state.gamestate'. (Only remaining module in 'state')
 * Properly implement sound behavior.
 * *Finish missing parts of 'MFLib'.*
 * *Split supporting sub-classes into separate modules.* (Animation, etc)
@@ -23,3 +22,4 @@ without making any claim to parody the original behavior in any way.
 * **~~Implement 'gameengine'~~** (Input systems, etc)
 * **~~Implement 'pyxanimation' / 'pyxeditor'~~**
 * **~~Implement the missing portions of 'lib'~~** (Some unused features may be missing)
+* **~~Implement 'state'~~** (Gameplay state, title screen, special stage state, etc)
