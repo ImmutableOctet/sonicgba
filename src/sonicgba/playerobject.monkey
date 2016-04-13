@@ -431,8 +431,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const COLLISION_STATE_NUM:= 4
 		Const COLLISION_STATE_WALK:= 0
 		Const COLLISION_STATE_JUMP:= 1
-		Const COLLISION_STATE_IN_SAND:= 3
 		Const COLLISION_STATE_ON_OBJECT:= 2
+		Const COLLISION_STATE_IN_SAND:= 3
 		Const COLLISION_STATE_NONE:= 4 ' COLLISION_STATE_NUM
 		
 		' Immutable Arrays (Constant):
