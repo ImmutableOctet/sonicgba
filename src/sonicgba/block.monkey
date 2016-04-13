@@ -16,6 +16,9 @@ Public
 Class Block Extends GimmickObject
 	Private
 		' Constant variable(s):
+		Const COLLISION_WIDTH:Int = 128
+		Const COLLISION_HEIGHT:Int = 128
+		
 		Const Y_OFFSET:Int = 1024
 		
 		' Fields:
@@ -67,15 +70,15 @@ Class Block Extends GimmickObject
 			If (player.getFootPositionY() >= Self.collisionRect.y0 + ((Self.mHeight * 3) / 4)) Then
 				player.beStop(0, direction, Self)
 			ElseIf (player.getVelX() > 0 And direction = 3) Then
-				player.setFootPositionY(Self.collisionRect.y0 - 64)
+				player.setFootPositionY(Self.collisionRect.y0 - (COLLISION_HEIGHT / 2))
 			ElseIf (player.getVelX() < 0 And direction = 2) Then
-				player.setFootPositionY(Self.collisionRect.y0 - 64)
+				player.setFootPositionY(Self.collisionRect.y0 - (COLLISION_HEIGHT / 2))
 			EndIf
 		End
 		
 		Method logic:Void()
 			If (Self.collisionRect.collisionChk(player.getCollisionRect()) And player.collisionState = PlayerObject.COLLISION_STATE_ON_OBJECT) Then
-				player.moveOnObject(player.footPointX + PickValue((Self.direct = 0), -128, 128), player.footPointY)
+				player.moveOnObject(player.footPointX + PickValue((Self.direct = 0), -COLLISION_WIDTH, COLLISION_WIDTH), player.footPointY)
 				
 				Self.isActive = True
 				
