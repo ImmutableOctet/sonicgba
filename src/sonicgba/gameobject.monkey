@@ -136,7 +136,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		
 		' This is a container that's used to pass entries from 'allGameObject'
 		' to the main update routine. There's no allocation needed for sub-containers.
-		Global mainObjectLogicVec:= New Stack<Stack<GameObjectShr()
+		Global mainObjectLogicVec:= New Stack<Stack<GameObject>>()
 		
 		' These two containers are undocumented for now:
 		Global bossObjVec:= New Stack<GameObject>() ' BossObject
@@ -255,7 +255,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 				Next
 			Else
 				For Local X:= 0 Until objVecWidth
-					Local xArray:= New Stack<GameObject>[]
+					Local xArray:= New Stack<GameObject>[objVecHeight]
 					
 					For Local Y:= 0 Until objVecHeight
 						xArray[Y] = New Stack<GameObject>()
@@ -1419,8 +1419,8 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			
 			Local xFirst:Bool = (quaNumX > quaNumY)
 			
-			Local startPointX = preX
-			Local startPointY = preY
+			Local startPointX:= preX
+			Local startPointY:= preY
 			
 			If (moveDistanceY2 <= 0) Then
 				Return
@@ -1503,7 +1503,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			Return ((blockY Shl SEARCH_COUNT) Shl 6)
 		End
 		
-		Method getBlockDownSide(blockX:Int, blockY:Int)
+		Method getBlockDownSide:Int(blockX:Int, blockY:Int)
 			Return ((((blockY + 1) Shl SEARCH_COUNT) - 1) Shl 6)
 		End
 		

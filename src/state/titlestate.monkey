@@ -84,8 +84,8 @@ Class TitleState Extends State
 		Const MAIN_MENU_CENTER_Y:Int = 159
 		
 		Global MAIN_MENU_FUNCTION_MOREGAME:Int[] = [4, 6, 7, 8, 9, 10, 11, 12] ' Const
-		Global MAIN_MENU_FUNCTION_NO_MOREGAME:Int[4, 6, 7, 8, 9, 10, 11, 12] ' Const
-		Global MAIN_MENU_FUNCTION_UNACTIVIATE:Int[4, 6, 7, 8, 9, 10, 11, 12] ' Const
+		Global MAIN_MENU_FUNCTION_NO_MOREGAME:Int[] = [4, 6, 7, 8, 9, 10, 11, 12] ' Const
+		Global MAIN_MENU_FUNCTION_UNACTIVIATE:Int[] = [4, 6, 7, 8, 9, 10, 11, 12] ' Const
 		Global MAIN_MENU_MOREGAME:Int[] = [1, 2, 3, 4, 5, 6, 7, 8]
 		Global MAIN_MENU_NO_MOREGAME:Int[] = [1, 2, 4, 5, 6, 7, 8] ' Const
 		Global MAIN_MENU_UNACTIVIATE:Int[] = [1, 2, 4, 5, 6, 7, 8] ' Const
@@ -1019,7 +1019,7 @@ Class TitleState Extends State
 							' Nothing so far.
 					End Select
 				Case STATE_START_TO_MENU_1
-					Self.logoX = MyAPI.calNextPositionReverse(Self.logoX, LOGO_POSITION_X, SCREEN_WIDTH + (SCREEN_WIDTH Shr 1), ZONE_NUM_OFFSET, STATE_MOVING)
+					Self.logoX = MyAPI.calNextPositionReverse(Self.logoX, LOGO_POSITION_X, SCREEN_WIDTH + (SCREEN_WIDTH Shr 1), ZONE_NUM_OFFSET, 2)
 					
 					If (Self.logoX = SCREEN_WIDTH + (SCREEN_WIDTH Shr 1)) Then
 						Self.logoX = -(SCREEN_WIDTH Shr 1)
@@ -1028,7 +1028,7 @@ Class TitleState Extends State
 						Self.logoY = LOGO_POSITION_Y_2
 					EndIf
 				Case STATE_START_TO_MENU_2
-					Self.logoX = MyAPI.calNextPosition(Double(Self.logoX), Double(LOGO_POSITION_X), ZONE_NUM_OFFSET, STATE_MOVING)
+					Self.logoX = MyAPI.calNextPosition(Double(Self.logoX), Double(LOGO_POSITION_X), ZONE_NUM_OFFSET, 2)
 					
 					If (Self.logoX = LOGO_POSITION_X) Then
 						state = STATE_MOVING
@@ -1036,7 +1036,7 @@ Class TitleState Extends State
 						Self.nextState = STATE_MOVING
 					EndIf
 				Case STATE_RETURN_TO_LOGO_1
-					Self.logoX = MyAPI.calNextPositionReverse(Self.logoX, LOGO_POSITION_X, SCREEN_WIDTH + (SCREEN_WIDTH Shr 1), ZONE_NUM_OFFSET, STATE_MOVING)
+					Self.logoX = MyAPI.calNextPositionReverse(Self.logoX, LOGO_POSITION_X, SCREEN_WIDTH + (SCREEN_WIDTH Shr 1), ZONE_NUM_OFFSET, 2)
 					
 					If (Self.logoX = SCREEN_WIDTH + (SCREEN_WIDTH Shr 1)) Then
 						Self.logoX = -(SCREEN_WIDTH Shr 1)
@@ -1051,7 +1051,7 @@ Class TitleState Extends State
 						Self.mainMenuBackFlag = False
 					EndIf
 				Case STATE_RETURN_TO_LOGO_2
-					Self.logoX = MyAPI.calNextPosition(Double(Self.logoX), Double(LOGO_POSITION_X), ZONE_NUM_OFFSET, STATE_MOVING)
+					Self.logoX = MyAPI.calNextPosition(Double(Self.logoX), Double(LOGO_POSITION_X), ZONE_NUM_OFFSET, 2)
 					
 					If (Self.logoX = LOGO_POSITION_X) Then
 						state = STATE_PRESS_START
@@ -1955,7 +1955,7 @@ Class TitleState Extends State
 		Method stageSelectDraw:Void(g:MFGraphics, type:Int)
 			menuBgDraw(g)
 			
-			Self.stageDrawOffsetY = MyAPI.calNextPosition(Double(Self.stageDrawOffsetY), Double((-Self.stageStartIndex) * ITEM_SPACE), ZONE_NUM_OFFSET, STATE_MOVING)
+			Self.stageDrawOffsetY = MyAPI.calNextPosition(Double(Self.stageDrawOffsetY), Double((-Self.stageStartIndex) * ITEM_SPACE), ZONE_NUM_OFFSET, 2)
 			
 			If (Self.stageItemNumForShow <> StageManager.STAGE_NUM) Then
 				MyAPI.setClip(g, 0, Self.stageDrawStartY - (ITEM_SPACE Shr 1), SCREEN_WIDTH, Self.stageItemNumForShow * ITEM_SPACE)
@@ -2478,12 +2478,12 @@ Class TitleState Extends State
 					EndIf
 					
 					If (Self.openingEnding) Then
-						State.drawFadeBase(g, STATE_MOVING)
+						State.drawFadeBase(g, 2)
 					EndIf
 			End Select
 			
 			If (Self.openingStateChanging) Then
-				State.drawFadeBase(g, STATE_MOVING)
+				State.drawFadeBase(g, 2)
 			EndIf
 			
 			If (Not Self.openingDrawer[STATE_START_GAME].checkEnd()) Then
@@ -2824,11 +2824,11 @@ Class TitleState Extends State
 						Self.character_offset_state = 0
 						
 						If (Self.arrowPressState = 0) Then
-							Self.character_sel_offset_x = MyAPI.calNextPosition((double) Self.character_sel_offset_x, 0.0, ZONE_NUM_OFFSET, STATE_MOVING)
+							Self.character_sel_offset_x = MyAPI.calNextPosition(Double(Self.character_sel_offset_x), 0.0, ZONE_NUM_OFFSET, 2)
 						Else
 							
 							If (Self.arrowPressstate = STATE_PRESS_START) Then
-								Self.character_sel_offset_x = MyAPI.calNextPosition((double) Self.character_sel_offset_x, 128.0, ZONE_NUM_OFFSET, STATE_MOVING)
+								Self.character_sel_offset_x = MyAPI.calNextPosition(Double(Self.character_sel_offset_x), 128.0, ZONE_NUM_OFFSET, 2)
 								
 								If (Self.character_sel_offset_x = TIME_ATTACK_WIDTH) Then
 									Self.character_id -= 1
@@ -2845,7 +2845,7 @@ Class TitleState Extends State
 							EndIf
 							
 							If (Self.arrowPressState = STATE_MOVING) Then
-								Self.character_sel_offset_x = MyAPI.calNextPosition((double) Self.character_sel_offset_x, -128.0, ZONE_NUM_OFFSET, STATE_MOVING)
+								Self.character_sel_offset_x = MyAPI.calNextPosition(Double(Self.character_sel_offset_x), -128.0, ZONE_NUM_OFFSET, 2)
 								
 								If (Self.character_sel_offset_x = Def.TOUCH_HELP_LEFT_X) Then
 									Self.character_id += 1
@@ -3145,13 +3145,13 @@ Class TitleState Extends State
 				EndIf
 				
 				If (Self.offsetY[0] - Self.vY[0] <= 0) Then
-					For i:= 0 Until Self.STAGE_TOTAL_NUM
+					For i = 0 Until Self.STAGE_TOTAL_NUM
 						Self.offsetY[i] = 0
 					Next
 					
 					Self.stage_select_state = STATE_PRESS_START
 				Else
-					For i:= 0 Until Self.STAGE_TOTAL_NUM
+					For i = 0 Until Self.STAGE_TOTAL_NUM
 						Local iArr:= Self.offsetY
 						
 						iArr[i] -= Self.vY[i]
@@ -3619,7 +3619,7 @@ Class TitleState Extends State
 			
 			drawRecordTime(g, StageManager.getTimeModeScore(Self.characterRecordID, Self.stage_characterRecord_ID, 0), (SCREEN_HEIGHT Shr 1) + STATE_EXIT)
 			drawRecordTime(g, StageManager.getTimeModeScore(Self.characterRecordID, Self.stage_characterRecord_ID, ZONE_NUM_OFFSET), ((SCREEN_HEIGHT Shr 1) + STATE_EXIT) + STATE_INTERRUPT)
-			drawRecordTime(g, StageManager.getTimeModeScore(Self.characterRecordID, Self.stage_characterRecord_ID, STATE_MOVING), ((SCREEN_HEIGHT Shr 1) + STATE_EXIT) + STATE_OPTION_SP_SET)
+			drawRecordTime(g, StageManager.getTimeModeScore(Self.characterRecordID, Self.stage_characterRecord_ID, 2), ((SCREEN_HEIGHT Shr 1) + STATE_EXIT) + STATE_OPTION_SP_SET)
 			
 			If (muiAniDrawer = Null) Then
 				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
@@ -3740,7 +3740,7 @@ Class TitleState Extends State
 			
 			drawRecordTime(g, StageManager.getTimeModeScore(Self.characterRecordID, Self.stage_characterRecord_ID, 0), (SCREEN_HEIGHT Shr 1) + STATE_EXIT)
 			drawRecordTime(g, StageManager.getTimeModeScore(Self.characterRecordID, Self.stage_characterRecord_ID, ZONE_NUM_OFFSET), ((SCREEN_HEIGHT Shr 1) + STATE_EXIT) + STATE_INTERRUPT)
-			drawRecordTime(g, StageManager.getTimeModeScore(Self.characterRecordID, Self.stage_characterRecord_ID, STATE_MOVING), ((SCREEN_HEIGHT Shr 1) + STATE_EXIT) + STATE_OPTION_SP_SET)
+			drawRecordTime(g, StageManager.getTimeModeScore(Self.characterRecordID, Self.stage_characterRecord_ID, 2), ((SCREEN_HEIGHT Shr 1) + STATE_EXIT) + STATE_OPTION_SP_SET)
 		End
 		
 		Method drawStageNameinIntergradeRecord:Void(g:MFGraphics)
@@ -3779,7 +3779,7 @@ Class TitleState Extends State
 		End
 		
 		Method drawTitle1:Void(g:MFGraphics)
-			Self.copyOffsetX = MyAPI.calNextPosition((double) Self.copyOffsetX, 0.0, ZONE_NUM_OFFSET, STATE_MOVING)
+			Self.copyOffsetX = MyAPI.calNextPosition(Double(Self.copyOffsetX), 0.0, ZONE_NUM_OFFSET, 2)
 			
 			MyAPI.drawImage(g, Self.sonicBigImage, Self.sonicBigX - Self.cameraX, SONIC_BIG_Y, STATE_RETURN_TO_LOGO_1)
 		End
@@ -4531,7 +4531,7 @@ Class TitleState Extends State
 					PageBackGroundOffsetY Mod= intergradeRecordtoGamecnt_max
 				EndIf
 				
-				For Local x:= (PageBackGroundOffsetX - 112) Until ((SCREEN_WIDTH * STATE_OPENING) / STATE_MOVING) Step CREDIT_PAGE_BACKGROUND_WIDTH)
+				For Local x:= (PageBackGroundOffsetX - 112) Until ((SCREEN_WIDTH * STATE_OPENING) / STATE_MOVING) Step CREDIT_PAGE_BACKGROUND_WIDTH
 					For Local y:= (PageBackGroundOffsetY - 56) Until ((SCREEN_HEIGHT * STATE_OPENING) / STATE_MOVING) Step intergradeRecordtoGamecnt_max
 						muiAniDrawer.draw(g, x, y)
 					Next
@@ -4663,7 +4663,7 @@ Class TitleState Extends State
 			GameState.guiAniDrawer.setActionId(STATE_RESET_RECORD_ASK)
 			GameState.guiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - 37)
 			
-			PlayerObject.drawRecordTime(g, StageManager.getTimeModeScore(PlayerObject.getCharacterID()), (SCREEN_WIDTH Shr 1) + 54, (SCREEN_HEIGHT Shr 1) - 10, STATE_MOVING, STATE_MOVING)
+			PlayerObject.drawRecordTime(g, StageManager.getTimeModeScore(PlayerObject.getCharacterID()), (SCREEN_WIDTH Shr 1) + 54, (SCREEN_HEIGHT Shr 1) - 10, STATE_MOVING, 2)
 			
 			animationDrawer.setActionId(Int(Key.touchscoreupdateyes.Isin()) + 55)
 			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 60, (SCREEN_HEIGHT Shr 1) + STATE_OPTION_SOUND)

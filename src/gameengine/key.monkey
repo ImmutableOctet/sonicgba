@@ -1516,8 +1516,8 @@ Class Key
 			Return False
 		End
 		
-		Function setKeyFunction:Void(function:Bool)
-			keyFunction = function
+		Function setKeyFunction:Void(toggle:Bool)
+			keyFunction = toggle
 		End
 		
 		Function pressAnyKey:Bool()

@@ -4,8 +4,8 @@ Public
 
 ' Imports:
 Private
-	'Import gameengine.def
-	'Import gameengine.key
+	Import gameengine.def
+	Import gameengine.key
 	
 	Import lib.soundsystem
 	
@@ -23,6 +23,8 @@ Private
 	Import sonicgba.stagemanager
 	
 	Import mojo.app
+	
+	Import application
 Public
 
 ' Classes:
@@ -38,11 +40,11 @@ Class MainState Implements MFGameState, Def
 		Global gameVersion:String
 		
 		' Fields:
-		Field main:Main
+		Field main:Application
 		Field pauseFlag:Bool
 	Public
 		' Constructor(s):
-		Method New(main:Main)
+		Method New(main:Application)
 			Self.pauseFlag = False
 			Self.main = main
 		End

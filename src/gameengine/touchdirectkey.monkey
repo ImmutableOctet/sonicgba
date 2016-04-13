@@ -237,7 +237,7 @@ Class TouchDirectKey Implements MFComponent
 			Local reset_x:= (x - Self.CenterX)
 			Local reset_y:= (y - Self.CenterY)
 			
-			Local degree = ((crlFP32.actTanDegree(reset_y, reset_x) + MDPhone.SCREEN_WIDTH) Mod MDPhone.SCREEN_WIDTH)
+			Local degree:= ((crlFP32.actTanDegree(reset_y, reset_x) + 360) Mod 360)
 			
 			If ((reset_x * reset_x) + (reset_y * reset_y) >= Self.OutCircleR * Self.OutCircleR) Then
 				Return MFGamePad.KEY_NULL
@@ -256,7 +256,7 @@ Class TouchDirectKey Implements MFComponent
 					Return MFGamePad.KEY_UP_RIGHT
 				EndIf
 				
-				If ((degree >= 0 And degree < 22) Or (degree >= 337 And degree <= MDPhone.SCREEN_WIDTH)) Then
+				If ((degree >= 0 And degree < 22) Or (degree >= 337 And degree <= 360)) Then
 					Return MFGamePad.KEY_RIGHT
 				EndIf
 				
@@ -284,7 +284,7 @@ Class TouchDirectKey Implements MFComponent
 					Return Key.B_LOOK
 				EndIf
 				
-				If ((degree >= 0 And degree < 54) Or (degree >= 305 And degree <= MDPhone.SCREEN_WIDTH)) Then
+				If ((degree >= 0 And degree < 54) Or (degree >= 305 And degree <= 360)) Then
 					Return MFGamePad.KEY_RIGHT
 				EndIf
 				
@@ -297,7 +297,7 @@ Class TouchDirectKey Implements MFComponent
 		End
 		
 		Method getPointerDegree:Int(x:Int, y:Int)
-			Return ((crlFP32.actTanDegree(y - Self.CenterY, x - Self.CenterX) + MDPhone.SCREEN_WIDTH) Mod MDPhone.SCREEN_WIDTH)
+			Return ((crlFP32.actTanDegree(y - Self.CenterY, x - Self.CenterX) + 360) Mod 360)
 		End
 		
 		Method rangeChk:Bool(x:Int, y:Int)

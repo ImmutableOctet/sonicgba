@@ -26,7 +26,7 @@ Private
 Public
 
 ' Classes:
-Class MyAPI Implements Def, GRAPHICS_MACROS
+Class MyAPI Extends GRAPHICS_MACROS Implements Def ' Implements GRAPHICS_MACROS
 	Private
 		' Constant variable(s):
 		Const ROTATE_90:Int = 1

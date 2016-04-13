@@ -28,6 +28,8 @@ Private
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
 	Import com.sega.mobile.framework.ui.mfbutton
+	
+	Import application
 Public
 
 ' Classes
@@ -100,7 +102,7 @@ Class Standard2 Implements Def ' Final
 		Const MESSAGE_SAVE:Int = 6
 		
 		' Global variable(s):
-		Global activity:Main
+		Global activity:Application
 		Global confirmcursor:Int = 0
 		Global confirmframe:Int = 0
 		Global isConfirm:Bool
@@ -399,7 +401,7 @@ Class Standard2 Implements Def ' Final
 			EndIf
 		End
 		
-		Function getMain:Void(main:Main)
+		Function getMain:Void(main:Application)
 			activity = main
 		End
 		

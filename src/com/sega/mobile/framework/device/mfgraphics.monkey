@@ -5,9 +5,11 @@ Public
 ' Imports:
 Private
 	'Import sonicgba.mapmanager
-	Import com.sega.mobile.framework.android.font
+	'Import com.sega.mobile.framework.android.font
 	Import com.sega.mobile.framework.android.graphics
 	Import com.sega.mobile.framework.utility.mfutility
+	
+	Import com.sega.mobile.framework.device.mfdevice
 	
 	Import lib.constutil
 	
@@ -17,7 +19,7 @@ Private
 Public
 
 ' Classes:
-Class MFGraphics Implements GRAPHICS_MACROS
+Class MFGraphics Extends GRAPHICS_MACROS ' Implements GRAPHICS_MACROS
 	Public
 		' Constant variable(s):
 		Const FONT_LARGE:Int = -3
@@ -65,7 +67,13 @@ Class MFGraphics Implements GRAPHICS_MACROS
 	Protected
 		' Fields:
 		Field context:Graphics
-		
+	Private
+		' Constructor(s):
+		Method New()
+			Self.enableExceed = False
+			Self.fillRectRGB = New Int[100]
+		End
+	Public
 		' Functions:
 		Function init:Void() ' Final
 			#Rem
@@ -79,14 +87,7 @@ Class MFGraphics Implements GRAPHICS_MACROS
 			EndIf
 			#End
 		End
-	Private
-		' Constructor(s):
-		Method New()
-			Self.enableExceed = False
-			Self.fillRectRGB = New Int[100]
-		End
-	Public
-		' Functions:
+		
 		Function createMFGraphics:MFGraphics(graphics:Graphics, width:Int, height:Int) ' Final
 			If (MFDevice.preScaleZoomOutFlag) Then
 				width Shr= MFDevice.preScaleShift
@@ -229,7 +230,8 @@ Class MFGraphics Implements GRAPHICS_MACROS
 	
 		Method setGraphics:Void(graphics:Graphics) Final
 			Self.context = graphics
-			Self.context.setFont(Font.getFont(TRANS_NONE, TRANS_NONE, RIGHT))
+			
+			'Self.context.setFont(Font.getFont(TRANS_NONE, TRANS_NONE, RIGHT))
 		End
 		
 		' This method may behave differently in the future.

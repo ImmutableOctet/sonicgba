@@ -22,17 +22,20 @@ Private
 		Import android.telephony.telephonymanager
 	#End
 	
+	Import com.sega.mobile.define.mdphone
+	
 	Import com.sega.mobile.framework.mfgamestate
-	'Import com.sega.mobile.framework.mfmain
-	'Import com.sega.mobile.framework.android.canvas
 	Import com.sega.mobile.framework.android.graphics
-	'Import com.sega.mobile.framework.android.image
 	Import com.sega.mobile.framework.device.mfcomponent
 	Import com.sega.mobile.framework.device.mfgamepad
 	Import com.sega.mobile.framework.device.mfgraphics
+	Import com.sega.mobile.framework.ui.mftouchkey
+	
 	'Import com.sega.mobile.framework.device.mfsensor
 	'Import com.sega.mobile.framework.device.mfsound
-	'Import com.sega.mobile.framework.ui.mftouchkey
+	'Import com.sega.mobile.framework.mfmain
+	'Import com.sega.mobile.framework.android.canvas
+	'Import com.sega.mobile.framework.android.image
 	
 	Import mojo.app
 	Import mojo.input
@@ -100,17 +103,15 @@ Class MFDevice Final
 		
 		Global inSuspendFlag:Bool
 		Global inVibrationFlag:Bool
-		'Global interruptConfirm:MFTouchKey
+		Global interruptConfirm:MFTouchKey
 		Global interruptPauseFlag:Bool
 		Global lastSystemTime:Long
 		Global logicTrace:Bool
 		
-		#Rem
-			Global vibraionFlag:Bool
-			Global vibrateStartTime:Long
-			Global vibrateTime:Int
-			Global vibrator:Vibrator
-		#End
+		Global vibraionFlag:Bool
+		Global vibrateStartTime:Long
+		Global vibrateTime:Int
+		'Global vibrator:Vibrator
 		
 		'Global webPageUrl:String
 		
@@ -127,7 +128,7 @@ Class MFDevice Final
 		Global postLayerImage:Image[] = New Image[MAX_LAYER]
 		Global preLayerGraphics:MFGraphics[] = New MFGraphics[MAX_LAYER]
 		Global preLayerImage:Image[] = New Image[MAX_LAYER]
-	Protected
+	Public ' Protected
 		' Global variable(s):
 		'Global mainRunnable:Runnable = New C00011()
 		'Global mainCanvas:MyGameCanvas = New MyGameCanvas(MFMain.getInstance())
@@ -585,7 +586,7 @@ Class MFDevice Final
 			
 			Local ret:DataBuffer
 			
-			If (t = 0) Then
+			If (size = 0) Then
 				ret = NULL_RECORD
 			Else
 				ret = New DataBuffer(size)
@@ -652,9 +653,9 @@ Class MFDevice Final
 			
 			records = New StringMap<DataBuffer>()
 			
-			Local recordStoreNumber:= dis.ReadInt()
-			
 			Local dis:= New DataStream(openRecordStore(RECORD_NAME))
+			
+			Local recordStoreNumber:= dis.ReadInt()
 			
 			For Local i:= 0 Until recordStoreNumber
 				Local nameLen:= dis.ReadShort()
@@ -771,8 +772,8 @@ Class MFDevice Final
 						component.reset()
 					Next
 					
-					'interruptConfirm = New MFTouchKey(0, canvasHeight - 50, 100, 50, 2112)
-					'addComponent(interruptConfirm)
+					interruptConfirm = New MFTouchKey(0, canvasHeight - 50, 100, 50, 2112)
+					addComponent(interruptConfirm)
 				EndIf
 			EndIf
 		End
@@ -793,7 +794,7 @@ Class MFDevice Final
 						component.reset()
 					Next
 					
-					'removeComponent(interruptConfirm)
+					removeComponent(interruptConfirm)
 				EndIf
 			EndIf
 		End
@@ -928,8 +929,8 @@ Class MFDevice Final
 					preScaleZoomOutFlag = False
 				EndIf
 				
-				h = screenHeight
-				w = ((canvasWidth * h) / canvasHeight)
+				Local h:= screenHeight
+				Local w:= ((canvasWidth * h) / canvasHeight)
 				
 				Local x:= ((screenWidth - w) / 2)
 				
@@ -994,8 +995,8 @@ Class MFDevice Final
 					preScaleZoomOutFlag = False
 				EndIf
 				
-				w = screenWidth
-				h = ((canvasHeight * w) / canvasWidth)
+				Local w:= screenWidth
+				Local h:= ((canvasHeight * w) / canvasWidth)
 				
 				Local y:= ((screenHeight - h) / 2)
 				

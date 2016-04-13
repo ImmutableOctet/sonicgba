@@ -45,7 +45,7 @@ Private
 	
 	Import mojo.app
 	
-	Import mojo2.graphics
+	'Import mojo2.graphics
 	
 	#If TARGET = "glfw"
 		Import brl.requesters
@@ -54,11 +54,8 @@ Private
 	Import monkey.random
 Public
 
-' Aliases:
-Alias Application = Main
-
 ' Classes:
-Class Main Extends App ' Main Extends MFMain
+Class Application Extends App ' Main Extends MFMain
 	Public
 		' Global variable(s):
 		Global BULLET_TIME:Bool = False

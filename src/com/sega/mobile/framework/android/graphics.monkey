@@ -20,12 +20,11 @@ Private
 	
 	Import regal.typetool
 	'Import regal.matrix2d
-	
-	Import mojo2.graphics
 Public
+	Import mojo2.graphics
 
 ' Interfaces:
-Interface GRAPHICS_MACROS
+Class GRAPHICS_MACROS ' Interface
 	' Constant variable(s):
 	Const HCENTER:Int = 1
 	Const VCENTER:Int = 2
@@ -45,7 +44,7 @@ Interface GRAPHICS_MACROS
 End
 
 ' Classes:
-Class Graphics Implements GRAPHICS_MACROS
+Class Graphics Extends GRAPHICS_MACROS ' Implements GRAPHICS_MACROS
 	Private
 		' Fields:
 		Field mCanvas:Canvas ' DrawList
