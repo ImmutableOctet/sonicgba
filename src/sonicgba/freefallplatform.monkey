@@ -10,6 +10,7 @@ Private
 	Import com.sega.mobile.framework.device.mfimage
 	
 	Import sonicgba.gimmickobject
+	Import sonicgba.playerobject
 	Import sonicgba.freefallsystem
 Public
 
