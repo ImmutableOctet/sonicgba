@@ -420,8 +420,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>8</X>
-        <Y>78</Y>
+        <X>20</X>
+        <Y>81</Y>
       </CursorPos>
       <DocGUID>6697ed74-069c-4992-a09d-3b5904f99041</DocGUID>
       <Bookmarks />
@@ -836,8 +836,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playersonic.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>298</Y>
+        <X>23</X>
+        <Y>679</Y>
       </CursorPos>
       <DocGUID>a5737cf7-c803-4369-a3c9-d289230080c7</DocGUID>
       <Bookmarks />

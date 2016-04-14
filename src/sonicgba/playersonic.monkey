@@ -677,11 +677,11 @@ Class PlayerSonic Extends PlayerObject
 		End
 	Protected
 		' Methods:
-		Protected Method extraLogicJump:Void()
+		Method extraLogicJump:Void()
 			If (Not Self.hurtNoControl) Then
 				If (Not Self.slipping And Key.press(Key.gLeft)) Then
 					If (Not Self.jumpRollEnable) Then
-						Self.leftCount = SONIC_ANI_SPIN_1
+						Self.leftCount = 5
 					EndIf
 					
 					Self.rightCount = 0
@@ -691,14 +691,14 @@ Class PlayerSonic Extends PlayerObject
 					Self.leftCount = 0
 					
 					If (Not Self.jumpRollEnable) Then
-						Self.rightCount = SONIC_ANI_SPIN_1
+						Self.rightCount = 5
 					EndIf
 				EndIf
 			EndIf
 			
 			If (Self.animationID = SONIC_ANI_JUMP And Self.firstJump) Then
 				If (Self.leftCount > 0) Then
-					Self.leftCount -= SUPER_SONIC_ANI_CHANGE_1
+					Self.leftCount -= 1
 					
 					If (Not Key.repeated(Key.gLeft)) Then
 						Self.jumpRollEnable = True
@@ -707,16 +707,20 @@ Class PlayerSonic Extends PlayerObject
 					If (Self.jumpRollEnable And Key.repeated(Key.gLeft)) Then
 						Self.animationID = NO_ANIMATION
 						Self.myAnimationID = SONIC_ANI_JUMP_DASH_1
+						
 						Self.leftCount = 0
+						
 						Self.velY = 0
-						Self.velX -= Self.maxVelocity Shr SUPER_SONIC_ANI_CHANGE_2
-						soundInstance.playSe(SONIC_ANI_LOOK_UP_1)
+						Self.velX -= (Self.maxVelocity Shr 2) ' / 4
+						
+						soundInstance.playSe(SoundSystem.SE_112)
+						
 						Self.firstJump = False
 					EndIf
 				EndIf
 				
 				If (Self.rightCount > 0) Then
-					Self.rightCount -= SUPER_SONIC_ANI_CHANGE_1
+					Self.rightCount -= 1
 					
 					If (Not Key.repeated(Key.gRight)) Then
 						Self.jumpRollEnable = True
@@ -725,23 +729,31 @@ Class PlayerSonic Extends PlayerObject
 					If (Self.jumpRollEnable And Key.repeated(Key.gRight)) Then
 						Self.animationID = NO_ANIMATION
 						Self.myAnimationID = SONIC_ANI_JUMP_DASH_1
+						
 						Self.rightCount = 0
+						
 						Self.velY = 0
-						Self.velX += Self.maxVelocity Shr SUPER_SONIC_ANI_CHANGE_2
-						soundInstance.playSe(SONIC_ANI_LOOK_UP_1)
+						Self.velX += (Self.maxVelocity Shr 2) ' / 4
+						
+						soundInstance.playSe(SoundSystem.SE_112)
+						
 						Self.firstJump = False
 					EndIf
 				EndIf
 				
 				If (Self.firstJump And Key.press(Key.gUp | Key.B_HIGH_JUMP)) Then
-					Self.effectID = SUPER_SONIC_ANI_CHANGE_1
+					Self.effectID = EFFECT_JUMP
+					
 					Self.firstJump = False
+					
 					soundInstance.playSe(79)
+					
 					Self.effectDrawer.restart()
 					Self.effectDrawer.setActionId(SONIC_ANI_JUMP_ATTACK_EFFECT)
-					Byte[] rect = Self.effectDrawer.getARect()
 					
-					If (rect <> Null) Then
+					Local rect:= Self.effectDrawer.getARect()
+					
+					If (rect.Length > 0) Then
 						Self.attackRect.initCollision(rect[0] Shl 6, rect[1] Shl 6, rect[2] Shl 6, rect[3] Shl 6, SONIC_ANI_JUMP_ATTACK_EFFECT)
 						Self.attackRectVec.Push(Self.attackRect)
 					EndIf
@@ -751,7 +763,6 @@ Class PlayerSonic Extends PlayerObject
 			If (Self.myAnimationID = SONIC_ANI_ATTACK_2 And Self.drawer.checkEnd()) Then
 				Self.animationID = SONIC_ANI_STAND
 			EndIf
-			
 		End
 		
 		Protected Method extraLogicWalk:Void()
