@@ -240,7 +240,7 @@ Class Application Extends App ' Main Extends MFMain
 				msecStr = String(msec)
 			EndIf
 			
-			Self.mScore = (SonicDef.OVER_TIME - score)
+			Self.mScore = (sonicdef.OVER_TIME - score)
 			
 			Print("~~mScore:" + Self.mScore)
 			

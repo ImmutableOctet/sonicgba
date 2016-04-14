@@ -22,7 +22,7 @@ Import regal.typetool
 
 ' Custom/extended base-class for all "ending types".
 ' This is in contrast to 'PlainEnding', which has shared code specifically for 'NormalEnding' and 'SpecialEnding'.
-Class BaseEnding Extends State Implements SonicDef Abstract
+Class BaseEnding Extends State Abstract ' Implements SonicDef
 	Protected
 		' Constant variable(s):
 		Const ENDING_ANIMATION_PATH:String = "/animation/ending"

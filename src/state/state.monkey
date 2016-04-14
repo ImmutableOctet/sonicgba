@@ -18,7 +18,6 @@ Private
 	Import sonicgba.gameobject
 	Import sonicgba.globalresource
 	'Import sonicgba.playeranimationcollisionrect
-	Import sonicgba.sonicdef
 	Import sonicgba.stagemanager
 	
 	Import state.endingstate
@@ -40,8 +39,9 @@ Private
 	
 	Import regal.typetool
 Public
+	Import sonicgba.sonicdef
 
-Class State Implements SonicDef, StringIndex Abstract
+Class State Implements StringIndex Abstract ' SonicDef
 	Private
 		' Constant variable(s):
 		Global BAR_ANIMATION:Int[] = [103, 102, 118] ' Const

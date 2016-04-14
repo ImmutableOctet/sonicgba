@@ -13,7 +13,7 @@ Private
 Public
 
 ' Classes:
-Class NumberDrawer Implements SonicDef
+Class NumberDrawer ' Implements SonicDef
 	Public
 		' Constant variable(s):
 		Const ANCHOR_BOTTOM:Int = 16

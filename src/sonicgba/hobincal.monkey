@@ -11,7 +11,7 @@ Private
 Public
 
 ' Classes:
-Class HobinCal Implements SonicDef
+Class HobinCal ' Implements SonicDef
 	Private
 		' Constant variable(s):
 		Const MAX_DISTANCE:= 512

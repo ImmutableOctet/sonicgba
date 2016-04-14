@@ -27,8 +27,6 @@ Private
 	Import sonicgba.ringobject
 	Import sonicgba.rocketseparateeffect
 	Import sonicgba.smallanimal
-	Import sonicgba.sonicdebug
-	Import sonicgba.sonicdef
 	
 	Import com.sega.engine.action.acblock
 	Import com.sega.engine.action.acobject
@@ -39,9 +37,11 @@ Private
 	
 	Import monkey.stack
 Public
+	Import sonicgba.sonicdebug
+	Import sonicgba.sonicdef
 
 ' Classes:
-Class GameObject Extends ACObject Implements SonicDef Abstract
+Class GameObject Extends ACObject Abstract ' Implements SonicDef
 	' Constant variable(s):
 	Public
 		Const CHECK_OFFSET:= 192

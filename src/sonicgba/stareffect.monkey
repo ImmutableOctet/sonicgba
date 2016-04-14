@@ -15,7 +15,7 @@ Private
 Public
 
 ' Classes:
-Class StarEffect Implements SonicDef
+Class StarEffect ' Implements SonicDef
 	Private
 		' Constant variable(s):
 		Const MAX_VELOCITY:= -720
