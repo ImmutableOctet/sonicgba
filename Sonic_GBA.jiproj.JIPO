@@ -628,6 +628,14 @@
       <DocGUID>ef136825-412c-452f-8ec9-200d4492b913</DocGUID>
       <Bookmarks />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\caterpillarbody.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>21</X>
+        <Y>14</Y>
+      </CursorPos>
+      <DocGUID>a938ff37-3206-4429-9ffd-0bffcd687329</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\changerectregion.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>10</X>
