@@ -686,8 +686,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>45</X>
-        <Y>43</Y>
+        <X>7</X>
+        <Y>1520</Y>
       </CursorPos>
       <DocGUID>b8ad8876-58fa-4c92-afa9-6bed06cb2e75</DocGUID>
       <Bookmarks />
@@ -914,12 +914,13 @@
       <DocGUID>8e727180-210f-4ceb-b947-85afdedf535b</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\sonicdebug.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\sonicdebug.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>45</X>
-        <Y>10</Y>
+        <X>17</X>
+        <Y>5</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>d3088c1c-5a1c-4622-87fc-daa75f29688c</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1007,19 +1008,21 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\special\specialplayer.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\special\specialplayer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>3</X>
+        <Y>1082</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>a5932686-6301-4a05-a6db-82b7f8941d07</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\special\ssbomb.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\special\ssbomb.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>26</X>
-        <Y>59</Y>
+        <X>7</X>
+        <Y>67</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>19847360-4b4d-43ae-9205-a8bc2d2b9cd3</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\sscheckpoint.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
