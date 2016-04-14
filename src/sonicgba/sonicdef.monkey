@@ -3,12 +3,10 @@ Strict
 Public
 
 ' Imports:
-Private
-	Import gameengine.def
-Public
+Import gameengine.def
 
 ' Interfaces:
-Interface SonicDef Extends Def
+Interface SonicDef
 	' Constant variable(s):
 	Const ALPHA_CHANGE_STATE:= True
 	Const ANIMATION_PATH:= "/animation"

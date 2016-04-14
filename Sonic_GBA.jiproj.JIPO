@@ -230,7 +230,7 @@
     <DocUserOptions Filename=".\src\common\numberdrawer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>30</X>
-        <Y>18</Y>
+        <Y>19</Y>
       </CursorPos>
       <DocGUID>f28f96e3-908c-4ae0-9a3d-94c3f9137fd2</DocGUID>
       <Bookmarks />
@@ -922,8 +922,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>18</X>
-        <Y>10</Y>
+        <X>10</X>
+        <Y>4</Y>
       </CursorPos>
       <DocGUID>40624bab-0ef3-4843-bc24-1f6cd49f4b76</DocGUID>
       <Bookmarks />
