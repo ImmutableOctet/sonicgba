@@ -234,11 +234,14 @@ Class TitleState Extends State
 		Const CHARACTER_RECORD_BG_HEIGHT:Int = 48
 		Const CHARACTER_RECORD_BG_OFFSET:Int = 128
 		Const CHARACTER_RECORD_BG_SPEED:Int = 4
+		
 		Const ITEM_X:Int = (5 * SCREEN_WIDTH / 6)
+		
 		Const RETURN_PRESSED:Int = 400
-		Const STAGE_SELECT_KEY_DIRECT_PLAY:Int = 2
+		
 		Const STAGE_SELECT_KEY_RECORD_1:Int = 0
 		Const STAGE_SELECT_KEY_RECORD_2:Int = 1
+		Const STAGE_SELECT_KEY_DIRECT_PLAY:Int = 2
 		
 		' Global variable(s):
 		Global preStageSelectState:Int

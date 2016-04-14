@@ -566,7 +566,9 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 					End Try
 				Case LOAD_END
 					Try
-						ds.Close(); ds = Null
+						ds.Close()
+						
+						ds = Null
 						
 						loadStep = LOAD_OPEN_FILE
 					Catch err:StreamError
@@ -1351,7 +1353,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			rectH.setRect(objectRect.x0, objectRect.y0 + CHECK_OFFSET, objectRect.getWidth(), objectRect.getHeight() - PlayerSonic.BACK_JUMP_SPEED_X)
 			rectV.setRect(objectRect.x0 + CHECK_OFFSET, objectRect.y0, objectRect.getWidth() - PlayerSonic.BACK_JUMP_SPEED_Y, objectRect.getHeight()) ' BACK_JUMP_SPEED_X
 			
-			Return (thisRect.collisionChk(rectH) Or thisRect.collisionChk(rectV));
+			Return (thisRect.collisionChk(rectH) Or thisRect.collisionChk(rectV))
 		End
 		
 		Method onObjectChk:Bool(player:PlayerObject)
@@ -1496,7 +1498,7 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 		End
 		
 		Method getBlockRightSide:Int(blockX:Int, blockY:Int)
-			Return ((((blockX + 1) Shl SEARCH_COUNT) - 1) Shl 6);
+			Return ((((blockX + 1) Shl SEARCH_COUNT) - 1) Shl 6)
 		End
 		
 		Method getBlockUpSide:Int(blockX:Int, blockY:Int)
@@ -1519,33 +1521,33 @@ Class GameObject Extends ACObject Implements SonicDef Abstract
 			If (SonicDebug.showCollisionRect) Then
 				g.setColor(16711680)
 				
-				g.drawRect((Self.collisionRect.x0 Shr 6) - camera.x, (Self.collisionRect.y0 Shr 6) - camera.y, Self.collisionRect.getWidth() Shr 6, Self.collisionRect.getHeight() Shr 6);
-				g.drawRect(((Self.collisionRect.x0 Shr 6) - camera.x) + 1, ((Self.collisionRect.y0 Shr 6) - camera.y) + 1, (Self.collisionRect.getWidth() Shr 6) - 2, (Self.collisionRect.getHeight() Shr 6) - 2);
+				g.drawRect((Self.collisionRect.x0 Shr 6) - camera.x, (Self.collisionRect.y0 Shr 6) - camera.y, Self.collisionRect.getWidth() Shr 6, Self.collisionRect.getHeight() Shr 6)
+				g.drawRect(((Self.collisionRect.x0 Shr 6) - camera.x) + 1, ((Self.collisionRect.y0 Shr 6) - camera.y) + 1, (Self.collisionRect.getWidth() Shr 6) - 2, (Self.collisionRect.getHeight() Shr 6) - 2)
 			EndIf
 		End
 		
 		Function drawInMap:Void(graphics:MFGraphics, drawer:AnimationDrawer, x:Int, y:Int)
-			drawer.draw(graphics, (x Shr 6) - camera.x, (y Shr 6) - camera.y);
+			drawer.draw(graphics, (x Shr 6) - camera.x, (y Shr 6) - camera.y)
 		End
 		
 		Function drawInMap:Void(graphics:MFGraphics, drawer:AnimationDrawer)
-			drawInMap(graphics, drawer, Self.posX, Self.posY);
+			drawInMap(graphics, drawer, Self.posX, Self.posY)
 		End
 		
 		Function drawInMap:Void(graphics:MFGraphics, image:MFImage, x:Int, y:Int, anchor:Int)
-			MyAPI.drawImage(graphics, image, (x Shr 6) - camera.x, (y Shr 6) - camera.y, anchor);
+			MyAPI.drawImage(graphics, image, (x Shr 6) - camera.x, (y Shr 6) - camera.y, anchor)
 		End
 		
 		Function drawInMap:Void(graphics:MFGraphics, image:MFImage, anchor:Int)
-			drawInMap(graphics, image, Self.posX, Self.posY, anchor);
+			drawInMap(graphics, image, Self.posX, Self.posY, anchor)
 		End
 		
 		Function drawInMap:Void(graphics:MFGraphics, image:MFImage, srcX:Int, srcY:Int, width:Int, height:Int, trans:Int, x:Int, y:Int, anchor:Int)
-			MyAPI.drawRegion(graphics, image, srcX, srcY, width, height, trans, (x Shr 6) - camera.x, (y Shr 6) - camera.y, anchor);
+			MyAPI.drawRegion(graphics, image, srcX, srcY, width, height, trans, (x Shr 6) - camera.x, (y Shr 6) - camera.y, anchor)
 		End
 		
 		Function drawInMap:Void(graphics:MFGraphics, image:MFImage, srcX:Int, srcY:Int, width:Int, height:Int, trans:Int, anchor:Int)
-			drawInMap(graphics, image, srcX, srcY, width, height, trans, Self.posX, Self.posY, anchor);
+			drawInMap(graphics, image, srcX, srcY, width, height, trans, Self.posX, Self.posY, anchor)
 		End
 	Private
 		' Methods:
