@@ -13,6 +13,7 @@ Private
 	
 	Import com.sega.mobile.define.mdphone
 	Import com.sega.mobile.framework.android.graphics
+	Import com.sega.mobile.framework.android.graphicsmacros
 	Import com.sega.mobile.framework.device.mfdevice
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
@@ -26,7 +27,7 @@ Private
 Public
 
 ' Classes:
-Class MyAPI Extends GRAPHICS_MACROS Implements Def ' Implements GRAPHICS_MACROS
+Class MyAPI Implements Def ' Implements GRAPHICS_MACROS
 	Private
 		' Constant variable(s):
 		Const ROTATE_90:Int = 1

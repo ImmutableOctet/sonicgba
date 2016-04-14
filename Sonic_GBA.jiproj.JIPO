@@ -157,11 +157,18 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>19</X>
-        <Y>30</Y>
+        <X>1</X>
+        <Y>17</Y>
       </CursorPos>
       <DocGUID>eaf77854-99ef-410c-8fff-189791db32e0</DocGUID>
       <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphicsmacros.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>17</X>
+        <Y>22</Y>
+      </CursorPos>
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfcomponent.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -184,12 +191,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>16</X>
+        <Y>22</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>a397ad80-ff70-4ebe-9ff0-6fc1377d3a75</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfimage.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -382,8 +390,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>30</X>
-        <Y>28</Y>
+        <X>0</X>
+        <Y>27</Y>
       </CursorPos>
       <DocGUID>19e3309e-2ddd-460d-9ab5-94784534fa8b</DocGUID>
       <Bookmarks />
@@ -777,8 +785,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\platform.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
-        <Y>21</Y>
+        <X>48</X>
+        <Y>17</Y>
       </CursorPos>
       <DocGUID>207f3a28-d497-48e5-a06e-d7e15129b308</DocGUID>
       <Bookmarks />

@@ -17,9 +17,10 @@ Private
 	
 	'Import mojo.graphics
 Public
+	Import com.sega.mobile.framework.android.graphicsmacros
 
 ' Classes:
-Class MFGraphics Extends GRAPHICS_MACROS ' Implements GRAPHICS_MACROS
+Class MFGraphics
 	Public
 		' Constant variable(s):
 		Const FONT_LARGE:Int = -3

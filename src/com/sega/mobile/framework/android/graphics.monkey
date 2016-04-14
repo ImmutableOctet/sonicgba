@@ -22,29 +22,11 @@ Private
 	'Import regal.matrix2d
 Public
 	Import mojo2.graphics
-
-' Interfaces:
-Class GRAPHICS_MACROS ' Interface
-	' Constant variable(s):
-	Const HCENTER:Int = 1
-	Const VCENTER:Int = 2
-	Const LEFT:Int = 4
-	Const RIGHT:Int = 8
-	Const TOP:Int = 16
-	Const BOTTOM:Int = 32
 	
-	Const TRANS_NONE:Int = 0
-	Const TRANS_MIRROR_ROT180:Int = 1
-	Const TRANS_MIRROR:Int = 2
-	Const TRANS_ROT180:Int = 3
-	Const TRANS_MIRROR_ROT270:Int = 4
-	Const TRANS_ROT90:Int = 5
-	Const TRANS_ROT270:Int = 6
-	Const TRANS_MIRROR_ROT90:Int = 7
-End
+	Import com.sega.mobile.framework.android.graphicsmacros
 
 ' Classes:
-Class Graphics Extends GRAPHICS_MACROS ' Implements GRAPHICS_MACROS
+Class Graphics
 	Private
 		' Fields:
 		Field mCanvas:Canvas ' DrawList
