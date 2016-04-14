@@ -15,6 +15,8 @@ Private
 	Import sonicgba.seabedvolcanoplatform
 	
 	Import com.sega.mobile.framework.device.mfgraphics
+	
+	Import regal.typetool
 Public
 
 ' Classes:
@@ -26,7 +28,7 @@ Class SeabedVolcanoBase Extends GimmickObject
 		Const FIRE_OFFSET_Y:Int = 192
 		
 		' Global variable(s):
-		Global count:Byte
+		Global count:Byte = 0
 		
 		' Fields:
 		Field drawer:AnimationDrawer
@@ -66,7 +68,7 @@ Class SeabedVolcanoBase Extends GimmickObject
 			SeabedVolcanoPlatform.staticLogic()
 		End
 		
-		ublic Function releaseAllResource:Void()
+		Function releaseAllResource:Void()
 			Animation.closeAnimation(firemtAnimation)
 			
 			firemtAnimation = Null
