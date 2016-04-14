@@ -8,7 +8,9 @@ Private
 	
 	Import lib.animation
 	Import lib.animationdrawer
+	Import lib.soundsystem
 	Import lib.coordinate
+	Import lib.constutil
 	
 	Import sonicgba.gameobject
 	Import sonicgba.mapmanager
@@ -16,6 +18,8 @@ Private
 	Import sonicgba.playerobject
 	Import sonicgba.sonicdebug
 	Import sonicgba.stagemanager
+	
+	Import com.sega.engine.action.acworldcollisioncalculator
 	
 	Import com.sega.engine.lib.myapi
 	Import com.sega.mobile.framework.device.mfgraphics
@@ -155,58 +159,75 @@ Class PlayerSonic Extends PlayerObject
 			Self.effectDrawer = Null
 		End
 		
-		Public Method slipStart:Void()
-			Self.currentLayer = SONIC_ANI_STAND
+		Method slipStart:Void()
+			Self.currentLayer = 0
+			
 			Self.slipping = True
 			Self.slideSoundStart = True
-			soundInstance.playSe(SONIC_ANI_LOOK_UP_2)
+			
+			soundInstance.playSe(SoundSystem.SE_114_01)
+			
 			slidingFrame = SONIC_ANI_STAND
-			Self.collisionState = (Byte) 1
-			Self.worldCal.actionState = (Byte) 1
+			
+			Self.collisionState = COLLISION_STATE_JUMP
+			Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE
+			
 			setMinSlipSpeed()
+			
 			Self.worldCal.setMovedState(True)
 		End
 		
-		Public Method slipJumpOut:Void()
-			
+		Method slipJumpOut:Void()
 			If (Self.slipping) Then
-				Self.currentLayer = SUPER_SONIC_ANI_CHANGE_1
+				Self.currentLayer = 1
+				
 				Self.slipping = False
+				
 				calDivideVelocity()
-				setVelY(Self.isInWater ? JUMP_INWATER_START_VELOCITY : JUMP_START_VELOCITY)
-				Self.collisionState = (Byte) 1
-				Self.worldCal.actionState = (Byte) 1
+				
+				setVelY(PickValue(Self.isInWater, JUMP_INWATER_START_VELOCITY, JUMP_START_VELOCITY))
+				
+				Self.collisionState = COLLISION_STATE_JUMP
+				Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE
+				
 				Self.collisionChkBreak = True
+				
 				Self.worldCal.stopMove()
+				
 				Self.worldCal.setMovedState(False)
 			EndIf
-			
 		End
 		
-		Public Method slipEnd:Void()
-			
+		Method slipEnd:Void()
 			If (Self.slipping) Then
-				Self.currentLayer = SUPER_SONIC_ANI_CHANGE_1
+				Self.currentLayer = 1
+				
 				Self.slipping = False
+				
 				calDivideVelocity()
-				Self.collisionState = (Byte) 1
-				Self.worldCal.actionState = (Byte) 1
+				
+				Self.collisionState = COLLISION_STATE_JUMP
+				Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE
+				
 				Self.velY = -1540
 				Self.animationID = SONIC_ANI_SQUAT_1
+				
 				Self.collisionChkBreak = True
+				
 				Self.worldCal.stopMove()
+				
 				soundInstance.stopLoopSe()
-				soundInstance.playSequenceSe(SONIC_ANI_JUMP_ATTACK_BODY)
+				soundInstance.playSequenceSe(SoundSystem.SE_116)
+				
 				Self.worldCal.setMovedState(False)
 			EndIf
-			
 		End
 		
-		Public Method setSlideAni:Void()
+		Method setSlideAni:Void()
 			Self.animationID = NO_ANIMATION
 			Self.myAnimationID = SONIC_ANI_SLIDE_D0
 		End
-		
+	Protected
 		Protected Method extraLogicJump:Void()
 			
 			If (Not Self.hurtNoControl) Then
@@ -349,7 +370,7 @@ Class PlayerSonic Extends PlayerObject
 				Self.animationID = SONIC_ANI_STAND
 				Self.myAnimationID = ANIMATION_CONVERT[SONIC_ANI_STAND]
 				
-				If (Self.collisionState = (Byte) 1) Then
+				If (Self.collisionState = COLLISION_STATE_JUMP) Then
 					Self.animationID = SONIC_ANI_JUMP
 					Self.myAnimationID = ANIMATION_CONVERT[SONIC_ANI_JUMP]
 				EndIf
@@ -708,7 +729,7 @@ Class PlayerSonic Extends PlayerObject
 			If (Self.myAnimationID <> SONIC_ANI_ATTACK_1 And Self.myAnimationID <> SONIC_ANI_ATTACK_2 And Self.myAnimationID <> SONIC_ANI_ATTACK_3) Then
 				If (Self.slipping) Then
 					If (Not isHeadCollision()) Then
-						Self.currentLayer = SUPER_SONIC_ANI_CHANGE_1
+						Self.currentLayer = 1
 					Else
 						Return
 					EndIf
@@ -725,7 +746,7 @@ Class PlayerSonic Extends PlayerObject
 				Self.jumpRollEnable = False
 				
 				If (Self.slipping) Then
-					Self.currentLayer = SUPER_SONIC_ANI_CHANGE_1
+					Self.currentLayer = 1
 					Self.slipping = False
 				EndIf
 				
@@ -742,7 +763,7 @@ Class PlayerSonic Extends PlayerObject
 			Super.doHurt()
 			
 			If (Self.slipping) Then
-				Self.currentLayer = SUPER_SONIC_ANI_CHANGE_1
+				Self.currentLayer = 1
 				Self.slipping = False
 			EndIf
 			
