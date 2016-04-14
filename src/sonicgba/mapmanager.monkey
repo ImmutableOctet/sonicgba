@@ -367,87 +367,6 @@ Class MapManager ' Implements SonicDef
 			mapLoopLeft = loopLeft
 			mapLoopRight = loopRight
 		End
-	Private
-		Private Function cameraActionX:Void()
-			Int desCamX = (focusObj.getFocusX() - (CAMERA_WIDTH Shr 1)) - CAMERA_OFFSET_X
-			Select (cameraActionX)
-				Case 0
-					Int preCameraX = camera.x
-					camera.x = MyAPI.calNextPosition((Double) camera.x, (Double) desCamX, LOAD_MODEL, SHAKE_RANGE, 4.0)
-					
-					If (Abs(preCameraX - camera.x) > CAMERA_MAX_SPEED_Y) Then
-						If (camera.x > preCameraX) Then
-							camera.x = preCameraX + CAMERA_MAX_SPEED_Y
-						EndIf
-						
-						If (camera.x < preCameraX) Then
-							camera.x = preCameraX - CAMERA_MAX_SPEED_Y
-						EndIf
-					EndIf
-					
-				Case LOAD_OPEN_FILE
-					Int destiny
-					
-					If (desCamX < 0) Then
-						destiny = 0
-					Else
-						destiny = desCamX
-					EndIf
-					
-					Int move = ((destiny - camera.x) * 100) / LOAD_BACK
-					Coordinate coordinate = camera
-					Int i = coordinate.x
-					Int i2 = move / 100
-					Int i3 = move = 0 ? 0 : move > 0 ? LOAD_BACK : -5
-					coordinate.x = i + (i2 + i3)
-					
-					If (((destiny * 100) - (camera.x * 100)) * move <= 0) Then
-						cameraActionX = 0
-					EndIf
-					
-				Case LOAD_OVERALL
-					camera.x = desCamX
-					cameraActionX = 0
-				Default
-			End Select
-		}
-		
-		Private Function cameraActionY:Void()
-			Int desCamY = (focusObj.getFocusY() - (CAMERA_HEIGHT Shr 1)) - CAMERA_OFFSET_Y
-			Select (cameraActionY)
-				Case 0
-					Int preCameraY = camera.y
-					camera.y = MyAPI.calNextPosition((Double) camera.y, (Double) desCamY, LOAD_MODEL, SHAKE_RANGE, 4.0)
-					
-					If (Abs(preCameraY - camera.y) > CAMERA_MAX_SPEED_Y) Then
-						If (camera.y > preCameraY) Then
-							camera.y = preCameraY + CAMERA_MAX_SPEED_Y
-						EndIf
-						
-						If (camera.y < preCameraY) Then
-							camera.y = preCameraY - CAMERA_MAX_SPEED_Y
-						EndIf
-					EndIf
-					
-				Case LOAD_OPEN_FILE
-					Int destiny = focusObj.getFocusY() - (CAMERA_HEIGHT Shr 1) < 0 ? 0 : focusObj.getFocusY() - (CAMERA_HEIGHT Shr 1)
-					Int move = ((destiny - camera.y) * 100) / LOAD_BACK
-					Coordinate coordinate = camera
-					Int i = coordinate.y
-					Int i2 = move / 100
-					Int i3 = move = 0 ? 0 : move > 0 ? LOAD_BACK : -5
-					coordinate.y = i + (i2 + i3)
-					
-					If (((destiny * 100) - (camera.y * 100)) * move <= 0) Then
-						cameraActionY = 0
-					EndIf
-					
-				Case LOAD_OVERALL
-					camera.y = desCamY
-					cameraActionY = 0
-				Default
-			End Select
-		}
 		
 		Public Function setCameraLeftLimit:Void(limit:Int)
 			proposeLeftCameraLimit = limit
@@ -764,6 +683,123 @@ Class MapManager ' Implements SonicDef
 			BackGroundManager.drawFrontNatural(g)
 		}
 		
+		Public Function drawFront:Void(g:MFGraphics)
+			drawMap(g, mapFront)
+		}
+		
+		Public Function drawMapFrame:Void(g:MFGraphics)
+			If (CAMERA_OFFSET_X > 0 Or CAMERA_OFFSET_Y > 0) Then
+				If (CAMERA_OFFSET_Y > 0) Then
+					g.setColor(255)
+					MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, CAMERA_OFFSET_Y)
+					MyAPI.fillRect(g, 0, SCREEN_HEIGHT - CAMERA_OFFSET_Y, SCREEN_WIDTH, CAMERA_OFFSET_Y)
+				EndIf
+				
+				If (CAMERA_OFFSET_X > 0) Then
+					g.setColor(255)
+					MyAPI.fillRect(g, 0, CAMERA_OFFSET_Y + 0, CAMERA_OFFSET_X, SCREEN_HEIGHT - (CAMERA_OFFSET_Y Shl LOAD_OPEN_FILE))
+					MyAPI.fillRect(g, SCREEN_WIDTH - CAMERA_OFFSET_X, CAMERA_OFFSET_Y + 0, CAMERA_OFFSET_X, SCREEN_HEIGHT - (CAMERA_OFFSET_Y Shl LOAD_OPEN_FILE))
+				EndIf
+			EndIf
+		End
+		
+		Public Function getConvertX:Int(x:Int)
+			
+			If (x < mapLoopRight) Then
+				Return x
+			EndIf
+			
+			Int duration = mapLoopRight - mapLoopLeft
+			Select (StageManager.getCurrentZoneId())
+				Case SpecialObject.COLLISION_RANGE_Z
+					Return mapLoopLeft + ((x - mapLoopRight) Mod duration)
+				Default
+					Return mapLoopLeft + ((x - mapLoopRight) Mod duration)
+			End Select
+		End
+	Private
+		' Functions:
+		Private Function cameraActionX:Void()
+			Int desCamX = (focusObj.getFocusX() - (CAMERA_WIDTH Shr 1)) - CAMERA_OFFSET_X
+			Select (cameraActionX)
+				Case 0
+					Int preCameraX = camera.x
+					camera.x = MyAPI.calNextPosition((Double) camera.x, (Double) desCamX, LOAD_MODEL, SHAKE_RANGE, 4.0)
+					
+					If (Abs(preCameraX - camera.x) > CAMERA_MAX_SPEED_Y) Then
+						If (camera.x > preCameraX) Then
+							camera.x = preCameraX + CAMERA_MAX_SPEED_Y
+						EndIf
+						
+						If (camera.x < preCameraX) Then
+							camera.x = preCameraX - CAMERA_MAX_SPEED_Y
+						EndIf
+					EndIf
+					
+				Case LOAD_OPEN_FILE
+					Int destiny
+					
+					If (desCamX < 0) Then
+						destiny = 0
+					Else
+						destiny = desCamX
+					EndIf
+					
+					Int move = ((destiny - camera.x) * 100) / LOAD_BACK
+					Coordinate coordinate = camera
+					Int i = coordinate.x
+					Int i2 = move / 100
+					Int i3 = move = 0 ? 0 : move > 0 ? LOAD_BACK : -5
+					coordinate.x = i + (i2 + i3)
+					
+					If (((destiny * 100) - (camera.x * 100)) * move <= 0) Then
+						cameraActionX = 0
+					EndIf
+					
+				Case LOAD_OVERALL
+					camera.x = desCamX
+					cameraActionX = 0
+				Default
+			End Select
+		}
+		
+		Private Function cameraActionY:Void()
+			Int desCamY = (focusObj.getFocusY() - (CAMERA_HEIGHT Shr 1)) - CAMERA_OFFSET_Y
+			Select (cameraActionY)
+				Case 0
+					Int preCameraY = camera.y
+					camera.y = MyAPI.calNextPosition((Double) camera.y, (Double) desCamY, LOAD_MODEL, SHAKE_RANGE, 4.0)
+					
+					If (Abs(preCameraY - camera.y) > CAMERA_MAX_SPEED_Y) Then
+						If (camera.y > preCameraY) Then
+							camera.y = preCameraY + CAMERA_MAX_SPEED_Y
+						EndIf
+						
+						If (camera.y < preCameraY) Then
+							camera.y = preCameraY - CAMERA_MAX_SPEED_Y
+						EndIf
+					EndIf
+					
+				Case LOAD_OPEN_FILE
+					Int destiny = focusObj.getFocusY() - (CAMERA_HEIGHT Shr 1) < 0 ? 0 : focusObj.getFocusY() - (CAMERA_HEIGHT Shr 1)
+					Int move = ((destiny - camera.y) * 100) / LOAD_BACK
+					Coordinate coordinate = camera
+					Int i = coordinate.y
+					Int i2 = move / 100
+					Int i3 = move = 0 ? 0 : move > 0 ? LOAD_BACK : -5
+					coordinate.y = i + (i2 + i3)
+					
+					If (((destiny * 100) - (camera.y * 100)) * move <= 0) Then
+						cameraActionY = 0
+					EndIf
+					
+				Case LOAD_OVERALL
+					camera.y = desCamY
+					cameraActionY = 0
+				Default
+			End Select
+		}
+		
 		Private Function drawWind:Void(g:MFGraphics)
 			
 			If (windImage = Null) Then
@@ -799,28 +835,6 @@ Class MapManager ' Implements SonicDef
 				g.setColor(x | (h | (((((((16711680 & colorEnd) Shr TILE_WIDTH) * i) + (((16711680 & colorStart) Shr TILE_WIDTH) * (y - i))) / y) Shl TILE_WIDTH) & 16711680)))
 				MyAPI.fillRect(g, 0, coorSpace * i, w, coorSpace)
 			Next
-		}
-		
-		Public Function drawFront:Void(g:MFGraphics)
-			drawMap(g, mapFront)
-		}
-		
-		Public Function drawMapFrame:Void(g:MFGraphics)
-			
-			If (CAMERA_OFFSET_X > 0 Or CAMERA_OFFSET_Y > 0) Then
-				If (CAMERA_OFFSET_Y > 0) Then
-					g.setColor(255)
-					MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, CAMERA_OFFSET_Y)
-					MyAPI.fillRect(g, 0, SCREEN_HEIGHT - CAMERA_OFFSET_Y, SCREEN_WIDTH, CAMERA_OFFSET_Y)
-				EndIf
-				
-				If (CAMERA_OFFSET_X > 0) Then
-					g.setColor(255)
-					MyAPI.fillRect(g, 0, CAMERA_OFFSET_Y + 0, CAMERA_OFFSET_X, SCREEN_HEIGHT - (CAMERA_OFFSET_Y Shl LOAD_OPEN_FILE))
-					MyAPI.fillRect(g, SCREEN_WIDTH - CAMERA_OFFSET_X, CAMERA_OFFSET_Y + 0, CAMERA_OFFSET_X, SCREEN_HEIGHT - (CAMERA_OFFSET_Y Shl LOAD_OPEN_FILE))
-				EndIf
-			EndIf
-			
 		}
 		
 		Private Function drawMap:Void(g:MFGraphics, mapArray:Short[][])
@@ -940,21 +954,6 @@ Class MapManager ' Implements SonicDef
 			EndIf
 			
 			Return mapArray[x][y]
-		}
-		
-		Public Function getConvertX:Int(x:Int)
-			
-			If (x < mapLoopRight) Then
-				Return x
-			EndIf
-			
-			Int duration = mapLoopRight - mapLoopLeft
-			Select (StageManager.getCurrentZoneId())
-				Case SpecialObject.COLLISION_RANGE_Z
-					Return mapLoopLeft + ((x - mapLoopRight) Mod duration)
-				Default
-					Return mapLoopLeft + ((x - mapLoopRight) Mod duration)
-			End Select
 		}
 		
 		Private Function drawTile:Void(g:MFGraphics, sy:Int, x:Int, y:Int, trans:Int)
