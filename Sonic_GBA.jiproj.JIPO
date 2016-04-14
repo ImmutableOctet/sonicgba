@@ -148,13 +148,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\mobile\define\mdphone.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\mobile\define\mdphone.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
         <X>0</X>
         <Y>0</Y>
       </CursorPos>
-      <DocGUID>8c131c8b-2057-4a57-841d-668ec28bff00</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphics.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -415,13 +414,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
-        <X>14</X>
-        <Y>131</Y>
+        <X>0</X>
+        <Y>0</Y>
       </CursorPos>
-      <DocGUID>89f68b8c-77bb-4844-b601-a154738123b3</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -542,13 +540,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\bonus100pts.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\bonus100pts.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
-        <X>24</X>
-        <Y>23</Y>
+        <X>0</X>
+        <Y>0</Y>
       </CursorPos>
-      <DocGUID>1714760b-c97f-4bea-8bba-05a0e28b4a20</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boom.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -662,13 +659,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\enemyobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\enemyobject.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
-        <X>22</X>
-        <Y>17</Y>
+        <X>0</X>
+        <Y>0</Y>
       </CursorPos>
-      <DocGUID>e6e9932f-d45a-4ad3-8285-0360dbbeeadc</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\extraring.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -705,13 +701,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
-        <X>7</X>
-        <Y>43</Y>
+        <X>0</X>
+        <Y>0</Y>
       </CursorPos>
-      <DocGUID>77aa1329-86a6-4bdb-a7f0-a6e4e281bb72</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -826,12 +821,19 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
-        <X>9</X>
-        <Y>378</Y>
+        <X>0</X>
+        <Y>0</Y>
       </CursorPos>
-      <DocGUID>87cfac78-ee4e-45eb-ad28-8396e27cf930</DocGUID>
+      <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\playersonic.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>17</X>
+        <Y>24</Y>
+      </CursorPos>
+      <DocGUID>a5737cf7-c803-4369-a3c9-d289230080c7</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\railflipper.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
@@ -890,13 +892,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\seabedvolcanoasynbase.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\seabedvolcanoasynbase.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
-        <X>11</X>
-        <Y>30</Y>
+        <X>0</X>
+        <Y>0</Y>
       </CursorPos>
-      <DocGUID>01799c6c-ef81-4995-be1f-cbf03b0fbf44</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\seabedvolcanoasynhurt.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -905,13 +906,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\seabedvolcanoasynplatform.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\seabedvolcanoasynplatform.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
-        <Y>53</Y>
+        <X>5</X>
+        <Y>115</Y>
       </CursorPos>
-      <DocGUID>5f89fe51-7566-4604-bc36-4a259f23661c</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\seabedvolcanobase.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -962,13 +962,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
-        <X>20</X>
-        <Y>22</Y>
+        <X>0</X>
+        <Y>0</Y>
       </CursorPos>
-      <DocGUID>f822dfd7-8fd6-4161-b2f6-98082f3b36f1</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\stareffect.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -1180,13 +1179,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\state\stringindex.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\state\stringindex.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
-        <X>11</X>
-        <Y>33</Y>
+        <X>0</X>
+        <Y>0</Y>
       </CursorPos>
-      <DocGUID>f4713d4e-e83a-4dcc-a7ed-8177445f9c2d</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
