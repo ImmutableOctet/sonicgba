@@ -37,13 +37,13 @@ Class MapManager ' Implements SonicDef
 		
 		Const LINE_HEIGHT:Int = 2
 		
-		Const LOAD_BACK:Int = 5
-		Const LOAD_CAMERA_RESET:Int = 6
-		Const LOAD_FRONT:Int = 4
 		Const LOAD_MAP_IMAGE:Int = 0
-		Const LOAD_MODEL:Int = 3
 		Const LOAD_OPEN_FILE:Int = 1
 		Const LOAD_OVERALL:Int = 2
+		Const LOAD_MODEL:Int = 3
+		Const LOAD_FRONT:Int = 4
+		Const LOAD_BACK:Int = 5
+		Const LOAD_CAMERA_RESET:Int = 6
 		
 		Global LOOP_COUNT:Int = (((960 + SCREEN_WIDTH) - 1) / 480) ' Const
 		
@@ -300,6 +300,72 @@ Class MapManager ' Implements SonicDef
 					EndIf
 				EndIf
 			EndIf
+		End
+		
+		Function getPixelWidth:Int()
+			Return ((mapWidth * TILE_WIDTH) * MODEL_WIDTH)
+		End
+		
+		Function getPixelHeight:Int()
+			Return ((mapHeight * TILE_WIDTH) * MODEL_HEIGHT)
+		End
+		
+		Function getMapWidth:Int()
+			Return mapWidth
+		End
+		
+		Function getMapHeight:Int()
+			Return mapHeight
+		End
+		
+		Function setShake:Void(count:Int)
+			setShake(count, SHAKE_RANGE)
+		End
+		
+		Function setShake:Void(count:Int, power:Int)
+			If (count > 0) Then
+				shakeCount = count
+				shakeMaxCount = count
+				
+				shakePowerY = power
+			EndIf
+		End
+		
+		Function setShakeX:Void(power:Int)
+			shakePowerX = power
+		End
+		
+		Function setMapBrokeParam:Void(pointY:Int, offsetY:Int)
+			brokePointY = (pointY / 2)
+			brokeOffsetY = offsetY
+		End
+		
+		Function releaseCamera:Void()
+			proposeLeftCameraLimit = 0
+			
+			proposeRightCameraLimit = getPixelWidth()
+			
+			proposeUpCameraLimit = 0
+			
+			proposeDownCameraLimit = getPixelHeight()
+			
+			calCameraImmidiately()
+		End
+		
+		Function releaseCamera2:Void()
+			proposeLeftCameraLimit = 0
+			proposeRightCameraLimit = getPixelWidth()
+			proposeUpCameraLimit = 0
+			
+			' Magic number: 2372
+			proposeDownCameraLimit = 2372
+			
+			calCameraImmidiately()
+		End
+		
+		Function setMapLoop:Void(loopLeft:Int, loopRight:Int)
+			mapLoopLeft = loopLeft
+			mapLoopRight = loopRight
 		End
 	Private
 		Private Function cameraActionX:Void()
@@ -925,65 +991,5 @@ Class MapManager ' Implements SonicDef
 				MyAPI.drawImage(g, image, sx * TILE_WIDTH, sy * TILE_WIDTH, TILE_WIDTH, TILE_WIDTH, trans, ((x * TILE_WIDTH) - camera.x) + mapOffsetX, ((y * TILE_WIDTH) - camera.y) + (y >= brokePointY ? brokeOffsetY : 0), COLOR_SPACE)
 			EndIf
 			
-		}
-		
-		Public Function getPixelWidth:Int()
-			Return (mapWidth * TILE_WIDTH) * SHAKE_RANGE
-		}
-		
-		Public Function getPixelHeight:Int()
-			Return (mapHeight * TILE_WIDTH) * SHAKE_RANGE
-		}
-		
-		Public Function getMapWidth:Int()
-			Return mapWidth
-		}
-		
-		Public Function getMapHeight:Int()
-			Return mapHeight
-		}
-		
-		Public Function setShake:Void(count:Int)
-			setShake(count, SHAKE_RANGE)
-		}
-		
-		Public Function setShake:Void(count:Int, power:Int)
-			
-			If (count > 0) Then
-				shakeCount = count
-				shakeMaxCount = count
-				shakePowerY = power
-			EndIf
-			
-		}
-		
-		Public Function setShakeX:Void(power:Int)
-			shakePowerX = power
-		}
-		
-		Public Function setMapBrokeParam:Void(pointY:Int, offsetY:Int)
-			brokePointY = pointY / 2
-			brokeOffsetY = offsetY
-		}
-		
-		Public Function releaseCamera:Void()
-			proposeLeftCameraLimit = 0
-			proposeRightCameraLimit = getPixelWidth()
-			proposeUpCameraLimit = 0
-			proposeDownCameraLimit = getPixelHeight()
-			calCameraImmidiately()
-		}
-		
-		Public Function releaseCamera2:Void()
-			proposeLeftCameraLimit = 0
-			proposeRightCameraLimit = getPixelWidth()
-			proposeUpCameraLimit = 0
-			proposeDownCameraLimit = 2372
-			calCameraImmidiately()
-		}
-		
-		Public Function setMapLoop:Void(loopLeft:Int, loopRight:Int)
-			mapLoopLeft = loopLeft
-			mapLoopRight = loopRight
 		}
 End
