@@ -9,7 +9,7 @@ Private
 Public
 
 ' Classes / Interfaces:
-Class SSMapData2 Implements SSDef ' Interface
+Class SSMapData2 ' Interface ' Implements ' Extends ' SSDef
 	' Constant variable(s):
 	Global STAGE_5:Int[][] = [
 								[100, 40, 1216, SSOBJ_RING_ID],

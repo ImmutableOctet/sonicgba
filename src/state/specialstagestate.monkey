@@ -56,7 +56,7 @@ Private
 Public
 
 ' Classes:
-Class SpecialStageState Extends State Implements SSDef, BarWord
+Class SpecialStageState Extends State Implements BarWord ' SSDef
 	Private
 		' Constant variable(s):
 		Global BONUS_ID:Int[] = [22, 23, 24] ' Const

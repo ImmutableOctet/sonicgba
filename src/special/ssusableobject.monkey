@@ -9,7 +9,7 @@ Import special.ssdef
 Import com.sega.mobile.framework.device.mfgraphics
 
 ' Classes:
-Class SSUsableObject Extends SpecialObject Implements SSDef Abstract
+Class SSUsableObject Extends SpecialObject Abstract ' Implements SSDef
 	Protected
 		' Fields:
 		Field used:Bool
@@ -46,6 +46,6 @@ Class SSUsableObject Extends SpecialObject Implements SSDef Abstract
 		End
 		
 		Method refreshCollision:Void(x:Int, y:Int)
-			Self.collisionRect.setRect(x - (SSdef.PLAYER_MOVE_WIDTH / 2), y - (SSdef.PLAYER_MOVE_HEIGHT / 2), SSdef.PLAYER_MOVE_WIDTH, SSdef.PLAYER_MOVE_HEIGHT)
+			Self.collisionRect.setRect(x - (ssdef.PLAYER_MOVE_WIDTH / 2), y - (ssdef.PLAYER_MOVE_HEIGHT / 2), ssdef.PLAYER_MOVE_WIDTH, ssdef.PLAYER_MOVE_HEIGHT)
 		End
 End

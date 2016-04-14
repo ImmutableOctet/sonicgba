@@ -15,7 +15,6 @@ Private
 	
 	Import special.ssbomb
 	Import special.sscheckpoint
-	Import special.ssdef
 	Import special.ssgoal
 	Import special.ssmapdata
 	Import special.ssring
@@ -32,9 +31,10 @@ Private
 	
 	Import monkey.stack
 Public
+	Import special.ssdef
 
 ' Classes:
-Class SpecialObject Implements SSDef Abstract
+Class SpecialObject Abstract ' Implements SSDef
 	Public
 		' Constant variable(s):
 		Const COLLISION_RANGE_Z:Int = 8
