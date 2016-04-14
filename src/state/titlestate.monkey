@@ -3646,7 +3646,7 @@ Class TitleState Extends State
 			Local timenum:Int
 			
 			If (num = 0) Then
-				timenum = Sonicdef.OVER_TIME
+				timenum = SonicDef.OVER_TIME
 			Else
 				timenum = num
 			EndIf

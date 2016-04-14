@@ -5376,7 +5376,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				itemVec[I][0] = -1
 			Next
 			
-			setOverCount(Sonicdef.OVER_TIME)
+			setOverCount(SonicDef.OVER_TIME)
 		End
 		
 		Function initSpParam:Void(param_ringNum:Int, checkPointID:Int, param_timeCount:Int)
@@ -5917,7 +5917,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Function isHadRaceRecord:Bool()
-			Return (StageManager.getTimeModeScore(characterID) < Sonicdef.OVER_TIME)
+			Return (StageManager.getTimeModeScore(characterID) < SonicDef.OVER_TIME)
 		End
 	
 		Function movingBar:Bool()
