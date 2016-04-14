@@ -38,7 +38,7 @@ Class Standard ' Final
 		Const SPLASH_ROLL:Int = 3
 		Const SPLASH_SOUND:Int = 2
 		
-		Global STAR_WIDTH:= PickValue((SCREEN_WIDTH >= SSDef.PLAYER_MOVE_HEIGHT), 25, 20) ' Const
+		Global STAR_WIDTH:= PickValue((SCREEN_WIDTH >= SSdef.PLAYER_MOVE_HEIGHT), 25, 20) ' Const
 		
 		Const ROLL_FAST_DIFF:Int = 800
 		Const ROLL_GRID_WIDTH:Int = 52

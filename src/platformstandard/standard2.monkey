@@ -33,7 +33,7 @@ Private
 Public
 
 ' Classes
-Class Standard2 Implements Def ' Final
+Class Standard2 ' Implements Def ' Final
 	Private
 		' Constant variable(s):
 		Const CLIP_NUM:Int = 25

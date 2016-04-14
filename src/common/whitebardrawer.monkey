@@ -16,7 +16,7 @@ Private
 Public
 
 ' Classes:
-Class WhiteBarDrawer Implements Def
+Class WhiteBarDrawer ' Implements Def
 	Public
 		' Constant variable(s):
 		Const TIPS_BAR_X_IN:Int = 0

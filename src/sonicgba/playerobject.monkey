@@ -2910,7 +2910,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 			
 			' Magic number: -200 (Velocity; Y)
-			If ((Self.velY > -200 And Not Self.isAntiGravity) Or (Self.velY < BPDef.PRICE_REVIVE And Self.isAntiGravity)) Then
+			If ((Self.velY > -200 And Not Self.isAntiGravity) Or (Self.velY < BPdef.PRICE_REVIVE And Self.isAntiGravity)) Then
 				Self.animationID = ANI_POP_JUMP_UP_SLOW
 			EndIf
 		End
@@ -4300,7 +4300,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			setNoKey()
 			
-			Self.totalVelocity = DSgn(Not Self.faceDirection) * SSDef.PLAYER_MOVE_WIDTH
+			Self.totalVelocity = DSgn(Not Self.faceDirection) * SSdef.PLAYER_MOVE_WIDTH
 			
 			Self.worldCal.stopMoveX()
 			
@@ -5376,7 +5376,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				itemVec[I][0] = -1
 			Next
 			
-			setOverCount(SonicDef.OVER_TIME)
+			setOverCount(Sonicdef.OVER_TIME)
 		End
 		
 		Function initSpParam:Void(param_ringNum:Int, checkPointID:Int, param_timeCount:Int)
@@ -5401,7 +5401,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				GameState.guiAniDrawer.draw(g, 5, uiOffsetX + 0, 0, False, 0)
 				
 				' Rings.
-				drawNum(g, ringNum, (uiOffsetX + 12), 15, 0, PickValue((ringNum = 0 And (timeCount / SSDef.PLAYER_MOVE_HEIGHT) Mod 2 = 0), 3, 0))
+				drawNum(g, ringNum, (uiOffsetX + 12), 15, 0, PickValue((ringNum = 0 And (timeCount / SSdef.PLAYER_MOVE_HEIGHT) Mod 2 = 0), 3, 0))
 				
 				' Score.
 				drawNum(g, PickValue((stageModeState = STATE_RACE_MODE), raceScoreNum, scoreNum), NumberSideX + uiOffsetX, 8, 2, 0)
@@ -5675,7 +5675,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Local msec:= ((timeCount Mod 60000) Mod 1000) / 10
 			Local numType:= 0
 			
-			If ((GlobalResource.timeIsLimit() Or stageModeState = STATE_RACE_MODE) And (((overTime > timeCount And timeCount > 540000) Or (overTime < timeCount And timeCount < 60000)) And (timeCount / SSDef.PLAYER_MOVE_HEIGHT) Mod 2 = 0)) Then
+			If ((GlobalResource.timeIsLimit() Or stageModeState = STATE_RACE_MODE) And (((overTime > timeCount And timeCount > 540000) Or (overTime < timeCount And timeCount < 60000)) And (timeCount / SSdef.PLAYER_MOVE_HEIGHT) Mod 2 = 0)) Then
 				numType = 3
 			EndIf
 			
@@ -5917,7 +5917,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Function isHadRaceRecord:Bool()
-			Return (StageManager.getTimeModeScore(characterID) < SonicDef.OVER_TIME)
+			Return (StageManager.getTimeModeScore(characterID) < Sonicdef.OVER_TIME)
 		End
 	
 		Function movingBar:Bool()

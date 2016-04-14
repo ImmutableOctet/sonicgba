@@ -27,7 +27,7 @@ Private
 Public
 
 ' Classes:
-Class MyAPI Implements Def ' Implements GRAPHICS_MACROS
+Class MyAPI ' Implements Def
 	Private
 		' Constant variable(s):
 		Const ROTATE_90:Int = 1
@@ -1086,11 +1086,11 @@ Class MyAPI Implements Def ' Implements GRAPHICS_MACROS
 				dy -= sh / 2
 			EndIf
 			
-			g.setClip(Max(dx, 0), Max(dy, 0), Min(sw + dx, 0 + SSDef.PLAYER_MOVE_HEIGHT) - Max(dx, 0), Min(sh + dy, 0 + 320) - Max(dy, 0))
+			g.setClip(Max(dx, 0), Max(dy, 0), Min(sw + dx, 0 + SSdef.PLAYER_MOVE_HEIGHT) - Max(dx, 0), Min(sh + dy, 0 + 320) - Max(dy, 0))
 			
 			g.drawImage(image, dx - sx, dy - sy, 0)
 			
-			g.setClip(0, 0, SSDef.PLAYER_MOVE_HEIGHT, 320)
+			g.setClip(0, 0, SSdef.PLAYER_MOVE_HEIGHT, 320)
 		End
 		
 		#Rem
@@ -1167,7 +1167,7 @@ Class MyAPI Implements Def ' Implements GRAPHICS_MACROS
 				Select (rot)
 					Case FLIP_Y
 					Case PAGE_WAIT
-					Case SSDef.SSOBJ_BNLD_ID
+					Case SSdef.SSOBJ_BNLD_ID
 					Case FIXED_TWO_BASE
 						g.drawRGB(mRGB, 0, he, x, y, he, w, True)
 					Default

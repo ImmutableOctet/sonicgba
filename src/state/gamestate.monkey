@@ -634,7 +634,7 @@ Class GameState Extends State
 							SoundSystem.getInstance().stopBgm(True)
 							SoundSystem.getInstance().playBgm(SoundSystem.BGM_GAMEOVER, False)
 						Else
-							Self.overtitleID = 136 ' Def.TOUCH_HELP_HEIGHT
+							Self.overtitleID = 136 ' def.TOUCH_HELP_HEIGHT
 							
 							SoundSystem.getInstance().playSe(SoundSystem.BGM_SP_TOTAL_CLEAR)
 						EndIf
@@ -650,7 +650,7 @@ Class GameState Extends State
 					
 					If (Self.overtitleID = 78) Then
 						Self.movingTitleSpeedX = 24
-					ElseIf (Self.overtitleID = 136) Then ' Def.TOUCH_HELP_HEIGHT
+					ElseIf (Self.overtitleID = 136) Then ' def.TOUCH_HELP_HEIGHT
 						Self.movingTitleSpeedX = 8
 					EndIf
 				Case STATE_PAUSE
@@ -928,8 +928,8 @@ Class GameState Extends State
 					iArr = Self.display[4]
 					iArr[0] += Self.display[4][2]
 					
-					If (Self.display[5][0] + Self.display[5][2] < SCREEN_WIDTH - 112) Then ' Def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1
-						Self.display[5][0] = SCREEN_WIDTH - 112 ' Def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1
+					If (Self.display[5][0] + Self.display[5][2] < SCREEN_WIDTH - 112) Then ' def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1
+						Self.display[5][0] = SCREEN_WIDTH - 112 ' def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1
 					Else
 						iArr = Self.display[5]
 						iArr[0] += Self.display[5][2]
@@ -1159,8 +1159,8 @@ Class GameState Extends State
 					
 					iArr[0] += Self.display[4][2]
 					
-					If (Self.display[5][0] + Self.display[5][2] < SCREEN_WIDTH - 112) Then ' Def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1
-						Self.display[5][0] = SCREEN_WIDTH - 112 ' Def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1
+					If (Self.display[5][0] + Self.display[5][2] < SCREEN_WIDTH - 112) Then ' def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1
+						Self.display[5][0] = SCREEN_WIDTH - 112 ' def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1
 					Else
 						iArr = Self.display[5]
 						
@@ -1184,7 +1184,7 @@ Class GameState Extends State
 						If (Self.overcnt = 36) Then
 							Self.state = STATE_CONTINUE_0
 						EndIf
-					ElseIf (Self.overtitleID = 136 And Self.overcnt = 28) Then ' Def.TOUCH_HELP_HEIGHT
+					ElseIf (Self.overtitleID = 136 And Self.overcnt = 28) Then ' def.TOUCH_HELP_HEIGHT
 						Self.state = STATE_TIME_OVER_0
 					EndIf
 				Case STATE_PAUSE_SELECT_CHARACTER
@@ -3607,7 +3607,7 @@ Class GameState Extends State
 			
 			If (Self.overtitleID = 78) Then
 				id = 11
-			ElseIf (Self.overtitleID = 136) Then ' Def.TOUCH_HELP_HEIGHT
+			ElseIf (Self.overtitleID = 136) Then ' def.TOUCH_HELP_HEIGHT
 				id = 10
 			EndIf
 			
@@ -3714,19 +3714,19 @@ Class GameState Extends State
 		
 		Method drawGameOverTouchKey:Void(g:MFGraphics)
 			If (Key.touchgameoveryres.Isin()) Then
-				State.drawTouchGameKeyBoardById(g, 10, SCREEN_WIDTH - 22, Def.TOUCH_A_Y) ' 123
+				State.drawTouchGameKeyBoardById(g, 10, SCREEN_WIDTH - 22, def.TOUCH_A_Y) ' 123
 			Else
-				State.drawTouchGameKeyBoardById(g, VISIBLE_OPTION_ITEMS_NUM, SCREEN_WIDTH - 22, Def.TOUCH_A_Y) ' 123
+				State.drawTouchGameKeyBoardById(g, VISIBLE_OPTION_ITEMS_NUM, SCREEN_WIDTH - 22, def.TOUCH_A_Y) ' 123
 			EndIf
 			
 			If (Key.touchgameoverno.Isin()) Then
-				State.drawTouchGameKeyBoardById(g, 12, SCREEN_WIDTH - 67, Def.TOUCH_B_Y) ' 138
+				State.drawTouchGameKeyBoardById(g, 12, SCREEN_WIDTH - 67, def.TOUCH_B_Y) ' 138
 			Else
-				State.drawTouchGameKeyBoardById(g, 11, SCREEN_WIDTH - 67, Def.TOUCH_B_Y) ' 138
+				State.drawTouchGameKeyBoardById(g, 11, SCREEN_WIDTH - 67, def.TOUCH_B_Y) ' 138
 			EndIf
 			
-			guiAniDrawer.draw(g, BIRD_SPACE_2, SCREEN_WIDTH - 22, Def.TOUCH_A_Y, False, 0)
-			guiAniDrawer.draw(g, 15, SCREEN_WIDTH - 67, Def.TOUCH_B_Y, False, 0)
+			guiAniDrawer.draw(g, BIRD_SPACE_2, SCREEN_WIDTH - 22, def.TOUCH_A_Y, False, 0)
+			guiAniDrawer.draw(g, 15, SCREEN_WIDTH - 67, def.TOUCH_B_Y, False, 0)
 		End
 		
 		Method gamePauseInit:Void()

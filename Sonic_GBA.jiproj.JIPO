@@ -241,12 +241,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\common\whitebardrawer.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\common\whitebardrawer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>23</X>
+        <Y>18</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>0e670df8-d323-42f1-a5e4-0999c7b8ecb6</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\ending\baseending.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -283,19 +284,21 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\gameengine\def.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
-      <CursorPos>
-        <X>9</X>
-        <Y>285</Y>
-      </CursorPos>
-      <DocGUID />
-    </DocUserOptions>
-    <DocUserOptions Filename=".\src\gameengine\key.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\gameengine\def.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>0</X>
-        <Y>0</Y>
+        <Y>29</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>8e4b6bb7-597c-4f01-80a7-e6968aad7a26</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\gameengine\key.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>83</X>
+        <Y>566</Y>
+      </CursorPos>
+      <DocGUID>9e7fe1e9-db91-4d01-b900-dd0cf0127bcd</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\gameengine\touchdirectkey.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -367,12 +370,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\def.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\lib\def.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>18</X>
+        <Y>10</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>399946cc-181e-4417-aa49-97a3fad6d5bc</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\direction.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -390,8 +394,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>27</Y>
+        <X>14</X>
+        <Y>29</Y>
       </CursorPos>
       <DocGUID>19e3309e-2ddd-460d-9ab5-94784534fa8b</DocGUID>
       <Bookmarks />
@@ -424,12 +428,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>0</X>
-        <Y>0</Y>
+        <Y>28</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>cebdf5cc-5b44-4a2f-b820-7a59c7928af8</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\platformstandard\standard.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -438,12 +443,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\platformstandard\standard2.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\platformstandard\standard2.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>18</X>
+        <Y>35</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>d4c82d85-9300-4fdd-972f-e28679228bb1</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\pyxeditor\pyxanimation.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -800,8 +806,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>315</Y>
+        <X>75</X>
+        <Y>2912</Y>
       </CursorPos>
       <DocGUID>409a54eb-3cf7-4218-8286-9c924efa367c</DocGUID>
       <Bookmarks />
@@ -1124,8 +1130,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>35</X>
+        <Y>1313</Y>
       </CursorPos>
       <DocGUID>ae299046-3cca-483a-bc89-2eb0fe69c668</DocGUID>
       <Bookmarks />
@@ -1155,7 +1161,7 @@
     <FolderStatus NodePath="Sonic_GBA\etc\tools\SSMapDestructor\main.buildv86e" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\etc\tools\SSMapDestructor\main.buildv86e\cpptool" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\com" Expanded="true" />
+    <FolderStatus NodePath="Sonic_GBA\src\com" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\action" Expanded="false" />
@@ -1170,13 +1176,13 @@
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\android" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\device" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\common" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\common" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\ending" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\gameengine" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\gameengine" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\lib\__test" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\mflib" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\platformstandard" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\mflib" Expanded="true" />
+    <FolderStatus NodePath="Sonic_GBA\src\platformstandard" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\pyxeditor" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\animation" Expanded="false" />

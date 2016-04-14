@@ -67,7 +67,7 @@ Class ShipSystem Extends GimmickObject
 		
 		Method getNewShipPosition:Void(ship:Ship)
 			Self.lineVelocity += (((GRAVITY * 2) * MyAPI.dSin((Self.degree / RING_NUM) - (DEGREE_VELOCITY/2))) / 100) / 3
-			Self.degree -= ((((Self.lineVelocity * RING_NUM) / RADIUS) * RING_NUM) * DEGREE_VELOCITY) / SonicDef.PI
+			Self.degree -= ((((Self.lineVelocity * RING_NUM) / RADIUS) * RING_NUM) * DEGREE_VELOCITY) / Sonicdef.PI
 			
 			Local preX:= ship.posX
 			Local preY:= ship.posY

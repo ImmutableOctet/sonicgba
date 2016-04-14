@@ -206,7 +206,7 @@ Class Application Extends App ' Main Extends MFMain
 		
 		Method getEntryGameState:MFGameState()
 			' Magic numbers:
-			MFDevice.setCanvasSize(Min(Max(240, (MFDevice.getDeviceWidth() * 160) / MFDevice.getDeviceHeight()), 284), 160) ' SSDef.PLAYER_MOVE_HEIGHT
+			MFDevice.setCanvasSize(Min(Max(240, (MFDevice.getDeviceWidth() * 160) / MFDevice.getDeviceHeight()), 284), 160) ' SSdef.PLAYER_MOVE_HEIGHT
 			MFDevice.setEnableCustomBack(True)
 			
 			Return New MainState(Self)
@@ -240,7 +240,7 @@ Class Application Extends App ' Main Extends MFMain
 				msecStr = String(msec)
 			EndIf
 			
-			Self.mScore = (SonicDef.OVER_TIME - score)
+			Self.mScore = (Sonicdef.OVER_TIME - score)
 			
 			Print("~~mScore:" + Self.mScore)
 			

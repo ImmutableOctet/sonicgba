@@ -1311,7 +1311,7 @@ Class TitleState Extends State
 				Self.title_name_center_y = 114
 			ElseIf (Self.titleFrame = STATE_MOVING) Then
 				Self.titleScale = 2.5
-				Self.title_name_center_x = Def.TOUCH_SEL_1_W
+				Self.title_name_center_x = def.TOUCH_SEL_1_W
 				Self.title_name_center_y = 76
 			ElseIf (Self.titleFrame = STATE_OPENING) Then
 				Self.titleScale = 1.75
@@ -1866,11 +1866,11 @@ Class TitleState Extends State
 			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + 192) + Self.optionArrowDriveY)
 			
 			If (Self.optionUpArrowAvailable) Then
-				Self.optionArrowUpDrawer.draw(g, (SCREEN_WIDTH Shr 1) + Def.TOUCH_OPTION_ARROW_OFFSET_X, (SCREEN_HEIGHT Shr 1) - 19)
+				Self.optionArrowUpDrawer.draw(g, (SCREEN_WIDTH Shr 1) + def.TOUCH_OPTION_ARROW_OFFSET_X, (SCREEN_HEIGHT Shr 1) - 19)
 			EndIf
 			
 			If (Self.optionDownArrowAvailable) Then
-				Self.optionArrowDownDrawer.draw(g, (SCREEN_WIDTH Shr 1) + Def.TOUCH_OPTION_ARROW_OFFSET_X, (SCREEN_HEIGHT Shr 1) + STATE_CHARACTER_RECORD)
+				Self.optionArrowDownDrawer.draw(g, (SCREEN_WIDTH Shr 1) + def.TOUCH_OPTION_ARROW_OFFSET_X, (SCREEN_HEIGHT Shr 1) + STATE_CHARACTER_RECORD)
 			EndIf
 			
 			Self.optionOffsetX -= STATE_START_GAME
@@ -2850,7 +2850,7 @@ Class TitleState Extends State
 							If (Self.arrowPressState = STATE_MOVING) Then
 								Self.character_sel_offset_x = MyAPI.calNextPosition(Double(Self.character_sel_offset_x), -128.0, ZONE_NUM_OFFSET, 2)
 								
-								If (Self.character_sel_offset_x = Def.TOUCH_HELP_LEFT_X) Then
+								If (Self.character_sel_offset_x = def.TOUCH_HELP_LEFT_X) Then
 									Self.character_id += 1
 									Self.character_circleturnright = True
 									Self.character_id += PlayerObject.CHARACTER_LIST.Length
@@ -3646,7 +3646,7 @@ Class TitleState Extends State
 			Local timenum:Int
 			
 			If (num = 0) Then
-				timenum = SonicDef.OVER_TIME
+				timenum = Sonicdef.OVER_TIME
 			Else
 				timenum = num
 			EndIf
@@ -4544,7 +4544,7 @@ Class TitleState Extends State
 					MyAPI.drawImage(g, Self.textBGImage, ((SCREEN_WIDTH Shr 1) - 104) + (i * STATE_INTERGRADE_RECORD), (SCREEN_HEIGHT Shr 1) - 72, 0)
 				Next
 				
-				MyAPI.drawStrings(g, strForShow, (SCREEN_WIDTH Shr 1) - 104, ((SCREEN_HEIGHT Shr 1) - 72) + STATE_GOTO_GAME, Int(Def.TOUCH_HELP_WIDTH), 131, 0, True, Int(MapManager.END_COLOR), 4656650, 0, 11)
+				MyAPI.drawStrings(g, strForShow, (SCREEN_WIDTH Shr 1) - 104, ((SCREEN_HEIGHT Shr 1) - 72) + STATE_GOTO_GAME, Int(def.TOUCH_HELP_WIDTH), 131, 0, True, Int(MapManager.END_COLOR), 4656650, 0, 11)
 				
 				If (MyAPI.upPermit) Then
 					muiUpArrowDrawer.draw(g, (SCREEN_WIDTH Shr 1) - STATE_CHARACTER_RECORD, SCREEN_HEIGHT)

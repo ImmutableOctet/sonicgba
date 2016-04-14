@@ -28,7 +28,7 @@ Private
 Public
 
 ' Classes:
-Class MainState Implements MFGameState, Def
+Class MainState Implements MFGameState ' Def
 	Public
 		' Constant variable(s):
 		Const FRAME_SKIP:Int = 63

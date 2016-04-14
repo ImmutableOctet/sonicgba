@@ -20,7 +20,7 @@ Public
 Class BackManagerStage4 Extends BackGroundManager
 	Private
 		' Global variable(s):
-		Global IMAGE_WIDTH:Int = 240 ' SSDef.PLAYER_MOVE_WIDTH
+		Global IMAGE_WIDTH:Int = 240 ' SSdef.PLAYER_MOVE_WIDTH
 		Global IMAGE_HEIGHT:Int = 512
 		
 		' Fields:

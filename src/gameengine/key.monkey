@@ -465,7 +465,7 @@ Class Key
 		
 		Function touchHelpInit:Void()
 			If (touchhelpleft = Null Or touchhelpright = Null Or touchhelpup = Null Or touchhelpdown = Null) Then
-				touchhelpleft = New TouchKeyRange((SCREEN_WIDTH / 2) + Def.TOUCH_HELP_LEFT_X, (SCREEN_HEIGHT / 2) - 70, 48, 48) ' Shr 1
+				touchhelpleft = New TouchKeyRange((SCREEN_WIDTH / 2) + def.TOUCH_HELP_LEFT_X, (SCREEN_HEIGHT / 2) - 70, 48, 48) ' Shr 1
 				touchhelpright = New TouchKeyRange((SCREEN_WIDTH / 2) + 80, (SCREEN_HEIGHT / 2) - 70, 48, 48) ' Shr 1
 				touchhelpup = New TouchKeyRange((SCREEN_WIDTH / 2) - 48, (SCREEN_HEIGHT / 2) + 42, 48, 48) ' Shr 1
 				touchhelpdown = New TouchKeyRange((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) + 42, 48, 48) ' Shr 1
@@ -564,12 +564,12 @@ Class Key
 				touchselarrowup = New TouchKeyRange((SCREEN_WIDTH / 2) - 72, (SCREEN_HEIGHT / 2) - 64, 24, 32) ' Shr 1
 				touchselarrowdown = New TouchKeyRange((SCREEN_WIDTH / 2) - 72, (SCREEN_HEIGHT / 2) + 32, 24, 32) ' Shr 1
 				
-				touchsel1 = New TouchKeyRange((SCREEN_WIDTH / 2) - 48, (SCREEN_HEIGHT / 2) - 72, Def.TOUCH_SEL_1_W, 24) ' Shr 1
-				touchsel2 = New TouchKeyRange((SCREEN_WIDTH / 2) - 48, ((SCREEN_HEIGHT / 2) - 72) + 24, Def.TOUCH_SEL_1_W, 24) ' Shr 1
-				touchsel3 = New TouchKeyRange((SCREEN_WIDTH / 2) - 48, ((SCREEN_HEIGHT / 2) - 72) + 48, Def.TOUCH_SEL_1_W, 24) ' Shr 1
-				touchsel4 = New TouchKeyRange((SCREEN_WIDTH / 2) - 48, ((SCREEN_HEIGHT / 2) - 72) + 72, Def.TOUCH_SEL_1_W, 24) ' Shr 1
-				touchsel5 = New TouchKeyRange((SCREEN_WIDTH / 2) - 48, ((SCREEN_HEIGHT / 2) - 72) + 96, Def.TOUCH_SEL_1_W, 24) ' Shr 1
-				touchsel6 = New TouchKeyRange((SCREEN_WIDTH / 2) - 48, ((SCREEN_HEIGHT / 2) - 72) + 120, Def.TOUCH_SEL_1_W, 24) ' Shr 1
+				touchsel1 = New TouchKeyRange((SCREEN_WIDTH / 2) - 48, (SCREEN_HEIGHT / 2) - 72, def.TOUCH_SEL_1_W, 24) ' Shr 1
+				touchsel2 = New TouchKeyRange((SCREEN_WIDTH / 2) - 48, ((SCREEN_HEIGHT / 2) - 72) + 24, def.TOUCH_SEL_1_W, 24) ' Shr 1
+				touchsel3 = New TouchKeyRange((SCREEN_WIDTH / 2) - 48, ((SCREEN_HEIGHT / 2) - 72) + 48, def.TOUCH_SEL_1_W, 24) ' Shr 1
+				touchsel4 = New TouchKeyRange((SCREEN_WIDTH / 2) - 48, ((SCREEN_HEIGHT / 2) - 72) + 72, def.TOUCH_SEL_1_W, 24) ' Shr 1
+				touchsel5 = New TouchKeyRange((SCREEN_WIDTH / 2) - 48, ((SCREEN_HEIGHT / 2) - 72) + 96, def.TOUCH_SEL_1_W, 24) ' Shr 1
+				touchsel6 = New TouchKeyRange((SCREEN_WIDTH / 2) - 48, ((SCREEN_HEIGHT / 2) - 72) + 120, def.TOUCH_SEL_1_W, 24) ' Shr 1
 				
 				MFDevice.addComponent(touchselarrowup)
 				MFDevice.addComponent(touchselarrowdown)
@@ -789,7 +789,7 @@ Class Key
 				touchcharsElselect = New TouchKeyRange(80, (SCREEN_HEIGHT / 2) - 56, 80, 96) ' Shr 1
 				slidesensorcharsel = New MFSlideSensor(0, (SCREEN_HEIGHT / 2) - 56, SCREEN_WIDTH, 96, 64) ' Shr 1
 				touchcharselreturn = New TouchKeyRange(0, SCREEN_HEIGHT - 24, 24, 24)
-				touchcharselleftarrow = New TouchKeyRange((SCREEN_WIDTH / 2) + Def.TOUCH_CHARACTER_SELECT_LEFT_ARROW_OFFSET_X, (SCREEN_HEIGHT / 2) - 44, 48, 44) ' Shr 1
+				touchcharselleftarrow = New TouchKeyRange((SCREEN_WIDTH / 2) + def.TOUCH_CHARACTER_SELECT_LEFT_ARROW_OFFSET_X, (SCREEN_HEIGHT / 2) - 44, 48, 44) ' Shr 1
 				touchcharselrightarrow = New TouchKeyRange((SCREEN_WIDTH / 2) + 72, (SCREEN_HEIGHT / 2) - 44, 48, 44) ' Shr 1
 				
 				MFDevice.addComponent(touchcharsel)
@@ -890,7 +890,7 @@ Class Key
 		
 		Function touchCharacterRecordInit:Void()
 			If (slidesensorcharacterrecord = Null Or touchintergraderecord = Null Or touchintergraderecordreturn = Null Or touchintergraderecordleftarrow = Null Or touchintergraderecordrightarrow = Null Or touchintergraderecordupdate = Null) Then
-				slidesensorcharacterrecord = New MFSlideSensor(0, (SCREEN_HEIGHT / 2) - 48, SCREEN_WIDTH, Def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1, (SCREEN_WIDTH / 2)) ' Shr 1
+				slidesensorcharacterrecord = New MFSlideSensor(0, (SCREEN_HEIGHT / 2) - 48, SCREEN_WIDTH, def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1, (SCREEN_WIDTH / 2)) ' Shr 1
 				touchintergraderecord = New TouchKeyRange(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 				touchintergraderecordreturn = New TouchKeyRange(0, SCREEN_HEIGHT - 24, 24, 24)
 				touchintergraderecordleftarrow = New TouchKeyRange(0, (SCREEN_HEIGHT / 2) - 12, PAUSE_WIDTH, PAUSE_WIDTH) ' Shr 1
@@ -1048,11 +1048,11 @@ Class Key
 		Function touchGamePauseOptionInit:Void()
 			If (touchpauseoption = Null Or touchpauseoptionsound = Null Or touchpauseoptionvib = Null Or touchpauseoptionkeyset = Null Or touchpauseoptionspset = Null Or touchpauseoptionhelp = Null Or touchpauseoptionreturn = Null) Then
 				touchpauseoption = New TouchKeyRange(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
-				touchpauseoptionsound = New TouchKeyRange(((SCREEN_WIDTH / 2) + 56) - 56, 28, Def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1, 24) ' Shr 1
-				touchpauseoptionvib = New TouchKeyRange(((SCREEN_WIDTH / 2) + 56) - 56, 52, Def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1, 24) ' Shr 1
-				touchpauseoptionkeyset = New TouchKeyRange(((SCREEN_WIDTH / 2) - 56) - Def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1, 76, SpecialMap.MAP_HEIGHT, 24) ' Shr 1 ' 224
-				touchpauseoptionspset = New TouchKeyRange(((SCREEN_WIDTH / 2) + 56) - 56, 100, Def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1, 24) ' Shr 1
-				touchpauseoptionhelp = New TouchKeyRange(((SCREEN_WIDTH / 2) - 56) - Def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1, 124, SpecialMap.MAP_HEIGHT, 24) ' Shr 1 ' 224
+				touchpauseoptionsound = New TouchKeyRange(((SCREEN_WIDTH / 2) + 56) - 56, 28, def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1, 24) ' Shr 1
+				touchpauseoptionvib = New TouchKeyRange(((SCREEN_WIDTH / 2) + 56) - 56, 52, def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1, 24) ' Shr 1
+				touchpauseoptionkeyset = New TouchKeyRange(((SCREEN_WIDTH / 2) - 56) - def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1, 76, SpecialMap.MAP_HEIGHT, 24) ' Shr 1 ' 224
+				touchpauseoptionspset = New TouchKeyRange(((SCREEN_WIDTH / 2) + 56) - 56, 100, def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1, 24) ' Shr 1
+				touchpauseoptionhelp = New TouchKeyRange(((SCREEN_WIDTH / 2) - 56) - def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1, 124, SpecialMap.MAP_HEIGHT, 24) ' Shr 1 ' 224
 				touchpauseoptionreturn = New TouchKeyRange(0, SCREEN_HEIGHT - 24, 24, 24)
 				
 				MFDevice.addComponent(touchpauseoption)
@@ -1101,7 +1101,7 @@ Class Key
 				
 				For Local i:= 0 Until (touchmenuoptionitems.Length / 2) ' Shr 1
 					touchmenuoptionitems[i * 2] = New TouchKeyRange((SCREEN_WIDTH / 2) - 100, (i * 24) + 28, 100, 24) ' Shr 1
-					touchmenuoptionitems[(i * 2) + 1] = New TouchKeyRange((SCREEN_WIDTH / 2), (i * 24) + 28, Def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1, 24) ' Shr 1
+					touchmenuoptionitems[(i * 2) + 1] = New TouchKeyRange((SCREEN_WIDTH / 2), (i * 24) + 28, def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1, 24) ' Shr 1
 				Next
 				
 				touchmenuoptionreturn = New TouchKeyRange(0, SCREEN_HEIGHT - 24, 24, 24)
@@ -1114,8 +1114,8 @@ Class Key
 					MFDevice.addComponent(touchmenuoptionitems[i])
 				Next
 				
-				touchmenuoptionuparrow = New TouchKeyRange((SCREEN_WIDTH / 2) + Def.TOUCH_OPTION_ARROW_RANGE_X, (SCREEN_HEIGHT / 2) - 41, 24, 32) ' Shr 1
-				touchmenuoptiondownarrow = New TouchKeyRange((SCREEN_WIDTH / 2) + Def.TOUCH_OPTION_ARROW_RANGE_X, (SCREEN_HEIGHT / 2) + 24, 24, 32) ' Shr 1
+				touchmenuoptionuparrow = New TouchKeyRange((SCREEN_WIDTH / 2) + def.TOUCH_OPTION_ARROW_RANGE_X, (SCREEN_HEIGHT / 2) - 41, 24, 32) ' Shr 1
+				touchmenuoptiondownarrow = New TouchKeyRange((SCREEN_WIDTH / 2) + def.TOUCH_OPTION_ARROW_RANGE_X, (SCREEN_HEIGHT / 2) + 24, 24, 32) ' Shr 1
 				
 				MFDevice.addComponent(touchmenuoptionuparrow)
 				MFDevice.addComponent(touchmenuoptiondownarrow)
@@ -1224,7 +1224,7 @@ Class Key
 			If (slidesensorhelp = Null Or touchhelpreturn = Null Or touchhelpuparrow = Null Or touchhelpdownarrow = Null Or touchpage = Null Or touchhelpleftarrow = Null Or touchhelprightarrow = Null) Then
 				touchpage = New TouchKeyRange(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 				
-				slidesensorhelp = New MFSlideSensor((SCREEN_WIDTH / 2) - 104, 0, Def.TOUCH_HELP_WIDTH, SCREEN_HEIGHT, TOUCH_WIDTH) ' Shr 1
+				slidesensorhelp = New MFSlideSensor((SCREEN_WIDTH / 2) - 104, 0, def.TOUCH_HELP_WIDTH, SCREEN_HEIGHT, TOUCH_WIDTH) ' Shr 1
 				
 				touchhelpreturn = New TouchKeyRange(0, SCREEN_HEIGHT - 24, 24, 24)
 				touchhelpuparrow = New TouchKeyRange((SCREEN_WIDTH / 2) - 40, SCREEN_HEIGHT - 24, 32, 24) ' Shr 1
@@ -1401,7 +1401,7 @@ Class Key
 		Function touchscoreupdatekeyInit:Void()
 			If (touchscoreupdate = Null Or touchscoreupdateyes = Null Or touchscoreupdateno = Null Or touchscoreupdatereturn = Null) Then
 				touchscoreupdate = New TouchKeyRange(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
-				touchscoreupdateyes = New TouchKeyRange((SCREEN_WIDTH / 2) + Def.TOUCH_SCORE_UPDATE_MENU_YES_START_X, (SCREEN_HEIGHT / 2) + 10, 96, 28) ' Shr 1
+				touchscoreupdateyes = New TouchKeyRange((SCREEN_WIDTH / 2) + def.TOUCH_SCORE_UPDATE_MENU_YES_START_X, (SCREEN_HEIGHT / 2) + 10, 96, 28) ' Shr 1
 				touchscoreupdateno = New TouchKeyRange((SCREEN_WIDTH / 2) + 12, (SCREEN_HEIGHT / 2) + 10, 96, 28) ' Shr 1
 				touchscoreupdatereturn = New TouchKeyRange(0, SCREEN_HEIGHT - 24, 24, 24)
 				

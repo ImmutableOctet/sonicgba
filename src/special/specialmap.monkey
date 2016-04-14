@@ -81,8 +81,8 @@ Class SpecialMap Implements SSDef
 		Function cameraLogic:Void()
 			Local topPlayerY:= ((SpecialObject.player.posY Shr 6) + 120)
 			
-			cameraX = ((CAMERA_MAX_X * ((SpecialObject.player.posX Shr 6) + 150)) / SSDef.PLAYER_MOVE_WIDTH)
-			cameraY = ((CAMERA_MAX_Y * topPlayerY) / SSDef.PLAYER_MOVE_HEIGHT)
+			cameraX = ((CAMERA_MAX_X * ((SpecialObject.player.posX Shr 6) + 150)) / SSdef.PLAYER_MOVE_WIDTH)
+			cameraY = ((CAMERA_MAX_Y * topPlayerY) / SSdef.PLAYER_MOVE_HEIGHT)
 			
 			mapProgress += ((SpecialObject.player.velZ Shl 6) / MAP_VELOCITY_STANDARD)
 			

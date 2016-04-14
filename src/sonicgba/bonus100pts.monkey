@@ -35,7 +35,7 @@ Class Bonus100pts Extends EnemyObject
 			Super.New(id, x, y, left, top, width, height)
 			
 			' Magic number: I'm unsure if this actually has a corresponding variable.
-			Self.movement = 240 ' SSDef.PLAYER_MOVE_HEIGHT
+			Self.movement = 240 ' SSdef.PLAYER_MOVE_HEIGHT
 			
 			If (BonusAnimation = Null) Then
 				BonusAnimation = New Animation("/animation/100pts")

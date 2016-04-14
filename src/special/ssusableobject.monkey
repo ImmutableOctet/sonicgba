@@ -46,6 +46,6 @@ Class SSUsableObject Extends SpecialObject Implements SSDef Abstract
 		End
 		
 		Method refreshCollision:Void(x:Int, y:Int)
-			Self.collisionRect.setRect(x - (SSDef.PLAYER_MOVE_WIDTH / 2), y - (SSDef.PLAYER_MOVE_HEIGHT / 2), SSDef.PLAYER_MOVE_WIDTH, SSDef.PLAYER_MOVE_HEIGHT)
+			Self.collisionRect.setRect(x - (SSdef.PLAYER_MOVE_WIDTH / 2), y - (SSdef.PLAYER_MOVE_HEIGHT / 2), SSdef.PLAYER_MOVE_WIDTH, SSdef.PLAYER_MOVE_HEIGHT)
 		End
 End

@@ -310,7 +310,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 			
 			Self.isPause = False
 			
-			Local animation:= New Animation(SSDef.SPECIAL_ANIMATION_PATH + ANIMATION_NAME[characterID])
+			Local animation:= New Animation(SSdef.SPECIAL_ANIMATION_PATH + ANIMATION_NAME[characterID])
 			
 			Self.drawer = animation.getDrawer()
 			
