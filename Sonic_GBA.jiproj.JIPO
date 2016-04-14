@@ -774,8 +774,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\mapmanager.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>858</Y>
+        <X>11</X>
+        <Y>849</Y>
       </CursorPos>
       <DocGUID>4f4d460d-cfd7-4f0f-9b73-f33ee0e97fd9</DocGUID>
       <Bookmarks />

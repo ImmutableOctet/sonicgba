@@ -847,106 +847,124 @@ Class MapManager ' Implements SonicDef
 			Next
 		End
 		
-		Private Function drawMap:Void(g:MFGraphics, mapArray:Short[][])
-			Int startY = (camera.y + CAMERA_OFFSET_Y) / TILE_WIDTH
-			Int endX = (((((camera.x + CAMERA_WIDTH) + TILE_WIDTH) - 1) + CAMERA_OFFSET_X) - mapOffsetX) / TILE_WIDTH
-			Int endY = ((((camera.y + CAMERA_HEIGHT) + TILE_WIDTH) - 1) + CAMERA_OFFSET_Y) / TILE_WIDTH
-			Int preCheckModelX = -1
-			Int x = ((camera.x + CAMERA_OFFSET_X) - mapOffsetX) / TILE_WIDTH
-			While (x < endX) {
-				Int modelX = x / SHAKE_RANGE
-				Int my
-				Int y
-				Int tileId
-				Bool flipX
+		Function drawMap:Void(g:MFGraphics, mapArray:Short[][])
+			Local startY:= (camera.y + CAMERA_OFFSET_Y) / TILE_HEIGHT
+			
+			Local endX:= (((((camera.x + CAMERA_WIDTH) + TILE_WIDTH) - 1) + CAMERA_OFFSET_X) - mapOffsetX) / TILE_WIDTH
+			Local endY:= ((((camera.y + CAMERA_HEIGHT) + TILE_HEIGHT) - 1) + CAMERA_OFFSET_Y) / TILE_HEIGHT
+			
+			Local preCheckModelX:= -1
+			
+			Local x:= (((camera.x + CAMERA_OFFSET_X) - mapOffsetX) / TILE_WIDTH)
+			
+			While (x < endX)
+				Local modelX:= (x / MODEL_WIDTH)
+				
+				Local my:Int
+				Local y:Int
+				
+				Local tileId:Int
+				
+				Local flipX:Bool
 				
 				If (modelX <> preCheckModelX) Then
-					preCheckModelX = LOAD_OPEN_FILE
-					For (my = startY / SHAKE_RANGE; my < ((endY + SHAKE_RANGE) - 1) / SHAKE_RANGE; my += 1)
-						
+					preCheckModelX = 1
+					
+					For my = (startY / MODEL_HEIGHT) Until (((endY + MODEL_HEIGHT) - 1) / MODEL_HEIGHT)
 						If (getModelIdByIndex(mapArray, modelX, my) <> 0) Then
 							preCheckModelX = 0
-							break
+							
+							Exit
 						EndIf
-						
 					Next
-					my = x / SHAKE_RANGE
+					
+					my = (x / MODEL_HEIGHT) ' MODEL_WIDTH
 					
 					If (preCheckModelX <> 0) Then
-						modelX = ((modelX + 1) * SHAKE_RANGE) - 1
+						modelX = ((modelX + 1) * MODEL_WIDTH) - 1
+						
 						preCheckModelX = my
 					EndIf
 					
 					y = startY
-					While (y < endY) {
-						
+					
+					While (y < endY)
 						If (getModelId(mapArray, x, y) <> 0) Then
-							preCheckModelX = (((y / SHAKE_RANGE) + 1) * SHAKE_RANGE) - 1
+							preCheckModelX = (((y / MODEL_HEIGHT) + 1) * MODEL_HEIGHT) - 1
 						Else
 							tileId = getTileId(mapArray, x, y)
-							flipX = (MFGamePad.KEY_NUM_9 & tileId) = 0 ? True : False
 							
-							If ((tileId & MFGamePad.KEY_NUM_8) = 0 ? True : False) Then
+							flipX = ((MFGamePad.KEY_NUM_9 & tileId) = 0)
+							
+							If ((tileId & MFGamePad.KEY_NUM_8) = 0) Then
 								modelX = 0
 							Else
-								modelX = 0 | LOAD_OVERALL
+								modelX = 2 ' (0 | 2)
 							EndIf
 							
 							If (flipX) Then
 								preCheckModelX = modelX
 							Else
-								preCheckModelX = modelX | LOAD_OPEN_FILE
+								preCheckModelX = (modelX | 1)
 							EndIf
 							
-							drawTile(g, tileId & 16383, x, y, preCheckModelX)
+							drawTile(g, (tileId & 16383), x, y, preCheckModelX)
+							
 							preCheckModelX = y
 						EndIf
 						
-						y = preCheckModelX + 1
-					}
+						y = (preCheckModelX + 1)
+					Wend
+					
 					modelX = x
 					preCheckModelX = my
 				Else
 					my = preCheckModelX
 					y = startY
-					While (y < endY) {
-						
+					
+					While (y < endY)
 						If (getModelId(mapArray, x, y) <> 0) Then
 							tileId = getTileId(mapArray, x, y)
 							
-							If ((MFGamePad.KEY_NUM_9 & tileId) = 0) Then
-							EndIf
+							#Rem
+								If ((MFGamePad.KEY_NUM_9 & tileId) = 0) Then
+									' Nothing so far.
+								EndIf
+								
+								If ((tileId & MFGamePad.KEY_NUM_8) = 0) Then
+									' Nothing so far.
+								EndIf
+							#End
 							
 							If ((tileId & MFGamePad.KEY_NUM_8) = 0) Then
-							EndIf
-							
-							If ((tileId & MFGamePad.KEY_NUM_8) = 0 ? True : False) Then
 								modelX = 0
 							Else
-								modelX = 0 | LOAD_OVERALL
+								modelX = 2 ' (0 | 2)
 							EndIf
 							
 							If (flipX) Then
 								preCheckModelX = modelX
 							Else
-								preCheckModelX = modelX | LOAD_OPEN_FILE
+								preCheckModelX = (modelX | 1)
 							EndIf
 							
-							drawTile(g, tileId & 16383, x, y, preCheckModelX)
+							drawTile(g, (tileId & 16383), x, y, preCheckModelX)
+							
 							preCheckModelX = y
 						Else
-							preCheckModelX = (((y / SHAKE_RANGE) + 1) * SHAKE_RANGE) - 1
+							preCheckModelX = (((y / MODEL_HEIGHT) + 1) * MODEL_HEIGHT) - 1
 						EndIf
 						
-						y = preCheckModelX + 1
-					}
+						y = (preCheckModelX + 1)
+					Wend
+					
 					modelX = x
 					preCheckModelX = my
 				EndIf
 				
 				x = modelX + 1
-			}
-		}
+			Wend
+		End
 		
 		Function getTileId:Int(mapArray:Short[][], x:Int, y:Int)
 			Return mapModel[getModelId(mapArray, x, y)][x Mod MODEL_WIDTH][y Mod MODEL_HEIGHT]
