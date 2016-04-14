@@ -112,9 +112,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Const ITEM_INDEX:Int = 0
 		
+		Const JUMP_EFFECT_WIDTH:Int = 1920
 		Const JUMP_EFFECT_HEIGHT:Int = 1920
 		Const JUMP_EFFECT_OFFSET_Y:Int = 256
-		Const JUMP_EFFECT_WIDTH:Int = 1920
 		
 		Const LEFT_FOOT_OFFSET_X:Int = -256
 		Const LEFT_WALK_COLLISION_CHECK_OFFSET_X:Int = -512

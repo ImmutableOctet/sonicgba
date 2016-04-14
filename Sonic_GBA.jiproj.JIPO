@@ -420,8 +420,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>20</X>
-        <Y>81</Y>
+        <X>14</X>
+        <Y>80</Y>
       </CursorPos>
       <DocGUID>6697ed74-069c-4992-a09d-3b5904f99041</DocGUID>
       <Bookmarks />
@@ -828,8 +828,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>13</X>
-        <Y>314</Y>
+        <X>0</X>
+        <Y>0</Y>
       </CursorPos>
       <DocGUID>fc986356-1725-4773-83cc-477a622583b3</DocGUID>
       <Bookmarks />
@@ -837,7 +837,7 @@
     <DocUserOptions Filename=".\src\sonicgba\playersonic.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>23</X>
-        <Y>679</Y>
+        <Y>767</Y>
       </CursorPos>
       <DocGUID>a5737cf7-c803-4369-a3c9-d289230080c7</DocGUID>
       <Bookmarks />
@@ -1186,12 +1186,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\state\stringindex.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\state\stringindex.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>31</X>
+        <Y>14</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>e07bf193-1584-4752-a826-3884190dc0d9</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -1283,7 +1284,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\tuch" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\water" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonicgba" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\special" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\state" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\special" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\state" Expanded="true" />
   </Folders>
 </JiProjUserOptions>
