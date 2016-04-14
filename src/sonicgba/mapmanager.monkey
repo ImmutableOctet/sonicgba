@@ -2,6 +2,11 @@ Strict
 
 Public
 
+#Rem
+	TODO:
+		* Replace 'Short' arrays with 'DataBuffers' to reduce the memory footprint.
+#End
+
 ' Imports:
 Private
 	Import lib.animation
@@ -15,13 +20,15 @@ Private
 	Import sonicgba.sonicdef
 	Import sonicgba.stagemanager
 	
-	'Import com.sega.mobile.framework.device.mfdevice
+	Import com.sega.mobile.framework.device.mfdevice
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
 	
+	Import brl.databuffer
 	Import brl.stream
 	
 	Import regal.typetool
+	Import regal.sizeof
 Public
 
 ' Classes:
@@ -83,7 +90,6 @@ Class MapManager ' Implements SonicDef
 		
 		' Streams:
 		Global ds:Stream
-		Global is:Stream
 		
 		Global focusObj:Focusable
 		
@@ -111,6 +117,9 @@ Class MapManager ' Implements SonicDef
 		Global stage_id:Int
 		
 		Global zone4TileLoopID:Int[] = [0, 1, 2, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 6, 7, 8, 9, 9, 9, 9, 9, 9, 9, 9, 10, 11, 12, 13, 14, 14, 14, 14, 14, 14, 14, 14, 15, 16, 17, 18, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19]
+	Protected
+		' Constant variable(s):
+		Const MODE_CHUNK_SIZE:= ((MODEL_WIDTH * MODEL_HEIGHT) * SizeOf_Short)
 	Public
 		' Constant variable(s):
 		Global CAMERA_WIDTH:Int = SCREEN_WIDTH ' Const
@@ -140,9 +149,11 @@ Class MapManager ' Implements SonicDef
 		
 		Global tileimage:MFImage[]
 		
-		Global mapBack:Short[][]
-		Global mapFront:Short[][]
-		Global mapModel:Short[][][]
+		Global mapBack:DataBuffer ' Short[][]
+		Global mapFront:DataBuffer ' Short[][]
+		
+		' A collection of tile-maps.
+		Global mapModel:DataBuffer[] ' Short[][][]
 		
 		Global mapWidth:Int
 		Global mapHeight:Int
@@ -157,6 +168,16 @@ Class MapManager ' Implements SonicDef
 		Global reCamera:Coordinate = New Coordinate()
 		
 		' Functions:
+		
+		' Extensions:
+		Function AsMapCoord:Int(x:Int, y:Int)
+			Return ((y * MODEL_HEIGHT) + x) ' x Mod MODEL_WIDTH
+		End
+		
+		Function getTileAt:Int(data:DataBuffer, x:Int, y:Int)
+			Return data.PeekShort(AsMapCoord(x, y))
+		End
+		
 		Function cameraLogic:Void()
 			If (focusObj <> Null And Not cameraLocked) Then
 				If (getPixelWidth() < CAMERA_WIDTH) Then
@@ -485,75 +506,60 @@ Class MapManager ' Implements SonicDef
 			cameraUpDownLocked = lock
 		End
 		
-		Public Function loadMapStep:Bool(stageId:Int, stageName:String)
+		Function loadMapStep:Bool(stageId:Int, stageName:String)
 			Local imageNum:Int
+			' Local stageId2:Int
 			
 			Select (loadStep)
 				Case LOAD_MAP_IMAGE
-					try {
-						stage_id = stageId
+					stage_id = stageId
+					
+					If (stageId = 0 Or stageId = 1 Or stageId = 5 Or stageId = 5 Or stageId = 6 Or stageId = 7 Or stageId = 8 Or stageId = 9 Or stageId = 10 Or stageId = 11) Then
+						stageFlag = True
+					Else
+						stageFlag = False
 						
-						If (stageId = 0 Or stageId = 1 Or stageId = 5 Or stageId = 5 Or stageId = 6 Or stageId = 7 Or stageId = 8 Or stageId = 9 Or stageId = 10 Or stageId = 11) Then
-							stageFlag = True
-						Else
-							stageFlag = False
-							image = MFImage.createImage("/map/stage" + stageName + ".png")
-						EndIf
-						
-						If (Not stageFlag) Then
-							IMAGE_TILE_WIDTH = MyAPI.zoomIn(image.getWidth() / TILE_WIDTH)
-							break
-						EndIf
-						
+						image = MFImage.createImage("/map/stage" + stageName + ".png")
+					EndIf
+					
+					If (Not stageFlag) Then
+						IMAGE_TILE_WIDTH = MyAPI.zoomIn(image.getWidth() / TILE_WIDTH)
+					Else
 						imageNum = 0
+						
 						Select (stageId)
-							Case 0
-							Case LOAD_OPEN_FILE
-							Case LOAD_FRONT
-							Case LOAD_BACK
-							Case SSdef.SSOBJ_CHECKPT
+							Case 0, 1, 4, 5, 10
 								imageNum = 8
-								break
-							Case SHAKE_RANGE
-							Case SSdef.SSOBJ_BNRD_ID
-								imageNum = COLOR_SPACE
-								break
-							Case SpecialObject.COLLISION_RANGE_Z
-							Case SSdef.SSOBJ_BOMB_ID
-								imageNum = LOAD_FRONT
-								break
-							Case SSdef.SSOBJ_GOAL
-								imageNum = TILE_WIDTH
-								break
+							Case 6, 7
+								imageNum = 20
+							Case 8, 9
+								imageNum = 4
+							Case 11
+								imageNum = 16
 						End Select
+						
 						tileimage = New MFImage[imageNum]
 						
 						If (stageId = 0 Or stageId = 1 Or stageId = 5 Or stageId = 5 Or stageId = 10 Or stageId = 11) Then
-							For (stageId = 0; stageId < imageNum; stageId += 1)
-								tileimage[stageId] = MFImage.createImage("/map/stage" + stageName + "/#" + (stageId + 1) + ".png")
+							For stageId = 0 Until imageNum
+								tileimage[stageId] = MFImage.createImage("/map/stage" + stageName + "/#" + String(stageId + 1) + ".png")
 							Next
 						Else
 							tileimage[0] = MFImage.createImage("/map/stage" + stageName + "/#1.png")
-							For (stageId = 1; stageId < imageNum; stageId += 1)
-								tileimage[stageId] = MFImage.createPaletteImage("/map/stage" + stageName + "/#" + (stageId + 1) + ".pal")
+							
+							For stageId = 1 Until imageNum
+								tileimage[stageId] = MFImage.createPaletteImage("/map/stage" + stageName + "/#" + String(stageId + 1) + ".pal")
 							Next
 						EndIf
 						
 						IMAGE_TILE_WIDTH = MyAPI.zoomIn(tileimage[Null].getWidth() / TILE_WIDTH)
-						break
-					} catch (Int stageId2) {
-						stageId2.printStackTrace()
-						break
-					}
-					break
+					EndIf
 				Case LOAD_OPEN_FILE
-					is = MFDevice.getResourceAsStream("/map/" + stageName + MAP_EXTEND_NAME)
-					ds = New DataInputStream(is)
-					break
+					ds = MFDevice.getResourceAsStream("/map/" + stageName + MAP_EXTEND_NAME)
 				Case LOAD_OVERALL
-					try {
-						mapWidth = ds.readByte()
-						mapHeight = ds.readByte()
+					Try
+						mapWidth = ds.ReadByte()
+						mapHeight = ds.ReadByte()
 						
 						If (mapWidth < 0) Then
 							mapWidth += 256
@@ -563,88 +569,87 @@ Class MapManager ' Implements SonicDef
 							mapHeight += 256
 						EndIf
 						
-						mapFront = (Short[][]) Array.newInstance(Short.TYPE, New Int[]{mapWidth, mapHeight})
-						mapBack = (Short[][]) Array.newInstance(Short.TYPE, New Int[]{mapWidth, mapHeight})
-						break
-					} catch (Exception e) {
-						break
-					}
+						Local mapSize:= (mapWidth*mapHeight*SizeOf_Short)
+						
+						mapFront = New DataBuffer(mapSize)
+						mapBack = New DataBuffer(mapSize)
+					Catch E:StreamError
+						' Nothing so far.
+					End Try
 				Case LOAD_MODEL
-					try {
-						imageNum = ds.readShort()
-						ds.readShort()
-						mapModel = (Short[][][]) Array.newInstance(Short.TYPE, New Int[]{imageNum, SHAKE_RANGE, SHAKE_RANGE})
-						For (Int n = 0; n < imageNum; n += 1)
-							For (stageId2 = 0; stageId2 < SHAKE_RANGE; stageId2 += 1)
-								For (stageName = Null; stageName < SHAKE_RANGE; stageName += 1)
-									mapModel[n][stageId2][stageName] = ds.readShort()
-								Next
-							Next
+					Try
+						' Read the number of "chunks":
+						imageNum = ds.ReadShort()
+						
+						' Skip the next two bytes (I'm not sure if this is supposed to be an 'Int' or not):
+						'ds.ReadShort()
+						ds.Seek(ds.Position+2)
+						
+						' Allocate an array of "map chunks":
+						mapModel = New DataBuffer[imageNum]
+						
+						' Allocate the "chunks" we need:
+						For Local i:= 0 Until imageNum ' mapModel.Length
+							' Allocate a "chunk" using the pre-determined size.
+							Local chunk:= New DataBuffer(MODE_CHUNK_SIZE)
+							
+							' Read the "chunk data" (Tile information) from the input-stream.
+							ds.ReadAll(chunk, 0, MODE_CHUNK_SIZE) ' chunk.Length
+							
+							' Store the "chunk" in our container.
+							mapModel[i] = chunk
 						Next
-						break
-					} catch (Exception e2) {
-						e2.printStackTrace()
-						break
-					}
+					Catch E:StreamError
+						' Nothing so far.
+					End Try
 				Case LOAD_FRONT
-					stageId2 = 0
-					While (stageId2 < mapWidth) {
-						try {
-							For (stageName = Null; stageName < mapHeight; stageName += 1)
-								mapFront[stageId2][stageName] = ds.readShort()
-							Next
-							stageId2 += 1
-						} catch (Exception e3) {
-							break
-						}
-					}
-					break
+					Try
+						ds.ReadAll(mapFront, 0, mapFront.Length) ' (mapWidth*mapHeight*SizeOf_Short)
+					Catch E:StreamError
+						' Nothing so far.
+					End Try
 				Case LOAD_BACK
-					stageId2 = 0
-					While (stageId2 < mapWidth) {
-						try {
-							For (stageName = Null; stageName < mapHeight; stageName += 1)
-								mapBack[stageId2][stageName] = ds.readShort()
-							Next
-							stageId2 += 1
-						} catch (Exception e4) {
-							break
-						}
-					}
+					Try
+						ds.ReadAll(mapBack, 0, mapBack.Length) ' (mapWidth*mapHeight*SizeOf_Short)
+					Catch E:StreamError
+						' Nothing so far.
+					End Try
 					
-					If (ds <> 0) Then
-						ds.close()
-						break
+					If (ds <> Null) Then
+						ds.Close()
 					EndIf
-					
-					break
 				Case LOAD_CAMERA_RESET
 					proposeLeftCameraLimit = 0
 					actualLeftCameraLimit = 0
 					proposeUpCameraLimit = 0
 					actualUpCameraLimit = 0
+					
 					proposeRightCameraLimit = getPixelWidth()
 					actualRightCameraLimit = getPixelWidth()
 					proposeDownCameraLimit = getPixelHeight()
 					actualDownCameraLimit = getPixelHeight()
+					
 					loadStep = 0
 					mapOffsetX = 0
 					shakeCount = 0
 					brokePointY = 0
 					brokeOffsetY = 0
-					setMapLoop(mapWidth - LOAD_FRONT, mapWidth)
+					
+					setMapLoop((mapWidth - 4), mapWidth)
+					
 					Select (StageManager.getCurrentZoneId())
-						Case SpecialObject.COLLISION_RANGE_Z
+						Case 8
 							setCameraRightLimit(WIND_LOOP_WIDTH)
-							setMapLoop(mapWidth - 28, mapWidth)
+							setMapLoop((mapWidth - 28), mapWidth)
+							
 							calCameraImmidiately()
-							break
 					End Select
+					
 					Select (StageManager.getStageID())
-						Case SSdef.SSOBJ_CHECKPT
-							setCameraRightLimit(getPixelWidth() - 1)
-							break
+						Case 10
+							setCameraRightLimit((getPixelWidth() - 1))
 					End Select
+					
 					Return True
 			End Select
 			
@@ -656,17 +661,32 @@ Class MapManager ' Implements SonicDef
 		Function closeMap:Void()
 			image = Null
 			
-			If (tileimage <> Null) Then
-				For Local i:= 0 Until tileimage.Length
-					tileimage[i] = Null
-				Next
-			EndIf
+			'#Rem
+			For Local i:= 0 Until tileimage.Length
+				'tileimage[i].Discard()
+				
+				tileimage[i] = Null
+			Next
+			'#End
 			
 			tileimage = []
+			
+			For Local i:= 0 Until mapModel.Length
+				mapModel[i].Discard()
+				
+				mapModel[i] = Null
+			Next
+			
+			mapModel = []
+			
+			mapFront.Discard()
+			mapBack.Discard()
 			
 			mapModel = Null
 			mapFront = Null
 			mapBack = Null
+			
+			'windImage.Discard()
 			
 			windImage = Null
 			windDrawer = Null
@@ -847,7 +867,7 @@ Class MapManager ' Implements SonicDef
 			Next
 		End
 		
-		Function drawMap:Void(g:MFGraphics, mapArray:Short[][])
+		Function drawMap:Void(g:MFGraphics, mapArray:DataBuffer)
 			Local startY:= (camera.y + CAMERA_OFFSET_Y) / TILE_HEIGHT
 			
 			Local endX:= (((((camera.x + CAMERA_WIDTH) + TILE_WIDTH) - 1) + CAMERA_OFFSET_X) - mapOffsetX) / TILE_WIDTH
@@ -966,22 +986,24 @@ Class MapManager ' Implements SonicDef
 			Wend
 		End
 		
-		Function getTileId:Int(mapArray:Short[][], x:Int, y:Int)
-			Return mapModel[getModelId(mapArray, x, y)][x Mod MODEL_WIDTH][y Mod MODEL_HEIGHT]
+		Function getTileId:Int(mapArray:DataBuffer, x:Int, y:Int)
+			Local chunk:= mapModel[getModelId(mapArray, x, y)]
+			
+			Return chunk.PeekShort(AsMapCoord(x Mod MODEL_WIDTH, y Mod MODEL_HEIGHT))
 		End
 		
-		Function getModelId:Int(mapArray:Short[][], x:Int, y:Int)
-			Return getModelIdByIndex(mapArray, x / MODEL_WIDTH, y / MODEL_HEIGHT)
+		Function getModelId:Int(mapArray:DataBuffer, x:Int, y:Int)
+			Return getModelIdByIndex(mapArray, (x / MODEL_WIDTH), (y / MODEL_HEIGHT))
 		End
 		
-		Function getModelIdByIndex:Int(mapArray:Short[][], x:Int, y:Int)
+		Function getModelIdByIndex:Int(mapArray:DataBuffer, x:Int, y:Int)
 			x = getConvertX(x)
 			
-			If (y >= mapArray[0].Length) Then
+			If (y >= MODEL_HEIGHT) Then
 				Return 0
 			EndIf
 			
-			Return mapArray[x][y]
+			Return getTileAt(mapArray, x, y)
 		End
 		
 		Function drawTile:Void(g:MFGraphics, sy:Int, x:Int, y:Int, trans:Int)
@@ -1004,12 +1026,12 @@ Class MapManager ' Implements SonicDef
 						mappaintframe = zone4TileLoopID[gameFrame Mod zone4TileLoopID.Length]
 					EndIf
 					
-					MyAPI.drawImage(g, tileimage[mappaintframe], sx * TILE_WIDTH, sy * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT, trans, ((x * TILE_WIDTH) - camera.x) + mapOffsetX, ((y * TILE_HEIGHT) - camera.y) + PickValue((y >= brokePointY), brokeOffsetY, 0), COLOR_SPACE)
+					MyAPI.drawImage(g, tileimage[mappaintframe], (sx * TILE_WIDTH), (sy * TILE_HEIGHT), TILE_WIDTH, TILE_HEIGHT, trans, ((x * TILE_WIDTH) - camera.x) + mapOffsetX, ((y * TILE_HEIGHT) - camera.y) + PickValue((y >= brokePointY), brokeOffsetY, 0), COLOR_SPACE)
 					
 					Return
 				EndIf
 				
-				MyAPI.drawImage(g, image, sx * TILE_WIDTH, sy * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT, trans, ((x * TILE_WIDTH) - camera.x) + mapOffsetX, ((y * TILE_HEIGHT) - camera.y) + PickValue((y >= brokePointY), brokeOffsetY, 0), COLOR_SPACE)
+				MyAPI.drawImage(g, image, (sx * TILE_WIDTH), (sy * TILE_HEIGHT), TILE_WIDTH, TILE_HEIGHT, trans, ((x * TILE_WIDTH) - camera.x) + mapOffsetX, ((y * TILE_HEIGHT) - camera.y) + PickValue((y >= brokePointY), brokeOffsetY, 0), COLOR_SPACE)
 			EndIf
 		End
 End
