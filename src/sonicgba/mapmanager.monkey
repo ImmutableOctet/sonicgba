@@ -486,13 +486,14 @@ Class MapManager ' Implements SonicDef
 		End
 		
 		Public Function loadMapStep:Bool(stageId:Int, stageName:String)
-			Int imageNum
+			Local imageNum:Int
+			
 			Select (loadStep)
-				Case 0
+				Case LOAD_MAP_IMAGE
 					try {
 						stage_id = stageId
 						
-						If (stageId = 0 Or stageId = LOAD_OPEN_FILE Or stageId = LOAD_FRONT Or stageId = LOAD_BACK Or stageId = SHAKE_RANGE Or stageId = 7 Or stageId = 8 Or stageId = 9 Or stageId = 10 Or stageId = 11) Then
+						If (stageId = 0 Or stageId = 1 Or stageId = 5 Or stageId = 5 Or stageId = 6 Or stageId = 7 Or stageId = 8 Or stageId = 9 Or stageId = 10 Or stageId = 11) Then
 							stageFlag = True
 						Else
 							stageFlag = False
@@ -527,14 +528,14 @@ Class MapManager ' Implements SonicDef
 						End Select
 						tileimage = New MFImage[imageNum]
 						
-						If (stageId = 0 Or stageId = LOAD_OPEN_FILE Or stageId = LOAD_FRONT Or stageId = LOAD_BACK Or stageId = 10 Or stageId = 11) Then
+						If (stageId = 0 Or stageId = 1 Or stageId = 5 Or stageId = 5 Or stageId = 10 Or stageId = 11) Then
 							For (stageId = 0; stageId < imageNum; stageId += 1)
-								tileimage[stageId] = MFImage.createImage("/map/stage" + stageName + "/#" + (stageId + LOAD_OPEN_FILE) + ".png")
+								tileimage[stageId] = MFImage.createImage("/map/stage" + stageName + "/#" + (stageId + 1) + ".png")
 							Next
 						Else
 							tileimage[0] = MFImage.createImage("/map/stage" + stageName + "/#1.png")
-							For (stageId = LOAD_OPEN_FILE; stageId < imageNum; stageId += 1)
-								tileimage[stageId] = MFImage.createPaletteImage("/map/stage" + stageName + "/#" + (stageId + LOAD_OPEN_FILE) + ".pal")
+							For (stageId = 1; stageId < imageNum; stageId += 1)
+								tileimage[stageId] = MFImage.createPaletteImage("/map/stage" + stageName + "/#" + (stageId + 1) + ".pal")
 							Next
 						EndIf
 						
@@ -617,7 +618,7 @@ Class MapManager ' Implements SonicDef
 					EndIf
 					
 					break
-				Case SHAKE_RANGE
+				Case LOAD_CAMERA_RESET
 					proposeLeftCameraLimit = 0
 					actualLeftCameraLimit = 0
 					proposeUpCameraLimit = 0
@@ -641,18 +642,16 @@ Class MapManager ' Implements SonicDef
 					End Select
 					Select (StageManager.getStageID())
 						Case SSdef.SSOBJ_CHECKPT
-							setCameraRightLimit(getPixelWidth() - LOAD_OPEN_FILE)
+							setCameraRightLimit(getPixelWidth() - 1)
 							break
 					End Select
 					Return True
 			End Select
 			
-			If (True) Then
-				loadStep += 1
-			EndIf
+			loadStep += 1
 			
 			Return False
-		}
+		End
 		
 		Function closeMap:Void()
 			image = Null
@@ -805,47 +804,53 @@ Class MapManager ' Implements SonicDef
 			End Select
 		End
 		
-		Private Function drawWind:Void(g:MFGraphics)
-			
+		Function drawWind:Void(g:MFGraphics)
 			If (windImage = Null) Then
 				windImage = MFImage.createImage("/animation/bg_cloud_" + StageManager.getCurrentZoneId() + ".png")
+				
 				windDrawer = New Animation(windImage, "/animation/bg_cloud").getDrawer()
 			EndIf
 			
 			If (windImage <> Null And windDrawer <> Null) Then
-				Int offsetX = (camera.x / 8) Mod WIND_LOOP_WIDTH
-				For (Int i = -1; i < 0; i += 1)
-					For (Int j = 0; j < WIND_POSITION.Length; j += 1)
+				Local offsetX:= ((camera.x / 8) Mod WIND_LOOP_WIDTH)
+				
+				For Local i:= -1 Until 0
+					For Local j:= 0 Until WIND_POSITION.Length
+						Local wind:= WIND_POSITION[j]
 						
-						If ((WIND_POSITION[j][0] - offsetX) + (i * WIND_LOOP_WIDTH) >= (-(SCREEN_WIDTH Shr 1))) Then
-							If ((WIND_POSITION[j][0] - offsetX) + (i * WIND_LOOP_WIDTH) > SCREEN_WIDTH) Then
-								break
+						Local negLoopWidth:= (i * WIND_LOOP_WIDTH)
+						
+						If ((wind[0] - offsetX) + negLoopWidth >= (-(SCREEN_WIDTH / 2))) Then ' Shr 1
+							If ((wind[0] - offsetX) + negLoopWidth > SCREEN_WIDTH) Then
+								Exit
 							EndIf
 							
-							windDrawer.setActionId(WIND_POSITION[j][LOAD_OVERALL])
-							windDrawer.draw(g, (WIND_POSITION[j][0] - offsetX) + (i * WIND_LOOP_WIDTH), WIND_POSITION[j][LOAD_OPEN_FILE])
+							windDrawer.setActionId(wind[2])
+							windDrawer.draw(g, (wind[0] - offsetX) + negLoopWidth, wind[1])
 						EndIf
-						
 					Next
 				Next
 			EndIf
-			
-		}
+		End
 		
-		Private Function fillChangeColorRect:Void(g:MFGraphics, x:Int, y:Int, w:Int, h:Int, colorStart:Int, colorEnd:Int, coorSpace:Int)
-			y = ((h + coorSpace) - LOAD_OPEN_FILE) / coorSpace
-			For (Int i = 0; i < y; i += 1)
-				h = ((((((65280 & colorEnd) Shr 8) * i) + (((65280 & colorStart) Shr 8) * (y - i))) / y) Shl 8) & 65280
-				x = ((((((colorEnd & 255) Shr 0) * i) + (((colorStart & 255) Shr 0) * (y - i))) / y) Shl 0) & 255
-				g.setColor(x | (h | (((((((16711680 & colorEnd) Shr TILE_WIDTH) * i) + (((16711680 & colorStart) Shr TILE_WIDTH) * (y - i))) / y) Shl TILE_WIDTH) & 16711680)))
+		Function fillChangeColorRect:Void(g:MFGraphics, x:Int, y:Int, w:Int, h:Int, colorStart:Int, colorEnd:Int, coorSpace:Int)
+			y = ((h + coorSpace) - 1) / coorSpace
+			
+			For Local i:= 0 Until y
+				h = (((((((65280 & colorEnd) Shr 8) * i) + (((65280 & colorStart) Shr 8) * (y - i))) / y) Shl 8) & 65280)
+				
+				x = (((((((colorEnd & 255) Shr 0) * i) + (((colorStart & 255) Shr 0) * (y - i))) / y) Shl 0) & 255)
+				
+				g.setColor(x | (h | (((((((16711680 & colorEnd) Shr 16) * i) + (((16711680 & colorStart) Shr 16) * (y - i))) / y) Shl 16) & 16711680)))
+				
 				MyAPI.fillRect(g, 0, coorSpace * i, w, coorSpace)
 			Next
-		}
+		End
 		
 		Private Function drawMap:Void(g:MFGraphics, mapArray:Short[][])
 			Int startY = (camera.y + CAMERA_OFFSET_Y) / TILE_WIDTH
-			Int endX = (((((camera.x + CAMERA_WIDTH) + TILE_WIDTH) - LOAD_OPEN_FILE) + CAMERA_OFFSET_X) - mapOffsetX) / TILE_WIDTH
-			Int endY = ((((camera.y + CAMERA_HEIGHT) + TILE_WIDTH) - LOAD_OPEN_FILE) + CAMERA_OFFSET_Y) / TILE_WIDTH
+			Int endX = (((((camera.x + CAMERA_WIDTH) + TILE_WIDTH) - 1) + CAMERA_OFFSET_X) - mapOffsetX) / TILE_WIDTH
+			Int endY = ((((camera.y + CAMERA_HEIGHT) + TILE_WIDTH) - 1) + CAMERA_OFFSET_Y) / TILE_WIDTH
 			Int preCheckModelX = -1
 			Int x = ((camera.x + CAMERA_OFFSET_X) - mapOffsetX) / TILE_WIDTH
 			While (x < endX) {
@@ -857,7 +862,7 @@ Class MapManager ' Implements SonicDef
 				
 				If (modelX <> preCheckModelX) Then
 					preCheckModelX = LOAD_OPEN_FILE
-					For (my = startY / SHAKE_RANGE; my < ((endY + SHAKE_RANGE) - LOAD_OPEN_FILE) / SHAKE_RANGE; my += 1)
+					For (my = startY / SHAKE_RANGE; my < ((endY + SHAKE_RANGE) - 1) / SHAKE_RANGE; my += 1)
 						
 						If (getModelIdByIndex(mapArray, modelX, my) <> 0) Then
 							preCheckModelX = 0
@@ -868,7 +873,7 @@ Class MapManager ' Implements SonicDef
 					my = x / SHAKE_RANGE
 					
 					If (preCheckModelX <> 0) Then
-						modelX = ((modelX + LOAD_OPEN_FILE) * SHAKE_RANGE) - LOAD_OPEN_FILE
+						modelX = ((modelX + 1) * SHAKE_RANGE) - 1
 						preCheckModelX = my
 					EndIf
 					
@@ -876,7 +881,7 @@ Class MapManager ' Implements SonicDef
 					While (y < endY) {
 						
 						If (getModelId(mapArray, x, y) <> 0) Then
-							preCheckModelX = (((y / SHAKE_RANGE) + LOAD_OPEN_FILE) * SHAKE_RANGE) - LOAD_OPEN_FILE
+							preCheckModelX = (((y / SHAKE_RANGE) + 1) * SHAKE_RANGE) - 1
 						Else
 							tileId = getTileId(mapArray, x, y)
 							flipX = (MFGamePad.KEY_NUM_9 & tileId) = 0 ? True : False
@@ -897,7 +902,7 @@ Class MapManager ' Implements SonicDef
 							preCheckModelX = y
 						EndIf
 						
-						y = preCheckModelX + LOAD_OPEN_FILE
+						y = preCheckModelX + 1
 					}
 					modelX = x
 					preCheckModelX = my
@@ -930,28 +935,28 @@ Class MapManager ' Implements SonicDef
 							drawTile(g, tileId & 16383, x, y, preCheckModelX)
 							preCheckModelX = y
 						Else
-							preCheckModelX = (((y / SHAKE_RANGE) + LOAD_OPEN_FILE) * SHAKE_RANGE) - LOAD_OPEN_FILE
+							preCheckModelX = (((y / SHAKE_RANGE) + 1) * SHAKE_RANGE) - 1
 						EndIf
 						
-						y = preCheckModelX + LOAD_OPEN_FILE
+						y = preCheckModelX + 1
 					}
 					modelX = x
 					preCheckModelX = my
 				EndIf
 				
-				x = modelX + LOAD_OPEN_FILE
+				x = modelX + 1
 			}
 		}
 		
-		Private Function getTileId:Int(mapArray:Short[][], x:Int, y:Int)
-			Return mapModel[getModelId(mapArray, x, y)][x Mod SHAKE_RANGE][y Mod SHAKE_RANGE]
-		}
+		Function getTileId:Int(mapArray:Short[][], x:Int, y:Int)
+			Return mapModel[getModelId(mapArray, x, y)][x Mod MODEL_WIDTH][y Mod MODEL_HEIGHT]
+		End
 		
-		Private Function getModelId:Int(mapArray:Short[][], x:Int, y:Int)
-			Return getModelIdByIndex(mapArray, x / SHAKE_RANGE, y / SHAKE_RANGE)
-		}
+		Function getModelId:Int(mapArray:Short[][], x:Int, y:Int)
+			Return getModelIdByIndex(mapArray, x / MODEL_WIDTH, y / MODEL_HEIGHT)
+		End
 		
-		Private Function getModelIdByIndex:Int(mapArray:Short[][], x:Int, y:Int)
+		Function getModelIdByIndex:Int(mapArray:Short[][], x:Int, y:Int)
 			x = getConvertX(x)
 			
 			If (y >= mapArray[0].Length) Then
@@ -959,41 +964,34 @@ Class MapManager ' Implements SonicDef
 			EndIf
 			
 			Return mapArray[x][y]
-		}
+		End
 		
-		Private Function drawTile:Void(g:MFGraphics, sy:Int, x:Int, y:Int, trans:Int)
-			
+		Function drawTile:Void(g:MFGraphics, sy:Int, x:Int, y:Int, trans:Int)
 			If (sy <> 0) Then
-				Int sx = sy Mod IMAGE_TILE_WIDTH
+				Local sx:= (sy Mod IMAGE_TILE_WIDTH)
+				
 				sy /= IMAGE_TILE_WIDTH
 				
 				If (stageFlag) Then
 					mappaintframe = gameFrame
+					
 					Select (stage_id)
-						Case 0
-						Case LOAD_OPEN_FILE
-						Case SpecialObject.COLLISION_RANGE_Z
-						Case SSdef.SSOBJ_BOMB_ID
-						Case SSdef.SSOBJ_CHECKPT
+						Case 0, 1, 8, 9, 10
 							mappaintframe Mod= tileimage.Length
-							break
-						Case LOAD_FRONT
-						Case LOAD_BACK
-						Case SSdef.SSOBJ_GOAL
-							mappaintframe = (gameFrame Mod (tileimage.Length * LOAD_OVERALL)) / 2
-							break
+						Case 4, 5, 11
+							mappaintframe = (gameFrame Mod (tileimage.Length * 2)) / 2
 					End Select
 					
-					If (stage_id = SHAKE_RANGE Or stage_id = 7) Then
+					If (stage_id = 6 Or stage_id = 7) Then
 						mappaintframe = zone4TileLoopID[gameFrame Mod zone4TileLoopID.Length]
 					EndIf
 					
-					MyAPI.drawImage(g, tileimage[mappaintframe], sx * TILE_WIDTH, sy * TILE_WIDTH, TILE_WIDTH, TILE_WIDTH, trans, ((x * TILE_WIDTH) - camera.x) + mapOffsetX, ((y * TILE_WIDTH) - camera.y) + (y >= brokePointY ? brokeOffsetY : 0), COLOR_SPACE)
+					MyAPI.drawImage(g, tileimage[mappaintframe], sx * TILE_WIDTH, sy * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT, trans, ((x * TILE_WIDTH) - camera.x) + mapOffsetX, ((y * TILE_HEIGHT) - camera.y) + PickValue((y >= brokePointY), brokeOffsetY, 0), COLOR_SPACE)
+					
 					Return
 				EndIf
 				
-				MyAPI.drawImage(g, image, sx * TILE_WIDTH, sy * TILE_WIDTH, TILE_WIDTH, TILE_WIDTH, trans, ((x * TILE_WIDTH) - camera.x) + mapOffsetX, ((y * TILE_WIDTH) - camera.y) + (y >= brokePointY ? brokeOffsetY : 0), COLOR_SPACE)
+				MyAPI.drawImage(g, image, sx * TILE_WIDTH, sy * TILE_HEIGHT, TILE_WIDTH, TILE_HEIGHT, trans, ((x * TILE_WIDTH) - camera.x) + mapOffsetX, ((y * TILE_HEIGHT) - camera.y) + PickValue((y >= brokePointY), brokeOffsetY, 0), COLOR_SPACE)
 			EndIf
-			
-		}
+		End
 End
