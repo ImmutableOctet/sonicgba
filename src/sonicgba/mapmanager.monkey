@@ -165,14 +165,14 @@ Class MapManager ' Implements SonicDef
 					cameraActionX()
 					
 					If (actualLeftCameraLimit > proposeLeftCameraLimit) Then
-						actualLeftCameraLimit -= 5
+						actualLeftCameraLimit -= CAMERA_SPEED
 						
 						If (actualLeftCameraLimit < proposeLeftCameraLimit) Then
 							actualLeftCameraLimit = proposeLeftCameraLimit
 						EndIf
 						
 					ElseIf (actualLeftCameraLimit < proposeLeftCameraLimit) Then
-						actualLeftCameraLimit += 5
+						actualLeftCameraLimit += CAMERA_SPEED
 						
 						If (actualLeftCameraLimit > proposeLeftCameraLimit) Then
 							actualLeftCameraLimit = proposeLeftCameraLimit
@@ -180,14 +180,14 @@ Class MapManager ' Implements SonicDef
 					EndIf
 					
 					If (actualRightCameraLimit < proposeRightCameraLimit) Then
-						actualRightCameraLimit += 5
+						actualRightCameraLimit += CAMERA_SPEED
 						
 						If (actualRightCameraLimit > proposeRightCameraLimit) Then
 							actualRightCameraLimit = proposeRightCameraLimit
 						EndIf
 						
 					ElseIf (actualRightCameraLimit > proposeRightCameraLimit) Then
-						actualRightCameraLimit -= 5
+						actualRightCameraLimit -= CAMERA_SPEED
 						
 						If (actualRightCameraLimit < proposeRightCameraLimit) Then
 							actualRightCameraLimit = proposeRightCameraLimit
@@ -220,14 +220,14 @@ Class MapManager ' Implements SonicDef
 						cameraActionY()
 						
 						If (actualDownCameraLimit > proposeDownCameraLimit) Then
-							actualDownCameraLimit -= 5
+							actualDownCameraLimit -= CAMERA_SPEED
 							
 							If (actualDownCameraLimit < proposeDownCameraLimit) Then
 								actualDownCameraLimit = proposeDownCameraLimit
 							EndIf
 							
 						ElseIf (actualDownCameraLimit < proposeDownCameraLimit) Then
-							actualDownCameraLimit += 5
+							actualDownCameraLimit += CAMERA_SPEED
 							
 							If (actualDownCameraLimit > proposeDownCameraLimit) Then
 								actualDownCameraLimit = proposeDownCameraLimit
@@ -235,14 +235,14 @@ Class MapManager ' Implements SonicDef
 						EndIf
 						
 						If (actualUpCameraLimit < proposeUpCameraLimit) Then
-							actualUpCameraLimit += 5
+							actualUpCameraLimit += CAMERA_SPEED
 							
 							If (actualUpCameraLimit > proposeUpCameraLimit) Then
 								actualUpCameraLimit = proposeUpCameraLimit
 							EndIf
 							
 						ElseIf (actualUpCameraLimit > proposeUpCameraLimit) Then
-							actualUpCameraLimit -= 5
+							actualUpCameraLimit -= CAMERA_SPEED
 							
 							If (actualUpCameraLimit < proposeUpCameraLimit) Then
 								actualUpCameraLimit = proposeUpCameraLimit
@@ -368,7 +368,7 @@ Class MapManager ' Implements SonicDef
 			mapLoopRight = loopRight
 		End
 		
-		Public Function setCameraLeftLimit:Void(limit:Int)
+		Function setCameraLeftLimit:Void(limit:Int)
 			proposeLeftCameraLimit = limit
 			
 			If (proposeLeftCameraLimit <= camera.x) Then
@@ -376,26 +376,25 @@ Class MapManager ' Implements SonicDef
 			Else
 				actualLeftCameraLimit = camera.x
 			EndIf
-			
-		}
+		End
 		
-		Public Function setCameraRightLimit:Void(limit:Int)
+		Function setCameraRightLimit:Void(limit:Int)
 			proposeRightCameraLimit = limit
 			
-			If (proposeRightCameraLimit >= camera.x + CAMERA_WIDTH) Then
+			If (proposeRightCameraLimit >= (camera.x + CAMERA_WIDTH)) Then
 				actualRightCameraLimit = proposeRightCameraLimit
 			Else
 				actualRightCameraLimit = camera.x + CAMERA_WIDTH
 			EndIf
-			
-		}
+		End
 		
-		Public Function setCameraDownLimit:Void(limit:Int)
+		Function setCameraDownLimit:Void(limit:Int)
 			proposeDownCameraLimit = limit
-			actualDownCameraLimit = camera.y + CAMERA_HEIGHT
-		}
+			
+			actualDownCameraLimit = (camera.y + CAMERA_HEIGHT)
+		End
 		
-		Public Function setCameraUpLimit:Void(limit:Int)
+		Function setCameraUpLimit:Void(limit:Int)
 			proposeUpCameraLimit = limit
 			
 			If (camera.y < proposeUpCameraLimit) Then
@@ -403,34 +402,32 @@ Class MapManager ' Implements SonicDef
 			Else
 				actualUpCameraLimit = proposeUpCameraLimit
 			EndIf
-			
-		}
+		End
 		
-		Public Function calCameraImmidiately:Void()
+		Function calCameraImmidiately:Void()
 			actualUpCameraLimit = proposeUpCameraLimit
 			actualDownCameraLimit = proposeDownCameraLimit
 			actualLeftCameraLimit = proposeLeftCameraLimit
 			actualRightCameraLimit = proposeRightCameraLimit
-		}
+		End
 		
-		Public Function releaseCameraUpLimit:Void()
+		Function releaseCameraUpLimit:Void()
 			proposeUpCameraLimit = 0
-		}
+		End
 		
-		Public Function releaseCameraLeftLimit:Void(limit:Int)
+		Function releaseCameraLeftLimit:Void(limit:Int)
 			proposeLeftCameraLimit = 0
-		}
+		End
 		
-		Public Function releaseCameraRightLimit:Void(limit:Int)
+		Function releaseCameraRightLimit:Void(limit:Int)
 			proposeRightCameraLimit = getPixelWidth()
-		}
+		End
 		
-		Public Function getCameraRightLimit:Int()
+		Function getCameraRightLimit:Int()
 			Return proposeRightCameraLimit
-		}
+		End
 		
-		Public Function isCameraStop:Bool()
-			
+		Function isCameraStop:Bool()
 			If (focusObj = Null Or cameraLocked) Then
 				Return True
 			EndIf
@@ -440,53 +437,53 @@ Class MapManager ' Implements SonicDef
 			EndIf
 			
 			Return False
-		}
+		End
 		
-		Public Function getCamera:Coordinate()
+		Function getCamera:Coordinate()
 			Return camera
-		}
+		End
 		
-		Public Function setFocusObj:Void(obj:Focusable)
-			
+		Function setFocusObj:Void(obj:Focusable)
 			If (focusObj <> obj) Then
-				cameraActionX = LOAD_OPEN_FILE
-				cameraActionY = LOAD_OPEN_FILE
+				cameraActionX = 1
+				cameraActionY = 1
 			EndIf
 			
 			focusObj = obj
+			
 			lockCamera(False)
-		}
+		End
 		
-		Public Function focusQuickLocation:Void()
+		Function focusQuickLocation:Void()
 			cameraActionX = 0
 			cameraActionY = 0
 			
 			If (focusObj <> Null) Then
-				camera.x = focusObj.getFocusX() - (CAMERA_WIDTH Shr 1)
-				camera.y = focusObj.getFocusY() - (CAMERA_HEIGHT Shr 1)
+				camera.x = focusObj.getFocusX() - (CAMERA_WIDTH / 2) ' Shr 1
+				camera.y = focusObj.getFocusY() - (CAMERA_HEIGHT / 2) ' Shr 1
 			EndIf
 			
 			cameraLogic()
-		}
+		End
 		
-		Public Function setCameraMoving:Void()
-			cameraActionX = LOAD_OPEN_FILE
-			cameraActionY = LOAD_OPEN_FILE
+		Function setCameraMoving:Void()
+			cameraActionX = 1
+			cameraActionY = 1
+			
 			cameraLogic()
-		}
+		End
 		
-		Public Function lockCamera:Void(lock:Bool)
+		Function lockCamera:Void(lock:Bool)
 			cameraLocked = lock
 			
 			If (Not lock) Then
 				cameraUpDownLocked = False
 			EndIf
-			
-		}
+		End
 		
-		Public Function lockUpDownCamera:Void(lock:Bool)
+		Function lockUpDownCamera:Void(lock:Bool)
 			cameraUpDownLocked = lock
-		}
+		End
 		
 		Public Function loadMapStep:Bool(stageId:Int, stageName:String)
 			Int imageNum
@@ -657,74 +654,81 @@ Class MapManager ' Implements SonicDef
 			Return False
 		}
 		
-		Public Function closeMap:Void()
+		Function closeMap:Void()
 			image = Null
 			
 			If (tileimage <> Null) Then
-				For (Int i = 0; i < tileimage.Length; i += 1)
+				For Local i:= 0 Until tileimage.Length
 					tileimage[i] = Null
 				Next
 			EndIf
 			
-			tileimage = Null
+			tileimage = []
+			
 			mapModel = Null
 			mapFront = Null
 			mapBack = Null
+			
 			windImage = Null
 			windDrawer = Null
-		}
+		End
 		
-		Public Function drawBack:Void(g:MFGraphics)
+		Function drawBack:Void(g:MFGraphics)
 			BackGroundManager.drawBackGround(g)
+			
 			drawMap(g, mapBack)
-		}
+		End
 		
-		Public Function drawFrontNatural:Void(g:MFGraphics)
+		Function drawFrontNatural:Void(g:MFGraphics)
 			BackGroundManager.drawFrontNatural(g)
-		}
+		End
 		
-		Public Function drawFront:Void(g:MFGraphics)
+		Function drawFront:Void(g:MFGraphics)
 			drawMap(g, mapFront)
-		}
+		End
 		
-		Public Function drawMapFrame:Void(g:MFGraphics)
+		Function drawMapFrame:Void(g:MFGraphics)
 			If (CAMERA_OFFSET_X > 0 Or CAMERA_OFFSET_Y > 0) Then
 				If (CAMERA_OFFSET_Y > 0) Then
 					g.setColor(255)
+					
 					MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, CAMERA_OFFSET_Y)
 					MyAPI.fillRect(g, 0, SCREEN_HEIGHT - CAMERA_OFFSET_Y, SCREEN_WIDTH, CAMERA_OFFSET_Y)
 				EndIf
 				
 				If (CAMERA_OFFSET_X > 0) Then
 					g.setColor(255)
-					MyAPI.fillRect(g, 0, CAMERA_OFFSET_Y + 0, CAMERA_OFFSET_X, SCREEN_HEIGHT - (CAMERA_OFFSET_Y Shl LOAD_OPEN_FILE))
-					MyAPI.fillRect(g, SCREEN_WIDTH - CAMERA_OFFSET_X, CAMERA_OFFSET_Y + 0, CAMERA_OFFSET_X, SCREEN_HEIGHT - (CAMERA_OFFSET_Y Shl LOAD_OPEN_FILE))
+					
+					MyAPI.fillRect(g, 0, CAMERA_OFFSET_Y + 0, CAMERA_OFFSET_X, SCREEN_HEIGHT - (CAMERA_OFFSET_Y * 2)) ' Shl 1
+					MyAPI.fillRect(g, SCREEN_WIDTH - CAMERA_OFFSET_X, CAMERA_OFFSET_Y + 0, CAMERA_OFFSET_X, SCREEN_HEIGHT - (CAMERA_OFFSET_Y * 2)) ' Shl 1
 				EndIf
 			EndIf
 		End
 		
-		Public Function getConvertX:Int(x:Int)
-			
+		Function getConvertX:Int(x:Int)
 			If (x < mapLoopRight) Then
 				Return x
 			EndIf
 			
-			Int duration = mapLoopRight - mapLoopLeft
+			Local duration:= (mapLoopRight - mapLoopLeft)
+			
 			Select (StageManager.getCurrentZoneId())
-				Case SpecialObject.COLLISION_RANGE_Z
-					Return mapLoopLeft + ((x - mapLoopRight) Mod duration)
+				Case 8
+					Return (mapLoopLeft + ((x - mapLoopRight) Mod duration))
 				Default
-					Return mapLoopLeft + ((x - mapLoopRight) Mod duration)
+					Return (mapLoopLeft + ((x - mapLoopRight) Mod duration))
 			End Select
 		End
 	Private
 		' Functions:
-		Private Function cameraActionX:Void()
-			Int desCamX = (focusObj.getFocusX() - (CAMERA_WIDTH Shr 1)) - CAMERA_OFFSET_X
+		Function cameraActionX:Void()
+			Local desCamX:= (focusObj.getFocusX() - (CAMERA_WIDTH / 2)) - CAMERA_OFFSET_X ' Shr 1
+			
 			Select (cameraActionX)
 				Case 0
-					Int preCameraX = camera.x
-					camera.x = MyAPI.calNextPosition((Double) camera.x, (Double) desCamX, LOAD_MODEL, SHAKE_RANGE, 4.0)
+					Local preCameraX:= camera.x
+					
+					camera.x = MyAPI.calNextPosition(Double(camera.x), Double(desCamX), 3, 6, 4.0) ' SHAKE_RANGE
 					
 					If (Abs(preCameraX - camera.x) > CAMERA_MAX_SPEED_Y) Then
 						If (camera.x > preCameraX) Then
@@ -735,70 +739,71 @@ Class MapManager ' Implements SonicDef
 							camera.x = preCameraX - CAMERA_MAX_SPEED_Y
 						EndIf
 					EndIf
+				Case 1
+					Local destiny:= Max(desCamX, 0)
 					
-				Case LOAD_OPEN_FILE
-					Int destiny
+					Local move:= (((destiny - camera.x) * 100) / CAMERA_SPEED)
+					Local coordinate:= camera
 					
-					If (desCamX < 0) Then
-						destiny = 0
-					Else
-						destiny = desCamX
-					EndIf
+					Local i:= coordinate.x
+					Local i2:= (move / 100)
+					Local i3:= PickValue((move = 0), 0, PickValue((move > 0), CAMERA_SPEED, -CAMERA_SPEED))
 					
-					Int move = ((destiny - camera.x) * 100) / LOAD_BACK
-					Coordinate coordinate = camera
-					Int i = coordinate.x
-					Int i2 = move / 100
-					Int i3 = move = 0 ? 0 : move > 0 ? LOAD_BACK : -5
 					coordinate.x = i + (i2 + i3)
 					
-					If (((destiny * 100) - (camera.x * 100)) * move <= 0) Then
+					If ((((destiny * 100) - (camera.x * 100)) * move) <= 0) Then
 						cameraActionX = 0
 					EndIf
-					
-				Case LOAD_OVERALL
+				Case 2
 					camera.x = desCamX
+					
 					cameraActionX = 0
 				Default
+					' Nothing so far.
 			End Select
-		}
+		End
 		
-		Private Function cameraActionY:Void()
-			Int desCamY = (focusObj.getFocusY() - (CAMERA_HEIGHT Shr 1)) - CAMERA_OFFSET_Y
+		Function cameraActionY:Void()
+			Local desCamY:= (focusObj.getFocusY() - (CAMERA_HEIGHT / 2)) - CAMERA_OFFSET_Y ' Shr 1
+			
 			Select (cameraActionY)
 				Case 0
-					Int preCameraY = camera.y
-					camera.y = MyAPI.calNextPosition((Double) camera.y, (Double) desCamY, LOAD_MODEL, SHAKE_RANGE, 4.0)
+					Local preCameraY:= camera.y
+					
+					camera.y = MyAPI.calNextPosition(Double(camera.y), Double(desCamY), 3, 6, 4.0) ' SHAKE_RANGE
 					
 					If (Abs(preCameraY - camera.y) > CAMERA_MAX_SPEED_Y) Then
 						If (camera.y > preCameraY) Then
-							camera.y = preCameraY + CAMERA_MAX_SPEED_Y
+							camera.y = (preCameraY + CAMERA_MAX_SPEED_Y)
 						EndIf
 						
 						If (camera.y < preCameraY) Then
-							camera.y = preCameraY - CAMERA_MAX_SPEED_Y
+							camera.y = (preCameraY - CAMERA_MAX_SPEED_Y)
 						EndIf
 					EndIf
+				Case 1
+					Local destiny:= PickValue((focusObj.getFocusY() - (CAMERA_HEIGHT / 2) < 0), 0, (focusObj.getFocusY() - (CAMERA_HEIGHT / 2))) ' Shr 1
 					
-				Case LOAD_OPEN_FILE
-					Int destiny = focusObj.getFocusY() - (CAMERA_HEIGHT Shr 1) < 0 ? 0 : focusObj.getFocusY() - (CAMERA_HEIGHT Shr 1)
-					Int move = ((destiny - camera.y) * 100) / LOAD_BACK
-					Coordinate coordinate = camera
-					Int i = coordinate.y
-					Int i2 = move / 100
-					Int i3 = move = 0 ? 0 : move > 0 ? LOAD_BACK : -5
+					Local move:= ((destiny - camera.y) * 100) / CAMERA_SPEED
+					Local coordinate:= camera
+					
+					Local i:= coordinate.y
+					Local i2:= (move / 100)
+					Local i3:= PickValue((move = 0), 0, PickValue((move > 0), CAMERA_SPEED, -CAMERA_SPEED))
+					
 					coordinate.y = i + (i2 + i3)
 					
-					If (((destiny * 100) - (camera.y * 100)) * move <= 0) Then
+					If ((((destiny * 100) - (camera.y * 100)) * move) <= 0) Then
 						cameraActionY = 0
 					EndIf
-					
-				Case LOAD_OVERALL
+				Case 2
 					camera.y = desCamY
+					
 					cameraActionY = 0
 				Default
+					' Nothing so far.
 			End Select
-		}
+		End
 		
 		Private Function drawWind:Void(g:MFGraphics)
 			
