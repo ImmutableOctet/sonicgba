@@ -826,6 +826,14 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\playeranimationcollisionrect.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>34</X>
+        <Y>15</Y>
+      </CursorPos>
+      <DocGUID>e7821bfb-361f-4071-b64c-bf19fcc51b66</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>0</X>
@@ -836,8 +844,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playersonic.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>17</X>
-        <Y>30</Y>
+        <X>8</X>
+        <Y>36</Y>
       </CursorPos>
       <DocGUID>a5737cf7-c803-4369-a3c9-d289230080c7</DocGUID>
       <Bookmarks />
@@ -970,7 +978,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>27</X>
+        <X>7</X>
         <Y>21</Y>
       </CursorPos>
       <DocGUID>1e7421d1-9c2e-4437-879b-76b249369a57</DocGUID>
