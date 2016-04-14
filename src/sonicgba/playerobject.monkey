@@ -291,13 +291,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const STATE_PIPE_OVER:= 2
 		Const STATE_PIPING:= 1
 		
+		Const TER_STATE_RUN:= 0
 		Const TER_STATE_BRAKE:= 1
+		Const TER_STATE_LOOK_MOON:= 2
+		Const TER_STATE_LOOK_MOON_WAIT:= 3
 		Const TER_STATE_CHANGE_1:= 4
 		Const TER_STATE_CHANGE_2:= 5
 		Const TER_STATE_GO_AWAY:= 6
-		Const TER_STATE_LOOK_MOON:= 2
-		Const TER_STATE_LOOK_MOON_WAIT:= 3
-		Const TER_STATE_RUN:= 0
 		Const TER_STATE_SHINING_2:= 7
 		
 		' Immutable Arrays (Constant):

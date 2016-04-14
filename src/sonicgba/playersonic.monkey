@@ -23,6 +23,8 @@ Private
 	
 	Import com.sega.engine.lib.myapi
 	Import com.sega.mobile.framework.device.mfgraphics
+	
+	Import regal.typetool
 Public
 
 ' Classes:
@@ -31,7 +33,9 @@ Class PlayerSonic Extends PlayerObject
 		' Constant variable(s):
 		Const ATTACK_COUNT_LEVEL_1:Int = 6
 		Const ATTACK_COUNT_LEVEL_2:Int = 12
+		
 		Const BACK_JUMP_SPEED_X:Int = 384
+		
 		Const SONIC_ANI_ATTACK_1:Int = 13
 		Const SONIC_ANI_ATTACK_2:Int = 14
 		Const SONIC_ANI_ATTACK_3:Int = 15
@@ -90,26 +94,32 @@ Class PlayerSonic Extends PlayerObject
 		Const SONIC_ANI_WALK_1:Int = 1
 		Const SONIC_ANI_WALK_2:Int = 2
 		Const SONIC_ANI_WIND:Int = 43
+		
 		Const SONIC_ATTACK_LEVEL_1_V0_IN_WATER:Int = 650
 		Const SONIC_ATTACK_LEVEL_2_V0_IN_WATER:Int = 1036
 		Const SONIC_ATTACK_LEVEL_3_V0_IN_WATER:Int = 1620
 	Private
 		' Constant variable(s):
 		Const AIR_DASH_TIME_COUNT:Int = 5
+		
 		Const ATTACK4_ISINWATER_JUMP_START_V:Int = (-1354 - GRAVITY)
 		Const ATTACK4_JUMP_START_V:Int = (-1188 - GRAVITY)
-		Const EFFECT_JUMP:Int = 1
+		
 		Const EFFECT_NONE:Int = 0
+		Const EFFECT_JUMP:Int = 1
 		Const EFFECT_SLIP:Int = 2
+		
 		Const LOOP:Int = -1
 		Const NO_ANIMATION:Int = -1
 		Const NO_LOOP:Int = -2
 		Const NO_LOOP_DEPAND:Int = -3
+		
 		Const SNOW_DIVIDE_COUNT:Int = 70
+		
+		Const SUPER_SONIC_ANI_LOOK_MOON:Int = 0
 		Const SUPER_SONIC_ANI_CHANGE_1:Int = 1
 		Const SUPER_SONIC_ANI_CHANGE_2:Int = 2
 		Const SUPER_SONIC_ANI_GO:Int = 3
-		Const SUPER_SONIC_ANI_LOOK_MOON:Int = 0
 		
 		Global ANIMATION_CONVERT:Int[] = [0, 1, 2, 3, 4, 10, 5, 6, 31, 19, 23, -1, 28, 39, 20, -1, -1, 54, -1, -1, -1, 52, 34, 35, 38, 32, 33, 41, 42, 43, 28, 40, 44, 45, 46, 47, 48, 49, 7, 8, 7, 30, 21, 22, 28, 29, 9, 36, 37, 51, 55, 56, 57, 50] ' Const
 		Global LOOP_INDEX:Int[] = [-1, -1, -1, -1, -1, -1, -1, 8, -1, -3, -1, 4, -2, -1, -2, -1, -1, 18, -1, 22, -1, 22, 23, -1, -1, -1, -1, 28, -1, 30, -1, -1, 33, 32, 35, 34, -1, -1, -1, 20, 3, -1, -1, -1, -1, -1, -1, 48, -1, -2, 0, -2, -1, -1, -1, 56, -1, -1, 0] ' Const
@@ -227,20 +237,458 @@ Class PlayerSonic Extends PlayerObject
 			Self.animationID = NO_ANIMATION
 			Self.myAnimationID = SONIC_ANI_SLIDE_D0
 		End
-	Protected
-		Protected Method extraLogicJump:Void()
+		
+		Method isOnSlip0:Bool()
+			Return (Self.myAnimationID = SONIC_ANI_SLIDE_D0)
+		End
+		
+		Method setSlip0:Void()
+			If (Self.collisionState = COLLISION_STATE_NONE) Then
+				Self.animationID = NO_ANIMATION
+				Self.myAnimationID = SONIC_ANI_SLIDE_D0
+			EndIf
 			
+			setMinSlipSpeed()
+		End
+		
+		Method doJump:Void()
+			If (Self.myAnimationID <> SONIC_ANI_ATTACK_1 And Self.myAnimationID <> SONIC_ANI_ATTACK_2 And Self.myAnimationID <> SONIC_ANI_ATTACK_3) Then
+				If (Self.slipping) Then
+					If (Not isHeadCollision()) Then
+						Self.currentLayer = 1
+					Else
+						Return
+					EndIf
+				EndIf
+				
+				' Magic number: 192
+				If (Self.slipping And Self.totalVelocity = 192) Then
+					Super.doJumpV()
+				Else
+					Super.doJump()
+				EndIf
+				
+				Self.leftCount = 0
+				Self.rightCount = 0
+				
+				Self.jumpRollEnable = False
+				
+				If (Self.slipping) Then
+					Self.currentLayer = 1
+					
+					Self.slipping = False
+				EndIf
+				
+				Self.firstJump = True
+				
+				If (Self.bankwalking) Then
+					Self.firstJump = False
+				EndIf
+			EndIf
+		End
+		
+		Method doHurt:Void()
+			Super.doHurt()
+			
+			If (Self.slipping) Then
+				Self.currentLayer = 1
+				Self.slipping = False
+			EndIf
+		End
+		
+		Method drawCharacter:Void(g:MFGraphics)
+			Local camera:= MapManager.getCamera()
+			
+			If (isTerminal And terminalType = TER_STATE_LOOK_MOON_WAIT And terminalState >= TER_STATE_LOOK_MOON) Then
+				Select (terminalState)
+					Case TER_STATE_LOOK_MOON, TER_STATE_LOOK_MOON_WAIT
+						Self.SuperSonicAnimationID = 0
+						break
+					Case TER_STATE_CHANGE_1, TER_STATE_CHANGE_2
+						If (Not (Self.SuperSonicAnimationID = SUPER_SONIC_ANI_CHANGE_1 Or Self.SuperSonicAnimationID = SUPER_SONIC_ANI_CHANGE_2)) Then
+							Self.SuperSonicAnimationID = SUPER_SONIC_ANI_CHANGE_1
+						EndIf
+					Case TER_STATE_GO_AWAY
+						Self.SuperSonicAnimationID = SUPER_SONIC_ANI_GO
+				End Select
+				
+				Self.SuperSonicDrawer.setActionId(Self.SuperSonicAnimationID)
+				Self.SuperSonicDrawer.setLoop(SUPER_SONIC_LOOP[Self.SuperSonicAnimationID])
+				
+				drawInMap(g, Self.SuperSonicDrawer, Self.posX + Self.terminalOffset, Self.posY)
+				
+				If (Self.SuperSonicDrawer.checkEnd()) Then
+					Select (Self.SuperSonicAnimationID)
+						Case SUPER_SONIC_ANI_CHANGE_1
+							Self.SuperSonicAnimationID = SUPER_SONIC_ANI_CHANGE_2
+						Default
+							' Nothing so far.
+					End Select
+				EndIf
+				
+				Return
+			EndIf
+			
+			If (Self.animationID <> NO_ANIMATION) Then
+				Self.myAnimationID = ANIMATION_CONVERT[Self.animationID]
+			EndIf
+			
+			If (Self.myAnimationID <> NO_ANIMATION) Then
+				Local trans:Int
+				Local drawY:Int
+				
+				Local rect:Byte[]
+				
+				Local loop:Bool = (LOOP_INDEX[Self.myAnimationID] = NO_ANIMATION)
+				
+				' I'm pretty sure this is to make the sprite flash when hurt:
+				If ((Self.hurtCount Mod 2) = 0) Then
+					Local bodyCenterX:Int
+					Local bodyCenterY:Int
+					
+					If (Self.animationID <> SONIC_ANI_JUMP) Then
+						If (Self.animationID <> SONIC_ANI_SPIN_2 And Self.animationID <> SONIC_ANI_LOOK_UP_1) Then
+							Select (Self.myAnimationID)
+								Case SONIC_ANI_SLIDE_D0
+									Self.drawer.draw(g, Self.myAnimationID, ((Self.footPointX Shr 6) - camera.x), ((Self.footPointY Shr 6) - camera.y), loop, 0)
+									
+									If (Not Self.isInWater) Then
+										Self.effectDrawer.setSpeed(1, 1) ' EFFECT_JUMP
+									Else
+										Self.effectDrawer.setSpeed(1, 2) ' EFFECT_JUMP ' EFFECT_SLIP
+									EndIf
+								Case SONIC_ANI_SLIDE_D45
+									Self.effectDrawer.draw(g, SONIC_ANI_SLIDE_D45_EFFECT, ((Self.footPointX Shr 6) - camera.x) + 8, ((Self.footPointY Shr 6) - camera.y), loop, 0)
+									
+									Self.drawer.draw(g, Self.myAnimationID, ((Self.footPointX Shr 6) - camera.x) + 8, ((Self.footPointY Shr 6) - camera.y), loop, 0)
+									
+									If (Not Self.isInWater) Then
+										Self.effectDrawer.setSpeed(1, 1) ' EFFECT_JUMP
+									Else
+										Self.effectDrawer.setSpeed(1, 2) ' EFFECT_JUMP ' EFFECT_SLIP
+									EndIf
+								Default
+									If (Self.isInWater) Then
+										Self.drawer.setSpeed(1, 2) ' EFFECT_JUMP ' EFFECT_SLIP
+									Else
+										Self.drawer.setSpeed(1, 1) ' EFFECT_JUMP
+									EndIf
+									
+									If (Self.myAnimationID = SONIC_ANI_CLIFF_1 Or Self.myAnimationID = SONIC_ANI_CLIFF_2 Or Self.myAnimationID = SONIC_ANI_LOOK_UP_1 Or Self.myAnimationID = SONIC_ANI_LOOK_UP_2) Then
+										Self.degreeForDraw = Self.degreeStable
+										Self.faceDegree = Self.degreeStable
+									EndIf
+									
+									If (Self.myAnimationID = SONIC_ANI_BRAKE) Then
+										Self.degreeForDraw = Self.degreeStable
+									EndIf
+									
+									If (Not (Self.myAnimationID = SONIC_ANI_WALK_1 Or Self.myAnimationID = SONIC_ANI_WALK_2 Or Self.myAnimationID = SONIC_ANI_RUN Or Self.myAnimationID = SONIC_ANI_CAUGHT)) Then
+										Self.degreeForDraw = Self.degreeStable
+									EndIf
+									
+									If (Self.fallinSandSlipState <> FALL_IN_SAND_SLIP_NONE) Then
+										If (Self.fallinSandSlipState = FALL_IN_SAND_SLIP_RIGHT) Then
+											Self.faceDirection = True
+										ElseIf (Self.fallinSandSlipState = FALL_IN_SAND_SLIP_LEFT) Then
+											Self.faceDirection = False
+										EndIf
+									EndIf
+									
+									If (Self.faceDirection) Then
+										trans = TRANS_NONE
+									Else
+										trans = TRANS_MIRROR
+									EndIf
+									
+									If (Self.degreeForDraw = Self.faceDegree) Then
+										drawDrawerByDegree(g, Self.drawer, Self.myAnimationID, (Self.footPointX Shr 6) - camera.x, (Self.footPointY Shr 6) - camera.y, loop, Self.degreeForDraw, Not Self.faceDirection)
+									Else
+										bodyCenterX = getNewPointX(Self.footPointX, 0, (-Self.collisionRect.getHeight()) Shr 1, Self.faceDegree)
+										bodyCenterY = getNewPointY(Self.footPointY, 0, (-Self.collisionRect.getHeight()) Shr 1, Self.faceDegree)
+										
+										g.saveCanvas()
+										
+										g.translateCanvas((bodyCenterX Shr 6) - camera.x, (bodyCenterY Shr 6) - camera.y)
+										g.rotateCanvas(Float(Self.degreeForDraw))
+										
+										Self.drawer.draw(g, Self.myAnimationID, 0, (Self.collisionRect.getHeight() Shr 1) Shr 6, loop, trans)
+										
+										g.restoreCanvas()
+									EndIf
+							End Select
+						EndIf
+						
+						drawDrawerByDegree(g, Self.drawer, Self.myAnimationID, (Self.footPointX Shr 6) - camera.x, (Self.footPointY Shr 6) - camera.y, loop, Self.degreeForDraw, (Not Self.faceDirection))
+					Else
+						bodyCenterX = getNewPointX(Self.footPointX, 0, -512, Self.faceDegree)
+						bodyCenterY = getNewPointY(Self.footPointY, 0, -512, Self.faceDegree)
+						
+						Local drawX:= getNewPointX(bodyCenterX, 0, (HINER_JUMP_LIMIT / 2), 0) ' (WIDTH / 2) ' 512
+						drawY = getNewPointY(bodyCenterY, 0, (HINER_JUMP_LIMIT / 2), 0) ' (BALL_HEIGHT_OFFSET / 2) ' 512
+						
+						If (Self.collisionState = COLLISION_STATE_NONE) Then
+							If (Self.isAntiGravity) Then
+								If (Self.faceDirection) Then
+									trans = PickValue((Self.totalVelocity >= 0), TRANS_MIRROR|TRANS_MIRROR_ROT180, TRANS_MIRROR_ROT180)
+									drawY -= BALL_HEIGHT_OFFSET ' HINER_JUMP_LIMIT
+								Else
+									trans = PickValue((Self.totalVelocity > 0), TRANS_MIRROR|TRANS_MIRROR_ROT180, TRANS_MIRROR_ROT180)
+									drawY -= BALL_HEIGHT_OFFSET ' HINER_JUMP_LIMIT
+								EndIf
+							ElseIf (Self.faceDirection) Then
+								trans = PickValue((Self.totalVelocity >= 0), TRANS_NONE, TRANS_MIRROR)
+							Else
+								trans = PickValue((Self.totalVelocity > 0), TRANS_NONE, TRANS_MIRROR)
+							EndIf
+						ElseIf (Self.isAntiGravity) Then
+							If (Self.faceDirection) Then
+								trans = ((Self.velX <= 0), TRANS_MIRROR|TRANS_MIRROR_ROT180, TRANS_MIRROR_ROT180)
+								drawY -= BALL_HEIGHT_OFFSET ' HINER_JUMP_LIMIT
+							Else
+								trans = ((Self.velX < 0), TRANS_MIRROR|TRANS_MIRROR_ROT180, TRANS_MIRROR_ROT180)
+								drawY -= BALL_HEIGHT_OFFSET ' HINER_JUMP_LIMIT
+							EndIf
+						ElseIf (Self.faceDirection) Then
+							trans = PickValue((Self.velX >= 0), TRANS_NONE, TRANS_MIRROR)
+						Else
+							trans = PickValue((Self.velX > 0), TRANS_NONE, TRANS_MIRROR)
+						EndIf
+						
+						Self.drawer.draw(g, Self.myAnimationID, (drawX Shr 6) - camera.x, (drawY Shr 6) - camera.y, loop, trans)
+					EndIf
+				Else
+					If (Self.myAnimationID <> Self.drawer.getActionId()) Then
+						Self.drawer.setActionId(Self.myAnimationID)
+					EndIf
+					
+					If (Not AnimationDrawer.isAllPause()) Then
+						Self.drawer.moveOn()
+					EndIf
+				EndIf
+				
+				Select (Self.effectID)
+					Case EFFECT_JUMP
+						drawY = 0
+						
+						If (Self.collisionState = COLLISION_STATE_NONE) Then
+							If (Not Self.faceDirection) Then
+								trans = PickValue((Self.totalVelocity > 0), TRANS_NONE, TRANS_MIRROR)
+							ElseIf (Self.totalVelocity >= 0) Then
+								trans = TRANS_NONE
+							Else
+								trans = TRANS_MIRROR
+							EndIf
+						ElseIf (Self.isAntiGravity) Then
+							If (Self.faceDirection) Then
+								trans = PickValue((Self.velX <= 0), TRANS_MIRROR_ROT180|TRANS_MIRROR, TRANS_MIRROR_ROT180)
+								drawY = -BALL_HEIGHT_OFFSET ' HINER_JUMP_LIMIT
+							Else
+								trans = PickValue((Self.velX < 0), TRANS_MIRROR_ROT180|TRANS_MIRROR, TRANS_MIRROR_ROT180)
+								drawY = -BALL_HEIGHT_OFFSET ' HINER_JUMP_LIMIT
+							EndIf
+						ElseIf (Self.faceDirection) Then
+							trans = PickValue((Self.velX >= 0), TRANS_NONE, TRANS_MIRROR)
+						Else
+							trans = PickValue((Self.velX > 0), TRANS_NONE, TRANS_MIRROR)
+						EndIf
+						
+						Self.effectDrawer.draw(g, SONIC_ANI_JUMP_ATTACK_EFFECT, (Self.posX Shr 6) - camera.x, (((Self.posY + PickValue(Self.isAntiGravity, BALL_HEIGHT_OFFSET, 0)) Shr 6) + (drawY Shr 6)) - camera.y, False, trans) ' 12 ' 1024
+						
+						If (Not Self.isInWater) Then
+							Self.effectDrawer.setSpeed(1, 1)
+						Else
+							Self.effectDrawer.setSpeed(1, 2)
+						EndIf
+				End Select
+				
+				If (Self.effectDrawer.checkEnd()) Then
+					Self.effectID = EFFECT_NONE
+				EndIf
+				
+				Self.attackRectVec.Clear()
+				
+				If (Self.effectID = EFFECT_JUMP) Then
+					rect = Self.effectDrawer.getARect()
+				Else
+					rect = Self.drawer.getARect()
+				EndIf
+				
+				If (Self.isAntiGravity) Then
+					Local rectTmp:= Self.drawer.getARect()
+					
+					If (rectTmp <> Null) Then
+						rect[0] = Byte((-rectTmp[0]) - rectTmp[2])
+						rect[1] = Byte((-rectTmp[1]) - rectTmp[3])
+					EndIf
+				EndIf
+				
+				If (rect <> Null) Then
+					If (SonicDebug.showCollisionRect) Then
+						g.setColor(65280)
+						
+						g.drawRect(((Self.footPointX Shr 6) + rect[0]) - camera.x, ((Self.footPointY Shr 6) + rect[1]) - camera.y, rect[2], rect[3])
+					EndIf
+					
+					Local animColRect:= Self.attackRect
+					
+					Local xOffset:= (rect[0] Shl 6)
+					Local yOffset:= (rect[1] Shl 6)
+					Local width:= (rect[2] Shl 6)
+					Local height:= (rect[3] Shl 6)
+					
+					Local animID:Int ' = SONIC_ANI_STAND ' 0
+					
+					If (Self.effectID = EFFECT_JUMP) Then
+						animID = SONIC_ANI_JUMP_ATTACK_EFFECT
+					Else
+						animID = Self.myAnimationID
+					EndIf
+					
+					animColRect.initCollision(xOffset, yOffset, width, height, animID)
+					
+					Self.attackRectVec.Push(Self.attackRect)
+				Else
+					Self.attackRect.reset()
+				EndIf
+				
+				If (Self.animationID = NO_ANIMATION) Then
+					If (Self.drawer.checkEnd()) Then
+						If (LOOP_INDEX[Self.myAnimationID] >= 0) Then
+							Self.myAnimationID = LOOP_INDEX[Self.myAnimationID]
+						EndIf
+					EndIf
+				EndIf
+				
+				If (Self.isFirstAttack) Then
+					If (Self.myAnimationID = SONIC_ANI_ATTACK_1 And Not Self.isCrashFallingSand) Then
+						soundInstance.playSe(SoundSystem.SE_109)
+					EndIf
+					
+					Self.isFirstAttack = False
+				EndIf
+			EndIf
+		End
+		
+		Method doWhileLand:Void(degree:Int)
+			Super.doWhileLand(degree)
+			
+			Self.firstJump = False
+		End
+		
+		Method extraInputLogic:Void()
+			If (isTerminal And terminalState >= SUPER_SONIC_ANI_CHANGE_2) Then
+				Select (terminalState)
+					Case SONIC_ANI_JUMP
+						Self.velX = 0
+					Default
+						' Nothing so far.
+				End Select
+			EndIf
+		End
+		
+		Method getRetPower:Int()
+			Local retPower:= Super.getRetPower()
+			
+			If (speedCount > 0 And Self.myAnimationID >= SONIC_ANI_ATTACK_1 And Self.myAnimationID <= SONIC_ANI_ATTACK_2) Then
+				retPower /= 2
+			EndIf
+			
+			If (Self.myAnimationID = SONIC_ANI_ATTACK_3) Then
+				Return 150
+			EndIf
+			
+			Return retPower
+		End
+		
+		Method needRetPower:Bool()
+			If (Self.slipping) Then
+				Return False
+			EndIf
+			
+			If (Self.myAnimationID = SONIC_ANI_ATTACK_1 Or Self.myAnimationID = SONIC_ANI_ATTACK_2 Or Self.myAnimationID = SONIC_ANI_ATTACK_3) Then
+				Return True
+			EndIf
+			
+			Return Super.needRetPower()
+		End
+		
+		Method getSlopeGravity:Int()
+			If (Self.slipping) Then
+				Return 0
+			EndIf
+			
+			Return Super.getSlopeGravity()
+		End
+		
+		Method noRotateDraw:Bool()
+			If (Self.myAnimationID = SONIC_ANI_ATTACK_1 Or Self.myAnimationID = SONIC_ANI_ATTACK_2 Or Self.myAnimationID = SONIC_ANI_ATTACK_3) Then
+				Return True
+			EndIf
+			
+			Return Super.noRotateDraw()
+		End
+		
+		Method beSpring:Void(springPower:Int, direction:Int)
+			Super.beSpring(springPower, direction)
+			
+			If (Self.attackLevel <> 0) Then
+				Self.attackLevel = 0
+				Self.attackCount = 0
+				
+				Select (direction)
+					Case DIRECTION_LEFT, DIRECTION_RIGHT
+						Self.animationID = SUPER_SONIC_ANI_GO
+						
+						If (Key.repeated(Key.gDown)) Then
+							Self.animationID = SONIC_ANI_JUMP
+						EndIf
+					Default
+						' Nothing so far.
+				End Select
+			EndIf
+		End
+		
+		Method beAccelerate:Bool(power:Int, IsX:Bool, sender:GameObject)
+			Local re:= Super.beAccelerate(power, IsX, sender)
+			
+			If (Self.attackLevel <> 0) Then
+				Self.attackLevel = 0
+				Self.attackCount = 0
+				Self.animationID = SUPER_SONIC_ANI_GO
+				
+				If (Key.repeated(Key.gDown)) Then
+					Self.animationID = SONIC_ANI_JUMP
+				EndIf
+			EndIf
+			
+			Return re
+		End
+	Private
+		' Methods:
+		Private Method startSpeedSet:Int(confFlag:Bool, sourceSpeed:Int, conf:Int)
+			Return confFlag ? (sourceSpeed * conf) / 100 : sourceSpeed
+		End
+		
+		Method setMinSlipSpeed:Void()
+			If (getVelX() < SPEED_LIMIT_LEVEL_1) Then
+				setVelX(SPEED_LIMIT_LEVEL_1)
+			EndIf
+		End
+	Protected
+		' Methods:
+		Protected Method extraLogicJump:Void()
 			If (Not Self.hurtNoControl) Then
 				If (Not Self.slipping And Key.press(Key.gLeft)) Then
 					If (Not Self.jumpRollEnable) Then
 						Self.leftCount = SONIC_ANI_SPIN_1
 					EndIf
 					
-					Self.rightCount = SONIC_ANI_STAND
+					Self.rightCount = 0
 				EndIf
 				
 				If (Key.press(Key.gRight)) Then
-					Self.leftCount = SONIC_ANI_STAND
+					Self.leftCount = 0
 					
 					If (Not Self.jumpRollEnable) Then
 						Self.rightCount = SONIC_ANI_SPIN_1
@@ -259,8 +707,8 @@ Class PlayerSonic Extends PlayerObject
 					If (Self.jumpRollEnable And Key.repeated(Key.gLeft)) Then
 						Self.animationID = NO_ANIMATION
 						Self.myAnimationID = SONIC_ANI_JUMP_DASH_1
-						Self.leftCount = SONIC_ANI_STAND
-						Self.velY = SONIC_ANI_STAND
+						Self.leftCount = 0
+						Self.velY = 0
 						Self.velX -= Self.maxVelocity Shr SUPER_SONIC_ANI_CHANGE_2
 						soundInstance.playSe(SONIC_ANI_LOOK_UP_1)
 						Self.firstJump = False
@@ -277,8 +725,8 @@ Class PlayerSonic Extends PlayerObject
 					If (Self.jumpRollEnable And Key.repeated(Key.gRight)) Then
 						Self.animationID = NO_ANIMATION
 						Self.myAnimationID = SONIC_ANI_JUMP_DASH_1
-						Self.rightCount = SONIC_ANI_STAND
-						Self.velY = SONIC_ANI_STAND
+						Self.rightCount = 0
+						Self.velY = 0
 						Self.velX += Self.maxVelocity Shr SUPER_SONIC_ANI_CHANGE_2
 						soundInstance.playSe(SONIC_ANI_LOOK_UP_1)
 						Self.firstJump = False
@@ -294,40 +742,14 @@ Class PlayerSonic Extends PlayerObject
 					Byte[] rect = Self.effectDrawer.getARect()
 					
 					If (rect <> Null) Then
-						Self.attackRect.initCollision(rect[SONIC_ANI_STAND] Shl SONIC_ANI_SPIN_2, rect[SUPER_SONIC_ANI_CHANGE_1] Shl SONIC_ANI_SPIN_2, rect[SUPER_SONIC_ANI_CHANGE_2] Shl SONIC_ANI_SPIN_2, rect[SUPER_SONIC_ANI_GO] Shl SONIC_ANI_SPIN_2, SONIC_ANI_JUMP_ATTACK_EFFECT)
-						Self.attackRectVec.addElement(Self.attackRect)
+						Self.attackRect.initCollision(rect[0] Shl 6, rect[1] Shl 6, rect[2] Shl 6, rect[3] Shl 6, SONIC_ANI_JUMP_ATTACK_EFFECT)
+						Self.attackRectVec.Push(Self.attackRect)
 					EndIf
 				EndIf
 			EndIf
 			
 			If (Self.myAnimationID = SONIC_ANI_ATTACK_2 And Self.drawer.checkEnd()) Then
 				Self.animationID = SONIC_ANI_STAND
-			EndIf
-			
-		End
-		
-		Private Method startSpeedSet:Int(confFlag:Bool, sourceSpeed:Int, conf:Int)
-			Return confFlag ? (sourceSpeed * conf) / 100 : sourceSpeed
-		End
-		
-		Public Method isOnSlip0:Bool()
-			Return Self.myAnimationID = SONIC_ANI_SLIDE_D0
-		End
-		
-		Public Method setSlip0:Void()
-			
-			If (Self.collisionState = Null) Then
-				Self.animationID = NO_ANIMATION
-				Self.myAnimationID = SONIC_ANI_SLIDE_D0
-			EndIf
-			
-			setMinSlipSpeed()
-		End
-		
-		Private Method setMinSlipSpeed:Void()
-			
-			If (getVelX() < SPEED_LIMIT_LEVEL_1) Then
-				setVelX(SPEED_LIMIT_LEVEL_1)
 			EndIf
 			
 		End
@@ -342,7 +764,10 @@ Class PlayerSonic Extends PlayerObject
 				EndIf
 				
 				Self.totalVelocity -= SONIC_ANI_DEAD_2
+				
+				' Magic number: 192
 				Self.totalVelocity = Max(Self.totalVelocity, 192)
+				
 				Self.animationID = NO_ANIMATION
 				Self.faceDirection = True
 				
@@ -368,7 +793,7 @@ Class PlayerSonic Extends PlayerObject
 			
 			If ((Self.myAnimationID = SONIC_ANI_ATTACK_1 Or Self.myAnimationID = SONIC_ANI_ATTACK_2 Or Self.myAnimationID = SONIC_ANI_ATTACK_3) And Self.faceDegree <> 90 And Self.faceDegree <> 270 And Self.attackLevel = 0) Then
 				Self.animationID = SONIC_ANI_STAND
-				Self.myAnimationID = ANIMATION_CONVERT[SONIC_ANI_STAND]
+				Self.myAnimationID = ANIMATION_CONVERT[0]
 				
 				If (Self.collisionState = COLLISION_STATE_JUMP) Then
 					Self.animationID = SONIC_ANI_JUMP
@@ -382,13 +807,13 @@ Class PlayerSonic Extends PlayerObject
 				Case SONIC_ANI_ATTACK_1
 					
 					If ((Self.attackCount = 0 Or getVelX() = 0) And Not Self.isStopByObject) Then
-						Self.attackLevel = SONIC_ANI_STAND
+						Self.attackLevel = 0
 					Else
 						Self.myAnimationID = SONIC_ANI_ATTACK_1
 					EndIf
 					
 					If (Self.isStopByObject And Self.attackCount = 0) Then
-						Self.attackLevel = SONIC_ANI_STAND
+						Self.attackLevel = 0
 					EndIf
 					
 					If (Key.press(Key.gSelect) And Not Self.isCrashPipe) Then
@@ -397,7 +822,7 @@ Class PlayerSonic Extends PlayerObject
 						soundInstance.playSe(SONIC_ANI_JUMP_DASH_1)
 						v0 = Self.isInWater ? SONIC_ATTACK_LEVEL_2_V0_IN_WATER : PlayerObject.SONIC_ATTACK_LEVEL_2_V0
 						
-						If (Self.collisionState = Null) Then
+						If (Self.collisionState = COLLISION_STATE_NONE) Then
 							If (Self.faceDirection) Then
 								startSpeedSet = startSpeedSet(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
@@ -406,7 +831,6 @@ Class PlayerSonic Extends PlayerObject
 							
 							Self.totalVelocity = startSpeedSet
 						Else
-							
 							If (Self.faceDirection) Then
 								startSpeedSet = startSpeedSet(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
@@ -429,7 +853,7 @@ Class PlayerSonic Extends PlayerObject
 						Self.myAnimationID = SONIC_ANI_ATTACK_3
 						v0 = Self.isInWater ? SONIC_ATTACK_LEVEL_3_V0_IN_WATER : PlayerObject.SONIC_ATTACK_LEVEL_3_V0
 						
-						If (Self.collisionState = Null) Then
+						If (Self.collisionState = COLLISION_STATE_NONE) Then
 							If (Self.faceDirection) Then
 								startSpeedSet = startSpeedSet(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
@@ -438,7 +862,6 @@ Class PlayerSonic Extends PlayerObject
 							
 							Self.totalVelocity = startSpeedSet
 						Else
-							
 							If (Self.faceDirection) Then
 								startSpeedSet = startSpeedSet(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
@@ -466,16 +889,16 @@ Class PlayerSonic Extends PlayerObject
 						EndIf
 						
 						Super.doJumpV(startSpeedSet)
-						Self.attackLevel = SONIC_ANI_STAND
+						Self.attackLevel = 0
 						setVelX(-preVelX)
 						Self.animationID = NO_ANIMATION
 						Self.myAnimationID = SONIC_ANI_ATTACK_4
 						Self.noVelMinus = True
 					Else
 						Self.animationID = SONIC_ANI_STAND
-						Self.attackLevel = SONIC_ANI_STAND
+						Self.attackLevel = 0
 						setVelX(SONIC_ANI_STAND)
-						Self.totalVelocity = SONIC_ANI_STAND
+						Self.totalVelocity = 0
 					EndIf
 					
 					If (Self.attackLevel <> 0) Then
@@ -496,11 +919,11 @@ Class PlayerSonic Extends PlayerObject
 					If (getVelX() <> 0 Or Self.isStopByObject) Then
 						Self.myAnimationID = SONIC_ANI_ATTACK_3
 					Else
-						Self.attackLevel = SONIC_ANI_STAND
+						Self.attackLevel = 0
 					EndIf
 					
 					If (Self.isStopByObject And Self.attackCount = 0) Then
-						Self.attackLevel = SONIC_ANI_STAND
+						Self.attackLevel = 0
 						break
 					EndIf
 					
@@ -519,7 +942,7 @@ Class PlayerSonic Extends PlayerObject
 						Self.isFirstAttack = True
 						v0 = Self.isInWater ? SONIC_ATTACK_LEVEL_1_V0_IN_WATER : PlayerObject.SONIC_ATTACK_LEVEL_1_V0
 						
-						If (Self.collisionState = Null) Then
+						If (Self.collisionState = COLLISION_STATE_NONE) Then
 							If (Self.faceDirection) Then
 								startSpeedSet = startSpeedSet(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
@@ -542,8 +965,8 @@ Class PlayerSonic Extends PlayerObject
 						Byte[] rect = Self.drawer.getARect()
 						
 						If (rect <> Null) Then
-							Self.attackRect.initCollision(rect[SONIC_ANI_STAND] Shl SONIC_ANI_SPIN_2, rect[SUPER_SONIC_ANI_CHANGE_1] Shl SONIC_ANI_SPIN_2, rect[SUPER_SONIC_ANI_CHANGE_2] Shl SONIC_ANI_SPIN_2, rect[SUPER_SONIC_ANI_GO] Shl SONIC_ANI_SPIN_2, SONIC_ANI_ATTACK_1)
-							Self.attackRectVec.addElement(Self.attackRect)
+							Self.attackRect.initCollision(rect[0] Shl 6, rect[1] Shl 6, rect[2] Shl 6, rect[3] Shl 6, SONIC_ANI_ATTACK_1)
+							Self.attackRectVec.Push(Self.attackRect)
 							break
 						EndIf
 					EndIf
@@ -569,7 +992,7 @@ Class PlayerSonic Extends PlayerObject
 			
 			If ((Self.myAnimationID = SONIC_ANI_ATTACK_1 Or Self.myAnimationID = SONIC_ANI_ATTACK_2 Or Self.myAnimationID = SONIC_ANI_ATTACK_3) And Self.attackLevel = 0) Then
 				Self.animationID = SONIC_ANI_STAND
-				Self.myAnimationID = ANIMATION_CONVERT[SONIC_ANI_STAND]
+				Self.myAnimationID = ANIMATION_CONVERT[0]
 			EndIf
 			
 			Int v0
@@ -578,13 +1001,13 @@ Class PlayerSonic Extends PlayerObject
 				Case SONIC_ANI_ATTACK_1
 					
 					If ((Self.attackCount = 0 Or getVelX() = 0) And Not Self.isStopByObject) Then
-						Self.attackLevel = SONIC_ANI_STAND
+						Self.attackLevel = 0
 					Else
 						Self.myAnimationID = SONIC_ANI_ATTACK_1
 					EndIf
 					
 					If (Self.isStopByObject And Self.attackCount = 0) Then
-						Self.attackLevel = SONIC_ANI_STAND
+						Self.attackLevel = 0
 					EndIf
 					
 					If (Key.press(Key.gSelect) And Not Self.isCrashPipe) Then
@@ -593,7 +1016,7 @@ Class PlayerSonic Extends PlayerObject
 						soundInstance.playSe(SONIC_ANI_JUMP_DASH_1)
 						v0 = Self.isInWater ? SONIC_ATTACK_LEVEL_2_V0_IN_WATER : PlayerObject.SONIC_ATTACK_LEVEL_2_V0
 						
-						If (Self.collisionState = Null) Then
+						If (Self.collisionState = COLLISION_STATE_NONE) Then
 							If ((Self.isAntiGravity ~ Self.faceDirection) <> 0) Then
 								startSpeedSet = startSpeedSet(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
@@ -623,14 +1046,14 @@ Class PlayerSonic Extends PlayerObject
 						Self.myAnimationID = SONIC_ANI_ATTACK_2
 					ElseIf (Self.attackLevel < SUPER_SONIC_ANI_GO Or (getVelX() = 0 And Not Self.isStopByObject)) Then
 						Self.animationID = SONIC_ANI_STAND
-						Self.attackLevel = SONIC_ANI_STAND
+						Self.attackLevel = 0
 						setVelX(SONIC_ANI_STAND)
-						Self.totalVelocity = SONIC_ANI_STAND
+						Self.totalVelocity = 0
 					Else
 						Self.myAnimationID = SONIC_ANI_ATTACK_3
 						v0 = Self.isInWater ? SONIC_ATTACK_LEVEL_3_V0_IN_WATER : PlayerObject.SONIC_ATTACK_LEVEL_3_V0
 						
-						If (Self.collisionState = Null) Then
+						If (Self.collisionState = COLLISION_STATE_NONE) Then
 							If ((Self.isAntiGravity ~ Self.faceDirection) <> 0) Then
 								startSpeedSet = startSpeedSet(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
@@ -664,11 +1087,11 @@ Class PlayerSonic Extends PlayerObject
 					If (getVelX() <> 0 Or Self.isStopByObject) Then
 						Self.myAnimationID = SONIC_ANI_ATTACK_3
 					Else
-						Self.attackLevel = SONIC_ANI_STAND
+						Self.attackLevel = 0
 					EndIf
 					
 					If (Self.isStopByObject And Self.attackCount = 0) Then
-						Self.attackLevel = SONIC_ANI_STAND
+						Self.attackLevel = 0
 						break
 					EndIf
 					
@@ -683,7 +1106,7 @@ Class PlayerSonic Extends PlayerObject
 						Self.isFirstAttack = True
 						v0 = Self.isInWater ? SONIC_ATTACK_LEVEL_1_V0_IN_WATER : PlayerObject.SONIC_ATTACK_LEVEL_1_V0
 						
-						If (Self.collisionState = Null) Then
+						If (Self.collisionState = COLLISION_STATE_NONE) Then
 							If ((Self.isAntiGravity ~ Self.faceDirection) <> 0) Then
 								startSpeedSet = startSpeedSet(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
@@ -706,8 +1129,8 @@ Class PlayerSonic Extends PlayerObject
 						Byte[] rect = Self.drawer.getARect()
 						
 						If (rect <> Null) Then
-							Self.attackRect.initCollision(rect[SONIC_ANI_STAND] Shl SONIC_ANI_SPIN_2, rect[SUPER_SONIC_ANI_CHANGE_1] Shl SONIC_ANI_SPIN_2, rect[SUPER_SONIC_ANI_CHANGE_2] Shl SONIC_ANI_SPIN_2, rect[SUPER_SONIC_ANI_GO] Shl SONIC_ANI_SPIN_2, SONIC_ANI_ATTACK_1)
-							Self.attackRectVec.addElement(Self.attackRect)
+							Self.attackRect.initCollision(rect[0] Shl 6, rect[1] Shl 6, rect[2] Shl 6, rect[3] Shl 6, SONIC_ANI_ATTACK_1)
+							Self.attackRectVec.Push(Self.attackRect)
 							break
 						EndIf
 					EndIf
@@ -722,442 +1145,5 @@ Class PlayerSonic Extends PlayerObject
 				Self.isAttacking = True
 			EndIf
 			
-		End
-		
-		Public Method doJump:Void()
-			
-			If (Self.myAnimationID <> SONIC_ANI_ATTACK_1 And Self.myAnimationID <> SONIC_ANI_ATTACK_2 And Self.myAnimationID <> SONIC_ANI_ATTACK_3) Then
-				If (Self.slipping) Then
-					If (Not isHeadCollision()) Then
-						Self.currentLayer = 1
-					Else
-						Return
-					EndIf
-				EndIf
-				
-				If (Self.slipping And Self.totalVelocity = 192) Then
-					Super.doJumpV()
-				Else
-					Super.doJump()
-				EndIf
-				
-				Self.leftCount = SONIC_ANI_STAND
-				Self.rightCount = SONIC_ANI_STAND
-				Self.jumpRollEnable = False
-				
-				If (Self.slipping) Then
-					Self.currentLayer = 1
-					Self.slipping = False
-				EndIf
-				
-				Self.firstJump = True
-				
-				If (Self.bankwalking) Then
-					Self.firstJump = False
-				EndIf
-			EndIf
-			
-		End
-		
-		Public Method doHurt:Void()
-			Super.doHurt()
-			
-			If (Self.slipping) Then
-				Self.currentLayer = 1
-				Self.slipping = False
-			EndIf
-			
-		End
-		
-		Public Method drawCharacter:Void(g:MFGraphics)
-			Coordinate camera = MapManager.getCamera()
-			
-			If (isTerminal And terminalType = SUPER_SONIC_ANI_GO And terminalState >= SUPER_SONIC_ANI_CHANGE_2) Then
-				Select (terminalState)
-					Case SUPER_SONIC_ANI_CHANGE_2
-					Case SUPER_SONIC_ANI_GO
-						Self.SuperSonicAnimationID = SONIC_ANI_STAND
-						break
-					Case SONIC_ANI_JUMP
-					Case SONIC_ANI_SPIN_1
-						
-						If (Not (Self.SuperSonicAnimationID = SUPER_SONIC_ANI_CHANGE_1 Or Self.SuperSonicAnimationID = SUPER_SONIC_ANI_CHANGE_2)) Then
-							Self.SuperSonicAnimationID = SUPER_SONIC_ANI_CHANGE_1
-							break
-						EndIf
-						
-					Case SONIC_ANI_SPIN_2
-						Self.SuperSonicAnimationID = SUPER_SONIC_ANI_GO
-						break
-				End Select
-				Self.SuperSonicDrawer.setActionId(Self.SuperSonicAnimationID)
-				Self.SuperSonicDrawer.setLoop(SUPER_SONIC_LOOP[Self.SuperSonicAnimationID])
-				drawInMap(g, Self.SuperSonicDrawer, Self.posX + Self.terminalOffset, Self.posY)
-				
-				If (Self.SuperSonicDrawer.checkEnd()) Then
-					Select (Self.SuperSonicAnimationID)
-						Case SUPER_SONIC_ANI_CHANGE_1
-							Self.SuperSonicAnimationID = SUPER_SONIC_ANI_CHANGE_2
-							Return
-						Default
-							Return
-					End Select
-				EndIf
-				
-				Return
-			EndIf
-			
-			If (Self.animationID <> NO_ANIMATION) Then
-				Self.myAnimationID = ANIMATION_CONVERT[Self.animationID]
-			EndIf
-			
-			If (Self.myAnimationID <> NO_ANIMATION) Then
-				Bool loop
-				Int trans
-				Int drawY
-				Byte[] rect
-				
-				If (LOOP_INDEX[Self.myAnimationID] = NO_ANIMATION) Then
-					loop = True
-				Else
-					loop = False
-				EndIf
-				
-				If (Self.hurtCount Mod SUPER_SONIC_ANI_CHANGE_2 = 0) Then
-					Int bodyCenterX
-					Int bodyCenterY
-					
-					If (Self.animationID <> SONIC_ANI_JUMP) Then
-						If (Self.animationID <> SONIC_ANI_SPIN_2 And Self.animationID <> SONIC_ANI_LOOK_UP_1) Then
-							Select (Self.myAnimationID)
-								Case SONIC_ANI_SLIDE_D0
-									Self.drawer.draw(g, Self.myAnimationID, ((Self.footPointX Shr SONIC_ANI_SPIN_2) - camera.x) + SONIC_ANI_STAND, ((Self.footPointY Shr SONIC_ANI_SPIN_2) - camera.y) + SONIC_ANI_STAND, loop, SONIC_ANI_STAND)
-									
-									If (Not Self.isInWater) Then
-										Self.effectDrawer.setSpeed(SUPER_SONIC_ANI_CHANGE_1, SUPER_SONIC_ANI_CHANGE_1)
-										break
-									Else
-										Self.effectDrawer.setSpeed(SUPER_SONIC_ANI_CHANGE_1, SUPER_SONIC_ANI_CHANGE_2)
-										break
-									EndIf
-									
-								Case SONIC_ANI_SLIDE_D45
-									Self.effectDrawer.draw(g, SONIC_ANI_SLIDE_D45_EFFECT, ((Self.footPointX Shr SONIC_ANI_SPIN_2) - camera.x) + SONIC_ANI_LOOK_UP_2, ((Self.footPointY Shr SONIC_ANI_SPIN_2) - camera.y) + SONIC_ANI_STAND, loop, SONIC_ANI_STAND)
-									Self.drawer.draw(g, Self.myAnimationID, ((Self.footPointX Shr SONIC_ANI_SPIN_2) - camera.x) + SONIC_ANI_LOOK_UP_2, ((Self.footPointY Shr SONIC_ANI_SPIN_2) - camera.y) + SONIC_ANI_STAND, loop, SONIC_ANI_STAND)
-									
-									If (Not Self.isInWater) Then
-										Self.effectDrawer.setSpeed(SUPER_SONIC_ANI_CHANGE_1, SUPER_SONIC_ANI_CHANGE_1)
-										break
-									Else
-										Self.effectDrawer.setSpeed(SUPER_SONIC_ANI_CHANGE_1, SUPER_SONIC_ANI_CHANGE_2)
-										break
-									EndIf
-									
-								Default
-									
-									If (Self.isInWater) Then
-										Self.drawer.setSpeed(SUPER_SONIC_ANI_CHANGE_1, SUPER_SONIC_ANI_CHANGE_2)
-									Else
-										Self.drawer.setSpeed(SUPER_SONIC_ANI_CHANGE_1, SUPER_SONIC_ANI_CHANGE_1)
-									EndIf
-									
-									If (Self.myAnimationID = SONIC_ANI_CLIFF_1 Or Self.myAnimationID = SONIC_ANI_CLIFF_2 Or Self.myAnimationID = SONIC_ANI_LOOK_UP_1 Or Self.myAnimationID = SONIC_ANI_LOOK_UP_2) Then
-										Self.degreeForDraw = Self.degreeStable
-										Self.faceDegree = Self.degreeStable
-									EndIf
-									
-									If (Self.myAnimationID = SONIC_ANI_BRAKE) Then
-										Self.degreeForDraw = Self.degreeStable
-									EndIf
-									
-									If (Not (Self.myAnimationID = SUPER_SONIC_ANI_CHANGE_1 Or Self.myAnimationID = SUPER_SONIC_ANI_CHANGE_2 Or Self.myAnimationID = SUPER_SONIC_ANI_GO Or Self.myAnimationID = SONIC_ANI_CAUGHT)) Then
-										Self.degreeForDraw = Self.degreeStable
-									EndIf
-									
-									If (Self.fallinSandSlipState <> 0) Then
-										If (Self.fallinSandSlipState = SUPER_SONIC_ANI_CHANGE_1) Then
-											Self.faceDirection = True
-										ElseIf (Self.fallinSandSlipState = SUPER_SONIC_ANI_CHANGE_2) Then
-											Self.faceDirection = False
-										EndIf
-									EndIf
-									
-									If (Self.faceDirection) Then
-										trans = SONIC_ANI_STAND
-									Else
-										trans = SUPER_SONIC_ANI_CHANGE_2
-									EndIf
-									
-									If (Self.degreeForDraw = Self.faceDegree) Then
-										drawDrawerByDegree(g, Self.drawer, Self.myAnimationID, (Self.footPointX Shr SONIC_ANI_SPIN_2) - camera.x, (Self.footPointY Shr SONIC_ANI_SPIN_2) - camera.y, loop, Self.degreeForDraw, Not Self.faceDirection)
-										break
-									EndIf
-									
-									bodyCenterX = getNewPointX(Self.footPointX, SONIC_ANI_STAND, (-Self.collisionRect.getHeight()) Shr SUPER_SONIC_ANI_CHANGE_1, Self.faceDegree)
-									bodyCenterY = getNewPointY(Self.footPointY, SONIC_ANI_STAND, (-Self.collisionRect.getHeight()) Shr SUPER_SONIC_ANI_CHANGE_1, Self.faceDegree)
-									g.saveCanvas()
-									g.translateCanvas((bodyCenterX Shr SONIC_ANI_SPIN_2) - camera.x, (bodyCenterY Shr SONIC_ANI_SPIN_2) - camera.y)
-									g.rotateCanvas((Float) Self.degreeForDraw)
-									Self.drawer.draw(g, Self.myAnimationID, SONIC_ANI_STAND, (Self.collisionRect.getHeight() Shr SUPER_SONIC_ANI_CHANGE_1) Shr SONIC_ANI_SPIN_2, loop, trans)
-									g.restoreCanvas()
-									break
-							End Select
-						EndIf
-						
-						drawDrawerByDegree(g, Self.drawer, Self.myAnimationID, (Self.footPointX Shr SONIC_ANI_SPIN_2) - camera.x, (Self.footPointY Shr SONIC_ANI_SPIN_2) - camera.y, loop, Self.degreeForDraw, Not Self.faceDirection)
-					Else
-						bodyCenterX = getNewPointX(Self.footPointX, SONIC_ANI_STAND, -512, Self.faceDegree)
-						bodyCenterY = getNewPointY(Self.footPointY, SONIC_ANI_STAND, -512, Self.faceDegree)
-						Int drawX = getNewPointX(bodyCenterX, SONIC_ANI_STAND, BarHorbinV.COLLISION_OFFSET, SONIC_ANI_STAND)
-						drawY = getNewPointY(bodyCenterY, SONIC_ANI_STAND, BarHorbinV.COLLISION_OFFSET, SONIC_ANI_STAND)
-						
-						If (Self.collisionState = Null) Then
-							If (Self.isAntiGravity) Then
-								If (Self.faceDirection) Then
-									trans = Self.totalVelocity >= 0 ? SUPER_SONIC_ANI_GO : SUPER_SONIC_ANI_CHANGE_1
-									drawY -= 1024
-								Else
-									trans = Self.totalVelocity > 0 ? SUPER_SONIC_ANI_GO : SUPER_SONIC_ANI_CHANGE_1
-									drawY -= 1024
-								EndIf
-								
-							ElseIf (Self.faceDirection) Then
-								trans = Self.totalVelocity >= 0 ? SONIC_ANI_STAND : SUPER_SONIC_ANI_CHANGE_2
-							Else
-								trans = Self.totalVelocity > 0 ? SONIC_ANI_STAND : SUPER_SONIC_ANI_CHANGE_2
-							EndIf
-							
-						ElseIf (Self.isAntiGravity) Then
-							If (Self.faceDirection) Then
-								trans = Self.velX <= 0 ? SUPER_SONIC_ANI_GO : SUPER_SONIC_ANI_CHANGE_1
-								drawY -= 1024
-							Else
-								trans = Self.velX < 0 ? SUPER_SONIC_ANI_GO : SUPER_SONIC_ANI_CHANGE_1
-								drawY -= 1024
-							EndIf
-							
-						ElseIf (Self.faceDirection) Then
-							trans = Self.velX >= 0 ? SONIC_ANI_STAND : SUPER_SONIC_ANI_CHANGE_2
-						Else
-							trans = Self.velX > 0 ? SONIC_ANI_STAND : SUPER_SONIC_ANI_CHANGE_2
-						EndIf
-						
-						Self.drawer.draw(g, Self.myAnimationID, (drawX Shr SONIC_ANI_SPIN_2) - camera.x, (drawY Shr SONIC_ANI_SPIN_2) - camera.y, loop, trans)
-					EndIf
-					
-				Else
-					
-					If (Self.myAnimationID <> Self.drawer.getActionId()) Then
-						Self.drawer.setActionId(Self.myAnimationID)
-					EndIf
-					
-					If (Not AnimationDrawer.isAllPause()) Then
-						Self.drawer.moveOn()
-					EndIf
-				EndIf
-				
-				Select (Self.effectID)
-					Case SUPER_SONIC_ANI_CHANGE_1
-						drawY = SONIC_ANI_STAND
-						
-						If (Self.collisionState = Null) Then
-							If (Not Self.faceDirection) Then
-								trans = Self.totalVelocity > 0 ? SONIC_ANI_STAND : SUPER_SONIC_ANI_CHANGE_2
-							ElseIf (Self.totalVelocity >= 0) Then
-								trans = SONIC_ANI_STAND
-							Else
-								trans = SUPER_SONIC_ANI_CHANGE_2
-							EndIf
-							
-						ElseIf (Self.isAntiGravity) Then
-							If (Self.faceDirection) Then
-								trans = Self.velX <= 0 ? SUPER_SONIC_ANI_GO : SUPER_SONIC_ANI_CHANGE_1
-								drawY = SONIC_ANI_STAND - 1024
-							Else
-								trans = Self.velX < 0 ? SUPER_SONIC_ANI_GO : SUPER_SONIC_ANI_CHANGE_1
-								drawY = SONIC_ANI_STAND - 1024
-							EndIf
-							
-						ElseIf (Self.faceDirection) Then
-							trans = Self.velX >= 0 ? SONIC_ANI_STAND : SUPER_SONIC_ANI_CHANGE_2
-						Else
-							trans = Self.velX > 0 ? SONIC_ANI_STAND : SUPER_SONIC_ANI_CHANGE_2
-						EndIf
-						
-						Self.effectDrawer.draw(g, SONIC_ANI_JUMP_ATTACK_EFFECT, (Self.posX Shr SONIC_ANI_SPIN_2) - camera.x, (((Self.posY + (Self.isAntiGravity ? SpecialMap.MAP_LENGTH : SONIC_ANI_STAND)) Shr SONIC_ANI_SPIN_2) + (drawY Shr SONIC_ANI_SPIN_2)) - camera.y, False, trans)
-						
-						If (Not Self.isInWater) Then
-							Self.effectDrawer.setSpeed(SUPER_SONIC_ANI_CHANGE_1, SUPER_SONIC_ANI_CHANGE_1)
-							break
-						Else
-							Self.effectDrawer.setSpeed(SUPER_SONIC_ANI_CHANGE_1, SUPER_SONIC_ANI_CHANGE_2)
-							break
-						EndIf
-						
-				End Select
-				
-				If (Self.effectDrawer.checkEnd()) Then
-					Self.effectID = SONIC_ANI_STAND
-				EndIf
-				
-				Self.attackRectVec.removeAllElements()
-				
-				If (Self.effectID = SUPER_SONIC_ANI_CHANGE_1) Then
-					rect = Self.effectDrawer.getARect()
-				Else
-					rect = Self.drawer.getARect()
-				EndIf
-				
-				If (Self.isAntiGravity) Then
-					Byte[] rectTmp = Self.drawer.getARect()
-					
-					If (rectTmp <> Null) Then
-						rect[SONIC_ANI_STAND] = (Byte) ((-rectTmp[SONIC_ANI_STAND]) - rectTmp[SUPER_SONIC_ANI_CHANGE_2])
-						rect[SUPER_SONIC_ANI_CHANGE_1] = (Byte) ((-rectTmp[SUPER_SONIC_ANI_CHANGE_1]) - rectTmp[SUPER_SONIC_ANI_GO])
-					EndIf
-				EndIf
-				
-				If (rect <> Null) Then
-					Int i
-					
-					If (SonicDebug.showCollisionRect) Then
-						g.setColor(65280)
-						g.drawRect(((Self.footPointX Shr SONIC_ANI_SPIN_2) + rect[SONIC_ANI_STAND]) - camera.x..((Self.footPointY Shr SONIC_ANI_SPIN_2) + rect[SUPER_SONIC_ANI_CHANGE_1]) - camera.y, rect[SUPER_SONIC_ANI_CHANGE_2], rect[SUPER_SONIC_ANI_GO])
-					EndIf
-					
-					PlayerAnimationCollisionRect playerAnimationCollisionRect = Self.attackRect
-					Int i2 = rect[SONIC_ANI_STAND] Shl SONIC_ANI_SPIN_2
-					Int i3 = rect[SUPER_SONIC_ANI_CHANGE_1] Shl SONIC_ANI_SPIN_2
-					Int i4 = rect[SUPER_SONIC_ANI_CHANGE_2] Shl SONIC_ANI_SPIN_2
-					Int i5 = rect[SUPER_SONIC_ANI_GO] Shl SONIC_ANI_SPIN_2
-					
-					If (Self.effectID = SUPER_SONIC_ANI_CHANGE_1) Then
-						i = SONIC_ANI_JUMP_ATTACK_EFFECT
-					Else
-						Int i6 = Self.myAnimationID
-					EndIf
-					
-					playerAnimationCollisionRect.initCollision(i2, i3, i4, i5, i)
-					Self.attackRectVec.addElement(Self.attackRect)
-				Else
-					Self.attackRect.reset()
-				EndIf
-				
-				If (Self.animationID = NO_ANIMATION) Then
-					If (Self.drawer.checkEnd()) Then
-						If (LOOP_INDEX[Self.myAnimationID] >= 0) Then
-							Self.myAnimationID = LOOP_INDEX[Self.myAnimationID]
-						EndIf
-					EndIf
-				EndIf
-				
-				If (Self.isFirstAttack) Then
-					If (Self.myAnimationID = SONIC_ANI_ATTACK_1 And Not Self.isCrashFallingSand) Then
-						soundInstance.playSe(SONIC_ANI_JUMP)
-					EndIf
-					
-					Self.isFirstAttack = False
-				EndIf
-			EndIf
-			
-		End
-		
-		Public Method doWhileLand:Void(degree:Int)
-			Super.doWhileLand(degree)
-			Self.firstJump = False
-		End
-		
-		Public Method extraInputLogic:Void()
-			
-			If (isTerminal And terminalState >= SUPER_SONIC_ANI_CHANGE_2) Then
-				Select (terminalState)
-					Case SONIC_ANI_JUMP
-						Self.velX = SONIC_ANI_STAND
-					Default
-				End Select
-			EndIf
-			
-		End
-		
-		Public Method getRetPower:Int()
-			Int retPower = Super.getRetPower()
-			
-			If (speedCount > 0 And Self.myAnimationID >= SONIC_ANI_ATTACK_1 And Self.myAnimationID <= SONIC_ANI_ATTACK_2) Then
-				retPower /= SUPER_SONIC_ANI_CHANGE_2
-			EndIf
-			
-			If (Self.myAnimationID = SONIC_ANI_ATTACK_3) Then
-				Return 150
-			EndIf
-			
-			Return retPower
-		End
-		
-		Public Method needRetPower:Bool()
-			
-			If (Self.slipping) Then
-				Return False
-			EndIf
-			
-			If (Self.myAnimationID = SONIC_ANI_ATTACK_1 Or Self.myAnimationID = SONIC_ANI_ATTACK_2 Or Self.myAnimationID = SONIC_ANI_ATTACK_3) Then
-				Return True
-			EndIf
-			
-			Return Super.needRetPower()
-		End
-		
-		Public Method getSlopeGravity:Int()
-			
-			If (Self.slipping) Then
-				Return SONIC_ANI_STAND
-			EndIf
-			
-			Return Super.getSlopeGravity()
-		End
-		
-		Public Method noRotateDraw:Bool()
-			
-			If (Self.myAnimationID = SONIC_ANI_ATTACK_1 Or Self.myAnimationID = SONIC_ANI_ATTACK_2 Or Self.myAnimationID = SONIC_ANI_ATTACK_3) Then
-				Return True
-			EndIf
-			
-			Return Super.noRotateDraw()
-		End
-		
-		Public Method beSpring:Void(springPower:Int, direction:Int)
-			Super.beSpring(springPower, direction)
-			
-			If (Self.attackLevel <> 0) Then
-				Self.attackLevel = SONIC_ANI_STAND
-				Self.attackCount = SONIC_ANI_STAND
-				Select (direction)
-					Case SUPER_SONIC_ANI_CHANGE_2
-					Case SUPER_SONIC_ANI_GO
-						Self.animationID = SUPER_SONIC_ANI_GO
-						
-						If (Key.repeated(Key.gDown)) Then
-							Self.animationID = SONIC_ANI_JUMP
-						EndIf
-						
-					Default
-				End Select
-			EndIf
-			
-		End
-		
-		Public Method beAccelerate:Bool(power:Int, IsX:Bool, sender:GameObject)
-			Bool re = Super.beAccelerate(power, IsX, sender)
-			
-			If (Self.attackLevel <> 0) Then
-				Self.attackLevel = SONIC_ANI_STAND
-				Self.attackCount = SONIC_ANI_STAND
-				Self.animationID = SUPER_SONIC_ANI_GO
-				
-				If (Key.repeated(Key.gDown)) Then
-					Self.animationID = SONIC_ANI_JUMP
-				EndIf
-			EndIf
-			
-			Return re
 		End
 End

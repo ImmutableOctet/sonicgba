@@ -172,7 +172,7 @@ Class AnimationDrawer
 			
 			Self.actionId = Short(actionId)
 			Self.attr = ConstUtil.TRANS[transId]
-			Self.transId = Byte(transId)
+			Self.transId = Byte(transId) ' transId
 			
 			Self.loop = loop
 			
