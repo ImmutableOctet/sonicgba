@@ -165,8 +165,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphicsmacros.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>17</X>
-        <Y>22</Y>
+        <X>12</X>
+        <Y>13</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -892,8 +892,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\seabedvolcanoasynbase.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>27</X>
-        <Y>20</Y>
+        <X>11</X>
+        <Y>30</Y>
       </CursorPos>
       <DocGUID>01799c6c-ef81-4995-be1f-cbf03b0fbf44</DocGUID>
       <Bookmarks />
@@ -904,6 +904,14 @@
         <Y>59</Y>
       </CursorPos>
       <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\seabedvolcanoasynplatform.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>14</X>
+        <Y>53</Y>
+      </CursorPos>
+      <DocGUID>5f89fe51-7566-4604-bc36-4a259f23661c</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\seabedvolcanobase.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -954,12 +962,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
-        <Y>19</Y>
+        <X>20</X>
+        <Y>22</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>f822dfd7-8fd6-4161-b2f6-98082f3b36f1</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\stareffect.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -1222,9 +1231,9 @@
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mflib\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\define" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\__test" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\android" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\android" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\device" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\common" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\ending" Expanded="false" />
