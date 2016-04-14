@@ -130,8 +130,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\lib\line.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
-        <Y>130</Y>
+        <X>7</X>
+        <Y>150</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -643,6 +643,14 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\collisionrect.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>19</X>
+        <Y>17</Y>
+      </CursorPos>
+      <DocGUID>d646eee5-7fbe-45bc-a1fd-65f392d2ed37</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\damagearea.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>38</X>
@@ -826,13 +834,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\playeranimationcollisionrect.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\playeranimationcollisionrect.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>34</X>
-        <Y>15</Y>
+        <X>25</X>
+        <Y>28</Y>
       </CursorPos>
-      <DocGUID>e7821bfb-361f-4071-b64c-bf19fcc51b66</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
