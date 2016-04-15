@@ -47,6 +47,27 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 		Field modelInfo:DataBuffer[] ' Short[][][]
 		
 		Field degreeGetter:MyDegreeGetter
+		
+		' Constructor(s):
+		Method New()
+			' Empty implementation; used for privacy reasons.
+		End
+		
+		' Methods:
+		Method getBlockIndexWithBlock:Int(blockX:Int, blockY:Int, currentLayer:Int)
+			' Magic number: 1 (Collision layer)
+			If (currentLayer = 1) Then
+				Return getTileId(MapManager.mapBack, blockX, blockY)
+			EndIf
+			
+			Return getTileId(MapManager.mapFront, blockX, blockY)
+		End
+		
+		Method getTileId:Int(mapArray:DataBuffer, x:Int, y:Int)
+			Local chunk:= Self.modelInfo[MapManager.getTileAt(mapArray, (x / GRID_NUM_PER_MODEL), (y / GRID_NUM_PER_MODEL))]
+			
+			Return MapManager.getTileAt(chunk, (x Mod GRID_NUM_PER_MODEL), (y Mod GRID_NUM_PER_MODEL))
+		End
 	Public
 		' Constant variable(s):
 		Const COLLISION_FILE_NAME:String = ".co"
@@ -173,55 +194,52 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 			Return False
 		End
 		
-		Public Method getCollisionInfoWithBlock:Void(blockX:Int, blockY:Int, currentLayer:Int, block:ACBlock)
-			getCollisionBlock(block, getTileWidth() * blockX, getTileHeight() * blockY, currentLayer)
+		Method getCollisionInfoWithBlock:Void(blockX:Int, blockY:Int, currentLayer:Int, block:ACBlock)
+			getCollisionBlock(block, (getTileWidth() * blockX), (getTileHeight() * blockY), currentLayer)
 		End
 		
-		Private Method getBlockIndexWithBlock:Int(blockX:Int, blockY:Int, currentLayer:Int)
+		Method closeMap:Void()
+			Self.collisionInfo = []
+			Self.directionInfo = []
 			
-			If (currentLayer = LOAD_MODEL_INFO) Then
-				Return getTileId(MapManager.mapBack, blockX, blockY)
-			EndIf
+			For Local i:= 0 Until Self.modelInfo.Length
+				'Self.modelInfo[i].Discard()
+				
+				Self.modelInfo[i] = Null
+			Next
 			
-			Return getTileId(MapManager.mapFront, blockX, blockY)
+			Self.modelInfo = []
 		End
 		
-		Private Method getTileId:Int(mapArray:Short[][], x:Int, y:Int)
-			Return Self.modelInfo[mapArray[x / GRID_NUM_PER_MODEL][y / GRID_NUM_PER_MODEL]][x Mod GRID_NUM_PER_MODEL][y Mod GRID_NUM_PER_MODEL]
-		End
-		
-		Public Method closeMap:Void()
-			Self.collisionInfo = Null
-			Self.directionInfo = Null
-			Self.modelInfo = Null
-		End
-		
-		Private Method CollisionMap:private()
-		End
-		
-		Public Method getCollisionBlock:Void(block:ACBlock, x:Int, y:Int, layer:Int)
+		Method getCollisionBlock:Void(block:ACBlock, x:Int, y:Int, layer:Int)
+			' Pretty terrible, but it works:
 			
-			If (block instanceof CollisionBlock) Then
-				Int blockX = ACUtilities.getQuaParam(x - (MapManager.mapOffsetX Shl 6), getTileWidth())
-				Int blockY = ACUtilities.getQuaParam(y, getTileHeight())
-				CollisionBlock myBlock = (CollisionBlock) block
-				myBlock.setPosition((getTileWidth() * blockX) + (MapManager.mapOffsetX Shl 6), getTileHeight() * blockY)
+			' Optimization potential; dynamic cast.
+			Local myBlock:= CollisionBlock(block)
+			
+			If (myBlock <> Null) Then
+				Local blockX:= ACUtilities.getQuaParam(x - (MapManager.mapOffsetX Shl 6), getTileWidth()) ' getZoom()
+				Local blockY:= ACUtilities.getQuaParam(y, getTileHeight())
+				
+				myBlock.setPosition((getTileWidth() * blockX) + (MapManager.mapOffsetX Shl 6), getTileHeight() * blockY) ' getZoom()
 				
 				If (blockX < 0) Then
 					myBlock.setProperty(BLANK_BLOCK, False, False, 64, False)
-				ElseIf (blockY < 0 Or blockY >= MapManager.mapHeight * GRID_NUM_PER_MODEL) Then
-					myBlock.setProperty(BLANK_BLOCK, False, False, LOAD_OPEN_FILE, False)
+				ElseIf (blockY < 0 Or blockY >= (MapManager.mapHeight * GRID_NUM_PER_MODEL)) Then
+					myBlock.setProperty(BLANK_BLOCK, False, False, 0, False)
 				Else
-					Int tileId = getBlockIndexWithBlock((MapManager.getConvertX(blockX / GRID_NUM_PER_MODEL) * GRID_NUM_PER_MODEL) + (blockX Mod GRID_NUM_PER_MODEL), blockY, layer)
-					Int cell_id = tileId & 8191
-					myBlock.setProperty(Self.collisionInfo[cell_id], (tileId & MFGamePad.KEY_NUM_8) <> 0..(MFGamePad.KEY_NUM_9 & tileId) <> 0, Self.directionInfo[cell_id], (tileId & MFGamePad.KEY_NUM_7) <> 0)
+					Local tileId:= getBlockIndexWithBlock((MapManager.getConvertX(blockX / GRID_NUM_PER_MODEL) * GRID_NUM_PER_MODEL) + (blockX Mod GRID_NUM_PER_MODEL), blockY, layer)
+					
+					' Magic numbers: 8191 (Bit mask)
+					Local cell_id:= (tileId & 8191)
+					
+					' Magic numbers: 16384, 32768, 8192 (Flags?)
+					myBlock.setProperty(Self.collisionInfo[cell_id], ((tileId & 16384) <> 0), ((32768 & tileId) <> 0), Self.directionInfo[cell_id], ((tileId & 8192) <> 0))
 				EndIf
 			EndIf
-			
 		End
 		
-		Public Method getDegreeGetterForObject:ACDegreeGetter()
-			
+		Method getDegreeGetterForObject:ACDegreeGetter()
 			If (Self.degreeGetter = Null) Then
 				Self.degreeGetter = New MyDegreeGetter(Self)
 			EndIf
@@ -229,27 +247,27 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 			Return Self.degreeGetter
 		End
 		
-		Public Method getNewCollisionBlock:ACBlock()
+		Method getNewCollisionBlock:ACBlock()
 			Return New CollisionBlock(Self)
 		End
 		
-		Public Method getTileHeight:Int()
+		Method getTileHeight:Int()
 			Return 512
 		End
 		
-		Public Method getTileWidth:Int()
+		Method getTileWidth:Int()
 			Return 512
 		End
 		
-		Public Method getWorldHeight:Int()
-			Return MapManager.getPixelHeight() Shl 6
+		Method getWorldHeight:Int()
+			Return (MapManager.getPixelHeight() Shl 6) ' getZoom()
 		End
 		
-		Public Method getWorldWidth:Int()
-			Return MapManager.getPixelWidth() Shl 6
+		Method getWorldWidth:Int()
+			Return (MapManager.getPixelWidth() Shl 6) ' getZoom()
 		End
 		
-		Public Method getZoom:Int()
+		Method getZoom:Int()
 			Return 6
 		End
 End
