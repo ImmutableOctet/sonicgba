@@ -45,6 +45,7 @@ Class StageManager ' Implements SonicDef
 		
 		Const HIGH_SCORE_NUM:Int = 5
 		Const HIGH_SCORE_OFFSET_X:Int = 0
+		
 		Global HIGH_SCORE_Y:Int = (44 + FONT_H_HALF) ' Const
 		Global HIGH_SCORE_Y_TMP:Int = (SCREEN_HEIGHT - 5 * MENU_SPACE / 2) ' Shr 1 ' Const
 		
@@ -135,10 +136,11 @@ Class StageManager ' Implements SonicDef
 		' Presumably, this is used to match the Zones and acts as you move through the levels.
 		Global ZOME_ID:Int[] = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 7] ' Const
 		
-		Global MUSIC_ID:Int[] ' Const
-		Global MUSIC_ID_HIGH:Int[] ' Const
-		Global MUSIC_ID_LOW:Int[] ' Const
-		Global PLAYER_START:Int[][] ' Const
+		Global MUSIC_ID:Int[] = MUSIC_ID_HIGH ' Const
+		Global MUSIC_ID_HIGH:Int[] = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20] ' Const
+		Global MUSIC_ID_LOW:Int[] = [6, 7, 8, 9, 10, 11, 12, 13] ' Const
+		
+		Global PLAYER_START:Int[][] = [[96, 448], [96, 690], [96, 146], [96, 1600], [96, 160], [96, 640], [100, 200], [80, 868], [96, 832], [96, 928], [106, 6988], [100, 1732], [100, 771], [56, 230]] ' Const
 		
 		' Global variable(s):
 		Global characterFromGame:Int = -1
