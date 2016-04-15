@@ -170,12 +170,12 @@ Class MapManager ' Implements SonicDef
 		' Functions:
 		
 		' Extensions:
-		Function AsMapCoord:Int(x:Int, y:Int)
-			Return ((y * MODEL_HEIGHT) + x) ' x Mod MODEL_WIDTH
+		Function AsMapModelCoord:Int(x:Int, y:Int)
+			Return ((y * MODEL_WIDTH) + x) ' x Mod MODEL_WIDTH ' MODEL_HEIGHT
 		End
 		
-		Function getTileAt:Int(data:DataBuffer, x:Int, y:Int)
-			Return data.PeekShort(AsMapCoord(x, y))
+		Function getModelTileAt:Int(data:DataBuffer, x:Int, y:Int)
+			Return data.PeekShort(AsMapModelCoord(x, y))
 		End
 		
 		Function cameraLogic:Void()
@@ -989,7 +989,7 @@ Class MapManager ' Implements SonicDef
 		Function getTileId:Int(mapArray:DataBuffer, x:Int, y:Int)
 			Local chunk:= mapModel[getModelId(mapArray, x, y)]
 			
-			Return chunk.PeekShort(AsMapCoord(x Mod MODEL_WIDTH, y Mod MODEL_HEIGHT))
+			Return chunk.PeekShort(AsMapModelCoord(x Mod MODEL_WIDTH, y Mod MODEL_HEIGHT))
 		End
 		
 		Function getModelId:Int(mapArray:DataBuffer, x:Int, y:Int)
@@ -1003,7 +1003,7 @@ Class MapManager ' Implements SonicDef
 				Return 0
 			EndIf
 			
-			Return getTileAt(mapArray, x, y)
+			Return getModelTileAt(mapArray, x, y)
 		End
 		
 		Function drawTile:Void(g:MFGraphics, sy:Int, x:Int, y:Int, trans:Int)

@@ -641,18 +641,17 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\collisionblock.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\collisionblock.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>20</X>
-        <Y>18</Y>
+        <X>25</X>
+        <Y>20</Y>
       </CursorPos>
-      <DocGUID>5c7d5463-6b77-4bf8-be4c-08a1940d2cd7</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\collisionmap.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>29</X>
-        <Y>79</Y>
+        <X>18</X>
+        <Y>25</Y>
       </CursorPos>
       <DocGUID>29171ccb-5be6-431c-9ba5-b217b408dfe1</DocGUID>
       <Bookmarks />
@@ -793,8 +792,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\mapmanager.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>20</X>
-        <Y>176</Y>
+        <X>68</X>
+        <Y>173</Y>
       </CursorPos>
       <DocGUID>7455a94e-f86f-437c-a260-3cbeddbeca8d</DocGUID>
       <Bookmarks />
@@ -1002,13 +1001,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>20</X>
         <Y>20</Y>
       </CursorPos>
-      <DocGUID>0d2f2162-7891-4170-b549-a4086f27787d</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\stareffect.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
