@@ -78,7 +78,7 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 		End
 		
 		Method getTileId:Int(mapArray:DataBuffer, x:Int, y:Int)
-			Local chunk:= Self.modelInfo[getModelTileAt(mapArray, (x / GRID_NUM_PER_MODEL), (y / GRID_NUM_PER_MODEL))]
+			Local chunk:= Self.modelInfo[MapManager.getModelTileAt(mapArray, (x / GRID_NUM_PER_MODEL), (y / GRID_NUM_PER_MODEL))] ' getModelTileAt
 			
 			Return getModelTileAt(chunk, (x Mod GRID_NUM_PER_MODEL), (y Mod GRID_NUM_PER_MODEL))
 		End
