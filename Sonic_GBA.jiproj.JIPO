@@ -650,8 +650,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\collisionmap.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>137</X>
-        <Y>80</Y>
+        <X>2</X>
+        <Y>53</Y>
       </CursorPos>
       <DocGUID>29171ccb-5be6-431c-9ba5-b217b408dfe1</DocGUID>
       <Bookmarks />
@@ -792,8 +792,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\mapmanager.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>10</X>
-        <Y>151</Y>
+        <X>5</X>
+        <Y>178</Y>
       </CursorPos>
       <DocGUID>7455a94e-f86f-437c-a260-3cbeddbeca8d</DocGUID>
       <Bookmarks />

@@ -48,7 +48,7 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 			Return ((y * GRID_NUM_PER_MODEL) + x) ' x Mod GRID_NUM_PER_MODEL
 		End
 		
-		Function getModelTileAt:Int(data:DataBuffer, x:Int, y:Int)
+		Function GetModelTileAt:Int(data:DataBuffer, x:Int, y:Int)
 			Return data.PeekShort(AsModelCoord(x, y))
 		End
 		
@@ -78,9 +78,9 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 		End
 		
 		Method getTileId:Int(mapArray:DataBuffer, x:Int, y:Int)
-			Local chunk:= Self.modelInfo[MapManager.getModelTileAt(mapArray, (x / GRID_NUM_PER_MODEL), (y / GRID_NUM_PER_MODEL))] ' getModelTileAt
+			Local chunk:= Self.modelInfo[MapManager.GetModelTileAt(mapArray, (x / GRID_NUM_PER_MODEL), (y / GRID_NUM_PER_MODEL))] ' GetModelTileAt
 			
-			Return getModelTileAt(chunk, (x Mod GRID_NUM_PER_MODEL), (y Mod GRID_NUM_PER_MODEL))
+			Return GetModelTileAt(chunk, (x Mod GRID_NUM_PER_MODEL), (y Mod GRID_NUM_PER_MODEL))
 		End
 	Public
 		' Constant variable(s):

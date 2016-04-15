@@ -174,7 +174,7 @@ Class MapManager ' Implements SonicDef
 			Return ((y * MODEL_WIDTH) + x) ' x Mod MODEL_WIDTH ' MODEL_HEIGHT
 		End
 		
-		Function getModelTileAt:Int(data:DataBuffer, x:Int, y:Int)
+		Function GetModelTileAt:Int(data:DataBuffer, x:Int, y:Int)
 			Return data.PeekShort(AsMapModelCoord(x, y))
 		End
 		
@@ -1003,7 +1003,7 @@ Class MapManager ' Implements SonicDef
 				Return 0
 			EndIf
 			
-			Return getModelTileAt(mapArray, x, y)
+			Return GetModelTileAt(mapArray, x, y)
 		End
 		
 		Function drawTile:Void(g:MFGraphics, sy:Int, x:Int, y:Int, trans:Int)
