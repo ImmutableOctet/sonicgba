@@ -17,6 +17,9 @@ Private
 	
 	Import brl.databuffer
 	Import brl.stream
+	
+	Import regal.typetool
+	Import regal.sizeof
 Public
 
 ' Classes:
@@ -41,8 +44,8 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 		' Fields:
 		Field ds:Stream
 		
-		Field directionInfo:Byte[]
-		Field collisionInfo:Byte[][]
+		Field directionInfo:DataBuffer ' Byte[]
+		Field collisionInfo:DataBuffer ' DataBuffer[] ' Byte[][]
 		
 		Field modelInfo:DataBuffer[] ' Short[][][]
 		
@@ -68,6 +71,9 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 			
 			Return MapManager.getTileAt(chunk, (x Mod GRID_NUM_PER_MODEL), (y Mod GRID_NUM_PER_MODEL))
 		End
+	Protected
+		' Constant variable(s):
+		Const MODEL_INFO_SIZE:= ((GRID_NUM_PER_MODEL*GRID_NUM_PER_MODEL)*SizeOf_Short)
 	Public
 		' Constant variable(s):
 		Const COLLISION_FILE_NAME:String = ".co"
@@ -83,113 +89,58 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 		End
 		
 		' Methods:
-		Public Method loadCollisionInfoStep:Bool(stageName:String)
-			Int i
+		Method loadCollisionInfoStep:Bool(stageName:String)
 			Select (loadStep)
 				Case LOAD_OPEN_FILE
-					Self.ds = New DataInputStream(MFDevice.getResourceAsStream("/map/" + stageName + MODEL_FILE_NAME))
-					break
+					Self.ds = MFDevice.getResourceAsStream("/map/" + stageName + MODEL_FILE_NAME)
 				Case LOAD_MODEL_INFO
-					Self.modelInfo = (Short[][][]) Array.newInstance(Short.TYPE, New Int[]{MapManager.mapModel.Length, GRID_NUM_PER_MODEL, GRID_NUM_PER_MODEL})
-					i = 0
-					While (i < Self.modelInfo.Length) {
-						try {
-							For (Int y = 0; y < GRID_NUM_PER_MODEL; y += 1)
-								For (Int x = 0; x < GRID_NUM_PER_MODEL; x += 1)
-									Self.modelInfo[i][x][y] = (Short) (Self.ds.readShort() & 65535)
-								Next
-							Next
-							i += 1
-						} catch (Exception e) {
-							
-							If (Self.ds <> Null) Then
-								try {
-									Self.ds.close()
-									break
-								} catch (IOException e2) {
-									e2.printStackTrace()
-									break
-								}
-							EndIf
-							
-						} catch (Throwable th) {
-							
-							If (Self.ds <> Null) Then
-								try {
-									Self.ds.close()
-								} catch (IOException e3) {
-									e3.printStackTrace()
-								}
-							EndIf
-							
-						}
-					}
+					Self.modelInfo = New DataBuffer[MapManager.mapModel.Length]
+					
+					For Local i:= 0 Until Self.modelInfo.Length ' MapManager.mapModel.Length
+						Self.modelInfo[i] = New DataBuffer(MODEL_INFO_SIZE)
+					Next
+					
+					Try
+						For Local i:= 0 Until Self.modelInfo.Length
+							ds.ReadAll(Self.modelInfo[i], 0, Self.modelInfo[i].Length) ' & 65535
+						Next
+					Catch E:StreamError
+						' Nothing so far.
+					End Try
 					
 					If (Self.ds <> Null) Then
-						try {
-							Self.ds.close()
-							break
-						} catch (IOException e22) {
-							e22.printStackTrace()
-							break
-						}
+						Self.ds.Close()
 					EndIf
-					
-					break
 				Case LOAD_COLLISION_INFO
-					Self.ds = New DataInputStream(MFDevice.getResourceAsStream("/map/" + stageName + COLLISION_FILE_NAME))
-					try {
-						Int collisionKindNum = Self.ds.readShort()
-						Self.collisionInfo = (Byte[][]) Array.newInstance(Byte.TYPE, New Int[]{collisionKindNum, 8})
-						Self.directionInfo = New Byte[collisionKindNum]
-						For (i = 0; i < collisionKindNum; i += 1)
-							For (Int n = 0; n < 8; n += 1)
-								Self.collisionInfo[i][n] = Self.ds.readByte()
-							EndIf
-							Self.directionInfo[i] = Self.ds.readByte()
+					Self.ds = MFDevice.getResourceAsStream("/map/" + stageName + COLLISION_FILE_NAME)
+					
+					Try
+						Local collisionKindNum = Self.ds.ReadShort()
+						
+						Local collisionInfoStride:= 8
+						
+						Self.collisionInfo = New DataBuffer(collisionKindNum * collisionInfoStride) ' * SizeOf_Byte
+						Self.directionInfo = New DataBuffer(collisionKindNum) ' * SizeOf_Byte
+						
+						For Local i:= 0 Until collisionKindNum ' Self.directionInfo.Length
+							Self.ds.ReadAll(Self.collisionInfo, (i * collisionInfoStride), collisionInfoStride)
+							
+							Self.directionInfo.PokeByte(i, Self.ds.ReadByte())
 						Next
-						
-						If (Self.ds <> Null) Then
-							try {
-								Self.ds.close()
-								break
-							} catch (IOException e222) {
-								e222.printStackTrace()
-								break
-							EndIf
-						EndIf
-						
-					} catch (Exception e4) {
-						
-						If (Self.ds <> Null) Then
-							try {
-								Self.ds.close()
-								break
-							} catch (IOException e2222) {
-								e2222.printStackTrace()
-								break
-							Next
-						EndIf
-						
-					} catch (Throwable th2) {
-						
-						If (Self.ds <> Null) Then
-							try {
-								Self.ds.close()
-							} catch (IOException e32) {
-								e32.printStackTrace()
-							}
-						EndIf
+					Catch E:StreamError
+						' Nothing so far.
+					End Try
+					
+					If (Self.ds <> Null) Then
+						Self.ds.Close()
 					EndIf
-					break
 				Case LOAD_OVER
 					loadStep = 0
+					
 					Return True
 			End Select
 			
-			If (True) Then
-				loadStep += 1
-			EndIf
+			loadStep += 1
 			
 			Return False
 		End
