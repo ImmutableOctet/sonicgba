@@ -71,13 +71,13 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 			
 			Return MapManager.getTileAt(chunk, (x Mod GRID_NUM_PER_MODEL), (y Mod GRID_NUM_PER_MODEL))
 		End
-	Protected
-		' Constant variable(s):
-		Const MODEL_INFO_SIZE:= ((GRID_NUM_PER_MODEL*GRID_NUM_PER_MODEL)*SizeOf_Short)
 	Public
 		' Constant variable(s):
 		Const COLLISION_FILE_NAME:String = ".co"
 		Const MODEL_FILE_NAME:String = ".ci"
+		
+		Const MODEL_INFO_SIZE:= ((GRID_NUM_PER_MODEL*GRID_NUM_PER_MODEL)*SizeOf_Short)
+		Const COLLISION_INFO_STRIDE:= 8
 		
 		' Functions:
 		Function getInstance:CollisionMap()
@@ -86,6 +86,11 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 			EndIf
 			
 			Return instance
+		End
+		
+		' Extensions:
+		Function ToCollisionInfoPosition:Int(index:Int)
+			Return (index * COLLISION_INFO_STRIDE)
 		End
 		
 		' Methods:
@@ -117,13 +122,11 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 					Try
 						Local collisionKindNum = Self.ds.ReadShort()
 						
-						Local collisionInfoStride:= 8
-						
-						Self.collisionInfo = New DataBuffer(collisionKindNum * collisionInfoStride) ' * SizeOf_Byte
+						Self.collisionInfo = New DataBuffer(collisionKindNum * COLLISION_INFO_STRIDE) ' * SizeOf_Byte
 						Self.directionInfo = New DataBuffer(collisionKindNum) ' * SizeOf_Byte
 						
 						For Local i:= 0 Until collisionKindNum ' Self.directionInfo.Length
-							Self.ds.ReadAll(Self.collisionInfo, (i * collisionInfoStride), collisionInfoStride)
+							Self.ds.ReadAll(Self.collisionInfo, (i * COLLISION_INFO_STRIDE), COLLISION_INFO_STRIDE)
 							
 							Self.directionInfo.PokeByte(i, Self.ds.ReadByte())
 						Next
@@ -150,11 +153,11 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 		End
 		
 		Method closeMap:Void()
-			Self.collisionInfo = []
-			Self.directionInfo = []
+			Self.collisionInfo = Null
+			Self.directionInfo = Null
 			
 			For Local i:= 0 Until Self.modelInfo.Length
-				'Self.modelInfo[i].Discard()
+				Self.modelInfo[i].Discard()
 				
 				Self.modelInfo[i] = Null
 			Next
@@ -185,7 +188,7 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 					Local cell_id:= (tileId & 8191)
 					
 					' Magic numbers: 16384, 32768, 8192 (Flags?)
-					myBlock.setProperty(Self.collisionInfo[cell_id], ((tileId & 16384) <> 0), ((32768 & tileId) <> 0), Self.directionInfo[cell_id], ((tileId & 8192) <> 0))
+					myBlock.setProperty(Self.collisionInfo, ToCollisionInfoPosition(cell_id), ((tileId & 16384) <> 0), ((32768 & tileId) <> 0), Self.directionInfo.PeekByte(cell_id), ((tileId & 8192) <> 0))
 				EndIf
 			EndIf
 		End
