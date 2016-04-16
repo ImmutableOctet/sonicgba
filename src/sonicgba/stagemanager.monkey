@@ -491,7 +491,7 @@ Class StageManager ' Implements sonicdef
 				Next
 			Catch E:StreamError
 				For Local i:= 0 Until timeModeScore.Length
-					timeModeScore[i] = sonicdef.OVER_TIME
+					timeModeScore[i] = OVER_TIME
 				Next
 				
 				saveHighScoreRecord()
@@ -605,7 +605,7 @@ Class StageManager ' Implements sonicdef
 				PlayerObject.resetGameParam()
 				
 				For Local i:= 0 Until timeModeScore.Length
-					timeModeScore[i] = sonicdef.OVER_TIME
+					timeModeScore[i] = OVER_TIME
 				Next
 				
 				startStageID = 0
@@ -681,263 +681,278 @@ Class StageManager ' Implements sonicdef
 			EndIf
 		End
 		
-		Public Function addNewNormalScore:Void(newScore:Int)
-			Bool isNewScore = False
-			Int tmpScore = 0
-			For (Int i = 0; i < LOAD_OBJ_INIT; i += 1)
-				
+		Function addNewNormalScore:Void(newScore:Int)
+			Local isNewScore:Bool = False
+			Local tmpScore:Int = 0
+			
+			For Local i:= 0 Until HIGH_SCORE_NUM ' highScore.Length
 				If (isNewScore) Then
-					Int tmpScore2 = highScore[i]
+					Local tmpScore2:= highScore[i]
 					highScore[i] = tmpScore
 					tmpScore = tmpScore2
 				ElseIf (newScore > highScore[i]) Then
 					isNewScore = True
+					
 					tmpScore = highScore[i]
+					
 					highScore[i] = newScore
+					
 					drawNewScore = i
 				EndIf
 			EndIf
-			
-		}
+		End
 		
-		Public Function normalHighScoreInit:Void()
+		Function normalHighScoreInit:Void()
 			movingRow = 0
 			movingCount = 0
-			For (Int i = 0; i < rankingOffsetX.Length; i += 1)
+			
+			For Local i:= 0 Until rankingOffsetX.Length
 				rankingOffsetX[i] = SCREEN_WIDTH
 			EndIf
-		}
+		End
 		
-		Public Function drawNormalHighScore:Void(g:MFGraphics)
-			Int i
-			For (i = 0; i < LOAD_OBJ_INIT; i += 1)
-				
-				If (drawNewScore = i And (Millisecs() / 300) Mod 2 = 0) Then
-					State.drawMenuFontById(g, 49, (((SCREEN_WIDTH Shr 1) - 45) + rankingOffsetX[i]) + 0, HIGH_SCORE_Y + (MENU_SPACE * i))
-					State.drawMenuFontById(g, i + 38, (((SCREEN_WIDTH Shr 1) - 45) + rankingOffsetX[i]) + 0, HIGH_SCORE_Y + (MENU_SPACE * i))
-					PlayerObject.drawNum(g, highScore[i]..((((SCREEN_WIDTH Shr 1) + 20) + 48) + rankingOffsetX[i]) + 0, (MENU_SPACE * i) + HIGH_SCORE_Y, 2, LOAD_BACKGROUND)
+		Function drawNormalHighScore:Void(g:MFGraphics)
+			For Local i:= 0 Until HIGH_SCORE_NUM
+				If (drawNewScore = i And ((Millisecs() / 300) Mod 2) = 0) Then
+					State.drawMenuFontById(g, 49, (((SCREEN_WIDTH / 2) - 45) + rankingOffsetX[i]), HIGH_SCORE_Y + (MENU_SPACE * i)) ' Shr 1
+					State.drawMenuFontById(g, i + 38, (((SCREEN_WIDTH / 2) - 45) + rankingOffsetX[i]), HIGH_SCORE_Y + (MENU_SPACE * i)) ' Shr 1
+					
+					PlayerObject.drawNum(g, highScore[i], ((((SCREEN_WIDTH / 2) + 20) + 48) + rankingOffsetX[i]), (MENU_SPACE * i) + HIGH_SCORE_Y, 2, 4) ' Shr 1
 				Else
-					State.drawMenuFontById(g, 48, (((SCREEN_WIDTH Shr 1) - 45) + rankingOffsetX[i]) + 0, HIGH_SCORE_Y + (MENU_SPACE * i))
-					State.drawMenuFontById(g, i + 28, (((SCREEN_WIDTH Shr 1) - 45) + rankingOffsetX[i]) + 0, HIGH_SCORE_Y + (MENU_SPACE * i))
-					PlayerObject.drawNum(g, highScore[i]..((((SCREEN_WIDTH Shr 1) + 20) + 48) + rankingOffsetX[i]) + 0, (MENU_SPACE * i) + HIGH_SCORE_Y, 2, 0)
+					State.drawMenuFontById(g, 48, (((SCREEN_WIDTH / 2) - 45) + rankingOffsetX[i]), HIGH_SCORE_Y + (MENU_SPACE * i)) ' Shr 1
+					State.drawMenuFontById(g, i + 28, (((SCREEN_WIDTH / 2) - 45) + rankingOffsetX[i]), HIGH_SCORE_Y + (MENU_SPACE * i)) ' Shr 1
+					PlayerObject.drawNum(g, highScore[i], ((((SCREEN_WIDTH / 2) + 20) + 48) + rankingOffsetX[i]), (MENU_SPACE * i) + HIGH_SCORE_Y, 2, 0) ' Shr 1
 				EndIf
-			EndIf
-			If (movingRow < rankingOffsetX.Length And movingCount Mod 2 = 0) Then
+			Next
+			
+			If (movingRow < rankingOffsetX.Length And (movingCount Mod 2) = 0) Then
 				movingRow += 1
 			EndIf
 			
 			movingCount += 1
-			For (i = 0; i < movingRow; i += 1)
-				rankingOffsetX[i] = MyAPI.calNextPosition((Double) rankingOffsetX[i], 0.0, 1, RECORD_NUM)
-			EndIf
-		}
-		
-		Public Function drawHighScoreEnd:Void()
-			drawNewScore = -1
-		}
-		
-		Public Function getOpenedStageId:Int()
 			
-			If (TitleState.preStageSelectState = 24) Then
+			For Local i:= 0 Until movingRow
+				rankingOffsetX[i] = MyAPI.calNextPosition(Double(rankingOffsetX[i]), 0.0, 1, RECORD_NUM)
+			Next
+		End
+		
+		Function drawHighScoreEnd:Void()
+			drawNewScore = -1
+		End
+		
+		Function getOpenedStageId:Int()
+			If (TitleState.preStageSelectState = STATE_PRO_RACE_MODE) Then
 				Return getMaxStageID()
 			EndIf
 			
-			Int stageid = openedStageIDArray[PlayerObject.getCharacterID()]
+			Local stageid:= openedStageIDArray[PlayerObject.getCharacterID()]
 			
-			If (PlayerObject.getCharacterID() = 0) Then
+			If (PlayerObject.getCharacterID() = CHARACTER_SONIC) Then
 				If (GameObject.stageModeState = GameObject.STATE_NORMAL_MODE) Then
 					If (stageid >= STAGE_NUM) Then
 						stageid = STAGE_NUM
 					EndIf
-					
-				ElseIf (GameObject.stageModeState = GameObject.STATE_RACE_MODE And stageid >= STAGE_NUM - RECORD_NUM) Then
-					stageid = STAGE_NUM - RECORD_NUM
+				ElseIf (GameObject.stageModeState = GameObject.STATE_RACE_MODE And stageid >= (STAGE_NUM - 3)) Then
+					stageid = (STAGE_NUM - 3)
 				EndIf
-				
 			ElseIf (GameObject.stageModeState = GameObject.STATE_NORMAL_MODE) Then
-				If (stageid >= STAGE_NUM - 2) Then
-					stageid = STAGE_NUM - 2
-				EndIf
-				
-			ElseIf (GameObject.stageModeState = GameObject.STATE_RACE_MODE And stageid >= STAGE_NUM - RECORD_NUM) Then
-				stageid = STAGE_NUM - RECORD_NUM
+				stageid = Min(stageid, (STAGE_NUM - 2))
+			ElseIf (GameObject.stageModeState = GameObject.STATE_RACE_MODE And stageid >= (STAGE_NUM - 3)) Then
+				stageid = (STAGE_NUM - 3)
 			EndIf
 			
 			Return stageid
-		}
+		End
 		
-		Public Function getMaxStageID:Int()
-			
+		Function getMaxStageID:Int()
 			If (PlayerObject.getCharacterID() = 0) Then
 				If (GameObject.stageModeState = GameObject.STATE_NORMAL_MODE) Then
-					If (openedStageIDArray[PlayerObject.getCharacterID()] >= STAGE_NUM - 1) Then
-						Return STAGE_NUM - 1
+					If (openedStageIDArray[PlayerObject.getCharacterID()] >= (STAGE_NUM - 1)) Then
+						Return (STAGE_NUM - 1)
 					EndIf
 					
-					Return STAGE_NUM - 2
+					Return (STAGE_NUM - 2)
 				ElseIf (GameObject.stageModeState = GameObject.STATE_RACE_MODE) Then
-					Return STAGE_NUM - RECORD_NUM
+					Return (STAGE_NUM - 3)
 				EndIf
-				
 			ElseIf (GameObject.stageModeState = GameObject.STATE_NORMAL_MODE) Then
-				Return STAGE_NUM - 2
+				Return (STAGE_NUM - 2)
 			Else
-				
 				If (GameObject.stageModeState = GameObject.STATE_RACE_MODE) Then
-					Return STAGE_NUM - RECORD_NUM
+					Return (STAGE_NUM - 3)
 				EndIf
 			EndIf
 			
 			Return 0
-		}
+		End
 		
-		Public Function resetOpenedStageIdforTry:Void(id:Int)
+		Function resetOpenedStageIdforTry:Void(id:Int)
 			openedStageIDArray[PlayerObject.getCharacterID()] = id
 			stageIDArray[PlayerObject.getCharacterID()] = 0
 			normalStageIDArray[PlayerObject.getCharacterID()] = 0
+			
 			saveStageRecord()
-		}
+		End
 		
-		Public Function hasContinueGame:Bool()
+		Function hasContinueGame:Bool()
 			Return stageIDArray[PlayerObject.getCharacterID()] = 0
-		}
+		End
 		
-		Public Function saveCheckPoint:Void(x:Int, y:Int)
-			checkPointX = x Shr LOAD_GIMMICK
-			checkPointY = y Shr LOAD_GIMMICK
+		Function saveCheckPoint:Void(x:Int, y:Int)
+			checkPointX = (x Shr 6)
+			checkPointY = (y Shr 6)
+			
 			checkPointEnable = True
+			
 			checkPointTime = PlayerObject.timeCount
-		}
+		End
 		
-		Public Function saveSpecialStagePoint:Void(x:Int, y:Int)
-			specialStagePointX = x Shr LOAD_GIMMICK
-			specialStagePointY = y Shr LOAD_GIMMICK
-		}
+		Function saveSpecialStagePoint:Void(x:Int, y:Int)
+			specialStagePointX = (x Shr 6)
+			specialStagePointY = (y Shr 6)
+		End
 		
-		Public Function saveCheckPointCamera:Void(cameraUpX:Int, cameraDownX:Int, cameraLeftX:Int, cameraRightX:Int)
+		Function saveCheckPointCamera:Void(cameraUpX:Int, cameraDownX:Int, cameraLeftX:Int, cameraRightX:Int)
 			checkCameraUpX = cameraUpX
 			checkCameraDownX = cameraDownX
 			checkCameraLeftX = cameraLeftX
 			checkCameraRightX = cameraRightX
-			checkCameraEnable = True
-		}
-		
-		Public Function resetStageId:Void()
 			
+			checkCameraEnable = True
+		End
+		
+		Function resetStageId:Void()
 			If (openedStageIDArray[PlayerObject.getCharacterID()] < stageIDArray[PlayerObject.getCharacterID()]) Then
 				openedStageIDArray[PlayerObject.getCharacterID()] = stageIDArray[PlayerObject.getCharacterID()]
 			EndIf
 			
 			stageIDArray[PlayerObject.getCharacterID()] = 0
 			normalStageIDArray[PlayerObject.getCharacterID()] = 0
+			
 			saveStageRecord()
-		}
+		End
 		
-		Public Function resetStageIdforTry:Void()
+		Function resetStageIdforTry:Void()
 			openedStageIDArray[PlayerObject.getCharacterID()] = 0
 			stageIDArray[PlayerObject.getCharacterID()] = 0
 			normalStageIDArray[PlayerObject.getCharacterID()] = 0
+			
 			saveStageRecord()
-		}
+		End
 		
-		Public Function resetStageIdforContinueEnd:Void()
+		Function resetStageIdforContinueEnd:Void()
 			characterFromGame = -1
 			stageIDFromGame = -1
+			
 			PlayerObject.setScore(0)
 			PlayerObject.setLife(PlayerObject.LIFE_NUM_RESET)
+			
 			saveStageRecord()
-		}
+		End
 		
-		Public Function resetGameRecord:Void()
-			Int i
+		Function resetGameRecord:Void()
 			stageId = 0
-			For (i = 0; i < LOAD_BACKGROUND; i += 1)
+			
+			For Local i:= 0 Until CHARACTER_NUM ' stageIDArray.Length
 				stageIDArray[i] = 0
 			EndIf
+			
 			normalStageId = 0
-			For (i = 0; i < LOAD_BACKGROUND; i += 1)
+			
+			For Local i:= 0 Until CHARACTER_NUM ' normalStageIDArray.Length
 				normalStageIDArray[i] = 0
-			EndIf
+			Next
+			
 			PlayerObject.setScore(0)
 			PlayerObject.setLife(PlayerObject.LIFE_NUM_RESET)
+			
 			openedStageId = 0
-			For (i = 0; i < LOAD_BACKGROUND; i += 1)
+			
+			For Local i:= 0 Until CHARACTER_NUM ' openedStageIDArray.Length
 				openedStageIDArray[i] = 0
-			EndIf
+			Next
+			
 			PlayerObject.resetGameParam()
-			For (i = 0; i < timeModeScore.Length; i += 1)
-				timeModeScore[i] = sonicdef.OVER_TIME
-			EndIf
+			
+			For Local i:= 0 Until timeModeScore.Length
+				timeModeScore[i] = OVER_TIME
+			Next
+			
 			startStageID = 0
-			For (i = 0; i < LOAD_BACKGROUND; i += 1)
+			
+			For Local i:= 0 Until CHARACTER_NUM ' startStageIDArray.Length
 				startStageIDArray[i] = 0
-			EndIf
+			Next
+			
 			characterFromGame = -1
 			stageIDFromGame = -1
+			
 			PlayerObject.setScore(0)
 			PlayerObject.setLife(PlayerObject.LIFE_NUM_RESET)
-			SpecialStageState.emptyEmeraldArray()
-			GlobalResource.initSystemConfig()
-			saveStageRecord()
-		}
-		
-		Public Function doWhileEnterRace:Void()
 			
+			SpecialStageState.emptyEmeraldArray()
+			
+			GlobalResource.initSystemConfig()
+			
+			saveStageRecord()
+		End
+		
+		Function doWhileEnterRace:Void()
 			If (Not isRacing) Then
 				normalStageIDArray[PlayerObject.getCharacterID()] = stageIDArray[PlayerObject.getCharacterID()]
+				
 				isRacing = True
 			EndIf
-			
-		}
+		End
 		
-		Public Function doWhileLeaveRace:Void()
-			
+		Function doWhileLeaveRace:Void()
 			If (isRacing) Then
 				stageIDArray[PlayerObject.getCharacterID()] = normalStageIDArray[PlayerObject.getCharacterID()]
+				
 				isRacing = False
 			EndIf
-			
-		}
+		End
 		
-		Public Function getStageNameID:Int(stageID:Int)
+		Function getStageNameID:Int(stageID:Int)
 			Return STAGE_NAME_ID[stageID / 2]
-		}
+		End
 		
-		Public Function setWaterLevel:Void(level:Int)
+		Function setWaterLevel:Void(level:Int)
 			waterLevel = level
-		}
+		End
 		
-		Public Function getWaterLevel:Int()
-			
+		Function getWaterLevel:Int()
 			If (getCurrentZoneId() = 4) Then
 				Return waterLevel
 			EndIf
 			
 			Return -1
-		}
+		End
 		
-		Public Function isGoingToExtraStage:Bool()
-			Return PlayerObject.getCharacterID() = 0 And Not SpecialStageState.emeraldMissed() And getStartStageID() <> LOAD_SE And getStageID() = LOAD_SE
-		}
+		Function isGoingToExtraStage:Bool()
+			Return (PlayerObject.getCharacterID() = 0 And Not SpecialStageState.emeraldMissed() And getStartStageID() <> 12 And getStageID() = 12)
+		End
 		
-		Public Function stagePassInit:Void()
+		Function stagePassInit:Void()
 			isOnlyScoreCal = False
 			isOnlyStagePass = False
 			isScoreBarOutOfScreen = False
+			
 			PlayerObject.isbarOut = False
-		}
+		End
 		
-		Public Function setOnlyScoreCal:Void()
+		Function setOnlyScoreCal:Void()
 			isOnlyScoreCal = True
 			isOnlyStagePass = False
+			
 			PlayerObject.isbarOut = True
-		}
+		End
 		
-		Public Function setStraightlyPass:Void()
+		Function setStraightlyPass:Void()
 			isOnlyStagePass = True
-		}
+		End
 		
-		Public Function isScoreBarOut:Bool()
+		Function isScoreBarOut:Bool()
 			Return isScoreBarOutOfScreen
-		}
+		End
 End
