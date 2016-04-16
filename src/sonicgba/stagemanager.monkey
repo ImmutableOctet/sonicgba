@@ -35,10 +35,12 @@ Private
 	Import brl.stream
 	
 	Import regal.typetool
-	'Import regal.sizeof
+	Import regal.sizeof
+	
+	Import regal.ioutil.publicdatastream
 Public
 
-Class StageManager ' Implements SonicDef
+Class StageManager ' Implements sonicdef
 	Private
 		' Constant variable(s):
 		Const CHARACTER_NUM:Int = 4
@@ -311,71 +313,67 @@ Class StageManager ' Implements SonicDef
 			Return MUSIC_ID[stageIDArray[PlayerObject.getCharacterID()]]
 		End
 		
-		Public Function draw:Void(g:MFGraphics)
+		Function draw:Void(g:MFGraphics)
 			g.setColor(MapManager.END_COLOR)
+			
 			MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
-			For (Int i = 0; i < STAGE_NAME.Length; i += 1)
+			
+			For Local i:= 0 Until STAGE_NAME.Length
 				g.setColor(0)
 				
 				If (i = stageId) Then
 					g.setColor(16711680)
 				EndIf
 				
-				MyAPI.drawString(g, "stage" + STAGE_NAME[i], SCREEN_WIDTH Shr 1, (i * 20) + 20, 17)
+				MyAPI.drawString(g, "stage" + STAGE_NAME[i], (SCREEN_WIDTH / 2), (i * 20) + 20, 17) ' Shr 1
 			Next
-		}
+		End
 		
-		Public Function getCurrentZoneId:Int()
-			
+		Function getCurrentZoneId:Int()
 			If (stageIDArray[PlayerObject.getCharacterID()] >= ZOME_ID.Length) Then
-				Return ZOME_ID[ZOME_ID.Length - 1] + 1
+				Return (ZOME_ID[ZOME_ID.Length - 1] + 1)
 			EndIf
 			
-			Return ZOME_ID[stageIDArray[PlayerObject.getCharacterID()]] + 1
-		}
+			Return (ZOME_ID[stageIDArray[PlayerObject.getCharacterID()]] + 1)
+		End
 		
-		Public Function setStagePass:Void()
-			
+		Function setStagePass:Void()
 			If (Not stagePassFlag) Then
 				stagePassFlag = True
+				
 				stagePassCount = 0
 			EndIf
-			
-		}
+		End
 		
-		Public Function setStageRestart:Void()
-			
+		Function setStageRestart:Void()
 			If (Not stageRestartFlag) Then
 				stageRestartFlag = True
-				stageRestartCount = STAGE_RESTART_FRAME
+				
+				stageRestartCount = 10
 			EndIf
-			
-		}
+		End
 		
-		Public Function setStageGameover:Void()
-			
+		Function setStageGameover:Void()
 			If (Not stageGameoverFlag) Then
 				stageGameoverFlag = True
-				stageGameoverCount = STAGE_RESTART_FRAME
+				
+				stageGameoverCount = 10
 			EndIf
-			
-		}
+		End
 		
-		Public Function resetStageGameover:Void()
+		Function resetStageGameover:Void()
 			stageGameoverFlag = False
-		}
+		End
 		
-		Public Function setStageTimeover:Void()
-			
+		Function setStageTimeover:Void()
 			If (Not stageTimeoverFlag) Then
 				stageTimeoverFlag = True
+				
 				stageTimeoverCount = 0
 			EndIf
-			
-		}
+		End
 		
-		Public Function stageLogic:Void()
-			
+		Function stageLogic:Void()
 			If (stagePassFlag And stagePassCount > 0) Then
 				stagePassCount -= 1
 			EndIf
@@ -391,71 +389,67 @@ Class StageManager ' Implements SonicDef
 			If (stageTimeoverFlag And stageTimeoverCount > 0) Then
 				stageTimeoverCount -= 1
 			EndIf
-			
-		}
+		End
 		
-		Public Function isStagePassTimePause:Bool()
+		Function isStagePassTimePause:Bool()
 			Return stagePassFlag
-		}
+		End
 		
-		Public Function isStagePass:Bool()
-			Return stagePassFlag And stagePassCount = 0
-		}
+		Function isStagePass:Bool()
+			Return (stagePassFlag And stagePassCount = 0)
+		End
 		
-		Public Function isStageRestart:Bool()
-			Return stageRestartFlag And stageRestartCount = 0
-		}
+		Function isStageRestart:Bool()
+			Return (stageRestartFlag And stageRestartCount = 0)
+		End
 		
-		Public Function isStageGameover:Bool()
-			Return stageGameoverFlag And stageGameoverCount = 0
-		}
+		Function isStageGameover:Bool()
+			Return (stageGameoverFlag And stageGameoverCount = 0)
+		End
 		
-		Public Function isStageTimeover:Bool()
-			Return stageTimeoverFlag And stageTimeoverCount = 0
-		}
+		Function isStageTimeover:Bool()
+			Return (stageTimeoverFlag And stageTimeoverCount = 0)
+		End
 		
-		Public Function setStageID:Void(id:Int)
+		Function setStageID:Void(id:Int)
 			stageIDArray[PlayerObject.getCharacterID()] = id
-		}
+		End
 		
-		Public Function setStartStageID:Void(id:Int)
+		Function setStartStageID:Void(id:Int)
 			startStageIDArray[PlayerObject.getCharacterID()] = id
-		}
+		End
 		
-		Public Function getStartStageID:Int()
+		Function getStartStageID:Int()
 			Return startStageIDArray[PlayerObject.getCharacterID()]
-		}
+		End
 		
-		Public Function getStageID:Int()
+		Function getStageID:Int()
 			Return stageIDArray[PlayerObject.getCharacterID()]
-		}
+		End
 		
-		Public Function addStageID:Void()
-			Int[] iArr = stageIDArray
-			Int characterID = PlayerObject.getCharacterID()
-			iArr[characterID] = iArr[characterID] + 1
+		Function addStageID:Void() 
+			Local characterID:= PlayerObject.getCharacterID()
+			
+			stageIDArray[characterID] += 1
 			
 			If (openedStageIDArray[PlayerObject.getCharacterID()] < stageIDArray[PlayerObject.getCharacterID()]) Then
 				openedStageIDArray[PlayerObject.getCharacterID()] = stageIDArray[PlayerObject.getCharacterID()]
 			EndIf
-			
-		}
+		End
 		
-		Public Function IsStageEnd:Bool()
-			
-			If (stageIDArray[PlayerObject.getCharacterID()] + 1 = STAGE_NAME.Length) Then
+		Function IsStageEnd:Bool()
+			If ((stageIDArray[PlayerObject.getCharacterID()] + 1) = STAGE_NAME.Length) Then
 				Return True
 			EndIf
 			
 			Return False
-		}
+		End
 		
-		Public Function getTimeModeScore:Int(characterid:Int)
+		Function getTimeModeScore:Int(characterid:Int)
 			Return getTimeModeScore(characterid, stageIDArray[characterid])
-		}
+		End
 		
-		Public Function setTimeModeScore:Void(characterid:Int, score:Int)
-			
+		Function setTimeModeScore:Void(characterid:Int, score:Int)
 			If (score <= timeModeScore[((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)]) Then
 				timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + 2] = timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + 1]
 				timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + 1] = timeModeScore[((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)]
@@ -466,413 +460,226 @@ Class StageManager ' Implements SonicDef
 			ElseIf (score <= timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + 2]) Then
 				timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + 2] = score
 			EndIf
-			
-		}
+		End
 		
-		Public Function getTimeModeScore:Int(characterid:Int, id:Int)
+		Function getTimeModeScore:Int(characterid:Int, id:Int)
 			Return timeModeScore[((STAGE_NUM * RECORD_NUM) * characterid) + (id * RECORD_NUM)]
-		}
+		End
 		
-		Public Function getTimeModeScore:Int(characterid:Int, id:Int, index:Int)
+		Function getTimeModeScore:Int(characterid:Int, id:Int, index:Int)
 			Return timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (id * RECORD_NUM)) + index]
-		}
+		End
 		
-		Public Function getTimeModeScore:Int[]()
+		Function getTimeModeScore:Int[]()
 			Return timeModeScore
-		}
+		End
 		
-		Public Function setTimeModeScore:Void(tmpTimeModeScore:Int[])
-			For (Int i = 0; i < timeModeScore.Length; i += 1)
+		Function setTimeModeScore:Void(tmpTimeModeScore:Int[])
+			For Local i:= 0 Until timeModeScore.Length
 				timeModeScore[i] = tmpTimeModeScore[i]
 			Next
-		}
+		End
 		
-		Public Function loadHighScoreRecord:Void()
-			Int i
-			ByteArrayInputStream bs = Record.loadRecordStream(Record.HIGHSCORE_RECORD)
-			try {
-				DataInputStream ds = New DataInputStream(bs)
-				For (i = 0; i < timeModeScore.Length; i += 1)
-					timeModeScore[i] = ds.readInt()
-				Next
-				
-				If (bs <> Null) Then
-					try {
-						bs.close()
-					} catch (IOException e) {
-						e.printStackTrace()
-					}
-				EndIf
-				
-			} catch (Exception e2) {
-				e2.printStackTrace()
-				For (i = 0; i < timeModeScore.Length; i += 1)
-					timeModeScore[i] = Sonicdef.OVER_TIME
-				Next
-				saveHighScoreRecord()
-				
-				If (bs <> Null) Then
-					try {
-						bs.close()
-					} catch (Exception e3) {
-						e3.printStackTrace()
-					}
-				EndIf
-				
-			} catch (Throwable th) {
-				
-				If (bs <> Null) Then
-					try {
-						bs.close()
-					} catch (IOException e4) {
-						e4.printStackTrace()
-					}
-				EndIf
-				
-			}
-		}
-		
-		/* JADX WARNING: inconsistent code. */
-		/* Code decompiled incorrectly, please refer to instructions dump. */
-		Public Function saveHighScoreRecord:Void()
-			/*
-			r0 = New java.io.ByteArrayOutputStream
-			r0.<init>()
-			r1 = New java.io.DataOutputStream
-			r1.<init>(r0)
-			r3 = 0
-		L_0x000b:
-			r4 = timeModeScore;	 Catch:{ Exception -> 0x0023, all -> 0x002d }
-			r4 = r4.Length;	 Catch:{ Exception -> 0x0023, all -> 0x002d }
+		Function loadHighScoreRecord:Void()
+			Local ds:Stream
 			
-			If (r3 < r4) goto L_0x0019
-		L_0x0010:
-			r4 = "SONIC_HIGHSCORE_RECORD"
-			Lib.Record.saveRecordStream(r4, r0);	 Catch:{ Exception -> 0x0023, all -> 0x002d }
-			r1.close();	 Catch:{ IOException -> 0x0037 }
-		L_0x0018:
-			Return
-		L_0x0019:
-			r4 = timeModeScore;	 Catch:{ Exception -> 0x0023, all -> 0x002d }
-			r4 = r4[r3];	 Catch:{ Exception -> 0x0023, all -> 0x002d }
-			r1.writeInt(r4);	 Catch:{ Exception -> 0x0023, all -> 0x002d }
-			r3 = r3 + 1
-			goto L_0x000b
-		L_0x0023:
-			r4 = move-exception
-			r1.close();	 Catch:{ IOException -> 0x0028 }
-			goto L_0x0018
-		L_0x0028:
-			r2 = move-exception
-			r2.printStackTrace()
-			goto L_0x0018
-		L_0x002d:
-			r4 = move-exception
-			r1.close();	 Catch:{ IOException -> 0x0032 }
-		L_0x0031:
-			throw r4
-		L_0x0032:
-			r2 = move-exception
-			r2.printStackTrace()
-			goto L_0x0031
-		L_0x0037:
-			r2 = move-exception
-			r2.printStackTrace()
-			goto L_0x0018
-			*/
-			throw New UnsupportedOperationException("Method not decompiled: SonicGBA.StageManager.saveHighScoreRecord():Void")
-		}
-		
-		Public Function loadStageRecord:Void()
-			ByteArrayInputStream bs = Record.loadRecordStream(Record.STAGE_RECORD)
-			Int i
-			try {
-				DataInputStream ds = New DataInputStream(bs)
-				stageId = ds.readByte()
-				For (i = 0; i < LOAD_BACKGROUND; i += 1)
-					stageIDArray[i] = ds.readByte()
+			Try
+				ds = Record.loadRecordStream(Record.HIGHSCORE_RECORD)
+				
+				For Local i:= 0 Until timeModeScore.Length
+					timeModeScore[i] = ds.ReadInt()
 				Next
-				openedStageId = ds.readByte()
+			Catch E:StreamError
+				For Local i:= 0 Until timeModeScore.Length
+					timeModeScore[i] = sonicdef.OVER_TIME
+				Next
+				
+				saveHighScoreRecord()
+			End Try
+			
+			If (ds <> Null) Then
+				ds.Close()
+			EndIf
+		End
+		
+		Function saveHighScoreRecord:Void()
+			Local ds:PublicDataStream
+			
+			Try
+				ds = New PublicDataStream((timeModeScore.Length * SizeOf_Integer))
+				
+				For Local i:= 0 Until timeModeScore.Length
+					ds.WriteInt(timeModeScore[i])
+				Next
+				
+				Record.saveRecordStream(Record.HIGHSCORE_RECORD, ds)
+			Catch E:StreamError
+				' Nothing so far.
+			End Try
+			
+			If (ds <> Null) Then
+				ds.Close()
+			EndIf
+		End
+		
+		Function loadStageRecord:Void()
+			Local ds:Stream
+			
+			Try
+				ds = Record.loadRecordStream(Record.STAGE_RECORD)
+				
+				stageId = ds.ReadByte()
+				
+				For Local i:= 0 Until CHARACTER_NUM ' stageIDArray.Length
+					stageIDArray[i] = ds.ReadByte()
+				Next
+				
+				openedStageId = ds.ReadByte()
 				
 				If (openedStageId >= STAGE_NUM) Then
-					openedStageId = STAGE_NUM - 1
+					openedStageId = (STAGE_NUM - 1)
 				EndIf
 				
-				Int characterID = PlayerObject.getCharacterID()
-				For (i = 0; i < LOAD_BACKGROUND; i += 1)
-					openedStageIDArray[i] = ds.readByte()
+				'Local characterID:= PlayerObject.getCharacterID()
+				
+				For Local i:= 0 Until CHARACTER_NUM ' openedStageIDArray.Length
+					openedStageIDArray[i] = ds.ReadByte()
 					
 					If (openedStageIDArray[i] >= STAGE_NUM) Then
-						openedStageIDArray[i] = STAGE_NUM - 1
+						openedStageIDArray[i] = (STAGE_NUM - 1)
 					EndIf
-					
 				Next
-				For (i = 0; i < timeModeScore.Length; i += 1)
-					ds.readInt()
-				Next
-				normalStageId = ds.readByte()
+				
+				' Skip the time-mode scores.
+				ds.Seek(ds.Position + (timeModeScore.Length * SizeOf_Integer))
+				
+				normalStageId = ds.ReadByte()
 				
 				If (normalStageId <> stageId) Then
 					stageId = normalStageId
 				EndIf
 				
-				For (i = 0; i < LOAD_BACKGROUND; i += 1)
-					normalStageIDArray[i] = ds.readByte()
+				For Local i:= 0 Until CHARACTER_NUM ' normalStageIDArray.Length
+					normalStageIDArray[i] = ds.ReadByte()
 					
 					If (normalStageIDArray[i] <> stageIDArray[i]) Then
 						stageIDArray[i] = normalStageIDArray[i]
 					EndIf
-					
 				Next
-				startStageID = ds.readByte()
-				For (i = 0; i < LOAD_BACKGROUND; i += 1)
-					startStageIDArray[i] = ds.readByte()
+				
+				startStageID = ds.ReadByte()
+				
+				For Local i:= 0 Until CHARACTER_NUM ' startStageIDArray.Length
+					startStageIDArray[i] = ds.ReadByte()
 				Next
-				characterFromGame = ds.readByte()
-				stageIDFromGame = ds.readByte()
-				PlayerObject.setLife(ds.readByte())
-				PlayerObject.setScore(ds.readInt())
 				
-				If (bs <> Null) Then
-					try {
-						bs.close()
-					} catch (IOException e) {
-						e.printStackTrace()
-					}
-				EndIf
+				characterFromGame = ds.ReadByte()
+				stageIDFromGame = ds.ReadByte()
 				
-			} catch (Exception e2) {
-				e2.printStackTrace()
+				PlayerObject.setLife(ds.ReadByte())
+				PlayerObject.setScore(ds.ReadInt())
+			Catch E:StreamError
+				Print("Exception caught: " + E.ToString())
+				
 				stageId = 0
-				For (i = 0; i < LOAD_BACKGROUND; i += 1)
+				
+				For Local i:= 0 Until CHARACTER_NUM ' stageIDArray.Length
 					stageIDArray[i] = 0
 				Next
+				
 				normalStageId = 0
-				For (i = 0; i < LOAD_BACKGROUND; i += 1)
+				
+				For Local i:= 0 Until CHARACTER_NUM ' stageIDArray.Length
 					normalStageIDArray[i] = 0
 				Next
+				
 				PlayerObject.setScore(0)
-				PlayerObject.setLife(2)
+				PlayerObject.setLife(PlayerObject.LIFE_NUM_RESET)
+				
 				openedStageId = 0
-				For (i = 0; i < LOAD_BACKGROUND; i += 1)
+				
+				For Local i:= 0 Until CHARACTER_NUM ' openedStageIDArray.Length
 					openedStageIDArray[i] = 0
 				Next
+				
 				PlayerObject.resetGameParam()
-				For (i = 0; i < timeModeScore.Length; i += 1)
-					timeModeScore[i] = Sonicdef.OVER_TIME
+				
+				For Local i:= 0 Until timeModeScore.Length
+					timeModeScore[i] = sonicdef.OVER_TIME
 				Next
+				
 				startStageID = 0
-				For (i = 0; i < LOAD_BACKGROUND; i += 1)
+				
+				For Local i:= 0 Until CHARACTER_NUM ' startStageIDArray.Length
 					startStageIDArray[i] = 0
 				Next
+				
 				characterFromGame = -1
 				stageIDFromGame = -1
+				
 				PlayerObject.setScore(0)
-				PlayerObject.setLife(2)
+				PlayerObject.setLife(PlayerObject.LIFE_NUM_RESET)
+				
 				saveStageRecord()
-				
-				If (bs <> Null) Then
-					try {
-						bs.close()
-					} catch (Exception e3) {
-						e3.printStackTrace()
-					}
-				EndIf
-				
-			} catch (Throwable th) {
-				
-				If (bs <> Null) Then
-					try {
-						bs.close()
-					} catch (IOException e4) {
-						e4.printStackTrace()
-					}
-				EndIf
+			End Try
+			
+			If (ds <> Null) Then
+				ds.Close()
 			EndIf
-			
-		}
+		End
 		
-		/* JADX WARNING: inconsistent code. */
-		/* Code decompiled incorrectly, please refer to instructions dump. */
-		Public Function saveStageRecord:Void()
-			/*
-			r8 = 1
-			r7 = 4
-			r0 = New java.io.ByteArrayOutputStream
-			r0.<init>()
-			r2 = New java.io.DataOutputStream
-			r2.<init>(r0)
-			r5 = stageId;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r2.writeByte(r5);	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r4 = 0
-		L_0x0012:
+		Function saveStageRecord:Void()
+			Local ds:PublicDataStream
 			
-			If (r4 < r7) goto L_0x00b1
-		L_0x0014:
-			r5 = openedStageId;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r6 = stageId;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
+			Try
+				ds = New PublicDataStream((timeModeScore.Length * SizeOf_Integer))
+				
+				ds.WriteByte(stageId)
+				
+				For Local i:= 0 Until CHARACTER_NUM ' stageIDArray.Length
+					ds.WriteByte(stageIDArray[i])
+				Next
+				
+				ds.WriteByte(openedStageId)
+				
+				'Local characterID:= PlayerObject.getCharacterID()
+				
+				For Local i:= 0 Until CHARACTER_NUM ' openedStageIDArray.Length
+					ds.WriteByte(openedStageIDArray[i])
+				Next
+				
+				' These are normally skipped by 'loadStageRecord':
+				For Local i:= 0 Until timeModeScore.Length
+					ds.WriteInt(timeModeScore[i])
+				Next
+				
+				ds.WriteByte(normalStageId)
+				
+				For Local i:= 0 Until CHARACTER_NUM ' normalStageIDArray.Length
+					ds.WriteByte(normalStageIDArray[i])
+				Next
+				
+				ds.WriteByte(startStageID)
+				
+				For Local i:= 0 Until CHARACTER_NUM ' startStageIDArray.Length
+					ds.WriteByte(startStageIDArray[i])
+				Next
+				
+				ds.WriteByte(characterFromGame)
+				ds.WriteByte(stageIDFromGame)
+				
+				ds.WriteByte(PlayerObject.getLife())
+				ds.WriteInt(PlayerObject.getScore())
+				
+				Record.saveRecordStream(Record.STAGE_RECORD, ds)
+			Catch E:StreamError
+				' Nothing so far.
+			End Try
 			
-			If (r5 >= r6) goto L_0x001e
-		L_0x001a:
-			r5 = stageId;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			openedStageId = r5;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-		L_0x001e:
-			r5 = openedStageId;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r6 = STAGE_NUM;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			
-			If (r5 < r6) goto L_0x0029
-		L_0x0024:
-			r5 = STAGE_NUM;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r5 = r5 - r8
-			openedStageId = r5;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-		L_0x0029:
-			r5 = openedStageId;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r2.writeByte(r5);	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r1 = SonicGBA.PlayerObject.getCharacterID();	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r5 = openedStageIDArray;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r5 = r5[r1];	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r6 = stageIDArray;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r6 = r6[r1];	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			
-			If (r5 >= r6) goto L_0x0044
-		L_0x003c:
-			r5 = openedStageIDArray;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r6 = stageIDArray;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r6 = r6[r1];	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r5[r1] = r6;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-		L_0x0044:
-			r5 = openedStageIDArray;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r5 = r5[r1];	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r6 = STAGE_NUM;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			
-			If (r5 < r6) goto L_0x0053
-		L_0x004c:
-			r5 = openedStageIDArray;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r6 = STAGE_NUM;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r6 = r6 - r8
-			r5[r1] = r6;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-		L_0x0053:
-			r4 = 0
-		L_0x0054:
-			
-			If (r4 < r7) goto L_0x00bc
-		L_0x0056:
-			r4 = 0
-		L_0x0057:
-			r5 = timeModeScore;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r5 = r5.Length;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			
-			If (r4 < r5) goto L_0x00c6
-		L_0x005c:
-			r5 = isRacing;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			
-			If (r5 <> 0) goto L_0x006a
-		L_0x0060:
-			r5 = normalStageId;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r6 = stageId;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			
-			If (r5 = r6) goto L_0x006a
-		L_0x0066:
-			r5 = stageId;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			normalStageId = r5;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-		L_0x006a:
-			r5 = isRacing;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			
-			If (r5 <> 0) goto L_0x0080
-		L_0x006e:
-			r5 = normalStageIDArray;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r5 = r5[r1];	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r6 = stageIDArray;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r6 = r6[r1];	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			
-			If (r5 = r6) goto L_0x0080
-		L_0x0078:
-			r5 = normalStageIDArray;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r6 = stageIDArray;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r6 = r6[r1];	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r5[r1] = r6;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-		L_0x0080:
-			r5 = normalStageId;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r2.writeByte(r5);	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r4 = 0
-		L_0x0086:
-			
-			If (r4 < r7) goto L_0x00d0
-		L_0x0088:
-			r5 = startStageID;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r2.writeByte(r5);	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r4 = 0
-		L_0x008e:
-			
-			If (r4 < r7) goto L_0x00da
-		L_0x0090:
-			r5 = characterFromGame;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r2.writeByte(r5);	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r5 = stageIDFromGame;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r2.writeByte(r5);	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r5 = SonicGBA.PlayerObject.getLife();	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r2.writeByte(r5);	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r5 = SonicGBA.PlayerObject.getScore();	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r2.writeInt(r5);	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r5 = "SONIC_STAGE_RECORD"
-			Lib.Record.saveRecordStream(r5, r0);	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r2.close();	 Catch:{ IOException -> 0x00f8 }
-		L_0x00b0:
-			Return
-		L_0x00b1:
-			r5 = stageIDArray;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r5 = r5[r4];	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r2.writeByte(r5);	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r4 = r4 + 1
-			goto L_0x0012
-		L_0x00bc:
-			r5 = openedStageIDArray;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r5 = r5[r4];	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r2.writeByte(r5);	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r4 = r4 + 1
-			goto L_0x0054
-		L_0x00c6:
-			r5 = timeModeScore;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r5 = r5[r4];	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r2.writeInt(r5);	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r4 = r4 + 1
-			goto L_0x0057
-		L_0x00d0:
-			r5 = normalStageIDArray;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r5 = r5[r4];	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r2.writeByte(r5);	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r4 = r4 + 1
-			goto L_0x0086
-		L_0x00da:
-			r5 = startStageIDArray;	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r5 = r5[r4];	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r2.writeByte(r5);	 Catch:{ Exception -> 0x00e4, all -> 0x00ee }
-			r4 = r4 + 1
-			goto L_0x008e
-		L_0x00e4:
-			r5 = move-exception
-			r2.close();	 Catch:{ IOException -> 0x00e9 }
-			goto L_0x00b0
-		L_0x00e9:
-			r3 = move-exception
-			r3.printStackTrace()
-			goto L_0x00b0
-		L_0x00ee:
-			r5 = move-exception
-			r2.close();	 Catch:{ IOException -> 0x00f3 }
-		L_0x00f2:
-			throw r5
-		L_0x00f3:
-			r3 = move-exception
-			r3.printStackTrace()
-			goto L_0x00f2
-		L_0x00f8:
-			r3 = move-exception
-			r3.printStackTrace()
-			goto L_0x00b0
-			*/
-			throw New UnsupportedOperationException("Method not decompiled: SonicGBA.StageManager.saveStageRecord():Void")
-		}
+			If (ds <> Null) Then
+				ds.Close()
+			EndIf
+		End
 		
 		Public Function addNewNormalScore:Void(newScore:Int)
 			Bool isNewScore = False
@@ -1037,7 +844,7 @@ Class StageManager ' Implements SonicDef
 			characterFromGame = -1
 			stageIDFromGame = -1
 			PlayerObject.setScore(0)
-			PlayerObject.setLife(2)
+			PlayerObject.setLife(PlayerObject.LIFE_NUM_RESET)
 			saveStageRecord()
 		}
 		
@@ -1052,14 +859,14 @@ Class StageManager ' Implements SonicDef
 				normalStageIDArray[i] = 0
 			EndIf
 			PlayerObject.setScore(0)
-			PlayerObject.setLife(2)
+			PlayerObject.setLife(PlayerObject.LIFE_NUM_RESET)
 			openedStageId = 0
 			For (i = 0; i < LOAD_BACKGROUND; i += 1)
 				openedStageIDArray[i] = 0
 			EndIf
 			PlayerObject.resetGameParam()
 			For (i = 0; i < timeModeScore.Length; i += 1)
-				timeModeScore[i] = Sonicdef.OVER_TIME
+				timeModeScore[i] = sonicdef.OVER_TIME
 			EndIf
 			startStageID = 0
 			For (i = 0; i < LOAD_BACKGROUND; i += 1)
@@ -1068,7 +875,7 @@ Class StageManager ' Implements SonicDef
 			characterFromGame = -1
 			stageIDFromGame = -1
 			PlayerObject.setScore(0)
-			PlayerObject.setLife(2)
+			PlayerObject.setLife(PlayerObject.LIFE_NUM_RESET)
 			SpecialStageState.emptyEmeraldArray()
 			GlobalResource.initSystemConfig()
 			saveStageRecord()
