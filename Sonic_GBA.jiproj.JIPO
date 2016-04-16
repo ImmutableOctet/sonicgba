@@ -680,12 +680,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\enemyobject.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\enemyobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>22</X>
+        <Y>278</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>cfc3d430-1ae6-4466-a8de-2625a4452282</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\extraring.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -722,12 +723,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>12</X>
+        <Y>520</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>bfaf2a90-ad60-4573-8678-a49b6a5289d5</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -855,12 +857,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>40</X>
+        <Y>1051</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>b20c5215-269c-49ed-8681-bb8fbc1c1799</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playersonic.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -1004,8 +1007,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\stagemanager.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>142</Y>
+        <X>24</X>
+        <Y>172</Y>
       </CursorPos>
       <DocGUID>6959162a-5588-4466-a42a-629fdd882c05</DocGUID>
       <Bookmarks />

@@ -136,6 +136,7 @@ Class StageManager ' Implements SonicDef
 		' Presumably, this is used to match the Zones and acts as you move through the levels.
 		Global ZOME_ID:Int[] = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 7] ' Const
 		
+		' If it wouldn't make the arrays huge, these would use the 'BGM constants' found in 'SoundSystem':
 		Global MUSIC_ID:Int[] = MUSIC_ID_HIGH ' Const
 		Global MUSIC_ID_HIGH:Int[] = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20] ' Const
 		Global MUSIC_ID_LOW:Int[] = [6, 7, 8, 9, 10, 11, 12, 13] ' Const
@@ -165,55 +166,62 @@ Class StageManager ' Implements SonicDef
 		Global stageIDFromGame:Int = -1
 		
 		' Functions:
-		Public Function loadStageStep:Bool()
-			Bool nextStep = True
+		
+		' This function may need to be optimized in the future.
+		' I say this because I'm pretty sure some things get done multiple times for no reason.
+		' If someone were to extend this function with their own code, that could cause weird behavior.
+		Function loadStageStep:Bool()
+			Local nextStep:Bool = True
+			
 			Select (loadStep)
-				Case STAGE_PASS_FRAME
+				Case LOAD_RELEASE_MEMORY
 					SoundSystem.getInstance().stopBgm(True)
+					
 					MapManager.closeMap()
 					CollisionMap.getInstance().closeMap()
+					
 					Key.touchkeygameboardClose()
+					
 					RocketSeparateEffect.getInstance().close()
+					
 					Key.touchGamePauseClose()
+					
 					State.isDrawTouchPad = False
+					
 					PlayerObject.isNeedPlayWaterSE = False
+					
 					SoundSystem.getInstance().setSoundSpeed(1.0)
-					break
 				Case LOAD_RELEASE_MEMORY_2
-					Bool z
+					Local sameStage:Bool = (preStageIDArray[PlayerObject.getCharacterID()] = stageIDArray[PlayerObject.getCharacterID()])
 					
-					If (preStageIDArray[PlayerObject.getCharacterID()] = stageIDArray[PlayerObject.getCharacterID()]) Then
-						z = True
-					Else
-						z = False
-					EndIf
-					
-					nextStep = GameObject.closeObjectStep(z)
-					break
-				Case MOVING_SPACE
+					nextStep = GameObject.closeObjectStep(sameStage)
+				Case LOAD_MAP
 					PlayerObject.initStageParam()
 					
-					If (getCurrentZoneId() = LOAD_BACKGROUND) Then
-						If (stageIDArray[PlayerObject.getCharacterID()] Mod MOVING_SPACE = 0) Then
+					If (getCurrentZoneId() = 4) Then
+						' Check if this is the first or second act:
+						If ((stageIDArray[PlayerObject.getCharacterID()] Mod 2) = 0) Then
+							' Set the water level for stage 4-1.
 							setWaterLevel(STAGE_4_1_WATER_LEVEL)
 						Else
+							' Set the water level for stage 4-2.
 							setWaterLevel(STAGE_4_2_WATER_LEVEL)
 						EndIf
 					EndIf
 					
 					nextStep = MapManager.loadMapStep(stageIDArray[PlayerObject.getCharacterID()], STAGE_NAME[stageIDArray[PlayerObject.getCharacterID()]])
-					break
-				Case RECORD_NUM
+				Case LOAD_COLLISION
 					nextStep = CollisionMap.getInstance().loadCollisionInfoStep(STAGE_NAME[stageIDArray[PlayerObject.getCharacterID()]])
-					break
 				Case LOAD_BACKGROUND
 					BackGroundManager.init(stageIDArray[PlayerObject.getCharacterID()])
-					break
 				Case LOAD_OBJ_INIT
 					GameObject.initObject(MapManager.getPixelWidth(), MapManager.getPixelHeight(), preStageIDArray[PlayerObject.getCharacterID()] = stageIDArray[PlayerObject.getCharacterID()])
+					
 					preStageIDArray[PlayerObject.getCharacterID()] = stageIDArray[PlayerObject.getCharacterID()]
 					
-					If (Not GameState.isBackFromSpStage) Then
+					If (GameState.isBackFromSpStage) Then
+						GameObject.setPlayerPosition(specialStagePointX, specialStagePointY)
+					Else
 						If (Not stageRestartFlag) Then
 							checkPointEnable = False
 							checkCameraEnable = False
@@ -221,72 +229,69 @@ Class StageManager ' Implements SonicDef
 						
 						If (stageRestartFlag And checkPointEnable) Then
 							GameObject.setPlayerPosition(checkPointX, checkPointY)
+							
 							PlayerObject.timeCount = checkPointTime
 						Else
-							GameObject.setPlayerPosition(PLAYER_START[stageIDArray[PlayerObject.getCharacterID()]][STAGE_PASS_FRAME], PLAYER_START[stageIDArray[PlayerObject.getCharacterID()]][LOAD_RELEASE_MEMORY_2])
+							GameObject.setPlayerPosition(PLAYER_START[stageIDArray[PlayerObject.getCharacterID()]][0], PLAYER_START[stageIDArray[PlayerObject.getCharacterID()]][1])
+							
 							PlayerObject.doInitInNewStage()
 						EndIf
 						
-						If (checkCameraEnable And stageRestartFlag And PlayerObject.stageModeState <> LOAD_RELEASE_MEMORY_2) Then
+						If (checkCameraEnable And stageRestartFlag And GameObject.stageModeState <> GameObject.STATE_RACE_MODE) Then
 							MapManager.setCameraUpLimit(checkCameraUpX)
 							MapManager.setCameraDownLimit(checkCameraDownX)
 							MapManager.setCameraLeftLimit(checkCameraLeftX)
 							MapManager.setCameraRightLimit(checkCameraRightX)
 							MapManager.calCameraImmidiately()
-							break
 						EndIf
 					EndIf
-					
-					GameObject.setPlayerPosition(specialStagePointX, specialStagePointY)
-					break
-					break
 				Case LOAD_GIMMICK
-					nextStep = GameObject.loadObjectStep("/map/" + STAGE_NAME[stageIDArray[PlayerObject.getCharacterID()]] + ".gi", STAGE_PASS_FRAME)
+					nextStep = GameObject.loadObjectStep("/map/" + STAGE_NAME[stageIDArray[PlayerObject.getCharacterID()]] + ".gi", 0)
 					break
 				Case LOAD_RING
-					nextStep = GameObject.loadObjectStep("/map/" + STAGE_NAME[stageIDArray[PlayerObject.getCharacterID()]] + ".ri", LOAD_RELEASE_MEMORY_2)
+					nextStep = GameObject.loadObjectStep("/map/" + STAGE_NAME[stageIDArray[PlayerObject.getCharacterID()]] + ".ri", 1)
 					break
 				Case LOAD_ENEMY
-					nextStep = GameObject.loadObjectStep("/map/" + STAGE_NAME[stageIDArray[PlayerObject.getCharacterID()]] + ".en", MOVING_SPACE)
+					nextStep = GameObject.loadObjectStep("/map/" + STAGE_NAME[stageIDArray[PlayerObject.getCharacterID()]] + ".en", 2)
 					
-					If (getCurrentZoneId() = LOAD_ENEMY) Then
-						EnemyObject enemy = EnemyObject.getNewInstance(36, STAGE_PASS_FRAME, STAGE_PASS_FRAME, STAGE_PASS_FRAME, STAGE_PASS_FRAME, STAGE_PASS_FRAME, STAGE_PASS_FRAME)
+					If (getCurrentZoneId() = 8) Then ' And nextStep
+						Local enemy:= EnemyObject.getNewInstance(EnemyObject.ENEMY_BOSS_EXTRA, 0, 0, 0, 0, 0, 0)
 						
 						If (Not (enemy = Null Or EnemyObject.IsBoss)) Then
 							GameObject.addGameObject(enemy)
 						EndIf
 						
 						nextStep = True
-						break
 					EndIf
-					
-					break
 				Case LOAD_ITEM
 					nextStep = GameObject.loadObjectStep("/map/" + STAGE_NAME[stageIDArray[PlayerObject.getCharacterID()]] + ".it", RECORD_NUM)
+					
 					Key.clear()
+					
 					stagePassFlag = False
 					stageRestartFlag = False
 					stageGameoverFlag = False
 					stageTimeoverFlag = False
-					break
-				Case STAGE_RESTART_FRAME
+				Case LOAD_ANIMAL
 					SmallAnimal.animalInit()
+					
 					MapManager.focusQuickLocation()
-					break
 				Case LOAD_GAME_LOGIC
 					nextStep = True
+					
 					Key.clear()
+					
 					GameObject.logicObjects()
-					break
 				Case LOAD_SE
 					GameObject.isDamageSandActive = False
+					
 					SoundSystem.getInstance().preLoadAllSe()
-					break
 				Case LOAD_GAME_INIT
 					SoundSystem.getInstance().playBgm(getBgmId(), True)
-					loadStep = STAGE_PASS_FRAME
 					
-					If (State.loadingType = MOVING_SPACE) Then
+					loadStep = LOAD_RELEASE_MEMORY
+					
+					If (State.loadingType = 2) Then
 						isNextGameStageDirectedly = True
 					Else
 						isNextGameStageDirectedly = False
@@ -296,44 +301,44 @@ Class StageManager ' Implements SonicDef
 			End Select
 			
 			If (nextStep) Then
-				loadStep += LOAD_RELEASE_MEMORY_2
+				loadStep += 1
 			EndIf
 			
 			Return False
-		}
+		End
 		
-		Public Function getBgmId:Int()
+		Function getBgmId:Int()
 			Return MUSIC_ID[stageIDArray[PlayerObject.getCharacterID()]]
-		}
+		End
 		
 		Public Function draw:Void(g:MFGraphics)
 			g.setColor(MapManager.END_COLOR)
-			MyAPI.fillRect(g, STAGE_PASS_FRAME, STAGE_PASS_FRAME, SCREEN_WIDTH, SCREEN_HEIGHT)
-			For (Int i = STAGE_PASS_FRAME; i < STAGE_NAME.Length; i += LOAD_RELEASE_MEMORY_2)
-				g.setColor(STAGE_PASS_FRAME)
+			MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+			For (Int i = 0; i < STAGE_NAME.Length; i += 1)
+				g.setColor(0)
 				
 				If (i = stageId) Then
 					g.setColor(16711680)
 				EndIf
 				
-				MyAPI.drawString(g, "stage" + STAGE_NAME[i], SCREEN_WIDTH Shr LOAD_RELEASE_MEMORY_2, (i * 20) + 20, 17)
+				MyAPI.drawString(g, "stage" + STAGE_NAME[i], SCREEN_WIDTH Shr 1, (i * 20) + 20, 17)
 			Next
 		}
 		
 		Public Function getCurrentZoneId:Int()
 			
 			If (stageIDArray[PlayerObject.getCharacterID()] >= ZOME_ID.Length) Then
-				Return ZOME_ID[ZOME_ID.Length - LOAD_RELEASE_MEMORY_2] + LOAD_RELEASE_MEMORY_2
+				Return ZOME_ID[ZOME_ID.Length - 1] + 1
 			EndIf
 			
-			Return ZOME_ID[stageIDArray[PlayerObject.getCharacterID()]] + LOAD_RELEASE_MEMORY_2
+			Return ZOME_ID[stageIDArray[PlayerObject.getCharacterID()]] + 1
 		}
 		
 		Public Function setStagePass:Void()
 			
 			If (Not stagePassFlag) Then
 				stagePassFlag = True
-				stagePassCount = STAGE_PASS_FRAME
+				stagePassCount = 0
 			EndIf
 			
 		}
@@ -364,7 +369,7 @@ Class StageManager ' Implements SonicDef
 			
 			If (Not stageTimeoverFlag) Then
 				stageTimeoverFlag = True
-				stageTimeoverCount = STAGE_PASS_FRAME
+				stageTimeoverCount = 0
 			EndIf
 			
 		}
@@ -372,19 +377,19 @@ Class StageManager ' Implements SonicDef
 		Public Function stageLogic:Void()
 			
 			If (stagePassFlag And stagePassCount > 0) Then
-				stagePassCount -= LOAD_RELEASE_MEMORY_2
+				stagePassCount -= 1
 			EndIf
 			
 			If (stageRestartFlag And stageRestartCount > 0) Then
-				stageRestartCount -= LOAD_RELEASE_MEMORY_2
+				stageRestartCount -= 1
 			EndIf
 			
 			If (stageGameoverFlag And stageGameoverCount > 0) Then
-				stageGameoverCount -= LOAD_RELEASE_MEMORY_2
+				stageGameoverCount -= 1
 			EndIf
 			
 			If (stageTimeoverFlag And stageTimeoverCount > 0) Then
-				stageTimeoverCount -= LOAD_RELEASE_MEMORY_2
+				stageTimeoverCount -= 1
 			EndIf
 			
 		}
@@ -428,7 +433,7 @@ Class StageManager ' Implements SonicDef
 		Public Function addStageID:Void()
 			Int[] iArr = stageIDArray
 			Int characterID = PlayerObject.getCharacterID()
-			iArr[characterID] = iArr[characterID] + LOAD_RELEASE_MEMORY_2
+			iArr[characterID] = iArr[characterID] + 1
 			
 			If (openedStageIDArray[PlayerObject.getCharacterID()] < stageIDArray[PlayerObject.getCharacterID()]) Then
 				openedStageIDArray[PlayerObject.getCharacterID()] = stageIDArray[PlayerObject.getCharacterID()]
@@ -438,7 +443,7 @@ Class StageManager ' Implements SonicDef
 		
 		Public Function IsStageEnd:Bool()
 			
-			If (stageIDArray[PlayerObject.getCharacterID()] + LOAD_RELEASE_MEMORY_2 = STAGE_NAME.Length) Then
+			If (stageIDArray[PlayerObject.getCharacterID()] + 1 = STAGE_NAME.Length) Then
 				Return True
 			EndIf
 			
@@ -452,14 +457,14 @@ Class StageManager ' Implements SonicDef
 		Public Function setTimeModeScore:Void(characterid:Int, score:Int)
 			
 			If (score <= timeModeScore[((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)]) Then
-				timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + MOVING_SPACE] = timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + LOAD_RELEASE_MEMORY_2]
-				timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + LOAD_RELEASE_MEMORY_2] = timeModeScore[((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)]
+				timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + 2] = timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + 1]
+				timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + 1] = timeModeScore[((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)]
 				timeModeScore[((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)] = score
-			ElseIf (score <= timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + LOAD_RELEASE_MEMORY_2]) Then
-				timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + MOVING_SPACE] = timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + LOAD_RELEASE_MEMORY_2]
-				timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + LOAD_RELEASE_MEMORY_2] = score
-			ElseIf (score <= timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + MOVING_SPACE]) Then
-				timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + MOVING_SPACE] = score
+			ElseIf (score <= timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + 1]) Then
+				timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + 2] = timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + 1]
+				timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + 1] = score
+			ElseIf (score <= timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + 2]) Then
+				timeModeScore[(((STAGE_NUM * RECORD_NUM) * characterid) + (stageIDArray[characterid] * RECORD_NUM)) + 2] = score
 			EndIf
 			
 		}
@@ -477,7 +482,7 @@ Class StageManager ' Implements SonicDef
 		}
 		
 		Public Function setTimeModeScore:Void(tmpTimeModeScore:Int[])
-			For (Int i = STAGE_PASS_FRAME; i < timeModeScore.Length; i += LOAD_RELEASE_MEMORY_2)
+			For (Int i = 0; i < timeModeScore.Length; i += 1)
 				timeModeScore[i] = tmpTimeModeScore[i]
 			Next
 		}
@@ -487,7 +492,7 @@ Class StageManager ' Implements SonicDef
 			ByteArrayInputStream bs = Record.loadRecordStream(Record.HIGHSCORE_RECORD)
 			try {
 				DataInputStream ds = New DataInputStream(bs)
-				For (i = STAGE_PASS_FRAME; i < timeModeScore.Length; i += LOAD_RELEASE_MEMORY_2)
+				For (i = 0; i < timeModeScore.Length; i += 1)
 					timeModeScore[i] = ds.readInt()
 				Next
 				
@@ -501,7 +506,7 @@ Class StageManager ' Implements SonicDef
 				
 			} catch (Exception e2) {
 				e2.printStackTrace()
-				For (i = STAGE_PASS_FRAME; i < timeModeScore.Length; i += LOAD_RELEASE_MEMORY_2)
+				For (i = 0; i < timeModeScore.Length; i += 1)
 					timeModeScore[i] = Sonicdef.OVER_TIME
 				Next
 				saveHighScoreRecord()
@@ -584,25 +589,25 @@ Class StageManager ' Implements SonicDef
 			try {
 				DataInputStream ds = New DataInputStream(bs)
 				stageId = ds.readByte()
-				For (i = STAGE_PASS_FRAME; i < LOAD_BACKGROUND; i += LOAD_RELEASE_MEMORY_2)
+				For (i = 0; i < LOAD_BACKGROUND; i += 1)
 					stageIDArray[i] = ds.readByte()
 				Next
 				openedStageId = ds.readByte()
 				
 				If (openedStageId >= STAGE_NUM) Then
-					openedStageId = STAGE_NUM - LOAD_RELEASE_MEMORY_2
+					openedStageId = STAGE_NUM - 1
 				EndIf
 				
 				Int characterID = PlayerObject.getCharacterID()
-				For (i = STAGE_PASS_FRAME; i < LOAD_BACKGROUND; i += LOAD_RELEASE_MEMORY_2)
+				For (i = 0; i < LOAD_BACKGROUND; i += 1)
 					openedStageIDArray[i] = ds.readByte()
 					
 					If (openedStageIDArray[i] >= STAGE_NUM) Then
-						openedStageIDArray[i] = STAGE_NUM - LOAD_RELEASE_MEMORY_2
+						openedStageIDArray[i] = STAGE_NUM - 1
 					EndIf
 					
 				Next
-				For (i = STAGE_PASS_FRAME; i < timeModeScore.Length; i += LOAD_RELEASE_MEMORY_2)
+				For (i = 0; i < timeModeScore.Length; i += 1)
 					ds.readInt()
 				Next
 				normalStageId = ds.readByte()
@@ -611,7 +616,7 @@ Class StageManager ' Implements SonicDef
 					stageId = normalStageId
 				EndIf
 				
-				For (i = STAGE_PASS_FRAME; i < LOAD_BACKGROUND; i += LOAD_RELEASE_MEMORY_2)
+				For (i = 0; i < LOAD_BACKGROUND; i += 1)
 					normalStageIDArray[i] = ds.readByte()
 					
 					If (normalStageIDArray[i] <> stageIDArray[i]) Then
@@ -620,7 +625,7 @@ Class StageManager ' Implements SonicDef
 					
 				Next
 				startStageID = ds.readByte()
-				For (i = STAGE_PASS_FRAME; i < LOAD_BACKGROUND; i += LOAD_RELEASE_MEMORY_2)
+				For (i = 0; i < LOAD_BACKGROUND; i += 1)
 					startStageIDArray[i] = ds.readByte()
 				Next
 				characterFromGame = ds.readByte()
@@ -638,32 +643,32 @@ Class StageManager ' Implements SonicDef
 				
 			} catch (Exception e2) {
 				e2.printStackTrace()
-				stageId = STAGE_PASS_FRAME
-				For (i = STAGE_PASS_FRAME; i < LOAD_BACKGROUND; i += LOAD_RELEASE_MEMORY_2)
-					stageIDArray[i] = STAGE_PASS_FRAME
+				stageId = 0
+				For (i = 0; i < LOAD_BACKGROUND; i += 1)
+					stageIDArray[i] = 0
 				Next
-				normalStageId = STAGE_PASS_FRAME
-				For (i = STAGE_PASS_FRAME; i < LOAD_BACKGROUND; i += LOAD_RELEASE_MEMORY_2)
-					normalStageIDArray[i] = STAGE_PASS_FRAME
+				normalStageId = 0
+				For (i = 0; i < LOAD_BACKGROUND; i += 1)
+					normalStageIDArray[i] = 0
 				Next
-				PlayerObject.setScore(STAGE_PASS_FRAME)
-				PlayerObject.setLife(MOVING_SPACE)
-				openedStageId = STAGE_PASS_FRAME
-				For (i = STAGE_PASS_FRAME; i < LOAD_BACKGROUND; i += LOAD_RELEASE_MEMORY_2)
-					openedStageIDArray[i] = STAGE_PASS_FRAME
+				PlayerObject.setScore(0)
+				PlayerObject.setLife(2)
+				openedStageId = 0
+				For (i = 0; i < LOAD_BACKGROUND; i += 1)
+					openedStageIDArray[i] = 0
 				Next
 				PlayerObject.resetGameParam()
-				For (i = STAGE_PASS_FRAME; i < timeModeScore.Length; i += LOAD_RELEASE_MEMORY_2)
+				For (i = 0; i < timeModeScore.Length; i += 1)
 					timeModeScore[i] = Sonicdef.OVER_TIME
 				Next
-				startStageID = STAGE_PASS_FRAME
-				For (i = STAGE_PASS_FRAME; i < LOAD_BACKGROUND; i += LOAD_RELEASE_MEMORY_2)
-					startStageIDArray[i] = STAGE_PASS_FRAME
+				startStageID = 0
+				For (i = 0; i < LOAD_BACKGROUND; i += 1)
+					startStageIDArray[i] = 0
 				Next
 				characterFromGame = -1
 				stageIDFromGame = -1
-				PlayerObject.setScore(STAGE_PASS_FRAME)
-				PlayerObject.setLife(MOVING_SPACE)
+				PlayerObject.setScore(0)
+				PlayerObject.setLife(2)
 				saveStageRecord()
 				
 				If (bs <> Null) Then
@@ -871,8 +876,8 @@ Class StageManager ' Implements SonicDef
 		
 		Public Function addNewNormalScore:Void(newScore:Int)
 			Bool isNewScore = False
-			Int tmpScore = STAGE_PASS_FRAME
-			For (Int i = STAGE_PASS_FRAME; i < LOAD_OBJ_INIT; i += LOAD_RELEASE_MEMORY_2)
+			Int tmpScore = 0
+			For (Int i = 0; i < LOAD_OBJ_INIT; i += 1)
 				
 				If (isNewScore) Then
 					Int tmpScore2 = highScore[i]
@@ -889,34 +894,34 @@ Class StageManager ' Implements SonicDef
 		}
 		
 		Public Function normalHighScoreInit:Void()
-			movingRow = STAGE_PASS_FRAME
-			movingCount = STAGE_PASS_FRAME
-			For (Int i = STAGE_PASS_FRAME; i < rankingOffsetX.Length; i += LOAD_RELEASE_MEMORY_2)
+			movingRow = 0
+			movingCount = 0
+			For (Int i = 0; i < rankingOffsetX.Length; i += 1)
 				rankingOffsetX[i] = SCREEN_WIDTH
 			EndIf
 		}
 		
 		Public Function drawNormalHighScore:Void(g:MFGraphics)
 			Int i
-			For (i = STAGE_PASS_FRAME; i < LOAD_OBJ_INIT; i += LOAD_RELEASE_MEMORY_2)
+			For (i = 0; i < LOAD_OBJ_INIT; i += 1)
 				
 				If (drawNewScore = i And (Millisecs() / 300) Mod 2 = 0) Then
-					State.drawMenuFontById(g, 49, (((SCREEN_WIDTH Shr LOAD_RELEASE_MEMORY_2) - 45) + rankingOffsetX[i]) + STAGE_PASS_FRAME, HIGH_SCORE_Y + (MENU_SPACE * i))
-					State.drawMenuFontById(g, i + 38, (((SCREEN_WIDTH Shr LOAD_RELEASE_MEMORY_2) - 45) + rankingOffsetX[i]) + STAGE_PASS_FRAME, HIGH_SCORE_Y + (MENU_SPACE * i))
-					PlayerObject.drawNum(g, highScore[i]..((((SCREEN_WIDTH Shr LOAD_RELEASE_MEMORY_2) + 20) + 48) + rankingOffsetX[i]) + STAGE_PASS_FRAME, (MENU_SPACE * i) + HIGH_SCORE_Y, MOVING_SPACE, LOAD_BACKGROUND)
+					State.drawMenuFontById(g, 49, (((SCREEN_WIDTH Shr 1) - 45) + rankingOffsetX[i]) + 0, HIGH_SCORE_Y + (MENU_SPACE * i))
+					State.drawMenuFontById(g, i + 38, (((SCREEN_WIDTH Shr 1) - 45) + rankingOffsetX[i]) + 0, HIGH_SCORE_Y + (MENU_SPACE * i))
+					PlayerObject.drawNum(g, highScore[i]..((((SCREEN_WIDTH Shr 1) + 20) + 48) + rankingOffsetX[i]) + 0, (MENU_SPACE * i) + HIGH_SCORE_Y, 2, LOAD_BACKGROUND)
 				Else
-					State.drawMenuFontById(g, 48, (((SCREEN_WIDTH Shr LOAD_RELEASE_MEMORY_2) - 45) + rankingOffsetX[i]) + STAGE_PASS_FRAME, HIGH_SCORE_Y + (MENU_SPACE * i))
-					State.drawMenuFontById(g, i + 28, (((SCREEN_WIDTH Shr LOAD_RELEASE_MEMORY_2) - 45) + rankingOffsetX[i]) + STAGE_PASS_FRAME, HIGH_SCORE_Y + (MENU_SPACE * i))
-					PlayerObject.drawNum(g, highScore[i]..((((SCREEN_WIDTH Shr LOAD_RELEASE_MEMORY_2) + 20) + 48) + rankingOffsetX[i]) + STAGE_PASS_FRAME, (MENU_SPACE * i) + HIGH_SCORE_Y, MOVING_SPACE, STAGE_PASS_FRAME)
+					State.drawMenuFontById(g, 48, (((SCREEN_WIDTH Shr 1) - 45) + rankingOffsetX[i]) + 0, HIGH_SCORE_Y + (MENU_SPACE * i))
+					State.drawMenuFontById(g, i + 28, (((SCREEN_WIDTH Shr 1) - 45) + rankingOffsetX[i]) + 0, HIGH_SCORE_Y + (MENU_SPACE * i))
+					PlayerObject.drawNum(g, highScore[i]..((((SCREEN_WIDTH Shr 1) + 20) + 48) + rankingOffsetX[i]) + 0, (MENU_SPACE * i) + HIGH_SCORE_Y, 2, 0)
 				EndIf
 			EndIf
-			If (movingRow < rankingOffsetX.Length And movingCount Mod MOVING_SPACE = 0) Then
-				movingRow += LOAD_RELEASE_MEMORY_2
+			If (movingRow < rankingOffsetX.Length And movingCount Mod 2 = 0) Then
+				movingRow += 1
 			EndIf
 			
-			movingCount += LOAD_RELEASE_MEMORY_2
-			For (i = STAGE_PASS_FRAME; i < movingRow; i += LOAD_RELEASE_MEMORY_2)
-				rankingOffsetX[i] = MyAPI.calNextPosition((Double) rankingOffsetX[i], 0.0, LOAD_RELEASE_MEMORY_2, RECORD_NUM)
+			movingCount += 1
+			For (i = 0; i < movingRow; i += 1)
+				rankingOffsetX[i] = MyAPI.calNextPosition((Double) rankingOffsetX[i], 0.0, 1, RECORD_NUM)
 			EndIf
 		}
 		
@@ -933,21 +938,21 @@ Class StageManager ' Implements SonicDef
 			Int stageid = openedStageIDArray[PlayerObject.getCharacterID()]
 			
 			If (PlayerObject.getCharacterID() = 0) Then
-				If (GameObject.stageModeState = 0) Then
+				If (GameObject.stageModeState = GameObject.STATE_NORMAL_MODE) Then
 					If (stageid >= STAGE_NUM) Then
 						stageid = STAGE_NUM
 					EndIf
 					
-				ElseIf (GameObject.stageModeState = LOAD_RELEASE_MEMORY_2 And stageid >= STAGE_NUM - RECORD_NUM) Then
+				ElseIf (GameObject.stageModeState = GameObject.STATE_RACE_MODE And stageid >= STAGE_NUM - RECORD_NUM) Then
 					stageid = STAGE_NUM - RECORD_NUM
 				EndIf
 				
-			ElseIf (GameObject.stageModeState = 0) Then
-				If (stageid >= STAGE_NUM - MOVING_SPACE) Then
-					stageid = STAGE_NUM - MOVING_SPACE
+			ElseIf (GameObject.stageModeState = GameObject.STATE_NORMAL_MODE) Then
+				If (stageid >= STAGE_NUM - 2) Then
+					stageid = STAGE_NUM - 2
 				EndIf
 				
-			ElseIf (GameObject.stageModeState = LOAD_RELEASE_MEMORY_2 And stageid >= STAGE_NUM - RECORD_NUM) Then
+			ElseIf (GameObject.stageModeState = GameObject.STATE_RACE_MODE And stageid >= STAGE_NUM - RECORD_NUM) Then
 				stageid = STAGE_NUM - RECORD_NUM
 			EndIf
 			
@@ -957,32 +962,32 @@ Class StageManager ' Implements SonicDef
 		Public Function getMaxStageID:Int()
 			
 			If (PlayerObject.getCharacterID() = 0) Then
-				If (GameObject.stageModeState = 0) Then
-					If (openedStageIDArray[PlayerObject.getCharacterID()] >= STAGE_NUM - LOAD_RELEASE_MEMORY_2) Then
-						Return STAGE_NUM - LOAD_RELEASE_MEMORY_2
+				If (GameObject.stageModeState = GameObject.STATE_NORMAL_MODE) Then
+					If (openedStageIDArray[PlayerObject.getCharacterID()] >= STAGE_NUM - 1) Then
+						Return STAGE_NUM - 1
 					EndIf
 					
-					Return STAGE_NUM - MOVING_SPACE
-				ElseIf (GameObject.stageModeState = LOAD_RELEASE_MEMORY_2) Then
+					Return STAGE_NUM - 2
+				ElseIf (GameObject.stageModeState = GameObject.STATE_RACE_MODE) Then
 					Return STAGE_NUM - RECORD_NUM
 				EndIf
 				
-			ElseIf (GameObject.stageModeState = 0) Then
-				Return STAGE_NUM - MOVING_SPACE
+			ElseIf (GameObject.stageModeState = GameObject.STATE_NORMAL_MODE) Then
+				Return STAGE_NUM - 2
 			Else
 				
-				If (GameObject.stageModeState = LOAD_RELEASE_MEMORY_2) Then
+				If (GameObject.stageModeState = GameObject.STATE_RACE_MODE) Then
 					Return STAGE_NUM - RECORD_NUM
 				EndIf
 			EndIf
 			
-			Return STAGE_PASS_FRAME
+			Return 0
 		}
 		
 		Public Function resetOpenedStageIdforTry:Void(id:Int)
 			openedStageIDArray[PlayerObject.getCharacterID()] = id
-			stageIDArray[PlayerObject.getCharacterID()] = STAGE_PASS_FRAME
-			normalStageIDArray[PlayerObject.getCharacterID()] = STAGE_PASS_FRAME
+			stageIDArray[PlayerObject.getCharacterID()] = 0
+			normalStageIDArray[PlayerObject.getCharacterID()] = 0
 			saveStageRecord()
 		}
 		
@@ -1016,54 +1021,54 @@ Class StageManager ' Implements SonicDef
 				openedStageIDArray[PlayerObject.getCharacterID()] = stageIDArray[PlayerObject.getCharacterID()]
 			EndIf
 			
-			stageIDArray[PlayerObject.getCharacterID()] = STAGE_PASS_FRAME
-			normalStageIDArray[PlayerObject.getCharacterID()] = STAGE_PASS_FRAME
+			stageIDArray[PlayerObject.getCharacterID()] = 0
+			normalStageIDArray[PlayerObject.getCharacterID()] = 0
 			saveStageRecord()
 		}
 		
 		Public Function resetStageIdforTry:Void()
-			openedStageIDArray[PlayerObject.getCharacterID()] = STAGE_PASS_FRAME
-			stageIDArray[PlayerObject.getCharacterID()] = STAGE_PASS_FRAME
-			normalStageIDArray[PlayerObject.getCharacterID()] = STAGE_PASS_FRAME
+			openedStageIDArray[PlayerObject.getCharacterID()] = 0
+			stageIDArray[PlayerObject.getCharacterID()] = 0
+			normalStageIDArray[PlayerObject.getCharacterID()] = 0
 			saveStageRecord()
 		}
 		
 		Public Function resetStageIdforContinueEnd:Void()
 			characterFromGame = -1
 			stageIDFromGame = -1
-			PlayerObject.setScore(STAGE_PASS_FRAME)
-			PlayerObject.setLife(MOVING_SPACE)
+			PlayerObject.setScore(0)
+			PlayerObject.setLife(2)
 			saveStageRecord()
 		}
 		
 		Public Function resetGameRecord:Void()
 			Int i
-			stageId = STAGE_PASS_FRAME
-			For (i = STAGE_PASS_FRAME; i < LOAD_BACKGROUND; i += LOAD_RELEASE_MEMORY_2)
-				stageIDArray[i] = STAGE_PASS_FRAME
+			stageId = 0
+			For (i = 0; i < LOAD_BACKGROUND; i += 1)
+				stageIDArray[i] = 0
 			EndIf
-			normalStageId = STAGE_PASS_FRAME
-			For (i = STAGE_PASS_FRAME; i < LOAD_BACKGROUND; i += LOAD_RELEASE_MEMORY_2)
-				normalStageIDArray[i] = STAGE_PASS_FRAME
+			normalStageId = 0
+			For (i = 0; i < LOAD_BACKGROUND; i += 1)
+				normalStageIDArray[i] = 0
 			EndIf
-			PlayerObject.setScore(STAGE_PASS_FRAME)
-			PlayerObject.setLife(MOVING_SPACE)
-			openedStageId = STAGE_PASS_FRAME
-			For (i = STAGE_PASS_FRAME; i < LOAD_BACKGROUND; i += LOAD_RELEASE_MEMORY_2)
-				openedStageIDArray[i] = STAGE_PASS_FRAME
+			PlayerObject.setScore(0)
+			PlayerObject.setLife(2)
+			openedStageId = 0
+			For (i = 0; i < LOAD_BACKGROUND; i += 1)
+				openedStageIDArray[i] = 0
 			EndIf
 			PlayerObject.resetGameParam()
-			For (i = STAGE_PASS_FRAME; i < timeModeScore.Length; i += LOAD_RELEASE_MEMORY_2)
+			For (i = 0; i < timeModeScore.Length; i += 1)
 				timeModeScore[i] = Sonicdef.OVER_TIME
 			EndIf
-			startStageID = STAGE_PASS_FRAME
-			For (i = STAGE_PASS_FRAME; i < LOAD_BACKGROUND; i += LOAD_RELEASE_MEMORY_2)
-				startStageIDArray[i] = STAGE_PASS_FRAME
+			startStageID = 0
+			For (i = 0; i < LOAD_BACKGROUND; i += 1)
+				startStageIDArray[i] = 0
 			EndIf
 			characterFromGame = -1
 			stageIDFromGame = -1
-			PlayerObject.setScore(STAGE_PASS_FRAME)
-			PlayerObject.setLife(MOVING_SPACE)
+			PlayerObject.setScore(0)
+			PlayerObject.setLife(2)
 			SpecialStageState.emptyEmeraldArray()
 			GlobalResource.initSystemConfig()
 			saveStageRecord()
@@ -1088,7 +1093,7 @@ Class StageManager ' Implements SonicDef
 		}
 		
 		Public Function getStageNameID:Int(stageID:Int)
-			Return STAGE_NAME_ID[stageID / MOVING_SPACE]
+			Return STAGE_NAME_ID[stageID / 2]
 		}
 		
 		Public Function setWaterLevel:Void(level:Int)
@@ -1097,7 +1102,7 @@ Class StageManager ' Implements SonicDef
 		
 		Public Function getWaterLevel:Int()
 			
-			If (getCurrentZoneId() = LOAD_BACKGROUND) Then
+			If (getCurrentZoneId() = 4) Then
 				Return waterLevel
 			EndIf
 			
