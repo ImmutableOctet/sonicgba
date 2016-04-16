@@ -60,6 +60,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 		
 		Field lastMoveDistanceX:Int
 		Field lastMoveDistanceY:Int
+		
 		Field limit:ACWorldCollisionLimit
 		
 		Field movePassiveX:Int
