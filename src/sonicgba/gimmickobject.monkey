@@ -40,7 +40,6 @@ Private
 	Import state.titlestate
 	
 	Import sonicgba.playerobject
-	Import sonicgba.gameobject
 	
 	Import com.sega.engine.action.accollision
 	Import com.sega.engine.action.acobject
@@ -52,6 +51,7 @@ Private
 	' Gimmicks:
 	' Nothing so far.
 Public
+	Import sonicgba.gameobject
 
 ' Classes:
 Class GimmickObject Extends GameObject
