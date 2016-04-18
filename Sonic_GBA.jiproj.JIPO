@@ -974,8 +974,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>26</X>
-        <Y>299</Y>
+        <X>9</X>
+        <Y>3660</Y>
       </CursorPos>
       <DocGUID>d7bda53f-1d75-4238-82cd-a9ac78200d4b</DocGUID>
       <Bookmarks />
@@ -1150,18 +1150,26 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
-        <Y>19</Y>
+        <X>26</X>
+        <Y>21</Y>
       </CursorPos>
-      <DocGUID>45967dca-cd94-4973-96d7-b92d259c61b8</DocGUID>
+      <DocGUID>aec3205d-fe1c-48b4-87e5-d9831ca17dfa</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\spring.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>12</X>
-        <Y>21</Y>
+        <X>62</X>
+        <Y>36</Y>
       </CursorPos>
-      <DocGUID>c871aa1f-77f4-4a64-afdb-2da130194f61</DocGUID>
+      <DocGUID>4a8e76e1-a5ca-4d82-af50-92281abb2571</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\springisland.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>18</X>
+        <Y>23</Y>
+      </CursorPos>
+      <DocGUID>e45813ea-baec-4586-8bf4-78a287b6e102</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\stagemanager.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
