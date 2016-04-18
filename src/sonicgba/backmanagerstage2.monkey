@@ -114,7 +114,7 @@ Class BackManagerStage2 Extends BackGroundManager
 			Next
 			
 			startX = -((cameraX / 2) Mod STAGE_BG_WIDTH)
-			startY = (-((cameraY / 2) Mod 256)) + def.TOUCH_OPTION_ITEMS_TOUCH_WIDTH_1
+			startY = (-((cameraY / 2) Mod 256)) + 112
 			
 			For Local x:= 0 Until X_DRAW_NUM
 				Local i:= 0
