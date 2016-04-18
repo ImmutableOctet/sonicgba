@@ -185,8 +185,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgamepad.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>32</X>
-        <Y>50</Y>
+        <X>29</X>
+        <Y>47</Y>
       </CursorPos>
       <DocGUID>e9bf21ce-c43d-4aa3-9f2d-e541257d4643</DocGUID>
       <Bookmarks />
@@ -509,10 +509,18 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\backmanagerstage61.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
+        <X>25</X>
+        <Y>23</Y>
+      </CursorPos>
+      <DocGUID>04f41515-40fb-47e4-be54-74d574450158</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\backmanagerstage62.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
         <X>24</X>
         <Y>17</Y>
       </CursorPos>
-      <DocGUID>04f41515-40fb-47e4-be54-74d574450158</DocGUID>
+      <DocGUID>942949a3-78ed-463c-8d51-8ac028d0a84b</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\backmanagerstageextra.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
