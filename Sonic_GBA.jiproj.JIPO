@@ -676,13 +676,12 @@
       <DocGUID>37b67715-309b-4b8b-92e9-22894de32bf6</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\cagebutton.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\cagebutton.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>16</X>
-        <Y>18</Y>
+        <X>19</X>
+        <Y>32</Y>
       </CursorPos>
-      <DocGUID>c62497ec-a2a2-4c4d-baee-9eac76f5c34e</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\caterpillar.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -806,8 +805,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>21</X>
-        <Y>162</Y>
+        <X>26</X>
+        <Y>451</Y>
       </CursorPos>
       <DocGUID>c8fbf0a8-9a63-40f4-a41d-19a456a4ac97</DocGUID>
       <Bookmarks />
@@ -1044,6 +1043,14 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\shatter.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>13</X>
+        <Y>14</Y>
+      </CursorPos>
+      <DocGUID>e6443ee8-66b4-4767-b28f-4e5e99bcb291</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\shimasting.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
         <X>0</X>
@@ -1089,9 +1096,9 @@
     <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>20</X>
-        <Y>19</Y>
+        <Y>20</Y>
       </CursorPos>
-      <DocGUID>2aa40acf-1d3d-49e5-adf0-ccc666fb630b</DocGUID>
+      <DocGUID>6a8a3a15-27ee-447e-937a-abc2923f137d</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\stagemanager.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
