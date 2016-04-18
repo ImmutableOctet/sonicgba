@@ -798,8 +798,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>6</X>
-        <Y>52</Y>
+        <X>23</X>
+        <Y>58</Y>
       </CursorPos>
       <DocGUID>c8fbf0a8-9a63-40f4-a41d-19a456a4ac97</DocGUID>
       <Bookmarks />
