@@ -958,8 +958,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playersonic.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>8</X>
-        <Y>36</Y>
+        <X>9</X>
+        <Y>93</Y>
       </CursorPos>
       <DocGUID>f9ec94fa-a22b-4989-a03a-3e83a03f6c8e</DocGUID>
       <Bookmarks />

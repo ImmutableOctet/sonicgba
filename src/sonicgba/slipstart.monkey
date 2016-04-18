@@ -54,7 +54,7 @@ Class SlipStart Extends GimmickObject
 					If (sonic <> Null) Then
 						If (Not Self.isActived) Then
 							If (player.getVelX() > ACTIVE_SPEED_Y And player.getVelY() > ACTIVE_SPEED_Y And Self.collisionRect.collisionChk(player.getFootPositionX(), player.getFootPositionY()) And player.currentLayer = 1) Then
-								PlayerObject.slidingFrame = 1
+								PlayerObject.slidingFrame = 1 ' PlayerSonic.SONIC_ANI_WALK_1
 								
 								sonic.slipStart()
 							EndIf
@@ -63,13 +63,13 @@ Class SlipStart Extends GimmickObject
 						EndIf
 					EndIf
 				ElseIf (player.getCharacterID() = CHARACTER_AMY) Then
-					If (player.getCharacterAnimationID() >= 4 And player.getCharacterAnimationID() <= 8) Then
+					If (player.getCharacterAnimationID() >= PlayerAmy.AMY_ANI_DASH_1 And player.getCharacterAnimationID() <= PlayerAmy.AMY_ANI_DASH_5) Then
 						Return
 					EndIf
 					
-					If ((player.getCharacterAnimationID() < 11 Or player.getCharacterAnimationID() > 12) And Not Self.isActived) Then
+					If ((player.getCharacterAnimationID() < PlayerAmy.AMY_ANI_SQUAT_1 Or player.getCharacterAnimationID() > PlayerAmy.AMY_ANI_SQUAT_2) And Not Self.isActived) Then
 						If (player.getVelX() > ACTIVE_SPEED_Y And player.getVelY() > ACTIVE_SPEED_Y And Self.collisionRect.collisionChk(player.getFootPositionX(), player.getFootPositionY()) And player.currentLayer = 1) Then
-							PlayerObject.slidingFrame = 1
+							PlayerObject.slidingFrame = 1 ' PlayerAmy.AMY_ANI_WALK_1
 							
 							Local amy:= PlayerAmy(player)
 							
