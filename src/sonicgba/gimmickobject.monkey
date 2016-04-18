@@ -770,6 +770,7 @@ Class GimmickObject Extends GameObject
 						ElseIf (Not Self.used) Then
 							p.velX = 0
 							p.ductOut()
+							
 							Self.used = True
 						EndIf
 					Case GIMMICK_ADD_DOUBLE_MAX_SPEED
