@@ -467,8 +467,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\backgroundmanager.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>47</X>
-        <Y>69</Y>
+        <X>51</X>
+        <Y>21</Y>
       </CursorPos>
       <DocGUID>e27411fa-19f9-4bff-875f-354bf09f96c9</DocGUID>
       <Bookmarks />
@@ -776,12 +776,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\frontmanager2_1.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\frontmanagerstage2_1.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>25</X>
-        <Y>23</Y>
+        <X>29</X>
+        <Y>94</Y>
       </CursorPos>
-      <DocGUID>93020111-fbec-4c43-9207-c47ffde5012e</DocGUID>
+      <DocGUID>0fc1fb3e-1e18-439b-a70d-ccb150082dcc</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">

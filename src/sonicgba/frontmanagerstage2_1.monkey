@@ -92,6 +92,7 @@ Class FrontManagerStage2_1 Extends BackGroundManager
 				
 				g2.restoreCanvas()
 				
+				' Screen mask (Software):
 				Self.screenMask.getRGB(Self.screenMaskRGB, 0, SCREEN_WIDTH, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 				
 				For Local i:= 0 Until Self.screenMaskRGB.Length
