@@ -96,7 +96,7 @@ Class SteamPlatform Extends GimmickObject
 		End
 		
 		Method drawPlatform:Void(g:MFGraphics)
-			drawInMap(g, image, 33)
+			drawInMap(g, image, BOTTOM|HCENTER)
 		End
 		
 		Method refreshCollisionRect:Void(x:Int, y:Int)

@@ -14,6 +14,7 @@ Const CHARACTER_SONIC:Int = 0
 Const CHARACTER_TAILS:Int = 1
 Const CHARACTER_KNUCKLES:Int = 2
 Const CHARACTER_AMY:Int = 3
+'Const CHARACTER_SUPER_SONIC:Int = 4
 
 ' Directions:
 Const DIRECTION_UP:=			0
