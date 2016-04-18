@@ -421,8 +421,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const SONIC_ATTACK_LEVEL_2_V0:Int = 672
 		Const SONIC_ATTACK_LEVEL_3_V0:Int = 1200
 		
-		Const TERMINAL_NO_MOVE:Int = 1
 		Const TERMINAL_RUN_TO_RIGHT:Int = 0
+		Const TERMINAL_NO_MOVE:Int = 1
 		Const TERMINAL_RUN_TO_RIGHT_2:Int = 2
 		Const TERMINAL_SUPER_SONIC:Int = 3
 		
