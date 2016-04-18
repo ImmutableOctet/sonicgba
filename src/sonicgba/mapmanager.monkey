@@ -914,9 +914,9 @@ Class MapManager ' Implements SonicDef
 						Else
 							tileId = getTileId(mapArray, x, y)
 							
-							flipX = ((MFGamePad.KEY_NUM_9 & tileId) = 0)
+							flipX = ((32768 & tileId) = 0)
 							
-							If ((tileId & MFGamePad.KEY_NUM_8) = 0) Then
+							If ((tileId & 16384) = 0) Then
 								modelX = 0
 							Else
 								modelX = 2 ' (0 | 2)
@@ -947,16 +947,16 @@ Class MapManager ' Implements SonicDef
 							tileId = getTileId(mapArray, x, y)
 							
 							#Rem
-								If ((MFGamePad.KEY_NUM_9 & tileId) = 0) Then
+								If ((32768 & tileId) = 0) Then
 									' Nothing so far.
 								EndIf
 								
-								If ((tileId & MFGamePad.KEY_NUM_8) = 0) Then
+								If ((tileId & 16384) = 0) Then
 									' Nothing so far.
 								EndIf
 							#End
 							
-							If ((tileId & MFGamePad.KEY_NUM_8) = 0) Then
+							If ((tileId & 16384) = 0) Then
 								modelX = 0
 							Else
 								modelX = 2 ' (0 | 2)
