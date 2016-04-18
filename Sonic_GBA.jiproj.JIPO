@@ -467,8 +467,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\backgroundmanager.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>51</X>
-        <Y>21</Y>
+        <X>32</X>
+        <Y>74</Y>
       </CursorPos>
       <DocGUID>e27411fa-19f9-4bff-875f-354bf09f96c9</DocGUID>
       <Bookmarks />
@@ -1057,6 +1057,14 @@
         <Y>0</Y>
       </CursorPos>
       <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\snowstage4.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>16</X>
+        <Y>20</Y>
+      </CursorPos>
+      <DocGUID>36f5d6aa-6634-49fc-9270-1647498bcb52</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\sonicdebug.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
