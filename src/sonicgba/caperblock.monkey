@@ -76,7 +76,7 @@ Class CaperBlock Extends GimmickObject
 				Select (direction)
 					Case DIRECTION_DOWN
 						If (p = player) Then
-							p.beSpring(1350, DIRECTION_DOWN) ' direction
+							p.beSpring(1350, DIRECTION_DOWN) ' 1 ' direction
 							
 							Self.hobinCal.startHobin(400, 90, 10)
 							
@@ -98,7 +98,7 @@ Class CaperBlock Extends GimmickObject
 						EndIf
 					Case DIRECTION_NONE
 						If (p.getMoveDistance().y > 0 And p.getCollisionRect().y1 < Self.collisionRect.y1 And p = player) Then
-							p.beSpring(1350, DIRECTION_DOWN)
+							p.beSpring(1350, DIRECTION_DOWN) ' 1
 							
 							Self.hobinCal.startHobin(400, 90, 10)
 							
