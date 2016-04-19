@@ -2,6 +2,11 @@ Strict
 
 Public
 
+' Preprocessor related:
+#If SONICGBA_EASTEREGGS
+	#SONICGBA_SPRING_EASTEREGG = True
+#End
+
 ' Imports:
 Private
 	Import lib.animation
@@ -80,6 +85,16 @@ Class Spring Extends GimmickObject
 		End
 		
 		' Methods:
+		
+		' Extensions:
+		Method playSound:Void()
+			#If Not SONICGBA_SPRING_EASTEREGG
+				soundInstance.playSe(SoundSystem.SE_148)
+			#Else
+				soundInstance.playSe(SoundSystem.SE_206)
+			#End
+		End
+		
 		Method draw:Void(g:MFGraphics)
 			Self.springPower = PickValue(player.isInWater, SPRING_INWATER_POWER[Self.iLeft], SPRING_POWER[Self.iLeft])
 			
@@ -132,7 +147,7 @@ Class Spring Extends GimmickObject
 											p.setAnimationId(PlayerObject.ANI_POP_JUMP_UP)
 										EndIf
 										
-										soundInstance.playSe(SoundSystem.SE_148)
+										playSound()
 									Case GIMMICK_SPRING_LEFT
 										If (p.isAntiGravity And Self.firstTouch) Then
 											p.setAnimationId(PlayerObject.ANI_STAND)
@@ -158,7 +173,7 @@ Class Spring Extends GimmickObject
 										EndIf
 										
 										If (Self.firstTouch) Then
-											soundInstance.playSe(SoundSystem.SE_148)
+											playSound()
 										EndIf
 									Case GIMMICK_SPRING_LEFT
 										If (Self.firstTouch) Then
@@ -176,7 +191,7 @@ Class Spring Extends GimmickObject
 											
 											Self.drawer.setActionId(((Self.objId - GIMMICK_SPRING_UP) * 2) + 1)
 											
-											soundInstance.playSe(SoundSystem.SE_148)
+											playSound()
 											
 											If (p.getCharacterID() = CHARACTER_AMY) Then
 												p.setAnimationId(PlayerObject.ANI_RUN_3)
@@ -201,7 +216,7 @@ Class Spring Extends GimmickObject
 											
 											p.setFootPositionY(Self.collisionRect.y0)
 											
-											soundInstance.playSe(SoundSystem.SE_148)
+											playSound()
 										ElseIf (Self.firstTouch) Then
 											p.setAnimationId(PlayerObject.ANI_STAND)
 										EndIf
@@ -221,7 +236,8 @@ Class Spring Extends GimmickObject
 											EndIf
 											
 											p.setFootPositionY(Self.collisionRect.y0)
-											soundInstance.playSe(SoundSystem.SE_148)
+											
+											playSound()
 										ElseIf (Self.firstTouch) Then
 											p.setAnimationId(PlayerObject.ANI_STAND)
 										EndIf
@@ -247,7 +263,7 @@ Class Spring Extends GimmickObject
 										
 										Self.drawer.setActionId(((Self.objId - GIMMICK_SPRING_UP) * 2) + 1)
 										
-										soundInstance.playSe(SoundSystem.SE_148)
+										playSound()
 										
 										If (p.getCharacterID() = CHARACTER_AMY) Then
 											p.setAnimationId(PlayerObject.ANI_RUN_3)
@@ -266,7 +282,8 @@ Class Spring Extends GimmickObject
 											
 											p.setFootPositionY(Self.collisionRect.y0)
 											p.setFootPositionX(Self.collisionRect.x1)
-											soundInstance.playSe(SoundSystem.SE_148)
+											
+											playSound()
 										EndIf
 								End Select
 							Case DIRECTION_RIGHT
@@ -278,7 +295,7 @@ Class Spring Extends GimmickObject
 										
 										Self.drawer.setActionId(((Self.objId - GIMMICK_SPRING_UP) * 2) + 1)
 										
-										soundInstance.playSe(SoundSystem.SE_148)
+										playSound()
 										
 										If (p instanceof PlayerAmy) Then
 											p.setAnimationId(PlayerObject.ANI_RUN_3)
@@ -296,7 +313,8 @@ Class Spring Extends GimmickObject
 											
 											p.setFootPositionY(Self.collisionRect.y0)
 											p.setFootPositionX(Self.collisionRect.x0)
-											soundInstance.playSe(SoundSystem.SE_148)
+											
+											playSound()
 										EndIf
 								End Select
 							Case DIRECTION_NONE
@@ -315,7 +333,7 @@ Class Spring Extends GimmickObject
 												p.setAnimationId(PlayerObject.ANI_POP_JUMP_UP)
 											EndIf
 											
-											soundInstance.playSe(SoundSystem.SE_148)
+											playSound()
 										Case GIMMICK_SPRING_DOWN
 											p.beSpring(Self.springPower, DIRECTION_UP)
 											
@@ -329,7 +347,7 @@ Class Spring Extends GimmickObject
 												p.setAnimationId(PlayerObject.ANI_POP_JUMP_UP)
 											EndIf
 											
-											soundInstance.playSe(SoundSystem.SE_148)
+											playSound()
 									End Select
 								EndIf
 								
@@ -346,7 +364,7 @@ Class Spring Extends GimmickObject
 									p.setFootPositionY(Self.collisionRect.y0)
 									p.setFootPositionX(Self.collisionRect.x0)
 									
-									soundInstance.playSe(SoundSystem.SE_148)
+									playSound()
 								EndIf
 						End Select
 					EndIf
@@ -375,7 +393,7 @@ Class Spring Extends GimmickObject
 								p.setAnimationId(PlayerObject.ANI_POP_JUMP_UP)
 							EndIf
 							
-							soundInstance.playSe(SoundSystem.SE_148)
+							playSound()
 						EndIf
 					Case GIMMICK_SPRING_DOWN
 						If (animationID <> PlayerAmy.AMY_ANI_DASH_3 And animationID <> PlayerAmy.AMY_ANI_DASH_4) Then
@@ -391,7 +409,7 @@ Class Spring Extends GimmickObject
 								p.setAnimationId(PlayerObject.ANI_POP_JUMP_UP)
 							EndIf
 							
-							soundInstance.playSe(SoundSystem.SE_148)
+							playSound()
 						EndIf
 					Case GIMMICK_SPRING_LEFT_UP, GIMMICK_SPRING_LEFT_UP_BURY
 						If (animationID <> PlayerAmy.AMY_ANI_DASH_3 And animationID <> PlayerAmy.AMY_ANI_DASH_4) Then
@@ -408,7 +426,7 @@ Class Spring Extends GimmickObject
 								p.setAnimationId(PlayerObject.ANI_POP_JUMP_UP)
 							EndIf
 							
-							soundInstance.playSe(SoundSystem.SE_148)
+							playSound()
 						EndIf
 					Case GIMMICK_SPRING_RIGHT_UP, GIMMICK_SPRING_RIGHT_UP_BURY
 						If (animationID <> PlayerAmy.AMY_ANI_DASH_3 And animationID <> PlayerAmy.AMY_ANI_DASH_4) Then
@@ -425,7 +443,7 @@ Class Spring Extends GimmickObject
 								p.setAnimationId(PlayerObject.ANI_POP_JUMP_UP)
 							EndIf
 							
-							soundInstance.playSe(SoundSystem.SE_148)
+							playSound()
 						EndIf
 					Default
 						If (direction = DIRECTION_DOWN) Then

@@ -5,6 +5,8 @@ Public
 ' Preprocessor related:
 #MONKEYLANG_EXTENSION_WIDECHARACTERS = True
 
+'#SONICGBA_EASTEREGGS = True
+
 ' Imports:
 Import application
 
