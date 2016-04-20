@@ -9,6 +9,8 @@ Private
 	Import lib.animation
 	Import lib.animationdrawer
 	Import lib.coordinate
+	Import lib.soundsystem
+	Import lib.constutil
 	Import lib.myapi
 	
 	Import sonicgba.effect
@@ -19,8 +21,11 @@ Private
 	Import sonicgba.sonicdebug
 	
 	Import com.sega.engine.action.acworldcollisioncalculator
+	
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
+	
+	Import regal.typetool
 Public
 
 ' Classes:
@@ -166,109 +171,113 @@ Class PlayerAmy Extends PlayerObject
 		End
 		
 		' Methods:
-		Public Method closeImpl:Void()
+		Method closeImpl:Void()
 			Animation.closeAnimationDrawer(Self.amyDrawer1)
 			Self.amyDrawer1 = Null
+			
 			Animation.closeAnimation(Self.amyAnimation)
 			Self.amyAnimation = Null
+			
 			Animation.closeAnimationDrawer(Self.amyDrawer2)
 			Self.amyDrawer2 = Null
 		End
 		
-		Public Method drawCharacter:Void(g:MFGraphics)
-			Coordinate camera = MapManager.getCamera()
+		Method drawCharacter:Void(g:MFGraphics)
+			Local camera:= MapManager.getCamera()
 			
 			If (Self.animationID <> NO_ANIMATION) Then
 				Self.myAnimationID = ANIMATION_CONVERT[Self.animationID]
 			EndIf
 			
 			If (Self.myAnimationID <> NO_ANIMATION) Then
-				Bool loop = LOOP_INDEX[Self.myAnimationID] = NO_ANIMATION
-				Int effectID = NO_ANIMATION
+				Local loop:Bool = (LOOP_INDEX[Self.myAnimationID] = LOOP)
+				Local effectID:= EFFECT_NONE ' -1
+				
 				Select (Self.myAnimationID)
 					Case AMY_ANI_ATTACK_1
-						effectID = AMY_ANI_STAND
+						effectID = 0 ' EFFECT_SAND_1
+						
 						Self.isAttacking = True
-						break
 					Case AMY_ANI_ATTACK_2
-						effectID = AMY_ANI_WALK_1
+						effectID = 1 ' EFFECT_SAND_2
+						
 						Self.isAttacking = True
-						break
 					Case AMY_ANI_JUMP_ATTACK_1
-						effectID = AMY_ANI_WALK_2
+						effectID = 2
+						
 						checkBreatheReset()
+						
 						Self.isAttacking = True
-						break
 					Case AMY_ANI_JUMP_ATTACK_2
-						effectID = AMY_ANI_RUN
+						effectID = 3
+						
 						Self.isAttacking = True
-						break
 					Case AMY_ANI_JUMP_ATTACK_3
-						effectID = AMY_ANI_DASH_1
+						effectID = 4
+						
 						Self.isAttacking = True
-						break
 				End Select
 				
 				If (effectID >= 0) Then
-					Int frame = Self.drawer.getCurrentFrame()
+					Local frame:= Self.drawer.getCurrentFrame()
 					
 					If (frame >= 0 And frame < HEART_SYMBOL_PARAM[effectID].Length) Then
-						For (Int i = AMY_ANI_STAND; i < HEART_SYMBOL_PARAM[effectID][frame][AMY_ANI_STAND]; i += AMY_ANI_WALK_1)
-							Effect.showEffect(Self.amyAnimation, AMY_ANI_HEART_SYMBOL, (Self.footPointX Shr AMY_ANI_DASH_3) + (((Self.isAntiGravity ~ Self.faceDirection) <> 0 ? AMY_ANI_WALK_1 : NO_ANIMATION) * HEART_SYMBOL_PARAM[effectID][frame][(i * AMY_ANI_WALK_2) + AMY_ANI_WALK_1])..(Self.footPointY Shr AMY_ANI_DASH_3) + ((Self.isAntiGravity ? NO_ANIMATION : AMY_ANI_WALK_1) * HEART_SYMBOL_PARAM[effectID][frame][(i * AMY_ANI_WALK_2) + AMY_ANI_WALK_2]), AMY_ANI_STAND, AMY_ANI_WALK_1)
+						For Local i:= 0 Until HEART_SYMBOL_PARAM[effectID][frame][0]
+							Effect.showEffect(Self.amyAnimation, AMY_ANI_HEART_SYMBOL, (Self.footPointX Shr 6) + ((DSgn((Self.isAntiGravity <> Self.faceDirection) <> 0)) * HEART_SYMBOL_PARAM[effectID][frame][(i * 2) + 1]), (Self.footPointY Shr 6) + (DSgn(Not Self.isAntiGravity) * HEART_SYMBOL_PARAM[effectID][frame][(i * 2) + 2]), 0, 1) ' 57
 						Next
 					EndIf
 				EndIf
 				
 				Self.drawer = Self.amyDrawer1
-				Int drawerActionID = Self.myAnimationID
+				
+				Local drawerActionID:= Self.myAnimationID
 				
 				If (Self.myAnimationID >= AMY_ANI_WAITING_1) Then
 					Self.drawer = Self.amyDrawer2
-					drawerActionID = Self.myAnimationID - AMY_ANI_WAITING_1
+					
+					drawerActionID = (Self.myAnimationID - AMY_ANI_WAITING_1)
 					
 					If (Self.myAnimationID = AMY_ANI_WAITING_1 And Self.isResetWaitAni) Then
 						Self.drawer.restart()
+						
 						Self.isResetWaitAni = False
 					EndIf
 				EndIf
 				
 				If (Self.isInWater) Then
-					Self.drawer.setSpeed(AMY_ANI_WALK_1, AMY_ANI_WALK_2)
+					Self.drawer.setSpeed(1, 2)
 				Else
-					Self.drawer.setSpeed(AMY_ANI_WALK_1, AMY_ANI_WALK_1)
+					Self.drawer.setSpeed(1, 1)
 				EndIf
 				
-				If (Self.hurtCount Mod AMY_ANI_WALK_2 = 0) Then
-					Int trans
-					
+				If ((Self.hurtCount Mod 2) = 0) Then
 					If (Self.fallinSandSlipState <> 0) Then
-						If (Self.fallinSandSlipState = AMY_ANI_WALK_1) Then
+						If (Self.fallinSandSlipState = 1) Then
 							Self.faceDirection = True
-						ElseIf (Self.fallinSandSlipState = AMY_ANI_WALK_2) Then
+						ElseIf (Self.fallinSandSlipState = 2) Then
 							Self.faceDirection = False
 						EndIf
 					EndIf
 					
+					Local trans:Int ' = TRANS_NONE
+					
 					If (Self.faceDirection) Then
-						trans = AMY_ANI_STAND
+						trans = TRANS_NONE
 					Else
-						trans = AMY_ANI_WALK_2
+						trans = TRANS_MIRROR
 					EndIf
 					
 					If (Self.animationID <> AMY_ANI_DASH_1) Then
 						If (Self.animationID <> AMY_ANI_DASH_3 And Self.animationID <> AMY_ANI_DASH_4) Then
 							Select (Self.myAnimationID)
 								Case AMY_ANI_SLIP_D0
-									Self.drawer.draw(g, drawerActionID, ((Self.footPointX Shr AMY_ANI_DASH_3) - camera.x) + AMY_ANI_STAND, ((Self.footPointY Shr AMY_ANI_DASH_3) - camera.y) + AMY_ANI_STAND, loop, AMY_ANI_STAND)
-									break
+									Self.drawer.draw(g, drawerActionID, ((Self.footPointX Shr 6) - camera.x), ((Self.footPointY Shr 6) - camera.y), loop, 0) ' TRANS_NONE
 								Case AMY_ANI_SLIP_D45
-									Self.drawer.draw(g, drawerActionID, ((Self.footPointX Shr AMY_ANI_DASH_3) - camera.x) + AMY_ANI_DASH_5, ((Self.footPointY Shr AMY_ANI_DASH_3) - camera.y) + AMY_ANI_STAND, loop, AMY_ANI_STAND)
-									break
+									Self.drawer.draw(g, drawerActionID, ((Self.footPointX Shr 6) - camera.x) + 8, ((Self.footPointY Shr 6) - camera.y), loop, 0) ' TRANS_NONE
 								Default
-									
 									If (Self.myAnimationID = AMY_ANI_JUMP_ATTACK_3) Then
 										If (Self.drawer.checkEnd()) Then
-											soundInstance.playSe(AMY_ANI_SPRING_1)
+											soundInstance.playSe(SoundSystem.SE_131)
 										EndIf
 									EndIf
 									
@@ -290,63 +299,55 @@ Class PlayerAmy Extends PlayerObject
 									EndIf
 									
 									If (Self.degreeForDraw = Self.faceDegree) Then
-										Bool z
-										AnimationDrawer animationDrawer = Self.drawer
-										Int i2 = (Self.footPointX Shr AMY_ANI_DASH_3) - camera.x
-										Int i3 = (Self.footPointY Shr AMY_ANI_DASH_3) - camera.y
-										Int i4 = Self.degreeForDraw
+										drawDrawerByDegree(g, Self.drawer, drawerActionID, ((Self.footPointX Shr 6) - camera.x), ((Self.footPointY Shr 6) - camera.y), loop, Self.degreeForDraw, Not Self.faceDirection)
+									Else
+										Local bodyCenterX:= getNewPointX(Self.footPointX, 0, ((-Self.collisionRect.getHeight()) / 2), Self.faceDegree) ' Shr 1
+										Local bodyCenterY:= getNewPointY(Self.footPointY, 0, ((-Self.collisionRect.getHeight()) / 2), Self.faceDegree) ' Shr 1
 										
-										If (Self.faceDirection) Then
-											z = False
-										Else
-											z = True
-										EndIf
+										g.saveCanvas()
 										
-										drawDrawerByDegree(g, animationDrawer, drawerActionID, i2, i3, loop, i4, z)
-										break
+										g.translateCanvas((bodyCenterX Shr 6) - camera.x, (bodyCenterY Shr 6) - camera.y)
+										g.rotateCanvas(Float(Self.degreeForDraw))
+										
+										Self.drawer.draw(g, drawerActionID, 0, ((Self.collisionRect.getHeight() / 2) Shr 6), loop, trans) ' Shr 1
+										
+										g.restoreCanvas()
 									EndIf
-									
-									Int bodyCenterX = getNewPointX(Self.footPointX, AMY_ANI_STAND, (-Self.collisionRect.getHeight()) Shr AMY_ANI_WALK_1, Self.faceDegree)
-									Int bodyCenterY = getNewPointY(Self.footPointY, AMY_ANI_STAND, (-Self.collisionRect.getHeight()) Shr AMY_ANI_WALK_1, Self.faceDegree)
-									g.saveCanvas()
-									g.translateCanvas((bodyCenterX Shr AMY_ANI_DASH_3) - camera.x, (bodyCenterY Shr AMY_ANI_DASH_3) - camera.y)
-									g.rotateCanvas((Float) Self.degreeForDraw)
-									Self.drawer.draw(g, drawerActionID, AMY_ANI_STAND, (Self.collisionRect.getHeight() Shr AMY_ANI_WALK_1) Shr AMY_ANI_DASH_3, loop, trans)
-									g.restoreCanvas()
-									break
 							End Select
 						EndIf
 						
-						Self.drawer.draw(g, drawerActionID, (Self.footPointX Shr AMY_ANI_DASH_3) - camera.x, (Self.footPointY Shr AMY_ANI_DASH_3) - camera.y, loop, trans)
+						Self.drawer.draw(g, drawerActionID, (Self.footPointX Shr 6) - camera.x, (Self.footPointY Shr 6) - camera.y, loop, trans)
 					Else
-						Self.drawer.draw(g, drawerActionID, (getNewPointX(getNewPointX(Self.footPointX, AMY_ANI_STAND, -512, Self.faceDegree), AMY_ANI_STAND, 512, AMY_ANI_STAND) Shr AMY_ANI_DASH_3) - camera.x, (getNewPointY(getNewPointY(Self.footPointY, AMY_ANI_STAND, -512, Self.faceDegree), AMY_ANI_STAND, 512, AMY_ANI_STAND) Shr AMY_ANI_DASH_3) - camera.y, loop, AMY_ANI_STAND)
+						Self.drawer.draw(g, drawerActionID, (getNewPointX(getNewPointX(Self.footPointX, 0, -RIGHT_WALK_COLLISION_CHECK_OFFSET_X, Self.faceDegree), 0, RIGHT_WALK_COLLISION_CHECK_OFFSET_X, 0) Shr 6) - camera.x, (getNewPointY(getNewPointY(Self.footPointY, 0, RIGHT_WALK_COLLISION_CHECK_OFFSET_Y, Self.faceDegree), 0, -RIGHT_WALK_COLLISION_CHECK_OFFSET_Y, 0) Shr 6) - camera.y, loop, 0) ' 512 ' (SIDE_FOOT_FROM_CENTER * 2)
 					EndIf
 					
-					Self.attackRectVec.removeAllElements()
-					Byte[] rect = Self.drawer.getARect()
+					' I don't know why this is done in a draw routine, but whatever:
+					Self.attackRectVec.Clear()
+					
+					Local rect:= Self.drawer.getARect()
 					
 					If (Self.isAntiGravity) Then
-						Byte[] rectTmp = Self.drawer.getARect()
+						Local rectTmp:= Self.drawer.getARect() ' rect
 						
-						If (rectTmp <> Null) Then
-							rect[AMY_ANI_STAND] = (Byte) ((-rectTmp[AMY_ANI_STAND]) - rectTmp[AMY_ANI_WALK_2])
+						If (rectTmp.Length > 0) Then
+							rect[0] = Byte((-rectTmp[0]) - rectTmp[2])
 						EndIf
 					EndIf
 					
-					If (rect <> Null) Then
+					If (rect.Length > 0) Then
 						If (SonicDebug.showCollisionRect) Then
 							g.setColor(65280)
-							g.drawRect(((Self.footPointX Shr AMY_ANI_DASH_3) + rect[AMY_ANI_STAND]) - camera.x..((Self.footPointY Shr AMY_ANI_DASH_3) + (Self.isAntiGravity ? (-rect[AMY_ANI_WALK_1]) - rect[AMY_ANI_RUN] : rect[AMY_ANI_WALK_1])) - camera.y, rect[AMY_ANI_WALK_2], rect[AMY_ANI_RUN])
+							
+							g.drawRect(((Self.footPointX Shr 6) + rect[0]) - camera.x, ((Self.footPointY Shr 6) + PickValue(Self.isAntiGravity, (-rect[1]) - rect[3], rect[1])) - camera.y, rect[2], rect[3])
 						EndIf
 						
-						Self.attackRect.initCollision(rect[AMY_ANI_STAND] Shl AMY_ANI_DASH_3, rect[AMY_ANI_WALK_1] Shl AMY_ANI_DASH_3, rect[AMY_ANI_WALK_2] Shl AMY_ANI_DASH_3, rect[AMY_ANI_RUN] Shl AMY_ANI_DASH_3, Self.myAnimationID)
-						Self.attackRectVec.addElement(Self.attackRect)
+						Self.attackRect.initCollision((rect[0] Shl 6), (rect[1] Shl 6), (rect[2] Shl 6), (rect[3] Shl 6), Self.myAnimationID)
+						
+						Self.attackRectVec.Push(Self.attackRect)
 					Else
 						Self.attackRect.reset()
 					EndIf
-					
 				Else
-					
 					If (drawerActionID <> Self.drawer.getActionId()) Then
 						Self.drawer.setActionId(drawerActionID)
 					EndIf
@@ -361,29 +362,29 @@ Class PlayerAmy Extends PlayerObject
 						Select (Self.myAnimationID)
 							Case AMY_ANI_DASH_5
 								Self.animationID = AMY_ANI_STAND
-								break
 							Case AMY_ANI_ATTACK_1
-								
-								If (Self.attackLevel <> AMY_ANI_WALK_2) Then
+								If (Self.attackLevel <> 2) Then
 									Self.animationID = AMY_ANI_STAND
-									Self.attackLevel = AMY_ANI_STAND
+									
+									Self.attackLevel = 0
+									
 									Self.isAttacking = False
-									break
+								Else
+									Self.myAnimationID = AMY_ANI_ATTACK_2
+									
+									Self.attack2Flag = True
+									
+									Self.worldCal.actionLogic((DSgn((Self.isAntiGravity <> Self.faceDirection) <> 0)) * (BIG_JUMP_POWER / 2), 0, DSgn(Self.faceDirection) * (BIG_JUMP_POWER / 2)) ' 768
 								EndIf
-								
-								Self.myAnimationID = AMY_ANI_ATTACK_2
-								Self.attack2Flag = True
-								Self.worldCal.actionLogic(((Self.isAntiGravity ~ Self.faceDirection) <> 0 ? AMY_ANI_WALK_1 : NO_ANIMATION) * 768, AMY_ANI_STAND, (Self.faceDirection ? AMY_ANI_WALK_1 : NO_ANIMATION) * 768)
-								Return
 							Case AMY_ANI_ATTACK_2
 								Self.animationID = AMY_ANI_STAND
-								Self.attackLevel = AMY_ANI_STAND
+								Self.attackLevel = 0
+								
 								Self.isAttacking = False
-								break
 							Case AMY_ANI_JUMP_ATTACK_1
-								Self.animationID = ATTACK_COUNT_MAX
+								Self.animationID = AMY_ANI_LOOK_UP_2
+								
 								Self.isAttacking = False
-								break
 						End Select
 						
 						If (LOOP_INDEX[Self.myAnimationID] >= 0) Then
@@ -392,7 +393,6 @@ Class PlayerAmy Extends PlayerObject
 					EndIf
 				EndIf
 			EndIf
-			
 		End
 		
 		Protected Method spinLogic:Bool()
@@ -416,7 +416,7 @@ Class PlayerAmy Extends PlayerObject
 						jump = Self.isInWater ? STEP_JUMP_INWATER_Y : STEP_JUMP_Y
 						
 						If (Self.faceDirection) Then
-							i = AMY_ANI_WALK_1
+							i = 1
 						Else
 							i = NO_ANIMATION
 						EndIf
@@ -424,7 +424,7 @@ Class PlayerAmy Extends PlayerObject
 						Self.velX = ((i * jump_x) * MyAPI.dCos(Self.faceDegree)) / 100
 						
 						If (Self.faceDirection) Then
-							i = AMY_ANI_WALK_1
+							i = 1
 						Else
 							i = NO_ANIMATION
 						EndIf
@@ -440,7 +440,7 @@ Class PlayerAmy Extends PlayerObject
 						If (Self.isAntiGravity) Then
 							i2 = NO_ANIMATION
 						Else
-							i2 = AMY_ANI_WALK_1
+							i2 = 1
 						EndIf
 						
 						Self.velY = i + (i2 * ((-jump) - getGravity()))
@@ -457,7 +457,7 @@ Class PlayerAmy Extends PlayerObject
 						Self.velX += (((-jump) - getGravity()) * (-MyAPI.dSin(Self.faceDegree))) / 100
 						soundInstance.playSe(AMY_ANI_SQUAT_1)
 					ElseIf (Abs(getVelX()) <= SLIDING_BRAKE And getDegreeDiff(Self.faceDegree, Self.degreeStable) <= AMY_ANI_WIND) Then
-						Self.focusMovingState = AMY_ANI_WALK_2
+						Self.focusMovingState = 2
 					EndIf
 					
 				ElseIf (Self.animationID = AMY_ANI_DASH_2) Then
@@ -475,7 +475,7 @@ Class PlayerAmy Extends PlayerObject
 				
 				If (Self.slipping) Then
 					If (Not isHeadCollision()) Then
-						Self.currentLayer = AMY_ANI_WALK_1
+						Self.currentLayer = 1
 					Else
 						Return
 					EndIf
@@ -488,7 +488,7 @@ Class PlayerAmy Extends PlayerObject
 				EndIf
 				
 				If (Self.slipping) Then
-					Self.currentLayer = AMY_ANI_WALK_1
+					Self.currentLayer = 1
 					Self.slipping = False
 				EndIf
 				
@@ -525,15 +525,15 @@ Class PlayerAmy Extends PlayerObject
 			EndIf
 			
 			If (Self.attackCount > 0) Then
-				Self.attackCount -= AMY_ANI_WALK_1
+				Self.attackCount -= 1
 				
 				If (Self.attackCount = 0) Then
-					Self.attackLevel = AMY_ANI_STAND
+					Self.attackLevel = 0
 				EndIf
 			EndIf
 			
 			If (Self.attackLevel > 0) Then
-				Self.totalVelocity = AMY_ANI_STAND
+				Self.totalVelocity = 0
 			EndIf
 			
 			If (Self.attackLevel = 0) Then
@@ -544,14 +544,14 @@ Class PlayerAmy Extends PlayerObject
 			
 			If (Not (Self.cannotAttack Or Not Key.press(Key.gSelect) Or Self.myAnimationID = AMY_ANI_PUSH_WALL Or Self.collisionState = (Byte) 1)) Then
 				If (Self.animationID <> NO_ANIMATION And Not Key.repeated(Key.gDown)) Then
-					Self.totalVelocity = AMY_ANI_STAND
+					Self.totalVelocity = 0
 					Self.animationID = NO_ANIMATION
 					Self.myAnimationID = AMY_ANI_ATTACK_1
 					Self.attack1Flag = True
 					Self.attackCount = Self.isInWater ? AMY_ANI_JUMP_ATTACK_1 : ATTACK_COUNT_MAX
-					Self.attackLevel = AMY_ANI_WALK_1
-				ElseIf (Self.attackCount > 0 And Self.attackLevel < AMY_ANI_WALK_2) Then
-					Self.attackLevel += AMY_ANI_WALK_1
+					Self.attackLevel = 1
+				ElseIf (Self.attackCount > 0 And Self.attackLevel < 2) Then
+					Self.attackLevel += 1
 				EndIf
 			EndIf
 			
@@ -589,7 +589,7 @@ Class PlayerAmy Extends PlayerObject
 					EndIf
 				EndIf
 				
-				slidingFrame += AMY_ANI_WALK_1
+				slidingFrame += 1
 				
 				If (slidingFrame = AMY_ANI_DASH_1) Then
 					soundInstance.playLoopSe(AMY_ANI_LOOK_UP_1)
@@ -641,7 +641,7 @@ Class PlayerAmy Extends PlayerObject
 					
 			End Select
 			
-			If (Self.animationID >= AMY_ANI_WALK_1 And Self.animationID <= AMY_ANI_RUN And Key.press(Key.gSelect) And Not Self.jumpAttackUsed) Then
+			If (Self.animationID >= 1 And Self.animationID <= AMY_ANI_RUN And Key.press(Key.gSelect) And Not Self.jumpAttackUsed) Then
 				Self.jumpAttackUsed = True
 				
 				If (Key.repeated(Key.gDown)) Then
@@ -675,15 +675,15 @@ Class PlayerAmy Extends PlayerObject
 			EndIf
 			
 			If (Self.attackCount > 0) Then
-				Self.attackCount -= AMY_ANI_WALK_1
+				Self.attackCount -= 1
 				
 				If (Self.attackCount = 0) Then
-					Self.attackLevel = AMY_ANI_STAND
+					Self.attackLevel = 0
 				EndIf
 			EndIf
 			
 			If (Self.attackLevel > 0) Then
-				Self.totalVelocity = AMY_ANI_STAND
+				Self.totalVelocity = 0
 			EndIf
 			
 			If (Self.attackLevel = 0) Then
@@ -701,14 +701,14 @@ Class PlayerAmy Extends PlayerObject
 			EndIf
 			
 			If (Self.animationID <> NO_ANIMATION And Not Key.repeated(Key.gDown) And Self.collisionState <> (Byte) 1) Then
-				Self.totalVelocity = AMY_ANI_STAND
+				Self.totalVelocity = 0
 				Self.animationID = NO_ANIMATION
 				Self.myAnimationID = AMY_ANI_ATTACK_1
 				Self.attack1Flag = True
 				Self.attackCount = Self.isInWater ? AMY_ANI_JUMP_ATTACK_1 : ATTACK_COUNT_MAX
-				Self.attackLevel = AMY_ANI_WALK_1
-			ElseIf (Self.attackCount > 0 And Self.attackLevel < AMY_ANI_WALK_2) Then
-				Self.attackLevel += AMY_ANI_WALK_1
+				Self.attackLevel = 1
+			ElseIf (Self.attackCount > 0 And Self.attackLevel < 2) Then
+				Self.attackLevel += 1
 			EndIf
 			
 		End
@@ -732,7 +732,7 @@ Class PlayerAmy Extends PlayerObject
 		End
 		
 		Public Method slipStart:Void()
-			Self.currentLayer = AMY_ANI_STAND
+			Self.currentLayer = 0
 			Self.slipping = True
 			Self.slideSoundStart = True
 			Self.collisionState = (Byte) 1
@@ -751,7 +751,7 @@ Class PlayerAmy Extends PlayerObject
 		Public Method slipJumpOut:Void()
 			
 			If (Self.slipping) Then
-				Self.currentLayer = AMY_ANI_WALK_1
+				Self.currentLayer = 1
 				Self.slipping = False
 				calDivideVelocity()
 				setVelY(Self.isInWater ? JUMP_INWATER_START_VELOCITY : JUMP_START_VELOCITY)
@@ -766,7 +766,7 @@ Class PlayerAmy Extends PlayerObject
 		Public Method slipEnd:Void()
 			
 			If (Self.slipping) Then
-				Self.currentLayer = AMY_ANI_WALK_1
+				Self.currentLayer = 1
 				Self.slipping = False
 				calDivideVelocity()
 				Self.collisionState = (Byte) 1
@@ -790,20 +790,20 @@ Class PlayerAmy Extends PlayerObject
 			Super.doHurt()
 			
 			If (Self.slipping) Then
-				Self.currentLayer = AMY_ANI_WALK_1
+				Self.currentLayer = 1
 				Self.slipping = False
 			EndIf
 			
 		End
 		
 		Public Method beSpring:Void(springPower:Int, direction:Int)
-			Self.attackLevel = AMY_ANI_STAND
-			Self.attackCount = AMY_ANI_STAND
+			Self.attackLevel = 0
+			Self.attackCount = 0
 			Self.jumpAttackUsed = False
 			Super.beSpring(springPower, direction)
 			
 			If (Self.myAnimationID = AMY_ANI_DASH_3 Or Self.myAnimationID = AMY_ANI_DASH_4) Then
-				If (Not (Self.animationID = 0 And Self.animationID = AMY_ANI_WALK_1 And Self.animationID = AMY_ANI_WALK_2 And Self.animationID = AMY_ANI_RUN)) Then
+				If (Not (Self.animationID = AMY_ANI_STAND And Self.animationID = 1 And Self.animationID = AMY_ANI_WALK_2 And Self.animationID = AMY_ANI_RUN)) Then
 					Self.animationID = AMY_ANI_STAND
 				EndIf
 				
@@ -824,7 +824,7 @@ Class PlayerAmy Extends PlayerObject
 				Return Super.getRetPower()
 			EndIf
 			
-			Effect.showEffectPlayer(Self.dustEffectAnimation, AMY_ANI_WALK_2, Self.posX Shr AMY_ANI_DASH_3, Self.posY Shr AMY_ANI_DASH_3, AMY_ANI_STAND)
+			Effect.showEffectPlayer(Self.dustEffectAnimation, 2, Self.posX Shr 6, Self.posY Shr 6, 0)
 			Return SLIDING_BRAKE
 		End
 		
@@ -836,7 +836,7 @@ Class PlayerAmy Extends PlayerObject
 			
 			Bool re = Super.beAccelerate(power, IsX, sender)
 			
-			If (Not (Self.animationID = 0 And Self.animationID = AMY_ANI_WALK_1 And Self.animationID = AMY_ANI_WALK_2 And Self.animationID = AMY_ANI_RUN)) Then
+			If (Not (Self.animationID = AMY_ANI_STAND And Self.animationID = 1 And Self.animationID = AMY_ANI_WALK_2 And Self.animationID = AMY_ANI_RUN)) Then
 				Self.animationID = AMY_ANI_STAND
 			EndIf
 			
@@ -855,7 +855,7 @@ Class PlayerAmy Extends PlayerObject
 		Public Method getSlopeGravity:Int()
 			
 			If (Self.myAnimationID = AMY_ANI_DASH_3 Or Self.myAnimationID = AMY_ANI_DASH_4) Then
-				Return AMY_ANI_STAND
+				Return 0
 			EndIf
 			
 			Return Super.getSlopeGravity()
@@ -866,8 +866,8 @@ Class PlayerAmy Extends PlayerObject
 		End
 		
 		Public Method resetAttackLevel:Void()
-			Self.attackLevel = AMY_ANI_STAND
-			Self.attackCount = AMY_ANI_STAND
+			Self.attackLevel = 0
+			Self.attackCount = 0
 		End
 		
 		Public Method setCannotAttack:Void(cannot:Bool)
