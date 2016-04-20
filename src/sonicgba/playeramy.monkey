@@ -395,81 +395,7 @@ Class PlayerAmy Extends PlayerObject
 			EndIf
 		End
 		
-		Protected Method spinLogic:Bool()
-			
-			If (Not (Key.repeated(Key.gLeft) Or Key.repeated(Key.gRight) Or isTerminal Or Self.animationID = NO_ANIMATION)) Then
-				If (Key.repeated(Key.gDown)) Then
-					If (Not (Self.animationID = AMY_ANI_DASH_2 Or Self.animationID = AMY_ANI_BANK_2 Or Self.animationID = AMY_ANI_BANK_3)) Then
-						Self.animationID = AMY_ANI_BANK_1
-					EndIf
-					
-					Int jump
-					
-					If (Key.press(Key.B_HIGH_JUMP | Key.gUp) And ((Not Self.isAntiGravity And (Self.faceDegree < 90 Or Self.faceDegree > 270)) Or (Self.isAntiGravity And Self.faceDegree > 90 And Self.faceDegree < 270))) Then
-						Int i
-						Int i2
-						Self.animationID = NO_ANIMATION
-						Self.myAnimationID = AMY_ANI_DASH_1
-						Self.collisionState = (Byte) 1
-						Self.worldCal.actionState = (Byte) 1
-						Int jump_x = Self.isInWater ? STEP_JUMP_INWATER_X : STEP_JUMP_X
-						jump = Self.isInWater ? STEP_JUMP_INWATER_Y : STEP_JUMP_Y
-						
-						If (Self.faceDirection) Then
-							i = 1
-						Else
-							i = NO_ANIMATION
-						EndIf
-						
-						Self.velX = ((i * jump_x) * MyAPI.dCos(Self.faceDegree)) / 100
-						
-						If (Self.faceDirection) Then
-							i = 1
-						Else
-							i = NO_ANIMATION
-						EndIf
-						
-						Self.velY = ((i * jump_x) * MyAPI.dSin(Self.faceDegree)) / 100
-						
-						If (Self.velY < STEP_JUMP_LIMIT_Y) Then
-							Self.velY = STEP_JUMP_LIMIT_Y
-						EndIf
-						
-						i = Self.velY
-						
-						If (Self.isAntiGravity) Then
-							i2 = NO_ANIMATION
-						Else
-							i2 = 1
-						EndIf
-						
-						Self.velY = i + (i2 * ((-jump) - getGravity()))
-						soundInstance.playSe(AMY_ANI_SQUAT_1)
-						Return True
-					ElseIf (Key.press(Key.gSelect)) Then
-						Self.animationID = NO_ANIMATION
-						Self.myAnimationID = AMY_ANI_BIG_JUMP
-						Self.isinBigJumpAttack = True
-						Self.collisionState = (Byte) 1
-						Self.worldCal.actionState = (Byte) 1
-						jump = Self.isInWater ? BIG_JUMP_INWATER_POWER : BIG_JUMP_POWER
-						Self.velY += (((-jump) - getGravity()) * MyAPI.dCos(Self.faceDegree)) / 100
-						Self.velX += (((-jump) - getGravity()) * (-MyAPI.dSin(Self.faceDegree))) / 100
-						soundInstance.playSe(AMY_ANI_SQUAT_1)
-					ElseIf (Abs(getVelX()) <= SLIDING_BRAKE And getDegreeDiff(Self.faceDegree, Self.degreeStable) <= AMY_ANI_WIND) Then
-						Self.focusMovingState = 2
-					EndIf
-					
-				ElseIf (Self.animationID = AMY_ANI_DASH_2) Then
-					Self.animationID = AMY_ANI_BANK_1
-				EndIf
-			EndIf
-			
-			Return False
-		End
-		
-		Public Method doJump:Void()
-			
+		Method doJump:Void()
 			If (Self.myAnimationID <> AMY_ANI_BIG_JUMP And Self.myAnimationID <> AMY_ANI_DASH_4 And Self.myAnimationID <> AMY_ANI_DASH_5) Then
 				Self.jumpAttackUsed = False
 				
@@ -481,7 +407,8 @@ Class PlayerAmy Extends PlayerObject
 					EndIf
 				EndIf
 				
-				If (Self.slipping And Self.totalVelocity = 192) Then
+				' Magic number: 192
+				If (Self.slipping And Self.totalVelocity = 192) Then ' (HURT_POWER_X / 2)
 					Super.doJumpV()
 				Else
 					Super.doJump()
@@ -489,26 +416,263 @@ Class PlayerAmy Extends PlayerObject
 				
 				If (Self.slipping) Then
 					Self.currentLayer = 1
+					
 					Self.slipping = False
 				EndIf
 				
 				Self.animationID = AMY_ANI_SPRING_2
 			EndIf
-			
 		End
 		
-		Public Method isOnSlip0:Bool()
-			Return Self.myAnimationID = AMY_ANI_SLIP_D0
+		Method isOnSlip0:Bool()
+			Return (Self.myAnimationID = AMY_ANI_SLIP_D0)
 		End
 		
-		Public Method setSlip0:Void()
-			
-			If (Self.collisionState = Null) Then
+		Method setSlip0:Void()
+			If (Self.collisionState = 0) Then
 				Self.animationID = NO_ANIMATION
 				Self.myAnimationID = AMY_ANI_SLIP_D0
 			EndIf
 			
 			setMinSlipSpeed()
+		End
+		
+		Method doWhileLand:Void(degree:Int)
+			Super.doWhileLand(degree)
+			
+			Self.jumpAttackUsed = False
+			
+			If (Self.myAnimationID = AMY_ANI_DASH_4 Or Self.myAnimationID = AMY_ANI_DASH_3) Then
+				Self.myAnimationID = AMY_ANI_DASH_4
+				
+				Self.animationID = NO_ANIMATION
+				
+				soundInstance.playSe(AMY_ANI_DASH_3)
+			EndIf
+			
+			Self.isinBigJumpAttack = False
+			
+			If (Self.myAnimationID = AMY_ANI_JUMP_ATTACK_2 Or Self.myAnimationID = AMY_ANI_JUMP_ATTACK_3) Then
+				Self.isAttacking = False
+			EndIf
+		End
+		
+		Method slipStart:Void()
+			' Magic number: 0
+			Self.currentLayer = 0
+			
+			Self.slipping = True
+			Self.slideSoundStart = True
+			
+			' Magic numbers: 1
+			Self.collisionState = 1
+			Self.worldCal.actionState = 1
+			
+			setMinSlipSpeed()
+		End
+		
+		Method slipJumpOut:Void()
+			If (Self.slipping) Then
+				' Magic numbers: 1
+				
+				Self.currentLayer = 1
+				
+				Self.slipping = False
+				
+				calDivideVelocity()
+				
+				setVelY(PickValue(Self.isInWater, JUMP_INWATER_START_VELOCITY, JUMP_START_VELOCITY))
+				
+				Self.collisionState = 1
+				Self.worldCal.actionState = 1
+				
+				Self.collisionChkBreak = True
+				
+				Self.worldCal.stopMove()
+			EndIf
+		End
+		
+		Method slipEnd:Void()
+			If (Self.slipping) Then
+				' Magic numbers: 1
+				
+				Self.currentLayer = 1
+				
+				Self.slipping = False
+				
+				calDivideVelocity()
+				
+				Self.collisionState = 1
+				Self.worldCal.actionState = 1
+				
+				' Magic number: -1540
+				Self.velY = -1540
+				
+				Self.animationID = AMY_ANI_LOOK_UP_1
+				
+				Self.collisionChkBreak = True
+				
+				Self.worldCal.stopMove()
+				
+				soundInstance.stopLoopSe()
+				soundInstance.playSequenceSe(SoundSystem.SE_116)
+			EndIf
+		End
+		
+		Method setSlideAni:Void()
+			Self.animationID = NO_ANIMATION
+			Self.myAnimationID = AMY_ANI_SLIP_D0
+		End
+		
+		Method doHurt:Void()
+			Super.doHurt()
+			
+			If (Self.slipping) Then
+				' Magic number: 1
+				Self.currentLayer = 1
+				
+				Self.slipping = False
+			EndIf
+		End
+		
+		Method beSpring:Void(springPower:Int, direction:Int)
+			Self.attackLevel = 0
+			Self.attackCount = 0
+			
+			Self.jumpAttackUsed = False
+			
+			Super.beSpring(springPower, direction)
+			
+			If (Self.myAnimationID = AMY_ANI_DASH_3 Or Self.myAnimationID = AMY_ANI_DASH_4) Then
+				If (Not (Self.animationID = AMY_ANI_STAND And Self.animationID = AMY_ANI_WALK_1 And Self.animationID = AMY_ANI_WALK_2 And Self.animationID = AMY_ANI_RUN)) Then
+					Self.animationID = AMY_ANI_STAND
+				EndIf
+				
+				If (Key.repeated(Key.gDown)) Then
+					Self.animationID = AMY_ANI_DASH_2
+				EndIf
+			EndIf
+		End
+		
+		Method getRetPower:Int()
+			If (Self.animationID = AMY_ANI_DASH_2 And Self.fallTime = 0) Then
+				Return MOVE_POWER_REVERSE
+			EndIf
+			
+			If (Self.myAnimationID <> AMY_ANI_DASH_3 And Self.myAnimationID <> AMY_ANI_DASH_4) Then
+				Return Super.getRetPower()
+			EndIf
+			
+			Effect.showEffectPlayer(Self.dustEffectAnimation, 2, (Self.posX Shr 6), (Self.posY Shr 6), 0)
+			
+			Return SLIDING_BRAKE
+		End
+		
+		Method beAccelerate:Bool(power:Int, IsX:Bool, sender:GameObject)
+			If (Self.myAnimationID = AMY_ANI_DASH_3 Or Self.myAnimationID = AMY_ANI_DASH_4) Then
+				Return False
+			EndIf
+			
+			Local re:= Super.beAccelerate(power, IsX, sender)
+			
+			If (Not (Self.animationID = AMY_ANI_STAND And Self.animationID = AMY_ANI_WALK_1 And Self.animationID = AMY_ANI_WALK_2 And Self.animationID = AMY_ANI_RUN)) Then
+				Self.animationID = AMY_ANI_STAND
+			EndIf
+			
+			If (Key.repeated(Key.gDown)) Then
+				Self.animationID = AMY_ANI_DASH_2
+			EndIf
+			
+			Return re
+		End
+		
+		Method needRetPower:Bool()
+			Return ((Self.myAnimationID = AMY_ANI_DASH_3 Or Self.myAnimationID = AMY_ANI_DASH_4) Or Super.needRetPower())
+		End
+		
+		Method getSlopeGravity:Int()
+			If (Self.myAnimationID = AMY_ANI_DASH_3 Or Self.myAnimationID = AMY_ANI_DASH_4) Then
+				Return 0
+			EndIf
+			
+			Return Super.getSlopeGravity()
+		End
+		
+		Method noRotateDraw:Bool()
+			Return (Self.myAnimationID = AMY_ANI_ATTACK_1 Or Self.myAnimationID = AMY_ANI_ATTACK_2 Or Self.myAnimationID = AMY_ANI_DASH_3 Or Self.myAnimationID = AMY_ANI_DASH_4 Or Self.myAnimationID = AMY_ANI_DASH_5 Or Super.noRotateDraw())
+		End
+		
+		Method resetAttackLevel:Void()
+			Self.attackLevel = 0
+			Self.attackCount = 0
+		End
+		
+		Method setCannotAttack:Void(cannot:Bool)
+			Self.cannotAttack = cannot
+		End
+	Protected
+		' Methods:
+		Method spinLogic:Bool()
+			If (Not (Key.repeated(Key.gLeft) Or Key.repeated(Key.gRight) Or isTerminal Or Self.animationID = NO_ANIMATION)) Then
+				If (Key.repeated(Key.gDown)) Then
+					If (Not (Self.animationID = AMY_ANI_DASH_2 Or Self.animationID = AMY_ANI_BANK_2 Or Self.animationID = AMY_ANI_BANK_3)) Then
+						Self.animationID = AMY_ANI_BANK_1
+					EndIf
+					
+					Local jump:Int
+					
+					If (Key.press(Key.B_HIGH_JUMP | Key.gUp) And ((Not Self.isAntiGravity And (Self.faceDegree < 90 Or Self.faceDegree > 270)) Or (Self.isAntiGravity And Self.faceDegree > 90 And Self.faceDegree < 270))) Then
+						Self.animationID = NO_ANIMATION
+						Self.myAnimationID = AMY_ANI_DASH_1
+						
+						' Magic numbers: 1
+						Self.collisionState = 1
+						Self.worldCal.actionState = 1
+						
+						Local jump_x:= PickValue(Self.isInWater, STEP_JUMP_INWATER_X, STEP_JUMP_X)
+						
+						jump = PickValue(Self.isInWater, STEP_JUMP_INWATER_Y, STEP_JUMP_Y)
+						
+						Local directionSgn:Int = DSgn(Self.faceDirection)
+						
+						Self.velX = (((directionSgn * jump_x) * MyAPI.dCos(Self.faceDegree)) / 100)
+						Self.velY = (((directionSgn * jump_x) * MyAPI.dSin(Self.faceDegree)) / 100) ' jump
+						
+						If (Self.velY < STEP_JUMP_LIMIT_Y) Then
+							Self.velY = STEP_JUMP_LIMIT_Y
+						EndIf
+						
+						Self.velY += (DSgn(Not Self.isAntiGravity) * ((-jump) - getGravity()))
+						
+						soundInstance.playSe(SoundSystem.SE_116)
+						
+						Return True
+					ElseIf (Key.press(Key.gSelect)) Then
+						Self.animationID = NO_ANIMATION
+						Self.myAnimationID = AMY_ANI_BIG_JUMP
+						
+						Self.isinBigJumpAttack = True
+						
+						' Magic numbers: 1
+						Self.collisionState = 1
+						Self.worldCal.actionState = 1
+						
+						jump = PickValue(Self.isInWater, BIG_JUMP_INWATER_POWER, BIG_JUMP_POWER)
+						
+						Self.velY += ((((-jump) - getGravity()) * MyAPI.dCos(Self.faceDegree)) / 100)
+						Self.velX += ((((-jump) - getGravity()) * (-MyAPI.dSin(Self.faceDegree))) / 100)
+						
+						soundInstance.playSe(SoundSystem.SE_116)
+					ElseIf (Abs(getVelX()) <= SLIDING_BRAKE And getDegreeDiff(Self.faceDegree, Self.degreeStable) <= AMY_ANI_WIND) Then
+						' Magic number: 2
+						Self.focusMovingState = 2
+					EndIf
+				ElseIf (Self.animationID = AMY_ANI_DASH_2) Then
+					Self.animationID = AMY_ANI_BANK_1
+				EndIf
+			EndIf
+			
+			Return False
 		End
 		
 		Protected Method extraLogicWalk:Void()
@@ -712,165 +876,11 @@ Class PlayerAmy Extends PlayerObject
 			EndIf
 			
 		End
-		
-		Public Method doWhileLand:Void(degree:Int)
-			Super.doWhileLand(degree)
-			Self.jumpAttackUsed = False
-			
-			If (Self.myAnimationID = AMY_ANI_DASH_4 Or Self.myAnimationID = AMY_ANI_DASH_3) Then
-				Self.myAnimationID = AMY_ANI_DASH_4
-				Self.animationID = NO_ANIMATION
-				soundInstance.playSe(AMY_ANI_DASH_3)
-			EndIf
-			
-			Self.isinBigJumpAttack = False
-			
-			If (Self.myAnimationID = AMY_ANI_JUMP_ATTACK_2 Or Self.myAnimationID = AMY_ANI_JUMP_ATTACK_3) Then
-				Self.isAttacking = False
-			EndIf
-			
-		End
-		
-		Public Method slipStart:Void()
-			Self.currentLayer = 0
-			Self.slipping = True
-			Self.slideSoundStart = True
-			Self.collisionState = (Byte) 1
-			Self.worldCal.actionState = (Byte) 1
-			setMinSlipSpeed()
-		End
-		
-		Private Method setMinSlipSpeed:Void()
-			
+	Private
+		' Methods:
+		Method setMinSlipSpeed:Void()
 			If (getVelX() < SPEED_LIMIT_LEVEL_1) Then
 				setVelX(SPEED_LIMIT_LEVEL_1)
 			EndIf
-			
-		End
-		
-		Public Method slipJumpOut:Void()
-			
-			If (Self.slipping) Then
-				Self.currentLayer = 1
-				Self.slipping = False
-				calDivideVelocity()
-				setVelY(Self.isInWater ? JUMP_INWATER_START_VELOCITY : JUMP_START_VELOCITY)
-				Self.collisionState = (Byte) 1
-				Self.worldCal.actionState = (Byte) 1
-				Self.collisionChkBreak = True
-				Self.worldCal.stopMove()
-			EndIf
-			
-		End
-		
-		Public Method slipEnd:Void()
-			
-			If (Self.slipping) Then
-				Self.currentLayer = 1
-				Self.slipping = False
-				calDivideVelocity()
-				Self.collisionState = (Byte) 1
-				Self.worldCal.actionState = (Byte) 1
-				Self.velY = -1540
-				Self.animationID = AMY_ANI_LOOK_UP_1
-				Self.collisionChkBreak = True
-				Self.worldCal.stopMove()
-				soundInstance.stopLoopSe()
-				soundInstance.playSequenceSe(AMY_ANI_SQUAT_1)
-			EndIf
-			
-		End
-		
-		Public Method setSlideAni:Void()
-			Self.animationID = NO_ANIMATION
-			Self.myAnimationID = AMY_ANI_SLIP_D0
-		End
-		
-		Public Method doHurt:Void()
-			Super.doHurt()
-			
-			If (Self.slipping) Then
-				Self.currentLayer = 1
-				Self.slipping = False
-			EndIf
-			
-		End
-		
-		Public Method beSpring:Void(springPower:Int, direction:Int)
-			Self.attackLevel = 0
-			Self.attackCount = 0
-			Self.jumpAttackUsed = False
-			Super.beSpring(springPower, direction)
-			
-			If (Self.myAnimationID = AMY_ANI_DASH_3 Or Self.myAnimationID = AMY_ANI_DASH_4) Then
-				If (Not (Self.animationID = AMY_ANI_STAND And Self.animationID = 1 And Self.animationID = AMY_ANI_WALK_2 And Self.animationID = AMY_ANI_RUN)) Then
-					Self.animationID = AMY_ANI_STAND
-				EndIf
-				
-				If (Key.repeated(Key.gDown)) Then
-					Self.animationID = AMY_ANI_DASH_2
-				EndIf
-			EndIf
-			
-		End
-		
-		Public Method getRetPower:Int()
-			
-			If (Self.animationID = AMY_ANI_DASH_2 And Self.fallTime = 0) Then
-				Return MOVE_POWER_REVERSE
-			EndIf
-			
-			If (Self.myAnimationID <> AMY_ANI_DASH_3 And Self.myAnimationID <> AMY_ANI_DASH_4) Then
-				Return Super.getRetPower()
-			EndIf
-			
-			Effect.showEffectPlayer(Self.dustEffectAnimation, 2, Self.posX Shr 6, Self.posY Shr 6, 0)
-			Return SLIDING_BRAKE
-		End
-		
-		Public Method beAccelerate:Bool(power:Int, IsX:Bool, sender:GameObject)
-			
-			If (Self.myAnimationID = AMY_ANI_DASH_3 Or Self.myAnimationID = AMY_ANI_DASH_4) Then
-				Return False
-			EndIf
-			
-			Bool re = Super.beAccelerate(power, IsX, sender)
-			
-			If (Not (Self.animationID = AMY_ANI_STAND And Self.animationID = 1 And Self.animationID = AMY_ANI_WALK_2 And Self.animationID = AMY_ANI_RUN)) Then
-				Self.animationID = AMY_ANI_STAND
-			EndIf
-			
-			If (Key.repeated(Key.gDown)) Then
-				Self.animationID = AMY_ANI_DASH_2
-			EndIf
-			
-			Return re
-		End
-		
-		Public Method needRetPower:Bool()
-			Bool re = Self.myAnimationID = AMY_ANI_DASH_3 Or Self.myAnimationID = AMY_ANI_DASH_4
-			Return re | Super.needRetPower()
-		End
-		
-		Public Method getSlopeGravity:Int()
-			
-			If (Self.myAnimationID = AMY_ANI_DASH_3 Or Self.myAnimationID = AMY_ANI_DASH_4) Then
-				Return 0
-			EndIf
-			
-			Return Super.getSlopeGravity()
-		End
-		
-		Public Method noRotateDraw:Bool()
-			Return Self.myAnimationID = AMY_ANI_ATTACK_1 Or Self.myAnimationID = AMY_ANI_ATTACK_2 Or Self.myAnimationID = AMY_ANI_DASH_3 Or Self.myAnimationID = AMY_ANI_DASH_4 Or Self.myAnimationID = AMY_ANI_DASH_5 Or Super.noRotateDraw()
-		End
-		
-		Public Method resetAttackLevel:Void()
-			Self.attackLevel = 0
-			Self.attackCount = 0
-		End
-		
-		Public Method setCannotAttack:Void(cannot:Bool)
-			Self.cannotAttack = cannot
 		End
 End
