@@ -429,6 +429,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const YELLOW_NUM:Int = 4
 		
 		Const COLLISION_STATE_NUM:= 4
+		
 		Const COLLISION_STATE_WALK:= 0
 		Const COLLISION_STATE_JUMP:= 1
 		Const COLLISION_STATE_ON_OBJECT:= 2

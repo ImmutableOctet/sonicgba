@@ -418,7 +418,7 @@
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>14</X>
-        <Y>86</Y>
+        <Y>97</Y>
       </CursorPos>
       <DocGUID>d9ff5404-e893-4f34-b55d-aa6901b81569</DocGUID>
       <Bookmarks />
@@ -986,8 +986,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playeramy.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>35</X>
-        <Y>881</Y>
+        <X>26</X>
+        <Y>866</Y>
       </CursorPos>
       <DocGUID>181f4ce8-c17e-4d15-811a-0b729bd146e0</DocGUID>
       <Bookmarks />
@@ -1001,8 +1001,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>607</Y>
+        <X>28</X>
+        <Y>432</Y>
       </CursorPos>
       <DocGUID>d7bda53f-1d75-4238-82cd-a9ac78200d4b</DocGUID>
       <Bookmarks />
@@ -1443,12 +1443,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\state\stringindex.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\state\stringindex.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>7</X>
-        <Y>49</Y>
+        <Y>14</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>85021c53-2022-4b24-abed-41ee71bc4e85</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>

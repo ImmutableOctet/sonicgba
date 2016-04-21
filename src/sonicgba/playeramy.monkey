@@ -429,7 +429,7 @@ Class PlayerAmy Extends PlayerObject
 		End
 		
 		Method setSlip0:Void()
-			If (Self.collisionState = 0) Then
+			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				Self.animationID = NO_ANIMATION
 				Self.myAnimationID = AMY_ANI_SLIP_D0
 			EndIf
@@ -447,7 +447,7 @@ Class PlayerAmy Extends PlayerObject
 				
 				Self.animationID = NO_ANIMATION
 				
-				soundInstance.playSe(AMY_ANI_DASH_3)
+				soundInstance.playSe(SoundSystem.SE_111)
 			EndIf
 			
 			Self.isinBigJumpAttack = False
@@ -465,7 +465,7 @@ Class PlayerAmy Extends PlayerObject
 			Self.slideSoundStart = True
 			
 			' Magic numbers: 1
-			Self.collisionState = 1
+			Self.collisionState = COLLISION_STATE_JUMP
 			Self.worldCal.actionState = 1
 			
 			setMinSlipSpeed()
@@ -483,7 +483,7 @@ Class PlayerAmy Extends PlayerObject
 				
 				setVelY(PickValue(Self.isInWater, JUMP_INWATER_START_VELOCITY, JUMP_START_VELOCITY))
 				
-				Self.collisionState = 1
+				Self.collisionState = COLLISION_STATE_JUMP
 				Self.worldCal.actionState = 1
 				
 				Self.collisionChkBreak = True
@@ -502,7 +502,7 @@ Class PlayerAmy Extends PlayerObject
 				
 				calDivideVelocity()
 				
-				Self.collisionState = 1
+				Self.collisionState = COLLISION_STATE_JUMP
 				Self.worldCal.actionState = 1
 				
 				' Magic number: -1540
@@ -626,7 +626,7 @@ Class PlayerAmy Extends PlayerObject
 						Self.myAnimationID = AMY_ANI_DASH_1
 						
 						' Magic numbers: 1
-						Self.collisionState = 1
+						Self.collisionState = COLLISION_STATE_JUMP
 						Self.worldCal.actionState = 1
 						
 						Local jump_x:= PickValue(Self.isInWater, STEP_JUMP_INWATER_X, STEP_JUMP_X)
@@ -654,7 +654,7 @@ Class PlayerAmy Extends PlayerObject
 						Self.isinBigJumpAttack = True
 						
 						' Magic numbers: 1
-						Self.collisionState = 1
+						Self.collisionState = COLLISION_STATE_JUMP
 						Self.worldCal.actionState = 1
 						
 						jump = PickValue(Self.isInWater, BIG_JUMP_INWATER_POWER, BIG_JUMP_POWER)
@@ -675,16 +675,16 @@ Class PlayerAmy Extends PlayerObject
 			Return False
 		End
 		
-		Protected Method extraLogicWalk:Void()
-			
+		Method extraLogicWalk:Void()
 			If (Self.myAnimationID = AMY_ANI_ATTACK_1 And Self.drawer.getCurrentFrame() = AMY_ANI_DASH_1) Then
 				If (Self.attack1Flag) Then
-					soundInstance.playSe(AMY_ANI_JUMP_ATTACK_2)
+					soundInstance.playSe(SoundSystem.SE_128)
+					
 					Self.attack1Flag = False
 				EndIf
-				
 			ElseIf (Self.myAnimationID = AMY_ANI_ATTACK_2 And Self.drawer.getCurrentFrame() = AMY_ANI_DASH_2 And Self.attack2Flag) Then
-				soundInstance.playSe(AMY_ANI_JUMP_ATTACK_2)
+				soundInstance.playSe(SoundSystem.SE_128)
+				
 				Self.attack2Flag = False
 			EndIf
 			
@@ -706,13 +706,17 @@ Class PlayerAmy Extends PlayerObject
 				isCanJump = False
 			EndIf
 			
-			If (Not (Self.cannotAttack Or Not Key.press(Key.gSelect) Or Self.myAnimationID = AMY_ANI_PUSH_WALL Or Self.collisionState = (Byte) 1)) Then
+			If (Not (Self.cannotAttack Or Not Key.press(Key.gSelect) Or Self.myAnimationID = AMY_ANI_PUSH_WALL Or Self.collisionState = COLLISION_STATE_JUMP)) Then
 				If (Self.animationID <> NO_ANIMATION And Not Key.repeated(Key.gDown)) Then
 					Self.totalVelocity = 0
+					
 					Self.animationID = NO_ANIMATION
 					Self.myAnimationID = AMY_ANI_ATTACK_1
+					
 					Self.attack1Flag = True
-					Self.attackCount = Self.isInWater ? AMY_ANI_JUMP_ATTACK_1 : ATTACK_COUNT_MAX
+					
+					Self.attackCount = PickValue(Self.isInWater, (ATTACK_COUNT_MAX * 2), ATTACK_COUNT_MAX) ' 20 ' AMY_ANI_JUMP_ATTACK_1
+					
 					Self.attackLevel = 1
 				ElseIf (Self.attackCount > 0 And Self.attackLevel < 2) Then
 					Self.attackLevel += 1
@@ -724,14 +728,19 @@ Class PlayerAmy Extends PlayerObject
 			EndIf
 			
 			If (Self.slipping) Then
+				' Magic numbers: 30
+				
 				If (Key.repeated(Key.gLeft) And Self.myAnimationID = AMY_ANI_SLIP_D45) Then
-					Self.totalVelocity -= AMY_ANI_ROLL_V_2
-				ElseIf (Key.repeated(Key.gDown | Key.gRight) And Self.faceDegree < StringIndex.FONT_COLON_RED) Then
-					Self.totalVelocity += (MyAPI.dSin(Self.faceDegree) * 150) / 100
+					Self.totalVelocity -= 30
+				ElseIf (Key.repeated(Key.gDown | Key.gRight) And Self.faceDegree < 135) Then
+					Self.totalVelocity += ((MyAPI.dSin(Self.faceDegree) * 150) / 100)
 				EndIf
 				
-				Self.totalVelocity -= AMY_ANI_ROLL_V_2
+				Self.totalVelocity -= 30
+				
+				' Magic number: 192
 				Self.totalVelocity = Max(Self.totalVelocity, 192)
+				
 				Self.animationID = NO_ANIMATION
 				Self.faceDirection = True
 				
@@ -739,16 +748,18 @@ Class PlayerAmy Extends PlayerObject
 					Self.myAnimationID = AMY_ANI_SLIP_D45
 					
 					If (Self.slideSoundStart) Then
-						soundInstance.playSe(AMY_ANI_DASH_5)
+						soundInstance.playSe(SoundSystem.SE_114_01)
+						
 						Self.slideSoundStart = False
 					EndIf
-					
 				Else
 					setMinSlipSpeed()
+					
 					Self.myAnimationID = AMY_ANI_SLIP_D0
 					
 					If (Self.slideSoundStart) Then
-						soundInstance.playSe(AMY_ANI_DASH_5)
+						soundInstance.playSe(SoundSystem.SE_114_01)
+						
 						Self.slideSoundStart = False
 					EndIf
 				EndIf
@@ -756,53 +767,37 @@ Class PlayerAmy Extends PlayerObject
 				slidingFrame += 1
 				
 				If (slidingFrame = AMY_ANI_DASH_1) Then
-					soundInstance.playLoopSe(AMY_ANI_LOOK_UP_1)
+					soundInstance.playLoopSe(SoundSystem.SE_114_02)
 				EndIf
 			EndIf
-			
 		End
 		
-		Protected Method extraLogicJump:Void()
+		Method extraLogicJump:Void()
 			Select (Self.myAnimationID)
-				Case AMY_ANI_DASH_1
-				Case AMY_ANI_DASH_2
-					
-					If (Not Key.press(Key.gSelect)) Then
-						If (Self.velX <> 0) Then
-							If (Self.velX >= 0) Then
-								Self.velX = Max(Self.velX, STEP_JUMP_X_V0)
-								break
-							Else
-								Self.velX = Min(Self.velX, -912)
-								break
-							EndIf
+				Case AMY_ANI_DASH_1, AMY_ANI_DASH_2
+					If (Not Key.press(Key.gSelect) And Self.velX <> 0) Then
+						If (Self.velX >= 0) Then
+							Self.velX = Max(Self.velX, STEP_JUMP_X_V0) ' 912
+						Else
+							Self.velX = Min(Self.velX, -STEP_JUMP_X_V0)
 						EndIf
+					Else
+						Self.myAnimationID = AMY_ANI_DASH_3
 					EndIf
-					
-					Self.myAnimationID = AMY_ANI_DASH_3
-					break
-					break
-				Case AMY_ANI_SPRING_2
-				Case AMY_ANI_SPRING_3
-				Case AMY_ANI_SPRING_4
-				Case AMY_ANI_SPRING_5
-				Case AMY_ANI_SPRING_1
-					
+				Case AMY_ANI_SPRING_1, AMY_ANI_SPRING_2, AMY_ANI_SPRING_3, AMY_ANI_SPRING_4, AMY_ANI_SPRING_5
 					If (Not (Not Key.press(Key.gSelect) Or Self.isinBigJumpAttack Or Self.jumpAttackUsed)) Then
 						Self.jumpAttackUsed = True
 						
 						If (Not Key.repeated(Key.gDown)) Then
 							Self.animationID = NO_ANIMATION
 							Self.myAnimationID = AMY_ANI_JUMP_ATTACK_1
-							soundInstance.playSe(AMY_ANI_JUMP_ATTACK_3)
-							break
+							
+							soundInstance.playSe(SoundSystem.SE_130)
+						Else
+							Self.animationID = NO_ANIMATION
+							Self.myAnimationID = AMY_ANI_JUMP_ATTACK_2
 						EndIf
-						
-						Self.animationID = NO_ANIMATION
-						Self.myAnimationID = AMY_ANI_JUMP_ATTACK_2
-						break
 					EndIf
-					
 			End Select
 			
 			If (Self.animationID >= 1 And Self.animationID <= AMY_ANI_RUN And Key.press(Key.gSelect) And Not Self.jumpAttackUsed) Then
@@ -814,27 +809,28 @@ Class PlayerAmy Extends PlayerObject
 				Else
 					Self.animationID = NO_ANIMATION
 					Self.myAnimationID = AMY_ANI_JUMP_ATTACK_1
-					soundInstance.playSe(AMY_ANI_JUMP_ATTACK_3)
+					
+					soundInstance.playSe(SoundSystem.SE_130)
 				EndIf
 			EndIf
 			
 			If (Self.myAnimationID = AMY_ANI_SPRING_1 Or Self.myAnimationID = AMY_ANI_SPRING_5) Then
 				Self.skipBeStop = False
 			EndIf
-			
 		End
 		
-		Protected Method extraLogicOnObject:Void()
+		Method extraLogicOnObject:Void()
 			Self.isinBigJumpAttack = False
 			
 			If (Self.myAnimationID = AMY_ANI_ATTACK_1 And Self.drawer.getCurrentFrame() = AMY_ANI_DASH_1) Then
 				If (Self.attack1Flag) Then
-					soundInstance.playSe(AMY_ANI_JUMP_ATTACK_2)
+					soundInstance.playSe(SoundSystem.SE_128)
+					
 					Self.attack1Flag = False
 				EndIf
-				
 			ElseIf (Self.myAnimationID = AMY_ANI_ATTACK_2 And Self.drawer.getCurrentFrame() = AMY_ANI_DASH_2 And Self.attack2Flag) Then
-				soundInstance.playSe(AMY_ANI_JUMP_ATTACK_2)
+				soundInstance.playSe(SoundSystem.SE_128)
+				
 				Self.attack2Flag = False
 			EndIf
 			
@@ -850,31 +846,27 @@ Class PlayerAmy Extends PlayerObject
 				Self.totalVelocity = 0
 			EndIf
 			
-			If (Self.attackLevel = 0) Then
-				isCanJump = True
-			Else
-				isCanJump = False
-			EndIf
+			isCanJump = (Self.attackLevel = 0)
 			
 			If (Self.myAnimationID = AMY_ANI_DASH_4 And Self.velX = 0 And Self.velY = 0) Then
 				Self.myAnimationID = AMY_ANI_DASH_5
 			EndIf
 			
-			If (Not Key.press(Key.gSelect)) Then
-				Return
+			If (Key.press(Key.gSelect)) Then
+				If (Self.animationID <> NO_ANIMATION And Not Key.repeated(Key.gDown) And Self.collisionState <> (Byte) 1) Then
+					Self.totalVelocity = 0
+					
+					Self.animationID = NO_ANIMATION
+					Self.myAnimationID = AMY_ANI_ATTACK_1
+					
+					Self.attack1Flag = True
+					Self.attackCount = PickValue(Self.isInWater, (ATTACK_COUNT_MAX * 2), ATTACK_COUNT_MAX) ' 20
+					
+					Self.attackLevel = 1
+				ElseIf (Self.attackCount > 0 And Self.attackLevel < 2) Then
+					Self.attackLevel += 1
+				EndIf
 			EndIf
-			
-			If (Self.animationID <> NO_ANIMATION And Not Key.repeated(Key.gDown) And Self.collisionState <> (Byte) 1) Then
-				Self.totalVelocity = 0
-				Self.animationID = NO_ANIMATION
-				Self.myAnimationID = AMY_ANI_ATTACK_1
-				Self.attack1Flag = True
-				Self.attackCount = Self.isInWater ? AMY_ANI_JUMP_ATTACK_1 : ATTACK_COUNT_MAX
-				Self.attackLevel = 1
-			ElseIf (Self.attackCount > 0 And Self.attackLevel < 2) Then
-				Self.attackLevel += 1
-			EndIf
-			
 		End
 	Private
 		' Methods:
