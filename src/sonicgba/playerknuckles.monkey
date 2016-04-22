@@ -748,38 +748,24 @@ Class PlayerKnuckles Extends PlayerObject
 		End
 	Protected
 		' Methods:
-		Protected Method extraLogicJump:Void()
-			Bool z
-			
-			If (Self.myAnimationID = KNUCKLES_ANI_FLY_1 Or Self.myAnimationID = KNUCKLES_ANI_FLY_2 Or Self.myAnimationID = KNUCKLES_ANI_FLY_3 Or Self.myAnimationID = KNUCKLES_ANI_SWIM_1) Then
-				z = True
-			Else
-				z = False
-			EndIf
-			
-			Self.flying = z
-			Int i
+		Method extraLogicJump:Void()
+			Self.flying = (Self.myAnimationID = KNUCKLES_ANI_FLY_1 Or Self.myAnimationID = KNUCKLES_ANI_FLY_2 Or Self.myAnimationID = KNUCKLES_ANI_FLY_3 Or Self.myAnimationID = KNUCKLES_ANI_SWIM_1)
 			
 			If (Self.flying) Then
 				If (Key.repeated(Key.B_HIGH_JUMP | Key.gUp)) Then
 					If (Self.flySpeed < PUNCH_MOVE01) Then
 						Self.flySpeed += KNUCKLES_ANI_FLY_4
-					ElseIf (Self.flySpeed < FLY_MAX_SPEED And (Self.flyDegree = FLY_DOWN_SPEED Or Self.flyDegree = -90)) Then
+					ElseIf (Self.flySpeed < FLY_MAX_SPEED And (Self.flyDegree = 90 Or Self.flyDegree = -90)) Then
 						Self.flySpeed += KNUCKLES_ANI_ATTACK_1
 					EndIf
 					
-					If ((Self.isAntiGravity ~ Self.faceDirection) <> 0) Then
-						i = FLY_DOWN_SPEED
-					Else
-						i = -90
-					EndIf
+					Self.flyDegreeStable = PickValue((Self.isAntiGravity <> Self.faceDirection), 90, -90)
+					Self.flyDegree = MyAPI.calNextPosition(Double(Self.flyDegree), Double(Self.flyDegreeStable), 1, 100, 20.0)
 					
-					Self.flyDegreeStable = i
-					Self.flyDegree = MyAPI.calNextPosition((Double) Self.flyDegree, (Double) Self.flyDegreeStable, 1, 100, 20.0)
-					Self.velX = (Self.flySpeed * MyAPI.dSin(Self.flyDegree)) / 100
+					Self.velX = ((Self.flySpeed * MyAPI.dSin(Self.flyDegree)) / 100)
 					
 					If (Self.isAntiGravity) Then
-						If (Self.velY > def.TOUCH_HELP_LEFT_X) Then
+						If (Self.velY > -DRIP_SPEED_Y_LIMIT) Then
 							Self.velY -= FLY_DOWN_SPEED
 						Else
 							Self.velY += FLY_DOWN_SPEED
@@ -787,7 +773,6 @@ Class PlayerKnuckles Extends PlayerObject
 						
 						Self.velY += getGravity()
 					Else
-						
 						If (Self.velY < DRIP_SPEED_Y_LIMIT) Then
 							Self.velY += FLY_DOWN_SPEED
 						Else
@@ -803,19 +788,18 @@ Class PlayerKnuckles Extends PlayerObject
 						If (Self.isInWater) Then
 							Self.myAnimationID = KNUCKLES_ANI_SWIM_1
 						EndIf
-						
 					ElseIf (Abs(Self.flyDegree) >= KNUCKLES_ANI_HURT_2) Then
 						Self.myAnimationID = KNUCKLES_ANI_FLY_2
 					Else
 						Self.myAnimationID = KNUCKLES_ANI_FLY_3
 					EndIf
-					
 				Else
 					Self.flying = False
+					
 					Self.myAnimationID = KNUCKLES_ANI_SPRING_4
-					Self.velX Shr= 2
+					
+					Self.velX Shr= 2 ' /= 4
 				EndIf
-				
 			ElseIf (Self.animationID = KNUCKLES_ANI_JUMP And Self.doJumpForwardly And Key.press(Key.B_HIGH_JUMP | Key.gUp)) Then
 				Self.animationID = NO_ANIMATION
 				Self.myAnimationID = KNUCKLES_ANI_FLY_1
@@ -839,14 +823,18 @@ Class PlayerKnuckles Extends PlayerObject
 				EndIf
 				
 				Self.velY -= getGravity()
-				Self.flySpeed = PUNCH_MOVE01
-				i = Self.footPointY - 512
-				Self.footPointY = i
-				Self.posY = i
+				Self.flySpeed = FLY_MIN_SPEED
+				
+				' Magic number: 512
+				Local pos:= Self.footPointY - 512 ' (WIDTH / 2)
+				
+				Self.footPointY = pos
+				Self.posY = pos
 			EndIf
 			
 			Floatchk()
-			Int waterLevel = StageManager.getWaterLevel() Shl 6
+			
+			Local waterLevel:= (StageManager.getWaterLevel() Shl 6)
 			
 			If (Self.Floating) Then
 				Self.breatheCount = 0
@@ -858,18 +846,23 @@ Class PlayerKnuckles Extends PlayerObject
 			
 			If (Key.press(Key.gDown)) Then
 				Self.Floating = False
+				
 				Self.animationID = KNUCKLES_ANI_SQUAT_2
 			ElseIf (Key.press(Key.B_HIGH_JUMP)) Then
 				doJump()
-				Self.velY = (Self.velY * 3) / KNUCKLES_ANI_SPIN_1
+				
+				Self.velY = ((Self.velY * 3) / 5)
+				
 				Self.Floating = False
 			Else
-				Int bodyCenterY = getNewPointY(Self.posY, 0, (-Self.collisionRect.getHeight()) Shr 1, Self.faceDegree)
+				Local bodyCenterY:= getNewPointY(Self.posY, 0, ((-Self.collisionRect.getHeight()) / 2), Self.faceDegree) ' Shr 1
+				
 				Self.animationID = NO_ANIMATION
 				
 				If (Key.repeated(Key.B_LOOK)) Then
 					Self.myAnimationID = KNUCKLES_ANI_SWIM_3
 					Self.focusMovingState = 1
+				' Magic number: 320
 				ElseIf (bodyCenterY - 320 <= waterLevel) Then
 					Self.myAnimationID = KNUCKLES_ANI_SWIM_2
 				EndIf
@@ -877,19 +870,19 @@ Class PlayerKnuckles Extends PlayerObject
 				If (Self.Floating) Then
 					Self.velY -= getGravity()
 					Self.velY -= FALL_ADD_SPEED
-					Self.velY = Max(-1920, Self.velY)
+					
+					Self.velY = Max(-JUMP_EFFECT_HEIGHT, Self.velY)
 					Self.velY = Max(waterLevel - bodyCenterY, Self.velY)
 				EndIf
 				
 				Self.swimWaterEffectFlag = False
 				
-				If (Abs(bodyCenterY - waterLevel) < MDPhone.SCREEN_HEIGHT) Then
+				If (Abs(bodyCenterY - waterLevel) < (MAX_VELOCITY / 2)) Then ' 640
 					Self.swimWaterEffectFlag = True
 				Else
 					resetBreatheCount()
 				EndIf
 			EndIf
-			
 		End
 		
 		Protected Method extraLogicWalk:Void()
