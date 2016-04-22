@@ -18,7 +18,33 @@ Private
 	Import lib.myrandom
 	Import lib.soundsystem
 	Import lib.constutil
-	'Import lib.crlfp32
+	Import lib.crlfp32
+	
+	Import sonicgba.accelerate
+	Import sonicgba.aspiratebubble
+	Import sonicgba.collisionmap
+	Import sonicgba.collisionrect
+	Import sonicgba.dekaplatform
+	Import sonicgba.drownbubble
+	Import sonicgba.effect
+	Import sonicgba.enemyobject
+	Import sonicgba.focusable
+	Import sonicgba.gameobject
+	Import sonicgba.gimmickobject
+	Import sonicgba.globalresource
+	Import sonicgba.hari
+	Import sonicgba.itemobject
+	Import sonicgba.mapmanager
+	Import sonicgba.moveobject
+	Import sonicgba.playeramy
+	Import sonicgba.playerknuckles
+	Import sonicgba.playersonic
+	Import sonicgba.playersupersonic
+	Import sonicgba.playertails
+	Import sonicgba.ringobject
+	Import sonicgba.rocketseparateeffect
+	Import sonicgba.spring
+	Import sonicgba.stagemanager
 	
 	Import mflib.bpdef
 	
@@ -27,8 +53,8 @@ Private
 	
 	Import state.gamestate
 	Import state.state
-	Import state.stringindex
-	Import state.titlestate
+	'Import state.stringindex
+	'Import state.titlestate
 	
 	Import com.sega.engine.action.acblock
 	Import com.sega.engine.action.accollision
@@ -41,9 +67,6 @@ Private
 	Import com.sega.mobile.framework.device.mfimage
 	
 	Import regal.typetool
-	
-	Import sonicgba.moveobject
-	Import sonicgba.focusable
 Public
 
 ' Classes:
