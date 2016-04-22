@@ -61,6 +61,7 @@ Class PlayerKnuckles Extends PlayerObject
 		Global LOOP_INDEX:Int[] = [-1, -1, -1, -1, -1, -1, -1, 8, -1, -2, -1, 0, 0, 18, 17, -1, 17, 18, -1, -1, -1, -1, -1, -1, 25, -1, 27, -1, -1, 30, -1, -1, -1, 0, -1, -1, -2, -1, -1, 40, 39, 42, 41, -1, 15, 3, -1, -1, -1, -1, -1, -1, 53, -1, -2, 0, -1, -1, -1, -1, 62, 62, -1, 0] ' Const
 		
 		Const NORMAL_FRAME_INTERVAL:Int = 3
+		
 		Const NO_ANIMATION:Int = -1
 		Const NO_LOOP:Int = -2
 		Const NO_LOOP_DEPAND:Int = -2
@@ -101,6 +102,7 @@ Class PlayerKnuckles Extends PlayerObject
 	Public
 		' Constant variable(s):
 		Const COLLISION_STATE_CLIMB:Int = 4
+		
 		Const KNUCKLES_ANI_ATTACK_1:Int = 11
 		Const KNUCKLES_ANI_ATTACK_2:Int = 12
 		Const KNUCKLES_ANI_ATTACK_3:Int = 13
@@ -198,42 +200,39 @@ Class PlayerKnuckles Extends PlayerObject
 			Self.effectDrawer = Null
 		End
 		
-		Public Method drawCharacter:Void(g:MFGraphics)
-			Coordinate camera = MapManager.getCamera()
+		Method drawCharacter:Void(g:MFGraphics)
+			Local camera:= MapManager.getCamera()
 			
 			If (Self.animationID <> NO_ANIMATION) Then
 				Self.myAnimationID = ANIMATION_CONVERT[Self.animationID]
 			EndIf
 			
 			If (Self.myAnimationID <> NO_ANIMATION) Then
-				Bool loop
-				
-				If (LOOP_INDEX[Self.myAnimationID] = NO_ANIMATION) Then
-					loop = True
-				Else
-					loop = False
-				EndIf
+				Local loop:Bool = (LOOP_INDEX[Self.myAnimationID] = NO_ANIMATION)
 				
 				Self.drawer = Self.knucklesDrawer1
-				Int drawerActionID = Self.myAnimationID
+				
+				Local drawerActionID:= Self.myAnimationID
 				
 				If (Self.myAnimationID >= KNUCKLES_ANI_WAITING_1) Then
 					Self.drawer = Self.knucklesDrawer2
-					drawerActionID = Self.myAnimationID - KNUCKLES_ANI_WAITING_1
+					
+					drawerActionID = (Self.myAnimationID - KNUCKLES_ANI_WAITING_1)
 					
 					If (Self.myAnimationID = KNUCKLES_ANI_WAITING_1 And Self.isResetWaitAni) Then
 						Self.drawer.restart()
+						
 						Self.isResetWaitAni = False
 					EndIf
 				EndIf
 				
 				If (Self.isInWater) Then
-					Self.drawer.setSpeed(1, KNUCKLES_ANI_WALK_2)
+					Self.drawer.setSpeed(1, 2)
 				Else
 					Self.drawer.setSpeed(1, 1)
 				EndIf
 				
-				If (Self.hurtCount Mod KNUCKLES_ANI_WALK_2 <> 0) Then
+				If ((Self.hurtCount Mod 2) <> 0) Then
 					If (drawerActionID <> Self.drawer.getActionId()) Then
 						Self.drawer.setActionId(drawerActionID)
 					EndIf
@@ -241,47 +240,51 @@ Class PlayerKnuckles Extends PlayerObject
 					If (Not AnimationDrawer.isAllPause()) Then
 						Self.drawer.moveOn()
 					EndIf
+				ElseIf (Self.animationID = KNUCKLES_ANI_JUMP) Then
+					' Magic numbers: -512, 512
+					bodyCenterX = getNewPointX(Self.footPointX, 0, -512, Self.faceDegree) ' -(SIDE_FOOT_FROM_CENTER * 2) ' -(WIDTH / 2)
+					bodyCenterY = getNewPointY(Self.footPointY, 0, -512, Self.faceDegree)
 					
-				ElseIf (Self.animationID = KNUCKLES_ATTACK_2_COUNT) Then
-					bodyCenterX = getNewPointX(Self.footPointX, KNUCKLES_ANI_STAND, -512, Self.faceDegree)
-					bodyCenterY = getNewPointY(Self.footPointY, KNUCKLES_ANI_STAND, -512, Self.faceDegree)
-					Int drawX = getNewPointX(bodyCenterX, KNUCKLES_ANI_STAND, 512, KNUCKLES_ANI_STAND)
-					Int drawY = getNewPointY(bodyCenterY, KNUCKLES_ANI_STAND, 512, KNUCKLES_ANI_STAND)
+					Local drawX:= getNewPointX(bodyCenterX, 0, 512, 0) ' (SIDE_FOOT_FROM_CENTER * 2) ' (WIDTH / 2)
+					Local drawY:= getNewPointY(bodyCenterY, 0, 512, 0)
 					
 					If (Self.collisionState = Null) Then
 						If (Self.isAntiGravity) Then
 							If (Self.faceDirection) Then
-								trans = Self.totalVelocity >= 0 ? NORMAL_FRAME_INTERVAL : 1
-								drawY -= 1024
+								trans = PickValue(Self.totalVelocity >= 0, TRANS_ROT180, TRANS_MIRROR_ROT180)
+								
+								drawY -= WIDTH
 							Else
-								trans = Self.totalVelocity > 0 ? NORMAL_FRAME_INTERVAL : 1
-								drawY -= 1024
+								trans = PickValue((Self.totalVelocity > 0), TRANS_ROT180, TRANS_MIRROR_ROT180)
+								
+								drawY -= WIDTH
 							EndIf
-							
 						ElseIf (Self.faceDirection) Then
-							trans = Self.totalVelocity >= 0 ? KNUCKLES_ANI_STAND : KNUCKLES_ANI_WALK_2
+							trans = PickValue((Self.totalVelocity >= 0), TRANS_NONE, TRANS_MIRROR)
 						Else
-							trans = Self.totalVelocity > 0 ? KNUCKLES_ANI_STAND : KNUCKLES_ANI_WALK_2
+							trans = PickValue((Self.totalVelocity > 0), TRANS_NONE, TRANS_MIRROR)
 						EndIf
 						
 					ElseIf (Self.isAntiGravity) Then
 						If (Self.faceDirection) Then
-							trans = Self.velX <= 0 ? NORMAL_FRAME_INTERVAL : 1
-							drawY -= 1024
+							trans = PickValue((Self.velX <= 0), TRANS_ROT180, TRANS_MIRROR_ROT180)
+							
+							drawY -= WIDTH
 						Else
-							trans = Self.velX < 0 ? NORMAL_FRAME_INTERVAL : 1
-							drawY -= 1024
+							trans = PickValue((Self.velX < 0), TRANS_ROT180, TRANS_MIRROR_ROT180)
+							
+							drawY -= WIDTH
 						EndIf
 						
 					ElseIf (Self.faceDirection) Then
-						trans = Self.velX >= 0 ? KNUCKLES_ANI_STAND : KNUCKLES_ANI_WALK_2
+						trans = PickValue((Self.velX >= 0), TRANS_NONE, TRANS_MIRROR)
 					Else
-						trans = Self.velX > 0 ? KNUCKLES_ANI_STAND : KNUCKLES_ANI_WALK_2
+						trans = PickValue((Self.velX > 0), TRANS_NONE : TRANS_MIRROR)
 					EndIf
 					
-					Self.drawer.draw(g, drawerActionID, (drawX Shr WATER_FRAME_INTERVAL) - camera.x, (drawY Shr WATER_FRAME_INTERVAL) - camera.y, loop, trans)
+					Self.drawer.draw(g, drawerActionID, (drawX Shr 6) - camera.x, (drawY Shr 6) - camera.y, loop, trans)
 				ElseIf (Self.animationID = WATER_FRAME_INTERVAL Or Self.animationID = KNUCKLES_ANI_LOOK_UP_1) Then
-					drawDrawerByDegree(g, Self.drawer, drawerActionID, (Self.footPointX Shr WATER_FRAME_INTERVAL) - camera.x, (Self.footPointY Shr WATER_FRAME_INTERVAL) - camera.y, loop, Self.degreeForDraw, Not Self.faceDirection)
+					drawDrawerByDegree(g, Self.drawer, drawerActionID, (Self.footPointX Shr 6) - camera.x, (Self.footPointY Shr 6) - camera.y, loop, Self.degreeForDraw, Not Self.faceDirection)
 				Else
 					
 					If (Self.myAnimationID = KNUCKLES_ANI_FLY_1 Or Self.myAnimationID = KNUCKLES_ANI_FLY_2 Or Self.myAnimationID = KNUCKLES_ANI_FLY_3 Or Self.myAnimationID = KNUCKLES_ANI_SWIM_1) Then
@@ -291,16 +294,16 @@ Class PlayerKnuckles Extends PlayerObject
 							If (Self.isAntiGravity) Then
 								degre = 1
 							Else
-								degre = KNUCKLES_ANI_STAND
+								degre = 0
 							EndIf
 							
 						ElseIf (Self.isAntiGravity) Then
 							degre = NORMAL_FRAME_INTERVAL
 						Else
-							degre = KNUCKLES_ANI_WALK_2
+							degre = 2
 						EndIf
 						
-						Self.drawer.draw(g, drawerActionID, (Self.footPointX Shr WATER_FRAME_INTERVAL) - camera.x, (Self.footPointY Shr WATER_FRAME_INTERVAL) - camera.y, loop, degre)
+						Self.drawer.draw(g, drawerActionID, (Self.footPointX Shr 6) - camera.x, (Self.footPointY Shr 6) - camera.y, loop, degre)
 					Else
 						
 						If (Self.myAnimationID = KNUCKLES_ANI_CLIFF_1 Or Self.myAnimationID = KNUCKLES_ANI_CLIFF_2 Or Self.myAnimationID = KNUCKLES_ANI_LOOK_UP_1 Or Self.myAnimationID = KNUCKLES_ANI_LOOK_UP_2) Then
@@ -312,37 +315,37 @@ Class PlayerKnuckles Extends PlayerObject
 							Self.degreeForDraw = Self.degreeStable
 						EndIf
 						
-						If (Not (Self.myAnimationID = 1 Or Self.myAnimationID = KNUCKLES_ANI_WALK_2 Or Self.myAnimationID = NORMAL_FRAME_INTERVAL Or Self.myAnimationID = KNUCKLES_ANI_CAUGHT)) Then
+						If (Not (Self.myAnimationID = 1 Or Self.myAnimationID = 2 Or Self.myAnimationID = NORMAL_FRAME_INTERVAL Or Self.myAnimationID = KNUCKLES_ANI_CAUGHT)) Then
 							Self.degreeForDraw = Self.degreeStable
 						EndIf
 						
 						If (Self.fallinSandSlipState <> 0) Then
 							If (Self.fallinSandSlipState = 1) Then
 								Self.faceDirection = True
-							ElseIf (Self.fallinSandSlipState = KNUCKLES_ANI_WALK_2) Then
+							ElseIf (Self.fallinSandSlipState = 2) Then
 								Self.faceDirection = False
 							EndIf
 						EndIf
 						
 						If (Self.faceDirection) Then
-							trans = KNUCKLES_ANI_STAND
+							trans = TRANS_NONE
 						Else
-							trans = KNUCKLES_ANI_WALK_2
+							trans = TRANS_MIRROR_ROT180
 						EndIf
 						
 						If (Self.degreeForDraw <> Self.faceDegree) Then
-							bodyCenterX = getNewPointX(Self.footPointX, KNUCKLES_ANI_STAND, (-Self.collisionRect.getHeight()) Shr 1, Self.faceDegree)
-							bodyCenterY = getNewPointY(Self.footPointY, KNUCKLES_ANI_STAND, (-Self.collisionRect.getHeight()) Shr 1, Self.faceDegree)
+							bodyCenterX = getNewPointX(Self.footPointX, 0, (-Self.collisionRect.getHeight()) Shr 1, Self.faceDegree)
+							bodyCenterY = getNewPointY(Self.footPointY, 0, (-Self.collisionRect.getHeight()) Shr 1, Self.faceDegree)
 							g.saveCanvas()
-							g.translateCanvas((bodyCenterX Shr WATER_FRAME_INTERVAL) - camera.x, (bodyCenterY Shr WATER_FRAME_INTERVAL) - camera.y)
+							g.translateCanvas((bodyCenterX Shr 6) - camera.x, (bodyCenterY Shr 6) - camera.y)
 							g.rotateCanvas((Float) Self.degreeForDraw)
-							Self.drawer.draw(g, drawerActionID, KNUCKLES_ANI_STAND, (Self.collisionRect.getHeight() Shr 1) Shr WATER_FRAME_INTERVAL, loop, trans)
+							Self.drawer.draw(g, drawerActionID, 0, (Self.collisionRect.getHeight() Shr 1) Shr 6, loop, trans)
 							g.restoreCanvas()
 						Else
 							Bool z
 							AnimationDrawer animationDrawer = Self.drawer
-							Int i = (Self.footPointX Shr WATER_FRAME_INTERVAL) - camera.x
-							Int i2 = (Self.footPointY Shr WATER_FRAME_INTERVAL) - camera.y
+							Int i = (Self.footPointX Shr 6) - camera.x
+							Int i2 = (Self.footPointY Shr 6) - camera.y
 							Int i3 = Self.degreeForDraw
 							
 							If (Self.faceDirection) Then
@@ -356,7 +359,7 @@ Class PlayerKnuckles Extends PlayerObject
 					EndIf
 					
 					If (Self.myAnimationID = KNUCKLES_ANI_SWIM_2 And Self.swimWaterEffectFlag) Then
-						Self.effectDrawer.draw(g, KNUCKLES_ANI_SWIM_EFFECT, (Self.footPointX Shr WATER_FRAME_INTERVAL) - camera.x, (((StageManager.getWaterLevel() Shl WATER_FRAME_INTERVAL) Shr WATER_FRAME_INTERVAL) + KNUCKLES_ANI_SPRING_1) - camera.y, True, getTrans())
+						Self.effectDrawer.draw(g, KNUCKLES_ANI_SWIM_EFFECT, (Self.footPointX Shr 6) - camera.x, (((StageManager.getWaterLevel() Shl 6) Shr 6) + KNUCKLES_ANI_SPRING_1) - camera.y, True, getTrans())
 					EndIf
 				EndIf
 				
@@ -368,14 +371,14 @@ Class PlayerKnuckles Extends PlayerObject
 					
 					If (rectTmp <> Null) Then
 						If (Self.attackLevel <> 0) Then
-							rect[KNUCKLES_ANI_STAND] = (Byte) ((-rectTmp[KNUCKLES_ANI_STAND]) - rectTmp[KNUCKLES_ANI_WALK_2])
+							rect[0] = (Byte) ((-rectTmp[0]) - rectTmp[2])
 						Else
 							
 							If (Self.flying And Self.faceDirection) Then
-								rect[KNUCKLES_ANI_STAND] = (Byte) ((-rectTmp[KNUCKLES_ANI_STAND]) - rectTmp[KNUCKLES_ANI_WALK_2])
+								rect[0] = (Byte) ((-rectTmp[0]) - rectTmp[2])
 							EndIf
 							
-							rect[1] = (Byte) ((-rectTmp[1]) - rectTmp[NORMAL_FRAME_INTERVAL])
+							rect[1] = (Byte) ((-rectTmp[1]) - rectTmp[3])
 						EndIf
 					EndIf
 				EndIf
@@ -383,10 +386,10 @@ Class PlayerKnuckles Extends PlayerObject
 				If (rect <> Null) Then
 					If (SonicDebug.showCollisionRect) Then
 						g.setColor(65280)
-						g.drawRect(((Self.footPointX Shr WATER_FRAME_INTERVAL) + rect[KNUCKLES_ANI_STAND]) - camera.x..((Self.footPointY Shr WATER_FRAME_INTERVAL) + (Self.isAntiGravity ? (-rect[1]) - rect[NORMAL_FRAME_INTERVAL] : rect[1])) - camera.y, rect[KNUCKLES_ANI_WALK_2], rect[NORMAL_FRAME_INTERVAL])
+						g.drawRect(((Self.footPointX Shr 6) + rect[0]) - camera.x..((Self.footPointY Shr 6) + PickValue(Self.isAntiGravity, (-rect[1]) - rect[3], rect[1])) - camera.y, rect[2], rect[3])
 					EndIf
 					
-					Self.attackRect.initCollision(rect[KNUCKLES_ANI_STAND] Shl WATER_FRAME_INTERVAL, rect[1] Shl WATER_FRAME_INTERVAL, rect[KNUCKLES_ANI_WALK_2] Shl WATER_FRAME_INTERVAL, rect[NORMAL_FRAME_INTERVAL] Shl WATER_FRAME_INTERVAL, Self.myAnimationID)
+					Self.attackRect.initCollision(rect[0] Shl 6, rect[1] Shl 6, rect[2] Shl 6, rect[3] Shl 6, Self.myAnimationID)
 					Self.attackRectVec.addElement(Self.attackRect)
 				Else
 					Self.attackRect.reset()
@@ -412,7 +415,7 @@ Class PlayerKnuckles Extends PlayerObject
 		
 		Public Method beSpring:Void(springPower:Int, direction:Int)
 			
-			If ((Self.myAnimationID = KNUCKLES_ANI_FLY_3 Or Self.myAnimationID = KNUCKLES_ANI_FLY_4) And (direction = NORMAL_FRAME_INTERVAL Or direction = KNUCKLES_ANI_WALK_2)) Then
+			If ((Self.myAnimationID = KNUCKLES_ANI_FLY_3 Or Self.myAnimationID = KNUCKLES_ANI_FLY_4) And (direction = NORMAL_FRAME_INTERVAL Or direction = 2)) Then
 				Self.flying = False
 				Self.animationID = KNUCKLES_ANI_STAND
 			EndIf
@@ -485,10 +488,10 @@ Class PlayerKnuckles Extends PlayerObject
 				Else
 					Self.flying = False
 					Self.myAnimationID = KNUCKLES_ANI_SPRING_4
-					Self.velX Shr= KNUCKLES_ANI_WALK_2
+					Self.velX Shr= 2
 				EndIf
 				
-			ElseIf (Self.animationID = KNUCKLES_ATTACK_2_COUNT And Self.doJumpForwardly And Key.press(Key.B_HIGH_JUMP | Key.gUp)) Then
+			ElseIf (Self.animationID = KNUCKLES_ANI_JUMP And Self.doJumpForwardly And Key.press(Key.B_HIGH_JUMP | Key.gUp)) Then
 				Self.animationID = NO_ANIMATION
 				Self.myAnimationID = KNUCKLES_ANI_FLY_1
 				
@@ -496,14 +499,18 @@ Class PlayerKnuckles Extends PlayerObject
 					Self.myAnimationID = KNUCKLES_ANI_SWIM_1
 				EndIf
 				
-				Self.flyDegreeStable = (Self.isAntiGravity ~ Self.faceDirection) <> 0 ? FLY_DOWN_SPEED : -90
-				Self.velY = KNUCKLES_ANI_STAND
+				Self.flyDegreeStable = PickValue((Self.isAntiGravity <> Self.faceDirection), FLY_DOWN_SPEED, -FLY_DOWN_SPEED) ' 90 ' -90
+				
+				Self.velY = 0
+				
 				Self.flyDegree = Self.flyDegreeStable
+				
 				Self.flying = True
+				
 				Self.velY += FLY_START_ADD_Y_SPEED
 				
 				If (Self.velY < 0) Then
-					Self.velY = KNUCKLES_ANI_STAND
+					Self.velY = 0
 				EndIf
 				
 				Self.velY -= getGravity()
@@ -514,10 +521,10 @@ Class PlayerKnuckles Extends PlayerObject
 			EndIf
 			
 			Floatchk()
-			Int waterLevel = StageManager.getWaterLevel() Shl WATER_FRAME_INTERVAL
+			Int waterLevel = StageManager.getWaterLevel() Shl 6
 			
 			If (Self.Floating) Then
-				Self.breatheCount = KNUCKLES_ANI_STAND
+				Self.breatheCount = 0
 			EndIf
 			
 			If (Not Self.Floating Or Not Self.isInWater) Then
@@ -532,7 +539,7 @@ Class PlayerKnuckles Extends PlayerObject
 				Self.velY = (Self.velY * NORMAL_FRAME_INTERVAL) / KNUCKLES_ANI_SPIN_1
 				Self.Floating = False
 			Else
-				Int bodyCenterY = getNewPointY(Self.posY, KNUCKLES_ANI_STAND, (-Self.collisionRect.getHeight()) Shr 1, Self.faceDegree)
+				Int bodyCenterY = getNewPointY(Self.posY, 0, (-Self.collisionRect.getHeight()) Shr 1, Self.faceDegree)
 				Self.animationID = NO_ANIMATION
 				
 				If (Key.repeated(Key.B_LOOK)) Then
@@ -591,7 +598,7 @@ Class PlayerKnuckles Extends PlayerObject
 					Self.isSlipActived = False
 				ElseIf (Not Key.repeated(Key.B_HIGH_JUMP | Key.gUp) Or ((Self.faceDegree >= KNUCKLES_ANI_POLE_H And Self.faceDegree <= 315 And Not Self.isAntiGravity) Or (Self.faceDegree < KNUCKLES_ANI_POLE_H And Self.faceDegree > 315 And Self.isAntiGravity))) Then
 					Self.animationID = KNUCKLES_ANI_STAND
-					Self.velX = KNUCKLES_ANI_STAND
+					Self.velX = 0
 					Self.isSlipActived = False
 				Else
 					
@@ -613,10 +620,10 @@ Class PlayerKnuckles Extends PlayerObject
 					Self.totalVelocity = i2 - (i * FLY_GROUND_SPEED)
 					
 					If (Self.totalVelocity * preTotalVelocity <= 0) Then
-						Self.totalVelocity = KNUCKLES_ANI_STAND
+						Self.totalVelocity = 0
 					EndIf
 					
-					Effect.showEffect(Self.dustEffectAnimation, KNUCKLES_ANI_WALK_2, Self.posX Shr WATER_FRAME_INTERVAL, Self.posY Shr WATER_FRAME_INTERVAL, KNUCKLES_ANI_STAND)
+					Effect.showEffect(Self.dustEffectAnimation, 2, Self.posX Shr 6, Self.posY Shr 6, 0)
 					slipBrakeNoise()
 				EndIf
 			EndIf
@@ -628,24 +635,27 @@ Class PlayerKnuckles Extends PlayerObject
 			SoundSystem soundSystem
 			SoundSystem soundSystem2
 			Select (Self.attackLevel)
-				Case KNUCKLES_ANI_STAND
+				Case 0
 					
-					If ((Self.animationID = 0 Or Self.animationID = 1 Or Self.animationID = KNUCKLES_ANI_WALK_2 Or Self.animationID = NORMAL_FRAME_INTERVAL Or Self.animationID = KNUCKLES_ANI_BAR_MOVE Or Self.animationID = KNUCKLES_ANI_WIND Or Self.animationID = KNUCKLES_ANI_SPIN_1) And Key.press(Key.gSelect) And Self.myAnimationID <> KNUCKLES_ANI_PUSH_WALL) Then
+					If ((Self.animationID = KNUCKLES_ANI_STAND Or Self.animationID = KNUCKLES_ANI_WALK_1 Or Self.animationID = KNUCKLES_ANI_WALK_2 Or Self.animationID = NORMAL_FRAME_INTERVAL Or Self.animationID = KNUCKLES_ANI_BAR_MOVE Or Self.animationID = KNUCKLES_ANI_WIND Or Self.animationID = KNUCKLES_ANI_SPIN_1) And Key.press(Key.gSelect) And Self.myAnimationID <> KNUCKLES_ANI_PUSH_WALL) Then
 						Self.attackLevel = 1
 						Self.animationID = NO_ANIMATION
 						Self.myAnimationID = KNUCKLES_ANI_ATTACK_1
+						
 						calDivideVelocity()
-						Self.velX = ((Self.isAntiGravity ~ Self.faceDirection) <> 0 ? 1 : NO_ANIMATION) * PUNCH_MOVE01
+						
+						Self.velX = (DSgn(Self.isAntiGravity <> Self.faceDirection) * PUNCH_MOVE01)
+						
 						calTotalVelocity()
 						
 						If (Self.isInWater) Then
-							i2 = KNUCKLES_ANI_WALK_2
+							i2 = 2
 						Else
 							i2 = 1
 						EndIf
 						
 						Self.attackCount = i2 * KNUCKLES_ATTACK_2_COUNT
-						Self.attackLevelNext = KNUCKLES_ANI_STAND
+						Self.attackLevelNext = 0
 						soundSystem = soundInstance
 						soundSystem2 = soundInstance
 						soundSystem.playSe(KNUCKLES_ANI_FLY_1)
@@ -657,14 +667,14 @@ Class PlayerKnuckles Extends PlayerObject
 					
 					If (Self.attackCount <> 0) Then
 						If (Key.press(Key.gSelect)) Then
-							Self.attackLevelNext = KNUCKLES_ANI_WALK_2
+							Self.attackLevelNext = 2
 							break
 						EndIf
 					EndIf
 					
 					Self.attackLevel = Self.attackLevelNext
 					Select (Self.attackLevelNext)
-						Case KNUCKLES_ANI_STAND
+						Case 0
 							Self.animationID = KNUCKLES_ANI_STAND
 							break
 						Case KNUCKLES_ANI_WALK_2
@@ -682,7 +692,7 @@ Class PlayerKnuckles Extends PlayerObject
 							calTotalVelocity()
 							
 							If (Self.isInWater) Then
-								i2 = KNUCKLES_ANI_WALK_2
+								i2 = 2
 							Else
 								i2 = 1
 							EndIf
@@ -693,7 +703,7 @@ Class PlayerKnuckles Extends PlayerObject
 							soundSystem.playSe(KNUCKLES_ANI_FLY_1)
 							break
 					End Select
-					Self.attackLevelNext = KNUCKLES_ANI_STAND
+					Self.attackLevelNext = 0
 					break
 					break
 				Case KNUCKLES_ANI_WALK_2
@@ -707,7 +717,7 @@ Class PlayerKnuckles Extends PlayerObject
 					
 					Self.attackLevel = Self.attackLevelNext
 					Select (Self.attackLevelNext)
-						Case KNUCKLES_ANI_STAND
+						Case 0
 							Self.animationID = KNUCKLES_ANI_STAND
 							break
 						Case NORMAL_FRAME_INTERVAL
@@ -715,7 +725,7 @@ Class PlayerKnuckles Extends PlayerObject
 							Self.myAnimationID = KNUCKLES_ANI_ATTACK_3
 							Self.worldCal.actionState = 1
 							Self.collisionState = COLLISION_STATE_JUMP
-							Int jump = Self.isInWater ? UPPER_INWATER_SPEED : UPPER_SPEED
+							Int jump = PickValue(Self.isInWater, UPPER_INWATER_SPEED, UPPER_SPEED)
 							i2 = Self.velY
 							
 							If (Self.isAntiGravity) Then
@@ -735,7 +745,7 @@ Class PlayerKnuckles Extends PlayerObject
 							Self.velX = i2 * jump
 							
 							If (Self.isInWater) Then
-								i2 = KNUCKLES_ANI_WALK_2
+								i2 = 2
 							Else
 								i2 = 1
 							EndIf
@@ -746,13 +756,13 @@ Class PlayerKnuckles Extends PlayerObject
 							soundSystem.playSe(KNUCKLES_ANI_FLY_2)
 							break
 					End Select
-					Self.attackLevelNext = KNUCKLES_ANI_STAND
+					Self.attackLevelNext = 0
 					break
 					break
 				Case NORMAL_FRAME_INTERVAL
 					
 					If (Self.animationID <> NO_ANIMATION) Then
-						Self.attackLevel = KNUCKLES_ANI_STAND
+						Self.attackLevel = 0
 						break
 					EndIf
 					
@@ -781,17 +791,18 @@ Class PlayerKnuckles Extends PlayerObject
 					Self.isSlipActived = False
 				ElseIf (Not Key.repeated(Key.B_HIGH_JUMP | Key.gUp) Or ((Self.faceDegree >= KNUCKLES_ANI_POLE_H And Self.faceDegree <= 315 And Not Self.isAntiGravity) Or (Self.faceDegree < KNUCKLES_ANI_POLE_H And Self.faceDegree > 315 And Self.isAntiGravity))) Then
 					Self.animationID = KNUCKLES_ANI_STAND
-					Self.velX = KNUCKLES_ANI_STAND
+					Self.velX = 0
 					Self.isSlipActived = False
 				Else
-					Int preTotalVelocity = Self.velX
-					Self.velX -= (Self.faceDirection ? 1 : NO_ANIMATION) * FLY_GROUND_SPEED
+					Local preTotalVelocity:= Self.velX
+					
+					Self.velX -= (DSgn(Not Self.faceDirection) * FLY_GROUND_SPEED)
 					
 					If (Self.velX * preTotalVelocity <= 0) Then
-						Self.velX = KNUCKLES_ANI_STAND
+						Self.velX = 0
 					EndIf
 					
-					Effect.showEffect(Self.dustEffectAnimation, KNUCKLES_ANI_WALK_2, Self.posX Shr WATER_FRAME_INTERVAL, Self.posY Shr WATER_FRAME_INTERVAL, KNUCKLES_ANI_STAND)
+					Effect.showEffect(Self.dustEffectAnimation, 2, Self.posX Shr 6, Self.posY Shr 6, 0)
 					slipBrakeNoise()
 				EndIf
 			EndIf
@@ -804,9 +815,9 @@ Class PlayerKnuckles Extends PlayerObject
 			SoundSystem soundSystem
 			SoundSystem soundSystem2
 			Select (Self.attackLevel)
-				Case KNUCKLES_ANI_STAND
+				Case 0
 					
-					If ((Self.animationID = 0 Or Self.animationID = 1 Or Self.animationID = KNUCKLES_ANI_WALK_2 Or Self.animationID = NORMAL_FRAME_INTERVAL Or Self.animationID = KNUCKLES_ANI_BAR_MOVE Or Self.animationID = KNUCKLES_ANI_WIND Or Self.animationID = KNUCKLES_ANI_SPIN_1) And Key.press(Key.gSelect) And Self.myAnimationID <> KNUCKLES_ANI_PUSH_WALL) Then
+					If ((Self.animationID = KNUCKLES_ANI_STAND Or Self.animationID = KNUCKLES_ANI_WALK_1 Or Self.animationID = KNUCKLES_ANI_WALK_2 Or Self.animationID = NORMAL_FRAME_INTERVAL Or Self.animationID = KNUCKLES_ANI_BAR_MOVE Or Self.animationID = KNUCKLES_ANI_WIND Or Self.animationID = KNUCKLES_ANI_SPIN_1) And Key.press(Key.gSelect) And Self.myAnimationID <> KNUCKLES_ANI_PUSH_WALL) Then
 						Self.attackLevel = 1
 						Self.animationID = NO_ANIMATION
 						Self.myAnimationID = KNUCKLES_ANI_ATTACK_1
@@ -820,13 +831,13 @@ Class PlayerKnuckles Extends PlayerObject
 						Self.velX = i * PUNCH_MOVE01
 						
 						If (Self.isInWater) Then
-							i = KNUCKLES_ANI_WALK_2
+							i = 2
 						Else
 							i = 1
 						EndIf
 						
 						Self.attackCount = i * KNUCKLES_ATTACK_2_COUNT
-						Self.attackLevelNext = KNUCKLES_ANI_STAND
+						Self.attackLevelNext = 0
 						soundSystem = soundInstance
 						soundSystem2 = soundInstance
 						soundSystem.playSe(KNUCKLES_ANI_FLY_1)
@@ -838,14 +849,14 @@ Class PlayerKnuckles Extends PlayerObject
 					
 					If (Self.attackCount <> 0) Then
 						If (Key.press(Key.gSelect)) Then
-							Self.attackLevelNext = KNUCKLES_ANI_WALK_2
+							Self.attackLevelNext = 2
 							break
 						EndIf
 					EndIf
 					
 					Self.attackLevel = Self.attackLevelNext
 					Select (Self.attackLevelNext)
-						Case KNUCKLES_ANI_STAND
+						Case 0
 							Self.animationID = KNUCKLES_ANI_STAND
 							break
 						Case KNUCKLES_ANI_WALK_2
@@ -861,7 +872,7 @@ Class PlayerKnuckles Extends PlayerObject
 							Self.velX = i * PUNCH_MOVE01
 							
 							If (Self.isInWater) Then
-								i = KNUCKLES_ANI_WALK_2
+								i = 2
 							Else
 								i = 1
 							EndIf
@@ -872,7 +883,7 @@ Class PlayerKnuckles Extends PlayerObject
 							soundSystem.playSe(KNUCKLES_ANI_FLY_1)
 							break
 					End Select
-					Self.attackLevelNext = KNUCKLES_ANI_STAND
+					Self.attackLevelNext = 0
 					break
 					break
 				Case KNUCKLES_ANI_WALK_2
@@ -886,7 +897,7 @@ Class PlayerKnuckles Extends PlayerObject
 					
 					Self.attackLevel = Self.attackLevelNext
 					Select (Self.attackLevelNext)
-						Case KNUCKLES_ANI_STAND
+						Case 0
 							Self.animationID = KNUCKLES_ANI_STAND
 							break
 						Case NORMAL_FRAME_INTERVAL
@@ -895,7 +906,9 @@ Class PlayerKnuckles Extends PlayerObject
 							Self.myAnimationID = KNUCKLES_ANI_ATTACK_3
 							Self.worldCal.actionState = 1
 							Self.collisionState = COLLISION_STATE_JUMP
-							Int jump = Self.isInWater ? UPPER_INWATER_SPEED : UPPER_SPEED
+							
+							Local jump:= PickValue(Self.isInWater, UPPER_INWATER_SPEED, UPPER_SPEED)
+							
 							i = Self.velY
 							
 							If (Self.isAntiGravity) Then
@@ -915,7 +928,7 @@ Class PlayerKnuckles Extends PlayerObject
 							Self.velX = i * jump
 							
 							If (Self.isInWater) Then
-								i = KNUCKLES_ANI_WALK_2
+								i = 2
 							Else
 								i = 1
 							EndIf
@@ -926,13 +939,13 @@ Class PlayerKnuckles Extends PlayerObject
 							soundSystem.playSe(KNUCKLES_ANI_FLY_2)
 							break
 					End Select
-					Self.attackLevelNext = KNUCKLES_ANI_STAND
+					Self.attackLevelNext = 0
 					break
 					break
 				Case NORMAL_FRAME_INTERVAL
 					
 					If (Self.animationID <> NO_ANIMATION) Then
-						Self.attackLevel = KNUCKLES_ANI_STAND
+						Self.attackLevel = 0
 						break
 					EndIf
 					
@@ -958,8 +971,8 @@ Class PlayerKnuckles Extends PlayerObject
 		
 		Private Method inputLogicClimb:Void()
 			Self.animationID = NO_ANIMATION
-			Self.velX = KNUCKLES_ANI_STAND
-			Self.velY = KNUCKLES_ANI_STAND
+			Self.velX = 0
+			Self.velY = 0
 			
 			If (Self.myAnimationID <> KNUCKLES_ANI_CLIMB_5) Then
 				SoundSystem soundSystem
@@ -988,8 +1001,8 @@ Class PlayerKnuckles Extends PlayerObject
 						EndIf
 					EndIf
 					
-					Self.velY = Self.isInWater ? GimmickObject.PLATFORM_OFFSET_Y : -WALL_CLIMB_SPEED
-					Self.myAnimationID = Self.isAntiGravity ? KNUCKLES_ANI_CLIMB_4 : KNUCKLES_ANI_CLIMB_3
+					Self.velY = PickValue(Self.isInWater, -WALL_CLIMB_SPEED_W, -WALL_CLIMB_SPEED)
+					Self.myAnimationID = PickValue(Self.isAntiGravity, KNUCKLES_ANI_CLIMB_4, KNUCKLES_ANI_CLIMB_3)
 				EndIf
 				
 				If ((Key.repeated(Key.gDown) And Not Self.isAntiGravity) Or (Key.repeated(Key.B_LOOK) And Self.isAntiGravity)) Then
@@ -1014,17 +1027,22 @@ Class PlayerKnuckles Extends PlayerObject
 						EndIf
 					EndIf
 					
-					Self.velY = Self.isInWater ? WALL_CLIMB_SPEED_W : WALL_CLIMB_SPEED
-					Self.myAnimationID = Self.isAntiGravity ? KNUCKLES_ANI_CLIMB_3 : KNUCKLES_ANI_CLIMB_4
+					Self.velY = PickValue(Self.isInWater, WALL_CLIMB_SPEED_W, WALL_CLIMB_SPEED)
+					Self.myAnimationID = PickValue(Self.isAntiGravity, KNUCKLES_ANI_CLIMB_3, KNUCKLES_ANI_CLIMB_4)
 				EndIf
 				
 				If (Key.press(Key.B_HIGH_JUMP | Key.gUp)) Then
 					soundInstance.stopLoopSe()
+					
 					Self.collisionState = COLLISION_STATE_JUMP
-					Self.velY = Self.isAntiGravity ? PlayerObject.SONIC_ATTACK_LEVEL_2_V0 : -672
-					Self.velX = ((Self.faceDirection ~ Self.isAntiGravity) <> 0 ? 1 : NO_ANIMATION) * -768
+					
+					Self.velY = PickValue(Self.isAntiGravity, SONIC_ATTACK_LEVEL_2_V0, -SONIC_ATTACK_LEVEL_2_V0)
+					Self.velX = (DSgn((Self.faceDirection <> Self.isAntiGravity)) * -FLY_START_X_SPEED)
+					
 					Self.faceDirection = Not Self.faceDirection
-					Self.animationID = KNUCKLES_ATTACK_2_COUNT
+					
+					Self.animationID = KNUCKLES_ANI_JUMP
+					
 					Return
 				EndIf
 				
@@ -1039,46 +1057,46 @@ Class PlayerKnuckles Extends PlayerObject
 					EndIf
 				EndIf
 				
-				Int climbPointX = Self.posX + (((Self.faceDirection ~ Self.isAntiGravity) <> 0 ? 1 : NO_ANIMATION) * SpecialMap.MAP_LENGTH)
-				Int climbPointY = (Self.posY + ((Self.isAntiGravity ? 1 : NO_ANIMATION) * (getCollisionRectHeight() Shr 1))) + Self.velY
+				Int climbPointX = Self.posX + (DSgn(Self.faceDirection <> Self.isAntiGravity) * WIDTH)
+				Int climbPointY = (Self.posY + (DSgn(Self.isAntiGravity) * (getCollisionRectHeight() / 2))) + Self.velY ' Shr 1
 				
-				If (climbPointY < (MapManager.getPixelHeight() Shl WATER_FRAME_INTERVAL) - PlayerObject.HEIGHT Or Not Self.isAntiGravity) Then
-					If (Self.worldInstance.getWorldX(climbPointX, climbPointY, Self.currentLayer, (Self.faceDirection ~ Self.isAntiGravity) <> 0 ? NORMAL_FRAME_INTERVAL : 1) = ACParam.NO_COLLISION) Then
-						Int footX = Self.posX + (((Self.faceDirection ~ Self.isAntiGravity) <> 0 ? 1 : NO_ANIMATION) * SpecialMap.MAP_LENGTH)
-						Int newY = Self.worldInstance.getWorldY(footX, Self.posY, Self.currentLayer, Self.isAntiGravity ? KNUCKLES_ANI_WALK_2 : KNUCKLES_ANI_STAND)
+				If (climbPointY < (MapManager.getPixelHeight() Shl 6) - HEIGHT Or Not Self.isAntiGravity) Then
+					If (Self.worldInstance.getWorldX(climbPointX, climbPointY, Self.currentLayer, PickValue((Self.faceDirection <> Self.isAntiGravity), TRANS_ROT180, TRANS_MIRROR_ROT180)) = ACParam.NO_COLLISION) Then
+						Int footX = Self.posX + (DSgn(Self.faceDirection <> Self.isAntiGravity) * WIDTH)
+						Int newY = Self.worldInstance.getWorldY(footX, Self.posY, Self.currentLayer, PickValue(Self.isAntiGravity, 2, 0))
 						
 						If (newY <> ACParam.NO_COLLISION) Then
-							playingLoopSeIndex = footX - (((Self.faceDirection ~ Self.isAntiGravity) <> 0 ? 1 : NO_ANIMATION) * (Self.worldInstance.getTileWidth() Shr 1))
+							playingLoopSeIndex = (footX - (DSgn(Self.faceDirection <> Self.isAntiGravity) * (Self.worldInstance.getTileWidth() / 2))) ' Shr 1
 							Self.posX = playingLoopSeIndex
 							Self.footPointX = playingLoopSeIndex
 							Self.posY = newY
 							Self.footPointY = newY
 							Self.myAnimationID = KNUCKLES_ANI_CLIMB_5
 							soundInstance.stopLoopSe()
-							Self.velX = KNUCKLES_ANI_STAND
-							Self.velY = KNUCKLES_ANI_STAND
+							Self.velX = 0
+							Self.velY = 0
 							Return
 						EndIf
 						
 						Self.collisionState = COLLISION_STATE_JUMP
-						Self.animationID = 1
+						Self.animationID = KNUCKLES_ANI_WALK_1
 						soundInstance.stopLoopSe()
 						Return
 					EndIf
 					
-					Int newPosX = Self.worldInstance.getWorldX(climbPointX, (Self.isAntiGravity ? PlayerObject.HEIGHT : -1536) + climbPointY, Self.currentLayer, (Self.faceDirection ~ Self.isAntiGravity) <> 0 ? NORMAL_FRAME_INTERVAL : 1) - (((Self.faceDirection ~ Self.isAntiGravity) <> 0 ? 1 : NO_ANIMATION) * 512)
+					Int newPosX = Self.worldInstance.getWorldX(climbPointX, PickValue(Self.isAntiGravity, HEIGHT, -HEIGHT) + climbPointY, Self.currentLayer, PickValue((Self.faceDirection <> Self.isAntiGravity) <> 0, TRANS_ROT180, TRANS_MIRROR_ROT180)) - ((DSgn(Self.faceDirection <> Self.isAntiGravity)) * (WIDTH / 2))
 					
 					If (newPosX >= 0 And (((newPosX - Self.posX > 0 And (Self.faceDirection ~ Self.isAntiGravity) = 0) Or (newPosX - Self.posX < 0 And (Self.faceDirection ~ Self.isAntiGravity) <> 0)) And ((Self.velY < 0 And Not Self.isAntiGravity) Or (Self.velY > 0 And Self.isAntiGravity)))) Then
-						Self.velY = KNUCKLES_ANI_STAND
+						Self.velY = 0
 					EndIf
 					
-					If (Self.worldInstance.getWorldX(climbPointX, climbPointY - (Self.isAntiGravity ? PlayerObject.SONIC_ATTACK_LEVEL_3_V0 : -1200), Self.currentLayer, (Self.faceDirection ~ Self.isAntiGravity) <> 0 ? NORMAL_FRAME_INTERVAL : 1) - (((Self.faceDirection ~ Self.isAntiGravity) <> 0 ? 1 : NO_ANIMATION) * 512) = Self.posX) Then
+					If (Self.worldInstance.getWorldX(climbPointX, climbPointY - PickValue(Self.isAntiGravity, SONIC_ATTACK_LEVEL_3_V0, -SONIC_ATTACK_LEVEL_3_V0), Self.currentLayer, PickValue((Self.faceDirection <> Self.isAntiGravity), TRANS_ROT180, TRANS_MIRROR_ROT180)) - ((DSgn(Self.faceDirection <> Self.isAntiGravity)) * (WIDTH / 2)) = Self.posX) Then
 						Return
 					EndIf
 					
 					If ((Self.velY > 0 And Not Self.isAntiGravity) Or (Self.velY < 0 And Self.isAntiGravity)) Then
 						Self.collisionState = COLLISION_STATE_JUMP
-						Self.animationID = 1
+						Self.animationID = KNUCKLES_ANI_WALK_1
 						soundInstance.stopLoopSe()
 						Return
 					EndIf
@@ -1086,9 +1104,8 @@ Class PlayerKnuckles Extends PlayerObject
 					Return
 				EndIf
 				
-				Self.velY = KNUCKLES_ANI_STAND
+				Self.velY = 0
 			EndIf
-			
 		End
 		
 		Public Method doWhileTouchWorld:Void(direction:Int, degree:Int)
@@ -1155,7 +1172,7 @@ Class PlayerKnuckles Extends PlayerObject
 		Public Method getSlopeGravity:Int()
 			
 			If (Self.myAnimationID = KNUCKLES_ANI_FLY_4) Then
-				Return KNUCKLES_ANI_STAND
+				Return 0
 			EndIf
 			
 			Return Super.getSlopeGravity()
@@ -1180,9 +1197,9 @@ Class PlayerKnuckles Extends PlayerObject
 		End
 		
 		Public Method doJump:Void()
-			Self.attackLevel = KNUCKLES_ANI_STAND
-			Self.attackLevelNext = KNUCKLES_ANI_STAND
-			Self.attackCount = KNUCKLES_ANI_STAND
+			Self.attackLevel = 0
+			Self.attackLevelNext = 0
+			Self.attackCount = 0
 			Super.doJump()
 		End
 		
@@ -1194,11 +1211,13 @@ Class PlayerKnuckles Extends PlayerObject
 			EndIf
 			
 			If (Self.myAnimationID = KNUCKLES_ANI_FLY_1 Or Self.myAnimationID = KNUCKLES_ANI_FLY_2 Or Self.myAnimationID = KNUCKLES_ANI_FLY_3 Or Self.myAnimationID = KNUCKLES_ANI_SWIM_1) Then
-				Self.checkPositionX = getNewPointX(Self.footPointX, KNUCKLES_ANI_STAND, (-1024) Shr 1, KNUCKLES_ANI_STAND) + KNUCKLES_ANI_STAND
-				Self.checkPositionY = getNewPointY(Self.footPointY, KNUCKLES_ANI_STAND, Self.isAntiGravity ? SpecialMap.MAP_LENGTH Shr 1 : (-1024) Shr 1, KNUCKLES_ANI_STAND) + KNUCKLES_ANI_STAND
+				Self.checkPositionX = getNewPointX(Self.footPointX, 0, ((-WIDTH) / 2), 0) ' Shr 1
+				Self.checkPositionY = getNewPointY(Self.footPointY, 0, PickValue(Self.isAntiGravity, (WIDTH / 2), ((-WIDTH) / 2)), 0) ' Shr 1
+				
 				Int i = 1280 Shr 1
-				i = SpecialMap.MAP_LENGTH Shr 1
-				Self.collisionRect.setTwoPosition(Self.checkPositionX - (1280 Shr 1), Self.checkPositionY - (SpecialMap.MAP_LENGTH Shr 1), Self.checkPositionX + MDPhone.SCREEN_HEIGHT, Self.checkPositionY + 512)
+				i = WIDTH Shr 1
+				
+				Self.collisionRect.setTwoPosition(Self.checkPositionX - (1280 Shr 1), Self.checkPositionY - (WIDTH Shr 1), Self.checkPositionX + MDPhone.SCREEN_HEIGHT, Self.checkPositionY + 512)
 			EndIf
 			
 		End
@@ -1215,7 +1234,7 @@ Class PlayerKnuckles Extends PlayerObject
 		Public Method getCollisionRectHeight:Int()
 			
 			If (Self.animationID = NO_ANIMATION And (Self.myAnimationID = KNUCKLES_ANI_FLY_1 Or Self.myAnimationID = KNUCKLES_ANI_FLY_2 Or Self.myAnimationID = KNUCKLES_ANI_FLY_3 Or Self.myAnimationID = KNUCKLES_ANI_SWIM_1)) Then
-				Return SpecialMap.MAP_LENGTH
+				Return WIDTH
 			EndIf
 			
 			If (Self.collisionState <> KNUCKLES_ATTACK_2_COUNT Or Self.myAnimationID = KNUCKLES_ANI_CLIMB_5) Then
@@ -1230,7 +1249,7 @@ Class PlayerKnuckles Extends PlayerObject
 			
 			If (Self.isAntiGravity) Then
 				If (direction = 1) Then
-					direction = KNUCKLES_ANI_STAND
+					direction = 0
 				ElseIf (direction = 0) Then
 					direction = 1
 				EndIf
