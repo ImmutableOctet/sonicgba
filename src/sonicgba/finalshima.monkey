@@ -22,9 +22,9 @@ Class FinalShima Extends GimmickObject ' Final
 		Const COLLISION_WIDTH:Int = 1024
 		Const COLLISION_HEIGHT:Int = 1536
 		
+		Const DROP_STATE_WAIT:Int = 0
 		Const DROP_STATE_READY:Int = 1
 		Const DROP_STATE_START:Int = 2
-		Const DROP_STATE_WAIT:Int = 0
 		
 		' Global variable(s):
 		Global image:MFImage
