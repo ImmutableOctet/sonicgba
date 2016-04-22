@@ -613,14 +613,13 @@ Class PlayerKnuckles Extends PlayerObject
 			EndIf
 		End
 		
-		Private Method inputLogicClimb:Void()
+		Method inputLogicClimb:Void()
 			Self.animationID = NO_ANIMATION
+			
 			Self.velX = 0
 			Self.velY = 0
 			
 			If (Self.myAnimationID <> KNUCKLES_ANI_CLIMB_5) Then
-				SoundSystem soundSystem
-				SoundSystem soundSystem2
 				Self.myAnimationID = KNUCKLES_ANI_CLIMB_2
 				
 				If ((Key.repeated(Key.B_LOOK) And Not Self.isAntiGravity) Or (Key.repeated(Key.gDown) And Self.isAntiGravity)) Then
@@ -629,19 +628,14 @@ Class PlayerKnuckles Extends PlayerObject
 						Self.waterframe Mod= WATER_FRAME_INTERVAL
 						
 						If (Self.waterframe = 1) Then
-							soundSystem = soundInstance
-							soundSystem2 = soundInstance
-							soundSystem.playSequenceSe(KNUCKLES_ANI_SPRING_5)
+							soundInstance.playSequenceSe(SoundSystem.SE_125)
 						EndIf
-						
 					Else
 						Self.waterframe += 1
-						Self.waterframe Mod= 3
+						Self.waterframe Mod= (WATER_FRAME_INTERVAL / 2)
 						
 						If (Self.waterframe = 1) Then
-							soundSystem = soundInstance
-							soundSystem2 = soundInstance
-							soundSystem.playSequenceSe(KNUCKLES_ANI_SPRING_5)
+							soundInstance.playSequenceSe(SoundSystem.SE_125)
 						EndIf
 					EndIf
 					
@@ -655,19 +649,14 @@ Class PlayerKnuckles Extends PlayerObject
 						Self.waterframe Mod= WATER_FRAME_INTERVAL
 						
 						If (Self.waterframe = 1) Then
-							soundSystem = soundInstance
-							soundSystem2 = soundInstance
-							soundSystem.playSequenceSe(KNUCKLES_ANI_SPRING_5)
+							soundInstance.playSequenceSe(SoundSystem.SE_125)
 						EndIf
-						
 					Else
 						Self.waterframe += 1
-						Self.waterframe Mod= 3
+						Self.waterframe Mod= (WATER_FRAME_INTERVAL / 2)
 						
 						If (Self.waterframe = 1) Then
-							soundSystem = soundInstance
-							soundSystem2 = soundInstance
-							soundSystem.playSequenceSe(KNUCKLES_ANI_SPRING_5)
+							soundInstance.playSequenceSe(SoundSystem.SE_125)
 						EndIf
 					EndIf
 					
@@ -690,65 +679,71 @@ Class PlayerKnuckles Extends PlayerObject
 					Return
 				EndIf
 				
-				Int playingLoopSeIndex
+				Local playingLoopSeIndex:Int
 				
 				If (Not (Self.myAnimationID = KNUCKLES_ANI_CLIMB_3 Or Self.myAnimationID = KNUCKLES_ANI_CLIMB_4)) Then
 					playingLoopSeIndex = soundInstance.getPlayingLoopSeIndex()
-					soundSystem2 = soundInstance
 					
 					If (playingLoopSeIndex = KNUCKLES_ANI_SPRING_5) Then
 						soundInstance.stopLoopSe()
 					EndIf
 				EndIf
 				
-				Int climbPointX = Self.posX + (DSgn(Self.faceDirection <> Self.isAntiGravity) * WIDTH)
-				Int climbPointY = (Self.posY + (DSgn(Self.isAntiGravity) * (getCollisionRectHeight() / 2))) + Self.velY ' Shr 1
+				Local climbPointX:= Self.posX + (DSgn(Self.faceDirection <> Self.isAntiGravity) * WIDTH)
+				Local climbPointY:= (Self.posY + (DSgn(Self.isAntiGravity) * (getCollisionRectHeight() / 2))) + Self.velY ' Shr 1
 				
 				If (climbPointY < (MapManager.getPixelHeight() Shl 6) - HEIGHT Or Not Self.isAntiGravity) Then
-					If (Self.worldInstance.getWorldX(climbPointX, climbPointY, Self.currentLayer, PickValue((Self.faceDirection <> Self.isAntiGravity), TRANS_ROT180, TRANS_MIRROR_ROT180)) = ACParam.NO_COLLISION) Then
-						Int footX = Self.posX + (DSgn(Self.faceDirection <> Self.isAntiGravity) * WIDTH)
-						Int newY = Self.worldInstance.getWorldY(footX, Self.posY, Self.currentLayer, PickValue(Self.isAntiGravity, 2, 0))
+					If (Self.worldInstance.getWorldX(climbPointX, climbPointY, Self.currentLayer, PickValue((Self.faceDirection <> Self.isAntiGravity), TRANS_ROT180, TRANS_MIRROR_ROT180)) = ACParam.NO_COLLISION) Then ' 3, 1
+						Local footX:= (Self.posX + (DSgn(Self.faceDirection <> Self.isAntiGravity) * WIDTH))
+						Local newY:= (Self.worldInstance.getWorldY(footX, Self.posY, Self.currentLayer, PickValue(Self.isAntiGravity, TRANS_MIRROR, TRANS_NONE))) ' 2, 0
 						
 						If (newY <> ACParam.NO_COLLISION) Then
 							playingLoopSeIndex = (footX - (DSgn(Self.faceDirection <> Self.isAntiGravity) * (Self.worldInstance.getTileWidth() / 2))) ' Shr 1
+							
 							Self.posX = playingLoopSeIndex
 							Self.footPointX = playingLoopSeIndex
+							
 							Self.posY = newY
 							Self.footPointY = newY
+							
 							Self.myAnimationID = KNUCKLES_ANI_CLIMB_5
+							
 							soundInstance.stopLoopSe()
+							
 							Self.velX = 0
 							Self.velY = 0
+							
 							Return
 						EndIf
 						
 						Self.collisionState = COLLISION_STATE_JUMP
 						Self.animationID = KNUCKLES_ANI_WALK_1
+						
 						soundInstance.stopLoopSe()
+						
 						Return
+					Else
+						Local newPosX:= Self.worldInstance.getWorldX(climbPointX, PickValue(Self.isAntiGravity, HEIGHT, -HEIGHT) + climbPointY, Self.currentLayer, PickValue((Self.faceDirection <> Self.isAntiGravity) <> 0, TRANS_ROT180, TRANS_MIRROR_ROT180)) - ((DSgn(Self.faceDirection <> Self.isAntiGravity)) * (WIDTH / 2))
+						
+						If (newPosX >= 0 And (((newPosX - Self.posX > 0 And (Self.faceDirection ~ Self.isAntiGravity) = 0) Or (newPosX - Self.posX < 0 And (Self.faceDirection ~ Self.isAntiGravity) <> 0)) And ((Self.velY < 0 And Not Self.isAntiGravity) Or (Self.velY > 0 And Self.isAntiGravity)))) Then
+							Self.velY = 0
+						EndIf
+						
+						If (Self.worldInstance.getWorldX(climbPointX, climbPointY - PickValue(Self.isAntiGravity, SONIC_ATTACK_LEVEL_3_V0, -SONIC_ATTACK_LEVEL_3_V0), Self.currentLayer, PickValue((Self.faceDirection <> Self.isAntiGravity), TRANS_ROT180, TRANS_MIRROR_ROT180)) - ((DSgn(Self.faceDirection <> Self.isAntiGravity)) * (WIDTH / 2)) = Self.posX) Then
+							Return
+						EndIf
+						
+						If ((Self.velY > 0 And Not Self.isAntiGravity) Or (Self.velY < 0 And Self.isAntiGravity)) Then
+							Self.collisionState = COLLISION_STATE_JUMP
+							
+							Self.animationID = KNUCKLES_ANI_WALK_1
+							
+							soundInstance.stopLoopSe()
+						EndIf
 					EndIf
-					
-					Int newPosX = Self.worldInstance.getWorldX(climbPointX, PickValue(Self.isAntiGravity, HEIGHT, -HEIGHT) + climbPointY, Self.currentLayer, PickValue((Self.faceDirection <> Self.isAntiGravity) <> 0, TRANS_ROT180, TRANS_MIRROR_ROT180)) - ((DSgn(Self.faceDirection <> Self.isAntiGravity)) * (WIDTH / 2))
-					
-					If (newPosX >= 0 And (((newPosX - Self.posX > 0 And (Self.faceDirection ~ Self.isAntiGravity) = 0) Or (newPosX - Self.posX < 0 And (Self.faceDirection ~ Self.isAntiGravity) <> 0)) And ((Self.velY < 0 And Not Self.isAntiGravity) Or (Self.velY > 0 And Self.isAntiGravity)))) Then
-						Self.velY = 0
-					EndIf
-					
-					If (Self.worldInstance.getWorldX(climbPointX, climbPointY - PickValue(Self.isAntiGravity, SONIC_ATTACK_LEVEL_3_V0, -SONIC_ATTACK_LEVEL_3_V0), Self.currentLayer, PickValue((Self.faceDirection <> Self.isAntiGravity), TRANS_ROT180, TRANS_MIRROR_ROT180)) - ((DSgn(Self.faceDirection <> Self.isAntiGravity)) * (WIDTH / 2)) = Self.posX) Then
-						Return
-					EndIf
-					
-					If ((Self.velY > 0 And Not Self.isAntiGravity) Or (Self.velY < 0 And Self.isAntiGravity)) Then
-						Self.collisionState = COLLISION_STATE_JUMP
-						Self.animationID = KNUCKLES_ANI_WALK_1
-						soundInstance.stopLoopSe()
-						Return
-					EndIf
-					
-					Return
+				Else
+					Self.velY = 0
 				EndIf
-				
-				Self.velY = 0
 			EndIf
 		End
 	Protected
