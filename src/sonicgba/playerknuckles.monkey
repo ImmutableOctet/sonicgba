@@ -26,6 +26,8 @@ Private
 	
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
+	
+	Import regal.typetool
 Public
 
 ' Classes:
@@ -286,26 +288,23 @@ Class PlayerKnuckles Extends PlayerObject
 				ElseIf (Self.animationID = WATER_FRAME_INTERVAL Or Self.animationID = KNUCKLES_ANI_LOOK_UP_1) Then
 					drawDrawerByDegree(g, Self.drawer, drawerActionID, (Self.footPointX Shr 6) - camera.x, (Self.footPointY Shr 6) - camera.y, loop, Self.degreeForDraw, Not Self.faceDirection)
 				Else
-					
 					If (Self.myAnimationID = KNUCKLES_ANI_FLY_1 Or Self.myAnimationID = KNUCKLES_ANI_FLY_2 Or Self.myAnimationID = KNUCKLES_ANI_FLY_3 Or Self.myAnimationID = KNUCKLES_ANI_SWIM_1) Then
-						Int degre
+						Local degre:Int
 						
 						If (Self.flyDegree >= 0) Then
 							If (Self.isAntiGravity) Then
-								degre = 1
+								degre = TRANS_MIRROR_ROT180
 							Else
-								degre = 0
+								degre = TRANS_NONE
 							EndIf
-							
 						ElseIf (Self.isAntiGravity) Then
-							degre = NORMAL_FRAME_INTERVAL
+							degre = TRANS_ROT180
 						Else
-							degre = 2
+							degre = TRANS_MIRROR
 						EndIf
 						
 						Self.drawer.draw(g, drawerActionID, (Self.footPointX Shr 6) - camera.x, (Self.footPointY Shr 6) - camera.y, loop, degre)
 					Else
-						
 						If (Self.myAnimationID = KNUCKLES_ANI_CLIFF_1 Or Self.myAnimationID = KNUCKLES_ANI_CLIFF_2 Or Self.myAnimationID = KNUCKLES_ANI_LOOK_UP_1 Or Self.myAnimationID = KNUCKLES_ANI_LOOK_UP_2) Then
 							Self.degreeForDraw = Self.degreeStable
 							Self.faceDegree = Self.degreeStable
@@ -315,14 +314,14 @@ Class PlayerKnuckles Extends PlayerObject
 							Self.degreeForDraw = Self.degreeStable
 						EndIf
 						
-						If (Not (Self.myAnimationID = 1 Or Self.myAnimationID = 2 Or Self.myAnimationID = NORMAL_FRAME_INTERVAL Or Self.myAnimationID = KNUCKLES_ANI_CAUGHT)) Then
+						If (Not (Self.myAnimationID = KNUCKLES_ANI_WALK_1 Or Self.myAnimationID = KNUCKLES_ANI_WALK_2 Or Self.myAnimationID = NORMAL_FRAME_INTERVAL Or Self.myAnimationID = KNUCKLES_ANI_CAUGHT)) Then
 							Self.degreeForDraw = Self.degreeStable
 						EndIf
 						
-						If (Self.fallinSandSlipState <> 0) Then
-							If (Self.fallinSandSlipState = 1) Then
+						If (Self.fallinSandSlipState <> FALL_IN_SAND_SLIP_NONE) Then
+							If (Self.fallinSandSlipState = FALL_IN_SAND_SLIP_RIGHT) Then
 								Self.faceDirection = True
-							ElseIf (Self.fallinSandSlipState = 2) Then
+							ElseIf (Self.fallinSandSlipState = FALL_IN_SAND_SLIP_LEFT) Then
 								Self.faceDirection = False
 							EndIf
 						EndIf
@@ -334,51 +333,46 @@ Class PlayerKnuckles Extends PlayerObject
 						EndIf
 						
 						If (Self.degreeForDraw <> Self.faceDegree) Then
-							bodyCenterX = getNewPointX(Self.footPointX, 0, (-Self.collisionRect.getHeight()) Shr 1, Self.faceDegree)
-							bodyCenterY = getNewPointY(Self.footPointY, 0, (-Self.collisionRect.getHeight()) Shr 1, Self.faceDegree)
+							bodyCenterX = getNewPointX(Self.footPointX, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree) ' Shr 1
+							bodyCenterY = getNewPointY(Self.footPointY, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree) ' Shr 1
+							
 							g.saveCanvas()
+							
 							g.translateCanvas((bodyCenterX Shr 6) - camera.x, (bodyCenterY Shr 6) - camera.y)
-							g.rotateCanvas((Float) Self.degreeForDraw)
-							Self.drawer.draw(g, drawerActionID, 0, (Self.collisionRect.getHeight() Shr 1) Shr 6, loop, trans)
+							g.rotateCanvas(Float(Self.degreeForDraw))
+							
+							Self.drawer.draw(g, drawerActionID, 0, (Self.collisionRect.getHeight() / 2) Shr 6, loop, trans) ' Shr 1
+							
 							g.restoreCanvas()
 						Else
-							Bool z
-							AnimationDrawer animationDrawer = Self.drawer
-							Int i = (Self.footPointX Shr 6) - camera.x
-							Int i2 = (Self.footPointY Shr 6) - camera.y
-							Int i3 = Self.degreeForDraw
+							Local x:= ((Self.footPointX Shr 6) - camera.x)
+							Local y:= ((Self.footPointY Shr 6) - camera.y)
 							
-							If (Self.faceDirection) Then
-								z = False
-							Else
-								z = True
-							EndIf
-							
-							drawDrawerByDegree(g, animationDrawer, drawerActionID, i, i2, loop, i3, z)
+							drawDrawerByDegree(g, Self.drawer, drawerActionID, x, y, loop, Self.degreeForDraw, Not Self.faceDirection)
 						EndIf
 					EndIf
 					
 					If (Self.myAnimationID = KNUCKLES_ANI_SWIM_2 And Self.swimWaterEffectFlag) Then
-						Self.effectDrawer.draw(g, KNUCKLES_ANI_SWIM_EFFECT, (Self.footPointX Shr 6) - camera.x, (((StageManager.getWaterLevel() Shl 6) Shr 6) + KNUCKLES_ANI_SPRING_1) - camera.y, True, getTrans())
+						Self.effectDrawer.draw(g, KNUCKLES_ANI_SWIM_EFFECT, (Self.footPointX Shr 6) - camera.x, (((StageManager.getWaterLevel() Shl 6) Shr 6) + 14) - camera.y, True, getTrans()) ' + KNUCKLES_ANI_SPRING_1
 					EndIf
 				EndIf
 				
-				Self.attackRectVec.removeAllElements()
-				Byte[] rect = Self.drawer.getARect()
+				Self.attackRectVec.Clear()
+				
+				Local rect:= Self.drawer.getARect()
 				
 				If (Self.isAntiGravity) Then
-					Byte[] rectTmp = Self.drawer.getARect()
+					Local rectTmp:= Self.drawer.getARect()
 					
-					If (rectTmp <> Null) Then
+					If (rectTmp.Length > 0) Then
 						If (Self.attackLevel <> 0) Then
-							rect[0] = (Byte) ((-rectTmp[0]) - rectTmp[2])
+							rect[0] = Byte((-rectTmp[0]) - rectTmp[2])
 						Else
-							
 							If (Self.flying And Self.faceDirection) Then
-								rect[0] = (Byte) ((-rectTmp[0]) - rectTmp[2])
+								rect[0] = Byte((-rectTmp[0]) - rectTmp[2])
 							EndIf
 							
-							rect[1] = (Byte) ((-rectTmp[1]) - rectTmp[3])
+							rect[1] = Byte((-rectTmp[1]) - rectTmp[3])
 						EndIf
 					EndIf
 				EndIf
@@ -386,11 +380,13 @@ Class PlayerKnuckles Extends PlayerObject
 				If (rect <> Null) Then
 					If (SonicDebug.showCollisionRect) Then
 						g.setColor(65280)
+						
 						g.drawRect(((Self.footPointX Shr 6) + rect[0]) - camera.x..((Self.footPointY Shr 6) + PickValue(Self.isAntiGravity, (-rect[1]) - rect[3], rect[1])) - camera.y, rect[2], rect[3])
 					EndIf
 					
 					Self.attackRect.initCollision(rect[0] Shl 6, rect[1] Shl 6, rect[2] Shl 6, rect[3] Shl 6, Self.myAnimationID)
-					Self.attackRectVec.addElement(Self.attackRect)
+					
+					Self.attackRectVec.Push(Self.attackRect)
 				Else
 					Self.attackRect.reset()
 				EndIf
@@ -403,6 +399,8 @@ Class PlayerKnuckles Extends PlayerObject
 									Self.canAttackByHari = True
 									
 									Self.collisionState = COLLISION_STATE_JUMP
+									
+									' Magic number: 1
 									Self.worldCal.actionState = 1
 							End Select
 							
@@ -1120,7 +1118,7 @@ Class PlayerKnuckles Extends PlayerObject
 			EndIf
 			
 			If ((direction = 1 And Self.faceDirection) Or (direction = NORMAL_FRAME_INTERVAL And Not Self.faceDirection)) Then
-				Self.collisionState = (Byte) 4
+				Self.collisionState = COLLISION_STATE_CLIMB
 				Self.flying = False
 				Self.animationID = NO_ANIMATION
 				Self.myAnimationID = KNUCKLES_ANI_CLIMB_1

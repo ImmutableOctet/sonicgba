@@ -164,8 +164,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphicsmacros.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
-        <Y>18</Y>
+        <X>18</X>
+        <Y>17</Y>
       </CursorPos>
       <DocGUID>fcdceaec-8dc6-4287-86bb-ca7bf8b6474d</DocGUID>
       <Bookmarks />
@@ -324,12 +324,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\animationdrawer.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\lib\animationdrawer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>13</X>
-        <Y>337</Y>
+        <X>10</X>
+        <Y>167</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>b4562825-897a-4aae-be29-76b9f44c3d16</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationframe.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1000,8 +1001,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerknuckles.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>4</X>
-        <Y>1213</Y>
+        <X>22</X>
+        <Y>204</Y>
       </CursorPos>
       <DocGUID>f7c53306-c261-481c-a12e-1a04473c13f1</DocGUID>
       <Bookmarks />
@@ -1009,7 +1010,7 @@
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>38</X>
-        <Y>421</Y>
+        <Y>382</Y>
       </CursorPos>
       <DocGUID>8ca28cc4-9b9f-4399-b062-6e0c07549a03</DocGUID>
       <Bookmarks />
@@ -1316,13 +1317,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\special\specialmap.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\special\specialmap.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>6</X>
         <Y>16</Y>
       </CursorPos>
-      <DocGUID>b6ea93c7-b3fb-4da2-b706-9f1761046a64</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\specialobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>

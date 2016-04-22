@@ -378,9 +378,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const CAN_BE_SQUEEZE:Bool = True
 		Const DETECT_HEIGHT:Int = 2048
 		
-		Const FALL_IN_SAND_SLIP_LEFT:Int = 2
 		Const FALL_IN_SAND_SLIP_NONE:Int = 0
 		Const FALL_IN_SAND_SLIP_RIGHT:Int = 1
+		Const FALL_IN_SAND_SLIP_LEFT:Int = 2
 		
 		Const HUGE_POWER_SPEED:Int = 1900
 		Const HURT_COUNT:Int = 48
