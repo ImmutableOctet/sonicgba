@@ -164,7 +164,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphicsmacros.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>18</X>
+        <X>19</X>
         <Y>17</Y>
       </CursorPos>
       <DocGUID>d5022053-a53b-4c58-a126-649c9c77345e</DocGUID>
@@ -286,7 +286,7 @@
     <DocUserOptions Filename=".\src\gameengine\def.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>7</X>
-        <Y>99</Y>
+        <Y>137</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -311,12 +311,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\animation.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\lib\animation.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>12</X>
-        <Y>474</Y>
+        <X>10</X>
+        <Y>528</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>ee7ed893-d831-45f3-97dd-78980653eaae</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationaction.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -419,7 +420,7 @@
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>14</X>
-        <Y>132</Y>
+        <Y>78</Y>
       </CursorPos>
       <DocGUID>d9ff5404-e893-4f34-b55d-aa6901b81569</DocGUID>
       <Bookmarks />
@@ -852,13 +853,20 @@
       <DocGUID>4f2c11a0-d18b-4827-9f8c-31ba1a207902</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\flipv.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\fliph.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>11</X>
-        <Y>18</Y>
+        <Y>23</Y>
       </CursorPos>
-      <DocGUID>f1d15d3e-942f-4da0-8f41-6893d047187b</DocGUID>
+      <DocGUID>32afd43b-d200-46c1-aadd-e36f6239e25f</DocGUID>
       <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\flipv.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>12</X>
+        <Y>28</Y>
+      </CursorPos>
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\focusable.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1098,7 +1106,7 @@
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>9</X>
-        <Y>456</Y>
+        <Y>361</Y>
       </CursorPos>
       <DocGUID>8ca28cc4-9b9f-4399-b062-6e0c07549a03</DocGUID>
       <Bookmarks />
@@ -1301,7 +1309,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>13</X>
+        <X>14</X>
         <Y>45</Y>
       </CursorPos>
       <DocGUID>aec3205d-fe1c-48b4-87e5-d9831ca17dfa</DocGUID>
