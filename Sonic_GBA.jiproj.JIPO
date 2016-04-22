@@ -419,7 +419,7 @@
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>14</X>
-        <Y>104</Y>
+        <Y>154</Y>
       </CursorPos>
       <DocGUID>d9ff5404-e893-4f34-b55d-aa6901b81569</DocGUID>
       <Bookmarks />
@@ -883,8 +883,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>10</X>
-        <Y>154</Y>
+        <X>9</X>
+        <Y>180</Y>
       </CursorPos>
       <DocGUID>a0823fff-eb3c-4709-948d-d8a5cc1e50f2</DocGUID>
       <Bookmarks />
@@ -898,8 +898,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\graphicpatch.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>18</X>
-        <Y>23</Y>
+        <X>0</X>
+        <Y>0</Y>
       </CursorPos>
       <DocGUID>972f9c68-7d0e-487d-ac14-3af70016b3b0</DocGUID>
       <Bookmarks />
@@ -1089,8 +1089,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>456</Y>
+        <X>17</X>
+        <Y>381</Y>
       </CursorPos>
       <DocGUID>8ca28cc4-9b9f-4399-b062-6e0c07549a03</DocGUID>
       <Bookmarks />
@@ -1157,6 +1157,14 @@
         <Y>5</Y>
       </CursorPos>
       <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\rollisland.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>16</X>
+        <Y>22</Y>
+      </CursorPos>
+      <DocGUID>3fd52dd9-6e0b-4927-8dc3-276f3e2fb08b</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ropeend.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
