@@ -2,6 +2,9 @@ Strict
 
 Public
 
+' Preprocessor related:
+'#SONICGBA_SUPERSONIC_MUTE_WARNING_SOUND = True
+
 ' Imports:
 Private
 	Import gameengine.key
@@ -58,7 +61,7 @@ Class PlayerSuperSonic Extends PlayerObject
 		
 		Const VELOCITY_STAY:Int = 400
 		
-		Global START_JUMP_VELOCITY:Int = (GRAVITY + PlayerObject.SHOOT_POWER) ' Const
+		Global START_JUMP_VELOCITY:Int = (GRAVITY + SHOOT_POWER) ' Const
 		
 		' Fields:
 		Field attackEffectShow:Bool
@@ -91,55 +94,72 @@ Class PlayerSuperSonic Extends PlayerObject
 		Field smallJumpCount:Int
 		Field starCount:Int
 	Public
-		Public Method PlayerSuperSonic:public()
+		' Constructor(s):
+		Method New()
 			Self.noRingLose = False
+			
 			Self.SuperSonicAcnimation = New Animation("/animation/player/chr_Super.sonic")
+			
 			Self.SuperSonicDrawer = Self.SuperSonicAcnimation.getDrawer()
-			Self.shadowDrawer = Self.SuperSonicAcnimation.getDrawer(START_JUMP_VELOCITY, True, START_JUMP_VELOCITY)
-			Self.attackEffectDrawer = Self.SuperSonicAcnimation.getDrawer(SUPER_ANI_ATTACK_EFFECT, False, START_JUMP_VELOCITY)
+			Self.shadowDrawer = Self.SuperSonicAcnimation.getDrawer(0, True, 0)
+			Self.attackEffectDrawer = Self.SuperSonicAcnimation.getDrawer(SUPER_ANI_ATTACK_EFFECT, False, 0)
+			
 			Self.moveCal = New ACMoveCalculator(Self, Self)
+			
 			Self.myAnimationID = SUPER_ANI_STAND
+			
 			Self.drawer = Self.SuperSonicDrawer
-			Self.starVec = New Vector()
-			Self.shadowPosition = (Int[][]) Array.newInstance(Integer.TYPE, New Int[]{SUPER_ANI_STAND, 2})
-			For (Int i = START_JUMP_VELOCITY; i < SUPER_ANI_STAND; i += 1)
-				Self.shadowPosition[i][START_JUMP_VELOCITY] = Self.posX
-				Self.shadowPosition[i][1] = Self.posY
+			
+			Self.starVec = New Stack<StarEffect>()
+			
+			Self.shadowPosition = New Int[3][]
+			
+			For Local i:= 0 Until Self.shadowPosition.Length
+				Self.shadowPosition[i] = [Self.posX, Self.posY]
 			Next
+			
 			ringNum = INIT_RING_NUM
 		End
 		
-		Public Method closeImpl:Void()
+		' Methods:
+		Method closeImpl:Void()
 			Animation.closeAnimationDrawer(Self.SuperSonicDrawer)
 			Self.SuperSonicDrawer = Null
+			
 			Animation.closeAnimationDrawer(Self.shadowDrawer)
 			Self.shadowDrawer = Null
+			
 			Animation.closeAnimationDrawer(Self.attackEffectDrawer)
 			Self.attackEffectDrawer = Null
+			
 			Animation.closeAnimation(Self.SuperSonicAcnimation)
 			Self.SuperSonicAcnimation = Null
 		End
 		
-		Public Method logic:Void()
+		Method logic:Void()
+			' Magic number: 200
 			MapManager.setCameraUpLimit(MapManager.getPixelHeight() - 200)
 			
 			If (getBossDieFlag()) Then
 				timeStopped = True
 			EndIf
 			
-			If (PlayerObject.getTimeCount() > 0 And Not Self.noRingLose And timeCount - lastTimeCount >= 1000) Then
+			If (getTimeCount() > 0 And Not Self.noRingLose And (timeCount - lastTimeCount) >= 1000) Then
 				lastTimeCount += 1000
 				
 				If (ringNum > 0) Then
 					ringNum -= 1
 					
-					If (ringNum <= SUPER_ANI_STAR_2) Then
-						SoundSystem.getInstance().playSe(30)
-					EndIf
+					#If Not SONICGBA_SUPERSONIC_MUTE_WARNING_SOUND
+						If (ringNum <= 10) Then
+							SoundSystem.getInstance().playSe(SoundSystem.SE_139)
+						EndIf
+					#End
 				EndIf
 				
 				If (ringNum = 0) Then
-					timeCount -= timeCount Mod 1000
+					timeCount -= (timeCount Mod 1000)
+					
 					setDieWithoutSE()
 					
 					If (Self.pacman <> Null) Then
@@ -147,31 +167,37 @@ Class PlayerSuperSonic Extends PlayerObject
 					EndIf
 					
 					Self.pacman = Null
+					
 					Self.myAnimationID = SUPER_ANI_DIE_1
 				EndIf
 			EndIf
 			
 			If (Self.isDead) Then
-				timeCount -= timeCount Mod 1000
-				ringNum = START_JUMP_VELOCITY
+				timeCount -= (timeCount Mod 1000)
+				
+				ringNum = 0
 				
 				If (Self.pacman <> Null) Then
 					Self.pacman.setDie()
+					
 					Self.pacman = Null
 				EndIf
 				
 				Self.velY += getGravity()
+				
 				Self.posX += Self.velX
 				Self.posY += Self.velY
 				
-				If (Self.posY > ((MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl SUPER_ANI_DAMAGE) + MFGamePad.KEY_NUM_6) Then
-					Self.posY = ((MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl SUPER_ANI_DAMAGE) + MFGamePad.KEY_NUM_6
+				' Magic number: 4096
+				If (Self.posY > ((MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl 6) + 4096) Then
+					Self.posY = ((MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl 6) + 4096
 					
 					If (Not Self.finishDeadStuff) Then
 						If (stageModeState = 1) Then
 							StageManager.setStageRestart()
 						ElseIf (lifeNum > 0) Then
 							lifeNum -= 1
+							
 							StageManager.setStageRestart()
 						Else
 							StageManager.setStageGameover()
@@ -180,66 +206,70 @@ Class PlayerSuperSonic Extends PlayerObject
 						Self.finishDeadStuff = True
 					EndIf
 				EndIf
-				
 			ElseIf (Self.pacman <> Null) Then
-				Self.moveCal.actionLogic(START_JUMP_VELOCITY, START_JUMP_VELOCITY)
+				Self.moveCal.actionLogic(0, 0)
 			Else
-				Self.shadowPosition[START_JUMP_VELOCITY][1] = Self.shadowPosition[1][1]
+				Self.shadowPosition[0][1] = Self.shadowPosition[1][1]
 				Self.shadowPosition[1][1] = Self.shadowPosition[2][1]
 				Self.shadowPosition[2][1] = Self.posY
+				
 				Self.hurtCount -= 1
 				
+				' Magic number: 12
 				If (Self.hurtCount = 12) Then
 					Self.myAnimationID = SUPER_ANI_STAND
 				EndIf
 				
 				If (Self.hurtCount < 0) Then
-					Self.hurtCount = START_JUMP_VELOCITY
+					Self.hurtCount = 0
 				EndIf
 				
+				' Magic number: 13
 				If (Self.hurtCount < 13) Then
 					Select (Self.collisionState)
-						Case START_JUMP_VELOCITY
+						Case COLLISION_STATE_WALK
 							inputWalkLogic()
-							break
-						Case 1
+						Case COLLISION_STATE_JUMP
 							inputJumpLogic()
-							break
 					End Select
 				EndIf
 				
-				Self.velY = START_JUMP_VELOCITY
+				Self.velY = 0
+				
+				' Magic number: -1243
 				Self.velX = -1243
+				
 				Self.moveCal.actionLogic(Self.velX, Self.velY)
-				Int moveLength = ((Self.velX + MOVE_MAX_VELOCITY) * 2) / SUPER_ANI_STAND
-				Self.shadowPosition[START_JUMP_VELOCITY][START_JUMP_VELOCITY] = Self.posX - (moveLength * SUPER_ANI_STAND)
-				Self.shadowPosition[1][START_JUMP_VELOCITY] = Self.posX - (moveLength * 2)
-				Self.shadowPosition[2][START_JUMP_VELOCITY] = Self.posX - moveLength
+				
+				Local moveLength:= (((Self.velX + MOVE_MAX_VELOCITY) * 2) / 3)
+				
+				Self.shadowPosition[0][0] = Self.posX - (moveLength * 3)
+				Self.shadowPosition[1][0] = Self.posX - (moveLength * 2)
+				Self.shadowPosition[2][0] = Self.posX - moveLength
+				
 				addStar()
 			EndIf
-			
 		End
 		
 		Public Method didAfterEveryMove:Void(moveDistanceX:Int, moveDistanceY:Int)
-			
-			If (Self.posX - 768 < (MapManager.actualLeftCameraLimit Shl SUPER_ANI_DAMAGE)) Then
-				Self.posX = (MapManager.actualLeftCameraLimit Shl SUPER_ANI_DAMAGE) + 768
+			If (Self.posX - 768 < (MapManager.actualLeftCameraLimit Shl 6)) Then
+				Self.posX = (MapManager.actualLeftCameraLimit Shl 6) + 768
 				
 				If (getVelX() < 0) Then
-					setVelX(START_JUMP_VELOCITY)
+					setVelX(0)
 				EndIf
 			EndIf
 			
-			If (MapManager.actualRightCameraLimit <> MapManager.getPixelWidth() And Self.posX + 768 > (MapManager.actualRightCameraLimit Shl SUPER_ANI_DAMAGE)) Then
-				Self.posX = (MapManager.actualRightCameraLimit Shl SUPER_ANI_DAMAGE) - 768
+			If (MapManager.actualRightCameraLimit <> MapManager.getPixelWidth() And Self.posX + 768 > (MapManager.actualRightCameraLimit Shl 6)) Then
+				Self.posX = (MapManager.actualRightCameraLimit Shl 6) - 768
 				
 				If (getVelX() > 0) Then
-					setVelX(START_JUMP_VELOCITY)
+					setVelX(0)
 				EndIf
 			EndIf
 			
-			If (Not Self.isDead And Self.footPointY > (MapManager.actualDownCameraLimit Shl SUPER_ANI_DAMAGE)) Then
-				Self.posY = MapManager.actualDownCameraLimit Shl SUPER_ANI_DAMAGE
+			If (Not Self.isDead And Self.footPointY > (MapManager.actualDownCameraLimit Shl 6)) Then
+				Self.posY = MapManager.actualDownCameraLimit Shl 6
 				setDieWithoutSE()
 			EndIf
 			
@@ -249,7 +279,7 @@ Class PlayerSuperSonic Extends PlayerObject
 			
 			Int groundY = getGroundY(Self.posX, Self.posY) - VELOCITY_STAY
 			Select (Self.collisionState)
-				Case START_JUMP_VELOCITY
+				Case 0
 					Self.posY = groundY
 					break
 				Case 1
@@ -268,7 +298,7 @@ Class PlayerSuperSonic Extends PlayerObject
 			
 			If (Self.pacman = Null) Then
 				Self.drawer.setLoop(True)
-				Self.drawer.setTrans(START_JUMP_VELOCITY)
+				Self.drawer.setTrans(0)
 				Self.drawer.setActionId(Self.myAnimationID)
 				
 				If (Self.myAnimationID = SUPER_ANI_DIE_1) Then
@@ -322,8 +352,8 @@ Class PlayerSuperSonic Extends PlayerObject
 						Self.posX += Self.velX
 						Self.posY += Self.velY
 						
-						If (Self.posY > ((MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl SUPER_ANI_DAMAGE) + MFGamePad.KEY_NUM_6) Then
-							Self.posY = ((MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl SUPER_ANI_DAMAGE) + MFGamePad.KEY_NUM_6
+						If (Self.posY > ((MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl 6) + MFGamePad.KEY_NUM_6) Then
+							Self.posY = ((MapManager.getCamera().y + MapManager.CAMERA_HEIGHT) Shl 6) + MFGamePad.KEY_NUM_6
 						EndIf
 					EndIf
 				EndIf
@@ -332,178 +362,6 @@ Class PlayerSuperSonic Extends PlayerObject
 				drawCollisionRect(g)
 			EndIf
 			
-		End
-		
-		Private Method inputWalkLogic:Void()
-			
-			If (Self.hurtCount < 13) Then
-				If (Key.repeated(Key.gLeft)) Then
-					If (Self.velX > -960) Then
-						Self.velX -= MOVE_POWER
-						
-						If (Self.velX < -960) Then
-							Self.velX = -960
-						EndIf
-					EndIf
-					
-				ElseIf (Key.repeated(Key.gRight)) Then
-					If (Self.velX < MOVE_MAX_VELOCITY) Then
-						Self.velX += MOVE_POWER
-						
-						If (Self.velX > MOVE_MAX_VELOCITY) Then
-							Self.velX = MOVE_MAX_VELOCITY
-						EndIf
-					EndIf
-					
-				ElseIf (Self.velX > 0) Then
-					Self.velX -= MOVE_POWER
-					
-					If (Self.velX < 0) Then
-						Self.velX = START_JUMP_VELOCITY
-					EndIf
-					
-				ElseIf (Self.velX < 0) Then
-					Self.velX += MOVE_POWER
-					
-					If (Self.velX > 0) Then
-						Self.velX = START_JUMP_VELOCITY
-					EndIf
-				EndIf
-				
-				If (Key.press(Key.B_HIGH_JUMP)) Then
-					Self.jumplocked = False
-					Self.velY = START_JUMP_VELOCITY
-					Self.collisionState = (Byte) 1
-					SoundSystem.getInstance().playSe(11)
-					Self.smallJumpCount = SUPER_ANI_STAR_1
-				EndIf
-				
-				If (Key.press(Key.gSelect) And Not Self.attackEffectShow) Then
-					Self.velX = ATTACK_VELOCITY
-					Self.attackEffectShow = True
-					Self.attackEffectDrawer.restart()
-					Self.myAnimationID = SUPER_ANI_ATTACK
-					Self.attackEffectCount = START_JUMP_VELOCITY
-					SoundSystem.getInstance().playSe(SUPER_ANI_DIE_1)
-				EndIf
-			EndIf
-			
-		End
-		
-		Private Method inputJumpLogic:Void()
-			
-			If (Key.repeated(Key.gLeft)) Then
-				If (Self.velX > -960) Then
-					Self.velX -= MOVE_POWER
-					
-					If (Self.velX < -960) Then
-						Self.velX = -960
-					EndIf
-				EndIf
-				
-			ElseIf (Key.repeated(Key.gRight)) Then
-				If (Self.velX < MOVE_MAX_VELOCITY) Then
-					Self.velX += MOVE_POWER
-					
-					If (Self.velX > MOVE_MAX_VELOCITY) Then
-						Self.velX = MOVE_MAX_VELOCITY
-					EndIf
-				EndIf
-				
-			ElseIf (Self.velX > 0) Then
-				Self.velX -= MOVE_POWER
-				
-				If (Self.velX < 0) Then
-					Self.velX = START_JUMP_VELOCITY
-				EndIf
-				
-			ElseIf (Self.velX < 0) Then
-				Self.velX += MOVE_POWER
-				
-				If (Self.velX > 0) Then
-					Self.velX = START_JUMP_VELOCITY
-				EndIf
-			EndIf
-			
-			If (Self.smallJumpCount > 0) Then
-				Self.smallJumpCount -= 1
-				
-				If (Not Key.repeated(Key.gUp | Key.B_HIGH_JUMP)) Then
-					Self.velY += GRAVITY Shr 1
-					Self.velY += GRAVITY Shr 2
-				EndIf
-			EndIf
-			
-			If (Self.attackEffectShow) Then
-				Self.velY = START_JUMP_VELOCITY
-			Else
-				Self.velY += GRAVITY
-			EndIf
-			
-			If (Key.press(Key.gSelect) And Not Self.attackEffectShow) Then
-				Self.velX = ATTACK_VELOCITY
-				Self.attackEffectShow = True
-				Self.attackEffectDrawer.restart()
-				Self.myAnimationID = SUPER_ANI_ATTACK
-				Self.attackEffectCount = START_JUMP_VELOCITY
-				SoundSystem.getInstance().playSe(SUPER_ANI_DIE_1)
-			EndIf
-			
-		End
-		
-		Private Method jumpRelock:Void()
-			Self.jumpframe = START_JUMP_VELOCITY
-			Self.jumplocked = True
-		End
-		
-		Private Method addStar:Void()
-			Self.starCount += 1
-			
-			If (Self.starCount >= Self.nextStarCount) Then
-				Self.starVec.addElement(New StarEffect(Self.SuperSonicAcnimation, MyRandom.nextInt(2) = 0 ? SUPER_ANI_STAR_1 : SUPER_ANI_STAR_2, Self.posX + WIDTH, Self.posY + MyRandom.nextInt(-400, START_JUMP_VELOCITY)))
-				Self.starCount = START_JUMP_VELOCITY
-				Self.nextStarCount = MyRandom.nextInt(2, SUPER_ANI_DAMAGE)
-			EndIf
-			
-		End
-		
-		Private Method drawStar:Void(g:MFGraphics)
-			Int i = START_JUMP_VELOCITY
-			While (i < Self.starVec.size()) {
-				StarEffect star = (StarEffect) Self.starVec.elementAt(i)
-				
-				If (star.draw(g)) Then
-					star.close()
-					Self.starVec.removeElementAt(i)
-					i -= 1
-				EndIf
-				
-				i += 1
-			}
-		End
-		
-		Private Method drawShadow:Void(g:MFGraphics)
-			Self.frameCount += 1
-			Self.frameCount Mod= SUPER_ANI_STAND
-			Self.shadowDrawer.setActionId(Self.myAnimationID)
-			For (Int i = START_JUMP_VELOCITY; i < Self.shadowPosition.Length; i += 1)
-				
-				If (Self.myAnimationID = SUPER_ANI_DAMAGE) Then
-					drawDamage(g, Self.shadowDrawer, Self.shadowPosition[i][START_JUMP_VELOCITY], Self.shadowPosition[i][1])
-				Else
-					
-					If (IsGamePause) Then
-						Self.frameCount = START_JUMP_VELOCITY
-					EndIf
-					
-					If (Self.frameCount Mod 2 = 0) Then
-						Self.shadowDrawer.draw(g, (Self.shadowPosition[i][START_JUMP_VELOCITY] Shr SUPER_ANI_DAMAGE) - camera.x..(Self.shadowPosition[i][1] Shr SUPER_ANI_DAMAGE) - camera.y)
-					Else
-						Self.shadowDrawer.moveOn()
-					EndIf
-				EndIf
-				
-			Next
 		End
 		
 		Public Method getFocusX:Int()
@@ -549,16 +407,6 @@ Class PlayerSuperSonic Extends PlayerObject
 			Return Super.isAttackingEnemy() Or Self.attackEffectShow
 		End
 		
-		Private Method drawDamage:Void(g:MFGraphics, drawer:AnimationDrawer, x:Int, y:Int)
-			Int degree = ((Self.hurtCount - HURT_COUNT) * MDPhone.SCREEN_WIDTH) / SUPER_ANI_DIE_1
-			Graphics g2 = (Graphics) g.getSystemGraphics()
-			g2.save()
-			g2.translate((Float) ((x Shr SUPER_ANI_DAMAGE) - camera.x), (Float) ((y Shr SUPER_ANI_DAMAGE) - camera.y))
-			g2.rotate((Float) degree)
-			drawer.draw(g, START_JUMP_VELOCITY, START_JUMP_VELOCITY)
-			g2.restore()
-		End
-		
 		Public Method refreshCollisionRectWrap:Void()
 			Self.collisionRect.setRect(Self.posX - 768, Self.posY - HEIGHT, WIDTH, HEIGHT)
 		End
@@ -576,5 +424,188 @@ Class PlayerSuperSonic Extends PlayerObject
 		Public Method getBossScore:Void()
 			Super.getBossScore()
 			Self.noRingLose = True
+		End
+	Private
+		' Methods:
+		Private Method inputWalkLogic:Void()
+			
+			If (Self.hurtCount < 13) Then
+				If (Key.repeated(Key.gLeft)) Then
+					If (Self.velX > -960) Then
+						Self.velX -= MOVE_POWER
+						
+						If (Self.velX < -960) Then
+							Self.velX = -960
+						EndIf
+					EndIf
+					
+				ElseIf (Key.repeated(Key.gRight)) Then
+					If (Self.velX < MOVE_MAX_VELOCITY) Then
+						Self.velX += MOVE_POWER
+						
+						If (Self.velX > MOVE_MAX_VELOCITY) Then
+							Self.velX = MOVE_MAX_VELOCITY
+						EndIf
+					EndIf
+					
+				ElseIf (Self.velX > 0) Then
+					Self.velX -= MOVE_POWER
+					
+					If (Self.velX < 0) Then
+						Self.velX = 0
+					EndIf
+					
+				ElseIf (Self.velX < 0) Then
+					Self.velX += MOVE_POWER
+					
+					If (Self.velX > 0) Then
+						Self.velX = 0
+					EndIf
+				EndIf
+				
+				If (Key.press(Key.B_HIGH_JUMP)) Then
+					Self.jumplocked = False
+					Self.velY = 0
+					Self.collisionState = (Byte) 1
+					SoundSystem.getInstance().playSe(11)
+					Self.smallJumpCount = SUPER_ANI_STAR_1
+				EndIf
+				
+				If (Key.press(Key.gSelect) And Not Self.attackEffectShow) Then
+					Self.velX = ATTACK_VELOCITY
+					Self.attackEffectShow = True
+					Self.attackEffectDrawer.restart()
+					Self.myAnimationID = SUPER_ANI_ATTACK
+					Self.attackEffectCount = 0
+					SoundSystem.getInstance().playSe(SUPER_ANI_DIE_1)
+				EndIf
+			EndIf
+			
+		End
+		
+		Private Method inputJumpLogic:Void()
+			
+			If (Key.repeated(Key.gLeft)) Then
+				If (Self.velX > -960) Then
+					Self.velX -= MOVE_POWER
+					
+					If (Self.velX < -960) Then
+						Self.velX = -960
+					EndIf
+				EndIf
+				
+			ElseIf (Key.repeated(Key.gRight)) Then
+				If (Self.velX < MOVE_MAX_VELOCITY) Then
+					Self.velX += MOVE_POWER
+					
+					If (Self.velX > MOVE_MAX_VELOCITY) Then
+						Self.velX = MOVE_MAX_VELOCITY
+					EndIf
+				EndIf
+				
+			ElseIf (Self.velX > 0) Then
+				Self.velX -= MOVE_POWER
+				
+				If (Self.velX < 0) Then
+					Self.velX = 0
+				EndIf
+				
+			ElseIf (Self.velX < 0) Then
+				Self.velX += MOVE_POWER
+				
+				If (Self.velX > 0) Then
+					Self.velX = 0
+				EndIf
+			EndIf
+			
+			If (Self.smallJumpCount > 0) Then
+				Self.smallJumpCount -= 1
+				
+				If (Not Key.repeated(Key.gUp | Key.B_HIGH_JUMP)) Then
+					Self.velY += GRAVITY Shr 1
+					Self.velY += GRAVITY Shr 2
+				EndIf
+			EndIf
+			
+			If (Self.attackEffectShow) Then
+				Self.velY = 0
+			Else
+				Self.velY += GRAVITY
+			EndIf
+			
+			If (Key.press(Key.gSelect) And Not Self.attackEffectShow) Then
+				Self.velX = ATTACK_VELOCITY
+				Self.attackEffectShow = True
+				Self.attackEffectDrawer.restart()
+				Self.myAnimationID = SUPER_ANI_ATTACK
+				Self.attackEffectCount = 0
+				SoundSystem.getInstance().playSe(SUPER_ANI_DIE_1)
+			EndIf
+			
+		End
+		
+		Private Method jumpRelock:Void()
+			Self.jumpframe = 0
+			Self.jumplocked = True
+		End
+		
+		Private Method addStar:Void()
+			Self.starCount += 1
+			
+			If (Self.starCount >= Self.nextStarCount) Then
+				Self.starVec.addElement(New StarEffect(Self.SuperSonicAcnimation, MyRandom.nextInt(2) = 0 ? SUPER_ANI_STAR_1 : SUPER_ANI_STAR_2, Self.posX + WIDTH, Self.posY + MyRandom.nextInt(-400, 0)))
+				Self.starCount = 0
+				Self.nextStarCount = MyRandom.nextInt(2, SUPER_ANI_DAMAGE)
+			EndIf
+			
+		End
+		
+		Private Method drawStar:Void(g:MFGraphics)
+			Int i = 0
+			While (i < Self.starVec.size()) {
+				StarEffect star = (StarEffect) Self.starVec.elementAt(i)
+				
+				If (star.draw(g)) Then
+					star.close()
+					Self.starVec.removeElementAt(i)
+					i -= 1
+				EndIf
+				
+				i += 1
+			}
+		End
+		
+		Private Method drawShadow:Void(g:MFGraphics)
+			Self.frameCount += 1
+			Self.frameCount Mod= SUPER_ANI_STAND
+			Self.shadowDrawer.setActionId(Self.myAnimationID)
+			For (Int i = 0; i < Self.shadowPosition.Length; i += 1)
+				
+				If (Self.myAnimationID = SUPER_ANI_DAMAGE) Then
+					drawDamage(g, Self.shadowDrawer, Self.shadowPosition[i][0], Self.shadowPosition[i][1])
+				Else
+					
+					If (IsGamePause) Then
+						Self.frameCount = 0
+					EndIf
+					
+					If (Self.frameCount Mod 2 = 0) Then
+						Self.shadowDrawer.draw(g, (Self.shadowPosition[i][0] Shr 6) - camera.x..(Self.shadowPosition[i][1] Shr 6) - camera.y)
+					Else
+						Self.shadowDrawer.moveOn()
+					EndIf
+				EndIf
+				
+			Next
+		End
+		
+		Private Method drawDamage:Void(g:MFGraphics, drawer:AnimationDrawer, x:Int, y:Int)
+			Int degree = ((Self.hurtCount - HURT_COUNT) * MDPhone.SCREEN_WIDTH) / SUPER_ANI_DIE_1
+			Graphics g2 = (Graphics) g.getSystemGraphics()
+			g2.save()
+			g2.translate((Float) ((x Shr 6) - camera.x), (Float) ((y Shr 6) - camera.y))
+			g2.rotate((Float) degree)
+			drawer.draw(g, 0, 0)
+			g2.restore()
 		End
 End
