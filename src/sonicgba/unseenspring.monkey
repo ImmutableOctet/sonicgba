@@ -56,7 +56,7 @@ Class UnseenSpring Extends GimmickObject ' Spring
 		End
 		
 		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
-			If (player.collisionState = Null) Then
+			If (player.collisionState = COLLISION_STATE_WALK) Then
 				player.beSpring(SPRING_POWER, 1)
 				
 				' Magic numbers: 17 and 32. Unsure about the action

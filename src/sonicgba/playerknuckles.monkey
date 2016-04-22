@@ -250,7 +250,7 @@ Class PlayerKnuckles Extends PlayerObject
 					Local drawX:= getNewPointX(bodyCenterX, 0, 512, 0) ' (SIDE_FOOT_FROM_CENTER * 2) ' (WIDTH / 2)
 					Local drawY:= getNewPointY(bodyCenterY, 0, 512, 0)
 					
-					If (Self.collisionState = Null) Then
+					If (Self.collisionState = COLLISION_STATE_WALK) Then
 						If (Self.isAntiGravity) Then
 							If (Self.faceDirection) Then
 								trans = PickValue(Self.totalVelocity >= 0, TRANS_ROT180, TRANS_MIRROR_ROT180)
