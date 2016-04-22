@@ -318,39 +318,35 @@ Class PlayerTails Extends PlayerObject
 						g.drawRect(((Self.footPointX Shr 6) + rect[0]) - camera.x..((Self.footPointY Shr 6) + PickValue(Self.isAntiGravity, (-rect[1]) - rect[3], rect[1])) - camera.y, rect[2], rect[3])
 					EndIf
 					
-					Self.attackRect.initCollision(rect[0] Shl 6, rect[1] Shl 6, rect[2] Shl 6, rect[3] Shl 6, Self.myAnimationID)
-					Self.attackRectVec.addElement(Self.attackRect)
+					Self.attackRect.initCollision((rect[0] Shl 6), (rect[1] Shl 6), (rect[2] Shl 6), (rect[3] Shl 6), Self.myAnimationID)
+					
+					Self.attackRectVec.Push(Self.attackRect)
 				Else
 					Self.attackRect.reset()
 				EndIf
 				
-				If (Self.myAnimationID = TAILS_ANI_VS_KNUCKLE) Then
+				If (Self.myAnimationID = TAILS_ANI_VS_KNUCKLE And Self.drawer.checkEnd()) Then
+					Self.animationID = TAILS_ANI_STAND ' 0
+				Else
 					If (Self.drawer.checkEnd()) Then
-						Self.animationID = 0
-						Return
-					EndIf
-				EndIf
-				
-				If (Self.drawer.checkEnd()) Then
-					If (LOOP_INDEX[Self.myAnimationID] >= 0) Then
-						If (Self.animationID = NO_ANIMATION) Then
-							Select (Self.myAnimationID)
-								Case TAILS_ANI_ATTACK
-									Self.animationID = 0
-									Self.isAttacking = False
-									break
-							End Select
+						If (LOOP_INDEX[Self.myAnimationID] >= 0) Then
+							If (Self.animationID = NO_ANIMATION) Then
+								Select (Self.myAnimationID)
+									Case TAILS_ANI_ATTACK
+										Self.animationID = TAILS_ANI_STAND ' 0
+										Self.isAttacking = False
+								End Select
+							EndIf
+							
+							Self.myAnimationID = LOOP_INDEX[Self.myAnimationID]
 						EndIf
-						
-						Self.myAnimationID = LOOP_INDEX[Self.myAnimationID]
 					EndIf
 				EndIf
 			EndIf
-			
 		End
 		
-		Public Method getGravity:Int()
-			
+		Method getGravity:Int()
+			' This may be useful later:
 			If (Self.flyCount = 0) Then
 				Return Super.getGravity()
 			EndIf
@@ -358,10 +354,65 @@ Class PlayerTails Extends PlayerObject
 			Return 0
 		End
 		
-		Public Method getGravity2:Int()
+		Method getGravity2:Int()
 			Return Super.getGravity()
 		End
 		
+		Method resetFlyCount:Void()
+			Self.flyCount = 0
+		End
+		
+		Method flyState:Bool()
+			Return (Self.flyCount > 0)
+		End
+		
+		Method stopFly:Void()
+			soundInstance.stopLoopSe()
+			
+			Self.flyCount = 0
+		End
+		
+		Method doPoalMotion:Bool(x:Int, y:Int, isLeft:Bool)
+			If (Self.myAnimationID = TAILS_ANI_FLY_1 Or Self.myAnimationID = TAILS_ANI_FLY_2 Or Self.myAnimationID = TAILS_ANI_FLY_3) Then
+				Return False
+			EndIf
+			
+			Return Super.doPoalMotion(x, y, isLeft)
+		End
+		
+		Method needRetPower:Bool()
+			If (Self.myAnimationID = TAILS_ANI_ATTACK) Then
+				Return True
+			EndIf
+			
+			Return Super.needRetPower()
+		End
+		
+		Method getRetPower:Int()
+			If (Self.myAnimationID = TAILS_ANI_ATTACK) Then
+				Return (MOVE_POWER_REVERSE / 2) ' Shr 1
+			EndIf
+			
+			Return Super.getRetPower()
+		End
+		
+		Method noRotateDraw:Bool()
+			If (Self.myAnimationID = TAILS_ANI_ATTACK) Then
+				Return True
+			EndIf
+			
+			Return Super.noRotateDraw()
+		End
+		
+		Method canDoJump:Bool()
+			If (Self.myAnimationID = TAILS_ANI_ATTACK) Then
+				Return False
+			EndIf
+			
+			Return Super.canDoJump()
+		End
+	Protected
+		' Methods:
 		Protected Method extraLogicJump:Void()
 			Int i
 			
@@ -480,15 +531,6 @@ Class PlayerTails Extends PlayerObject
 					Self.velY = i2 + (i * TAILS_ANI_CELEBRATE_4)
 				EndIf
 			EndIf
-			
-		End
-		
-		Public Method resetFlyCount:Void()
-			Self.flyCount = 0
-		End
-		
-		Public Method flyState:Bool()
-			Return Self.flyCount > 0
 		End
 		
 		Protected Method extraLogicWalk:Void()
@@ -511,12 +553,8 @@ Class PlayerTails Extends PlayerObject
 		Protected Method extraLogicOnObject:Void()
 			extraLogicWalk()
 		End
-		
-		Public Method stopFly:Void()
-			soundInstance.stopLoopSe()
-			Self.flyCount = 0
-		End
-		
+	Private
+		' Methods:
 		Private Method drawTail:Void(g:MFGraphics)
 			Bool mirror
 			Int tailID = NO_ANIMATION
@@ -569,50 +607,5 @@ Class PlayerTails Extends PlayerObject
 			EndIf
 			
 			Self.faceDirection = preFaceDirection
-		End
-		
-		Public Method doPoalMotion:Bool(x:Int, y:Int, isLeft:Bool)
-			
-			If (Self.myAnimationID = TAILS_ANI_FLY_1 Or Self.myAnimationID = TAILS_ANI_FLY_2 Or Self.myAnimationID = TAILS_ANI_FLY_3) Then
-				Return False
-			EndIf
-			
-			Return Super.doPoalMotion(x, y, isLeft)
-		End
-		
-		Public Method needRetPower:Bool()
-			
-			If (Self.myAnimationID = TAILS_ANI_ATTACK) Then
-				Return True
-			EndIf
-			
-			Return Super.needRetPower()
-		End
-		
-		Public Method getRetPower:Int()
-			
-			If (Self.myAnimationID = TAILS_ANI_ATTACK) Then
-				Return MOVE_POWER_REVERSE Shr 1
-			EndIf
-			
-			Return Super.getRetPower()
-		End
-		
-		Public Method noRotateDraw:Bool()
-			
-			If (Self.myAnimationID = TAILS_ANI_ATTACK) Then
-				Return True
-			EndIf
-			
-			Return Super.noRotateDraw()
-		End
-		
-		Public Method canDoJump:Bool()
-			
-			If (Self.myAnimationID = TAILS_ANI_ATTACK) Then
-				Return False
-			EndIf
-			
-			Return Super.canDoJump()
 		End
 End
