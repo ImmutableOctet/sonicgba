@@ -164,8 +164,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphicsmacros.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>12</X>
-        <Y>13</Y>
+        <X>23</X>
+        <Y>7</Y>
       </CursorPos>
       <DocGUID>d5022053-a53b-4c58-a126-649c9c77345e</DocGUID>
       <Bookmarks />
@@ -861,8 +861,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>31</X>
-        <Y>214</Y>
+        <X>10</X>
+        <Y>154</Y>
       </CursorPos>
       <DocGUID>a0823fff-eb3c-4709-948d-d8a5cc1e50f2</DocGUID>
       <Bookmarks />
@@ -1045,8 +1045,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>16</X>
-        <Y>359</Y>
+        <X>9</X>
+        <Y>338</Y>
       </CursorPos>
       <DocGUID>8ca28cc4-9b9f-4399-b062-6e0c07549a03</DocGUID>
       <Bookmarks />
@@ -1187,7 +1187,7 @@
     <DocUserOptions Filename=".\src\sonicgba\ship.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>2</X>
-        <Y>28</Y>
+        <Y>21</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -1235,8 +1235,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>13</X>
-        <Y>18</Y>
+        <X>20</X>
+        <Y>21</Y>
       </CursorPos>
       <DocGUID>aec3205d-fe1c-48b4-87e5-d9831ca17dfa</DocGUID>
       <Bookmarks />
@@ -1317,6 +1317,14 @@
         <Y>57</Y>
       </CursorPos>
       <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\togeshima.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>15</X>
+        <Y>19</Y>
+      </CursorPos>
+      <DocGUID>9c11b4c2-eb91-47b5-8b3c-7ed1f76feec3</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\touchfire.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
