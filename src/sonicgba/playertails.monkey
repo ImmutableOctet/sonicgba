@@ -9,7 +9,7 @@ Private
 	Import lib.animation
 	Import lib.animationdrawer
 	Import lib.coordinate
-	'Import lib.soundsystem
+	Import lib.soundsystem
 	Import lib.constutil
 	
 	Import sonicgba.mapmanager
@@ -113,7 +113,7 @@ Class PlayerTails Extends PlayerObject
 		Const TAILS_ANI_WIND:Int = 43
 		
 		' Global variable(s):
-		Global isInWind:Bool = False
+		Global isInWind:Bool = False ' Field
 		
 		' Fields:
 		Field flyCount:Int
@@ -207,7 +207,7 @@ Class PlayerTails Extends PlayerObject
 						Local drawX:= getNewPointX(bodyCenterX, 0, 512, 0)
 						Local drawY:= getNewPointY(bodyCenterY, 0, 512, 0)
 						
-						If (Self.collisionState = Null) Then
+						If (Self.collisionState = COLLISION_STATE_WALK) Then
 							If (Self.isAntiGravity) Then
 								' Magic number: 1024
 								If (Self.faceDirection) Then
@@ -413,45 +413,28 @@ Class PlayerTails Extends PlayerObject
 		End
 	Protected
 		' Methods:
-		Protected Method extraLogicJump:Void()
-			Int i
-			
+		Method extraLogicJump:Void()
 			If (Self.myAnimationID = TAILS_ANI_FLY_2 Or Self.myAnimationID = TAILS_ANI_FLY_3) Then
 				Self.velY += PickValue(Self.isAntiGravity, -FLY_GRAVITY, FLY_GRAVITY)
 				
-				Int i2 = Self.velY
-				
-				If (Self.isAntiGravity) Then
-					i = NO_ANIMATION
-				Else
-					i = 1
-				EndIf
-				
-				Self.velY = i2 - (i * getGravity())
+				Self.velY -= (DSgn(Not Self.isAntiGravity) * getGravity())
 			EndIf
 			
 			If (Self.myAnimationID = TAILS_ANI_FLY_1 Or Self.myAnimationID = TAILS_ANI_SWIM_1 Or Self.myAnimationID = TAILS_ANI_SWIM_2) Then
 				Self.flyCount -= 1
 				
 				If (Self.flyUpCoolCount = 1) Then
-					If (Key.press(Key.B_HIGH_JUMP) And (((Not Self.isAntiGravity And Self.velY >= MAX_FLY_VEL_Y) Or (Self.isAntiGravity And Self.velY <= 176)) And Self.flyCount > 0)) Then
+					If (Key.press(Key.B_HIGH_JUMP) And (((Not Self.isAntiGravity And Self.velY >= MAX_FLY_VEL_Y) Or (Self.isAntiGravity And Self.velY <= -MAX_FLY_VEL_Y)) And Self.flyCount > 0)) Then
 						Self.flyUpCoolCount = 2
 					EndIf
 					
 					Self.velY += PickValue(Self.isAntiGravity, -FLY_GRAVITY, FLY_GRAVITY)
-				ElseIf ((Self.isAntiGravity Or Self.velY < MAX_FLY_VEL_Y) And (Not Self.isAntiGravity Or Self.velY > 176)) Then
+				ElseIf ((Self.isAntiGravity Or Self.velY < MAX_FLY_VEL_Y) And (Not Self.isAntiGravity Or Self.velY > -MAX_FLY_VEL_Y)) Then
 					Self.flyUpCoolCount = 1
 				Else
 					If (Self.myAnimationID = TAILS_ANI_SWIM_1 Or Self.myAnimationID = TAILS_ANI_SWIM_2) Then
-						i2 = Self.velY
-						
-						If (Self.isAntiGravity) Then
-							i = NO_ANIMATION
-						Else
-							i = 1
-						EndIf
-						
-						Self.velY = i2 + (i * -450)
+						' Magic number: -450
+						Self.velY += (DSgn(Not Self.isAntiGravity) * -450)
 					Else
 						Self.velY += PickValue(Self.isAntiGravity, -FLY_POWER, FLY_POWER)
 					EndIf
@@ -463,15 +446,7 @@ Class PlayerTails Extends PlayerObject
 					EndIf
 				EndIf
 				
-				i2 = Self.velY
-				
-				If (Self.isAntiGravity) Then
-					i = NO_ANIMATION
-				Else
-					i = 1
-				EndIf
-				
-				Self.velY = i2 - (i * getGravity())
+				Self.velY -= (DSgn(Not Self.isAntiGravity) * getGravity()) ' += (DSgn(Self.isAntiGravity) * getGravity())
 				
 				If (Self.isInWater And Self.myAnimationID = TAILS_ANI_FLY_1) Then
 					Self.myAnimationID = TAILS_ANI_SWIM_1
@@ -481,14 +456,14 @@ Class PlayerTails Extends PlayerObject
 				
 				If (Self.flyCount = 0) Then
 					Self.myAnimationID = TAILS_ANI_FLY_2
+					
 					soundInstance.stopLoopSe()
 				ElseIf (Not Self.isInWater And Not isInWind And Not Self.isCrashFallingSand And Not IsGamePause) Then
-					soundInstance.playLoopSe(TAILS_ANI_HURT_1)
+					soundInstance.playLoopSe(SoundSystem.SE_120)
 				EndIf
-				
 			ElseIf (Self.animationID <> TAILS_ANI_SPIN) Then
+				' Nothing so far.
 			Else
-				
 				If ((Self.doJumpForwardly Or Self.isCrashFallingSand) And Key.press(Key.B_HIGH_JUMP)) Then
 					Self.animationID = NO_ANIMATION
 					Self.myAnimationID = TAILS_ANI_FLY_1
@@ -496,70 +471,52 @@ Class PlayerTails Extends PlayerObject
 					If (Self.isInWater) Then
 						Self.myAnimationID = TAILS_ANI_SWIM_1
 					Else
-						soundInstance.playLoopSe(TAILS_ANI_HURT_1)
+						soundInstance.playLoopSe(SoundSystem.SE_120)
 					EndIf
 					
 					Self.flyCount = FLY_TIME
+					
 					Self.flyUpCoolCount = 1
-					i2 = Self.velY
 					
-					If (Self.isAntiGravity) Then
-						i = NO_ANIMATION
-					Else
-						i = 1
-					EndIf
+					Self.velY += (DSgn(Not Self.isAntiGravity) * getGravity2())
+					Self.velY = ((Self.velY * TAILS_ANI_FLY_2) / TAILS_ANI_HURT_2) ' 13 ' 16
 					
-					Self.velY = i2 + (i * getGravity2())
-					Self.velY = (Self.velY * TAILS_ANI_FLY_2) / TAILS_ANI_HURT_2
-					i2 = Self.velY
-					
-					If (Self.isAntiGravity) Then
-						i = NO_ANIMATION
-					Else
-						i = 1
-					EndIf
-					
-					Self.velY = i2 - (i * getGravity())
-					i2 = Self.velY
-					
-					If (Self.isAntiGravity) Then
-						i = NO_ANIMATION
-					Else
-						i = 1
-					EndIf
-					
-					Self.velY = i2 + (i * TAILS_ANI_CELEBRATE_4)
+					Self.velY -= (DSgn(Not Self.isAntiGravity) * getGravity())
+					Self.velY += (DSgn(Not Self.isAntiGravity) * FLY_GRAVITY)
 				EndIf
 			EndIf
 		End
 		
-		Protected Method extraLogicWalk:Void()
-			
+		Method extraLogicWalk:Void()
 			If (Self.flyCount > 0) Then
 				soundInstance.stopLoopSe()
+				
 				Self.flyCount = 0
 			EndIf
 			
-			If (Key.press(Key.gSelect) And Self.myAnimationID <> TAILS_ANI_ATTACK And Self.myAnimationID <> TAILS_ANI_PUSH_WALL And Self.collisionState <> (Byte) 1 And Self.animationID <> TAILS_ANI_SPIN) Then
+			If (Key.press(Key.gSelect) And Self.myAnimationID <> TAILS_ANI_ATTACK And Self.myAnimationID <> TAILS_ANI_PUSH_WALL And Self.collisionState <> COLLISION_STATE_JUMP And Self.animationID <> TAILS_ANI_SPIN) Then
 				Self.animationID = NO_ANIMATION
 				Self.myAnimationID = TAILS_ANI_ATTACK
+				
 				Self.drawer.restart()
-				soundInstance.playSe(TAILS_ANI_HURT_2)
+				
+				soundInstance.playSe(SoundSystem.SE_121)
+				
 				Self.isAttacking = True
 			EndIf
-			
 		End
 		
-		Protected Method extraLogicOnObject:Void()
+		Method extraLogicOnObject:Void()
 			extraLogicWalk()
 		End
 	Private
 		' Methods:
-		Private Method drawTail:Void(g:MFGraphics)
-			Bool mirror
-			Int tailID = NO_ANIMATION
-			Int bodyCenterX = getNewPointX(Self.footPointX, 0, -512, Self.faceDegree)
-			Int bodyCenterY = getNewPointY(Self.footPointY, 0, -512, Self.faceDegree)
+		Method drawTail:Void(g:MFGraphics)
+			Local tailID:= NO_ANIMATION ' -1
+			
+			' Magic number: -512
+			Local bodyCenterX:= getNewPointX(Self.footPointX, 0, -512, Self.faceDegree)
+			Local bodyCenterY:= getNewPointY(Self.footPointY, 0, -512, Self.faceDegree)
 			
 			If (Self.myAnimationID = TAILS_ANI_JUMP_BODY) Then
 				tailID = TAILS_ANI_JUMP_TAIL
@@ -567,42 +524,40 @@ Class PlayerTails Extends PlayerObject
 				tailID = TAILS_ANI_RAIL_TAIL
 			EndIf
 			
-			Int tailDegree = Self.faceDegree
-			Int trans = getTrans(tailDegree)
+			Local tailDegree:= Self.faceDegree
+			Local trans:= getTrans(tailDegree)
 			
-			If (Self.faceDirection) Then
-				mirror = False
-			Else
-				mirror = True
-			EndIf
+			Local mirror:Bool = (Not Self.faceDirection)
 			
-			Bool preFaceDirection = Self.faceDirection
+			Local preFaceDirection:= Self.faceDirection
 			
 			If (Self.animationID = TAILS_ANI_SPIN) Then
-				If (Self.collisionState = Null) Then
+				If (Self.collisionState = COLLISION_STATE_WALK) Then
 					If (Not Self.faceDirection) Then
-						mirror = Self.totalVelocity <= 0
+						mirror = (Self.totalVelocity <= 0)
 					ElseIf (Self.totalVelocity < 0) Then
 						mirror = True
 					Else
 						mirror = False
 					EndIf
-					
 				ElseIf (Self.faceDirection) Then
-					mirror = Self.velX < 0
+					mirror = (Self.velX < 0)
 				Else
-					mirror = Self.velX <= 0
+					mirror = (Self.velX <= 0)
 				EndIf
 			EndIf
 			
-			If (Self.collisionState = (Byte) 1 Or Self.collisionState = TAILS_ANI_RUN Or ((Self.piping And Self.pipeState = (Byte) 1) Or Self.myAnimationID = TAILS_ANI_RAIL_BODY)) Then
+			If (Self.collisionState = COLLISION_STATE_JUMP Or Self.collisionState = COLLISION_STATE_IN_SAND Or ((Self.piping And Self.pipeState = STATE_PIPING) Or Self.myAnimationID = TAILS_ANI_RAIL_BODY)) Then
 				tailDegree = CrlFP32.actTanDegree(Self.velY, Self.velX)
+				
 				trans = TRANS[getTransId(tailDegree)]
+				
 				mirror = False
+				
 				Self.faceDirection = True
 			EndIf
 			
-			If (tailID <> NO_ANIMATION) Then
+			If (tailID <> NO_ANIMATION) Then ' -1
 				drawDrawerByDegree(g, Self.tailDrawer, tailID, (bodyCenterX Shr 6) - camera.x, (bodyCenterY Shr 6) - camera.y, True, tailDegree, mirror)
 			EndIf
 			
