@@ -36,10 +36,10 @@ Class PlayerKnuckles Extends PlayerObject
 		' Constant variable(s):
 		Global ANIMATION_CONVERT:Int[] = [0, 1, 2, 3, 4, 10, 5, 6, 23, 14, 18, -1, 25, 44, 15, -1, -1, 56, -1, -1, -1, 57, 41, 42, 43, 39, 40, 46, 47, 48, 25, 45, 49, 50, 51, 52, 53, 54, 7, 8, 7, 27, 16, 17, 25, 26, 9, 37, 38, 36, 61, 62, 60, 55] ' Const
 		
+		Const ATTACK_LEVEL_NONE:Int = 0
 		Const ATTACK_LEVEL_1:Int = 1
 		Const ATTACK_LEVEL_2:Int = 2
 		Const ATTACK_LEVEL_3:Int = 3
-		Const ATTACK_LEVEL_NONE:Int = 0
 		
 		Const DRIP_SPEED_Y_LIMIT:Int = 128
 		Const FALL_ADD_SPEED:Int = 337
