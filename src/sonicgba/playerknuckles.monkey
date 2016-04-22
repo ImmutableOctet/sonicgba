@@ -314,7 +314,7 @@ Class PlayerKnuckles Extends PlayerObject
 							Self.degreeForDraw = Self.degreeStable
 						EndIf
 						
-						If (Not (Self.myAnimationID = KNUCKLES_ANI_WALK_1 Or Self.myAnimationID = KNUCKLES_ANI_WALK_2 Or Self.myAnimationID = NORMAL_FRAME_INTERVAL Or Self.myAnimationID = KNUCKLES_ANI_CAUGHT)) Then
+						If (Not (Self.myAnimationID = KNUCKLES_ANI_WALK_1 Or Self.myAnimationID = KNUCKLES_ANI_WALK_2 Or Self.myAnimationID = 3 Or Self.myAnimationID = KNUCKLES_ANI_CAUGHT)) Then
 							Self.degreeForDraw = Self.degreeStable
 						EndIf
 						
@@ -430,60 +430,61 @@ Class PlayerKnuckles Extends PlayerObject
 			EndIf
 		End
 		
-		Public Method doWhileTouchWorld:Void(direction:Int, degree:Int)
+		Method doWhileTouchWorld:Void(direction:Int, degree:Int)
 			Super.doWhileTouchWorld(direction, degree)
 			
 			If (Not Self.flying) Then
 				Return
 			EndIf
 			
-			If (degree <> FLY_DOWN_SPEED And degree <> 270) Then
+			If (degree <> 90 And degree <> 270) Then ' FLY_DOWN_SPEED
 				Return
 			EndIf
 			
-			If ((direction = 1 And Self.faceDirection) Or (direction = DIRECTION_RIGHT And Not Self.faceDirection)) Then
+			If ((direction = DIRECTION_DOWN And Self.faceDirection) Or (direction = DIRECTION_RIGHT And Not Self.faceDirection)) Then
 				Self.collisionState = COLLISION_STATE_CLIMB
+				
 				Self.flying = False
+				
 				Self.animationID = NO_ANIMATION
 				Self.myAnimationID = KNUCKLES_ANI_CLIMB_1
+				
 				Self.worldCal.stopMove()
-				Int i = Self.posY + WALL_CLIMB_SPEED_W
-				Self.footPointY = i
-				Self.posX = i
+				
+				Local pos:= (Self.posY + WALL_CLIMB_SPEED_W)
+				
+				Self.footPointY = pos
+				Self.posX = pos
 			EndIf
-			
 		End
 		
-		Public Method doWhileLand:Void(degree:Int)
+		Method doWhileLand:Void(degree:Int)
 			Super.doWhileLand(degree)
 			
 			If (Self.flying And Self.hurtCount = 0) Then
 				Self.animationID = NO_ANIMATION
 				Self.myAnimationID = KNUCKLES_ANI_FLY_4
 			EndIf
-			
 		End
 		
-		Public Method needRetPower:Bool()
-			
-			If ((Self.attackLevel = 0 Or Self.attackLevel = NORMAL_FRAME_INTERVAL) And Self.myAnimationID <> KNUCKLES_ANI_FLY_4) Then
+		Method needRetPower:Bool()
+			If ((Self.attackLevel = 0 Or Self.attackLevel = 3) And Self.myAnimationID <> KNUCKLES_ANI_FLY_4) Then
 				Return Super.needRetPower()
 			EndIf
 			
 			Return True
 		End
 		
-		Public Method getRetPower:Int()
-			
-			If (Self.attackLevel = 0 Or Self.attackLevel = NORMAL_FRAME_INTERVAL) Then
+		Method getRetPower:Int()
+			If (Self.attackLevel = 0 Or Self.attackLevel = 3) Then
 				Return Super.getRetPower()
 			EndIf
 			
+			' Magic number: 288
 			Return 288
 		End
 		
-		Public Method noRotateDraw:Bool()
-			
+		Method noRotateDraw:Bool()
 			If (Self.myAnimationID = KNUCKLES_ANI_ATTACK_1 Or Self.myAnimationID = KNUCKLES_ANI_ATTACK_2 Or Self.myAnimationID = KNUCKLES_ANI_ATTACK_3) Then
 				Return True
 			EndIf
@@ -491,8 +492,7 @@ Class PlayerKnuckles Extends PlayerObject
 			Return Super.noRotateDraw()
 		End
 		
-		Public Method getSlopeGravity:Int()
-			
+		Method getSlopeGravity:Int()
 			If (Self.myAnimationID = KNUCKLES_ANI_FLY_4) Then
 				Return 0
 			EndIf
@@ -500,8 +500,7 @@ Class PlayerKnuckles Extends PlayerObject
 			Return Super.getSlopeGravity()
 		End
 		
-		Public Method canDoJump:Bool()
-			
+		Method canDoJump:Bool()
 			If (Self.myAnimationID = KNUCKLES_ANI_ATTACK_1 Or Self.myAnimationID = KNUCKLES_ANI_ATTACK_2) Then
 				Return False
 			EndIf
@@ -509,8 +508,7 @@ Class PlayerKnuckles Extends PlayerObject
 			Return Super.canDoJump()
 		End
 		
-		Public Method doHurt:Void()
-			
+		Method doHurt:Void()
 			If (Self.Floating) Then
 				Self.Floating = False
 			EndIf
@@ -518,14 +516,15 @@ Class PlayerKnuckles Extends PlayerObject
 			Super.doHurt()
 		End
 		
-		Public Method doJump:Void()
+		Method doJump:Void()
 			Self.attackLevel = 0
 			Self.attackLevelNext = 0
 			Self.attackCount = 0
+			
 			Super.doJump()
 		End
 		
-		Public Method refreshCollisionRectWrap:Void()
+		Method refreshCollisionRectWrap:Void()
 			Super.refreshCollisionRectWrap()
 			
 			If (Self.animationID <> NO_ANIMATION) Then
@@ -536,56 +535,52 @@ Class PlayerKnuckles Extends PlayerObject
 				Self.checkPositionX = getNewPointX(Self.footPointX, 0, ((-WIDTH) / 2), 0) ' Shr 1
 				Self.checkPositionY = getNewPointY(Self.footPointY, 0, PickValue(Self.isAntiGravity, (WIDTH / 2), ((-WIDTH) / 2)), 0) ' Shr 1
 				
-				Int i = 1280 Shr 1
-				i = WIDTH Shr 1
-				
-				Self.collisionRect.setTwoPosition(Self.checkPositionX - (1280 Shr 1), Self.checkPositionY - (WIDTH Shr 1), Self.checkPositionX + MDPhone.SCREEN_HEIGHT, Self.checkPositionY + 512)
+				' Magic numbers: 1280, 1024, 640, 512
+				Self.collisionRect.setTwoPosition(Self.checkPositionX - (1280 / 2), Self.checkPositionY - (1024 / 2), Self.checkPositionX + (1280 / 2), Self.checkPositionY + (1024 / 2)) ' MAX_VELOCITY ' WIDTH
 			EndIf
-			
 		End
 		
-		Public Method getCollisionRectWidth:Int()
-			
+		Method getCollisionRectWidth:Int()
 			If (Self.animationID = NO_ANIMATION And (Self.myAnimationID = KNUCKLES_ANI_FLY_1 Or Self.myAnimationID = KNUCKLES_ANI_FLY_2 Or Self.myAnimationID = KNUCKLES_ANI_FLY_3 Or Self.myAnimationID = KNUCKLES_ANI_SWIM_1)) Then
+				' Magic number: 1280
 				Return 1280
 			EndIf
 			
 			Return Super.getCollisionRectWidth()
 		End
 		
-		Public Method getCollisionRectHeight:Int()
-			
+		Method getCollisionRectHeight:Int()
 			If (Self.animationID = NO_ANIMATION And (Self.myAnimationID = KNUCKLES_ANI_FLY_1 Or Self.myAnimationID = KNUCKLES_ANI_FLY_2 Or Self.myAnimationID = KNUCKLES_ANI_FLY_3 Or Self.myAnimationID = KNUCKLES_ANI_SWIM_1)) Then
-				Return WIDTH
+				' Magic number: 1024
+				Return 1024 ' WIDTH
 			EndIf
 			
 			If (Self.collisionState <> KNUCKLES_ATTACK_2_COUNT Or Self.myAnimationID = KNUCKLES_ANI_CLIMB_5) Then
 				Return Super.getCollisionRectHeight()
 			EndIf
 			
+			' Magic number: 1280
 			Return 1280
 		End
 		
-		Public Method beStop:Void(newPosition:Int, direction:Int, object:GameObject)
+		Method beStop:Void(newPosition:Int, direction:Int, object:GameObject)
 			Super.beStop(newPosition, direction, object)
 			
 			If (Self.isAntiGravity) Then
-				If (direction = 1) Then
-					direction = 0
-				ElseIf (direction = 0) Then
-					direction = 1
+				If (direction = DIRECTION_DOWN) Then
+					direction = DIRECTION_UP
+				ElseIf (direction = DIRECTION_UP) Then
+					direction = DIRECTION_DOWN
 				EndIf
 			EndIf
 			
-			If (direction = 1 And Self.flying And Self.hurtCount = 0) Then
+			If (direction = DIRECTION_DOWN And Self.flying And Self.hurtCount = 0) Then
 				Self.animationID = NO_ANIMATION
 				Self.myAnimationID = KNUCKLES_ANI_FLY_4
 			EndIf
-			
 		End
 		
-		Public Method beAccelerate:Bool(power:Int, IsX:Bool, sender:GameObject)
-			
+		Method beAccelerate:Bool(power:Int, IsX:Bool, sender:GameObject)
 			If (Self.myAnimationID = KNUCKLES_ANI_FLY_4) Then
 				Return False
 			EndIf
@@ -593,12 +588,11 @@ Class PlayerKnuckles Extends PlayerObject
 			Return Super.beAccelerate(power, IsX, sender)
 		End
 		
-		Public Method setPreWaterFlag:Void(state:Bool)
+		Method setPreWaterFlag:Void(state:Bool)
 			Self.preWaterFlag = state
 		End
 		
-		Public Method Floatchk:Void()
-			
+		Method Floatchk:Void()
 			If (Not (Self.preWaterFlag Or Not Self.isInWater Or Self.flying)) Then
 				Self.Floating = True
 			EndIf
@@ -606,7 +600,7 @@ Class PlayerKnuckles Extends PlayerObject
 			Self.preWaterFlag = Self.isInWater
 		End
 		
-		Public Method setFloating:Void(f:Bool)
+		Method setFloating:Void(f:Bool)
 			Self.Floating = f
 		End
 	Private
@@ -642,7 +636,7 @@ Class PlayerKnuckles Extends PlayerObject
 						
 					Else
 						Self.waterframe += 1
-						Self.waterframe Mod= NORMAL_FRAME_INTERVAL
+						Self.waterframe Mod= 3
 						
 						If (Self.waterframe = 1) Then
 							soundSystem = soundInstance
@@ -668,7 +662,7 @@ Class PlayerKnuckles Extends PlayerObject
 						
 					Else
 						Self.waterframe += 1
-						Self.waterframe Mod= NORMAL_FRAME_INTERVAL
+						Self.waterframe Mod= 3
 						
 						If (Self.waterframe = 1) Then
 							soundSystem = soundInstance
@@ -872,7 +866,7 @@ Class PlayerKnuckles Extends PlayerObject
 				Self.animationID = KNUCKLES_ANI_SQUAT_2
 			ElseIf (Key.press(Key.B_HIGH_JUMP)) Then
 				doJump()
-				Self.velY = (Self.velY * NORMAL_FRAME_INTERVAL) / KNUCKLES_ANI_SPIN_1
+				Self.velY = (Self.velY * 3) / KNUCKLES_ANI_SPIN_1
 				Self.Floating = False
 			Else
 				Int bodyCenterY = getNewPointY(Self.posY, 0, (-Self.collisionRect.getHeight()) Shr 1, Self.faceDegree)
@@ -953,7 +947,7 @@ Class PlayerKnuckles Extends PlayerObject
 			Select (Self.attackLevel)
 				Case 0
 					
-					If ((Self.animationID = KNUCKLES_ANI_STAND Or Self.animationID = KNUCKLES_ANI_WALK_1 Or Self.animationID = KNUCKLES_ANI_WALK_2 Or Self.animationID = NORMAL_FRAME_INTERVAL Or Self.animationID = KNUCKLES_ANI_BAR_MOVE Or Self.animationID = KNUCKLES_ANI_WIND Or Self.animationID = KNUCKLES_ANI_SPIN_1) And Key.press(Key.gSelect) And Self.myAnimationID <> KNUCKLES_ANI_PUSH_WALL) Then
+					If ((Self.animationID = KNUCKLES_ANI_STAND Or Self.animationID = KNUCKLES_ANI_WALK_1 Or Self.animationID = KNUCKLES_ANI_WALK_2 Or Self.animationID = 3 Or Self.animationID = KNUCKLES_ANI_BAR_MOVE Or Self.animationID = KNUCKLES_ANI_WIND Or Self.animationID = KNUCKLES_ANI_SPIN_1) And Key.press(Key.gSelect) And Self.myAnimationID <> KNUCKLES_ANI_PUSH_WALL) Then
 						Self.attackLevel = 1
 						Self.animationID = NO_ANIMATION
 						Self.myAnimationID = KNUCKLES_ANI_ATTACK_1
@@ -1026,7 +1020,7 @@ Class PlayerKnuckles Extends PlayerObject
 					
 					If (Self.attackCount <> 0) Then
 						If (Key.press(Key.gSelect)) Then
-							Self.attackLevelNext = NORMAL_FRAME_INTERVAL
+							Self.attackLevelNext = 3
 							break
 						EndIf
 					EndIf
@@ -1036,7 +1030,7 @@ Class PlayerKnuckles Extends PlayerObject
 						Case 0
 							Self.animationID = KNUCKLES_ANI_STAND
 							break
-						Case NORMAL_FRAME_INTERVAL
+						Case 3
 							Self.animationID = NO_ANIMATION
 							Self.myAnimationID = KNUCKLES_ANI_ATTACK_3
 							Self.worldCal.actionState = 1
@@ -1075,7 +1069,7 @@ Class PlayerKnuckles Extends PlayerObject
 					Self.attackLevelNext = 0
 					break
 					break
-				Case NORMAL_FRAME_INTERVAL
+				Case 3
 					
 					If (Self.animationID <> NO_ANIMATION) Then
 						Self.attackLevel = 0
@@ -1133,7 +1127,7 @@ Class PlayerKnuckles Extends PlayerObject
 			Select (Self.attackLevel)
 				Case 0
 					
-					If ((Self.animationID = KNUCKLES_ANI_STAND Or Self.animationID = KNUCKLES_ANI_WALK_1 Or Self.animationID = KNUCKLES_ANI_WALK_2 Or Self.animationID = NORMAL_FRAME_INTERVAL Or Self.animationID = KNUCKLES_ANI_BAR_MOVE Or Self.animationID = KNUCKLES_ANI_WIND Or Self.animationID = KNUCKLES_ANI_SPIN_1) And Key.press(Key.gSelect) And Self.myAnimationID <> KNUCKLES_ANI_PUSH_WALL) Then
+					If ((Self.animationID = KNUCKLES_ANI_STAND Or Self.animationID = KNUCKLES_ANI_WALK_1 Or Self.animationID = KNUCKLES_ANI_WALK_2 Or Self.animationID = 3 Or Self.animationID = KNUCKLES_ANI_BAR_MOVE Or Self.animationID = KNUCKLES_ANI_WIND Or Self.animationID = KNUCKLES_ANI_SPIN_1) And Key.press(Key.gSelect) And Self.myAnimationID <> KNUCKLES_ANI_PUSH_WALL) Then
 						Self.attackLevel = 1
 						Self.animationID = NO_ANIMATION
 						Self.myAnimationID = KNUCKLES_ANI_ATTACK_1
@@ -1206,7 +1200,7 @@ Class PlayerKnuckles Extends PlayerObject
 					
 					If (Self.attackCount <> 0) Then
 						If (Key.press(Key.gSelect)) Then
-							Self.attackLevelNext = NORMAL_FRAME_INTERVAL
+							Self.attackLevelNext = 3
 							break
 						EndIf
 					EndIf
@@ -1216,7 +1210,7 @@ Class PlayerKnuckles Extends PlayerObject
 						Case 0
 							Self.animationID = KNUCKLES_ANI_STAND
 							break
-						Case NORMAL_FRAME_INTERVAL
+						Case 3
 							Int i2
 							Self.animationID = NO_ANIMATION
 							Self.myAnimationID = KNUCKLES_ANI_ATTACK_3
@@ -1258,7 +1252,7 @@ Class PlayerKnuckles Extends PlayerObject
 					Self.attackLevelNext = 0
 					break
 					break
-				Case NORMAL_FRAME_INTERVAL
+				Case 3
 					
 					If (Self.animationID <> NO_ANIMATION) Then
 						Self.attackLevel = 0
