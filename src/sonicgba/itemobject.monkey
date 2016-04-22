@@ -6,6 +6,7 @@ Public
 Private
 	Import lib.myapi
 	Import lib.soundsystem
+	Import lib.constutil
 	
 	Import sonicgba.effect
 	Import sonicgba.gameobject
@@ -73,30 +74,29 @@ Class ItemObject Extends GameObject
 		' Constructor(s):
 		Method New(id:Int, x:Int, y:Int)
 			Self.poping = False
+			
 			Self.objId = id
+			
 			Self.mWidth = COLLISION_WIDTH
 			Self.mHeight = COLLISION_HEIGHT
+			
 			Self.posX = x
 			Self.posYoffset = 0
-			Int i = y + 256
-			Self.posY = i
-			Self.originalY = i
+			
+			' Magic number: 256
+			Local pos:= (y + 256)
+			
+			Self.posY = pos
+			Self.originalY = pos
 			
 			If (itemBoxImage = Null) Then
-				try {
-					itemBoxImage = MFImage.createImage("/item/item_box.png")
-				} catch (Exception e) {
-					e.printStackTrace()
-				}
+				itemBoxImage = MFImage.createImage("/item/item_box.png")
 			EndIf
 			
 			If (itemContentImage = Null) Then
-				try {
-					itemContentImage = MFImage.createImage("/item/item_content.png")
-				} catch (Exception e2) {
-					e2.printStackTrace()
-				}
-				gridWidth = MyAPI.zoomIn(itemContentImage.getWidth(), True) Shr 3
+				itemContentImage = MFImage.createImage("/item/item_content.png")
+				
+				gridWidth = (MyAPI.zoomIn(itemContentImage.getWidth(), True) Shr 3) ' / 8
 			EndIf
 			
 			If (itemHeadImage = Null) Then
@@ -114,54 +114,44 @@ Class ItemObject Extends GameObject
 				
 				Effect.showEffect(destroyEffectAnimation, 0, Self.posX Shr 6, (Self.posY - (Self.mHeight Shr 1)) Shr 6, 0)
 				
-				If ((player instanceof PlayerTails) And player.myAnimationID = 12 And direction = 1) Then
-					player.velY = -600
+				If ((player.getCharacterID() = CHARACTER_TAILS) And player.myAnimationID = PlayerTails.TAILS_ANI_FLY_1 And direction = DIRECTION_DOWN) Then
+					player.velY = -600 ' -DO_POAL_MOTION_SPEED
 				EndIf
 			EndIf
 		End
 		
-		Public Method doWhileCollision:Void(object:PlayerObject, direction:Int)
-			
-			If (Not Self.used And Not object.piping) Then
-				If (direction <> 4) Then
+		Method doWhileCollision:Void(p:PlayerObject, direction:Int)
+			If (Not Self.used And Not p.piping) Then
+				If (direction <> DIRECTION_NONE) Then
 					Select (direction)
-						Case 0
-							
-							If (player.isAntiGravity) Then
-								If (object = player And object.isAttackingItem() And Self.firstTouch And player.isAntiGravity And (Not (player instanceof PlayerKnuckles) Or player.animationID = 4)) Then
-									doFunction(object, direction)
-									break
-								EndIf
+						Case DIRECTION_UP
+							If (player.isAntiGravity And p = player And p.isAttackingItem() And Self.firstTouch And player.isAntiGravity And (Not (player.getCharacterID() = CHARACTER_KNUCKLES) Or player.animationID = PlayerObject.ANI_JUMP)) Then
+								doFunction(p, direction)
+							Else
+								Self.poping = True
+								
+								Self.velY = -(PlayerObject.HINER_JUMP_LIMIT / 2) ' -512
+								
+								Self.mapObj.setPosition(Self.posX, player.getCollisionRect().y0, 0, Self.velY, Self)
+							EndIf
+						Case DIRECTION_DOWN
+							If (p = player And p.isAttackingItem() And Self.firstTouch And Not player.isAntiGravity) Then
+								doFunction(p, direction)
 							EndIf
 							
-							Self.poping = True
-							Self.velY = -512
-							Self.mapObj.setPosition(Self.posX, player.getCollisionRect().y0, 0, Self.velY, Self)
-							break
-						Case 1
-							
-							If (object = player And object.isAttackingItem() And Self.firstTouch And Not player.isAntiGravity) Then
-								doFunction(object, direction)
-							EndIf
-							
-							If (object = player And Not player.isAntiGravity) Then
+							If (p = player And Not player.isAntiGravity) Then
 								Self.isActive = True
+								
 								player.IsStandOnItems = True
-								break
 							EndIf
-							
-						Case 2
-						Case SpecialObject.Z_ZOOM
-							
-							If (object = player And object.isAttackingItem() And object.getVelX() <> 0) Then
-								doFunction(object, direction)
-								break
+						Case DIRECTION_LEFT, DIRECTION_RIGHT
+							If (p = player And p.isAttackingItem() And p.getVelX() <> 0) Then
+								doFunction(p, direction)
 							EndIf
-							
 					End Select
 					
-					If (Not (Self.used Or ((player instanceof PlayerKnuckles) And direction = 0 And Not player.isAntiGravity))) Then
-						object.beStop(0, direction, Self)
+					If (Not (Self.used Or ((player.getCharacterID() = CHARACTER_KNUCKLES) And direction = DIRECTION_UP And Not player.isAntiGravity))) Then
+						p.beStop(0, direction, Self)
 					EndIf
 				EndIf
 				
@@ -169,81 +159,59 @@ Class ItemObject Extends GameObject
 					Effect.showEffect(destroyEffectAnimation, 0, Self.posX Shr 6, (Self.posY - (Self.mHeight Shr 1)) Shr 6, 0)
 				EndIf
 			EndIf
-			
 		End
 		
-		Public Method doWhileNoCollision:Void()
-			
+		Method doWhileNoCollision:Void()
 			If (Self.isActive) Then
 				player.IsStandOnItems = False
+				
 				Self.isActive = False
 			EndIf
-			
 		End
 		
-		Public Method draw:Void(g:MFGraphics)
-			
+		Method draw:Void(g:MFGraphics)
 			If (Not Self.used Or Self.moveCount >= 0) Then
 				If (Self.objId <> 0) Then
-					drawInMap(g, itemContentImage, Self.objId * gridWidth, 0, gridWidth, gridWidth, 0, Self.posX, (Self.posY - 896) + (Self.poping ? Self.posYoffset : 0), 3)
-				ElseIf (PlayerObject.getCharacterID() = 0) Then
-					r2 = itemContentImage
-					r5 = gridWidth
-					r6 = gridWidth
-					r8 = Self.posX
-					r0 = Self.posY - 896
-					
-					If (Self.poping) Then
-						r1 = Self.posYoffset
-					Else
-						r1 = 0
-					EndIf
-					
-					drawInMap(g, r2, 0, 0, r5, r6, 0, r8, r0 + r1, 3)
+					' Magic number: 896
+					drawInMap(g, itemContentImage, Self.objId * gridWidth, 0, gridWidth, gridWidth, 0, Self.posX, (Self.posY - 896) + PickValue(Self.poping, Self.posYoffset, 0), VCENTER|HCENTER)
+				ElseIf (PlayerObject.getCharacterID() = CHARACTER_SONIC) Then
+					' Magic number: 896
+					drawInMap(g, itemContentImage, 0, 0, gridWidth, gridWidth, 0, Self.posX, (Self.posY - 896) + PickValue(Self.poping, Self.posYoffset, 0), VCENTER|HCENTER)
 				Else
-					r2 = itemHeadImage
-					Int characterID = (PlayerObject.getCharacterID() - 1) * gridWidth
-					r5 = gridWidth
-					r6 = gridWidth
-					r8 = Self.posX
-					r0 = Self.posY - 896
+					Local characterID:= ((PlayerObject.getCharacterID() - 1) * gridWidth)
 					
-					If (Self.poping) Then
-						r1 = Self.posYoffset
-					Else
-						r1 = 0
-					EndIf
-					
-					drawInMap(g, r2, characterID, 0, r5, r6, 0, r8, r0 + r1, 3)
+					' Magic number: 896
+					drawInMap(g, itemHeadImage, characterID, 0, gridWidth, gridWidth, 0, Self.posX, (Self.posY - 896) + PickValue(Self.poping, Self.posYoffset, 0), VCENTER|HCENTER)
 				EndIf
 			EndIf
 			
 			If (Not Self.used) Then
-				drawInMap(g, itemBoxImage, 33)
+				drawInMap(g, itemBoxImage, BOTTOM|HCENTER)
 			EndIf
 			
 			drawCollisionRect(g)
 		End
 		
-		Public Method logic:Void()
-			
+		Method logic:Void()
 			If (Self.used) Then
 				If (Self.moveCount > 0) Then
 					Self.moveCount -= 1
 					
-					If (Self.moveCount = 19 And Self.objId >= 5 And Self.objId <= 7) Then
+					If (Self.moveCount = (MOVE_COUNT - 1) And Self.objId >= 5 And Self.objId <= 7) Then
 						PlayerObject.getTmpRing(Self.objId)
 					EndIf
 					
+					' Magic number: 200
 					Self.posY -= 200
 					Self.posYoffset -= 200
 				EndIf
 				
 				If (Self.moveCount = 0) Then
-					Self.moveCount = -1
+					Self.moveCount = -1 ' -= 1
 					
+					' Check if this is a ring monitor:
 					If (Self.objId >= 5 And Self.objId <= 7) Then
-						soundInstance.playSe(12)
+						soundInstance.playSe(SoundSystem.SE_117)
 					EndIf
 				EndIf
 			EndIf
@@ -251,49 +219,57 @@ Class ItemObject Extends GameObject
 			If (Self.poping) Then
 				If (Self.mapObj = Null) Then
 					Self.mapObj = New MapObject(Self.posX + COLLISION_WIDTH, Self.posY, 0, 0, Self, 1)
+					
 					Self.mapObj.setPosition(Self.posX, Self.posY, 0, Self.velY, Self)
 					Self.mapObj.setCrashCount(1)
 				EndIf
 				
 				Self.mapObj.logic2()
+				
 				checkWithPlayer(Self.posX, Self.posY, Self.mapObj.getPosX(), Self.mapObj.getPosY())
+				
 				Self.posX = Self.mapObj.getPosX()
 				Self.posY = Self.mapObj.getPosY()
+				
 				refreshCollisionRect(Self.posX, Self.posY)
 			EndIf
-			
 		End
 		
-		Public Method refreshCollisionRect:Void(x:Int, y:Int)
-			Self.collisionRect.setRect(x - (Self.mWidth Shr 1), y - Self.mHeight, Self.mWidth, Self.mHeight)
+		Method refreshCollisionRect:Void(x:Int, y:Int)
+			Self.collisionRect.setRect(x - (Self.mWidth / 2), y - Self.mHeight, Self.mWidth, Self.mHeight) ' Shr 1
 		End
 		
-		Public Method close:Void()
+		Method close:Void()
+			' Empty implementation.
 		End
 		
-		Public Method doBeforeCollisionCheck:Void()
+		Method doBeforeCollisionCheck:Void()
+			' Empty implementation.
 		End
 		
-		Public Method doWhileCollision:Void(arg0:ACObject, arg1:ACCollision, arg2:Int, arg3:Int, arg4:Int, arg5:Int, arg6:Int)
+		Method doWhileCollision:Void(arg0:ACObject, arg1:ACCollision, arg2:Int, arg3:Int, arg4:Int, arg5:Int, arg6:Int)
+			' Empty implementation.
 		End
 		
-		Private Method doFunction:Void(object:PlayerObject, direction:Int)
-			doFunction(object, direction, True)
+		Method getPaintLayer:Int()
+			Return DRAW_BEFORE_SONIC
+		End
+	Private
+		' Methods:
+		Method doFunction:Void(player:PlayerObject, direction:Int)
+			doFunction(player, direction, True)
 		End
 		
-		Private Method doFunction:Void(object:PlayerObject, direction:Int, attackPose:Bool)
-			
+		Method doFunction:Void(player:PlayerObject, direction:Int, attackPose:Bool)
 			If (attackPose) Then
-				object.doItemAttackPose(Self, direction)
+				player.doItemAttackPose(Self, direction)
 			EndIf
 			
 			Self.used = True
 			Self.moveCount = MOVE_COUNT
+			
 			player.getPreItem(Self.objId)
-			SoundSystem.getInstance().playSe(29)
-		End
-		
-		Public Method getPaintLayer:Int()
-			Return DRAW_BEFORE_SONIC
+			
+			SoundSystem.getInstance().playSe(SoundSystem.SE_138)
 		End
 End
