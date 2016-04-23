@@ -151,7 +151,7 @@
     <DocUserOptions Filename=".\src\com\sega\mobile\define\mdphone.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>7</X>
-        <Y>39</Y>
+        <Y>40</Y>
       </CursorPos>
       <DocGUID>2fc156b4-853f-46d2-9b64-33a13ad4ac42</DocGUID>
       <Bookmarks />
@@ -287,7 +287,7 @@
     <DocUserOptions Filename=".\src\gameengine\def.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>7</X>
-        <Y>14</Y>
+        <Y>99</Y>
       </CursorPos>
       <DocGUID>bb617aa5-95a6-49af-a17d-3f112c720a01</DocGUID>
       <Bookmarks />
@@ -421,7 +421,7 @@
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>14</X>
-        <Y>118</Y>
+        <Y>137</Y>
       </CursorPos>
       <DocGUID>d9ff5404-e893-4f34-b55d-aa6901b81569</DocGUID>
       <Bookmarks />
@@ -692,6 +692,14 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\breathebubble.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>19</X>
+        <Y>22</Y>
+      </CursorPos>
+      <DocGUID>439816c3-0a38-4132-9b94-1dd98f5a4364</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bubble.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>25</X>
@@ -927,7 +935,7 @@
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>8</X>
-        <Y>84</Y>
+        <Y>50</Y>
       </CursorPos>
       <DocGUID>c362988f-9f90-4b09-aa6b-f41cc5f1409e</DocGUID>
       <Bookmarks />
@@ -1388,8 +1396,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>21</X>
-        <Y>22</Y>
+        <X>0</X>
+        <Y>17</Y>
       </CursorPos>
       <DocGUID>aec3205d-fe1c-48b4-87e5-d9831ca17dfa</DocGUID>
       <Bookmarks />
