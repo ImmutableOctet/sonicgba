@@ -113,6 +113,7 @@ Class EnemyObject Extends GameObject Abstract
 		Const ENEMY_RABBIT_FISH:Int = 5
 		Const ENEMY_YOKOYUKIMAL:Int = 17
 		Const ENEMY_YUKIMAL:Int = 16
+		
 		Const POS_BOTTOM:Int = 1
 		Const POS_LEFT:Int = 2
 		Const POS_RIGHT:Int = 3
