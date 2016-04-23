@@ -573,10 +573,18 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\barhorbinh.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
+        <X>3</X>
+        <Y>51</Y>
+      </CursorPos>
+      <DocGUID>0a26544e-e4b4-49f6-9476-d5b2128e2830</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\barhorbinv.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
         <X>16</X>
         <Y>18</Y>
       </CursorPos>
-      <DocGUID>0a26544e-e4b4-49f6-9476-d5b2128e2830</DocGUID>
+      <DocGUID>490245be-c6a6-4a50-8320-7ccb47da243f</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\basicbullet.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
