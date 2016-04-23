@@ -421,7 +421,7 @@
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>14</X>
-        <Y>110</Y>
+        <Y>118</Y>
       </CursorPos>
       <DocGUID>d9ff5404-e893-4f34-b55d-aa6901b81569</DocGUID>
       <Bookmarks />
@@ -926,8 +926,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>16</X>
-        <Y>205</Y>
+        <X>8</X>
+        <Y>84</Y>
       </CursorPos>
       <DocGUID>c362988f-9f90-4b09-aa6b-f41cc5f1409e</DocGUID>
       <Bookmarks />
@@ -1045,6 +1045,14 @@
         <Y>293</Y>
       </CursorPos>
       <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\marker.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>2</X>
+        <Y>151</Y>
+      </CursorPos>
+      <DocGUID>add829a1-0dfb-4fb0-8006-d8dfd280445b</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\mirabullet.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
