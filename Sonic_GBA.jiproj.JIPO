@@ -697,12 +697,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\bulletobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\bulletobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>25</X>
-        <Y>66</Y>
+        <X>22</X>
+        <Y>64</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>cb5f7cf8-b8c2-4f78-94e6-f3f397345c5e</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\cage.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1002,13 +1003,12 @@
       <DocGUID>04965c92-bc19-40bd-b464-9b897136b973</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\lizard.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\lizard.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>12</X>
-        <Y>15</Y>
+        <X>28</X>
+        <Y>22</Y>
       </CursorPos>
-      <DocGUID>a7fdbc46-93f7-42e1-ba49-f078bd384fa6</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\lizardbullet.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1100,6 +1100,14 @@
         <Y>22</Y>
       </CursorPos>
       <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\penguin.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>54</X>
+        <Y>173</Y>
+      </CursorPos>
+      <DocGUID>3901488d-1ee8-49c4-a316-03cd1df6f0e9</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\penguinbullet.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
