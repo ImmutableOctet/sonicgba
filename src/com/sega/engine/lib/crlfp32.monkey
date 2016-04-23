@@ -13,19 +13,23 @@ Class CrlFP32 ' Final
 		' Constant variable(s):
 		Const DIGITS:Int = 4
 		Const DIGIT_MULTIPLIER:Int = 10000
+		
 		Const FIXED_MASK:Int = 63
+		
 		Const MBOOSTER_MAX_INSTANCES:Int = 0
 	Public
 		' Constant variable(s):
-		Const ERROR_BAD_INPUT:Int = 1
 		Const ERROR_NONE:Int = 0
+		Const ERROR_BAD_INPUT:Int = 1
 		Const ERROR_OVERFLOW:Int = 2
+		
 		Const FIXED_1:Int = 64
+		
 		Const FIXED_POINT_PRECISION:Int = 6
 		
 		Const MAX_VALUE:Int = INT_MAX
 		
-		Const PI:Int = div(20096, 6400)
+		Global PI:Int = div(20096, 6400) ' Const
 		Const SHIFT_SCALE:Int = 18
 		
 		' Global variable(s):
