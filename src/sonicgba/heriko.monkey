@@ -61,12 +61,13 @@ Class Heriko Extends EnemyObject
 			EndIf
 			
 			Self.drawer = herikoAnimation.getDrawer(0, True, 0)
+			
 			Self.startPosX = Self.posX
 			Self.endPosX = Self.posX + Self.mWidth
-			Self.dir = False
+			
 			Self.state = STATE_PATROL
+			
 			Self.wait_cn = 0
-			Self.IsFire = False
 		End
 	Public
 		' Functions:
@@ -125,7 +126,7 @@ Class Heriko Extends EnemyObject
 							If (Self.drawer.checkEnd() And Self.IsFire) Then
 								Self.IsFire = False
 								
-								BulletObject.addBullet(BULLET_MIRA, Self.posX, Self.posY, 0, BULLET_SPEED) ' BULLET_HERIKO
+								BulletObject.addBullet(BulletObject.BULLET_MIRA, Self.posX, Self.posY, 0, BULLET_SPEED) ' BulletObject.BULLET_HERIKO
 							EndIf
 						Else
 							Self.wait_cn = 0
