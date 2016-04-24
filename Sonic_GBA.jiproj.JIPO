@@ -607,6 +607,14 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\basicpipe.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>48</X>
+        <Y>52</Y>
+      </CursorPos>
+      <DocGUID>ef22652b-1d59-4b69-9d57-b4b997a87b8c</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\batbullet.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>3</X>
@@ -1003,13 +1011,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\heriko.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\heriko.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>12</X>
         <Y>15</Y>
       </CursorPos>
-      <DocGUID>2c9e7638-d3aa-4242-ae51-890c40096717</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\hobincal.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -1197,9 +1204,17 @@
     <DocUserOptions Filename=".\src\sonicgba\pipein.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>24</X>
-        <Y>159</Y>
+        <Y>77</Y>
       </CursorPos>
       <DocGUID>e5cb43a4-4b75-4897-bffe-21259ffcf6d3</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\pipeout.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>13</X>
+        <Y>15</Y>
+      </CursorPos>
+      <DocGUID>19ea1872-9e28-4cd3-9ba1-f5765e9c57ff</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\pipeset.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
@@ -1246,8 +1261,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>8</X>
-        <Y>361</Y>
+        <X>2</X>
+        <Y>4543</Y>
       </CursorPos>
       <DocGUID>8ca28cc4-9b9f-4399-b062-6e0c07549a03</DocGUID>
       <Bookmarks />

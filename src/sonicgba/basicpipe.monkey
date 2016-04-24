@@ -50,7 +50,7 @@ Class BasicPipe Extends GimmickObject Abstract
 			Self.direction = direction_or__width
 			Self.dirRect = Self.direction ' direction_or__width
 			
-			Select (direction_or__width)
+			Select (direction_or__width) ' Self.direction
 				Case DIRECTION_UP
 					Self.transID = 0
 				Case DIRECTION_DOWN
