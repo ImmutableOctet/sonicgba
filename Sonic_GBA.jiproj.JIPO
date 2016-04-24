@@ -419,8 +419,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
-        <Y>121</Y>
+        <X>17</X>
+        <Y>130</Y>
       </CursorPos>
       <DocGUID>d9ff5404-e893-4f34-b55d-aa6901b81569</DocGUID>
       <Bookmarks />
@@ -721,10 +721,10 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\breakwall.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>15</X>
-        <Y>28</Y>
+        <X>38</X>
+        <Y>8</Y>
       </CursorPos>
-      <DocGUID>0ce09611-a38c-49c0-8da7-18e60fc544c8</DocGUID>
+      <DocGUID>ffdc33d7-abb0-4e21-8ab0-a4170754e706</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\breathebubble.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
@@ -1027,8 +1027,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\globalresource.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>30</X>
-        <Y>19</Y>
+        <X>6</X>
+        <Y>52</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -1657,6 +1657,14 @@
         <Y>58</Y>
       </CursorPos>
       <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\uparm.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>11</X>
+        <Y>20</Y>
+      </CursorPos>
+      <DocGUID>a8b50238-8ddd-4a11-9e66-d1aad50a5de8</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\uparmbar.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
