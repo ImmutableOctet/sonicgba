@@ -24,6 +24,8 @@ Class Magma Extends EnemyObject
 		Const STATE_UP:Int = 0
 		Const STATE_WAIT:Int = 1
 		
+		Const INITIAL_VELOCITY:Int = -768
+		
 		' Global variable(s):
 		Global IsFire:Bool = False
 		
@@ -32,7 +34,7 @@ Class Magma Extends EnemyObject
 		
 		Global state:Int
 		
-		Global velocity:Int = -768
+		Global velocity:Int = INITIAL_VELOCITY
 		
 		Global wait_cnt:Int = 0
 		Global wait_cnt_max:Int = 64
@@ -85,8 +87,7 @@ Class Magma Extends EnemyObject
 			Select (state)
 				Case STATE_UP
 					If (magmaDrawer.getCurrentFrame() < 6) Then
-						' Magic number: -768
-						velocity = -768
+						velocity = INITIAL_VELOCITY
 						
 						IsFire = False
 					ElseIf (magmaDrawer.getCurrentFrame() = 6) Then
