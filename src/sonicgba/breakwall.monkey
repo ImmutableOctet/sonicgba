@@ -85,7 +85,7 @@ Class BreakWall Extends GimmickObject
 		
 		' Extensions:
 		Method getBreakOffset:Int(x:Int, y:Int)
-			Return (y * BREAK_NUM_WIDTH) + x
+			Return ((y * BREAK_NUM_WIDTH) + x) ' * 3
 		End
 	Public
 		' Functions:
