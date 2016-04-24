@@ -165,8 +165,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphicsmacros.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>15</X>
-        <Y>17</Y>
+        <X>9</X>
+        <Y>12</Y>
       </CursorPos>
       <DocGUID>d5022053-a53b-4c58-a126-649c9c77345e</DocGUID>
       <Bookmarks />
@@ -419,8 +419,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>137</Y>
+        <X>27</X>
+        <Y>129</Y>
       </CursorPos>
       <DocGUID>d9ff5404-e893-4f34-b55d-aa6901b81569</DocGUID>
       <Bookmarks />
@@ -473,6 +473,14 @@
         <Y>27</Y>
       </CursorPos>
       <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\arm.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>9</X>
+        <Y>19</Y>
+      </CursorPos>
+      <DocGUID>70c0cd8e-c041-4e56-a355-3e7e88db8975</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\aspiratebubble.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1208,8 +1216,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>22</X>
-        <Y>387</Y>
+        <X>28</X>
+        <Y>456</Y>
       </CursorPos>
       <DocGUID>8ca28cc4-9b9f-4399-b062-6e0c07549a03</DocGUID>
       <Bookmarks />
@@ -1616,8 +1624,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>12</X>
-        <Y>15</Y>
+        <X>6</X>
+        <Y>29</Y>
       </CursorPos>
       <DocGUID>195a3a1e-6d86-4cc6-9b82-28235317ce84</DocGUID>
       <Bookmarks />

@@ -507,6 +507,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Global RUN_BRAKE_SPEED_LIMIT:Int = 480
 		Global scoreNum:Int
 		Global slidingFrame:Int
+		
 		Global SPEED_FLOAT_DEVICE:Int = 40
 		Global SPEED_LIMIT_LEVEL_1:Int = 500
 		Global SPEED_LIMIT_LEVEL_2:Int = 1120
