@@ -178,7 +178,7 @@ Class RabbitFish Extends EnemyObject
 						EndIf
 						
 						' Magic number: 5120
-						If (Self.alert_state = POS_TOP And IsFacetoPlayer() And Self.move_cnt >= 5120) Then
+						If (Self.alert_state = IN_ALERT_RANGE And IsFacetoPlayer() And Self.move_cnt >= 5120) Then
 							Self.state = STATE_DEFEND
 							
 							Self.drawer.setActionId(1)

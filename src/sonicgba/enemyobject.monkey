@@ -61,7 +61,9 @@ Private
 	
 	Import com.sega.engine.action.accollision
 	Import com.sega.engine.action.acobject
+	
 	'Import com.sega.mobile.define.mdphone
+	
 	Import com.sega.mobile.framework.device.mfgraphics
 	
 	'Import regal.util
@@ -133,8 +135,6 @@ Class EnemyObject Extends GameObject Abstract
 		Field IsPlayBossBattleBGM:Bool
 	Public
 		' Constant variable(s):
-		Const CANNOT_BE_SEEN:Int = 2
-		
 		Const ENEMY_BOSS1:Int = 22
 		Const ENEMY_BOSS2:Int = 23
 		Const ENEMY_BOSS3:Int = 24
@@ -149,6 +149,7 @@ Class EnemyObject Extends GameObject Abstract
 		
 		Const IN_ALERT_RANGE:Int = 0
 		Const IN_AVAILABLE_RANGE:Int = 1
+		Const CANNOT_BE_SEEN:Int = 2
 		
 		' Global variable(s):
 		Global IsBoss:Bool = False
@@ -467,10 +468,10 @@ Class EnemyObject Extends GameObject Abstract
 			EndIf
 			
 			If (src_distance <= range_distance Or src_distance > (range_distance * 6)) Then
-				Return POS_LEFT
+				Return CANNOT_BE_SEEN
 			EndIf
 			
-			Return POS_BOTTOM
+			Return IN_AVAILABLE_RANGE
 		End
 		
 		Method checkPlayerInEnemyAlertRange:Int(currentX:Int, currentY:Int, range_width:Int, range_height:Int)
@@ -481,11 +482,11 @@ Class EnemyObject Extends GameObject Abstract
 				Return IN_ALERT_RANGE
 			EndIf
 			
-			If (range_x > range_width * POS_LEFT Or range_y > range_height * POS_LEFT) Then
-				Return POS_LEFT
+			If (range_x > (range_width * 2) Or range_y > (range_height * 2)) Then
+				Return CANNOT_BE_SEEN
 			EndIf
 			
-			Return POS_BOTTOM
+			Return IN_AVAILABLE_RANGE
 		End
 		
 		Method checkPlayerInEnemyAlertRangeScale:Bool(currentX:Int, currentY:Int, min:Int, max:Int)
@@ -509,11 +510,11 @@ Class EnemyObject Extends GameObject Abstract
 				Return IN_ALERT_RANGE
 			EndIf
 			
-			If (((player.getFootPositionX() Shr 6) > (limitMinx - (enemywidth / 2)) - 8 Or (player.getFootPositionX() Shr 6) < limitMinx - (enemywidth * POS_LEFT)) And ((player.getFootPositionX() Shr 6) < ((enemywidth / 2) + limitMaxX) + 8 Or (player.getFootPositionX() Shr 6) > (enemywidth * POS_LEFT) + limitMinx)) Then ' Shr 1
-				Return POS_LEFT
+			If (((player.getFootPositionX() Shr 6) > (limitMinx - (enemywidth / 2)) - 8 Or (player.getFootPositionX() Shr 6) < limitMinx - (enemywidth * 2)) And ((player.getFootPositionX() Shr 6) < ((enemywidth / 2) + limitMaxX) + 8 Or (player.getFootPositionX() Shr 6) > (enemywidth * 2) + limitMinx)) Then ' Shr 1
+				Return CANNOT_BE_SEEN
 			EndIf
 			
-			Return POS_BOTTOM
+			Return IN_AVAILABLE_RANGE
 		End
 		
 		Method checkPlayerInEnemyAlertRange:Int(currentX:Int, currentY:Int, range_width:Int, range_height:Int, limitMinx:Int, limitMaxX:Int, enemywidth:Int)
@@ -524,11 +525,11 @@ Class EnemyObject Extends GameObject Abstract
 				Return IN_ALERT_RANGE
 			EndIf
 			
-			If (range_x > range_width * POS_LEFT Or range_y > range_height * POS_LEFT) Then
-				Return POS_LEFT
+			If (range_x > (range_width * 2) Or range_y > (range_height * 2)) Then
+				Return CANNOT_BE_SEEN
 			EndIf
 			
-			Return POS_BOTTOM
+			Return IN_AVAILABLE_RANGE
 		End
 		
 		Method drawAlertRangeLine:Void(g:MFGraphics, state:Int, currentX:Int, currentY:Int, camera:Coordinate)
