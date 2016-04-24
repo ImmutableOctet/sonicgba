@@ -54,6 +54,7 @@ Class Record
 			Return (New DataStream(data))
 		End
 		
+		' This routine is considered "'Null' safe".
 		Function saveRecordStream:Void(recordId:String, ds:PublicDataStream)
 			If (ds <> Null) Then
 				saveRecord(recordId, ds.ToDataBuffer())
