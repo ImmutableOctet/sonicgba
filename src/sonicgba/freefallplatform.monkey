@@ -85,7 +85,7 @@ Class FreeFallPlatform Extends GimmickObject
 		End
 		
 		Method refreshCollisionRect:Void(x:Int, y:Int)
-			Self.collisionRect.setRect(x - 768, y + 768, 6144, 1792)
+			Self.collisionRect.setRect(x - 768, y + 768, 6144, 1792) ' (FreeFallSystem.MOVE_DISTANCE / 5)
 		End
 		
 		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
