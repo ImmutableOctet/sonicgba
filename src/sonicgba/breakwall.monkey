@@ -6,6 +6,7 @@ Public
 	TODO:
 		* Test uses of fake multi-dimensional array(s).
 		* Test performance of data-buffers vs. arrays.
+		* Test 'logic' for unknown behavior.
 #End
 
 ' Imports:
@@ -21,8 +22,7 @@ Private
 	Import com.sega.mobile.framework.device.mfimage
 	
 	'Import brl.databuffer
-	
-	Import regal.sizeof
+	'Import regal.sizeof
 Public
 
 ' Classes:
