@@ -114,10 +114,10 @@ Class EnemyObject Extends GameObject Abstract
 		Const ENEMY_YOKOYUKIMAL:Int = 17
 		Const ENEMY_YUKIMAL:Int = 16
 		
+		Const POS_TOP:Int = 0
 		Const POS_BOTTOM:Int = 1
 		Const POS_LEFT:Int = 2
 		Const POS_RIGHT:Int = 3
-		Const POS_TOP:Int = 0
 		
 		' Global variable(s):
 		Global BoomAni:Animation = Null
