@@ -2,6 +2,12 @@ Strict
 
 Public
 
+#Rem
+	TODO:
+		* Test the behavior of this class's constructor.
+		* Compare behavior of this class with 'DekaPlatform'.
+#End
+
 ' Imports:
 Private
 	Import lib.constutil
