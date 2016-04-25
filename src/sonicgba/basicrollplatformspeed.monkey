@@ -80,11 +80,20 @@ Class BasicRollPlatformSpeed Extends GimmickObject Abstract
 				End Try
 			EndIf
 		End
+		
+		' Methods:
+		
+		' Extensions:
+		Method onSetOffsetY2:Int(value:Int)
+			Return value
+		End
 	Public
 		' Methods:
+		
+		' Extensions:
 		Method logic_BasicRollPlatformSpeed:Void(degree:Int)
 			If (StageManager.getCurrentZoneId() >= 3 And StageManager.getCurrentZoneId() <= 6) Then
-				Self.offsetY2 = GimmickObject.PLATFORM_OFFSET_Y
+				Self.offsetY2 = onSetOffsetY2(GimmickObject.PLATFORM_OFFSET_Y)
 			EndIf
 			
 			Local thisDegree:= (degree + ((Self.iLeft * MAX_DEGREE_SCALED) / RING_RANGE))
