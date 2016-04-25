@@ -6,6 +6,9 @@ Public
 	This module will likely be reworked in the future.
 #End
 
+' Friends:
+Friend com.sega.mobile.framework.device.mfdevice
+
 ' Imports:
 Private
 	Import com.sega.mobile.define.mdphone

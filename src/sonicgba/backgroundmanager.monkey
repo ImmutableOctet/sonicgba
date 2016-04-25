@@ -88,7 +88,7 @@ Class BackGroundManager Abstract ' Implements SonicDef
 			End Select
 		End
 		
-		Function nextStates:Void()
+		Function nextStates:Void() ' Function next:Void()
 			If (instance <> Null) Then
 				instance.nextState()
 			EndIf

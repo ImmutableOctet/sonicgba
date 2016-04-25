@@ -1,6 +1,6 @@
 Strict
 
-Publ;ic
+Public
 
 ' Imports:
 Private

@@ -699,7 +699,7 @@ Class StageManager ' Implements sonicdef
 					
 					drawNewScore = i
 				EndIf
-			EndIf
+			Next
 		End
 		
 		Function normalHighScoreInit:Void()
@@ -708,7 +708,7 @@ Class StageManager ' Implements sonicdef
 			
 			For Local i:= 0 Until rankingOffsetX.Length
 				rankingOffsetX[i] = SCREEN_WIDTH
-			EndIf
+			Next
 		End
 		
 		Function drawNormalHighScore:Void(g:MFGraphics)
@@ -855,7 +855,7 @@ Class StageManager ' Implements sonicdef
 			
 			For Local i:= 0 Until CHARACTER_NUM ' stageIDArray.Length
 				stageIDArray[i] = 0
-			EndIf
+			Next
 			
 			normalStageId = 0
 			

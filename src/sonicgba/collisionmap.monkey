@@ -131,7 +131,7 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 					Self.ds = MFDevice.getResourceAsStream("/map/" + stageName + COLLISION_FILE_NAME)
 					
 					Try
-						Local collisionKindNum = Self.ds.ReadShort()
+						Local collisionKindNum:= Self.ds.ReadShort()
 						
 						Self.collisionInfo = New DataBuffer(collisionKindNum * COLLISION_INFO_STRIDE) ' * SizeOf_Byte
 						Self.directionInfo = New DataBuffer(collisionKindNum) ' * SizeOf_Byte

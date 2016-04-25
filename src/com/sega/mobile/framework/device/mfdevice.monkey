@@ -232,10 +232,10 @@ Class MFDevice Final
 			Const START_KEY_INDEX:= 0
 			Const LAST_KEY_INDEX:= 255 ' 256
 			
-			Local character:= GetChar()
+			Local keyCode:= GetChar()
 			
 			' Check if at least one character was pressed:
-			If (character <> 0) Then
+			If (keyCode <> 0) Then
 				For Local key:= START_KEY_INDEX To LAST_KEY_INDEX
 					If (KeyHit(key)) Then
 						MFGamePad.keyPressed(keyCode)
@@ -332,7 +332,7 @@ Class MFDevice Final
 		End
 		
 		Function flushScreen:Void()
-			deviceDraw(graphics.getSystemgraphics())
+			deviceDraw(graphics.getSystemGraphics())
 			
 			graphics.flush()
 		End
@@ -773,6 +773,7 @@ Class MFDevice Final
 					Next
 					
 					interruptConfirm = New MFTouchKey(0, canvasHeight - 50, 100, 50, 2112)
+					
 					addComponent(interruptConfirm)
 				EndIf
 			EndIf

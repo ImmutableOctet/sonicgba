@@ -183,7 +183,7 @@ Class MapManager ' Implements SonicDef
 				If (getPixelWidth() < CAMERA_WIDTH) Then
 					camera.x = ((CAMERA_WIDTH - getPixelWidth()) / 2)
 				Else
-					cameraActionX()
+					handleCameraActionX()
 					
 					If (actualLeftCameraLimit > proposeLeftCameraLimit) Then
 						actualLeftCameraLimit -= CAMERA_SPEED
@@ -238,7 +238,7 @@ Class MapManager ' Implements SonicDef
 					If (getPixelHeight() < CAMERA_HEIGHT) Then
 						camera.y = (CAMERA_HEIGHT - getPixelHeight()) / 2
 					Else
-						cameraActionY()
+						handleCameraActionY()
 						
 						If (actualDownCameraLimit > proposeDownCameraLimit) Then
 							actualDownCameraLimit -= CAMERA_SPEED
@@ -740,7 +740,7 @@ Class MapManager ' Implements SonicDef
 		End
 	Private
 		' Functions:
-		Function cameraActionX:Void()
+		Function handleCameraActionX:Void() ' Function cameraActionX:Void()
 			Local desCamX:= (focusObj.getFocusX() - (CAMERA_WIDTH / 2)) - CAMERA_OFFSET_X ' Shr 1
 			
 			Select (cameraActionX)
@@ -782,7 +782,7 @@ Class MapManager ' Implements SonicDef
 			End Select
 		End
 		
-		Function cameraActionY:Void()
+		Function handleCameraActionY:Void() ' Function cameraActionY:Void()
 			Local desCamY:= (focusObj.getFocusY() - (CAMERA_HEIGHT / 2)) - CAMERA_OFFSET_Y ' Shr 1
 			
 			Select (cameraActionY)

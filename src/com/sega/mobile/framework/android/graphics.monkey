@@ -324,15 +324,15 @@ Class Graphics
 		
 		Method drawImage:Void(image:Image, x:Int, y:Int, anchor:Int)
 			If ((anchor & TRANS_MIRROR_ROT180) <> 0) Then
-				x -= image.getWidth() / 2 ' VCENTER
+				x -= image.Width() / 2 ' VCENTER ' Width
 			ElseIf ((anchor & RIGHT) <> 0) Then
-				x -= image.getWidth()
+				x -= image.Width() ' Width
 			EndIf
 			
 			If ((anchor & VCENTER) <> 0) Then
-				y -= image.getHeight() / 2 ' VCENTER
+				y -= image.Height() / 2 ' VCENTER ' Height
 			ElseIf ((anchor & BOTTOM) <> 0) Then
-				y -= image.getHeight()
+				y -= image.Height() ' Height
 			EndIf
 			
 			'Local alpha:= mCanvas.Alpha

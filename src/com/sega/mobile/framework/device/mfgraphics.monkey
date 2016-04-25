@@ -2,6 +2,9 @@ Strict
 
 Public
 
+' Friends:
+Friend com.sega.mobile.framework.device.mfdevice
+
 ' Imports:
 Private
 	'Import sonicgba.mapmanager

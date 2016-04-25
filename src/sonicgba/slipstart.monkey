@@ -23,7 +23,7 @@ Class SlipStart Extends GimmickObject
 		
 		Const COLLISION_HEIGHT:Int = 1792
 		
-		Const COLLISION_OFFSET_Y:Int = -128s
+		Const COLLISION_OFFSET_Y:Int = -128
 		
 		' Fields:
 		Field isActived:Bool
