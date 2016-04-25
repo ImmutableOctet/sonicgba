@@ -560,8 +560,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ballhobin.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>15</X>
-        <Y>21</Y>
+        <X>4</X>
+        <Y>96</Y>
       </CursorPos>
       <DocGUID>6a63393f-bbf2-4798-9acd-2f7fe08380cb</DocGUID>
       <Bookmarks />
@@ -1074,6 +1074,14 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\hexhobin.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>14</X>
+        <Y>22</Y>
+      </CursorPos>
+      <DocGUID>705e9497-e7ed-471c-a1a1-491605c3f7d5</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\hobincal.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
         <X>0</X>
@@ -1350,8 +1358,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>28</X>
-        <Y>455</Y>
+        <X>9</X>
+        <Y>338</Y>
       </CursorPos>
       <DocGUID>8ca28cc4-9b9f-4399-b062-6e0c07549a03</DocGUID>
       <Bookmarks />
@@ -1598,8 +1606,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>17</Y>
+        <X>13</X>
+        <Y>18</Y>
       </CursorPos>
       <DocGUID>aec3205d-fe1c-48b4-87e5-d9831ca17dfa</DocGUID>
       <Bookmarks />

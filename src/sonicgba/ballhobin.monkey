@@ -51,13 +51,6 @@ Class BallHobin Extends HexHobin
 			
 			Self.initPos = PickValue(Self.isH, Self.posX, Self.posY)
 		End
-		
-		' Methods:
-		
-		' Extensions:
-		Method doWhileCollision_jumpCheck:Bool(player:PlayerObject)
-			Return ((player.getCharacterID() = CHARACTER_KNUCKLES) And ((player.getCharacterAnimationID() >= PlayerKnuckles.KNUCKLES_ANI_FLY_1 And player.getCharacterAnimationID() <= PlayerKnuckles.KNUCKLES_ANI_FLY_4) Or (player.getCharacterAnimationID() >= PlayerKnuckles.KNUCKLES_ANI_CLIMB_1 And player.getCharacterAnimationID() <= PlayerKnuckles.KNUCKLES_ANI_CLIMB_5))) Or ((player.getCharacterID() = CHARACTER_TAILS) And (player.getCharacterAnimationID() >= PlayerTails.TAILS_ANI_FLY_1 And player.getCharacterAnimationID() <= PlayerTails.TAILS_ANI_FLY_3))
-		End
 	Public
 		' Functions:
 		Function releaseAllResource:Void()
@@ -106,25 +99,7 @@ Class BallHobin Extends HexHobin
 					player.beStop(Self.collisionRect.y0, direction, Self)
 				EndIf
 				
-				If (direction = DIRECTION_RIGHT) Then
-					player.rightStopped = False
-					
-					If (doWhileCollision_jumpCheck(player)) Then
-						player.animationID = PlayerObject.ANI_JUMP
-					EndIf
-				ElseIf (direction = DIRECTION_LEFT) Then
-					player.leftStopped = False
-					
-					If (doWhileCollision_jumpCheck(player)) Then
-						player.animationID = PlayerObject.ANI_JUMP
-					EndIf
-				EndIf
-				
-				If (player.collisionState <> PlayerObject.COLLISION_STATE_WALK) Then
-					player.collisionState = PlayerObject.COLLISION_STATE_JUMP
-				EndIf
-				
-				player.dashRolling = False
+				doWhileCollision_jumpBehavior(player, direction)
 				
 				Local distanceX:= (player.getCheckPositionX() - Self.collisionRect.getCenterX())
 				Local distanceY:= (player.getCheckPositionY() - Self.collisionRect.getCenterY())
