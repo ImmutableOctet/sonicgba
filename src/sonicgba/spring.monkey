@@ -297,8 +297,8 @@ Class Spring Extends GimmickObject
 										
 										playSound()
 										
-										If (p instanceof PlayerAmy) Then
-											p.setAnimationId(PlayerObject.ANI_RUN_3)
+										If (p.getCharacterID() = CHARACTER_AMY) Then
+											p.setAnimationId(PlayerObject.ANI_RUN_3) ' PlayerAmy.AMY_ANI_RUN
 											p.restartAniDrawer()
 										EndIf
 									Case GIMMICK_SPRING_LEFT_UP, GIMMICK_SPRING_LEFT_UP_BURY

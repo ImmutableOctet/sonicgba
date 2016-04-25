@@ -103,7 +103,7 @@ Class BreakingParts Extends EnemyObject
 					Self.partsdrawer.setActionId(Self.pos[i][4])
 					
 					drawInMap(g, Self.partsdrawer, Self.pos[i][0], Self.pos[i][1])
-				EndIf
+				Next
 			EndIf
 		End
 		

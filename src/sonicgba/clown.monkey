@@ -103,7 +103,7 @@ Class Clown Extends EnemyObject
 					player.beStop(Self.collisionRect.x1, direction, Self)
 				Case DIRECTION_RIGHT
 					player.beStop(Self.collisionRect.x0, direction, Self)
-			EndIf
+			End Select
 			
 			player.setVelX(playerVelX)
 			player.setAnimationId(preAnimationId)

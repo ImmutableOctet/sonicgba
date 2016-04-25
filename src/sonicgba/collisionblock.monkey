@@ -62,7 +62,7 @@ Class CollisionBlock Extends ACBlock ' Implements SonicDef
 			
 			Self.degree = PickValue((degree < 0), (degree + 256), degree)
 			
-			Self.ExtendsDegree = (Self.degree = 255))
+			Self.ExtendsDegree = (Self.degree = 255)
 			
 			Local allEight:Bool = True
 			
@@ -472,9 +472,10 @@ Class CollisionBlock Extends ACBlock ' Implements SonicDef
 				Return ACParam.NO_COLLISION
 			EndIf
 			
-			While (y < 0) {
+			While (y < 0)
 				y += getHeight()
-			EndIf
+			Wend
+			
 			y = ((y Mod getHeight()) Shr 6)
 			
 			If (Self.FLIP_Y) Then

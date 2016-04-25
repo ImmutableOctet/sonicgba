@@ -97,7 +97,7 @@ Class BackManagerStage3 Extends BackGroundManager
 			
 			Local tmpframe:= ((frame Mod (Self.imageBG.Length * 2)) / 2)
 			
-			For Local i:= 0 UntilIMAGE_CUT.Length
+			For Local i:= 0 Until IMAGE_CUT.Length
 				Local xOffset:= -((cameraX / CLIP_SPEED_N[i]) Mod IMAGE_WIDTH)
 				
 				Local j:= 0

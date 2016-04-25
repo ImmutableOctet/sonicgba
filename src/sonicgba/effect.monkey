@@ -26,7 +26,7 @@ Class Effect
 		Global effectArray:Effect[][] = GenerateEffectArray()
 	Private
 		' Functions:
-		Function GenerateEffectArray:Effect[][]
+		Function GenerateEffectArray:Effect[][]()
 			Local effectArray:= New Effect[EFFECT_LAYER_NUM][]
 			
 			For Local l:= EFFECT_LAYER_TOP Until EFFECT_LAYER_NUM

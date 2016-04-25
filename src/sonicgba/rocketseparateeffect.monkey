@@ -122,7 +122,7 @@ Class RocketSeparateEffect ' Implements SonicDef
 			
 			Select (effectID)
 				Case STATE_SHAKING
-					BackGroundManager.next()
+					BackGroundManager.nextStates()
 				Default
 					' Nothing so far.
 			End Select
@@ -193,7 +193,7 @@ Class RocketSeparateEffect ' Implements SonicDef
 							Self.count = 0
 							
 							If (Self.effectID = Effect.EFFECT_LAYER_NUM) Then ' 2
-								BackGroundManager.next()
+								BackGroundManager.nextStates()
 							EndIf
 						EndIf
 					Case STATE_MAP_BROKE_1

@@ -172,6 +172,6 @@ Class Cement Extends EnemyObject
 					Self.collisionRect.setRect(x - (COLLISION_WIDTH / 2), y - (COLLISION_HEIGHT / 2), COLLISION_WIDTH, COLLISION_HEIGHT)
 				Case STATE_DEFENCE
 					Self.collisionRect.setRect(x - (DEFENCE_WIDTH / 2), y - (DEFENCE_HEIGHT / 2), DEFENCE_WIDTH, DEFENCE_HEIGHT)
-			EndIf
+			End Select
 		End
 End

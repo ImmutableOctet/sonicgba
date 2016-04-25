@@ -97,7 +97,7 @@ Class BackManagerStage61 Extends BackGroundManager
 						If (Self.passingY < -960) Then
 							Self.passingY += 480
 						Else
-							Self.passingY = MyAPI.calNextPosition((Double) Self.passingY, 0.0, 1, 2)
+							Self.passingY = MyAPI.calNextPosition(Double(Self.passingY), 0.0, 1, 2)
 						EndIf
 					EndIf
 					
@@ -127,7 +127,7 @@ Class BackManagerStage61 Extends BackGroundManager
 			
 			MyAPI.fillRect(g, 0, yOffset, SCREEN_WIDTH, 100)
 			
-			For Local i:= 0 Unitl 2
+			For Local i:= 0 Until 2
 				MyAPI.drawImage(g, Self.image2, IMAGE_DIVIDE_PARAM[4][0], IMAGE_DIVIDE_PARAM[4][1], IMAGE_DIVIDE_PARAM[4][2], IMAGE_DIVIDE_PARAM[4][3], 0, -128, ((Self.starY2 + (65536 * (i - 1))) / 256) + yOffset, 0)
 				MyAPI.drawImage(g, Self.image2, IMAGE_DIVIDE_PARAM[4][0], IMAGE_DIVIDE_PARAM[4][1], IMAGE_DIVIDE_PARAM[4][2], IMAGE_DIVIDE_PARAM[4][3], 0, 128, ((Self.starY2 + (65536 * (i - 1))) / 256) + yOffset, 0)
 			Next

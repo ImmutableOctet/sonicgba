@@ -443,10 +443,10 @@ Class PlayerSonic Extends PlayerObject
 							EndIf
 						ElseIf (Self.isAntiGravity) Then
 							If (Self.faceDirection) Then
-								trans = ((Self.velX <= 0), TRANS_MIRROR|TRANS_MIRROR_ROT180, TRANS_MIRROR_ROT180)
+								trans = PickValue((Self.velX <= 0), TRANS_MIRROR|TRANS_MIRROR_ROT180, TRANS_MIRROR_ROT180)
 								drawY -= BALL_HEIGHT_OFFSET ' HINER_JUMP_LIMIT
 							Else
-								trans = ((Self.velX < 0), TRANS_MIRROR|TRANS_MIRROR_ROT180, TRANS_MIRROR_ROT180)
+								trans = PickValue((Self.velX < 0), TRANS_MIRROR|TRANS_MIRROR_ROT180, TRANS_MIRROR_ROT180)
 								drawY -= BALL_HEIGHT_OFFSET ' HINER_JUMP_LIMIT
 							EndIf
 						ElseIf (Self.faceDirection) Then
@@ -666,8 +666,8 @@ Class PlayerSonic Extends PlayerObject
 		End
 	Private
 		' Methods:
-		Private Method startSpeedSet:Int(confFlag:Bool, sourceSpeed:Int, conf:Int)
-			Return confFlag ? (sourceSpeed * conf) / 100 : sourceSpeed
+		Method startSpeedSet:Int(confFlag:Bool, sourceSpeed:Int, conf:Int)
+			Return PickValue(confFlag, ((sourceSpeed * conf) / 100), sourceSpeed)
 		End
 		
 		Method setMinSlipSpeed:Void()

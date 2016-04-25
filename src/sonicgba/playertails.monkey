@@ -315,7 +315,7 @@ Class PlayerTails Extends PlayerObject
 				If (rect <> Null) Then
 					If (SonicDebug.showCollisionRect) Then
 						g.setColor(65280)
-						g.drawRect(((Self.footPointX Shr 6) + rect[0]) - camera.x..((Self.footPointY Shr 6) + PickValue(Self.isAntiGravity, (-rect[1]) - rect[3], rect[1])) - camera.y, rect[2], rect[3])
+						g.drawRect(((Self.footPointX Shr 6) + rect[0]) - camera.x, ((Self.footPointY Shr 6) + PickValue(Self.isAntiGravity, (-rect[1]) - rect[3], rect[1])) - camera.y, rect[2], rect[3])
 					EndIf
 					
 					Self.attackRect.initCollision((rect[0] Shl 6), (rect[1] Shl 6), (rect[2] Shl 6), (rect[3] Shl 6), Self.myAnimationID)

@@ -281,7 +281,7 @@ Class PlayerKnuckles Extends PlayerObject
 					ElseIf (Self.faceDirection) Then
 						trans = PickValue((Self.velX >= 0), TRANS_NONE, TRANS_MIRROR)
 					Else
-						trans = PickValue((Self.velX > 0), TRANS_NONE : TRANS_MIRROR)
+						trans = PickValue((Self.velX > 0), TRANS_NONE, TRANS_MIRROR)
 					EndIf
 					
 					Self.drawer.draw(g, drawerActionID, (drawX Shr 6) - camera.x, (drawY Shr 6) - camera.y, loop, trans)
@@ -382,7 +382,7 @@ Class PlayerKnuckles Extends PlayerObject
 					If (SonicDebug.showCollisionRect) Then
 						g.setColor(65280)
 						
-						g.drawRect(((Self.footPointX Shr 6) + rect[0]) - camera.x..((Self.footPointY Shr 6) + PickValue(Self.isAntiGravity, (-rect[1]) - rect[3], rect[1])) - camera.y, rect[2], rect[3])
+						g.drawRect(((Self.footPointX Shr 6) + rect[0]) - camera.x, ((Self.footPointY Shr 6) + PickValue(Self.isAntiGravity, (-rect[1]) - rect[3], rect[1])) - camera.y, rect[2], rect[3])
 					EndIf
 					
 					Self.attackRect.initCollision(rect[0] Shl 6, rect[1] Shl 6, rect[2] Shl 6, rect[3] Shl 6, Self.myAnimationID)

@@ -87,7 +87,7 @@ Class LightFont Extends GimmickObject
 			' Magic numbers: 50, 72, 122
 			Local timetemp:= ((((systemClock + 50) + 72) - Long(Self.logicDelay)) Mod 122)
 			
-			If ((((systemClock + 50) + 72) - ((Long) Self.logicDelay)) Mod 122 < 72) Then
+			If ((((systemClock + 50) + 72) - Long(Self.logicDelay)) Mod 122 < 72) Then
 				If (Self.drawer.getActionId() = FONT_O) Then
 					Self.drawer.setActionId(FONT_N)
 				EndIf

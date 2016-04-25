@@ -7,8 +7,8 @@ Private
 	Import lib.myapi
 	
 	Import sonicgba.backgroundmanager
-	Import sonicgba.
-	Import sonicgba.
+	Import sonicgba.gameobject
+	Import sonicgba.mapmanager
 	
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
@@ -79,6 +79,6 @@ Class BackManagerStage62 Extends BackGroundManager
 					Self.lightX[i] += 16384
 					Self.lightX[i] Mod= 16384
 				EndIf
-			EndIf
+			Next
 		End
 End

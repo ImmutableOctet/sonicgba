@@ -88,7 +88,7 @@ Class SeabedVolcanoAsynPlatform Extends GimmickObject
 		
 		' Methods:
 		Method logic:Void()
-			If (player.isFootOnObject(Self) And (player.getCharacterID() = CHARACTER_KNUCKLES) Then
+			If (player.isFootOnObject(Self) And (player.getCharacterID() = CHARACTER_KNUCKLES)) Then
 				Local knuckles:= PlayerKnuckles(player)
 				
 				If (knuckles <> Null) Then

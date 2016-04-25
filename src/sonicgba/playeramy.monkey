@@ -853,7 +853,7 @@ Class PlayerAmy Extends PlayerObject
 			EndIf
 			
 			If (Key.press(Key.gSelect)) Then
-				If (Self.animationID <> NO_ANIMATION And Not Key.repeated(Key.gDown) And Self.collisionState <> (Byte) 1) Then
+				If (Self.animationID <> NO_ANIMATION And Not Key.repeated(Key.gDown) And Self.collisionState <> COLLISION_STATE_JUMP) Then
 					Self.totalVelocity = 0
 					
 					Self.animationID = NO_ANIMATION
