@@ -1757,7 +1757,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			If (Self.posY <= SUPER_SONIC_CHANGING_CENTER_Y) Then
 				Self.velY = -100
+				
 				terminalState = TER_STATE_CHANGE_2
+				
 				Self.terminalCount = 60
 			EndIf
 		End
@@ -1774,10 +1776,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			If (Self.terminalCount = 0) Then
 				Self.velY = 0
 				Self.velX = 0
+				
 				MapManager.setCameraRightLimit(MapManager.getPixelWidth())
 				MapManager.setFocusObj(Null)
+				
 				Self.terminalCount = ANI_YELL
+				
 				terminalState = TER_STATE_GO_AWAY
+				
 				Self.posY -= Boss4Ice.DRAW_OFFSET_Y
 				Self.footPointY = Self.posY
 			EndIf
