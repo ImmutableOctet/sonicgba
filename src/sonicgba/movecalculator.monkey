@@ -12,7 +12,7 @@ Private
 Public
 
 ' Classes:
-Class MoveCalculator ' Extends GimmickObject
+Class MoveCalculator
 	Private
 		' Constant variable(s):
 		Const DEGREE_VELOCITY:Int = 5
