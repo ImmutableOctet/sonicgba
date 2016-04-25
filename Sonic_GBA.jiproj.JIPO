@@ -614,6 +614,14 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\basicrollplatformspeed.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>9</X>
+        <Y>84</Y>
+      </CursorPos>
+      <DocGUID>af1e08d3-a321-42d9-b842-86b509af8df2</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bat.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>2</X>
@@ -1400,8 +1408,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\rollplatformspeeda.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>17</Y>
+        <X>5</X>
+        <Y>32</Y>
       </CursorPos>
       <DocGUID>10523d1b-aee2-4654-afcc-75009b8f9fb7</DocGUID>
       <Bookmarks />
