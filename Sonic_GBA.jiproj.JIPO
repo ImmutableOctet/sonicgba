@@ -763,8 +763,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bulletobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>12</X>
-        <Y>110</Y>
+        <X>19</X>
+        <Y>55</Y>
       </CursorPos>
       <DocGUID>e9c11e0a-eca5-4571-90f5-cc41cc5488b8</DocGUID>
       <Bookmarks />
@@ -1192,6 +1192,14 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\mira.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>10</X>
+        <Y>20</Y>
+      </CursorPos>
+      <DocGUID>1c51be25-e35d-4482-b603-f67b9a9c50fe</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\mirabullet.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>30</X>
@@ -1580,21 +1588,19 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\snowroboth.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\snowroboth.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>21</X>
         <Y>73</Y>
       </CursorPos>
-      <DocGUID>8929ccf5-65fd-4f34-8418-0e1a11ef195d</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\snowrobotv.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\snowrobotv.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>16</X>
-        <Y>18</Y>
+        <X>2</X>
+        <Y>41</Y>
       </CursorPos>
-      <DocGUID>f1c18da1-6883-47db-baff-ef2a42f9e3c2</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\snowstage4.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
