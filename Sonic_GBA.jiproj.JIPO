@@ -164,8 +164,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphicsmacros.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>18</X>
-        <Y>17</Y>
+        <X>6</X>
+        <Y>2</Y>
       </CursorPos>
       <DocGUID>d5022053-a53b-4c58-a126-649c9c77345e</DocGUID>
       <Bookmarks />
@@ -911,7 +911,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\enemyobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>30</X>
+        <X>22</X>
         <Y>149</Y>
       </CursorPos>
       <DocGUID>7b73d7eb-95ac-498e-9795-d1da61d330fe</DocGUID>
@@ -982,8 +982,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\fountain.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>3</Y>
+        <X>8</X>
+        <Y>18</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -1212,6 +1212,14 @@
         <Y>17</Y>
       </CursorPos>
       <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\motor.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>11</X>
+        <Y>14</Y>
+      </CursorPos>
+      <DocGUID>03f4b032-fcd5-4913-b1fc-51f8b6f42ff6</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\movecalculator.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1744,8 +1752,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\waterfall.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>6</X>
-        <Y>19</Y>
+        <X>2</X>
+        <Y>26</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
