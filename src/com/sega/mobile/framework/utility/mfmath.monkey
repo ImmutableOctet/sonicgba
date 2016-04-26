@@ -2,9 +2,17 @@ Strict
 
 Public
 
+#Rem
+	This file and/or uses of it will likely be replaced with proper floating-point operations.
+	
+	Until then, we're stuck with some pretty terrifying software.
+#End
+
 ' Imports:
 Private
 	Import lib.constutil
+	
+	Import monkey.math
 	
 	Import regal.typetool
 Public
@@ -27,6 +35,7 @@ Class MFMath
 		
 		Const SYMBOL_DOT:= "."
 		Const SYMBOL_ZERO:= "0"
+		Const SYMBOL_MINUS:= "-"
 		
 		' Global variable(s):
 		Global _fbits:Int = 12
@@ -135,66 +144,78 @@ Class MFMath
 			Return i1
 		End
 		
-		Public Function toString:String(i:Int)
-			Bool flag = False
+		Function toString:String(i:Int)
+			Local flag:Bool = False
 			
 			If (i < 0) Then
 				flag = True
+				
 				i = -i
 			EndIf
 			
-			Int j = i Shr _fbits
-			String s = Integer.toString((_dmul * (_fmask & i)) Shr _fbits)
+			Local j = (i Shr _fbits)
+			
+			Local s:= String((_dmul * (_fmask & i)) Shr _fbits)
+			
 			While (s.Length < _digits) {
 				s = "0" + s
 			EndIf
 			
-			Return New StringBuilder(String.valueOf(flag ? "-" : "")).append(Integer.toString(j)).append(".").append(s).toString()
+			Local output:String = (String(j) + SYMBOL_DOT + s)
+			
+			If (flag) Then
+				Return SYMBOL_MINUS + output
+			EndIf
+			
+			Return output
 		End
 		
-		Public Function toString:String(i:Int, j:Int)
-			
+		Function toString:String(i:Int, j:Int)
 			If (j > _digits) Then
 				j = _digits
 			EndIf
 			
-			String s = toString(round(i, j))
+			Local s:= toString(round(i, j))
+			
 			Return s[..((s.Length - _digits) + j)]
-		}
+		End
 		
-		Public Function max:Int(i:Int, j:Int)
-			Return i >= j ? i : j
-		}
+		Function max:Int(i:Int, j:Int)
+			Return math.Max(i, j) ' PickValue((i >= j), i, j)
+		End
 		
-		Public Function min:Int(i:Int, j:Int)
-			Return j >= i ? i : j
-		}
+		Function min:Int(i:Int, j:Int)
+			Return math.Min(i, j) ' PickValue((j >= i), i, j)
+		End
 		
-		Public Function round:Int(i:Int, j:Int)
-			Int k = 10
-			For (Int l = 0; l < j; l += 1)
+		Function round:Int(i:Int, j:Int)
+			Local k:= 10
+			
+			For Local l:= 0 Until j
 				k *= 10
-			EndIf
+			Next
+			
 			k = div(toFP(5), toFP(k))
 			
 			If (i < 0) Then
 				k = -k
 			EndIf
 			
-			Return i + k
-		}
+			Return (i + k)
+		End
 		
-		Public Function mul:Int(i:Int, j:Int)
-			Bool flag = False
-			Int k = _fbits
-			Int l = _fmask
+		Function mul:Int(i:Int, j:Int)
+			Local flag:Bool = False
+			
+			Local k:= _fbits
+			Local l:= _fmask
 			
 			If ((i & l) = 0) Then
-				Return (i Shr k) * j
+				Return ((i Shr k) * j)
 			EndIf
 			
 			If ((j & l) = 0) Then
-				Return (j Shr k) * i
+				Return ((j Shr k) * i)
 			EndIf
 			
 			If ((i < 0 And j > 0) Or (i > 0 And j < 0)) Then
@@ -209,32 +230,36 @@ Class MFMath
 				j = -j
 			EndIf
 			
-			While (max(i, j) >= (1 Shl (31 - k))) {
+			While (max(i, j) >= (1 Shl (31 - k)))
 				i Shr= 1
 				j Shr= 1
 				l Shr= 1
+				
 				k -= 1
-			EndIf
-			Int i1 = (((((i Shr k) * (j Shr k)) Shl k) + ((((i & l) * (j & l)) Shr k) + ((((l ~ -1) & i) * (j & l)) Shr k))) + (((i & l) * ((l ~ -1) & j)) Shr k)) Shl (_fbits - k)
+			Wend
+			
+			Local i1:= (((((i Shr k) * (j Shr k)) Shl k) + ((((i & l) * (j & l)) Shr k) + ((((l ~ -1) & i) * (j & l)) Shr k))) + (((i & l) * ((l ~ -1) & j)) Shr k)) Shl (_fbits - k)
 			
 			If (i1 >= 0) Then
-				Return flag ? -i1 : i1
+				Return PickValue((flag), -i1, i1)
 			Else
-				throw New ArithmeticException("Overflow")
+				Throw New ArithmeticException("Overflow")
 			EndIf
 			
-		}
+			Return 0
+		End
 		
-		Public Function div:Int(i:Int, j:Int)
-			Bool flag = False
-			Int k = _fbits
+		Function div:Int(i:Int, j:Int)
+			Local flag:Bool = False
+			
+			Local k:= _fbits
 			
 			If (j = _one) Then
 				Return i
 			EndIf
 			
 			If ((_fmask & j) = 0) Then
-				Return i / (j Shr k)
+				Return (i / (j Shr k))
 			EndIf
 			
 			If ((i < 0 And j > 0) Or (i > 0 And j < 0)) Then
@@ -249,235 +274,151 @@ Class MFMath
 				j = -j
 			EndIf
 			
-			While (max(i, j) >= (1 Shl (31 - k))) {
+			While (max(i, j) >= (1 Shl (31 - k)))
 				i Shr= 1
 				j Shr= 1
+				
 				k -= 1
-			EndIf
-			Int l = ((i Shl k) / j) Shl (_fbits - k)
+			Wend
+			
+			Local l:= ((i Shl k) / j) Shl (_fbits - k)
 			
 			If (flag) Then
 				Return -l
 			EndIf
 			
 			Return l
-		}
+		End
 		
-		Public Function add:Int(i:Int, j:Int)
-			Return i + j
-		}
+		Function add:Int(i:Int, j:Int)
+			Return (i + j)
+		End
 		
-		Public Function sub:Int(i:Int, j:Int)
-			Return i - j
-		}
+		Function sub:Int(i:Int, j:Int)
+			Return (i - j)
+		End
 		
-		Public Function abs:Int(i:Int)
-			
+		Function abs:Int(i:Int)
 			If (i < 0) Then
 				Return -i
 			EndIf
 			
-			Return i
-		}
+			Return i ' Abs(i)
+		End
 		
-		Public Function sqrt:Int(i:Int, j:Int)
-			
+		Function sqrt:Int(i:Int, j:Int)
 			If (i < 0) Then
-				throw New ArithmeticException("Bad Input")
+				Throw New ArithmeticException("Bad Input")
 			ElseIf (i = 0) Then
 				Return 0
-			Else
-				Int k = (_one + i) Shr 1
-				For (Int l = 0; l < j; l += 1)
-					k = (div(i, k) + k) Shr 1
-				EndIf
-				If (k >= 0) Then
-					Return k
-				EndIf
-				
-				throw New ArithmeticException("Overflow")
 			EndIf
 			
-		}
+			Local k:= ((_one + i) Shr 1) ' / 2
+			
+			For Local l:= 0 Until j
+				k = ((div(i, k) + k) Shr 1) ' / 2
+			Next
+			
+			If (k >= 0) Then
+				Return k
+			Else
+				Throw New ArithmeticException("Overflow")
+			EndIf
+			
+			Return 0
+		End
 		
-		Public Function sqrt:Int(i:Int)
+		Function sqrt:Int(i:Int)
 			Return sqrt(i, 16)
-		}
+		End
 		
-		Public Function sin:Int(i:Int)
-			Int j = mul(i, div(toFP((Int) 180), PI)) Mod toFP((Int) MDPhone.SCREEN_WIDTH)
+		Function sin:Int(i:Int)
+			Local j:= (mul(i, div(toFP(180), PI)) Mod toFP(360))
 			
 			If (j < 0) Then
-				j += toFP((Int) MDPhone.SCREEN_WIDTH)
+				j += toFP(360)
 			EndIf
 			
-			Int k = j
+			Local k:= j
 			
 			If (j >= toFP(90) And j < toFP(270)) Then
-				k = toFP((Int) 180) - j
-			ElseIf (j >= toFP(270) And j < toFP((Int) MDPhone.SCREEN_WIDTH)) Then
-				k = -(toFP((Int) MDPhone.SCREEN_WIDTH) - j)
+				k = (toFP(180) - j)
+			ElseIf (j >= toFP(270) And j < toFP(360)) Then
+				k = -(toFP(360) - j)
 			EndIf
 			
-			Int l = k / 90
-			Int i1 = mul(l, l)
+			Local l:= (k / 90)
+			
+			Local i1:= mul(l, l)
+			
 			Return mul(mul(mul(mul(-18 Shr _flt, i1) + (326 Shr _flt), i1) - (2646 Shr _flt), i1) + (6434 Shr _flt), l)
-		}
+		End
 		
-		Public Function asin:Int(i:Int)
-			
+		Function asin:Int(i:Int)
 			If (abs(i) > _one) Then
-				throw New ArithmeticException("Bad Input")
+				Throw New ArithmeticException("Bad Input")
 			EndIf
 			
-			Bool flag = i < 0
+			Local flag:Bool = (i < 0)
 			
 			If (i < 0) Then
 				i = -i
 			EndIf
 			
-			Int k = (PI / 2) - mul(sqrt(_one - i), mul(mul(mul(mul(35 Shr _flt, i) - (StringIndex.STR_RESET_RECORD Shr _flt), i) + (347 Shr _flt), i) - (877 Shr _flt), i) + (6434 Shr _flt))
-			Return flag ? -k : k
-		}
+			Local k:= (PI / 2) - mul(sqrt(_one - i), mul(mul(mul(mul(35 Shr _flt, i) - (StringIndex.STR_RESET_RECORD Shr _flt), i) + (347 Shr _flt), i) - (877 Shr _flt), i) + (6434 Shr _flt))
+			
+			Return PickValue(flag, -k, k)
+		End
 		
-		Public Function cos:Int(i:Int)
+		Function cos:Int(i:Int)
 			Return sin((PI / 2) - i)
-		}
+		End
 		
-		Public Function acos:Int(i:Int)
+		Function acos:Int(i:Int)
 			Return (PI / 2) - asin(i)
-		}
+		End
 		
-		Public Function tan:Int(i:Int)
+		Function tan:Int(i:Int)
 			Return div(sin(i), cos(i))
-		}
+		End
 		
-		Public Function cot:Int(i:Int)
+		Function cot:Int(i:Int)
 			Return div(cos(i), sin(i))
-		}
+		End
 		
-		Public Function atan:Int(i:Int)
+		Function atan:Int(i:Int)
 			Return asin(div(i, sqrt(_one + mul(i, i))))
-		}
+		End
 		
-		/* JADX WARNING: inconsistent code. */
-		/* Code decompiled incorrectly, please refer to instructions dump. */
-		Public Function exp:Int(r10:Int)
-			/*
-			
-			If (r10 <> 0) goto L_0x0005
-		L_0x0002:
-			r8 = _one
-		L_0x0004:
-			Return r8
-		L_0x0005:
-			
-			If (r10 >= 0) goto L_0x0045
-		L_0x0007:
-			r8 = 1
-			r0 = r8
-		L_0x0009:
-			r10 = abs(r10)
-			r8 = _fbits
-			r2 = r10 Shr r8
-			r4 = _one
-			r6 = 0
-		L_0x0014:
-			r8 = r2 / 4
-			
-			If (r6 < r8) goto L_0x0048
-		L_0x0018:
-			r8 = r2 Mod 4
-			
-			If (r8 <= 0) goto L_0x0029
-		L_0x001c:
-			r8 = f12e
-			r9 = r2 Mod 4
-			r8 = r8[r9]
-			r9 = _flt
-			r8 = r8 Shr r9
-			r4 = mul(r4, r8)
-		L_0x0029:
-			r8 = _fmask
-			r10 = r10 & r8
-			
-			If (r10 <= 0) goto L_0x003b
-		L_0x002e:
-			r1 = _one
-			r3 = 0
-			r5 = 1
-			r7 = 0
-		L_0x0033:
-			r8 = 16
-			
-			If (r7 < r8) goto L_0x0057
-		L_0x0037:
-			r4 = mul(r4, r3)
-		L_0x003b:
-			
-			If (r0 = 0) goto L_0x0043
-		L_0x003d:
-			r8 = _one
-			r4 = div(r8, r4)
-		L_0x0043:
-			r8 = r4
-			goto L_0x0004
-		L_0x0045:
-			r8 = 0
-			r0 = r8
-			goto L_0x0009
-		L_0x0048:
-			r8 = f12e
-			r9 = 4
-			r8 = r8[r9]
-			r9 = _flt
-			r8 = r8 Shr r9
-			r4 = mul(r4, r8)
-			r6 = r6 + 1
-			goto L_0x0014
-		L_0x0057:
-			r8 = r1 / r5
-			r3 = r3 + r8
-			r1 = mul(r1, r10)
-			r8 = r7 + 1
-			r5 = r5 * r8
-			
-			If (r5 > r1) goto L_0x0037
-		L_0x0063:
-			
-			If (r1 <= 0) goto L_0x0037
-		L_0x0065:
-			
-			If (r5 <= 0) goto L_0x0037
-		L_0x0067:
-			r7 = r7 + 1
-			goto L_0x0033
-			*/
-			throw New UnsupportedOperationException("Method not decompiled: com.sega.mobile.framework.utility.MFMath.exp(Int):Int")
-		}
+		Function exp:Int(r10:Int)
+			' UNIMPLEMENTED FUNCTION.
+		End
 		
-		Public Function log:Int(i:Int)
-			
+		Function log:Int(i:Int)
 			If (i <= 0) Then
-				throw New ArithmeticException("Bad Input")
+				Throw New ArithmeticException("Bad Input")
 			EndIf
 			
-			Int j = 0
-			Int l = 0
-			While (i >= (_one Shl 1)) {
+			Local j:= 0
+			Local l:= 0
+			
+			While (i >= (_one Shl 1))
 				i Shr= 1
+				
 				l += 1
-			EndIf
-			Int i1 = l * (2839 Shr _flt)
-			Int j1 = 0
+			Wend
+			
+			Local i1 = (l * (2839 Shr _flt))
+			Local j1 = 0
 			
 			If (i < _one) Then
 				Return -log(div(_one, i))
 			EndIf
 			
 			i -= _one
-			For (Int k1 = 1; k1 < 20; k1 += 1)
-				Int k
+			
+			For Local k1:= 1 Until 20
+				Local k:Int
 				
 				If (j = 0) Then
 					k = i
@@ -486,32 +427,39 @@ Class MFMath
 				EndIf
 				
 				If (k = 0) Then
-					break
+					Exit
 				EndIf
 				
-				j1 += ((k1 Mod 2 <> 0 ? 1 : -1) * k) / k1
+				j1 += ((DSgn((k1 Mod 2) <> 0) * k) / k1)
+				
 				j = k
 			EndIf
-			Return i1 + j1
-		}
+			
+			Return (i1 + j1)
+		End
 		
-		Public Function pow:Int(i:Int, j:Int)
-			Bool flag = j < 0
-			Int k = _one
+		Function pow:Int(i:Int, j:Int)
+			Local flag:Bool = (j < 0)
+			
+			Local k:= _one
+			
 			j = abs(j)
-			Int l = j Shr _fbits
-			While (True) {
-				Int l2 = l - 1
+			
+			Local l:= (j Shr _fbits)
+			
+			While (True)
+				Local l2:= (l - 1)
 				
 				If (l <= 0) Then
-					break
+					Exit
 				EndIf
 				
 				k = mul(k, i)
 				l = l2
-			EndIf
+			Wend
+			
 			If (k < 0) Then
-				throw New ArithmeticException("Overflow")
+				Throw New ArithmeticException("Overflow")
 			EndIf
 			
 			If (i <> 0) Then
@@ -525,10 +473,9 @@ Class MFMath
 			EndIf
 			
 			Return k
-		}
+		End
 		
-		Public Function atan2:Int(y:Int, x:Int)
-			
+		Function atan2:Int(y:Int, x:Int)
 			If (y = 0 And x = 0) Then
 				Return 0
 			EndIf
@@ -538,15 +485,30 @@ Class MFMath
 			EndIf
 			
 			If (x >= 0) Then
-				Return y >= 0 ? PI / 2 : (-PI) / 2
-			Else
-				
-				If (y < 0) Then
-					Return (-PI) + atan(div(y, x))
-				EndIf
-				
-				Return PI - atan(abs(div(y, x)))
+				Return (PickValue((y >= 0), PI / 2, -PI) / 2)
 			EndIf
 			
+			If (y < 0) Then
+				Return (-PI) + atan(div(y, x))
+			EndIf
+			
+			Return (PI - atan(abs(div(y, x))))
 		End
+End
+
+' Exceptions:
+Class ArithmeticException Extends Throwable
+	Public
+		' Constructor(s):
+		Method New(message:String)
+			Self.message = message
+		End
+		
+		' Methods:
+		Method ToString:String() ' Property
+			Return Self.message
+		End
+	Protected
+		' Fields:
+		Field message:String
 End

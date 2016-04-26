@@ -151,8 +151,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\define\mdphone.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
-        <Y>40</Y>
+        <X>13</X>
+        <Y>39</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -244,7 +244,7 @@
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\utility\mfmath.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>2</X>
-        <Y>136</Y>
+        <Y>395</Y>
       </CursorPos>
       <DocGUID>a5dfcea6-c8fe-4857-9674-a9e040c1d247</DocGUID>
       <Bookmarks />
