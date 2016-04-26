@@ -204,29 +204,34 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\mobile\framework\ui\mfbutton.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\ui\mfbutton.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
-        <Y>11</Y>
+        <X>30</X>
+        <Y>19</Y>
       </CursorPos>
-      <DocGUID>1b9494b9-29c0-4475-817d-950706a070f4</DocGUID>
+      <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\ui\mfjoystick.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>16</X>
+        <Y>14</Y>
+      </CursorPos>
+      <DocGUID>40470aac-bf6f-44aa-ac17-9295f12c1218</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\mobile\framework\ui\mfsliderbar.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\ui\mfsliderbar.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>2</X>
         <Y>19</Y>
       </CursorPos>
-      <DocGUID>da41db38-87fe-4aa1-b0b1-2446ea2fd9dc</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\mobile\framework\ui\mfslidesensor.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\ui\mfslidesensor.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>19</X>
         <Y>11</Y>
       </CursorPos>
-      <DocGUID>782686d6-adf9-4654-93da-9969329fc88d</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\ui\mftouchkey.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
