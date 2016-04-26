@@ -204,6 +204,14 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\ui\mfslidebar.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>17</X>
+        <Y>11</Y>
+      </CursorPos>
+      <DocGUID>3af91c54-c780-4279-b446-86764d94a0c5</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\ui\mfslidesensor.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>19</X>
