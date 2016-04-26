@@ -211,13 +211,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\mobile\framework\ui\mfjoystick.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\ui\mfjoystick.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>16</X>
-        <Y>14</Y>
+        <X>2</X>
+        <Y>30</Y>
       </CursorPos>
-      <DocGUID>40470aac-bf6f-44aa-ac17-9295f12c1218</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\ui\mfsliderbar.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -239,6 +238,14 @@
         <Y>28</Y>
       </CursorPos>
       <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\utility\mfutility.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>15</X>
+        <Y>15</Y>
+      </CursorPos>
+      <DocGUID>059ca651-8f40-4d57-ac41-cfc146e1543d</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\mfgamestate.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -429,12 +436,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\myrandom.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\lib\myrandom.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>11</X>
+        <X>17</X>
         <Y>14</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>42a890d5-446f-4fcc-9856-36968181c7a6</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\record.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -2052,24 +2060,25 @@
     <FolderStatus NodePath="Sonic_GBA\src" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\action" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\action\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\ext" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\lib" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\lib" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mflib" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mflib\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\define" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\__test" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\android" Expanded="true" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\android" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\device" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\ui" Expanded="true" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\ui" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\utility" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\common" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\ending" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\gameengine" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\lib\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\mflib" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\platformstandard" Expanded="false" />
