@@ -390,8 +390,51 @@ Class MFMath
 			Return asin(div(i, sqrt(_one + mul(i, i))))
 		End
 		
-		Function exp:Int(r10:Int)
-			' UNIMPLEMENTED FUNCTION.
+		' This implementation in particular may change at a later date.
+		Function exp:Int(var0:Int)
+			If (var0 = 0) Then
+				return _one
+			EndIf
+			
+			Local var1:Bool = (var0 < 0) ' flag
+			
+			Local var2:= abs(var0)
+			Local var3:= (var2 Shr _fbits)
+			Local var4:= _one
+			
+			For Local var5:= 0 Until (var3 / 4)
+				var4 = mul(var4, e[4] Shr _flt)
+			Next
+			
+			If ((var3 Mod 4) > 0) Then
+				var4 = mul(var4, e[var3 Mod 4] Shr _flt)
+			EndIf
+			
+			Local var6:= (var2 & _fmask)
+			
+			If (var6 > 0) Then
+				Local var7:= _one
+				Local var8:= 0
+				Local var9:= 1
+				
+				For Local var10:= 0 Until 16
+					var8 += (var7 / var9)
+					var7 = mul(var7, var6)
+					var9 *= (var10 + 1)
+					
+					If (var9 > var7 Or var7 <= 0 Or var9 <= 0) Then
+						Exit
+					EndIf
+				Next
+				
+				var4 = mul(var4, var8)
+			EndIf
+			
+			If (var1) Then
+				var4 = div(_one, var4)
+			EndIf
+			
+			Return var4
 		End
 		
 		Function log:Int(i:Int)
