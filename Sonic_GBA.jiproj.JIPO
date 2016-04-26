@@ -243,8 +243,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\utility\mfmath.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>32</X>
-        <Y>419</Y>
+        <X>3</X>
+        <Y>556</Y>
       </CursorPos>
       <DocGUID>a5dfcea6-c8fe-4857-9674-a9e040c1d247</DocGUID>
       <Bookmarks />
@@ -396,12 +396,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\constutil.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\lib\constutil.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>10</X>
-        <Y>31</Y>
+        <X>11</X>
+        <Y>24</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>e2c11aed-3e45-4f06-9467-6defff4ad3c0</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\coordinate.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>

@@ -153,13 +153,13 @@ Class MFMath
 				i = -i
 			EndIf
 			
-			Local j = (i Shr _fbits)
+			Local j:= (i Shr _fbits)
 			
 			Local s:= String((_dmul * (_fmask & i)) Shr _fbits)
 			
-			While (s.Length < _digits) {
-				s = "0" + s
-			EndIf
+			While (s.Length < _digits)
+				s = SYMBOL_ZERO + s
+			Wend
 			
 			Local output:String = (String(j) + SYMBOL_DOT + s)
 			
@@ -451,8 +451,8 @@ Class MFMath
 				l += 1
 			Wend
 			
-			Local i1 = (l * (2839 Shr _flt))
-			Local j1 = 0
+			Local i1:= (l * (2839 Shr _flt))
+			Local j1:= 0
 			
 			If (i < _one) Then
 				Return -log(div(_one, i))
@@ -476,7 +476,7 @@ Class MFMath
 				j1 += ((DSgn((k1 Mod 2) <> 0) * k) / k1)
 				
 				j = k
-			EndIf
+			Next
 			
 			Return (i1 + j1)
 		End
