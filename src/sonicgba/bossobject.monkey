@@ -22,6 +22,7 @@ Public
 ' Presumed base-class for bosses.
 Class BossObject Extends EnemyObject Abstract
 	Private
+		' Constant variable(s):
 		Const DEFAULT_HP:= 8
 		Const EASY_HP:= 6
 	Protected
