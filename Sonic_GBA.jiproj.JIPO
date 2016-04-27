@@ -465,8 +465,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
-        <Y>110</Y>
+        <X>19</X>
+        <Y>23</Y>
       </CursorPos>
       <DocGUID>9738c019-aeda-4c8b-af83-0cf043b8f256</DocGUID>
       <Bookmarks />
@@ -732,8 +732,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss1.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>25</X>
-        <Y>285</Y>
+        <X>11</X>
+        <Y>23</Y>
       </CursorPos>
       <DocGUID>4ad7411d-0fab-45cb-8049-8202ae549e70</DocGUID>
       <Bookmarks />
@@ -986,8 +986,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\enemyobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>19</X>
+        <Y>119</Y>
       </CursorPos>
       <DocGUID>dcf355fc-0af5-46b1-8f3d-5e20a64a2e12</DocGUID>
       <Bookmarks />
@@ -1426,13 +1426,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\playeranimationcollisionrect.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\playeranimationcollisionrect.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>77</X>
         <Y>46</Y>
       </CursorPos>
-      <DocGUID>7a3acefb-6435-49cd-8acb-196423cf60af</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerknuckles.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1666,12 +1665,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\smallanimal.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\smallanimal.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>29</X>
+        <X>8</X>
         <Y>64</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>39ec0673-5721-46f5-9a5f-3f2890dbef2b</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\snowroboth.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1939,12 +1939,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\special\ssdef.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\special\ssdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>6</X>
-        <Y>29</Y>
+        <X>33</X>
+        <Y>15</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>11785aeb-dcd3-4f83-b234-2652ac454dd8</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssfollowring.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -2137,7 +2138,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\water" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonicgba" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\sonicgba\__test" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\special" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\special" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\state" Expanded="false" />
   </Folders>
 </JiProjUserOptions>

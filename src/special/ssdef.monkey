@@ -13,8 +13,8 @@ Global RING_TARGET:Int[][] = [[60, 120], [70, 140], [80, 160], [80, 160], [90, 1
 
 Global STAGE_ID_TO_SPECIAL_ID:Int[] = [0, 0, 1, 1, 2, 2, 3, 4, 5, 5, 6, 6] ' Const
 
-Const PLAYER_MOVE_HEIGHT:Int = 240
 Const PLAYER_MOVE_WIDTH:Int = 300
+Const PLAYER_MOVE_HEIGHT:Int = 240
 
 Const PLAYER_VELOCITY_DASH:Int = 6
 Const PLAYER_VELOCITY_STANDARD:Int = 4
