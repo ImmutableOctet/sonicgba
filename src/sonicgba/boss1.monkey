@@ -312,14 +312,14 @@ Class Boss1 Extends BossObject
 					' Magic numbers: 3, 4 (Arm states)
 					If (Self.state = STATE_ATTACK_1) Then
 						Self.state = STATE_BROKEN
-					ElseIf (Self.arm.getArmState() = 3 And Not Self.arm.getTurnState()) Then
+					ElseIf (Self.arm.getArmState() = Boss1Arm.STATE_ATTACK_2 And Not Self.arm.getTurnState()) Then
 						Self.state = STATE_ATTACK_2
 						
 						Self.dg_plus = 914 ' (14 Shl 6)
 						
 						Self.arm.setTurnState(True)
 						Self.arm.setDegreeSpeed(Self.dg_plus)
-					ElseIf (Self.arm.getArmState() = 4 And Not Self.arm.getTurnState()) Then
+					ElseIf (Self.arm.getArmState() = Boss1Arm.STATE_ATTACK_3 And Not Self.arm.getTurnState()) Then
 						Self.state = STATE_BROKEN
 					EndIf
 				ElseIf (Self.HP = 0 And Not Self.IsBreaking) Then
