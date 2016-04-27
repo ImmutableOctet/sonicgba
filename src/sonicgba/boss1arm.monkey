@@ -35,6 +35,7 @@ Class Boss1Arm Extends EnemyObject
 		Const DEGREE_MIN_2:Int = 23680
 		Const DEGREE_MAX_2:Int = 10880
 		
+		' States:
 		Const STATE_WAIT:Int = Boss1.STATE_WAIT
 		Const STATE_ATTACK_1:Int = Boss1.STATE_ATTACK_1
 		Const STATE_READY:Int = Boss1.STATE_READY
