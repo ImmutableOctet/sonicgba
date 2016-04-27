@@ -83,16 +83,16 @@ Class PlayerAnimationCollisionRect ' Implements SonicDef
 			EndIf
 		End
 		
-		Method doWhileCollisionWrap:Void(object:GameObject)
+		Method doWhileCollisionWrap:Void(obj:GameObject)
 			Local direction:= DIRECTION_NONE
 			
-			Local moveDistanceX:= object.getMoveDistance().x
-			Local moveDistanceY:= object.getMoveDistance().y
+			Local moveDistanceX:= obj.getMoveDistance().x
+			Local moveDistanceY:= obj.getMoveDistance().y
 			
 			Local collisionRectCurrent:= Self.collisionRect
 			Local collisionRectBefore:= Self.preCollisionRect
 			
-			Local objCollisionRect:= object.getCollisionRect()
+			Local objCollisionRect:= obj.getCollisionRect()
 			
 			Local xFirst:Bool
 			
@@ -130,7 +130,7 @@ Class PlayerAnimationCollisionRect ' Implements SonicDef
 				EndIf
 			EndIf
 			
-			object.doWhileBeAttack(Self.player, direction, Self.animationID)
+			obj.doWhileBeAttack(Self.player, direction, Self.animationID)
 			
 			calPreCollision()
 		End
