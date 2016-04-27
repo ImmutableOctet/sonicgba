@@ -13,9 +13,11 @@ Public
 
 ' Imports:
 Private
-	Import sonicgba.enemyobject
+	Import lib.soundsystem
+	
 	Import sonicgba.globalresource
 Public
+	Import sonicgba.enemyobject
 
 ' Classes:
 
@@ -32,6 +34,17 @@ Class BossObject Extends EnemyObject Abstract
 		' Constructor(s):
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
 			Super.New(id, x, y, left, top, width, height)
+		End
+		
+		' Methods:
+		
+		' Extensions:
+		Method playHitSound:Void()
+			If (Self.HP = 0) Then
+				SoundSystem.getInstance().playSe(SoundSystem.SE_144)
+			Else
+				SoundSystem.getInstance().playSe(SoundSystem.SE_143)
+			EndIf
 		End
 	Public
 		' Methods:

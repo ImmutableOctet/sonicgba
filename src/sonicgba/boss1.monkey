@@ -209,13 +209,60 @@ Class Boss1 Extends BossObject
 			EndIf
 			
 			Self.escapefacedrawer = escapefaceAni.getDrawer(4, True, 0)
-			Self.arm = New Boss1Arm(31, x, y, left, top, width, height)
+			
+			Self.arm = New Boss1Arm(EnemyObject.ENEMY_BOSS1_ARM, x, y, left, top, width, height)
+			
 			GameObject.addGameObject(Self.arm, x, y)
+			
 			Self.IsBreaking = False
 			Self.WaitCnt = 0
 			Self.IsStopWait = False
 			
 			setBossHP()
+		End
+		
+		' Methods:
+		
+		' Extensions:
+		Method onPlayerAttacked:Void(p:PlayerObject, direction:Int) ' animationID:Int
+			If (Self.face_state = FACE_HURT And Self.car_cnt = cnt_max) Then
+				Local animationID:= p.getAnimationId()
+				
+				' This behavior will likely change in the future:
+				
+				'If (animationID = PlayerObject.ANI_SPIN_LV1 Or animationID = PlayerObject.ANI_SPIN_LV2) Then
+				If (animationID <> PlayerObject.ANI_SPIN_LV1 And animationID <> PlayerObject.ANI_SPIN_LV2) Then
+					p.beHurt()
+					
+					Self.face_state = FACE_SMILE
+					
+					Return
+				EndIf
+			EndIf
+			
+			If (Self.HP > 0 And Self.face_state <> FACE_HURT) Then
+				Self.HP -= 1
+				
+				p.doBossAttackPose(Self, direction)
+				
+				Self.face_state = FACE_HURT
+				Self.car_state = CAR_HURT
+				
+				playHitSound()
+			EndIf
+		End
+	Private
+		' Methods:
+		Method changeAniState:Void(aniDrawer:AnimationDrawer, state:Int)
+			If (Self.velocity > 0) Then
+				aniDrawer.setActionId(state)
+				aniDrawer.setTrans(TRANS_MIRROR)
+				aniDrawer.setLoop(True)
+			Else
+				aniDrawer.setActionId(state)
+				aniDrawer.setTrans(TRANS_NONE)
+				aniDrawer.setLoop(True)
+			EndIf
 		End
 	Public
 		' Functions:
@@ -235,16 +282,21 @@ Class Boss1 Extends BossObject
 			escapefaceAni = Null
 		End
 		
-		/* JADX WARNING: inconsistent code. */
-		/* Code decompiled incorrectly, please refer to instructions dump. */
-		Public Method doWhileCollision:Void(r6:SonicGBA.PlayerObject, r7:Int)
-		
+		' Methods:
+		Method doWhileCollision:Void(p:PlayerObject, direction:Int)
+			If (Not Self.dead And Self.state <> STATE_BROKEN And Self.state <> STATE_ESCAPE And p = player) Then
+				If (p.isAttackingEnemy()) Then
+					onPlayerAttacked(p, direction)
+				ElseIf (Self.state <> STATE_BROKEN And Self.state <> STATE_ESCAPE And p.canBeHurt()) Then
+					p.beHurt()
+					
+					Self.face_state = FACE_SMILE
+				EndIf
+			EndIf
 		End
 		
-		/* JADX WARNING: inconsistent code. */
-		/* Code decompiled incorrectly, please refer to instructions dump. */
-		Public Method doWhileBeAttack:Void(r5:SonicGBA.PlayerObject, r6:Int, r7:Int)
-		
+		Method doWhileBeAttack:Void(p:PlayerObject, direction:Int, animationID:Int)
+			onPlayerAttacked(p, direction)
 		End
 		
 		Public Method logic:Void()
@@ -256,15 +308,15 @@ Class Boss1 Extends BossObject
 				Int tmpY = Self.posY
 				
 				If (Self.HP = 1) Then
-					If (Self.state = 1) Then
-						Self.state = 4
+					If (Self.state = STATE_ATTACK_1) Then
+						Self.state = STATE_ATTACK_4
 					ElseIf (Self.arm.getArmState() = STATE_ATTACK_2 And Not Self.arm.getTurnState()) Then
 						Self.state = STATE_ATTACK_2
 						Self.dg_plus = 914
 						Self.arm.setTurnState(True)
 						Self.arm.setDegreeSpeed(Self.dg_plus)
 					ElseIf (Self.arm.getArmState() = 4 And Not Self.arm.getTurnState()) Then
-						Self.state = 4
+						Self.state = STATE_ATTACK_4
 					EndIf
 					
 				ElseIf (Self.HP = 0 And Not Self.IsBreaking) Then
@@ -321,7 +373,7 @@ Class Boss1 Extends BossObject
 						
 						If (Self.IsStopWait) Then
 							If (Self.stop_wait_cnt >= stop_wait_cnt_max) Then
-								Self.state = 1
+								Self.state = STATE_ATTACK_1
 								break
 							Else
 								Self.stop_wait_cnt += 1
@@ -333,20 +385,20 @@ Class Boss1 Extends BossObject
 					Case 1
 					Case 2
 						
-						If (Self.face_state <> 0) Then
+						If (Self.face_state <> FACE_NORMAL) Then
 							If (Self.face_cnt < cnt_max) Then
 								Self.face_cnt += 1
 							Else
-								Self.face_state = 0
+								Self.face_state = FACE_NORMAL
 								Self.face_cnt = 0
 							EndIf
 						EndIf
 						
-						If (Self.car_state = 1) Then
+						If (Self.car_state = CAR_HURT) Then
 							If (Self.car_cnt < cnt_max) Then
 								Self.car_cnt += 1
 							Else
-								Self.car_state = 0
+								Self.car_state = CAR_MOVE
 								Self.car_cnt = 0
 							EndIf
 						EndIf
@@ -354,7 +406,7 @@ Class Boss1 Extends BossObject
 						changeAniState(Self.cardrawer, Self.car_state)
 						changeAniState(Self.facedrawer, Self.face_state)
 						
-						If (Self.state <> 4) Then
+						If (Self.state <> STATE_ATTACK_4) Then
 							If (Self.velocity > 0) Then
 								Self.posX += Self.velocity
 								
@@ -387,20 +439,20 @@ Class Boss1 Extends BossObject
 						break
 					Case STATE_ATTACK_2
 						
-						If (Self.face_state <> 0) Then
+						If (Self.face_state <> FACE_NORMAL) Then
 							If (Self.face_cnt < cnt_max) Then
 								Self.face_cnt += 1
 							Else
-								Self.face_state = 0
+								Self.face_state = FACE_NORMAL
 								Self.face_cnt = 0
 							EndIf
 						EndIf
 						
-						If (Self.car_state = 1) Then
+						If (Self.car_state = CAR_HURT) Then
 							If (Self.car_cnt < cnt_max) Then
 								Self.car_cnt += 1
 							Else
-								Self.car_state = 0
+								Self.car_state = CAR_MOVE
 								Self.car_cnt = 0
 							EndIf
 						EndIf
@@ -413,20 +465,20 @@ Class Boss1 Extends BossObject
 						break
 					Case 4
 						
-						If (Self.face_state <> 0) Then
+						If (Self.face_state <> FACE_NORMAL) Then
 							If (Self.face_cnt < cnt_max) Then
 								Self.face_cnt += 1
 							Else
-								Self.face_state = 0
+								Self.face_state = FACE_NORMAL
 								Self.face_cnt = 0
 							EndIf
 						EndIf
 						
-						If (Self.car_state = 1) Then
+						If (Self.car_state = CAR_HURT) Then
 							If (Self.car_cnt < cnt_max) Then
 								Self.car_cnt += 1
 							Else
-								Self.car_state = 0
+								Self.car_state = CAR_MOVE
 								Self.car_cnt = 0
 							EndIf
 						EndIf
@@ -457,11 +509,11 @@ Class Boss1 Extends BossObject
 						break
 					Case STATE_BROKEN
 						
-						If (Self.face_state <> 0) Then
+						If (Self.face_state <> FACE_NORMAL) Then
 							If (Self.face_cnt < cnt_max) Then
 								Self.face_cnt += 1
 							Else
-								Self.face_state = 0
+								Self.face_state = FACE_NORMAL
 								Self.face_cnt = 0
 							EndIf
 						EndIf
@@ -604,21 +656,7 @@ Class Boss1 Extends BossObject
 			Self.collisionRect.setRect(x - 2304, y - COLLISION_HEIGHT, COLLISION_WIDTH, COLLISION_HEIGHT)
 		End
 		
-		Private Method changeAniState:Void(AniDrawer:AnimationDrawer, state:Int)
-			
-			If (Self.velocity > 0) Then
-				AniDrawer.setActionId(state)
-				AniDrawer.setTrans(2)
-				AniDrawer.setLoop(True)
-				Return
-			EndIf
-			
-			AniDrawer.setActionId(state)
-			AniDrawer.setTrans(0)
-			AniDrawer.setLoop(True)
-		End
-		
-		Public Method close:Void()
+		Method close:Void()
 			Self.cardrawer = Null
 			Self.facedrawer = Null
 			Self.brokencardrawer = Null

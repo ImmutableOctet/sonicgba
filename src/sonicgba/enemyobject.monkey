@@ -83,7 +83,8 @@ Class EnemyObject Extends GameObject Abstract
 	Protected
 		' Constant variable(s):
 		Const ENEMY_RES_PATH:String = "/enemy"
-		
+	Public
+		' Constant variable(s):
 		Const ENEMY_100PTS:Int = 39
 		Const ENEMY_ASPIRATE_BUBBLE:Int = 40
 		Const ENEMY_BAT:Int = 9
@@ -116,6 +117,21 @@ Class EnemyObject Extends GameObject Abstract
 		Const ENEMY_YOKOYUKIMAL:Int = 17
 		Const ENEMY_YUKIMAL:Int = 16
 		
+		Const ENEMY_BOSS1:Int = 22
+		Const ENEMY_BOSS2:Int = 23
+		Const ENEMY_BOSS3:Int = 24
+		Const ENEMY_BOSS4:Int = 25
+		Const ENEMY_BOSS5:Int = 26
+		Const ENEMY_BOSS6:Int = 27
+		
+		Const ENEMY_BOSSF1:Int = 28
+		Const ENEMY_BOSSF2:Int = 29
+		Const ENEMY_BOSSF3:Int = 30
+		
+		Const ENEMY_BOSS_EXTRA:Int = 36
+		Const ENEMY_PROBOSS1:Int = 21
+	Protected
+		' Constant variable(s):
 		Const POS_TOP:Int = 0
 		Const POS_BOTTOM:Int = 1
 		Const POS_LEFT:Int = 2
@@ -135,18 +151,6 @@ Class EnemyObject Extends GameObject Abstract
 		Field IsPlayBossBattleBGM:Bool
 	Public
 		' Constant variable(s):
-		Const ENEMY_BOSS1:Int = 22
-		Const ENEMY_BOSS2:Int = 23
-		Const ENEMY_BOSS3:Int = 24
-		Const ENEMY_BOSS4:Int = 25
-		Const ENEMY_BOSS5:Int = 26
-		Const ENEMY_BOSS6:Int = 27
-		Const ENEMY_BOSSF1:Int = 28
-		Const ENEMY_BOSSF2:Int = 29
-		Const ENEMY_BOSSF3:Int = 30
-		Const ENEMY_BOSS_EXTRA:Int = 36
-		Const ENEMY_PROBOSS1:Int = 21
-		
 		Const IN_ALERT_RANGE:Int = 0
 		Const IN_AVAILABLE_RANGE:Int = 1
 		Const CANNOT_BE_SEEN:Int = 2
