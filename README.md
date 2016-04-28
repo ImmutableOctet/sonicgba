@@ -8,13 +8,19 @@ This project aims to maintain a codebase that resembles the original decompiled 
 without making any claim to parody the original behavior in any way.
 
 ## TODO
-* **Finish implementing 'sonicgba'**.
+
+### Major:
+* **Finish implementing 'sonicgba'**:
+    * Implement the remaining boss behavior.
 * Properly implement sound behavior.
 * *Finish missing parts of 'MFLib'.*
-* *Split supporting sub-classes into separate modules.* (Animation, etc)
 * *Implement font behavior.*
+
+### Minor:
+* *Split supporting sub-classes into separate modules.* (Animation, etc)
 * Resolve foreign text.
 
+### Done:
 * **~~Implement 'special'~~** (Special Stage objects)
 * **~~Implement 'common'~~** (Utilities)
 * **~~Implement 'platformstandard'~~**
