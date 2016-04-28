@@ -7,6 +7,8 @@ Private
 	Import com.sega.mobile.framework.device.mfgraphics
 	
 	Import sonicgba.enemyobject
+	
+	Import sonicgba.boss3
 Public
 
 ' Classes:
@@ -20,9 +22,9 @@ Class Boss3Shadow Extends EnemyObject
 		Const COLLISION_WIDTH:Int = 3200
 		Const COLLISION_HEIGHT:Int = 3200
 		
-		Const FACE_HURT:Int = 2
-		Const FACE_NORMAL:Int = 0
-		Const FACE_SMILE:Int = 1
+		Const FACE_NORMAL:= Boss3.FACE_NORMAL
+		Const FACE_SMILE:= Boss3.FACE_SMILE
+		Const FACE_HURT:= Boss3.FACE_HURT
 		
 		' Fields:
 		Field face_state:Int

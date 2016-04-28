@@ -37,8 +37,8 @@ Class Boss3 Extends BossObject
 		
 		Const SHOW_PIPE_ENTER:Int = 0
 		Const SHOW_BOSS_ENTER:Int = 1
-		Const SHOW_BOSS_INTO_PIPE:Int = 3
 		Const SHOW_BOSS_LAUGH:Int = 2
+		Const SHOW_BOSS_INTO_PIPE:Int = 3
 		
 		Const FACE_NORMAL:Int = 0
 		Const FACE_SMILE:Int = 1
@@ -67,9 +67,10 @@ Class Boss3 Extends BossObject
 		Const cnt_max:Int = 8
 		
 		Const boss_wait_cnt_max:Int = 16
-		Const pipe_offset_max:Int = 16
 		Const release_cnt_max:Int = 25
 		Const show_pipe_cnt_max:Int = 19
+		
+		Const pipe_offset_max:Int = 16
 		
 		' Global variable(s):
 		Global boatAni:Animation = Null
@@ -303,7 +304,7 @@ Class Boss3 Extends BossObject
 			p.doBossAttackPose(Self, direction)
 			
 			Self.face_state = FACE_HURT
-			Self.boat_state = 1
+			Self.boat_state = BOAT_HURT
 			
 			If (Self.HP = 0) Then
 				Self.state = STATE_BROKEN
@@ -347,8 +348,27 @@ Class Boss3 Extends BossObject
 			playHitSound()
 		End
 	Public
+		' Functions:
+		Function releaseAllResource:Void()
+			Animation.closeAnimation(realAni)
+			Animation.closeAnimation(shadowAni)
+			Animation.closeAnimation(faceAni)
+			Animation.closeAnimation(pipeAni)
+			Animation.closeAnimation(partAni)
+			Animation.closeAnimation(boatAni)
+			Animation.closeAnimation(escapefaceAni)
+			
+			realAni = Null
+			shadowAni = Null
+			faceAni = Null
+			pipeAni = Null
+			partAni = Null
+			boatAni = Null
+			escapefaceAni = Null
+		End
+		
 		' Methods:
-		Method doWhileCollision:Void(p:PlayerObject, direction:Int)
+		Method doWhileCollision:Void(p:PlayerObject, direction:Int) ' animationID:Int
 			' This behavior may change in the future:
 			If (Self.dead Or Self.state <= STATE_ENTER_SHOW Or Self.IsInPipeCollision Or p <> player) Then
 				Return
@@ -358,7 +378,7 @@ Class Boss3 Extends BossObject
 				If (Self.IsStartAttack And Self.HP > 0 And Self.state = STATE_PRO And Self.pro_step = PRO_BOSS_MOVING And Self.face_state <> FACE_HURT) Then
 					onPlayerAttack(p, direction)
 				EndIf
-			ElseIf (Self.state = STATE_PRO And Self.pro_step = PRO_BOSS_MOVING And Self.boat_state <> 1 And Self.IsStartAttack And p.canBeHurt()) Then
+			ElseIf (Self.state = STATE_PRO And Self.pro_step = PRO_BOSS_MOVING And Self.boat_state <> BOAT_HURT And Self.IsStartAttack And p.canBeHurt()) Then
 				p.beHurt()
 				
 				Self.face_state = FACE_SMILE
@@ -371,28 +391,27 @@ Class Boss3 Extends BossObject
 			EndIf
 		End
 		
-		Public Method logic:Void()
-			
+		Method logic:Void()
 			If (Not Self.dead) Then
-				Int preX = Self.posX
-				Int preY = Self.posY
+				Local preX:= Self.posX
+				Local preY:= Self.posY
 				
-				If (Self.state > 0) Then
+				If (Self.state > STATE_INIT) Then
 					isBossEnter = True
 				EndIf
 				
-				Int[] iArr
 				Select (Self.state)
-					Case 0
-						
+					Case STATE_INIT
 						If (player.getFootPositionX() >= Self.StartPosX) Then
 							MapManager.setCameraRightLimit(SIDE_RIGHT)
 						EndIf
 						
 						If (player.getFootPositionX() >= Self.StartPosX And player.getFootPositionY() >= SIDE_CHECK_UP) Then
 							Self.state = STATE_ENTER_SHOW
-							Self.show_step = 0
+							Self.show_step = SHOW_PIPE_ENTER
+							
 							Self.pipe_offset = 0
+							
 							MapManager.setCameraLeftLimit(SIDE_LEFT)
 							MapManager.setCameraRightLimit(SIDE_RIGHT)
 							MapManager.setCameraUpLimit(SIDE_UP)
@@ -400,21 +419,21 @@ Class Boss3 Extends BossObject
 							
 							If (Not Self.IsPlayBossBattleBGM) Then
 								bossFighting = True
+								
 								bossID = ENEMY_BOSS3
-								SoundSystem.getInstance().playBgm(22, True)
+								
+								SoundSystem.getInstance().playBgm(SoundSystem.BGM_BOSS_01, True) ' SoundSystem.BGM_BOSS_03
+								
 								Self.IsPlayBossBattleBGM = True
-								break
 							EndIf
 						EndIf
-						
-						break
-					Case 1
+					Case STATE_ENTER_SHOW
 						Select (Self.show_step)
-							Case 0
-								
+							Case SHOW_PIPE_ENTER
 								If (Self.show_pipe_cnt >= show_pipe_cnt_max) Then
 									If (Self.pipe_offset >= pipe_offset_max) Then
-										Self.show_step = 1
+										Self.show_step = SHOW_BOSS_ENTER
+										
 										Self.pipepos[0][0] = 490496
 										Self.pipepos[0][1] = 136384
 										Self.pipepos[1][0] = 490496
@@ -431,97 +450,69 @@ Class Boss3 Extends BossObject
 										Self.pipepos[6][1] = 145408
 										Self.pipepos[7][0] = 485056
 										Self.pipepos[7][1] = 145408
+										
 										Self.posX = Self.pipepos[7][0]
 										Self.posY = Self.pipepos[7][1]
-										break
+									Else
+										Self.pipe_offset += 1
+										
+										Self.pipepos[0][0] -= Self.pipe_vel_h
+										Self.pipepos[1][0] -= Self.pipe_vel_h
+										Self.pipepos[2][0] += Self.pipe_vel_h
+										Self.pipepos[3][0] += Self.pipe_vel_h
+										
+										Self.pipepos[4][1] += Self.pipe_vel_v
+										Self.pipepos[5][1] += Self.pipe_vel_v
+										Self.pipepos[6][1] -= Self.pipe_vel_v
+										Self.pipepos[7][1] -= Self.pipe_vel_v
 									EndIf
-									
-									Self.pipe_offset += 1
-									iArr = Self.pipepos[0]
-									iArr[0] = iArr[0] - Self.pipe_vel_h
-									iArr = Self.pipepos[1]
-									iArr[0] = iArr[0] - Self.pipe_vel_h
-									iArr = Self.pipepos[2]
-									iArr[0] = iArr[0] + Self.pipe_vel_h
-									iArr = Self.pipepos[3]
-									iArr[0] = iArr[0] + Self.pipe_vel_h
-									iArr = Self.pipepos[4]
-									iArr[1] = iArr[1] + Self.pipe_vel_v
-									iArr = Self.pipepos[5]
-									iArr[1] = iArr[1] + Self.pipe_vel_v
-									iArr = Self.pipepos[6]
-									iArr[1] = iArr[1] - Self.pipe_vel_v
-									iArr = Self.pipepos[7]
-									iArr[1] = iArr[1] - Self.pipe_vel_v
-									break
+								Else
+									Self.show_pipe_cnt += 1
 								EndIf
-								
-								Self.show_pipe_cnt += 1
-								break
-							Case 1
-								
+							Case SHOW_BOSS_ENTER
 								If (Self.posY <= Self.boss_show_top) Then
 									Self.posY = Self.boss_show_top
-									Self.show_step = 2
-									break
-								EndIf
-								
-								Self.posY -= Self.boss_v
-								break
-							Case 2
-								
-								If (Self.boss_wait_cnt >= pipe_offset_max) Then
-									If (Self.boss_wait_cnt <> pipe_offset_max) Then
-										If (Self.boss_wait_cnt <= pipe_offset_max Or Self.boss_wait_cnt >= 26) Then
-											If (Self.boss_wait_cnt <> 26) Then
-												If (Self.boss_wait_cnt <= 26 Or Self.boss_wait_cnt >= 42) Then
-													If (Self.boss_wait_cnt = 42) Then
-														Self.show_step = 3
-														break
-													EndIf
-												EndIf
-												
-												Self.boss_wait_cnt += 1
-												break
-											EndIf
-											
-											Self.boss_wait_cnt += 1
-											Self.facedrawer.setActionId(0)
-											Self.facedrawer.setLoop(True)
-											break
-										EndIf
-										
-										Self.boss_wait_cnt += 1
-										break
-									EndIf
 									
-									Self.boss_wait_cnt += 1
-									Self.facedrawer.setActionId(1)
-									Self.facedrawer.setLoop(True)
-									break
+									Self.show_step = SHOW_BOSS_LAUGH
+								Else
+									Self.posY -= Self.boss_v
 								EndIf
-								
-								Self.boss_wait_cnt += 1
-								break
-								break
-							Case 3
-								
+							Case SHOW_BOSS_LAUGH
+								If (Self.boss_wait_cnt < boss_wait_cnt_max) Then
+									Self.boss_wait_cnt += 1
+								ElseIf (Self.boss_wait_cnt = boss_wait_cnt_max) Then
+									Self.boss_wait_cnt += 1
+									
+									Self.facedrawer.setActionId(FACE_SMILE) ' 1
+									Self.facedrawer.setLoop(true)
+								ElseIf (Self.boss_wait_cnt > boss_wait_cnt_max And Self.boss_wait_cnt < 26) Then
+									Self.boss_wait_cnt += 1
+								ElseIf (Self.boss_wait_cnt = 26) Then
+									Self.boss_wait_cnt += 1
+									
+									Self.facedrawer.setActionId(FACE_NORMAL) ' 0
+									Self.facedrawer.setLoop(true)
+								ElseIf (Self.boss_wait_cnt > 26 And Self.boss_wait_cnt < 42) Then
+									Self.boss_wait_cnt += 1
+								ElseIf (Self.boss_wait_cnt = 42) Then
+									Self.show_step = 3
+								EndIf
+							Case SHOW_BOSS_INTO_PIPE
 								If (Self.posY <= Self.pipepos[5][1]) Then
 									Self.posY = Self.pipepos[5][1]
+									
 									Self.state = STATE_PRO
-									Self.pro_step = 0
-									Self.shadow = New Boss3Shadow(34, Self.posX, Self.posY, 0, 0, 0, 0)
+									
+									Self.pro_step = PRO_INIT
+									
+									Self.shadow = New Boss3Shadow(ENEMY_BOSS3_SHADOW, Self.posX, Self.posY, 0, 0, 0, 0)
+									
 									Self.boss_drip_cnt = 0
-									break
+								Else
+									Self.posY -= Self.boss_v
 								EndIf
-								
-								Self.posY -= Self.boss_v
-								break
-							Default
-								break
-						EndIf
-					Case 2
-						
+						End Select
+					Case STATE_PRO
 						If (Self.face_state = STATE_INIT) Then
 							Self.face_state = Self.shadow.getShadowHurt()
 						EndIf
@@ -531,22 +522,25 @@ Class Boss3 Extends BossObject
 								Self.face_cnt += 1
 							Else
 								Self.face_state = STATE_INIT
-								Self.shadow.setShadowHurt(0)
+								
+								Self.shadow.setShadowHurt(FACE_NORMAL)
+								
 								Self.face_cnt = 0
 							EndIf
 						EndIf
 						
-						If (Self.boat_state = 1) Then
+						If (Self.boat_state = BOAT_HURT) Then
 							If (Self.boat_cnt < cnt_max) Then
 								Self.boat_cnt += 1
 							Else
-								Self.boat_state = STATE_INIT
+								Self.boat_state = BOAT_NORMAL
+								
 								Self.boat_cnt = 0
 							EndIf
 						EndIf
 						
 						Select (Self.pro_step)
-							Case 0
+							Case PRO_INIT
 								Self.IsStartAttack = False
 								
 								If (Self.release_cnt >= release_cnt_max) Then
@@ -560,7 +554,7 @@ Class Boss3 Extends BossObject
 										Self.BossV_x = 549
 										Self.BossV_y = TitleState.RETURN_PRESSED
 									ElseIf (Self.HP = 3 Or Self.HP = 2) Then
-										Self.BossV_x = MDPhone.SCREEN_HEIGHT
+										Self.BossV_x = 640
 										Self.BossV_y = 462
 									ElseIf (Self.HP = 1) Then
 										Self.BossV_x = 733
@@ -703,7 +697,7 @@ Class Boss3 Extends BossObject
 								Self.release_cnt += 1
 								break
 								break
-							Case 1
+							Case PRO_BOSS_MOVING
 								Self.IsStartAttack = True
 								
 								If (Self.posX + Self.BossVX < Self.pipeposend[1] + 1280 Or Self.posX + Self.BossVX > Self.pipeposend[0] - 1280) Then
@@ -726,14 +720,15 @@ Class Boss3 Extends BossObject
 									break
 								EndIf
 								
-								Self.pro_step = 0
+								Self.pro_step = PRO_INIT
 								break
-						EndIf
+						End Select
+						
 						Self.shadow.logic(Self.ShadowPosX, Self.ShadowPosY)
 						Self.facedrawer.setActionId(Self.face_state)
 						Self.realdrawer.setActionId(Self.boat_state)
 						break
-					Case 3
+					Case STATE_BROKEN
 						Self.platform.setDisplay(False)
 						Self.shadow.IsOver = True
 						Self.bossbroken.logicBoom(Self.posX, Self.posY)
@@ -828,8 +823,7 @@ Class Boss3 Extends BossObject
 						EndIf
 						
 						break
-					Case 4
-						
+					Case STATE_ESCAPE
 						If (Self.party + Self.partvy > getGroundY(Self.partx, Self.party)) Then
 							Self.party = getGroundY(Self.partx, Self.party)
 							Self.StartEscape = True
@@ -885,29 +879,31 @@ Class Boss3 Extends BossObject
 						EndIf
 						
 						break
-				EndIf
-				For (Int i = 0; i < Self.pipe.Length; i += 1)
+				End Select
+				
+				For Local i:= 0 Until Self.pipe.Length
 					Self.pipe[i].logic(Self.pipepos[i][0], Self.pipepos[i][1])
-				EndIf
-				refreshCollisionRect(Self.posX Shr 6, Self.posY Shr 6)
+				Next
+				
+				refreshCollisionRect((Self.posX Shr 6), (Self.posY Shr 6))
+				
 				checkWithPlayer(preX, preY, Self.posX, Self.posY)
 			EndIf
-			
 		End
 		
-		Public Method draw:Void(g:MFGraphics)
-			
-			If (Self.state >= 2) Then
+		Method draw:Void(g:MFGraphics)
+			If (Self.state >= STATE_PRO) Then
 				drawInMap(g, Self.shadowdrawer, Self.ShadowPosX, Self.ShadowPosY)
 			EndIf
 			
-			If (Self.state >= 1 And Self.show_step > 0 And Not Self.StartEscape) Then
+			If (Self.state >= STATE_ENTER_SHOW And Self.show_step > SHOW_PIPE_ENTER And Not Self.StartEscape) Then
 				drawInMap(g, Self.realdrawer)
 				drawInMap(g, Self.facedrawer, Self.posX + Self.FACE_OFFSET_X, Self.posY + Self.FACE_OFFSET_Y)
 			EndIf
 			
 			If (Self.StartEscape) Then
-				drawInMap(g, Self.boatdrawer, Self.posX, Self.posY + MDPhone.SCREEN_HEIGHT)
+				' Magic numbers: 640, 1024
+				drawInMap(g, Self.boatdrawer, Self.posX, Self.posY + 640)
 				drawInMap(g, Self.escapefacedrawer, Self.posX, Self.posY - 1024)
 			EndIf
 			
@@ -915,36 +911,34 @@ Class Boss3 Extends BossObject
 				Self.bossbroken.draw(g)
 			EndIf
 			
-			If (Not (Self.partdrawer = Null Or Self.state <> STATE_ESCAPE Or Self.StartEscape)) Then
+			If ((Self.partdrawer <> Null) And Self.state = STATE_ESCAPE And Self.StartEscape) Then
 				drawInMap(g, Self.partdrawer, Self.partx, Self.party)
 			EndIf
 			
 			drawCollisionRect(g)
-			Int i
 			
 			If (Self.state = STATE_ESCAPE Or Self.show_pipe_cnt <> show_pipe_cnt_max Or Self.IsPipeOut) Then
-				For (i = 0; i < Self.pipe.Length; i += 1)
+				For Local i:= 0 Until Self.pipe.Length
 					Self.pipe[i].setisDraw(False)
-				EndIf
-				Return
-			EndIf
-			
-			For (i = 0; i < Self.pipe.Length; i += 1)
-				Self.pipe[i].setisDraw(True)
+				Next
+			Else
+				For Local i:= 0 Until Self.pipe.Length
+					Self.pipe[i].setisDraw(True)
+				Next
 			EndIf
 		End
 		
-		Public Method drawpipes:Void(g:MFGraphics)
-			For (Int i = 0; i < Self.pipe.Length; i += 1)
+		Method drawpipes:Void(g:MFGraphics)
+			For Local i:= 0 Until Self.pipe.Length
 				Self.pipe[i].draw(g)
-			EndIf
+			Next
 		End
 		
-		Public Method refreshCollisionRect:Void(x:Int, y:Int)
-			Self.collisionRect.setRect(x - 1600, y - 1600, COLLISION_WIDTH, COLLISION_WIDTH)
+		Method refreshCollisionRect:Void(x:Int, y:Int)
+			Self.collisionRect.setRect(x - (COLLISION_WIDTH / 2), y - (COLLISION_HEIGHT / 2), COLLISION_WIDTH, COLLISION_HEIGHT)
 		End
 		
-		Public Method close:Void()
+		Method close:Void()
 			Self.realdrawer = Null
 			Self.shadowdrawer = Null
 			Self.facedrawer = Null
@@ -956,24 +950,7 @@ Class Boss3 Extends BossObject
 			Self.bossbroken = Null
 		End
 		
-		Public Method getPaintLayer:Int()
-			Return 3
-		End
-		
-		Public Function releaseAllResource:Void()
-			Animation.closeAnimation(realAni)
-			Animation.closeAnimation(shadowAni)
-			Animation.closeAnimation(faceAni)
-			Animation.closeAnimation(pipeAni)
-			Animation.closeAnimation(partAni)
-			Animation.closeAnimation(boatAni)
-			Animation.closeAnimation(escapefaceAni)
-			realAni = Null
-			shadowAni = Null
-			faceAni = Null
-			pipeAni = Null
-			partAni = Null
-			boatAni = Null
-			escapefaceAni = Null
+		Method getPaintLayer:Int()
+			Return DRAW_BEFORE_BEFORE_SONIC
 		End
 End
