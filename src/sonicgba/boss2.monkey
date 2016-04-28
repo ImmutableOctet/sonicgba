@@ -712,7 +712,6 @@ Class Boss2 Extends BossObject
 		End
 		
 		Method IsJumpOutScreen:Bool()
-			
 			If (Not HighJump() Or (Self.posY Shr 6) >= MapManager.getCamera().y) Then
 				Return False
 			EndIf
@@ -721,24 +720,24 @@ Class Boss2 Extends BossObject
 		End
 		
 		Method draw:Void(g:MFGraphics)
-			
+			' Magic number: 1664
 			If (Not Self.dead) Then
-				If (Self.state = 0) Then
+				If (Self.state = STATE_SHOW_DROP) Then
 					If (Self.posY > ((SIDE_DOWN_MIDDLE - MapManager.CAMERA_HEIGHT) Shl 6)) Then
 						drawInMap(g, Self.boatdrawer, Self.posX, Self.posY - Self.springH)
-						drawInMap(g, Self.facedrawer, Self.posX, (Self.posY - Boss6Block.COLLISION2_HEIGHT) - Self.springH)
+						drawInMap(g, Self.facedrawer, Self.posX, (Self.posY - 1664) - Self.springH)
 					EndIf
-				ElseIf (Self.state <> STATE_ESCAPE And Self.state <> -1) Then
+				ElseIf (Self.state <> STATE_ESCAPE And Self.state <> STATE_WAIT) Then
 					drawInMap(g, Self.boatdrawer, Self.posX, Self.posY - Self.springH)
-					drawInMap(g, Self.facedrawer, Self.posX, (Self.posY - Boss6Block.COLLISION2_HEIGHT) - Self.springH)
-				ElseIf (Self.state <> -1) Then
+					drawInMap(g, Self.facedrawer, Self.posX, (Self.posY - 1664) - Self.springH)
+				ElseIf (Self.state <> STATE_WAIT) Then
 					drawInMap(g, Self.escapeboatdrawer, Self.posX, Self.posY)
-					drawInMap(g, Self.escapefacedrawer, Self.posX, Self.posY - Boss6Block.COLLISION2_HEIGHT)
+					drawInMap(g, Self.escapefacedrawer, Self.posX, Self.posY - 1664)
 				EndIf
 				
 				drawCollisionRect(g)
 				
-				If (Not (Self.state = STATE_BROKEN Or Self.state = STATE_ESCAPE Or Self.state = -1)) Then
+				If (Not (Self.state = STATE_BROKEN Or Self.state = STATE_ESCAPE Or Self.state = STATE_WAIT)) Then
 					Self.spring.draw(g)
 				EndIf
 				
@@ -746,7 +745,6 @@ Class Boss2 Extends BossObject
 					Self.bossbroken.draw(g)
 				EndIf
 			EndIf
-			
 		End
 		
 		Method resetBossDisplayState:Void()
@@ -755,6 +753,7 @@ Class Boss2 Extends BossObject
 					Self.face_cnt += 1
 				Else
 					Self.face_state = FACE_NORMAL
+					
 					Self.face_cnt = 0
 				EndIf
 			EndIf
@@ -764,22 +763,21 @@ Class Boss2 Extends BossObject
 					Self.boat_cnt += 1
 				Else
 					Self.boat_state = BOAT_NORMAL
+					
 					Self.boat_cnt = 0
 				EndIf
 			EndIf
 		End
 		
 		Method changeAniState:Void(AniDrawer:AnimationDrawer, state:Int, isloop:Bool)
+			AniDrawer.setActionId(state)
 			
 			If (player.getCheckPositionX() > Self.posX) Then
-				AniDrawer.setActionId(state)
-				AniDrawer.setTrans(2)
-				AniDrawer.setLoop(isloop)
-				Return
+				AniDrawer.setTrans(TRANS_MIRROR)
+			Else
+				AniDrawer.setTrans(TRANS_NONE)
 			EndIf
 			
-			AniDrawer.setActionId(state)
-			AniDrawer.setTrans(TRANS_NONE)
 			AniDrawer.setLoop(isloop)
 		End
 		
@@ -789,12 +787,13 @@ Class Boss2 Extends BossObject
 		End
 		
 		Method refreshCollisionRect:Void(x:Int, y:Int)
-			Self.collisionRect.setRect(x - PlayerObject.HEIGHT, (y - (Self.offset_y + COLLISION_HEIGHT)) - Self.springH, COLLISION_WIDTH, COLLISION_HEIGHT)
+			Self.collisionRect.setRect(x - (COLLISION_WIDTH / 2), (y - (Self.offset_y + COLLISION_HEIGHT)) - Self.springH, COLLISION_WIDTH, COLLISION_HEIGHT)
 		End
 		
 		Method close:Void()
 			Self.boatdrawer = Null
 			Self.facedrawer = Null
+			
 			Self.escapeboatdrawer = Null
 			Self.escapefacedrawer = Null
 		End
