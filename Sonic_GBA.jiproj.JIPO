@@ -374,8 +374,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationdrawer.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>10</X>
+        <Y>138</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -465,8 +465,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>109</Y>
+        <X>14</X>
+        <Y>111</Y>
       </CursorPos>
       <DocGUID>9738c019-aeda-4c8b-af83-0cf043b8f256</DocGUID>
       <Bookmarks />
@@ -732,10 +732,10 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss1.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>22</X>
-        <Y>56</Y>
+        <X>27</X>
+        <Y>213</Y>
       </CursorPos>
-      <DocGUID>4ad7411d-0fab-45cb-8049-8202ae549e70</DocGUID>
+      <DocGUID>6538718f-c31b-47b0-b820-75a5e32d327f</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss1arm.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
@@ -747,8 +747,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss2.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>11</X>
-        <Y>23</Y>
+        <X>14</X>
+        <Y>319</Y>
       </CursorPos>
       <DocGUID>59dc6876-86a7-4d31-8167-5a0cb9326ad6</DocGUID>
       <Bookmarks />
@@ -804,8 +804,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bossobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>28</X>
-        <Y>41</Y>
+        <X>53</X>
+        <Y>43</Y>
       </CursorPos>
       <DocGUID>7a8567ce-8c49-4d32-a128-4cb121a31589</DocGUID>
       <Bookmarks />
@@ -1008,8 +1008,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\enemyobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>19</X>
-        <Y>123</Y>
+        <X>8</X>
+        <Y>120</Y>
       </CursorPos>
       <DocGUID>dcf355fc-0af5-46b1-8f3d-5e20a64a2e12</DocGUID>
       <Bookmarks />
@@ -1768,8 +1768,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\stagemanager.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
-        <Y>857</Y>
+        <X>63</X>
+        <Y>312</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>

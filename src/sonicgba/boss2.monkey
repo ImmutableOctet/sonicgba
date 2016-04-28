@@ -166,29 +166,44 @@ Class Boss2 Extends BossObject
 			Self.velocity = -384
 			Self.range = 28800
 			Self.start_pos = 16640
-			Self.velX = STATE_SHOW_DROP
-			Self.velY = STATE_SHOW_DROP
-			Self.v_x_frame = 19
-			Self.normal_jump_startVerlY = ((-GRAVITY) / STATE_SHOW_WAITING) * 19
-			Self.lowerHP_jump_startVerlY = -2600
-			Self.wait_cnt_max = STATE_ATTACK_WAITING
-			Self.min_range_x = STATE_SHOW_DROP
-			Self.boom_offset = 1088
-			Self.escape_v = 512
-			Self.fly_top_range = 4096
-			Self.side_left = STATE_SHOW_DROP
-			Self.side_right = STATE_SHOW_DROP
-			Self.start_cnt = False
-			Self.display_cnt = STATE_SHOW_DROP
-			Self.show_laugh_cnt = STATE_SHOW_DROP
-			Self.high_jump_wait_cnt = STATE_SHOW_DROP
-			Self.IsinHighJump = False
-			Self.high_jump_cnt = STATE_WAIT
-			Self.high_jump_cnt_max = STATE_SHOW_LAUGH
-			Self.posX -= Self.iLeft * cnt_max
-			Self.posY -= Self.iTop * cnt_max
 			
-			If (StageManager.getCurrentZoneId() = STATE_ATTACK_WAITING) Then
+			Self.velX = 0
+			Self.velY = 0
+			
+			' Magic number: 19
+			Self.v_x_frame = 19 ' (display_wait_cnt_max + 3)
+			
+			Self.normal_jump_startVerlY = ((-GRAVITY) / 2) * 19
+			Self.lowerHP_jump_startVerlY = -2600
+			
+			Self.wait_cnt_max = 5
+			
+			Self.min_range_x = 0
+			
+			Self.boom_offset = 1088
+			
+			Self.escape_v = 512
+			
+			Self.fly_top_range = 4096
+			
+			Self.side_left = 0
+			Self.side_right = 0
+			
+			Self.start_cnt = False
+			
+			Self.display_cnt = 0
+			Self.show_laugh_cnt = 0
+			Self.high_jump_wait_cnt = 0
+			
+			Self.IsinHighJump = False
+			
+			Self.high_jump_cnt = -1
+			Self.high_jump_cnt_max = 3
+			
+			Self.posX -= (Self.iLeft * 8)
+			Self.posY -= (Self.iTop * 8)
+			
+			If (StageManager.getCurrentZoneId() = 5) Then
 				SIDE = SIDE_ST5
 				SIDE_LEFT = SIDE_LEFT_ST5
 				SIDE_RIGHT = SIDE_RIGHT_ST5
@@ -202,40 +217,66 @@ Class Boss2 Extends BossObject
 				BOSS_DRIP_X = BOSS_DRIP_X_ST2
 			EndIf
 			
-			Self.limitRightX = SIDE_RIGHT Shl STATE_ATTACK_SPRING_DAMPING
-			Self.limitLeftX = SIDE_LEFT Shl STATE_ATTACK_SPRING_DAMPING
-			refreshCollisionRect(Self.posX Shr STATE_ATTACK_SPRING_DAMPING, Self.posY Shr STATE_ATTACK_SPRING_DAMPING)
+			Self.limitRightX = (SIDE_RIGHT Shl 6)
+			Self.limitLeftX = (SIDE_LEFT Shl 6)
+			
+			refreshCollisionRect((Self.posX Shr 6), (Self.posY Shr 6))
 			
 			If (boatAni = Null) Then
 				boatAni = New Animation("/animation/boss2_boat")
 			EndIf
 			
-			Self.boatdrawer = boatAni.getDrawer(STATE_SHOW_DROP, True, STATE_SHOW_DROP)
+			Self.boatdrawer = boatAni.getDrawer(0, True, 0)
 			
 			If (faceAni = Null) Then
 				faceAni = New Animation("/animation/boss2_face")
 			EndIf
 			
-			Self.facedrawer = faceAni.getDrawer(STATE_SHOW_DROP, True, STATE_SHOW_DROP)
+			Self.facedrawer = faceAni.getDrawer(0, True, 0)
 			
 			If (escapeboatAni = Null) Then
 				escapeboatAni = New Animation("/animation/pod_boat")
 			EndIf
 			
-			Self.escapeboatdrawer = escapeboatAni.getDrawer(STATE_SHOW_DROP, True, STATE_SHOW_DROP)
+			Self.escapeboatdrawer = escapeboatAni.getDrawer(0, True, 0)
 			
 			If (escapefaceAni = Null) Then
 				escapefaceAni = New Animation("/animation/pod_face")
 			EndIf
 			
-			Self.escapefacedrawer = escapefaceAni.getDrawer(STATE_SHOW_WAITING_2, True, STATE_SHOW_DROP)
+			Self.escapefacedrawer = escapefaceAni.getDrawer(4, True, 0)
+			
 			Self.posY -= Self.start_pos
-			Self.spring = New Boss2Spring(32, x, y, left, top, width, height)
+			
+			Self.spring = New Boss2Spring(ENEMY_BOSS2_SPRING, x, y, left, top, width, height)
+			
 			GameObject.addGameObject(Self.spring, x, y)
+			
 			Self.IsBroken = False
+			
 			Self.state = STATE_WAIT
-			Self.high_jump_cnt = STATE_WAIT
+			
+			Self.high_jump_cnt = -1
+			
 			setBossHP()
+		End
+		
+		' Methods:
+		
+		' Extensions:
+		Method onPlayerAttack:Void(p:PlayerObject, direction:Int) ' animationID:Int
+			Self.HP -= 1
+			
+			If (Self.HP = 4) Then
+				Self.high_jump_cnt = 0
+			EndIf
+			
+			p.doBossAttackPose(Self, direction)
+			
+			Self.face_state = FACE_HURT
+			Self.boat_state = BOAT_HURT
+			
+			playHitSound()
 		End
 	Public
 		' Functions:
@@ -254,78 +295,56 @@ Class Boss2 Extends BossObject
 		End
 		
 		' Methods:
-		Public Method doWhileCollision:Void(object:PlayerObject, direction:Int)
-			If (Self.dead Or object <> player Or Self.state <= STATE_SHOW_WAITING_2) Then
+		Method doWhileCollision:Void(p:PlayerObject, direction:Int)
+			If (Self.dead Or p <> player Or Self.state <= STATE_SHOW_WAITING_2) Then
 				Return
 			EndIf
 			
-			If (player.isAttackingEnemy()) Then
-				If (Self.HP > 0 And Self.face_state <> STATE_SHOW_WAITING) Then
-					Self.HP -= STATE_SHOW_SPRING_DAMPING
-					
-					If (Self.HP = STATE_SHOW_WAITING_2) Then
-						Self.high_jump_cnt = STATE_SHOW_DROP
-					EndIf
-					
-					player.doBossAttackPose(Self, direction)
-					Self.face_state = STATE_SHOW_WAITING
-					Self.boat_state = STATE_SHOW_SPRING_DAMPING
-					
-					If (Self.HP = 0) Then
-						SoundSystem.getInstance().playSe(display_cnt_max)
-					Else
-						SoundSystem.getInstance().playSe(high_jump_wait_cnt_max)
-					EndIf
+			If (p.isAttackingEnemy()) Then
+				If (Self.HP > 0 And Self.face_state <> FACE_HURT) Then
+					onPlayerAttack(p, direction)
 				EndIf
+			ElseIf (Self.state <> STATE_BROKEN And Self.state <> STATE_ESCAPE And Self.boat_state <> BOAT_HURT And p.canBeHurt()) Then
+				p.beHurt()
 				
-			ElseIf (Self.state <> STATE_BROKEN And Self.state <> show_laugh_cnt_max And Self.boat_state <> STATE_SHOW_SPRING_DAMPING And player.canBeHurt()) Then
-				player.beHurt()
-				Self.face_state = STATE_SHOW_SPRING_DAMPING
+				Self.face_state = FACE_SMILE
 			EndIf
-			
 		End
 		
-		Public Method doWhileBeAttack:Void(object:PlayerObject, direction:Int, animationID:Int)
-			
-			If (Self.state > STATE_SHOW_WAITING_2 And Self.HP > 0 And Self.face_state <> STATE_SHOW_WAITING) Then
-				Self.HP -= STATE_SHOW_SPRING_DAMPING
-				
-				If (Self.HP = STATE_SHOW_WAITING_2) Then
-					Self.high_jump_cnt = STATE_SHOW_DROP
-				EndIf
-				
-				player.doBossAttackPose(Self, direction)
-				Self.face_state = STATE_SHOW_WAITING
-				Self.boat_state = STATE_SHOW_SPRING_DAMPING
-				
-				If (Self.HP = 0) Then
-					SoundSystem.getInstance().playSe(display_cnt_max)
-				Else
-					SoundSystem.getInstance().playSe(high_jump_wait_cnt_max)
-				EndIf
+		Method doWhileBeAttack:Void(p:PlayerObject, direction:Int, animationID:Int)
+			If (Self.state > STATE_SHOW_WAITING_2 And Self.HP > 0 And Self.face_state <> FACE_HURT) Then
+				onPlayerAttack(p, direction)
 			EndIf
-			
 		End
 		
-		Public Method logic:Void()
-			
+		Method logic:Void()
 			If (Not Self.dead) Then
 				Self.springH = Self.spring.getSpringHeight()
-				Int preX = Self.posX
-				Int preY = Self.posY
-				Int tmpX = Self.posX
-				Int tmpY = Self.posY
+				
+				Local preX:= Self.posX
+				Local preY:= Self.posY
+				
+				Local tmpX:= Self.posX
+				Local tmpY:= Self.posY
 				
 				If (Self.HP = 0 And Not Self.IsBroken) Then
 					Self.state = STATE_BROKEN
+					
 					Self.spring.setBossBrokenState(True)
+					
 					Self.posY = getGroundY(Self.posX, Self.posY) - Self.springHmax
-					Self.bossbroken = New BossBroken(23, Self.posX Shr STATE_ATTACK_SPRING_DAMPING, Self.posY Shr STATE_ATTACK_SPRING_DAMPING, STATE_SHOW_DROP, STATE_SHOW_DROP, STATE_SHOW_DROP, STATE_SHOW_DROP)
-					GameObject.addGameObject(Self.bossbroken, Self.posX Shr STATE_ATTACK_SPRING_DAMPING, Self.posY Shr STATE_ATTACK_SPRING_DAMPING)
+					
+					Self.bossbroken = New BossBroken(ENEMY_BOSS2, Self.posX Shr 6, Self.posY Shr 6, 0, 0, 0, 0)
+					
+					GameObject.addGameObject(Self.bossbroken, Self.posX Shr 6, Self.posY Shr 6)
+					
 					Self.IsBroken = True
-					Self.velY = STATE_SHOW_DROP
+					
+					Self.velY = 0
+					
 					Self.side_left = MapManager.getCamera().x
-					Self.side_right = Self.side_left + MapManager.CAMERA_WIDTH
+					Self.side_right = (Self.side_left + MapManager.CAMERA_WIDTH)
+					
 					MapManager.setCameraLeftLimit(Self.side_left)
 					MapManager.setCameraRightLimit(Self.side_right)
 				EndIf
@@ -334,29 +353,36 @@ Class Boss2 Extends BossObject
 					Self.spring.setAttackable(True)
 				EndIf
 				
-				If (Self.HP >= STATE_ATTACK_WAITING) Then
+				If (Self.HP >= 5) Then
 					Self.wait_cnt_max = cnt_max
+					
+					' Magic number: 19
 					Self.v_x_frame = 19
-				ElseIf (Self.HP = STATE_SHOW_WAITING_2 Or Self.HP = STATE_SHOW_LAUGH) Then
-					Self.wait_cnt_max = STATE_ATTACK_JUMPING
-					Self.v_x_frame = display_wait_cnt_max
-				ElseIf (Self.HP = STATE_SHOW_WAITING) Then
-					Self.wait_cnt_max = STATE_ATTACK_SPRING_DAMPING
+				ElseIf (Self.HP = 4 Or Self.HP = 3) Then
+					' Magic number: 7, 16
+					Self.wait_cnt_max = 7 ' (cnt_max - 1)
+					
+					Self.v_x_frame = 16 ' display_wait_cnt_max
+				ElseIf (Self.HP = 2) Then
+					' Magic numbers: 6, 14
+					Self.wait_cnt_max = 6 ' (cnt_max - 2)
+					
 					Self.v_x_frame = 14
-				ElseIf (Self.HP = STATE_SHOW_SPRING_DAMPING) Then
-					Self.wait_cnt_max = STATE_ATTACK_WAITING
+				ElseIf (Self.HP = 1) Then
+					' Magic numbers: 5, 12
+					Self.wait_cnt_max = 5 ' (cnt_max - 3)
+					
 					Self.v_x_frame = 12
 				EndIf
 				
-				Self.normal_jump_startVerlY = ((-GRAVITY) / STATE_SHOW_WAITING) * Self.v_x_frame
+				Self.normal_jump_startVerlY = (((-GRAVITY) / 2) * Self.v_x_frame)
 				
-				If (Self.state > STATE_WAIT) Then
+				If (Self.state > -1) Then
 					isBossEnter = True
 				EndIf
 				
 				Select (Self.state)
 					Case STATE_WAIT
-						
 						If (player.getFootPositionX() >= SIDE) Then
 							MapManager.setCameraRightLimit(SIDE_RIGHT)
 						EndIf
@@ -364,12 +390,17 @@ Class Boss2 Extends BossObject
 						If (player.getFootPositionX() >= SIDE And Not Self.start_cnt And player.getFootPositionY() >= SIDE_UP) Then
 							If (Not Self.IsPlayBossBattleBGM) Then
 								bossFighting = True
-								bossID = 23
-								SoundSystem.getInstance().playBgm(22, True)
+								
+								bossID = ENEMY_BOSS2
+								
+								SoundSystem.getInstance().playBgm(SoundSystem.BGM_BOSS_01, True) ' SoundSystem.BGM_BOSS_02 ' 22
+								
 								MapManager.setCameraLeftLimit(SIDE_LEFT)
 								MapManager.setCameraRightLimit(SIDE_RIGHT)
-								MapManager.setCameraDownLimit(SIDE_DOWN_MIDDLE + ((MapManager.CAMERA_HEIGHT * STATE_SHOW_SPRING_DAMPING) / STATE_SHOW_WAITING_2))
-								MapManager.setCameraUpLimit(SIDE_DOWN_MIDDLE - ((MapManager.CAMERA_HEIGHT * STATE_SHOW_LAUGH) / STATE_SHOW_WAITING_2))
+								
+								MapManager.setCameraDownLimit(SIDE_DOWN_MIDDLE + ((MapManager.CAMERA_HEIGHT * 1) / 4))
+								MapManager.setCameraUpLimit(SIDE_DOWN_MIDDLE - ((MapManager.CAMERA_HEIGHT * 3) / 4))
+								
 								Self.IsPlayBossBattleBGM = True
 							EndIf
 							
@@ -378,112 +409,107 @@ Class Boss2 Extends BossObject
 						
 						If (Self.start_cnt) Then
 							If (Self.display_cnt < display_cnt_max) Then
-								Self.display_cnt += STATE_SHOW_SPRING_DAMPING
-								break
+								Self.display_cnt += 1
+							Else
+								Self.state = STATE_SHOW_DROP
+								
+								Self.posX = BOSS_DRIP_X
 							EndIf
-							
-							Self.state = STATE_SHOW_DROP
-							Self.posX = BOSS_DRIP_X
-							break
 						EndIf
-						
-						break
 					Case STATE_SHOW_DROP
 						Self.velY += GRAVITY
 						Self.posY += Self.velY
 						
-						If (Self.posY + Self.velY >= getGroundY(Self.posX, Self.posY)) Then
-							Self.posY = getGroundY(Self.posX, Self.posY)
+						Local groundY:= getGroundY(Self.posX, Self.posY)
+						
+						If (Self.posY + Self.velY >= groundY) Then
+							Self.posY = groundY
+							
 							Self.state = STATE_SHOW_SPRING_DAMPING
-							Self.spring_state = STATE_SHOW_WAITING
-							Self.spring.setSpringAni(STATE_SHOW_WAITING, False)
-							SoundSystem.getInstance().playSe(36)
-							break
+							Self.spring_state = SPRING_DAMPING
+							
+							Self.spring.setSpringAni(SPRING_DAMPING, False) ' 2
+							
+							SoundSystem.getInstance().playSe(SoundSystem.SE_145)
 						EndIf
-						
-						break
 					Case STATE_SHOW_SPRING_DAMPING
-						
 						If (Self.spring.getEndState()) Then
 							Self.state = STATE_SHOW_WAITING
-							Self.spring_state = STATE_SHOW_SPRING_DAMPING
-							Self.spring.setSpringAni(STATE_SHOW_SPRING_DAMPING, True)
-							break
+							Self.spring_state = SPRING_WAITING
+							
+							Self.spring.setSpringAni(SPRING_WAITING, True) ' 1
 						EndIf
-						
-						break
 					Case STATE_SHOW_WAITING
-						
 						If (Self.display_wait_cnt >= display_wait_cnt_max) Then
 							Self.state = STATE_SHOW_LAUGH
-							Self.facedrawer.setActionId(STATE_SHOW_SPRING_DAMPING)
-							Self.facedrawer.setTrans(STATE_SHOW_DROP)
+							
+							Self.facedrawer.setActionId(FACE_SMILE) ' 1
+							Self.facedrawer.setTrans(TRANS_NONE)
 							Self.facedrawer.setLoop(True)
-							Self.display_wait_cnt = STATE_SHOW_DROP
-							break
+							
+							Self.display_wait_cnt = 0
+						Else
+							Self.display_wait_cnt += 1
 						EndIf
-						
-						Self.display_wait_cnt += STATE_SHOW_SPRING_DAMPING
-						break
 					Case STATE_SHOW_LAUGH
-						
 						If (Self.show_laugh_cnt >= show_laugh_cnt_max) Then
 							Self.state = STATE_SHOW_WAITING_2
-							changeAniState(Self.facedrawer, STATE_SHOW_DROP, True)
-							break
+							
+							changeAniState(Self.facedrawer, FACE_NORMAL, True) ' 0
+						Else
+							Self.show_laugh_cnt += 1
 						EndIf
-						
-						Self.show_laugh_cnt += STATE_SHOW_SPRING_DAMPING
-						break
 					Case STATE_SHOW_WAITING_2
-						
 						If (Self.display_wait_cnt < display_wait_cnt_max) Then
-							Self.display_wait_cnt += STATE_SHOW_SPRING_DAMPING
+							Self.display_wait_cnt += 1
 						Else
 							Self.state = STATE_ATTACK_SPRING_DAMPING
-							Self.spring_state = STATE_SHOW_WAITING
-							Self.spring.setSpringAni(STATE_SHOW_WAITING, False)
-							Self.display_wait_cnt = STATE_SHOW_DROP
+							Self.spring_state = SPRING_DAMPING
+							
+							Self.spring.setSpringAni(SPRING_DAMPING, False) ' 2
+							
+							Self.display_wait_cnt = 0
 						EndIf
 						
 						changeAniState(Self.boatdrawer, Self.boat_state, True)
 						changeAniState(Self.facedrawer, Self.face_state, True)
-						break
 					Case STATE_ATTACK_WAITING
 						resetBossDisplayState()
 						
 						If (Self.wait_cnt < Self.wait_cnt_max) Then
-							Self.wait_cnt += STATE_SHOW_SPRING_DAMPING
+							Self.wait_cnt += 1
 						Else
 							Self.state = STATE_ATTACK_SPRING_DAMPING
-							Self.spring_state = STATE_SHOW_WAITING
-							Self.spring.setSpringAni(STATE_SHOW_WAITING, False)
-							Self.wait_cnt = STATE_SHOW_DROP
+							Self.spring_state = SPRING_DAMPING
+							
+							Self.spring.setSpringAni(SPRING_DAMPING, False) ' 2
+							
+							Self.wait_cnt = 0
 						EndIf
 						
 						changeAniStateNoTran(Self.boatdrawer, Self.boat_state, True)
 						changeAniStateNoTran(Self.facedrawer, Self.face_state, True)
-						break
 					Case STATE_ATTACK_SPRING_DAMPING
 						resetBossDisplayState()
 						
 						If (Self.spring.getEndState()) Then
 							Self.state = STATE_ATTACK_JUMPING
-							Self.spring_state = STATE_SHOW_DROP
-							Self.spring.setSpringAni(STATE_SHOW_DROP, True)
+							Self.spring_state = SPRING_FLYING
+							
+							Self.spring.setSpringAni(SPRING_FLYING, True) ' 0
 							
 							If (HighJump()) Then
-								Self.velX = STATE_SHOW_DROP
+								Self.velX = 0
 								Self.velY = Self.lowerHP_jump_startVerlY
+								
 								Self.IsinHighJump = False
 							Else
-								
 								If (player.getFootPositionX() - Self.posX > Self.min_range_x Or player.getFootPositionX() - Self.posX < (-Self.min_range_x)) Then
-									Self.velX = (player.getFootPositionX() - Self.posX) / Self.v_x_frame
+									Self.velX = ((player.getFootPositionX() - Self.posX) / Self.v_x_frame)
 								ElseIf (player.getFootPositionX() - Self.posX <= Self.min_range_x And player.getFootPositionX() - Self.posX > 0) Then
-									Self.velX = Self.min_range_x / Self.v_x_frame
+									Self.velX = (Self.min_range_x / Self.v_x_frame)
 								ElseIf (player.getFootPositionX() - Self.posX >= (-Self.min_range_x) And player.getFootPositionX() - Self.posX < 0) Then
-									Self.velX = (-Self.min_range_x) / Self.v_x_frame
+									Self.velX = ((-Self.min_range_x) / Self.v_x_frame)
 								EndIf
 								
 								Self.velY = Self.normal_jump_startVerlY
@@ -492,36 +518,37 @@ Class Boss2 Extends BossObject
 						
 						changeAniState(Self.boatdrawer, Self.boat_state, True)
 						changeAniState(Self.facedrawer, Self.face_state, True)
-						break
 					Case STATE_ATTACK_JUMPING
 						resetBossDisplayState()
 						
 						If (Self.posY + Self.velY > getGroundY(Self.posX, Self.posY)) Then
 							Self.posY = getGroundY(Self.posX, Self.posY)
-							Self.state = cnt_max
-							Self.spring_state = STATE_SHOW_WAITING
-							Self.spring.setSpringAni(STATE_SHOW_WAITING, False)
+							
+							Self.state = STATE_RELASE_SPRING_DAMPING
+							Self.spring_state = SPRING_DAMPING
+							
+							Self.spring.setSpringAni(SPRING_DAMPING, False) ' 2
 							
 							If (HighJump()) Then
-								MapManager.setShake(cnt_max)
+								MapManager.setShake(cnt_max) ' 8
 							EndIf
 							
 							If (HighJump() And player.getFootPositionY() = getGroundY(player.getFootPositionX(), player.getFootPositionY())) Then
 								player.beHurt()
-								Self.face_state = STATE_SHOW_SPRING_DAMPING
+								
+								Self.face_state = FACE_SMILE
 							EndIf
 							
-							If (Self.HP < STATE_ATTACK_WAITING) Then
+							If (Self.HP < 5) Then
 								If (Self.high_jump_cnt < Self.high_jump_cnt_max) Then
-									Self.high_jump_cnt += STATE_SHOW_SPRING_DAMPING
+									Self.high_jump_cnt += 1
 								Else
-									Self.high_jump_cnt = STATE_SHOW_DROP
+									Self.high_jump_cnt = 0
 								EndIf
 							EndIf
 							
-							SoundSystem.getInstance().playSe(36)
+							SoundSystem.getInstance().playSe(SoundSystem.SE_145)
 						Else
-							
 							If (Self.posX + Self.velX >= Self.limitRightX) Then
 								Self.posX = Self.limitRightX
 							ElseIf (Self.posX + Self.velX <= Self.limitLeftX) Then
@@ -533,13 +560,15 @@ Class Boss2 Extends BossObject
 							If (Not IsJumpOutScreen() Or Self.IsinHighJump) Then
 								Self.velY += GRAVITY
 								Self.posY += Self.velY
-								Self.high_jump_wait_cnt = STATE_SHOW_DROP
+								
+								Self.high_jump_wait_cnt = 0
 							ElseIf (Self.high_jump_wait_cnt < high_jump_wait_cnt_max) Then
-								Self.high_jump_wait_cnt += STATE_SHOW_SPRING_DAMPING
+								Self.high_jump_wait_cnt += 1
 							Else
 								Self.posX = player.getFootPositionX()
-								Self.velY = STATE_SHOW_DROP
-								Self.velY += GRAVITY * STATE_SHOW_WAITING
+								
+								Self.velY = (GRAVITY * 2)
+								
 								Self.IsinHighJump = True
 							EndIf
 							
@@ -548,142 +577,168 @@ Class Boss2 Extends BossObject
 						
 						changeAniStateNoTran(Self.boatdrawer, Self.boat_state, True)
 						changeAniStateNoTran(Self.facedrawer, Self.face_state, True)
-						break
-					Case cnt_max
+					Case STATE_RELASE_SPRING_DAMPING
 						resetBossDisplayState()
 						
 						If (Self.spring.getEndState()) Then
 							Self.state = STATE_ATTACK_WAITING
-							Self.spring_state = STATE_SHOW_SPRING_DAMPING
-							Self.spring.setSpringAni(STATE_SHOW_SPRING_DAMPING, True)
+							Self.spring_state = SPRING_WAITING
+							
+							Self.spring.setSpringAni(SPRING_WAITING, True) ' 1
 						EndIf
 						
 						changeAniStateNoTran(Self.boatdrawer, Self.boat_state, True)
 						changeAniStateNoTran(Self.facedrawer, Self.face_state, True)
-						break
 					Case STATE_BROKEN
 						resetBossDisplayState()
-						Self.bossbroken.logicBoom(Self.posX, Self.posY - Self.boom_offset)
-						Self.springH = STATE_SHOW_DROP
 						
-						If (Self.posY + Self.velY > getGroundY(Self.posX, Self.posY) And Self.drop_cnt = 0) Then
-							Self.posY = getGroundY(Self.posX, Self.posY)
+						Self.bossbroken.logicBoom(Self.posX, Self.posY - Self.boom_offset)
+						
+						Self.springH = 0
+						
+						Local groundY:= getGroundY(Self.posX, Self.posY)
+						Local velPosY:= (Self.posY + Self.velY)
+						
+						Local velPosY_aboveGround:Bool = (velPosY > groundY)
+						
+						If (velPosY_aboveGround And Self.drop_cnt = 0) Then
+							Self.posY = groundY
+							
+							' Magic number: -640
 							Self.velY = -640
-							Self.drop_cnt = STATE_SHOW_SPRING_DAMPING
-						ElseIf (Self.posY + Self.velY > getGroundY(Self.posX, Self.posY) And Self.drop_cnt = STATE_SHOW_SPRING_DAMPING) Then
-							Self.posY = getGroundY(Self.posX, Self.posY)
+							
+							Self.drop_cnt = 1
+						ElseIf (velPosY_aboveGround And Self.drop_cnt = 1) Then
+							Self.posY = groundY
+							
+							' Magic number: -320
 							Self.velY = -320
-							Self.drop_cnt = STATE_SHOW_WAITING
-						ElseIf (Self.posY + Self.velY > getGroundY(Self.posX, Self.posY) And Self.drop_cnt = STATE_SHOW_WAITING) Then
-							Self.posY = getGroundY(Self.posX, Self.posY)
-							Self.drop_cnt = STATE_SHOW_LAUGH
-						ElseIf (Self.drop_cnt <> STATE_SHOW_LAUGH) Then
+							
+							Self.drop_cnt = 2
+						ElseIf (velPosY_aboveGround And Self.drop_cnt = 2) Then
+							Self.posY = groundY
+							
+							Self.drop_cnt = 3
+						ElseIf (Self.drop_cnt <> 3) Then
 							Self.velY += GRAVITY
 							Self.posY += Self.velY
 						EndIf
 						
 						If (Self.bossbroken.getEndState()) Then
-							Self.state = show_laugh_cnt_max
+							Self.state = STATE_ESCAPE
+							
 							Self.fly_top = Self.posY
 							Self.fly_end = Self.side_right
-							Self.wait_cnt = STATE_SHOW_DROP
+							
+							Self.wait_cnt = 0
+							
 							bossFighting = False
+							
 							player.getBossScore()
+							
 							SoundSystem.getInstance().playBgm(StageManager.getBgmId(), True)
 						EndIf
 						
 						changeAniStateNoTran(Self.facedrawer, Self.face_state, True)
-						break
-					Case show_laugh_cnt_max
-						Self.springH = STATE_SHOW_DROP
-						Self.wait_cnt += STATE_SHOW_SPRING_DAMPING
+					Case STATE_ESCAPE
+						Self.springH = 0
+						
+						Self.wait_cnt += 1
 						
 						If (Self.wait_cnt >= Self.wait_cnt_max And Self.posY >= Self.fly_top - Self.fly_top_range) Then
 							Self.posY -= Self.escape_v
 						EndIf
 						
-						If (Self.posY <= Self.fly_top - Self.fly_top_range And Self.WaitCnt = 0) Then
-							Self.posY = Self.fly_top - Self.fly_top_range
-							Self.escapefacedrawer.setActionId(STATE_SHOW_DROP)
-							Self.escapeboatdrawer.setActionId(STATE_SHOW_SPRING_DAMPING)
+						If (Self.posY <= (Self.fly_top - Self.fly_top_range) And Self.WaitCnt = 0) Then
+							Self.posY = (Self.fly_top - Self.fly_top_range)
+							
+							Self.escapefacedrawer.setActionId(0)
+							
+							Self.escapeboatdrawer.setActionId(1)
 							Self.escapeboatdrawer.setLoop(False)
-							Self.WaitCnt = STATE_SHOW_SPRING_DAMPING
+							
+							Self.WaitCnt = 1
 						EndIf
 						
-						If (Self.WaitCnt = STATE_SHOW_SPRING_DAMPING And Self.escapeboatdrawer.checkEnd()) Then
-							Self.escapefacedrawer.setActionId(STATE_SHOW_DROP)
-							Self.escapefacedrawer.setTrans(STATE_SHOW_WAITING)
+						If (Self.WaitCnt = 1 And Self.escapeboatdrawer.checkEnd()) Then
+							Self.escapefacedrawer.setActionId(0)
+							Self.escapefacedrawer.setTrans(TRANS_MIRROR)
 							Self.escapefacedrawer.setLoop(True)
-							Self.escapeboatdrawer.setActionId(STATE_SHOW_SPRING_DAMPING)
-							Self.escapeboatdrawer.setTrans(STATE_SHOW_WAITING)
+							
+							Self.escapeboatdrawer.setActionId(1)
+							Self.escapeboatdrawer.setTrans(TRANS_MIRROR)
 							Self.escapeboatdrawer.setLoop(False)
-							Self.WaitCnt = STATE_SHOW_WAITING
+							
+							Self.WaitCnt = 2
 						EndIf
 						
-						If (Self.WaitCnt = STATE_SHOW_WAITING And Self.escapeboatdrawer.checkEnd()) Then
-							Self.escapeboatdrawer.setActionId(STATE_SHOW_DROP)
-							Self.escapeboatdrawer.setTrans(STATE_SHOW_WAITING)
+						If (Self.WaitCnt = 2 And Self.escapeboatdrawer.checkEnd()) Then
+							Self.escapeboatdrawer.setActionId(0)
+							Self.escapeboatdrawer.setTrans(TRANS_MIRROR)
 							Self.escapeboatdrawer.setLoop(True)
-							Self.WaitCnt = STATE_SHOW_LAUGH
+							
+							Self.WaitCnt = 3
 						EndIf
 						
-						If (Self.WaitCnt = STATE_SHOW_LAUGH Or Self.WaitCnt = STATE_SHOW_WAITING_2) Then
+						If (Self.WaitCnt = 3 Or Self.WaitCnt = 4) Then
 							Self.posX += Self.escape_v
 						EndIf
 						
-						If (Self.posX > (Self.side_right Shl STATE_ATTACK_SPRING_DAMPING) And Self.WaitCnt = STATE_SHOW_LAUGH) Then
-							GameObject.addGameObject(New Cage((MapManager.getCamera().x + (MapManager.CAMERA_WIDTH Shr STATE_SHOW_SPRING_DAMPING)) Shl STATE_ATTACK_SPRING_DAMPING, MapManager.getCamera().y Shl STATE_ATTACK_SPRING_DAMPING))
+						If (Self.posX > (Self.side_right Shl 6) And Self.WaitCnt = 3) Then
+							GameObject.addGameObject(New Cage((MapManager.getCamera().x + (MapManager.CAMERA_WIDTH / 2)) Shl 6, MapManager.getCamera().y Shl 6)) ' Shr 1
+							
 							MapManager.lockCamera(True)
-							Self.WaitCnt = STATE_SHOW_WAITING_2
-							break
+							
+							Self.WaitCnt = 4
 						EndIf
-				EndIf
+				End Select
+				
 				Self.spring.logic(Self.posX, Self.posY, Self.spring_state, Self.velocity)
-				Self.spring.getIsHurt(Self.boat_state = STATE_SHOW_SPRING_DAMPING)
-				refreshCollisionRect(Self.posX Shr STATE_ATTACK_SPRING_DAMPING, Self.posY Shr STATE_ATTACK_SPRING_DAMPING)
+				Self.spring.getIsHurt((Self.boat_state = BOAT_HURT))
+				
+				refreshCollisionRect((Self.posX Shr 6), (Self.posY Shr 6))
+				
 				checkWithPlayer(preX, preY, Self.posX, Self.posY)
 			EndIf
 			
 		End
 		
-		Public Method HighJump:Bool()
-			
-			If (Self.HP >= STATE_ATTACK_WAITING Or Self.high_jump_cnt <> 0) Then
+		Method HighJump:Bool()
+			If (Self.HP >= 5 Or Self.high_jump_cnt <> 0) Then
 				Return False
 			EndIf
 			
 			Return True
 		End
 		
-		Public Method IsJumpOutScreen:Bool()
+		Method IsJumpOutScreen:Bool()
 			
-			If (Not HighJump() Or (Self.posY Shr STATE_ATTACK_SPRING_DAMPING) >= MapManager.getCamera().y) Then
+			If (Not HighJump() Or (Self.posY Shr 6) >= MapManager.getCamera().y) Then
 				Return False
 			EndIf
 			
 			Return True
 		End
 		
-		Public Method draw:Void(g:MFGraphics)
+		Method draw:Void(g:MFGraphics)
 			
 			If (Not Self.dead) Then
 				If (Self.state = 0) Then
-					If (Self.posY > ((SIDE_DOWN_MIDDLE - MapManager.CAMERA_HEIGHT) Shl STATE_ATTACK_SPRING_DAMPING)) Then
+					If (Self.posY > ((SIDE_DOWN_MIDDLE - MapManager.CAMERA_HEIGHT) Shl 6)) Then
 						drawInMap(g, Self.boatdrawer, Self.posX, Self.posY - Self.springH)
 						drawInMap(g, Self.facedrawer, Self.posX, (Self.posY - Boss6Block.COLLISION2_HEIGHT) - Self.springH)
 					EndIf
-					
-				ElseIf (Self.state <> show_laugh_cnt_max And Self.state <> STATE_WAIT) Then
+				ElseIf (Self.state <> STATE_ESCAPE And Self.state <> -1) Then
 					drawInMap(g, Self.boatdrawer, Self.posX, Self.posY - Self.springH)
 					drawInMap(g, Self.facedrawer, Self.posX, (Self.posY - Boss6Block.COLLISION2_HEIGHT) - Self.springH)
-				ElseIf (Self.state <> STATE_WAIT) Then
+				ElseIf (Self.state <> -1) Then
 					drawInMap(g, Self.escapeboatdrawer, Self.posX, Self.posY)
 					drawInMap(g, Self.escapefacedrawer, Self.posX, Self.posY - Boss6Block.COLLISION2_HEIGHT)
 				EndIf
 				
 				drawCollisionRect(g)
 				
-				If (Not (Self.state = STATE_BROKEN Or Self.state = show_laugh_cnt_max Or Self.state = STATE_WAIT)) Then
+				If (Not (Self.state = STATE_BROKEN Or Self.state = STATE_ESCAPE Or Self.state = -1)) Then
 					Self.spring.draw(g)
 				EndIf
 				
@@ -694,54 +749,50 @@ Class Boss2 Extends BossObject
 			
 		End
 		
-		Public Method resetBossDisplayState:Void()
-			
-			If (Self.face_state <> 0) Then
+		Method resetBossDisplayState:Void()
+			If (Self.face_state <> FACE_NORMAL) Then
 				If (Self.face_cnt < cnt_max) Then
-					Self.face_cnt += STATE_SHOW_SPRING_DAMPING
+					Self.face_cnt += 1
 				Else
-					Self.face_state = STATE_SHOW_DROP
-					Self.face_cnt = STATE_SHOW_DROP
+					Self.face_state = FACE_NORMAL
+					Self.face_cnt = 0
 				EndIf
 			EndIf
 			
-			If (Self.boat_state <> STATE_SHOW_SPRING_DAMPING) Then
-				Return
+			If (Self.boat_state = BOAT_HURT) Then
+				If (Self.boat_cnt < cnt_max) Then
+					Self.boat_cnt += 1
+				Else
+					Self.boat_state = BOAT_NORMAL
+					Self.boat_cnt = 0
+				EndIf
 			EndIf
-			
-			If (Self.boat_cnt < cnt_max) Then
-				Self.boat_cnt += STATE_SHOW_SPRING_DAMPING
-				Return
-			EndIf
-			
-			Self.boat_state = STATE_SHOW_DROP
-			Self.boat_cnt = STATE_SHOW_DROP
 		End
 		
-		Public Method changeAniState:Void(AniDrawer:AnimationDrawer, state:Int, isloop:Bool)
+		Method changeAniState:Void(AniDrawer:AnimationDrawer, state:Int, isloop:Bool)
 			
 			If (player.getCheckPositionX() > Self.posX) Then
 				AniDrawer.setActionId(state)
-				AniDrawer.setTrans(STATE_SHOW_WAITING)
+				AniDrawer.setTrans(2)
 				AniDrawer.setLoop(isloop)
 				Return
 			EndIf
 			
 			AniDrawer.setActionId(state)
-			AniDrawer.setTrans(STATE_SHOW_DROP)
+			AniDrawer.setTrans(TRANS_NONE)
 			AniDrawer.setLoop(isloop)
 		End
 		
-		Public Method changeAniStateNoTran:Void(AniDrawer:AnimationDrawer, state:Int, isloop:Bool)
+		Method changeAniStateNoTran:Void(AniDrawer:AnimationDrawer, state:Int, isloop:Bool)
 			AniDrawer.setActionId(state)
 			AniDrawer.setLoop(isloop)
 		End
 		
-		Public Method refreshCollisionRect:Void(x:Int, y:Int)
+		Method refreshCollisionRect:Void(x:Int, y:Int)
 			Self.collisionRect.setRect(x - PlayerObject.HEIGHT, (y - (Self.offset_y + COLLISION_HEIGHT)) - Self.springH, COLLISION_WIDTH, COLLISION_HEIGHT)
 		End
 		
-		Public Method close:Void()
+		Method close:Void()
 			Self.boatdrawer = Null
 			Self.facedrawer = Null
 			Self.escapeboatdrawer = Null

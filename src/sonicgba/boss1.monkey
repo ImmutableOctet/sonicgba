@@ -211,7 +211,7 @@ Class Boss1 Extends BossObject
 			
 			Self.escapefacedrawer = escapefaceAni.getDrawer(4, True, 0)
 			
-			Self.arm = New Boss1Arm(EnemyObject.ENEMY_BOSS1_ARM, x, y, left, top, width, height)
+			Self.arm = New Boss1Arm(ENEMY_BOSS1_ARM, x, y, left, top, width, height)
 			
 			GameObject.addGameObject(Self.arm, x, y)
 			
@@ -225,7 +225,7 @@ Class Boss1 Extends BossObject
 		' Methods:
 		
 		' Extensions:
-		Method onPlayerAttacked:Void(p:PlayerObject, direction:Int) ' animationID:Int
+		Method onPlayerAttack:Void(p:PlayerObject, direction:Int) ' animationID:Int
 			If (Self.face_state = FACE_HURT And Self.car_cnt = cnt_max) Then
 				Local animationID:= p.getAnimationId()
 				
@@ -287,7 +287,7 @@ Class Boss1 Extends BossObject
 		Method doWhileCollision:Void(p:PlayerObject, direction:Int)
 			If (Not Self.dead And Self.state <> STATE_BROKEN And Self.state <> STATE_ESCAPE And p = player) Then
 				If (p.isAttackingEnemy()) Then
-					onPlayerAttacked(p, direction)
+					onPlayerAttack(p, direction)
 				ElseIf (Self.state <> STATE_BROKEN And Self.state <> STATE_ESCAPE And p.canBeHurt()) Then
 					p.beHurt()
 					
@@ -297,7 +297,7 @@ Class Boss1 Extends BossObject
 		End
 		
 		Method doWhileBeAttack:Void(p:PlayerObject, direction:Int, animationID:Int)
-			onPlayerAttacked(p, direction)
+			onPlayerAttack(p, direction)
 		End
 		
 		Method logic:Void()
@@ -359,7 +359,7 @@ Class Boss1 Extends BossObject
 					Local brokenX:= (Self.posX Shr 6)
 					Local brokenY:= (Self.posY Shr 6)
 					
-					Self.bossbroken = New BossBroken(EnemyObject.ENEMY_BOSS1, brokenX, brokenY, 0, 0, 0, 0)
+					Self.bossbroken = New BossBroken(ENEMY_BOSS1, brokenX, brokenY, 0, 0, 0, 0)
 					
 					GameObject.addGameObject(Self.bossbroken, brokenX, brokenY)
 					
@@ -388,7 +388,7 @@ Class Boss1 Extends BossObject
 							
 							bossFighting = True
 							
-							bossID = EnemyObject.ENEMY_BOSS1
+							bossID = ENEMY_BOSS1
 							
 							SoundSystem.getInstance().playBgm(SoundSystem.BGM_BOSS_01, True)
 						EndIf
