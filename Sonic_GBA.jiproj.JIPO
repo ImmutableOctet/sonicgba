@@ -763,8 +763,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss3.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>47</X>
-        <Y>414</Y>
+        <X>77</X>
+        <Y>387</Y>
       </CursorPos>
       <DocGUID>685feffe-b219-48e2-9d2f-8391f19b76a0</DocGUID>
       <Bookmarks />
@@ -2073,8 +2073,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\state.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>8</X>
+        <Y>183</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -2179,6 +2179,6 @@
     <FolderStatus NodePath="Sonic_GBA\src\sonicgba" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\sonicgba\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\special" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\state" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\state" Expanded="true" />
   </Folders>
 </JiProjUserOptions>

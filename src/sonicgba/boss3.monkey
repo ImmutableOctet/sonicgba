@@ -552,7 +552,7 @@ Class Boss3 Extends BossObject
 										Self.BossV_y = 396
 									ElseIf (Self.HP = 4) Then
 										Self.BossV_x = 549
-										Self.BossV_y = TitleState.RETURN_PRESSED
+										Self.BossV_y = 400
 									ElseIf (Self.HP = 3 Or Self.HP = 2) Then
 										Self.BossV_x = 640
 										Self.BossV_y = 462
@@ -561,145 +561,123 @@ Class Boss3 Extends BossObject
 										Self.BossV_y = 528
 									EndIf
 									
-									Int rand1 = MyRandom.nextInt(0, 7)
-									Int rand2 = MyRandom.nextInt(0, 7)
+									Local rand1:= MyRandom.nextInt(0, 7) ' Self.pipepos.Length
+									Local rand2:= MyRandom.nextInt(0, 7) ' Self.pipepos.Length
+									
 									Select (rand1)
-										Case 0
-										Case 2
-											
+										Case 0, 2
 											If (rand2 = 0 Or rand2 = 2) Then
 												rand2 = MyRandom.nextInt(3, 7)
-												break
 											EndIf
-											
-										Case 1
-										Case 3
-											
+										Case 1, 3
 											If (rand2 = 1 Or rand2 = 3) Then
 												rand2 = MyRandom.nextInt(4, 7)
-												break
 											EndIf
-											
-										Case 4
-										Case SSdef.SSOBJ_BNLD_ID
-											
+										Case 4, 6
 											If (rand2 = 4 Or rand2 = 6) Then
 												rand2 = MyRandom.nextInt(0, 3)
-												break
 											EndIf
-											
-										Case SSdef.SSOBJ_BNRU_ID
-										Case SSdef.SSOBJ_BNRD_ID
-											
+										Case 5, 7
 											If (rand2 = 5 Or rand2 = 7) Then
 												rand2 = MyRandom.nextInt(0, 4)
-												break
 											EndIf
-									EndIf
+									End Select
+									
 									Self.posX = Self.pipepos[rand1][0]
 									Self.posY = Self.pipepos[rand1][1]
+									
 									Self.ShadowPosX = Self.pipepos[rand2][0]
 									Self.ShadowPosY = Self.pipepos[rand2][1]
+									
 									Select (rand1)
-										Case 0
-										Case 1
+										Case 0, 1
 											Self.BossVX = -Abs(Self.BossV_x)
 											Self.BossVY = 0
-											Self.realdrawer.setTrans(0)
-											Self.facedrawer.setTrans(0)
+											
+											Self.realdrawer.setTrans(TRANS_NONE)
+											Self.facedrawer.setTrans(TRANS_NONE)
+											
 											Self.FACE_OFFSET_X = 576
-											break
-										Case 2
-										Case 3
+										Case 2, 3
 											Self.BossVX = Abs(Self.BossV_x)
 											Self.BossVY = 0
-											Self.realdrawer.setTrans(2)
-											Self.facedrawer.setTrans(2)
+											
+											Self.realdrawer.setTrans(TRANS_MIRROR)
+											Self.facedrawer.setTrans(TRANS_MIRROR)
+											
 											Self.FACE_OFFSET_X = -448
-											break
-										Case 4
-										Case SSdef.SSOBJ_BNRU_ID
+										Case 4, 5
 											Self.BossVX = 0
 											Self.BossVY = Abs(Self.BossV_y)
 											
-											If (rand1 <> 4) Then
-												Self.realdrawer.setTrans(0)
-												Self.facedrawer.setTrans(0)
+											If (rand1 = 4) Then
+												Self.realdrawer.setTrans(TRANS_MIRROR)
+												Self.facedrawer.setTrans(TRANS_MIRROR)
+												
+												Self.FACE_OFFSET_X = -448
+											Else
+												Self.realdrawer.setTrans(TRANS_NONE)
+												Self.facedrawer.setTrans(TRANS_NONE)
+												
 												Self.FACE_OFFSET_X = 576
-												break
 											EndIf
-											
-											Self.realdrawer.setTrans(2)
-											Self.facedrawer.setTrans(2)
-											Self.FACE_OFFSET_X = -448
-											break
-										Case SSdef.SSOBJ_BNLD_ID
-										Case SSdef.SSOBJ_BNRD_ID
+										Case 6, 7
 											Self.BossVX = 0
 											Self.BossVY = -Abs(Self.BossV_y)
 											
-											If (rand1 <> 6) Then
-												Self.realdrawer.setTrans(0)
-												Self.facedrawer.setTrans(0)
+											If (rand1 = 6) Then
+												Self.realdrawer.setTrans(TRANS_MIRROR)
+												Self.facedrawer.setTrans(TRANS_MIRROR)
+												
+												Self.FACE_OFFSET_X = -448
+											Else
+												Self.realdrawer.setTrans(TRANS_NONE)
+												Self.facedrawer.setTrans(TRANS_NONE)
+												
 												Self.FACE_OFFSET_X = 576
-												break
 											EndIf
-											
-											Self.realdrawer.setTrans(2)
-											Self.facedrawer.setTrans(2)
-											Self.FACE_OFFSET_X = -448
-											break
-									EndIf
+									End Select
+									
 									Select (rand2)
-										Case 0
-										Case 1
+										Case 0, 1
 											Self.ShadowVX = -Abs(Self.BossV_x)
 											Self.ShadowVY = 0
-											Self.shadowdrawer.setTrans(0)
-											break
-										Case 2
-										Case 3
+											
+											Self.shadowdrawer.setTrans(TRANS_NONE)
+										Case 2, 3
 											Self.ShadowVX = Abs(Self.BossV_x)
 											Self.ShadowVY = 0
-											Self.shadowdrawer.setTrans(2)
-											break
-										Case 4
-										Case SSdef.SSOBJ_BNRU_ID
+											
+											Self.shadowdrawer.setTrans(TRANS_MIRROR)
+										Case 4, 5
 											Self.ShadowVX = 0
 											Self.ShadowVY = Abs(Self.BossV_y)
 											
-											If (rand2 <> 4) Then
-												Self.shadowdrawer.setTrans(0)
-												break
+											If (rand2 = 4) Then
+												Self.shadowdrawer.setTrans(TRANS_MIRROR)
 											Else
-												Self.shadowdrawer.setTrans(2)
-												break
+												Self.shadowdrawer.setTrans(TRANS_NONE)
 											EndIf
-											
-										Case SSdef.SSOBJ_BNLD_ID
-										Case SSdef.SSOBJ_BNRD_ID
+										Case 6, 7
 											Self.ShadowVX = 0
 											Self.ShadowVY = -Abs(Self.BossV_y)
 											
-											If (rand2 <> 6) Then
-												Self.shadowdrawer.setTrans(0)
-												break
+											If (rand2 = 6) Then
+												Self.shadowdrawer.setTrans(TRANS_MIRROR)
 											Else
-												Self.shadowdrawer.setTrans(2)
-												break
+												Self.shadowdrawer.setTrans(TRANS_NONE)
 											EndIf
-									EndIf
+									End Select
+									
 									Self.pro_step = PRO_BOSS_MOVING
 									Self.release_cnt = 0
-									break
+								Else
+									Self.release_cnt += 1
 								EndIf
-								
-								Self.release_cnt += 1
-								break
-								break
 							Case PRO_BOSS_MOVING
 								Self.IsStartAttack = True
 								
+								' Magic number: 1280
 								If (Self.posX + Self.BossVX < Self.pipeposend[1] + 1280 Or Self.posX + Self.BossVX > Self.pipeposend[0] - 1280) Then
 									Self.IsInPipeCollision = True
 								Else
@@ -715,60 +693,69 @@ Class Boss3 Extends BossObject
 								If (Self.posX + Self.BossVX >= Self.pipeposend[1] And Self.posX + Self.BossVX <= Self.pipeposend[0] And Self.ShadowPosX + Self.ShadowVX >= Self.pipeposend[1] And Self.ShadowPosX + Self.ShadowVX <= Self.pipeposend[0] And Self.posY + Self.BossVY >= Self.pipeposend[2] And Self.posY + Self.BossVY <= Self.pipeposend[3] And Self.ShadowPosY + Self.ShadowVY >= Self.pipeposend[2] And Self.ShadowPosY + Self.ShadowVY <= Self.pipeposend[3]) Then
 									Self.posX += Self.BossVX
 									Self.posY += Self.BossVY
+									
 									Self.ShadowPosX += Self.ShadowVX
 									Self.ShadowPosY += Self.ShadowVY
-									break
+								Else
+									Self.pro_step = PRO_INIT
 								EndIf
-								
-								Self.pro_step = PRO_INIT
-								break
 						End Select
 						
 						Self.shadow.logic(Self.ShadowPosX, Self.ShadowPosY)
+						
 						Self.facedrawer.setActionId(Self.face_state)
 						Self.realdrawer.setActionId(Self.boat_state)
-						break
 					Case STATE_BROKEN
 						Self.platform.setDisplay(False)
+						
 						Self.shadow.IsOver = True
+						
 						Self.bossbroken.logicBoom(Self.posX, Self.posY)
 						
 						If (Self.pipe_offset < pipe_offset_max) Then
 							Self.pipe_offset += 1
-							iArr = Self.pipepos[0]
-							iArr[0] = iArr[0] + Self.pipe_vel_h
-							iArr = Self.pipepos[1]
-							iArr[0] = iArr[0] + Self.pipe_vel_h
-							iArr = Self.pipepos[2]
-							iArr[0] = iArr[0] - Self.pipe_vel_h
-							iArr = Self.pipepos[3]
-							iArr[0] = iArr[0] - Self.pipe_vel_h
-							iArr = Self.pipepos[4]
-							iArr[1] = iArr[1] - Self.pipe_vel_v
-							iArr = Self.pipepos[5]
-							iArr[1] = iArr[1] - Self.pipe_vel_v
-							iArr = Self.pipepos[6]
-							iArr[1] = iArr[1] + Self.pipe_vel_v
-							iArr = Self.pipepos[7]
-							iArr[1] = iArr[1] + Self.pipe_vel_v
+							
+							Self.pipepos[0][0] += Self.pipe_vel_h
+							Self.pipepos[1][0] += Self.pipe_vel_h
+							Self.pipepos[2][0] -= Self.pipe_vel_h
+							Self.pipepos[3][0] -= Self.pipe_vel_h
+							
+							Self.pipepos[4][1] -= Self.pipe_vel_v
+							Self.pipepos[5][1] -= Self.pipe_vel_v
+							Self.pipepos[6][1] += Self.pipe_vel_v
+							Self.pipepos[7][1] += Self.pipe_vel_v
 						Else
 							Self.IsPipeOut = True
 						EndIf
 						
-						If ((Self.posY + Self.BossVY) + 1600 > getGroundY(Self.posX, Self.posY) And Self.boss_drip_cnt = 0) Then
-							Self.posY = getGroundY(Self.posX, Self.posY) - 1600
+						Local groundY:= getGroundY(Self.posX, Self.posY)
+						
+						Local tmpBossY:= (Self.posY + Self.BossVY) + (COLLISION_HEIGHT / 2)
+						
+						Local tmpBossY_over_ground:Bool = (tmpBossY > groundY)
+						Local tmpBossY_under_ground:Bool = (Not tmpBossY_over_ground) ' (tmpBossY <= groundY)
+						
+						' Magic numbers: -1280, -640
+						If (tmpBossY_over_ground And Self.boss_drip_cnt = 0) Then
+							Self.posY = groundY - (COLLISION_HEIGHT / 2)
+							
 							Self.BossVY = -1280
+							
 							Self.boss_drip_cnt = 1
-						ElseIf ((Self.posY + Self.BossVY) + 1600 > getGroundY(Self.posX, Self.posY) And Self.boss_drip_cnt = 1) Then
-							Self.posY = getGroundY(Self.posX, Self.posY) - 1600
+						ElseIf (tmpBossY_over_ground And Self.boss_drip_cnt = 1) Then
+							Self.posY = groundY - (COLLISION_HEIGHT / 2)
+							
 							Self.BossVY = -640
+							
 							Self.boss_drip_cnt = 2
-						ElseIf ((Self.posY + Self.BossVY) + 1600 <= getGroundY(Self.posX, Self.posY) Or Self.boss_drip_cnt <> 2) Then
+						ElseIf (tmpBossY_under_ground Or Self.boss_drip_cnt <> 2) Then ' tmpBossY <= groundY
 							Self.posX += Self.BossVX
+							
 							Self.BossVY += GRAVITY
+							
 							Self.posY += Self.BossVY
 						Else
-							Self.posY = getGroundY(Self.posX, Self.posY) - 1600
+							Self.posY = groundY - (COLLISION_HEIGHT / 2)
 							
 							If (partAni = Null) Then
 								partAni = New Animation("/animation/boss3_part")
@@ -787,49 +774,75 @@ Class Boss3 Extends BossObject
 							EndIf
 							
 							Self.escapefacedrawer = escapefaceAni.getDrawer(4, True, 0)
+							
 							Self.partx = Self.posX
 							Self.party = Self.posY
-							Self.partvx = -1600
+							
+							' Magic numbers: -1600, -320
+							Self.partvx = -1600 ' -(COLLISION_HEIGHT / 2)
 							Self.partvy = -320
 						EndIf
 						
-						If ((Self.ShadowPosY + Self.ShadowVY) + 1600 > getGroundY(Self.ShadowPosX, Self.ShadowPosY) And Self.shadow_drip_cnt = 0) Then
-							Self.ShadowPosY = getGroundY(Self.ShadowPosX, Self.ShadowPosY) - 1600
+						groundY = getGroundY(Self.ShadowPosX, Self.ShadowPosY)
+						
+						Local tmpShadowY:= (Self.ShadowPosY + Self.ShadowVY) + (COLLISION_HEIGHT / 2)
+						
+						Local tmpShadowY_over_ground:Bool = (tmpShadowY > groundY)
+						Local tmpShadowY_under_ground:Bool = (Not tmpShadowY_over_ground) ' (tmpShadowY <= groundY)
+						
+						' Magic numbers: -1280, -640
+						If (tmpShadowY_over_ground And Self.shadow_drip_cnt = 0) Then
+							Self.ShadowPosY = groundY - (COLLISION_HEIGHT / 2)
+							
 							Self.ShadowVY = -1280
+							
 							Self.shadow_drip_cnt = 1
-						ElseIf ((Self.ShadowPosY + Self.ShadowVY) + 1600 > getGroundY(Self.ShadowPosX, Self.ShadowPosY) And Self.shadow_drip_cnt = 1) Then
-							Self.ShadowPosY = getGroundY(Self.ShadowPosX, Self.ShadowPosY) - 1600
+						ElseIf (tmpShadowY_over_ground And Self.shadow_drip_cnt = 1) Then
+							Self.ShadowPosY = groundY - (COLLISION_HEIGHT / 2)
+							
 							Self.ShadowVY = -640
+							
 							Self.shadow_drip_cnt = 2
-						ElseIf ((Self.ShadowPosY + Self.ShadowVY) + 1600 <= getGroundY(Self.ShadowPosX, Self.ShadowPosY) Or Self.shadow_drip_cnt <> 2) Then
-							Self.ShadowPosX += Self.BossVX * 3
+						ElseIf (tmpShadowY_under_ground Or Self.shadow_drip_cnt <> 2) Then ' Not tmpShadowY_over_ground ' (tmpShadowY <= groundY)
+							Self.ShadowPosX += (Self.BossVX * 3)
+							
 							Self.ShadowVY += GRAVITY
+							
 							Self.ShadowPosY += Self.ShadowVY
 						Else
-							Self.ShadowPosY = getGroundY(Self.ShadowPosX, Self.ShadowPosY) - 1600
+							Self.ShadowPosY = groundY - (COLLISION_HEIGHT / 2)
 						EndIf
 						
 						If (Self.bossbroken.getEndState()) Then
 							Self.state = STATE_ESCAPE
+							
 							Self.StartEscape = False
+							
 							Self.WaitCnt = 0
+							
 							Self.wait_cnt = 0
+							
 							Self.fly_top = Self.posY - 3072
 							Self.fly_end = Self.side_right
+							
 							bossFighting = False
+							
 							player.getBossScore()
+							
 							SoundSystem.getInstance().playBgm(StageManager.getBgmId(), True)
-							break
 						EndIf
-						
-						break
 					Case STATE_ESCAPE
-						If (Self.party + Self.partvy > getGroundY(Self.partx, Self.party)) Then
-							Self.party = getGroundY(Self.partx, Self.party)
+						Local partGroundY:= getGroundY(Self.partx, Self.party)
+						
+						If (Self.party + Self.partvy > partGroundY) Then
+							Self.party = partGroundY
+							
 							Self.StartEscape = True
 						Else
 							Self.partx += Self.partvx
+							
 							Self.partvy += GRAVITY
+							
 							Self.party += Self.partvy
 						EndIf
 						
@@ -842,26 +855,35 @@ Class Boss3 Extends BossObject
 							
 							If (Self.posY <= Self.fly_top - Self.fly_top_range And Self.WaitCnt = 0) Then
 								Self.posY = Self.fly_top - Self.fly_top_range
-								Self.escapefacedrawer.setActionId(0)
-								Self.boatdrawer.setActionId(1)
+								
+								Self.escapefacedrawer.setActionId(FACE_NORMAL) ' 0
+								
+								Self.boatdrawer.setActionId(BOAT_HURT) ' 1
 								Self.boatdrawer.setLoop(False)
+								
 								Self.WaitCnt = 1
 							EndIf
 							
 							If (Self.WaitCnt = 1 And Self.boatdrawer.checkEnd()) Then
-								Self.escapefacedrawer.setActionId(0)
-								Self.escapefacedrawer.setTrans(2)
+								Self.escapefacedrawer.setActionId(FACE_NORMAL) ' 0
+								
+								Self.escapefacedrawer.setTrans(TRANS_MIRROR)
 								Self.escapefacedrawer.setLoop(True)
-								Self.boatdrawer.setActionId(1)
-								Self.boatdrawer.setTrans(2)
+								
+								Self.boatdrawer.setActionId(BOAT_HURT) ' 1
+								
+								Self.boatdrawer.setTrans(TRANS_MIRROR)
 								Self.boatdrawer.setLoop(False)
+								
 								Self.WaitCnt = 2
 							EndIf
 							
 							If (Self.WaitCnt = 2 And Self.boatdrawer.checkEnd()) Then
-								Self.boatdrawer.setActionId(0)
-								Self.boatdrawer.setTrans(2)
+								Self.boatdrawer.setActionId(BOAT_NORMAL) ' 0
+								
+								Self.boatdrawer.setTrans(TRANS_MIRROR)
 								Self.boatdrawer.setLoop(True)
+								
 								Self.WaitCnt = 3
 							EndIf
 							
@@ -871,14 +893,13 @@ Class Boss3 Extends BossObject
 							
 							If (Self.posX - Self.fly_end > Self.fly_top_range And Self.WaitCnt = 3) Then
 								GameObject.addGameObject(New Cage((MapManager.getCamera().x + (MapManager.CAMERA_WIDTH Shr 1)) Shl 6, MapManager.getCamera().y Shl 6))
+								
 								MapManager.setCameraUpLimit(SIDE_DOWN_MIDDLE - ((MapManager.CAMERA_HEIGHT * 3) / 4))
-								MapManager.setCameraDownLimit(((MapManager.CAMERA_HEIGHT * 1) / 4) + SIDE_DOWN_MIDDLE)
+								MapManager.setCameraDownLimit(((MapManager.CAMERA_HEIGHT) / 4) + SIDE_DOWN_MIDDLE)
+								
 								Self.WaitCnt = 4
-								break
 							EndIf
 						EndIf
-						
-						break
 				End Select
 				
 				For Local i:= 0 Until Self.pipe.Length
