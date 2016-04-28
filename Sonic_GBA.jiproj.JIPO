@@ -747,10 +747,18 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss2.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>15</X>
-        <Y>265</Y>
+        <X>22</X>
+        <Y>97</Y>
       </CursorPos>
       <DocGUID>59dc6876-86a7-4d31-8167-5a0cb9326ad6</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\boss2spring.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>17</X>
+        <Y>16</Y>
+      </CursorPos>
+      <DocGUID>1126b988-be42-4aae-98f4-f97f3ae8c9cd</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss3shadow.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
@@ -1464,8 +1472,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>338</Y>
+        <X>32</X>
+        <Y>401</Y>
       </CursorPos>
       <DocGUID>7df2e3e4-ff52-4fb7-a296-22530b355e07</DocGUID>
       <Bookmarks />
