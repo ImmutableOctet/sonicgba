@@ -163,12 +163,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphicsmacros.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphicsmacros.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>14</Y>
+        <X>7</X>
+        <Y>15</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>e68c2813-4cb8-40c6-8734-3aac75128569</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfcomponent.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -763,10 +764,18 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss3.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>77</X>
-        <Y>387</Y>
+        <X>27</X>
+        <Y>14</Y>
       </CursorPos>
       <DocGUID>685feffe-b219-48e2-9d2f-8391f19b76a0</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\boss3pipe.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>15</X>
+        <Y>17</Y>
+      </CursorPos>
+      <DocGUID>db967c18-8a77-42b1-98bd-fd59938973eb</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss3shadow.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
@@ -1145,8 +1154,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>32</X>
-        <Y>52</Y>
+        <X>9</X>
+        <Y>49</Y>
       </CursorPos>
       <DocGUID>01e45f66-e03d-420d-a2b4-d3d29069bc48</DocGUID>
       <Bookmarks />
@@ -2130,7 +2139,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\define" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\__test" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\android" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\android" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\device" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\ui" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\utility" Expanded="true" />
