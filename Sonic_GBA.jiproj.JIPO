@@ -745,20 +745,26 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\boss2.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\boss2.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>22</X>
         <Y>97</Y>
       </CursorPos>
-      <DocGUID>59dc6876-86a7-4d31-8167-5a0cb9326ad6</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\boss2spring.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\boss2spring.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>17</X>
         <Y>16</Y>
       </CursorPos>
-      <DocGUID>1126b988-be42-4aae-98f4-f97f3ae8c9cd</DocGUID>
+      <DocGUID />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\sonicgba\boss3.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>11</X>
+        <Y>25</Y>
+      </CursorPos>
+      <DocGUID>685feffe-b219-48e2-9d2f-8391f19b76a0</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss3shadow.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
