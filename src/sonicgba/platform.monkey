@@ -174,6 +174,7 @@ Class Platform Extends GimmickObject
 					Self.offsetY = STAND_OFFSET
 					
 					If (player.getCharacterID() = CHARACTER_KNUCKLES) Then
+						' Optimization potential; dynamic cast.
 						Local knuckles:= PlayerKnuckles(player)
 						
 						' Just to be safe, make sure this is actually Knuckles:
