@@ -1493,6 +1493,53 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			Next
 		End
 		
+		Method checkWithPlayer:Void(preX:Int, preY:Int, currentX:Int, currentY:Int)
+			Local moveDistanceX:= (currentX - preX)
+			Local moveDistanceY:= (currentY - preY)
+			
+			If (moveDistanceX = 0 And moveDistanceY = 0) Then
+				refreshCollisionRect(currentX, currentY)
+				
+				doWhileCollisionWrapWithPlayer()
+				
+				Return
+			EndIf
+			
+			Local moveDistance:Int
+			
+			Local mdXAbs:= Abs(moveDistanceX)
+			Local mdYAbs:= Abs(moveDistanceY)
+			
+			If (mdXAbs >= mdYAbs) Then
+				moveDistance = mdXAbs
+			Else
+				moveDistance = mdYAbs
+			EndIf
+			
+			Local preCheckX:= preX
+			Local preCheckY:= preY
+			
+			Local i:= 0
+			
+			While (i < moveDistance)
+				i += VELOCITY_DIVIDE
+				
+				If (i > moveDistance) Then ' >=
+					i = moveDistance
+				EndIf
+				
+				Local tmpCurrentX:= (preX + ((moveDistanceX * i) / moveDistance))
+				Local tmpCurrentY:= (preY + ((moveDistanceY * i) / moveDistance))
+				
+				refreshCollisionRect(tmpCurrentX, tmpCurrentY)
+				
+				doWhileCollisionWrapWithPlayer()
+				
+				preCheckX = tmpCurrentX
+				preCheckY = tmpCurrentY
+			Wend
+		End
+		
 		Method getBlockLeftSide:Int(blockX:Int, blockY:Int)
 			Return ((blockX Shl SEARCH_COUNT) Shl 6)
 		End
