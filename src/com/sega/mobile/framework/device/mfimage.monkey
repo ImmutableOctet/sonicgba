@@ -39,7 +39,7 @@ Class MFImage
 		End
 		
 		Function generateImage:Image(path:String)
-			Return Image.Load(url, 0.0, 0.0, Image.Mipmap)
+			Return Image.Load(path, 0.0, 0.0, Image.Mipmap)
 		End
 		
 		' Constructor(s):
@@ -49,6 +49,18 @@ Class MFImage
 		End
 	Public
 		' Functions:
+		
+		' Extensions:
+		
+		' These functions may be replaced at a later date:
+		Function generateNativeImage:Image(width:Int, height:Int)
+			Return generateImage(width, height)
+		End
+		
+		Function generateNativeImage:Image(path:String)
+			Return generateImage(path)
+		End
+		
 		Function createPaletteImage:MFImage(paletteFileName:String) ' Final
 			Try
 				Local data:Int
@@ -101,7 +113,7 @@ Class MFImage
 			Try
 				Local img:= CreateImage()
 				
-				ret = createImage(Image.createImage(is))
+				ret = createImage(MFImage.generateNativeImage(is))
 			Catch E:StreamError
 				' Nothing so far.
 			End Try
@@ -155,16 +167,22 @@ Class MFImage
 		End
 		
 		' Methods:
+		
+		' Extensions:
+		Method getNativeImage:Image() Final
+			Return Self.image
+		End
+		
 		Method getGraphics:MFGraphics() Final
 			Return Self.graphics
 		End
 	
 		Method getWidth:Int() Final
-			Return Self.image.Width()
+			Return Self.image.Width() ' Width
 		End
 	
 		Method getHeight:Int() Final
-			Return Self.image.Height()
+			Return Self.image.Height() ' Height
 		End
 		
 		Method getRGB:Void(rgbData:Int[], offset:Int, scanlength:Int, x:Int, y:Int, width:Int, height:Int) Final

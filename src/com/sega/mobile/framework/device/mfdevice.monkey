@@ -29,6 +29,7 @@ Private
 	Import com.sega.mobile.framework.device.mfcomponent
 	Import com.sega.mobile.framework.device.mfgamepad
 	Import com.sega.mobile.framework.device.mfgraphics
+	Import com.sega.mobile.framework.device.mfimage
 	Import com.sega.mobile.framework.ui.mftouchkey
 	
 	'Import com.sega.mobile.framework.device.mfsensor
@@ -854,11 +855,11 @@ Class MFDevice Final
 		Function enableLayer:Void(layer:Int)
 			If (layer <= 0 Or layer > MAX_LAYER) Then ' (layer <> MAX_LAYER)
 				If (layer < 0 And layer >= -MAX_LAYER And preLayerImage[(-layer) - MAX_LAYER] = Null) Then
-					preLayerImage[(-layer) - MAX_LAYER] = Image.createImage(screenWidth, screenHeight)
+					preLayerImage[(-layer) - MAX_LAYER] = MFImage.generateNativeImage(screenWidth, screenHeight)
 					preLayerGraphics[(-layer) - MAX_LAYER] = MFGraphics.createMFGraphics(preLayerImage[(-layer) - MAX_LAYER].getGraphics(), screenWidth, screenHeight)
 				EndIf
 			ElseIf (postLayerImage[layer - MAX_LAYER] = Null) Then
-				postLayerImage[layer - MAX_LAYER] = Image.createImage(screenWidth, screenHeight)
+				postLayerImage[layer - MAX_LAYER] = MFImage.generateNativeImage(screenWidth, screenHeight)
 				postLayerGraphics[layer - MAX_LAYER] = MFGraphics.createMFGraphics(postLayerImage[layer - MAX_LAYER].getGraphics(), screenWidth, screenHeight)
 			EndIf
 		End
@@ -939,11 +940,11 @@ Class MFDevice Final
 				
 				#Rem
 					If (preScaleZoomOutFlag) Then
-						bufferImage = Image.createImage(((canvasHeight * screenWidth) / screenHeight) Shl preScaleShift, canvasHeight Shl preScaleShift)
+						bufferImage = MFImage.generateNativeImage(((canvasHeight * screenWidth) / screenHeight) Shl preScaleShift, canvasHeight Shl preScaleShift)
 					ElseIf (preScaleZoomInFlag) Then
-						bufferImage = Image.createImage(((canvasHeight * screenWidth) / screenHeight) Shr preScaleShift, canvasHeight Shr preScaleShift)
+						bufferImage = MFImage.generateNativeImage(((canvasHeight * screenWidth) / screenHeight) Shr preScaleShift, canvasHeight Shr preScaleShift)
 					Else
-						bufferImage = Image.createImage((canvasHeight * screenWidth) / screenHeight, canvasHeight)
+						bufferImage = MFImage.generateNativeImage((canvasHeight * screenWidth) / screenHeight, canvasHeight)
 					EndIf
 					
 					graphics = MFGraphics.createMFGraphics(bufferImage.getGraphics(), (canvasHeight * screenWidth) / screenHeight, canvasHeight)
@@ -1005,11 +1006,11 @@ Class MFDevice Final
 				
 				#Rem
 					If (preScaleZoomOutFlag) Then
-						bufferImage = Image.createImage(canvasWidth Shl preScaleShift, ((canvasWidth * screenHeight) / screenWidth) Shl preScaleShift)
+						bufferImage = MFImage.generateNativeImage(canvasWidth Shl preScaleShift, ((canvasWidth * screenHeight) / screenWidth) Shl preScaleShift)
 					ElseIf (preScaleZoomInFlag) Then
-						bufferImage = Image.createImage(canvasWidth Shr preScaleShift, ((canvasWidth * screenHeight) / screenWidth) Shr preScaleShift)
+						bufferImage = MFImage.generateNativeImage(canvasWidth Shr preScaleShift, ((canvasWidth * screenHeight) / screenWidth) Shr preScaleShift)
 					Else
-						bufferImage = Image.createImage(canvasWidth, (canvasWidth * screenHeight) / screenWidth)
+						bufferImage = MFImage.generateNativeImage(canvasWidth, (canvasWidth * screenHeight) / screenWidth)
 					EndIf
 					
 					graphics = MFGraphics.createMFGraphics(bufferImage.getGraphics(), canvasWidth, (canvasWidth * screenHeight) / screenWidth)
