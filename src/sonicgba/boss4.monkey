@@ -406,20 +406,20 @@ Class Boss4 Extends BossObject
 			EndIf
 		End
 		
-		Public Method logic:Void()
+		Method logic:Void()
 			If (Not Self.dead) Then
 				Local preX:= Self.posX
 				Local preY:= Self.posY
 				
-				If (Self.state > 0) Then
+				If (Self.state > STATE_INIT) Then
 					isBossEnter = True
 				EndIf
 				
 				Select (Self.state)
-					Case 0
-						
+					Case STATE_INIT
 						If (player.getFootPositionX() >= StartPosX) Then
-							Self.state = 1
+							Self.state = STATE_ENTER_SHOW
+							
 							MapManager.setCameraLeftLimit(SIDE_LEFT)
 							MapManager.setCameraRightLimit(SIDE_RIGHT)
 							MapManager.setCameraUpLimit(SIDE_UP)
@@ -427,109 +427,99 @@ Class Boss4 Extends BossObject
 							
 							If (Not Self.IsPlayBossBattleBGM) Then
 								bossFighting = True
+								
 								bossID = ENEMY_BOSS4
-								SoundSystem.getInstance().playBgm(22, True)
+								
+								SoundSystem.getInstance().playBgm(SoundSystem.BGM_BOSS_01, True) ' SoundSystem.BGM_BOSS_04
+								
 								Self.IsPlayBossBattleBGM = True
 							EndIf
 							
-							Self.show_step = 0
-							setAniState((Int) 0, (Int) 0)
+							Self.show_step = SHOW_BOSS_ENTER
+							
+							setAniState(MACHINE_MOVE, FACE_NORMAL)
+							
 							player.setMeetingBoss(False)
+							
 							Self.water_level = StageManager.getWaterLevel()
 							
-							If (player instanceof PlayerKnuckles) Then
+							If (player.getCharacterID() = CHARACTER_KNUCKLES) Then
 								player.dripDownUnderWater()
 							EndIf
 							
 							player.isAttackBoss4 = True
-							break
 						EndIf
-						
-						break
-					Case 1
-						
-						If (player instanceof PlayerKnuckles) Then
+					Case STATE_ENTER_SHOW
+						If (player.getCharacterID() = CHARACTER_KNUCKLES) Then
 							player.dripDownUnderWater()
 						EndIf
 						
 						Select (Self.show_step)
-							Case 0
-								
+							Case SHOW_BOSS_ENTER
 								If (Self.posX <= BOSS_SHOW_END_POSX) Then
-									Self.show_step = 1
-									setAniState((Int) 4, (Int) 1)
+									Self.show_step = SHOW_BOSS_LAUGH
+									
+									setAniState(MACHINE_WAIT, FACE_SMILE)
+									
 									Self.laugh_cn = 0
-									break
+								Else
+									Self.posX -= MOVE_SPEED
 								EndIf
-								
-								Self.posX -= MOVE_SPEED
-								break
-							Case 1
-								
+							Case SHOW_BOSS_LAUGH
 								If (Self.laugh_cn >= BOSS_LAUGH_MAX) Then
-									Self.show_step = 2
-									setAniState(Self.faceDrawer, (Int) 0)
-									break
+									Self.show_step = SHOW_BOSS_END
+									
+									setAniState(Self.faceDrawer, FACE_NORMAL)
+								Else
+									Self.laugh_cn += 1
 								EndIf
-								
-								Self.laugh_cn += 1
-								break
-							Case 2
+							Case SHOW_BOSS_END
 								Self.state = STATE_PRO
-								Self.attack_step = 0
+								Self.attack_step = ATTACK_INIT
+								
 								Self.wait_cn = 0
+								
 								MapManager.setCameraDownLimit(SIDE_DOWN2)
-								break
-							Default
-								break
-						EndIf
-					Case 2
-						
+						End Select
+					Case STATE_PRO
 						If (MapManager.actualDownCameraLimit = MapManager.proposeDownCameraLimit) Then
 							player.setMeetingBoss(True)
 						EndIf
 						
-						If (Self.face_state <> 0) Then
+						If (Self.face_state <> FACE_NORMAL) Then
 							If (Self.face_cnt < cnt_max) Then
 								Self.face_cnt += 1
 							Else
-								setAniState(Self.faceDrawer, (Int) 0)
+								setAniState(Self.faceDrawer, FACE_NORMAL)
+								
 								Self.face_cnt = 0
 							EndIf
 						EndIf
 						
-						If (Not (Self.machine_state = STATE_INIT Or Self.machine_state = 2 Or Self.machine_state = 4)) Then
+						If (Not (Self.machine_state = MACHINE_MOVE Or Self.machine_state = MACHINE_ATTACK Or Self.machine_state = MACHINE_WAIT)) Then
 							Self.pro_machine_state2 = Self.machine_state
 							
 							If (Self.machine_cnt < cnt_max) Then
 								Self.machine_cnt += 1
 							Else
-								Self.machine_state = Self.pro_machine_state2 - 1
+								Self.machine_state = (Self.pro_machine_state2 - 1)
+								
 								setAniState(Self.machineDrawer, Self.machine_state)
+								
 								Self.machine_cnt = 0
 							EndIf
 						EndIf
 						
 						Select (Self.attack_step)
-							Case 0
-								
+							Case ATTACK_INIT
 								If (Self.wait_cn >= WAIT_TIME_MAX) Then
-									Self.direct = False
-									
-									If (MyRandom.nextInt(0, 100) <= 95) Then
-										Self.direct = True
-									Else
-										Self.direct = False
-									EndIf
+									Self.direct = (MyRandom.nextInt(0, 100) <= 95)
 									
 									setMoveConf()
-									break
+								Else
+									Self.wait_cn += 1
 								EndIf
-								
-								Self.wait_cn += 1
-								break
-							Case 1
-								
+							Case ATTACK_MOVE
 								If ((Self.posStartX <= SIDE_MIDDLE Or Not Self.direct Or Self.posX < Self.posStartX - (Self.move_distance * MOVE_INTERVAL)) And ((Self.posStartX <= SIDE_MIDDLE Or Self.direct Or Self.posX > Self.posStartX + (Self.move_distance * MOVE_INTERVAL)) And ((Self.posStartX > SIDE_MIDDLE Or Not Self.direct Or Self.posX > Self.posStartX + (Self.move_distance * MOVE_INTERVAL)) And (Self.posStartX > SIDE_MIDDLE Or Self.direct Or Self.posX < Self.posStartX - (Self.move_distance * MOVE_INTERVAL))))) Then
 									If (Self.posStartX > SIDE_MIDDLE) Then
 										If (Self.direct) Then
@@ -537,159 +527,154 @@ Class Boss4 Extends BossObject
 										Else
 											Self.posX = Self.posStartX + (Self.move_distance * MOVE_INTERVAL)
 										EndIf
-										
 									ElseIf (Self.direct) Then
 										Self.posX = Self.posStartX + (Self.move_distance * MOVE_INTERVAL)
 									Else
 										Self.posX = Self.posStartX - (Self.move_distance * MOVE_INTERVAL)
 									EndIf
 									
-									Self.attack_step = 2
-									setAniState(Self.machineDrawer, (Int) 4)
+									Self.attack_step = ATTACK_WAIT
+									
+									setAniState(Self.machineDrawer, MACHINE_WAIT)
+								' Magic number: 560128
 								ElseIf (Self.posX > 560128) Then
 									Self.posX = 560128
-									Self.attack_step = 2
-									setAniState(Self.machineDrawer, (Int) 4)
+									
+									Self.attack_step = ATTACK_WAIT
+									
+									setAniState(Self.machineDrawer, MACHINE_WAIT)
 								ElseIf (Self.posX < limitLeftX) Then
 									Self.posX = limitLeftX
-									Self.attack_step = 2
-									setAniState(Self.machineDrawer, (Int) 4)
+									
+									Self.attack_step = ATTACK_WAIT
+									
+									setAniState(Self.machineDrawer, MACHINE_WAIT)
 								Else
 									Self.posX += Self.move_velX
 								EndIf
 								
 								Self.wait_cn = 0
-								break
-							Case 2
-								
+							Case ATTACK_WAIT
 								If (Self.move_distance = 1) Then
 									If (Self.wait_cn >= BOSS_LAUGH_MAX) Then
-										Self.direct = False
-										
-										If (MyRandom.nextInt(0, 100) >= 50) Then
-											Self.direct = True
-										Else
-											Self.direct = False
-										EndIf
+										Self.direct = (MyRandom.nextInt(0, 100) >= 50)
 										
 										setMoveConf()
-										break
+									Else
+										Self.wait_cn += 1
 									EndIf
-									
-									Self.wait_cn += 1
-									break
 								ElseIf (Self.wait_cn >= WAIT_TIME_MAX) Then
-									Self.attack_step = 3
-									setAniState(Self.machineDrawer, (Int) 2)
+									Self.attack_step = ATTACK_FIRE
+									
+									setAniState(Self.machineDrawer, MACHINE_ATTACK)
+									
 									Self.attack_cn = 0
 									Self.wait_cn = 0
-									MapManager.setShake(BOSS_LAUGH_MAX)
-									break
+									
+									MapManager.setShake(16) ' BOSS_LAUGH_MAX
 								Else
 									Self.wait_cn += 1
-									break
 								EndIf
-								
-							Case 3
-								
+							Case ATTACK_FIRE
 								If (Self.attack_cn >= ATTACK_TIME_MAX) Then
-									Self.attack_step = 0
-									setAniState(Self.machineDrawer, (Int) 4)
+									Self.attack_step = ATTACK_INIT
+									
+									setAniState(Self.machineDrawer, MACHINE_WAIT)
+									
 									Self.attack_cn = 0
 									Self.wait_cn = 0
-									break
-								EndIf
-								
-								Self.attack_cn += 1
-								
-								If (Self.HP <= 4) Then
-									If (Self.HP <= 2) Then
+								Else
+									Self.attack_cn += 1
+									
+									If (Self.HP <= 4) Then
+										If (Self.HP <= 2) Then
+											Select (Self.attack_cn)
+												Case 6, 13, 22, 29
+													GameObject.addGameObject(New Boss4Ice(limitLeftIceX + (MyRandom.nextInt(16) * MACHINE_BASE_HALF_HEIGHT), 103424, MyRandom.nextInt(92, 148), 116352, Self)) ' BOSS_LAUGH_MAX
+													
+													SoundSystem.getInstance().playSe(SoundSystem.SE_145)
+												Default
+													' Nothing so far.
+											End Select
+										End Select
+										
 										Select (Self.attack_cn)
-											Case SSdef.SSOBJ_BNLD_ID
-											Case PlayerTails.TAILS_ANI_FLY_2
-											Case PlayerTails.TAILS_ANI_SPRING_3
-											Case PlayerTails.TAILS_ANI_CELEBRATE_3
-												GameObject.addGameObject(New Boss4Ice(limitLeftIceX + (MyRandom.nextInt(BOSS_LAUGH_MAX) * MACHINE_BASE_HALF_HEIGHT), 103424, MyRandom.nextInt(92, 148), 116352, Self))
-												SoundSystem.getInstance().playSe(36)
-												break
+											Case 6, 16, 25 ' BOSS_LAUGH_MAX
+												GameObject.addGameObject(New Boss4Ice(limitLeftIceX + (MyRandom.nextInt(16) * MACHINE_BASE_HALF_HEIGHT), 103424, MyRandom.nextInt(92, 148), 116352, Self)) ' BOSS_LAUGH_MAX
+												
+												SoundSystem.getInstance().playSe(SoundSystem.SE_145)
 											Default
-												break
-										EndIf
+												' Nothing so far.
+										End Select
 									EndIf
 									
 									Select (Self.attack_cn)
-										Case SSdef.SSOBJ_BNLD_ID
-										Case BOSS_LAUGH_MAX
-										Case PlayerTails.TAILS_ANI_CLIFF_1
+										Case 6, 22
 											GameObject.addGameObject(New Boss4Ice(limitLeftIceX + (MyRandom.nextInt(BOSS_LAUGH_MAX) * MACHINE_BASE_HALF_HEIGHT), 103424, MyRandom.nextInt(92, 148), 116352, Self))
-											SoundSystem.getInstance().playSe(36)
-											break
+											
+											SoundSystem.getInstance().playSe(SoundSystem.SE_145)
 										Default
-											break
-									EndIf
+											' Nothing so far.
+									End Select
 								EndIf
-								
-								Select (Self.attack_cn)
-									Case SSdef.SSOBJ_BNLD_ID
-									Case PlayerTails.TAILS_ANI_SPRING_3
-										GameObject.addGameObject(New Boss4Ice(limitLeftIceX + (MyRandom.nextInt(BOSS_LAUGH_MAX) * MACHINE_BASE_HALF_HEIGHT), 103424, MyRandom.nextInt(92, 148), 116352, Self))
-										SoundSystem.getInstance().playSe(36)
-										break
-									Default
-										break
-								EndIf
-							Default
-								break
-						EndIf
-					Case 3
+						End Select
+					Case STATE_BROKEN
 						Self.water_level += 2
+						
 						StageManager.setWaterLevel(Self.water_level)
-						For (Int i = 0; i < 3; i += 1)
-							Int[] iArr = Self.parts_pos[i]
-							iArr[0] = iArr[0] + Self.parts_v[i][0]
-							iArr = Self.parts_v[i]
-							iArr[1] = iArr[1] + GRAVITY
-							iArr = Self.parts_pos[i]
-							iArr[1] = iArr[1] + Self.parts_v[i][1]
-						EndIf
-						If (Self.posY >= getGroundY(Self.posX, Self.posY) - MACHINE_BASE_HALF_HEIGHT) Then
-							Self.posY = getGroundY(Self.posX, Self.posY) - MACHINE_BASE_HALF_HEIGHT
+						
+						For Local i:= 0 Until 3 ' Self.parts_pos.Length
+							Self.parts_pos[i][0] += Self.parts_v[i][0]
+							Self.parts_v[i][1] += GRAVITY
+							Self.parts_pos[i][1] += Self.parts_v[i][1]
+						Next
+						
+						Local posYLimit:= (getGroundY(Self.posX, Self.posY) - MACHINE_BASE_HALF_HEIGHT)
+						
+						If (Self.posY >= posYLimit) Then
+							Self.posY = posYLimit
+							
 							Self.touch_bottom_cnt += 1
 							
 							If (Self.touch_bottom_cnt > TOUCH_BOTTOM_CNT_MAX) Then
 								Self.state = STATE_ESCAPE
+								
 								bossFighting = False
+								
 								SoundSystem.getInstance().playBgm(StageManager.getBgmId(), True)
 							EndIf
-							
 						Else
-							Self.posY = Self.water_level Shl 6
+							Self.posY = (Self.water_level Shl 6)
 						EndIf
 						
 						Self.bossbroken.logicBoom(Self.posX, Self.posY)
-						break
-					Case 4
+					Case STATE_ESCAPE
 						Self.wait_cnt += 1
 						
 						If (Self.wait_cnt >= Self.wait_cnt_max And Self.posY >= Self.fly_top - Self.fly_top_range) Then
 							Self.posY -= Self.escape_v
 						EndIf
 						
-						If (Self.posY <= Self.fly_top - Self.fly_top_range And Self.WaitCnt = 0) Then
-							Self.posY = Self.fly_top - Self.fly_top_range
-							Self.escapefacedrawer.setActionId(0)
+						If (Self.posY <= (Self.fly_top - Self.fly_top_range) And Self.WaitCnt = 0) Then
+							Self.posY = (Self.fly_top - Self.fly_top_range)
+							
+							Self.escapefacedrawer.setActionId(FACE_NORMAL) ' 0
+							
 							Self.boatdrawer.setActionId(1)
 							Self.boatdrawer.setLoop(False)
+							
 							Self.WaitCnt = 1
 						EndIf
 						
 						If (Self.WaitCnt = 1 And Self.boatdrawer.checkEnd()) Then
-							Self.escapefacedrawer.setActionId(0)
+							Self.escapefacedrawer.setActionId(FACE_NORMAL) ' 0
 							Self.escapefacedrawer.setTrans(TRANS_MIRROR)
 							Self.escapefacedrawer.setLoop(True)
+							
 							Self.boatdrawer.setActionId(1)
 							Self.boatdrawer.setTrans(TRANS_MIRROR)
 							Self.boatdrawer.setLoop(False)
+							
 							Self.WaitCnt = 2
 						EndIf
 						
@@ -697,6 +682,7 @@ Class Boss4 Extends BossObject
 							Self.boatdrawer.setActionId(0)
 							Self.boatdrawer.setTrans(TRANS_MIRROR)
 							Self.boatdrawer.setLoop(True)
+							
 							Self.WaitCnt = 3
 						EndIf
 						
@@ -705,49 +691,50 @@ Class Boss4 Extends BossObject
 						EndIf
 						
 						If (Self.posX - Self.fly_end > Self.fly_top_range And Self.WaitCnt = 3) Then
-							GameObject.addGameObject(New Cage((MapManager.getCamera().x + (MapManager.CAMERA_WIDTH Shr 1)) Shl 6, (MapManager.getCamera().y + 40) Shl 6))
+							GameObject.addGameObject(New Cage((MapManager.getCamera().x + (MapManager.CAMERA_WIDTH / 2)) Shl 6, (MapManager.getCamera().y + 40) Shl 6)) ' Shr 1
+							
 							Self.WaitCnt = 4
-							break
 						EndIf
-				EndIf
+				End Select
+				
 				checkWithPlayer(preX, preY, Self.posX, Self.posY)
 			EndIf
-			
 		End
 		
-		Public Method draw:Void(g:MFGraphics)
-			
+		Method draw:Void(g:MFGraphics)
 			If (Not Self.dead) Then
 				If (Self.state <> STATE_BROKEN And Self.state <> STATE_ESCAPE) Then
 					drawInMap(g, Self.machineDrawer)
 					
-					If (Self.face_state <> 0) Then
+					If (Self.face_state <> FACE_NORMAL) Then
 						drawInMap(g, Self.faceDrawer, Self.posX, Self.posY + facePosY())
 					EndIf
-					
 				ElseIf (Self.state = STATE_BROKEN) Then
 					If (Self.bossbroken <> Null) Then
 						Self.bossbroken.draw(g)
 					EndIf
 					
 					Self.machinePartsdrawer.setActionId(0)
+					
 					drawInMap(g, Self.machinePartsdrawer, Self.parts_pos[0][0], Self.parts_pos[0][1])
+					
 					Self.machinePartsdrawer.setActionId(1)
+					
 					drawInMap(g, Self.machinePartsdrawer, Self.parts_pos[1][0], Self.parts_pos[1][1])
 					drawInMap(g, Self.machinePartsdrawer, Self.parts_pos[2][0], Self.parts_pos[2][1])
-					drawInMap(g, machineBase, Self.posX, Self.posY, 3)
+					drawInMap(g, machineBase, Self.posX, Self.posY, VCENTER|HCENTER)
 					drawInMap(g, Self.faceDrawer, Self.posX, Self.posY)
 				ElseIf (Self.state = STATE_ESCAPE) Then
+					' Magic numbers: 960, 2624
 					drawInMap(g, Self.boatdrawer, Self.posX, Self.posY - 960)
 					drawInMap(g, Self.escapefacedrawer, Self.posX, Self.posY - 2624)
 				EndIf
 				
 				drawCollisionRect(g)
 			EndIf
-			
 		End
 		
-		Public Method refreshCollisionRect:Void(x:Int, y:Int)
-			Self.collisionRect.setRect(x - (Self.COLLISION_WIDTH Shr 1), y, Self.COLLISION_WIDTH, Self.COLLISION_HEIGHT)
+		Method refreshCollisionRect:Void(x:Int, y:Int)
+			Self.collisionRect.setRect(x - (Self.COLLISION_WIDTH / 2), y, Self.COLLISION_WIDTH, Self.COLLISION_HEIGHT) ' Shr 1
 		End
 End

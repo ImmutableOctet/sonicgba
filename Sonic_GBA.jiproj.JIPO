@@ -467,8 +467,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>110</Y>
+        <X>14</X>
+        <Y>111</Y>
       </CursorPos>
       <DocGUID>9738c019-aeda-4c8b-af83-0cf043b8f256</DocGUID>
       <Bookmarks />
@@ -784,8 +784,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss4.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>8</X>
-        <Y>397</Y>
+        <X>5</X>
+        <Y>717</Y>
       </CursorPos>
       <DocGUID>2dd99e0d-b3bd-4275-a2df-ce5cf52c3355</DocGUID>
       <Bookmarks />
@@ -793,7 +793,7 @@
     <DocUserOptions Filename=".\src\sonicgba\boss4ice.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>7</X>
-        <Y>19</Y>
+        <Y>18</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
