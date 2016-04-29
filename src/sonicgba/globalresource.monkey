@@ -7,8 +7,12 @@ Private
 	Import lib.animation
 	Import lib.record
 	
+	Import com.sega.mobile.framework.device.mfdevice
+	
 	Import brl.stream
 	'Import brl.filestream
+	
+	Import regal.ioutil.publicdatastream
 Public
 
 Class GlobalResource
@@ -80,8 +84,8 @@ Class GlobalResource
 			Local dos:= new PublicDataStream(DEFAULT_FILE_SIZE)
 			
 			Try
-				If (ds = Null) Then
-					Throw New FileNotFoundException(ds)
+				If (dos = Null) Then
+					Throw New FileNotFoundException(dos)
 				EndIf
 				
 				dos.WriteByte(soundConfig)

@@ -36,6 +36,7 @@ Private
 	Import com.sega.mobile.framework.device.mfimage
 	Import com.sega.mobile.framework.ui.mftouchkey
 	
+	Import state.state
 	Import state.titlestate
 	
 	#Rem
@@ -755,21 +756,21 @@ Class SpecialStageState Extends State Implements BarWord ' SSDef
 		
 		' Functions:
 		Function loadData:Void()
-			If (record <> Null) Then
-				Local ds:= Record.loadRecordStream(Record.EMERALD_RECORD)
+			Local ds:Stream
+			
+			Try
+				ds = Record.loadRecordStream(Record.EMERALD_RECORD)
 				
-				Try
-					For Local i:= 0 Until emeraldStatus.Length
-						emeraldStatus[i] = ds.ReadByte()
-					Next
-					
-					Return
-				Catch E:StreamError
-					If (ds <> Null) Then
-						ds.Close()
-					EndIf
-				End Try
-			EndIf
+				For Local i:= 0 Until emeraldStatus.Length
+					emeraldStatus[i] = ds.ReadByte()
+				Next
+				
+				Return
+			Catch E:StreamError
+				If (ds <> Null) Then
+					ds.Close()
+				EndIf
+			End Try
 			
 			For Local i:= 0 Until emeraldStatus.Length
 				emeraldStatus[i] = 0

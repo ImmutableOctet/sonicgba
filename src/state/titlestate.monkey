@@ -27,6 +27,8 @@ Private
 	
 	Import special.ssdef
 	
+	Import state.state
+	
 	'Import android.os.message
 	
 	Import com.sega.mobile.framework.device.mfdevice
@@ -56,30 +58,46 @@ Class TitleState Extends State
 		Const CHARACTER_SELECT_ARROW_LEFT:Int = 1
 		Const CHARACTER_SELECT_ARROW_NONE:Int = 0
 		Const CHARACTER_SELECT_ARROW_RIGHT:Int = 2
+		
 		Global CHARACTER_STR:String[] = ["Sonic", "Tails", "Knuckles", "Amy"] ' "索尼克", "塔尔斯", "那克鲁兹", "艾米" ' Const
+		
 		Const COPY_RIGHT_X:Int = -2
 		Const COPY_RIGHT_Y:Int = 4
+		
 		Const CREDIT_PAGE_BACKGROUND_WIDTH:Int = 112
+		
 		Const DEGREE_GAP:Int = 18
 		Const DEGREE_START:Int = -DEGREE_GAP ' -18
+		
 		Const ELEMENT_OFFSET:Int = -1
 		Const ELEMENT_V_OFFSET:Int = 0
+		
 		Const EN_TITLE_SPACE_FOR_STAGE_SELECT:Int = 0
+		
 		Const GESTURE_SLIDE_STATE_DOWN:Int = 2
 		Const GESTURE_SLIDE_STATE_NONE:Int = 0
 		Const GESTURE_SLIDE_STATE_UP:Int = 1
+		
 		Const intergradeRecordtoGamecnt_max:Int = 56
+		
 		Const INTERGRADE_RECORD_STAGE_NAME_SPEED:Int = -8
 		Const INTERGRADE_RECORD_STAGE_NAME_WIDTH:Int = 200
+		
 		Const INTERVAL_ABOVE_RECORD_BAR:Int = (MENU_SPACE Shr 1) ' / 2
 		Const INTERVAL_FOR_RECORD_BAR:Int = MENU_SPACE
+		
 		Const ITEMS_INTERVALS:Int = 20
+		
 		Const ITEM_SPACE:Int = 24
+		
 		Const LINE_START_X:Int = LOGO_POSITION_X
+		
 		Global LINE_START_Y:Int = ((SCREEN_HEIGHT / 2) + 4 + MENU_SPACE) + PickValue((SCREEN_HEIGHT = 240), 24, 0) ' Shr 1 ' Const
-		Const LOGO_POSITION_X:Int = ORIGINAL_LOGO_X
-		Const LOGO_POSITION_Y:Int = ORIGINAL_LOGO_Y_ROTATE
-		Const LOGO_POSITION_Y_2:Int = ORIGINAL_LOGO_Y_NO_ROTATE
+		
+		Global LOGO_POSITION_X:Int = ORIGINAL_LOGO_X ' Const
+		Global LOGO_POSITION_Y:Int = ORIGINAL_LOGO_Y_ROTATE ' Const
+		Global LOGO_POSITION_Y_2:Int = ORIGINAL_LOGO_Y_NO_ROTATE ' Const
+		
 		Const MAIN_MENU_CENTER_X:Int = 51
 		Const MAIN_MENU_CENTER_Y:Int = 159
 		
@@ -100,7 +118,7 @@ Class TitleState Extends State
 		Global OFFSET_ARRAY:Int[] = [0, -1, -1, 0, 1, 1] ' Const
 		Global OPTION_DIFFICULTY:Int[] = [51, 53] ' Const
 		
-		Const OPTION_ELEMENT_NUM:Int = OPTION_TAG.Length
+		Global OPTION_ELEMENT_NUM:Int = OPTION_TAG.Length ' Const
 		Const OPTION_MOVING_INTERVAL:Int = 100
 		Const OPTION_MOVING_SPEED:Int = 4
 		
@@ -116,20 +134,26 @@ Class TitleState Extends State
 		Global OPTION_TAG_NO_SE:Int[] = [50, 54, 59, 146] ' Const
 		Global OPTION_TIME:Int[] = [60, 61] ' Const
 		
-		Const ORIGINAL_LOGO_X:Int = (152 * SCREEN_WIDTH / 240)
-		Const ORIGINAL_LOGO_Y_NO_ROTATE:Int = (61 * SCREEN_HEIGHT / 320)
-		Const ORIGINAL_LOGO_Y_ROTATE:Int = (168 * SCREEN_HEIGHT / 320)
+		Global ORIGINAL_LOGO_X:Int = (152 * SCREEN_WIDTH / 240) ' Const
+		Global ORIGINAL_LOGO_Y_NO_ROTATE:Int = (61 * SCREEN_HEIGHT / 320) ' Const
+		Global ORIGINAL_LOGO_Y_ROTATE:Int = (168 * SCREEN_HEIGHT / 320) ' Const
+		
+		Global PRESS_START_Y:Int = (236 * SCREEN_HEIGHT / 320) ' Const
+		
 		Const PATCH_OFFSET_X:Int = 66
 		Const PATCH_OFFSET_Y:Int = 224
 		Const PIC_OFFSET_X:Int = 92
 		Const PIC_OFFSET_Y:Int = 12
-		Const PRESS_START_Y:Int = (236 * SCREEN_HEIGHT / 320)
+		
 		Const RADIUS:Int = 137
 		Const SHOW_ELEMENT_NUM:Int = 5
 		Const SHOW_ELEMENT_V_NUM:Int = 3
+		
 		Const SONIC_BALL_SPACE:Int = 120
-		Const SONIC_BIG_Y:Int = (28 * SCREEN_HEIGHT / 320)
 		Const SONIC_RUN_POSITION_X:Int = -580
+		
+		Global SONIC_BIG_Y:Int = (28 * SCREEN_HEIGHT / 320) ' Const
+		
 		Const STAGE_SELECT_ARROW_STATE_DOWN:Int = 2
 		Const STAGE_SELECT_ARROW_STATE_NONE:Int = 0
 		Const STAGE_SELECT_ARROW_STATE_UP:Int = 1
@@ -198,10 +222,14 @@ Class TitleState Extends State
 		Const TITLE_BG_OFFSET:Int = 31
 		Const TITLE_BG_SPEED:Int = 1
 		Const TITLE_BG_WIDTH:Int = 62
-		Const TITLE_FRAME_HEIGHT:Int = (44 * SCREEN_HEIGHT / 320)
+		
+		Global TITLE_FRAME_HEIGHT:Int = (44 * SCREEN_HEIGHT / 320) ' Const
+		
 		Const TOTAL_OPTION_ITEMS_NUM:Int = 10
 		Const VISIBLE_OPTION_ITEMS_NUM:Int = 9
+		
 		Const ZONE_NUM_OFFSET:Int = 1
+		
 		Const ZONE_OFFSET:Int = -22
 		
 		' These values will eventually be assigned to constants:

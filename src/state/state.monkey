@@ -145,10 +145,11 @@ Class State Implements StringIndex Abstract ' SonicDef
 		
 		Const FONT_MOVE_SPEED:Int = 8
 		
-		Const FRAME_HEIGHT:Int = ((SCREEN_HEIGHT - FRAME_Y) - FRAME_Y)
-		Const FRAME_WIDTH:Int = MENU_RECT_WIDTH
+		Global FRAME_HEIGHT:Int = ((SCREEN_HEIGHT - FRAME_Y) - FRAME_Y) ' Const
+		Global FRAME_WIDTH:Int = MENU_RECT_WIDTH ' Const
 		
-		Const FRAME_X:Int = ((SCREEN_WIDTH - MENU_RECT_WIDTH) Shr 1)
+		Global FRAME_X:Int = ((SCREEN_WIDTH - MENU_RECT_WIDTH) Shr 1) ' Const
+		
 		Const FRAME_Y:Int = 30
 		
 		Const LOADING_TYPE_BLACK:Int = 0
