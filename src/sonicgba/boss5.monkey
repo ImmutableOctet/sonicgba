@@ -333,6 +333,268 @@ Class Boss5 Extends BossObject
 			
 			setBossHP()
 		End
+		
+		' Methods:
+		
+		' Extensions
+		Method pickRandomState:Int()
+			Select (Self.prestate)
+				Case STATE_FRESH_READY
+					If (Not CanFreshFight()) Then
+						random = MyRandom.nextInt(0, 100)
+						
+						If (random >= 45) Then ' random < 0 Or ...
+							If (random >= 55) Then
+								soundInstance.playSe(SoundSystem.SE_109)
+								
+								Return STATE_FRESH_BALL_HORIZON_ATTACK_READY
+							EndIf
+							
+							Return STATE_FRESH_READY
+						EndIf
+						
+						soundInstance.playSe(SoundSystem.SE_116)
+						
+						Return STATE_FRESH_BALL_UP
+					EndIf
+					
+					Return STATE_FRESH_FIGHT
+				Case STATE_FRESH_BALL_HORIZON_ATTACK_FIGHT
+					If (CanFreshFight()) Then
+						Return STATE_FRESH_FIGHT
+					EndIf
+					
+					Return STATE_FRESH_READY
+				Case STATE_FRESH_FLY_DRIP_LAND, STATE_FRESH_FIGHT
+					If (Not CanFreshFight()) Then
+						random = MyRandom.nextInt(0, 15)
+						
+						If (random >= 5) Then ' random < 0 Or ...
+							If (random >= 10) Then
+								soundInstance.playSe(SoundSystem.SE_109)
+								
+								Return STATE_FRESH_BALL_HORIZON_ATTACK_READY
+							EndIf
+							
+							Return STATE_FRESH_READY
+						EndIf
+						
+						soundInstance.playSe(SoundSystem.SE_116)
+						
+						Return STATE_FRESH_BALL_UP
+					EndIf
+					
+					Return STATE_FRESH_FIGHT
+				Case STATE_FRESH_HURT_LAND
+					If (Not CanFreshFight()) Then
+						random = MyRandom.nextInt(0, 100)
+						
+						If (random >= 50) Then
+							soundInstance.playSe(SoundSystem.SE_109)
+							
+							Return STATE_FRESH_BALL_HORIZON_ATTACK_READY
+						EndIf
+						
+						soundInstance.playSe(SoundSystem.SE_116)
+						
+						Return STATE_FRESH_BALL_UP
+					EndIf
+					
+					Return STATE_FRESH_FIGHT
+				Case STATE_FRESH_DEFENCE_BACK
+					If (Not CanFreshFight()) Then
+						random = MyRandom.nextInt(0, 100)
+						
+						If (random >= 30) Then
+							soundInstance.playSe(SoundSystem.SE_109)
+							
+							Return STATE_FRESH_BALL_HORIZON_ATTACK_READY
+						ElseIf (random >= 25) Then
+							Return STATE_FRESH_READY
+						EndIf
+						
+						soundInstance.playSe(SoundSystem.SE_116)
+						
+						Return STATE_FRESH_BALL_UP
+					EndIf
+					
+					Return STATE_FRESH_FIGHT
+				Case STATE_MACHINE_READY
+					If (Self.missile_alert_state <> IN_ALERT_RANGE) Then
+						random = MyRandom.nextInt(0, 100)
+						
+						If (random >= 12) Then ' random < 0 Or ...
+							If (random >= 25) Then
+								Return STATE_MACHINE_MISSILE_READY
+							EndIf
+							
+							soundInstance.playSe(SoundSystem.SE_109)
+							
+							Return STATE_MACHINE_BALL_HORIZON_ATTACK_READY
+						EndIf
+						
+						soundInstance.playSe(SoundSystem.SE_116)
+						
+						Return STATE_MACHINE_BALL_UP
+					Else
+						random = MyRandom.nextInt(0, 100)
+						
+						If (random >= 45) Then ' random < 0 Or ...
+							If (random >= 55) Then
+								soundInstance.playSe(SoundSystem.SE_109)
+								
+								Return STATE_MACHINE_BALL_HORIZON_ATTACK_READY
+							EndIf
+							
+							Return STATE_MACHINE_READY
+						EndIf
+						
+						soundInstance.playSe(SoundSystem.SE_116)
+						
+						Return STATE_MACHINE_BALL_UP
+					EndIf
+				Case STATE_MACHINE_BALL_HORIZON_ATTACK_FIGHT
+					Return STATE_MACHINE_READY
+				Case STATE_MACHINE_FLY_DRIP_LAND
+					If (Self.missile_alert_state <> IN_ALERT_RANGE) Then
+						random = MyRandom.nextInt(0, 100)
+						
+						If (random < 0 Or random >= 15) Then
+							If (random < 15 Or random >= 17) Then
+								If (random >= 25) Then
+									Return STATE_MACHINE_MISSILE_READY
+								EndIf
+								
+								soundInstance.playSe(SoundSystem.SE_109)
+								
+								Return STATE_MACHINE_BALL_HORIZON_ATTACK_READY
+							EndIf
+							
+							Return STATE_MACHINE_READY
+						EndIf
+						
+						soundInstance.playSe(SoundSystem.SE_116)
+						
+						Return STATE_MACHINE_BALL_UP
+					Else
+						random = MyRandom.nextInt(0, defence_cnt_max)
+						
+						If (random < 0 Or random >= 5) Then
+							If (random >= 10) Then
+								soundInstance.playSe(SoundSystem.SE_109)
+								
+								Return STATE_MACHINE_BALL_HORIZON_ATTACK_READY
+							EndIf
+							
+							Return STATE_MACHINE_READY
+						Else
+							soundInstance.playSe(SoundSystem.SE_116)
+							
+							Return STATE_MACHINE_BALL_UP
+						EndIf
+					EndIf
+				Case STATE_MACHINE_MISSILE_ATTACK
+					If (Self.missile_alert_state <> IN_ALERT_RANGE) Then
+						random = MyRandom.nextInt(0, 100)
+						
+						If (random < 0 Or random >= 10) Then
+							If (random >= 20) Then
+								Return STATE_MACHINE_MISSILE_READY
+							EndIf
+							
+							soundInstance.playSe(SoundSystem.SE_109)
+							
+							Return STATE_MACHINE_BALL_HORIZON_ATTACK_READY
+						Else
+							soundInstance.playSe(SoundSystem.SE_116)
+							
+							Return STATE_MACHINE_BALL_UP
+						EndIf
+					Else
+						random = MyRandom.nextInt(0, 100)
+						
+						If (random < 0 Or random >= 45) Then
+							If (random >= 55) Then
+								soundInstance.playSe(SoundSystem.SE_109)
+								
+								Return STATE_MACHINE_BALL_HORIZON_ATTACK_READY
+							EndIf
+							
+							Return STATE_MACHINE_READY
+						Else
+							soundInstance.playSe(SoundSystem.SE_116)
+							
+							Return STATE_MACHINE_BALL_UP
+						EndIf
+					EndIf
+				Case STATE_MACHINE_HURT_LAND
+					If (Self.missile_alert_state <> IN_ALERT_RANGE) Then
+						random = MyRandom.nextInt(0, 100)
+						
+						If (random < 0 Or random >= 25) Then
+							If (random >= 50) Then
+								Return STATE_MACHINE_MISSILE_READY
+							EndIf
+							
+							soundInstance.playSe(SoundSystem.SE_109)
+							
+							Return STATE_MACHINE_BALL_HORIZON_ATTACK_READY
+						EndIf
+						
+						soundInstance.playSe(SoundSystem.SE_116)
+						
+						Return STATE_MACHINE_BALL_UP
+					Else
+						random = MyRandom.nextInt(0, 100)
+						
+						If (random >= 50) Then ' random < 0 Or ...
+							soundInstance.playSe(SoundSystem.SE_109)
+							
+							Return STATE_MACHINE_BALL_HORIZON_ATTACK_READY
+						EndIf
+						
+						soundInstance.playSe(SoundSystem.SE_116)
+						
+						Return STATE_MACHINE_BALL_UP
+					EndIf
+				Case STATE_MACHINE_DEFENCE_BACK
+					If (Self.missile_alert_state <> IN_ALERT_RANGE) Then
+						random = MyRandom.nextInt(0, 100)
+						
+						If (random < 0 Or random >= 12) Then
+							If (random >= 25) Then
+								Return STATE_MACHINE_MISSILE_READY
+							EndIf
+							
+							soundInstance.playSe(SoundSystem.SE_109)
+							
+							Return STATE_MACHINE_BALL_HORIZON_ATTACK_READY
+						EndIf
+						
+						soundInstance.playSe(SoundSystem.SE_116)
+						
+						Return STATE_MACHINE_BALL_UP
+					Else
+						random = MyRandom.nextInt(0, 100)
+						
+						If (random < 0 Or random >= 25) Then
+							If (random >= 30) Then
+								soundInstance.playSe(SoundSystem.SE_109)
+								
+								Return STATE_MACHINE_BALL_HORIZON_ATTACK_READY
+							EndIf
+							
+							Return STATE_MACHINE_READY
+						EndIf
+						
+						soundInstance.playSe(SoundSystem.SE_116)
+						
+						Return STATE_MACHINE_BALL_UP
+					EndIf
+			End Select
+			
+			Return STATE_FRESH_WAIT_0 ' 0
+		End
 	Private
 		' Methods:
 		Method halfLife:Int()
@@ -511,341 +773,17 @@ Class Boss5 Extends BossObject
 		
 		/* JADX WARNING: inconsistent code. */
 		/* Code decompiled incorrectly, please refer to instructions dump. */
-		Public Method logic:Void()
+		Method logic:Void()
 		End
 		
-		Public Method randomSetState:Int()
-			Int result = 0
-			Self.missile_alert_state = checkPlayerInEnemyAlertRange(Self.posX Shr 6, Self.posY Shr 6, Self.missile_alert_range)
+		' This method's behavior may change in the future:
+		Method randomSetState:Int()
+			Self.missile_alert_state = checkPlayerInEnemyAlertRange((Self.posX Shr 6), (Self.posY Shr 6), Self.missile_alert_range)
+			
+			Local result:= STATE_FRESH_WAIT_0
 			
 			If (Self.first_jump_cnt >= first_jump_cnt_max) Then
-				Int random
-				Select (Self.prestate)
-					Case STATE_FRESH_READY
-						
-						If (Not CanFreshFight()) Then
-							random = MyRandom.nextInt(0, 100)
-							
-							If (random < 0 Or random >= M_PARTS_LEG_R) Then
-								If (random < M_PARTS_LEG_R Or random >= 55) Then
-									If (random >= 55) Then
-										result = STATE_FRESH_BALL_HORIZON_ATTACK_READY
-										soundInstance.playSe(STATE_FRESH_READY)
-										break
-									EndIf
-								EndIf
-								
-								result = STATE_FRESH_READY
-								break
-							EndIf
-							
-							result = STATE_FRESH_BALL_UP
-							soundInstance.playSe(STATE_FRESH_FLY_DRIP_LAND)
-							break
-						EndIf
-						
-						result = STATE_FRESH_FIGHT
-						break
-						break
-					Case STATE_FRESH_BALL_HORIZON_ATTACK_FIGHT
-						
-						If (Not CanFreshFight()) Then
-							result = STATE_FRESH_READY
-							break
-						EndIf
-						
-						result = STATE_FRESH_FIGHT
-						break
-					Case STATE_FRESH_FLY_DRIP_LAND
-					Case STATE_FRESH_FIGHT
-						
-						If (Not CanFreshFight()) Then
-							random = MyRandom.nextInt(0, defence_cnt_max)
-							
-							If (random < 0 Or random >= STATE_FRESH_BALL_HORIZON_ATTACK_READY) Then
-								If (random < STATE_FRESH_BALL_HORIZON_ATTACK_READY Or random >= STATE_FRESH_FLY_DRIPPING) Then
-									If (random >= STATE_FRESH_FLY_DRIPPING) Then
-										result = STATE_FRESH_BALL_HORIZON_ATTACK_READY
-										soundInstance.playSe(STATE_FRESH_READY)
-										break
-									EndIf
-								EndIf
-								
-								result = STATE_FRESH_READY
-								break
-							EndIf
-							
-							result = STATE_FRESH_BALL_UP
-							soundInstance.playSe(STATE_FRESH_FLY_DRIP_LAND)
-							break
-						EndIf
-						
-						result = STATE_FRESH_FIGHT
-						break
-						break
-					Case defence_cnt_max
-						
-						If (Not CanFreshFight()) Then
-							random = MyRandom.nextInt(0, 100)
-							
-							If (random < 0 Or random >= 50) Then
-								If (random >= 50) Then
-									result = STATE_FRESH_BALL_HORIZON_ATTACK_READY
-									soundInstance.playSe(STATE_FRESH_READY)
-									break
-								EndIf
-							EndIf
-							
-							result = STATE_FRESH_BALL_UP
-							soundInstance.playSe(STATE_FRESH_FLY_DRIP_LAND)
-							break
-						EndIf
-						
-						result = STATE_FRESH_FIGHT
-						break
-						break
-					Case STATE_FRESH_DEFENCE_BACK
-						
-						If (Not CanFreshFight()) Then
-							random = MyRandom.nextInt(0, 100)
-							
-							If (random < 0 Or random >= STATE_MACHINE_FLY_DRIP_READY) Then
-								If (random < STATE_MACHINE_FLY_DRIP_READY Or random >= STATE_MACHINE_HURT_KNOCK) Then
-									If (random >= STATE_MACHINE_HURT_KNOCK) Then
-										result = STATE_FRESH_BALL_HORIZON_ATTACK_READY
-										soundInstance.playSe(STATE_FRESH_READY)
-										break
-									EndIf
-								EndIf
-								
-								result = STATE_FRESH_READY
-								break
-							EndIf
-							
-							result = STATE_FRESH_BALL_UP
-							soundInstance.playSe(STATE_FRESH_FLY_DRIP_LAND)
-							break
-						EndIf
-						
-						result = STATE_FRESH_FIGHT
-						break
-						break
-					Case STATE_MACHINE_READY
-						
-						If (Self.missile_alert_state <> 0) Then
-							random = MyRandom.nextInt(0, 100)
-							
-							If (random < 0 Or random >= STATE_FRESH_FIGHT) Then
-								If (random < STATE_FRESH_FIGHT Or random >= STATE_MACHINE_FLY_DRIP_READY) Then
-									If (random >= STATE_MACHINE_FLY_DRIP_READY) Then
-										result = STATE_MACHINE_MISSILE_READY
-										break
-									EndIf
-								EndIf
-								
-								result = STATE_MACHINE_BALL_HORIZON_ATTACK_READY
-								soundInstance.playSe(STATE_FRESH_READY)
-								break
-							EndIf
-							
-							result = STATE_MACHINE_BALL_UP
-							soundInstance.playSe(STATE_FRESH_FLY_DRIP_LAND)
-							break
-						EndIf
-						
-						random = MyRandom.nextInt(0, 100)
-						
-						If (random < 0 Or random >= M_PARTS_LEG_R) Then
-							If (random < M_PARTS_LEG_R Or random >= 55) Then
-								If (random >= 55) Then
-									result = STATE_MACHINE_BALL_HORIZON_ATTACK_READY
-									soundInstance.playSe(STATE_FRESH_READY)
-									break
-								EndIf
-							EndIf
-							
-							result = STATE_MACHINE_READY
-							break
-						EndIf
-						
-						result = STATE_MACHINE_BALL_UP
-						soundInstance.playSe(STATE_FRESH_FLY_DRIP_LAND)
-						break
-						break
-					Case STATE_MACHINE_BALL_HORIZON_ATTACK_FIGHT
-						result = STATE_MACHINE_READY
-						break
-					Case STATE_MACHINE_FLY_DRIP_LAND
-						
-						If (Self.missile_alert_state <> 0) Then
-							random = MyRandom.nextInt(0, 100)
-							
-							If (random < 0 Or random >= defence_cnt_max) Then
-								If (random < defence_cnt_max Or random >= STATE_FRESH_DEFENCING) Then
-									If (random < STATE_FRESH_DEFENCING Or random >= STATE_MACHINE_FLY_DRIP_READY) Then
-										If (random >= STATE_MACHINE_FLY_DRIP_READY) Then
-											result = STATE_MACHINE_MISSILE_READY
-											break
-										EndIf
-									EndIf
-									
-									result = STATE_MACHINE_BALL_HORIZON_ATTACK_READY
-									soundInstance.playSe(STATE_FRESH_READY)
-									break
-								EndIf
-								
-								result = STATE_MACHINE_READY
-								break
-							EndIf
-							
-							result = STATE_MACHINE_BALL_UP
-							soundInstance.playSe(STATE_FRESH_FLY_DRIP_LAND)
-							break
-						EndIf
-						
-						random = MyRandom.nextInt(0, defence_cnt_max)
-						
-						If (random < 0 Or random >= STATE_FRESH_BALL_HORIZON_ATTACK_READY) Then
-							If (random < STATE_FRESH_BALL_HORIZON_ATTACK_READY Or random >= STATE_FRESH_FLY_DRIPPING) Then
-								If (random >= STATE_FRESH_FLY_DRIPPING) Then
-									result = STATE_MACHINE_BALL_HORIZON_ATTACK_READY
-									soundInstance.playSe(STATE_FRESH_READY)
-									break
-								EndIf
-							EndIf
-							
-							result = STATE_MACHINE_READY
-							break
-						EndIf
-						
-						result = STATE_MACHINE_BALL_UP
-						soundInstance.playSe(STATE_FRESH_FLY_DRIP_LAND)
-						break
-						break
-					Case STATE_MACHINE_MISSILE_ATTACK
-						
-						If (Self.missile_alert_state <> 0) Then
-							random = MyRandom.nextInt(0, 100)
-							
-							If (random < 0 Or random >= STATE_FRESH_FLY_DRIPPING) Then
-								If (random < STATE_FRESH_FLY_DRIPPING Or random >= STATE_MACHINE_ATTACK_TRANS) Then
-									If (random >= STATE_MACHINE_ATTACK_TRANS) Then
-										result = STATE_MACHINE_MISSILE_READY
-										break
-									EndIf
-								EndIf
-								
-								result = STATE_MACHINE_BALL_HORIZON_ATTACK_READY
-								soundInstance.playSe(STATE_FRESH_READY)
-								break
-							EndIf
-							
-							result = STATE_MACHINE_BALL_UP
-							soundInstance.playSe(STATE_FRESH_FLY_DRIP_LAND)
-							break
-						EndIf
-						
-						random = MyRandom.nextInt(0, 100)
-						
-						If (random < 0 Or random >= M_PARTS_LEG_R) Then
-							If (random < M_PARTS_LEG_R Or random >= 55) Then
-								If (random >= 55) Then
-									result = STATE_MACHINE_BALL_HORIZON_ATTACK_READY
-									soundInstance.playSe(STATE_FRESH_READY)
-									break
-								EndIf
-							EndIf
-							
-							result = STATE_MACHINE_READY
-							break
-						EndIf
-						
-						result = STATE_MACHINE_BALL_UP
-						soundInstance.playSe(STATE_FRESH_FLY_DRIP_LAND)
-						break
-						break
-					Case STATE_MACHINE_HURT_LAND
-						
-						If (Self.missile_alert_state <> 0) Then
-							random = MyRandom.nextInt(0, 100)
-							
-							If (random < 0 Or random >= STATE_MACHINE_FLY_DRIP_READY) Then
-								If (random < STATE_MACHINE_FLY_DRIP_READY Or random >= 50) Then
-									If (random >= 50) Then
-										result = STATE_MACHINE_MISSILE_READY
-										break
-									EndIf
-								EndIf
-								
-								result = STATE_MACHINE_BALL_HORIZON_ATTACK_READY
-								soundInstance.playSe(STATE_FRESH_READY)
-								break
-							EndIf
-							
-							result = STATE_MACHINE_BALL_UP
-							soundInstance.playSe(STATE_FRESH_FLY_DRIP_LAND)
-							break
-						EndIf
-						
-						random = MyRandom.nextInt(0, 100)
-						
-						If (random < 0 Or random >= 50) Then
-							If (random >= 50) Then
-								result = STATE_MACHINE_BALL_HORIZON_ATTACK_READY
-								soundInstance.playSe(STATE_FRESH_READY)
-								break
-							EndIf
-						EndIf
-						
-						result = STATE_MACHINE_BALL_UP
-						soundInstance.playSe(STATE_FRESH_FLY_DRIP_LAND)
-						break
-						break
-					Case STATE_MACHINE_DEFENCE_BACK
-						
-						If (Self.missile_alert_state <> 0) Then
-							random = MyRandom.nextInt(0, 100)
-							
-							If (random < 0 Or random >= STATE_FRESH_FIGHT) Then
-								If (random < STATE_FRESH_FIGHT Or random >= STATE_MACHINE_FLY_DRIP_READY) Then
-									If (random >= STATE_MACHINE_FLY_DRIP_READY) Then
-										result = STATE_MACHINE_MISSILE_READY
-										break
-									EndIf
-								EndIf
-								
-								result = STATE_MACHINE_BALL_HORIZON_ATTACK_READY
-								soundInstance.playSe(STATE_FRESH_READY)
-								break
-							EndIf
-							
-							result = STATE_MACHINE_BALL_UP
-							soundInstance.playSe(STATE_FRESH_FLY_DRIP_LAND)
-							break
-						EndIf
-						
-						random = MyRandom.nextInt(0, 100)
-						
-						If (random < 0 Or random >= STATE_MACHINE_FLY_DRIP_READY) Then
-							If (random < STATE_MACHINE_FLY_DRIP_READY Or random >= STATE_MACHINE_HURT_KNOCK) Then
-								If (random >= STATE_MACHINE_HURT_KNOCK) Then
-									result = STATE_MACHINE_BALL_HORIZON_ATTACK_READY
-									soundInstance.playSe(STATE_FRESH_READY)
-									break
-								EndIf
-							EndIf
-							
-							result = STATE_MACHINE_READY
-							break
-						EndIf
-						
-						result = STATE_MACHINE_BALL_UP
-						soundInstance.playSe(STATE_FRESH_FLY_DRIP_LAND)
-						break
-						break
-					Default
-						break
-				EndIf
+				result = pickRandomState()
 			EndIf
 			
 			Self.first_jump_cnt += 1
@@ -854,7 +792,7 @@ Class Boss5 Extends BossObject
 				result = STATE_FRESH_FIGHT
 			Else
 				result = STATE_FRESH_BALL_UP
-				soundInstance.playSe(STATE_FRESH_FLY_DRIP_LAND)
+				soundInstance.playSe(SoundSystem.SE_116)
 			EndIf
 			
 			Int tmpstate
@@ -970,18 +908,18 @@ Class Boss5 Extends BossObject
 					Self.COLLISION_WIDTH = 1024
 					Self.COLLISION_HEIGHT = 1664
 					break
-			EndIf
+			End Select
+			
 			Return result
 		End
 		
-		Public Method draw:Void(g:MFGraphics)
-			
+		Method draw:Void(g:MFGraphics)
 			If (Not Self.dead) Then
 				If (Self.state < STATE_MACHINE_PIECES) Then
 					drawInMap(g, Self.knuckdrawer, Self.posX, Self.posY)
 				EndIf
 				
-				If ((Self.HP = halfLifeNum() And Self.state >= STATE_FRESH_HURT_KNOCK And Self.state <= defence_cnt_max) Or (Self.HP = 0 And Self.state >= STATE_MACHINE_KO_AIR And Self.state <= STATE_MACHINE_KO_LAND)) Then
+				If ((Self.HP = halfLifeNum() And Self.state >= STATE_FRESH_HURT_KNOCK And Self.state <= STATE_FRESH_HURT_LAND) Or (Self.HP = 0 And Self.state >= STATE_MACHINE_KO_AIR And Self.state <= STATE_MACHINE_KO_LAND)) Then
 					drawInMap(g, Self.boomdrawer, Self.boomX, Self.boomY)
 				EndIf
 				
@@ -990,21 +928,24 @@ Class Boss5 Extends BossObject
 				EndIf
 				
 				If (Self.state = STATE_MACHINE_PIECES) Then
-					For (Int i = 0; i < Self.pos.Length; i += 1)
+					For Local i:= 0 Until Self.pos.Length
 						Self.knuckdrawer.setActionId(i + M_PARTS_HEAD)
+						
 						drawInMap(g, Self.knuckdrawer, Self.pos[i][0], Self.pos[i][1])
-					EndIf
+					Next
 				EndIf
 				
 				If (Self.state = STATE_ESCAPE) Then
 					drawInMap(g, Self.boatdrawer, Self.posX, Self.posY)
+					
+					' Magic number: 1664
 					drawInMap(g, Self.escapefacedrawer, Self.posX, Self.posY - 1664)
 				EndIf
 				
 				Self.flydefence.draw(g)
+				
 				drawCollisionRect(g)
 			EndIf
-			
 		End
 		
 		Method changeAniState:Void(AniDrawer:AnimationDrawer, state:Int, isloop:Bool)
