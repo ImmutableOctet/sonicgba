@@ -798,8 +798,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss5.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>28</X>
-        <Y>785</Y>
+        <X>13</X>
+        <Y>917</Y>
       </CursorPos>
       <DocGUID>8ef65447-a1b9-4c4b-bd99-0687cb32a90c</DocGUID>
       <Bookmarks />
@@ -1516,8 +1516,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>30</X>
-        <Y>422</Y>
+        <X>25</X>
+        <Y>338</Y>
       </CursorPos>
       <DocGUID>7df2e3e4-ff52-4fb7-a296-22530b355e07</DocGUID>
       <Bookmarks />

@@ -336,7 +336,9 @@ Class Boss5 Extends BossObject
 		
 		' Methods:
 		
-		' Extensions
+		' Extensions:
+		
+		' This method's behavior may change in the future:
 		Method pickRandomState:Int()
 			Select (Self.prestate)
 				Case STATE_FRESH_READY
@@ -784,132 +786,138 @@ Class Boss5 Extends BossObject
 			
 			If (Self.first_jump_cnt >= first_jump_cnt_max) Then
 				result = pickRandomState()
-			EndIf
-			
-			Self.first_jump_cnt += 1
-			
-			If (CanFreshFight()) Then
-				result = STATE_FRESH_FIGHT
 			Else
-				result = STATE_FRESH_BALL_UP
-				soundInstance.playSe(SoundSystem.SE_116)
+				Self.first_jump_cnt += 1
+				
+				If (CanFreshFight()) Then
+					result = STATE_FRESH_FIGHT
+				Else
+					result = STATE_FRESH_BALL_UP
+					
+					soundInstance.playSe(SoundSystem.SE_116)
+				EndIf
 			EndIf
 			
-			Int tmpstate
+			Local tmpstate:Int
+			
 			Select (result)
 				Case STATE_FRESH_READY
-					
 					If (Self.IsHurt) Then
-						tmpstate = STATE_FRESH_WAKE
+						tmpstate = F_WAIT_HURT
 					Else
-						tmpstate = 1
+						tmpstate = F_WAIT
 					EndIf
 					
 					changeAniState(Self.knuckdrawer, tmpstate, True)
+					
+					' Magic numbers: 1024, 1664
 					Self.COLLISION_WIDTH = 1024
 					Self.COLLISION_HEIGHT = 1664
-					break
 				Case STATE_FRESH_BALL_HORIZON_ATTACK_READY
-					Self.AttackStartDirection = Self.posX - MIDDLE_SCREEN
+					Self.AttackStartDirection = (Self.posX - MIDDLE_SCREEN)
 					
 					If (MIDDLE_SCREEN > Self.posX) Then
 						If (Self.horizon_move_speed < 0) Then
 							Self.horizon_move_speed = -Self.horizon_move_speed
 						EndIf
-						
 					ElseIf (Self.horizon_move_speed > 0) Then
 						Self.horizon_move_speed = -Self.horizon_move_speed
 					EndIf
 					
 					If (Self.IsHurt) Then
-						tmpstate = talk_cnt_max
+						tmpstate = F_BALL_B_HURT
 					Else
-						tmpstate = STATE_FRESH_READY
+						tmpstate = F_BALL_B
 					EndIf
 					
 					changeAniState(Self.knuckdrawer, tmpstate, True, Self.AttackStartDirection)
-					Self.COLLISION_WIDTH = PlayerObject.HEIGHT
-					Self.COLLISION_HEIGHT = PlayerObject.HEIGHT
-					break
+					
+					' Magic number: 1536
+					Self.COLLISION_WIDTH = 1536
+					Self.COLLISION_HEIGHT = 1536
 				Case STATE_FRESH_BALL_UP
-					
 					If (Self.IsHurt) Then
-						tmpstate = STATE_FRESH_FLY
+						tmpstate = F_BALL_A_HURT
 					Else
-						tmpstate = first_jump_cnt_max
+						tmpstate = F_BALL_A
 					EndIf
 					
 					changeAniState(Self.knuckdrawer, tmpstate, True)
-					Self.COLLISION_WIDTH = PlayerObject.HEIGHT
-					Self.COLLISION_HEIGHT = PlayerObject.HEIGHT
+					
+					' Magic number: 1536
+					Self.COLLISION_WIDTH = 1536
+					Self.COLLISION_HEIGHT = 1536
+					
 					Self.flydefence.setHurtState(False)
-					break
 				Case STATE_FRESH_FIGHT
-					changeAniState(Self.knuckdrawer, STATE_FRESH_DEFENCE_BACK, False)
-					Self.COLLISION_WIDTH = PlayerObject.HEIGHT
-					Self.COLLISION_HEIGHT = 1920
-					break
-				Case STATE_MACHINE_READY
+					changeAniState(Self.knuckdrawer, F_FIGHT, False)
 					
+					' Magic number: 1536
+					Self.COLLISION_WIDTH = 1536
+					Self.COLLISION_HEIGHT = 1920
+				Case STATE_MACHINE_READY
 					If (Self.IsHurt) Then
-						tmpstate = STATE_MACHINE_ATTACK_TRANS
+						tmpstate = M_WAIT_HURT
 					Else
-						tmpstate = STATE_MACHINE_READY
+						tmpstate = M_WAIT
 					EndIf
 					
 					changeAniState(Self.knuckdrawer, tmpstate, True)
+					
+					' Magic numbers: 1024, 1664
 					Self.COLLISION_WIDTH = 1024
 					Self.COLLISION_HEIGHT = 1664
-					break
 				Case STATE_MACHINE_BALL_HORIZON_ATTACK_READY
-					Self.AttackStartDirection = Self.posX - MIDDLE_SCREEN
+					Self.AttackStartDirection = (Self.posX - MIDDLE_SCREEN)
 					
 					If (MIDDLE_SCREEN > Self.posX) Then
 						If (Self.horizon_move_speed < 0) Then
 							Self.horizon_move_speed = -Self.horizon_move_speed
 						EndIf
-						
 					ElseIf (Self.horizon_move_speed > 0) Then
 						Self.horizon_move_speed = -Self.horizon_move_speed
 					EndIf
 					
 					If (Self.IsHurt) Then
-						tmpstate = STATE_MACHINE_FLY_DRIP_LAND
+						tmpstate = M_BALL_B_HURT
 					Else
-						tmpstate = STATE_MACHINE_BALL_HORIZON_ATTACK_FIGHT
+						tmpstate = M_BALL_B
 					EndIf
 					
 					changeAniState(Self.knuckdrawer, tmpstate, True, Self.AttackStartDirection)
-					Self.COLLISION_WIDTH = PlayerObject.HEIGHT
-					Self.COLLISION_HEIGHT = PlayerObject.HEIGHT
-					break
-				Case STATE_MACHINE_BALL_UP
 					
+					' Magic number: 1536
+					Self.COLLISION_WIDTH = 1536
+					Self.COLLISION_HEIGHT = 1536
+				Case STATE_MACHINE_BALL_UP
 					If (Self.IsHurt) Then
-						tmpstate = STATE_MACHINE_FLY_DRIPPING
+						tmpstate = M_BALL_A_HURT
 					Else
-						tmpstate = STATE_MACHINE_BALL_HORIZON_ATTACK_READY
+						tmpstate = M_BALL_A
 					EndIf
 					
 					changeAniState(Self.knuckdrawer, tmpstate, True)
-					Self.COLLISION_WIDTH = PlayerObject.HEIGHT
-					Self.COLLISION_HEIGHT = PlayerObject.HEIGHT
-					Self.flydefence.setHurtState(False)
-					break
-				Case STATE_MACHINE_MISSILE_READY
 					
+					' Magic number: 1536
+					Self.COLLISION_WIDTH = 1536
+					Self.COLLISION_HEIGHT = 1536
+					
+					Self.flydefence.setHurtState(False)
+				Case STATE_MACHINE_MISSILE_READY
 					If (Self.IsHurt) Then
-						tmpstate = STATE_MACHINE_BROKEN
+						tmpstate = M_MISSILE_READY_HURT
 					Else
-						tmpstate = STATE_MACHINE_KO_AIR
+						tmpstate = M_MISSILE_READY
 					EndIf
 					
 					changeAniState(Self.knuckdrawer, tmpstate, False)
+					
+					' Magic numbers: 1024, 1664
 					Self.COLLISION_WIDTH = 1024
 					Self.COLLISION_HEIGHT = 1664
-					break
 			End Select
 			
+			' Return the state we chose.
 			Return result
 		End
 		
