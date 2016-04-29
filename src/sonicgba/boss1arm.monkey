@@ -93,9 +93,11 @@ Class Boss1Arm Extends EnemyObject
 			Self.dg_plus = 320 ' (5 Shl 6)
 			Self.degree = 0
 			
-			Self.plus = 
+			Self.plus = 1
+			
 			Self.posX -= Self.iLeft * 8
 			Self.posY -= Self.iTop * 8
+			
 			Self.degree = 10560
 			
 			If (ArmAni = Null) Then

@@ -60,7 +60,8 @@ Class Boss3Pipe Extends EnemyObject ' Implements SonicDef...?
 				Case DIRECTION_RIGHT
 					Self.pipedrawer.setTrans(TRANS_ROT270)
 				Default
-			EndIf
+					' Nothing so far.
+			End Select
 		End
 	Public
 		' Methods:
@@ -77,7 +78,7 @@ Class Boss3Pipe Extends EnemyObject ' Implements SonicDef...?
 					p.isCrashPipe = True
 				Default
 					p.isCrashPipe = False
-			EndIf
+			End Select
 		End
 		
 		Method setisDraw:Void(state:Bool)

@@ -22,11 +22,10 @@ Private
 	Import sonicgba.smallanimal
 	Import sonicgba.sonicdef
 	
+	Import state.state
 	Import state.gamestate
 	Import state.specialstagestate
-	Import state.state
 	Import state.titlestate
-	Import state.stringindex
 	
 	'Import com.sega.mobile.define.mdphone
 	Import com.sega.mobile.framework.device.mfgraphics
@@ -40,12 +39,13 @@ Private
 	Import regal.ioutil.publicdatastream
 Public
 
-Class StageManager ' Implements sonicdef
+' Classes:
+Class StageManager ' Implements SonicDef
 	Private
 		' Constant variable(s):
 		Const CHARACTER_NUM:Int = 4
-		
 		Const HIGH_SCORE_NUM:Int = 5
+		
 		Const HIGH_SCORE_OFFSET_X:Int = 0
 		
 		Global HIGH_SCORE_Y:Int = (44 + FONT_H_HALF) ' Const

@@ -161,7 +161,7 @@ Class Boss4 Extends BossObject
 		Field isNoneIce:Bool
 	Protected
 		' Constructor(s):
-		Method(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
+		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
 			Super.New(id, x, y, left, top, width, height)
 			
 			Self.COLLISION_WIDTH = 704
@@ -596,7 +596,7 @@ Class Boss4 Extends BossObject
 												Default
 													' Nothing so far.
 											End Select
-										End Select
+										EndIf
 										
 										Select (Self.attack_cn)
 											Case 6, 16, 25 ' BOSS_LAUGH_MAX

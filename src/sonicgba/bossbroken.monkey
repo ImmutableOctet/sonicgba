@@ -65,8 +65,8 @@ Class BossBroken Extends EnemyObject
 			
 			Self.offsety = 0
 			
-			Self.Viy = New [750, -300, -150, 150, 450, -750, 600, 300, -450]
-			Self.Vix = New [-1200, -1050, -900, -750, -600]
+			Self.Viy = [750, -300, -150, 150, 450, -750, 600, 300, -450]
+			Self.Vix = [-1200, -1050, -900, -750, -600]
 			
 			Self.total_cnt_max = MAX_BOOM ' 8
 			
