@@ -91,8 +91,9 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		Const VELOCITY_DIVIDE:= 512
 	Private
 		Const AVAILABLE_RANGE:= 1
-		Const CLOSE_NUM_IN_ONE_LOOP:= 10
 		Const DESTORY_RANGE:= 2
+		
+		Const CLOSE_NUM_IN_ONE_LOOP:= 10
 		
 		Const PAINT_LAYER_NUM:= 4
 	Protected
