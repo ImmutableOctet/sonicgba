@@ -9,7 +9,7 @@ Private
 	Import sonicgba.bulletobject
 	Import sonicgba.playerobject
 	
-	Import sonicgba.monkey
+	Import sonicgba.monkeyobject
 	
 	Import com.sega.mobile.framework.device.mfgraphics
 Public

@@ -10,7 +10,7 @@ Private
 	
 	Import com.sega.mobile.framework.device.mfgraphics
 	
-	Import sonicgba.gimmick
+	Import sonicgba.gimmickobject
 	Import sonicgba.playerobject
 Public
 

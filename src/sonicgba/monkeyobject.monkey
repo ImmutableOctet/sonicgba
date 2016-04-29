@@ -13,7 +13,7 @@ Private
 Public
 
 ' Classes:
-Class Monkey Extends EnemyObject
+Class Monkey Extends EnemyObject ' Class MonkeyObject Extends EnemyObject
 	Private
 		' Constant variable(s):
 		Const ALERT_RANGE:Int = 9216

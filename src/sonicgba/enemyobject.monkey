@@ -47,7 +47,7 @@ Private
 	Import sonicgba.mapmanager
 	Import sonicgba.mira
 	Import sonicgba.mole
-	Import sonicgba.monkey
+	Import sonicgba.monkeyobject
 	Import sonicgba.motor
 	Import sonicgba.penguin
 	Import sonicgba.playeramy
