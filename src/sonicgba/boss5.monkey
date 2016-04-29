@@ -25,6 +25,9 @@ Private
 Public
 
 ' Classes:
+
+' This acts as the implementation of Mecha Knuckles, AKA Fake Knuckles, or simply "Knuckle".
+' This single boss class covers both the first and second phase forms of Mecha Knuckles.
 Class Boss5 Extends BossObject
 	Private
 		' Constant variable(s):
@@ -725,7 +728,7 @@ Class Boss5 Extends BossObject
 					
 					SoundSystem.getInstance().playSe(SoundSystem.SE_144, False)
 				Else
-					changeAniState(Self.knuckdrawer, STATE_MACHINE_BALL_UP, False)
+					changeAniState(Self.knuckdrawer, M_HURT_KNOCK, False)
 					
 					Self.state = STATE_MACHINE_HURT_KNOCK
 					
@@ -773,42 +776,692 @@ Class Boss5 Extends BossObject
 			Return (state = STATE_FRESH_WAIT_0 And player.isAttackingEnemy() And player.isOnGound())
 		End
 		
-		/* JADX WARNING: inconsistent code. */
-		/* Code decompiled incorrectly, please refer to instructions dump. */
 		Method logic:Void()
+			If (Not Self.dead) Then
+				Local preX:= Self.posX
+				Local preY:= Self.posY
+				
+				Self.boomX = preX
+				Self.boomY = preY
+				
+				Local boomGroundY:= Self.getGroundY(Self.boomX, Self.boomY)
+				
+				' Magic number: 1024
+				If ((1024 + Self.boomY + Self.velY) > boomGroundY) Then
+					Self.boomY = (boomGroundY - 1024)
+				EndIf
+	
+				If (Self.state > 0) Then
+					isBossEnter = True
+				EndIf
+	
+				Select (Self.state)
+					Case STATE_FRESH_WAIT_0
+						If (player.getFootPositionX() >= BEFORE_MEET_LINE) Then
+							Self.state = STATE_FRESH_WAIT_1
+							
+							MapManager.setCameraUpLimit(1128 - (3 * MapManager.CAMERA_HEIGHT) / 4)
+							MapManager.setCameraDownLimit(1128 + (MapManager.CAMERA_HEIGHT) / 4) ' 1 * MapManager.CAMERA_HEIGHT
+						EndIf
+					Case STATE_FRESH_WAIT_1
+						If (player.getFootPositionX() >= MEET_SONIC_LINE) Then
+							player.setMeetingBoss(False)
+							
+							MapManager.setCameraLeftLimit(SIDE_LEFT)
+							MapManager.setCameraRightLimit(9496)
+						Else
+							MapManager.setCameraLeftLimit(MapManager.getCamera().x)
+						EndIf
+						
+						' Magic number: 30
+						If (Self.posX < ((MapManager.getCamera().x + MapManager.CAMERA_WIDTH - 30) Shl 6)) Then
+							Self.changeAniState(Self.knuckdrawer, F_READY, False)
+							
+							' Magic numbers: 1024, 1664
+							Self.COLLISION_WIDTH = 1024
+							Self.COLLISION_HEIGHT = 1664
+							
+							Self.state = STATE_FRESH_WAKE
+							
+							bossFighting = True
+							bossID = ENEMY_BOSS5
+							
+							SoundSystem.getInstance().playBgm(23)
+						EndIf
+					Case STATE_FRESH_WAKE
+						If (Self.knuckdrawer.checkEnd()) {
+							Self.changeAniState(Self.knuckdrawer, F_WAIT, True)
+							Self.COLLISION_WIDTH = 1024
+							Self.COLLISION_HEIGHT = 1664
+							Self.talk_cnt = 1
+						}
+						
+						If (Self.talk_cnt >= 1) Then
+							Self.talk_cnt += 1
+							
+							If (Self.talk_cnt = talk_cnt_max) Then
+								player.setMeetingBoss(True)
+								player.setOutOfControl(Self)
+								
+								player.setAnimationId(PlayerObject.ANI_VS_FAKE_KNUCKLE)
+							ElseIf (Self.talk_cnt >= 19 And player.getAnimationId() = PlayerObject.ANI_STAND) Then
+								Self.state = STATE_FRESH_READY
+								
+								player.releaseOutOfControl()
+							EndIf
+						EndIf
+					Case 3:
+						Self.state = Self.randomSetState()
+						break
+					Case 4:
+						Self.alert_state = Self.checkPlayerInEnemyAlertRange(Self.posX Shr 6, Self.posY Shr 6, 2 * Self.fight_alert_range)
+						If (Self.IsNeedforDefence(Self.alert_state)) {
+							Self.changeAniState(Self.knuckdrawer, F_DEFENCE_READY, False)
+							Self.COLLISION_WIDTH = 1024
+							Self.COLLISION_HEIGHT = 1024
+							Self.state = 16
+							soundInstance.playSe(SoundSystem.SE_132)
+							Self.IsPlayerRunaway = False
+							Self.defence_cnt = 0
+						} else If (Self.ready_cnt < 24) {
+							++Self.ready_cnt
+						} else {
+							Self.ready_cnt = 0
+							Self.state = 3
+							Self.prestate = 4
+						}
+						break
+					Case 5:
+						If (Self.horizonAttackReady_cnt < Self.horizonAttackReady_cnt_max) {
+							++Self.horizonAttackReady_cnt
+						} else {
+							byte var12
+							If (Self.IsHurt) {
+								var12 = F_BALL_A_HURT
+							} else {
+								var12 = F_BALL_A
+							}
+		
+							Self.changeAniState(Self.knuckdrawer, var12, True)
+							Self.COLLISION_WIDTH = 1536
+							Self.COLLISION_HEIGHT = 1536
+							Self.horizonAttackReady_cnt = 0
+							Self.state = 6
+							soundInstance.playSe(SoundSystem.SE_110)
+						}
+						break
+					Case 6:
+						Self.IsHurt = False
+						If (Self.AttackStartDirection > 0) {
+							If (Self.posX <= Self.limitLeftX) {
+								Self.posX = Self.limitLeftX
+								Self.IsConner = True
+							} else {
+								Self.posX += Self.horizon_move_speed
+							}
+						} else If (Self.posX >= Self.limitRightX) {
+							Self.posX = Self.limitRightX
+							Self.IsConner = True
+						} else {
+							Self.posX += Self.horizon_move_speed
+						}
+		
+						If (Self.IsConner) {
+							Self.horizonAttackReady_cnt = 0
+							Self.IsConner = False
+							Self.state = 3
+							Self.prestate = 6
+						}
+						break
+					Case 7:
+						If (Self.posY <= Self.fly_top) {
+							Self.posY = Self.fly_top
+							Self.changeAniState(Self.knuckdrawer, F_FLY_A, True)
+							Self.AttackStartDirection = Self.posX - player.getFootPositionX()
+							Self.COLLISION_WIDTH = 960
+							Self.COLLISION_HEIGHT = 1472
+							Self.state = 8
+						} else {
+							Self.posY -= Self.fly_up_speed1
+						}
+						break
+					Case 8:
+						Self.IsHurt = False
+						If (Self.AttackStartDirection > 0) {
+							If (player.getFootPositionX() - Self.fly_drip_offset > Self.limitLeftX) {
+								Self.fly_attack_site = player.getFootPositionX() - Self.fly_drip_offset
+							} else {
+								Self.fly_attack_site = Self.limitLeftX
+							}
+		
+							If (Self.posX + Self.fly_move_x_speed1 <= Self.fly_attack_site) {
+								Self.posX = Self.fly_attack_site
+								Self.changeAniStateNoTrans(Self.knuckdrawer, 10, False)
+								Self.COLLISION_WIDTH = 1920
+								Self.COLLISION_HEIGHT = 2432
+								Self.state = 9
+							} else {
+								Self.posX += Self.fly_move_x_speed1
+								Self.posY += Self.fly_move_y_speed1
+							}
+						} else {
+							If (player.getFootPositionX() + Self.fly_drip_offset < Self.limitRightX) {
+								Self.fly_attack_site = player.getFootPositionX() + Self.fly_drip_offset
+							} else {
+								Self.fly_attack_site = Self.limitRightX
+							}
+		
+							If (Self.posX + Self.fly_move_x_speed1 >= Self.fly_attack_site) {
+								Self.posX = Self.fly_attack_site
+								Self.changeAniStateNoTrans(Self.knuckdrawer, 10, False)
+								Self.COLLISION_WIDTH = 1408
+								Self.COLLISION_HEIGHT = 2432
+								Self.state = 9
+							} else {
+								Self.posX += Self.fly_move_x_speed1
+								Self.posY += Self.fly_move_y_speed1
+							}
+						}
+						break
+					Case 9:
+						If (Self.knuckdrawer.checkEnd()) {
+							Self.changeAniStateNoTrans(Self.knuckdrawer, 11, True)
+							Self.COLLISION_WIDTH = 1536
+							Self.COLLISION_HEIGHT = 2432
+							Self.state = 10
+							Self.velY = 0
+						}
+						break
+					Case 10:
+						If (Self.posY + Self.velY >= Self.getGroundY(Self.posX, Self.posY)) {
+							Self.posY = Self.getGroundY(Self.posX, Self.posY)
+							Self.changeAniStateNoTrans(Self.knuckdrawer, 12, False)
+							Self.COLLISION_WIDTH = 1408
+							Self.COLLISION_HEIGHT = 1920
+							Self.state = 11
+						} else {
+							Self.velY += GRAVITY
+							Self.posY += Self.velY
+						}
+						break
+					Case 11:
+						If (Self.knuckdrawer.checkEnd()) {
+							Self.state = 3
+							Self.prestate = 11
+						}
+						break
+					Case 12:
+						If (Self.knuckdrawer.checkEnd()) {
+							Self.state = 3
+							Self.prestate = 12
+						} else {
+							If (Self.knuckdrawer.getCurrentFrame() <> 3 And Self.knuckdrawer.getCurrentFrame() <> 4 And Self.knuckdrawer.getCurrentFrame() <> 5 And Self.knuckdrawer.getCurrentFrame() <> 6 And Self.knuckdrawer.getCurrentFrame() <> 11 And Self.knuckdrawer.getCurrentFrame() <> 12) {
+								Self.COLLISION_WIDTH = 1536
+								Self.COLLISION_HEIGHT = 1920
+							} else {
+								Self.COLLISION_WIDTH = 3584
+								Self.COLLISION_HEIGHT = 2176
+							}
+		
+							If (Self.knuckdrawer.getCurrentFrame() = 1 Or Self.knuckdrawer.getCurrentFrame() = 5) {
+								soundInstance.playSe(SoundSystem.SE_126)
+							}
+						}
+						break
+					Case 13:
+						Self.flydefence.setHurtState(False)
+						If (Self.knuckdrawer.checkEnd()) {
+							Self.changeAniStateNoTrans(Self.knuckdrawer, 6, True)
+							Self.state = 14
+						} else {
+							Self.hurt_air_control()
+							If (isBossHalf) {
+								++damageframe
+								damageframe Mod= 11
+								If (damageframe Mod 2 = 0) {
+									SoundSystem.getInstance().playSe(SoundSystem.SE_144)
+								}
+							}
+						}
+						break
+					Case 14:
+						Self.flydefence.setHurtState(False)
+						If (Self.posY + Self.velY >= Self.getGroundY(Self.posX, Self.posY)) {
+							Self.posY = Self.getGroundY(Self.posX, Self.posY)
+							Self.changeAniStateNoTrans(Self.knuckdrawer, 7, False)
+							Self.state = 15
+						} else {
+							Self.hurt_air_control()
+							If (isBossHalf) {
+								damageframe += 1
+								damageframe Mod= 11
+								
+								If (damageframe Mod 2 = 0) {
+									SoundSystem.getInstance().playSe(SoundSystem.SE_144)
+								}
+							}
+						}
+						break
+					Case 15:
+						Self.flydefence.setHurtState(False)
+						If (Self.knuckdrawer.checkEnd()) {
+							If (Self.HP = Self.halfLifeNum()) {
+								Self.state = 20
+								Self.prestate = 32
+							} else {
+								Self.state = 3
+								Self.prestate = 15
+							}
+						}
+						break
+					Case 16:
+						If (Self.knuckdrawer.checkEnd()) {
+							Self.changeAniState(Self.knuckdrawer, F_DEFENCING, True)
+							Self.COLLISION_WIDTH = 1024
+							Self.COLLISION_HEIGHT = 1024
+							Self.state = 17
+						}
+						break
+					Case 17:
+						If (Self.IsPlayerRunaway Or Not player.isAttackingEnemy() Or Not player.isOnGound()) {
+							Self.changeAniState(Self.knuckdrawer, F_DEFENCE_BACK, False)
+							Self.COLLISION_WIDTH = 1024
+							Self.COLLISION_HEIGHT = 1024
+							Self.state = 18
+						}
+						break
+					Case 18:
+						If (Self.knuckdrawer.checkEnd()) {
+							Self.state = 3
+							Self.prestate = 18
+							Self.IsPlayerRunaway = False
+						}
+						break
+					Case 19:
+						Self.alert_state = Self.checkPlayerInEnemyAlertRange(Self.posX Shr 6, Self.posY Shr 6, 2 * Self.fight_alert_range)
+						If (Self.IsNeedforDefence(Self.alert_state)) {
+							Self.changeAniState(Self.knuckdrawer, M_DEFENCE_READY, False)
+							Self.COLLISION_WIDTH = 1024
+							Self.COLLISION_HEIGHT = 1024
+							Self.state = 33
+							Self.IsPlayerRunaway = False
+							Self.defence_cnt = 0
+						} else If (Self.ready_cnt < 24) {
+							++Self.ready_cnt
+						} else {
+							Self.ready_cnt = 0
+							Self.state = 20
+							Self.prestate = 19
+						}
+						break
+					Case 20:
+						Self.state = Self.randomSetState()
+						break
+					Case 21:
+						If (Self.horizonAttackReady_cnt < Self.horizonAttackReady_cnt_max) {
+							++Self.horizonAttackReady_cnt
+						} else {
+							byte var11
+							If (Self.IsHurt) {
+								var11 = M_BALL_A_HURT
+							} else {
+								var11 = M_BALL_A
+							}
+		
+							Self.changeAniState(Self.knuckdrawer, var11, True)
+							Self.COLLISION_WIDTH = 1536
+							Self.COLLISION_HEIGHT = 1536
+							Self.horizonAttackReady_cnt = 0
+							Self.state = 22
+							soundInstance.playSe(SoundSystem.SE_110)
+						}
+						break
+					Case 22:
+						Self.IsHurt = False
+						If (Self.AttackStartDirection > 0) {
+							If (Self.posX <= Self.limitLeftX) {
+								Self.posX = Self.limitLeftX
+								Self.IsConner = True
+							} else {
+								Self.posX += Self.horizon_move_speed
+							}
+						} else If (Self.posX >= Self.limitRightX) {
+							Self.posX = Self.limitRightX
+							Self.IsConner = True
+						} else {
+							Self.posX += Self.horizon_move_speed
+						}
+		
+						If (Self.IsConner) {
+							Self.horizonAttackReady_cnt = 0
+							Self.IsConner = False
+							Self.state = 20
+							Self.prestate = 22
+						}
+						break
+					Case 23:
+						If (Self.posY <= Self.fly_top) {
+							Self.posY = Self.fly_top
+							Self.changeAniState(Self.knuckdrawer, M_FLY_A, True)
+							Self.AttackStartDirection = Self.posX - player.getFootPositionX()
+							Self.COLLISION_WIDTH = 960
+							Self.COLLISION_HEIGHT = 1472
+							Self.state = 24
+						} else {
+							Self.posY -= Math.abs(Self.velocity)
+						}
+						break
+					Case 24:
+						Self.IsHurt = False
+						If (Self.AttackStartDirection > 0) {
+							If (player.getFootPositionX() - Self.fly_drip_offset > Self.limitLeftX) {
+								Self.fly_attack_site = player.getFootPositionX() - Self.fly_drip_offset
+							} else {
+								Self.fly_attack_site = Self.limitLeftX
+							}
+		
+							If (Self.posX + Self.fly_move_x_speed1 <= Self.fly_attack_site) {
+								Self.posX = Self.fly_attack_site
+								Self.changeAniStateNoTrans(Self.knuckdrawer, 28, False)
+								Self.COLLISION_WIDTH = 1920
+								Self.COLLISION_HEIGHT = 2432
+								Self.state = 25
+							} else {
+								Self.posX += Self.fly_move_x_speed1
+								Self.posY += Self.fly_move_y_speed1
+							}
+						} else {
+							If (player.getFootPositionX() + Self.fly_drip_offset < Self.limitRightX) {
+								Self.fly_attack_site = player.getFootPositionX() + Self.fly_drip_offset
+							} else {
+								Self.fly_attack_site = Self.limitRightX
+							}
+		
+							If (Self.posX + Self.fly_move_x_speed1 >= Self.fly_attack_site) {
+								Self.posX = Self.fly_attack_site
+								Self.changeAniStateNoTrans(Self.knuckdrawer, 28, False)
+								Self.COLLISION_WIDTH = 1408
+								Self.COLLISION_HEIGHT = 2432
+								Self.state = 25
+							} else {
+								Self.posX += Self.fly_move_x_speed1
+								Self.posY += Self.fly_move_y_speed1
+							}
+						}
+						break
+					Case 25:
+						If (Self.knuckdrawer.checkEnd()) {
+							Self.changeAniStateNoTrans(Self.knuckdrawer, 29, True)
+							Self.COLLISION_WIDTH = 1536
+							Self.COLLISION_HEIGHT = 2432
+							Self.state = 26
+							Self.velY = 0
+						}
+						break
+					Case 26:
+						If (Self.posY + Self.velY >= Self.getGroundY(Self.posX, Self.posY)) {
+							Self.posY = Self.getGroundY(Self.posX, Self.posY)
+							Self.changeAniStateNoTrans(Self.knuckdrawer, 30, False)
+							Self.COLLISION_WIDTH = 1408
+							Self.COLLISION_HEIGHT = 1920
+							Self.state = 27
+						} else {
+							Self.velY += GRAVITY
+							Self.posY += Self.velY
+						}
+						break
+					Case 27:
+						If (Self.knuckdrawer.checkEnd()) {
+							Self.state = 20
+							Self.prestate = 27
+						}
+						break
+					Case 28:
+						If (Self.knuckdrawer.checkEnd()) {
+							Self.changeAniState(Self.knuckdrawer, M_MISSILE_LAUNCH, False)
+							Self.COLLISION_WIDTH = 1408
+							Self.COLLISION_HEIGHT = 2176
+							Self.state = 29
+							If (Self.posX - player.getFootPositionX() > 0) {
+								BulletObject.addBullet(16, Self.posX - 1280, Self.posY - 1280, -320, 0)
+							} else {
+								BulletObject.addBullet(16, 1280 + Self.posX, Self.posY - 1280, 320, 0)
+							}
+		
+							MapManager.setShake(10)
+						}
+						break
+					Case 29:
+						Self.IsHurt = False
+						If (Self.knuckdrawer.checkEnd()) {
+							Self.state = 20
+							Self.prestate = 29
+						}
+						break
+					Case 30:
+						Self.flydefence.setHurtState(False)
+						If (Self.knuckdrawer.checkEnd()) {
+							Self.changeAniStateNoTrans(Self.knuckdrawer, 24, True)
+							Self.state = 31
+						} else {
+							Self.hurt_air_control()
+						}
+						break
+					Case 31:
+						Self.flydefence.setHurtState(False)
+						If (Self.posY + Self.velY >= Self.getGroundY(Self.posX, Self.posY)) {
+							Self.posY = Self.getGroundY(Self.posX, Self.posY)
+							Self.changeAniStateNoTrans(Self.knuckdrawer, 25, False)
+							Self.state = 32
+						} else {
+							Self.hurt_air_control()
+						}
+						break
+					Case 32:
+						Self.flydefence.setHurtState(False)
+						If (Self.knuckdrawer.checkEnd()) {
+							Self.state = 20
+							Self.prestate = 32
+						}
+						break
+					Case 33:
+						If (Self.knuckdrawer.checkEnd()) {
+							Self.changeAniState(Self.knuckdrawer, M_DEFENCING, True)
+							Self.COLLISION_WIDTH = 1024
+							Self.COLLISION_HEIGHT = 1024
+							Self.state = 34
+						}
+						break
+					Case 34:
+						If (Self.IsPlayerRunaway Or Not player.isAttackingEnemy() Or Not player.isOnGound()) {
+							Self.changeAniState(Self.knuckdrawer, M_DEFENCE_BACK, False)
+							Self.COLLISION_WIDTH = 1024
+							Self.COLLISION_HEIGHT = 1024
+							Self.state = 35
+						}
+						break
+					Case 35:
+						If (Self.knuckdrawer.checkEnd()) {
+							Self.changeAniState(Self.knuckdrawer, M_WAIT, False)
+							Self.COLLISION_WIDTH = 1024
+							Self.COLLISION_HEIGHT = 1664
+							Self.state = 20
+							Self.prestate = 35
+							Self.IsPlayerRunaway = False
+						}
+						break
+					Case 36:
+						If (Self.posY + Self.velY >= Self.getGroundY(Self.posX, Self.posY)) {
+							Self.posY = Self.getGroundY(Self.posX, Self.posY)
+							Self.changeAniState(Self.knuckdrawer, M_KO_LAND, True)
+							Self.state = 37
+						} else {
+							Self.hurt_air_control()
+						}
+						break
+					Case 37:
+						If (Self.KOWaitCnt < Self.KOWaitCntMax) {
+							++Self.KOWaitCnt
+						} else {
+							Self.state = 38
+							Self.bossbroken = new BossBroken(ENEMY_BOSS5, Self.posX Shr 6, Self.posY Shr 6, 0, 0, 0, 0)
+							addGameObject(Self.bossbroken, Self.posX Shr 6, Self.posY Shr 6)
+							Self.bossbroken.setTotalCntMax(6)
+							Self.bossbroken.setJumpTime(9)
+						}
+						break
+					Case 38:
+						Self.bossbroken.logicBoom(Self.posX, Self.posY)
+						If (Self.bossbroken.getEndState()) {
+							Self.state = 39
+							int[] var9 = new int[]{6, 4}
+							Self.pos = (int[][])Array.newInstance(Integer.TYPE, var9)
+		
+							for(int var10 = 0 var10 < Self.pos.length ++var10) {
+								Self.pos[var10][0] = Self.posX
+								Self.pos[var10][1] = Self.posY - Self.boom_offset
+								Self.pos[var10][2] = Self.Vix[MyRandom.nextInt(Self.Vix.length)]
+								Self.pos[var10][3] = Self.Viy[MyRandom.nextInt(Self.Viy.length)]
+							}
+						}
+						break
+					Case 39:
+						for(int var5 = 0 var5 < Self.pos.length ++var5) {
+							int[] var6 = Self.pos[var5]
+							var6[0] += Self.pos[var5][2]
+							int[] var7 = Self.pos[var5]
+							var7[3] += (GRAVITY / 2) ' Shr 1
+							int[] var8 = Self.pos[var5]
+							var8[1] += Self.pos[var5][3]
+							If (Self.pos[var5][1] >= Self.posY) {
+								++Self.pieces_drip_cnt
+							}
+						}
+		
+						If (Self.pieces_drip_cnt >= Self.pos.length) {
+							Self.posX = 609792
+							Self.posY = 69120
+							Self.fly_end = 607744
+							Self.escapefacedrawer.setActionId(0)
+							Self.escapefacedrawer.setLoop(True)
+							Self.WaitCnt = 0
+							Self.state = 40
+							MapManager.setCameraLeftLimit(9360)
+							MapManager.setCameraRightLimit(EGG_SIDE_RIGHT)
+							bossFighting = False
+							player.getBossScore()
+							SoundSystem.getInstance().playBgm(StageManager.getBgmId(), True)
+						}
+						break
+					Case 40:
+						If (Self.posX <= MapManager.getCamera().x + MapManager.CAMERA_WIDTH - 30 Shl 6 And Self.WaitCnt = 0) {
+							Self.escapefacedrawer.setActionId(2)
+							Self.escapefacedrawer.setLoop(False)
+							Self.WaitCnt = 1
+							int var3 = MapManager.getCamera().x
+							int var4 = var3 + MapManager.CAMERA_WIDTH
+							MapManager.setCameraLeftLimit(var3)
+							MapManager.setCameraRightLimit(var4)
+						}
+		
+						If (Self.escapefacedrawer.checkEnd() And Self.WaitCnt = 1) {
+							Self.escapefacedrawer.setActionId(0)
+							Self.boatdrawer.setActionId(1)
+							Self.boatdrawer.setLoop(False)
+							Self.WaitCnt = 2
+						}
+		
+						If (Self.WaitCnt = 2 And Self.boatdrawer.checkEnd()) {
+							Self.escapefacedrawer.setActionId(0)
+							Self.escapefacedrawer.setTrans(2)
+							Self.escapefacedrawer.setLoop(True)
+							Self.boatdrawer.setActionId(1)
+							Self.boatdrawer.setTrans(2)
+							Self.boatdrawer.setLoop(False)
+							Self.WaitCnt = 3
+						}
+		
+						If (Self.WaitCnt = 3 And Self.boatdrawer.checkEnd()) {
+							Self.boatdrawer.setActionId(0)
+							Self.boatdrawer.setTrans(2)
+							Self.boatdrawer.setLoop(True)
+							Self.WaitCnt = 4
+						}
+		
+						If (Self.WaitCnt = 4 Or Self.WaitCnt = 5) {
+							Self.posX += Self.escape_v
+						}
+		
+						If (Self.posX - Self.fly_end > Self.fly_range And Self.WaitCnt = 4) {
+							Self.WaitCnt = 5
+						}
+		
+						If (Self.WaitCnt = 5) {
+							If (Self.escape_cnt < Self.escape_cnt_max) {
+								++Self.escape_cnt
+							} else {
+								Self.WaitCnt = 6
+							}
+						}
+		
+						If (Self.WaitCnt = 6) {
+							addGameObject(new Cage(MapManager.getCamera().x + (MapManager.CAMERA_WIDTH / 2) Shl 6, 65280)) ' Shr 1
+							
+							Self.WaitCnt = 7
+						}
+		
+						Self.checkWithPlayer(preX, preY, Self.posX, Self.posY)
+				End Select
+	
+				Self.flydefence.logic(Self.posX, Self.posY, Self.AttackStartDirection)
+				
+				If (Self.state <> 8 And Self.state <> 24) {
+					Self.flydefence.setCollAvailable(False)
+				Else
+					Self.flydefence.setCollAvailable(True)
+					
+					If (Self.flydefence.getHurtState()) {
+						Self.HurtLogic()
+						Self.flydefence.setHurtState(False)
+					EndIf
+				EndIf
+	
+				Self.refreshCollisionRect(Self.posX Shr 6, Self.posY Shr 6)
+				Self.checkWithPlayer(preX, preY, Self.posX, Self.posY)
+			}
 		End
 		
 		' This method's behavior may change in the future:
 		Method randomSetState:Int()
 			Self.missile_alert_state = checkPlayerInEnemyAlertRange((Self.posX Shr 6), (Self.posY Shr 6), Self.missile_alert_range)
 			
-			Local result:= STATE_FRESH_WAIT_0
+			Local newState:= STATE_FRESH_WAIT_0
 			
 			If (Self.first_jump_cnt >= first_jump_cnt_max) Then
-				result = pickRandomState()
+				newState = pickRandomState()
 			Else
 				Self.first_jump_cnt += 1
 				
 				If (CanFreshFight()) Then
-					result = STATE_FRESH_FIGHT
+					newState = STATE_FRESH_FIGHT
 				Else
-					result = STATE_FRESH_BALL_UP
+					newState = STATE_FRESH_BALL_UP
 					
 					soundInstance.playSe(SoundSystem.SE_116)
 				EndIf
 			EndIf
 			
-			Local tmpstate:Int
+			Local drawState:Int
 			
-			Select (result)
+			Select (newState)
 				Case STATE_FRESH_READY
 					If (Self.IsHurt) Then
-						tmpstate = F_WAIT_HURT
+						drawState = F_WAIT_HURT
 					Else
-						tmpstate = F_WAIT
+						drawState = F_WAIT
 					EndIf
 					
-					changeAniState(Self.knuckdrawer, tmpstate, True)
+					changeAniState(Self.knuckdrawer, drawState, True)
 					
 					' Magic numbers: 1024, 1664
 					Self.COLLISION_WIDTH = 1024
@@ -825,24 +1478,24 @@ Class Boss5 Extends BossObject
 					EndIf
 					
 					If (Self.IsHurt) Then
-						tmpstate = F_BALL_B_HURT
+						drawState = F_BALL_B_HURT
 					Else
-						tmpstate = F_BALL_B
+						drawState = F_BALL_B
 					EndIf
 					
-					changeAniState(Self.knuckdrawer, tmpstate, True, Self.AttackStartDirection)
+					changeAniState(Self.knuckdrawer, drawState, True, Self.AttackStartDirection)
 					
 					' Magic number: 1536
 					Self.COLLISION_WIDTH = 1536
 					Self.COLLISION_HEIGHT = 1536
 				Case STATE_FRESH_BALL_UP
 					If (Self.IsHurt) Then
-						tmpstate = F_BALL_A_HURT
+						drawState = F_BALL_A_HURT
 					Else
-						tmpstate = F_BALL_A
+						drawState = F_BALL_A
 					EndIf
 					
-					changeAniState(Self.knuckdrawer, tmpstate, True)
+					changeAniState(Self.knuckdrawer, drawState, True)
 					
 					' Magic number: 1536
 					Self.COLLISION_WIDTH = 1536
@@ -857,12 +1510,12 @@ Class Boss5 Extends BossObject
 					Self.COLLISION_HEIGHT = 1920
 				Case STATE_MACHINE_READY
 					If (Self.IsHurt) Then
-						tmpstate = M_WAIT_HURT
+						drawState = M_WAIT_HURT
 					Else
-						tmpstate = M_WAIT
+						drawState = M_WAIT
 					EndIf
 					
-					changeAniState(Self.knuckdrawer, tmpstate, True)
+					changeAniState(Self.knuckdrawer, drawState, True)
 					
 					' Magic numbers: 1024, 1664
 					Self.COLLISION_WIDTH = 1024
@@ -879,24 +1532,24 @@ Class Boss5 Extends BossObject
 					EndIf
 					
 					If (Self.IsHurt) Then
-						tmpstate = M_BALL_B_HURT
+						drawState = M_BALL_B_HURT
 					Else
-						tmpstate = M_BALL_B
+						drawState = M_BALL_B
 					EndIf
 					
-					changeAniState(Self.knuckdrawer, tmpstate, True, Self.AttackStartDirection)
+					changeAniState(Self.knuckdrawer, drawState, True, Self.AttackStartDirection)
 					
 					' Magic number: 1536
 					Self.COLLISION_WIDTH = 1536
 					Self.COLLISION_HEIGHT = 1536
 				Case STATE_MACHINE_BALL_UP
 					If (Self.IsHurt) Then
-						tmpstate = M_BALL_A_HURT
+						drawState = M_BALL_A_HURT
 					Else
-						tmpstate = M_BALL_A
+						drawState = M_BALL_A
 					EndIf
 					
-					changeAniState(Self.knuckdrawer, tmpstate, True)
+					changeAniState(Self.knuckdrawer, drawState, True)
 					
 					' Magic number: 1536
 					Self.COLLISION_WIDTH = 1536
@@ -905,12 +1558,12 @@ Class Boss5 Extends BossObject
 					Self.flydefence.setHurtState(False)
 				Case STATE_MACHINE_MISSILE_READY
 					If (Self.IsHurt) Then
-						tmpstate = M_MISSILE_READY_HURT
+						drawState = M_MISSILE_READY_HURT
 					Else
-						tmpstate = M_MISSILE_READY
+						drawState = M_MISSILE_READY
 					EndIf
 					
-					changeAniState(Self.knuckdrawer, tmpstate, False)
+					changeAniState(Self.knuckdrawer, drawState, False)
 					
 					' Magic numbers: 1024, 1664
 					Self.COLLISION_WIDTH = 1024
@@ -918,7 +1571,7 @@ Class Boss5 Extends BossObject
 			End Select
 			
 			' Return the state we chose.
-			Return result
+			Return newState
 		End
 		
 		Method draw:Void(g:MFGraphics)

@@ -468,7 +468,7 @@
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>14</X>
-        <Y>78</Y>
+        <Y>110</Y>
       </CursorPos>
       <DocGUID>9738c019-aeda-4c8b-af83-0cf043b8f256</DocGUID>
       <Bookmarks />
@@ -798,8 +798,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss5.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>13</X>
-        <Y>917</Y>
+        <X>60</X>
+        <Y>1013</Y>
       </CursorPos>
       <DocGUID>8ef65447-a1b9-4c4b-bd99-0687cb32a90c</DocGUID>
       <Bookmarks />
@@ -1059,8 +1059,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\enemyobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>22</X>
-        <Y>153</Y>
+        <X>19</X>
+        <Y>123</Y>
       </CursorPos>
       <DocGUID>dcf355fc-0af5-46b1-8f3d-5e20a64a2e12</DocGUID>
       <Bookmarks />
@@ -1516,8 +1516,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>25</X>
-        <Y>338</Y>
+        <X>17</X>
+        <Y>383</Y>
       </CursorPos>
       <DocGUID>7df2e3e4-ff52-4fb7-a296-22530b355e07</DocGUID>
       <Bookmarks />
