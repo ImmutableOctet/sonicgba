@@ -8,6 +8,7 @@ Private
 	Import lib.animationdrawer
 	Import lib.myrandom
 	Import lib.soundsystem
+	Import lib.constutil
 	
 	Import sonicgba.boss4ice
 	Import sonicgba.bossbroken
@@ -234,6 +235,132 @@ Class Boss4 Extends BossObject
 			
 			setBossHP()
 		End
+		
+		' Methods:
+		
+		' Extensions:
+		Method onPlayerAttack:Void(p:PlayerObject, direction:Int) ' animationID:Int
+			Self.HP -= 1
+			
+			p.doBossAttackPose(Self, direction)
+			
+			setAniState(Self.faceDrawer, FACE_HURT)
+			
+			Self.pro_machine_state = Self.machine_state
+			Self.machine_state = (Self.pro_machine_state + 1)
+			
+			setAniState(Self.machineDrawer, Self.machine_state)
+			
+			If (Self.HP = 0) Then
+				Self.state = STATE_BROKEN
+				
+				Self.isNoneIce = True
+				
+				Self.fly_top = (Self.posY + FLY_TOP_OFFSETY)
+				
+				' Magic number: 564224
+				Self.fly_end = 564224
+				
+				For Local i:= 0 Until 3 ' Self.parts_pos.Length
+					Self.parts_pos[i][0] = Self.posX
+					Self.parts_pos[i][1] = Self.posY
+					
+					' Magic numbers: -640, 640, -320, -512
+					Self.parts_v[i][0] = PickValue(MyRandom.nextInt(0, 10) > 5, -640, 640)
+					Self.parts_v[i][1] = PickValue(MyRandom.nextInt(0, 10) > 5, -320, -512)
+				Next
+				
+				setAniState(Self.faceDrawer, FACE_SMILE)
+				
+				Local x:= (Self.posX Shr 6)
+				Local y:= (Self.posY Shr 6)
+				
+				Self.bossbroken = New BossBroken(ENEMY_BOSS4, x, y, 0, 0, 0, 0)
+				
+				GameObject.addGameObject(Self.bossbroken, x, y)
+			EndIf
+			
+			playHitSound()
+		End
+	Private
+		' Methods:
+		Method facePosY:Int()
+			Select (Self.machineDrawer.getCurrentFrame())
+				Case MACHINE_MOVE, MACHINE_ATTACK
+					Return 2752
+				Case MACHINE_MOVE_HURT, MACHINE_ATTACK_HURT, MACHINE_WAIT
+					Return 2688
+				Case MACHINE_WAIT_HURT
+					Return 2816
+				Default
+					Return 2688
+			End Select
+		End
+		
+		Method setAniState:Void(aniDrawer:AnimationDrawer, state:Int)
+			If (aniDrawer = Self.faceDrawer) Then
+				Self.face_state = state
+			EndIf
+			
+			aniDrawer.setActionId(state)
+			aniDrawer.setLoop(True)
+		End
+		
+		Method setAniState:Void(machine_state:Int, face_state:Int)
+			Self.machineDrawer.setActionId(machine_state)
+			Self.machineDrawer.setLoop(True)
+			
+			Self.faceDrawer.setActionId(face_state)
+			Self.faceDrawer.setLoop(True)
+			
+			Self.face_state = face_state
+		End
+		
+		Method setMoveConf:Void()
+			If (Self.posX > SIDE_MIDDLE) Then
+				If (Self.direct) Then
+					Self.move_velX = -MOVE_SPEED
+				Else
+					Self.move_velX = MOVE_SPEED
+				EndIf
+			ElseIf (Self.direct) Then
+				Self.move_velX = MOVE_SPEED
+			Else
+				Self.move_velX = -MOVE_SPEED
+			EndIf
+			
+			Local point:= MyRandom.nextInt(0, 100)
+			
+			If (point < 5) Then
+				Self.move_distance = 1
+			ElseIf (point < 20) Then ' TOUCH_BOTTOM_CNT_MAX
+				Self.move_distance = 2
+			ElseIf (point < 35) Then
+				Self.move_distance = 3
+			ElseIf (point < 55) Then
+				Self.move_distance = 4
+			ElseIf (point < 75) Then
+				Self.move_distance = 4
+			ElseIf (point < 90) Then
+				Self.move_distance = 6
+			Else
+				Self.move_distance = 7
+			EndIf
+			
+			setAniState(Self.machineDrawer, MACHINE_MOVE) ' 0
+			
+			If (Self.move_velX > 0) Then
+				Self.machineDrawer.setTrans(TRANS_MIRROR)
+			Else
+				Self.machineDrawer.setTrans(TRANS_NONE)
+			EndIf
+			
+			Self.posStartX = Self.posX
+			
+			Self.attack_step = ATTACK_MOVE
+			
+			Self.wait_cn = 0
+		End
 	Public
 		' Functions:
 		Function releaseAllResource:Void()
@@ -252,171 +379,37 @@ Class Boss4 Extends BossObject
 			Self.bossbroken = Null
 		End
 		
-		Private Method facePosY:Int()
-			Select (Self.machineDrawer.getCurrentFrame())
-				Case 0
-				Case 2
-					Return 2752
-				Case 1
-				Case 3
-				Case 4
-					Return 2688
-				Case MACHINE_WAIT_HURT
-					Return 2816
-				Default
-					Return 2688
-			EndIf
-		End
-		
-		Private Method setAniState:Void(aniDrawer:AnimationDrawer, state:Int)
-			
-			If (aniDrawer = Self.faceDrawer) Then
-				Self.face_state = state
-			EndIf
-			
-			aniDrawer.setActionId(state)
-			aniDrawer.setLoop(True)
-		End
-		
-		Private Method setAniState:Void(machine_state:Int, face_state:Int)
-			Self.machineDrawer.setActionId(machine_state)
-			Self.machineDrawer.setLoop(True)
-			Self.faceDrawer.setActionId(face_state)
-			Self.faceDrawer.setLoop(True)
-			Self.face_state = face_state
-		End
-		
-		Private Method setMoveConf:Void()
-			
-			If (Self.posX > SIDE_MIDDLE) Then
-				If (Self.direct) Then
-					Self.move_velX = GimmickObject.PLATFORM_OFFSET_Y
-				Else
-					Self.move_velX = MOVE_SPEED
-				EndIf
-				
-			ElseIf (Self.direct) Then
-				Self.move_velX = MOVE_SPEED
-			Else
-				Self.move_velX = GimmickObject.PLATFORM_OFFSET_Y
-			EndIf
-			
-			Int point = MyRandom.nextInt(0, 100)
-			
-			If (point < MACHINE_WAIT_HURT) Then
-				Self.move_distance = 1
-			ElseIf (point < TOUCH_BOTTOM_CNT_MAX) Then
-				Self.move_distance = 2
-			ElseIf (point < 35) Then
-				Self.move_distance = 3
-			ElseIf (point < 55) Then
-				Self.move_distance = 4
-			ElseIf (point < 75) Then
-				Self.move_distance = MACHINE_WAIT_HURT
-			ElseIf (point < 90) Then
-				Self.move_distance = 6
-			Else
-				Self.move_distance = 7
-			EndIf
-			
-			setAniState(Self.machineDrawer, (Int) 0)
-			
-			If (Self.move_velX > 0) Then
-				Self.machineDrawer.setTrans(2)
-			Else
-				Self.machineDrawer.setTrans(0)
-			EndIf
-			
-			Self.posStartX = Self.posX
-			Self.attack_step = 1
-			Self.wait_cn = 0
-		End
-		
-		Public Method doWhileCollision:Void(object:PlayerObject, direction:Int)
-			
-			If (Self.dead Or Self.state <> 2 Or object <> player) Then
+		Method doWhileCollision:Void(p:PlayerObject, direction:Int)
+			' This behavior may change in the future:
+			If (Self.dead Or Self.state <> STATE_PRO Or p <> player) Then
 				Return
 			EndIf
 			
-			If (Not (player instanceof PlayerTails) Or (player.getCharacterAnimationID() <> 12 And player.getCharacterAnimationID() <> 13)) Then
-				If (player.isAttackingEnemy()) Then
-					If (Self.HP > 0 And Self.face_state <> 2) Then
-						Self.HP -= 1
-						player.doBossAttackPose(Self, direction)
-						setAniState(Self.faceDrawer, (Int) 2)
-						Self.pro_machine_state = Self.machine_state
-						Self.machine_state = Self.pro_machine_state + 1
-						setAniState(Self.machineDrawer, Self.machine_state)
-						
-						If (Self.HP = 0) Then
-							Self.state = 3
-							Self.isNoneIce = True
-							Self.fly_top = Self.posY + FLY_TOP_OFFSETY
-							Self.fly_end = 564224
-							For (Int i = 0; i < 3; i += 1)
-								Self.parts_pos[i][0] = Self.posX
-								Self.parts_pos[i][1] = Self.posY
-								Self.parts_v[i][0] = MyRandom.nextInt(0, 10) > MACHINE_WAIT_HURT ? -640 : MDPhone.SCREEN_HEIGHT
-								Self.parts_v[i][1] = MyRandom.nextInt(0, 10) > MACHINE_WAIT_HURT ? -320 : -512
-							Next
-							setAniState(Self.faceDrawer, (Int) 1)
-							Self.bossbroken = New BossBroken(25, Self.posX Shr 6, Self.posY Shr 6, 0, 0, 0, 0)
-							GameObject.addGameObject(Self.bossbroken, Self.posX Shr 6, Self.posY Shr 6)
-							SoundSystem.getInstance().playSe(35, False)
-							Return
-						EndIf
-						
-						SoundSystem.getInstance().playSe(34, False)
+			If ((p.getCharacterID() <> CHARACTER_TAILS) Or (p.getCharacterAnimationID() <> PlayerTails.TAILS_ANI_FLY_1 And p.getCharacterAnimationID() <> PlayerTails.TAILS_ANI_FLY_2)) Then
+				If (p.isAttackingEnemy()) Then
+					If (Self.HP > 0 And Self.face_state <> FACE_HURT) Then
+						onPlayerAttack(p, direction)
 					EndIf
+				ElseIf (Self.machine_state <> MACHINE_MOVE_HURT And Self.machine_state <> MACHINE_ATTACK_HURT And Self.machine_state <> MACHINE_WAIT_HURT And p.canBeHurt()) Then
+					p.beHurt()
 					
-				ElseIf (Self.machine_state <> 1 And Self.machine_state <> 3 And Self.machine_state <> MACHINE_WAIT_HURT And player.canBeHurt()) Then
-					player.beHurt()
-					setAniState(Self.faceDrawer, (Int) 1)
+					setAniState(Self.faceDrawer, FACE_SMILE)
 				EndIf
 			EndIf
-			
 		End
 		
-		Public Method doWhileBeAttack:Void(object:PlayerObject, direction:Int, animationID:Int)
-			
-			If (Self.state = 2 And Self.HP > 0) Then
-				If ((Not (player instanceof PlayerTails) Or (Not (player.getCharacterAnimationID() = 12 Or player.getCharacterAnimationID() = 13) Or player.getVelY() <= 0)) And Self.face_state <> 2) Then
-					Self.HP -= 1
-					player.doBossAttackPose(Self, direction)
-					setAniState(Self.faceDrawer, (Int) 2)
-					Self.pro_machine_state = Self.machine_state
-					Self.machine_state = Self.pro_machine_state + 1
-					setAniState(Self.machineDrawer, Self.machine_state)
-					
-					If (Self.HP = 0) Then
-						Self.state = 3
-						Self.isNoneIce = True
-						Self.fly_top = Self.posY + FLY_TOP_OFFSETY
-						Self.fly_end = 564224
-						For (Int i = 0; i < 3; i += 1)
-							Self.parts_pos[i][0] = Self.posX
-							Self.parts_pos[i][1] = Self.posY
-							Self.parts_v[i][0] = MyRandom.nextInt(0, 10) > MACHINE_WAIT_HURT ? -640 : MDPhone.SCREEN_HEIGHT
-							Self.parts_v[i][1] = MyRandom.nextInt(0, 10) > MACHINE_WAIT_HURT ? -320 : -512
-						EndIf
-						setAniState(Self.faceDrawer, (Int) 1)
-						Self.bossbroken = New BossBroken(25, Self.posX Shr 6, Self.posY Shr 6, 0, 0, 0, 0)
-						GameObject.addGameObject(Self.bossbroken, Self.posX Shr 6, Self.posY Shr 6)
-						SoundSystem.getInstance().playSe(35, False)
-						Return
-					EndIf
-					
-					SoundSystem.getInstance().playSe(34, False)
+		Method doWhileBeAttack:Void(player:PlayerObject, direction:Int, animationID:Int)
+			If (Self.state = STATE_PRO And Self.HP > 0) Then
+				If (((player.getCharacterID() <> CHARACTER_TAILS) Or (Not (player.getCharacterAnimationID() = PlayerTails.TAILS_ANI_FLY_1 Or player.getCharacterAnimationID() = PlayerTails.TAILS_ANI_FLY_2) Or player.getVelY() <= 0)) And Self.face_state <> FACE_HURT) Then
+					onPlayerAttack(p, direction)
 				EndIf
 			EndIf
-			
 		End
 		
 		Public Method logic:Void()
-			
 			If (Not Self.dead) Then
-				Int preX = Self.posX
-				Int preY = Self.posY
+				Local preX:= Self.posX
+				Local preY:= Self.posY
 				
 				If (Self.state > 0) Then
 					isBossEnter = True
@@ -434,7 +427,7 @@ Class Boss4 Extends BossObject
 							
 							If (Not Self.IsPlayBossBattleBGM) Then
 								bossFighting = True
-								bossID = 25
+								bossID = ENEMY_BOSS4
 								SoundSystem.getInstance().playBgm(22, True)
 								Self.IsPlayBossBattleBGM = True
 							EndIf
@@ -482,7 +475,7 @@ Class Boss4 Extends BossObject
 								Self.laugh_cn += 1
 								break
 							Case 2
-								Self.state = 2
+								Self.state = STATE_PRO
 								Self.attack_step = 0
 								Self.wait_cn = 0
 								MapManager.setCameraDownLimit(SIDE_DOWN2)
@@ -664,7 +657,7 @@ Class Boss4 Extends BossObject
 							Self.touch_bottom_cnt += 1
 							
 							If (Self.touch_bottom_cnt > TOUCH_BOTTOM_CNT_MAX) Then
-								Self.state = 4
+								Self.state = STATE_ESCAPE
 								bossFighting = False
 								SoundSystem.getInstance().playBgm(StageManager.getBgmId(), True)
 							EndIf
@@ -692,17 +685,17 @@ Class Boss4 Extends BossObject
 						
 						If (Self.WaitCnt = 1 And Self.boatdrawer.checkEnd()) Then
 							Self.escapefacedrawer.setActionId(0)
-							Self.escapefacedrawer.setTrans(2)
+							Self.escapefacedrawer.setTrans(TRANS_MIRROR)
 							Self.escapefacedrawer.setLoop(True)
 							Self.boatdrawer.setActionId(1)
-							Self.boatdrawer.setTrans(2)
+							Self.boatdrawer.setTrans(TRANS_MIRROR)
 							Self.boatdrawer.setLoop(False)
 							Self.WaitCnt = 2
 						EndIf
 						
 						If (Self.WaitCnt = 2 And Self.boatdrawer.checkEnd()) Then
 							Self.boatdrawer.setActionId(0)
-							Self.boatdrawer.setTrans(2)
+							Self.boatdrawer.setTrans(TRANS_MIRROR)
 							Self.boatdrawer.setLoop(True)
 							Self.WaitCnt = 3
 						EndIf
@@ -725,14 +718,14 @@ Class Boss4 Extends BossObject
 		Public Method draw:Void(g:MFGraphics)
 			
 			If (Not Self.dead) Then
-				If (Self.state <> 3 And Self.state <> 4) Then
+				If (Self.state <> STATE_BROKEN And Self.state <> STATE_ESCAPE) Then
 					drawInMap(g, Self.machineDrawer)
 					
 					If (Self.face_state <> 0) Then
 						drawInMap(g, Self.faceDrawer, Self.posX, Self.posY + facePosY())
 					EndIf
 					
-				ElseIf (Self.state = 3) Then
+				ElseIf (Self.state = STATE_BROKEN) Then
 					If (Self.bossbroken <> Null) Then
 						Self.bossbroken.draw(g)
 					EndIf
@@ -744,7 +737,7 @@ Class Boss4 Extends BossObject
 					drawInMap(g, Self.machinePartsdrawer, Self.parts_pos[2][0], Self.parts_pos[2][1])
 					drawInMap(g, machineBase, Self.posX, Self.posY, 3)
 					drawInMap(g, Self.faceDrawer, Self.posX, Self.posY)
-				ElseIf (Self.state = 4) Then
+				ElseIf (Self.state = STATE_ESCAPE) Then
 					drawInMap(g, Self.boatdrawer, Self.posX, Self.posY - 960)
 					drawInMap(g, Self.escapefacedrawer, Self.posX, Self.posY - 2624)
 				EndIf

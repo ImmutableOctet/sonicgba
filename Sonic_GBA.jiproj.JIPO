@@ -150,8 +150,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\define\mdphone.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>6</X>
-        <Y>9</Y>
+        <X>7</X>
+        <Y>40</Y>
       </CursorPos>
       <DocGUID>4696eba6-78b1-43a5-bfda-0e3afbb72342</DocGUID>
       <Bookmarks />
@@ -467,8 +467,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>19</X>
-        <Y>23</Y>
+        <X>9</X>
+        <Y>110</Y>
       </CursorPos>
       <DocGUID>9738c019-aeda-4c8b-af83-0cf043b8f256</DocGUID>
       <Bookmarks />
@@ -734,8 +734,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss1.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>77</X>
-        <Y>227</Y>
+        <X>42</X>
+        <Y>229</Y>
       </CursorPos>
       <DocGUID>6538718f-c31b-47b0-b820-75a5e32d327f</DocGUID>
       <Bookmarks />
@@ -784,8 +784,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss4.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>42</Y>
+        <X>8</X>
+        <Y>397</Y>
       </CursorPos>
       <DocGUID>2dd99e0d-b3bd-4275-a2df-ce5cf52c3355</DocGUID>
       <Bookmarks />
@@ -848,8 +848,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bossobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>21</X>
-        <Y>41</Y>
+        <X>54</X>
+        <Y>43</Y>
       </CursorPos>
       <DocGUID>7a8567ce-8c49-4d32-a128-4cb121a31589</DocGUID>
       <Bookmarks />
@@ -1052,8 +1052,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\enemyobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>26</X>
-        <Y>95</Y>
+        <X>33</X>
+        <Y>115</Y>
       </CursorPos>
       <DocGUID>dcf355fc-0af5-46b1-8f3d-5e20a64a2e12</DocGUID>
       <Bookmarks />
@@ -1509,8 +1509,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>32</X>
-        <Y>4694</Y>
+        <X>35</X>
+        <Y>4027</Y>
       </CursorPos>
       <DocGUID>7df2e3e4-ff52-4fb7-a296-22530b355e07</DocGUID>
       <Bookmarks />
@@ -1531,8 +1531,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playertails.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>35</X>
-        <Y>98</Y>
+        <X>17</X>
+        <Y>77</Y>
       </CursorPos>
       <DocGUID>c14a7e7c-5e09-4c62-afb9-a1f88aca35d6</DocGUID>
       <Bookmarks />
