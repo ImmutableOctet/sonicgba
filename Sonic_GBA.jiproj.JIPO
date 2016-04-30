@@ -1033,8 +1033,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\collisionmap.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>12</X>
-        <Y>188</Y>
+        <X>4</X>
+        <Y>189</Y>
       </CursorPos>
       <DocGUID>5b1efba4-ee54-47aa-9b74-ca352fb53241</DocGUID>
       <Bookmarks />
