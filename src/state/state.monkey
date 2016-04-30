@@ -124,18 +124,20 @@ Class State Implements StringIndex Abstract ' SonicDef
 		Const BAR_ID_BLUE:Int = 0
 		Const BAR_ID_WHITE:Int = 2
 		
-		Const BG_NUM:Int = ((SCREEN_WIDTH + BACKGROUND_WIDTH) - 1) / BACKGROUND_WIDTH
+		Global BG_NUM:Int = ((SCREEN_WIDTH + BACKGROUND_WIDTH) - 1) / BACKGROUND_WIDTH ' Const
 		
-		Const CASE_WIDTH:Int = MENU_RECT_WIDTH
-		Const CASE_HEIGHT:Int = (SCREEN_HEIGHT - 60)
+		Global CASE_WIDTH:Int = MENU_RECT_WIDTH ' Const
+		Global CASE_HEIGHT:Int = (SCREEN_HEIGHT - 60) ' Const
 		
-		Const CASE_X:Int = ((SCREEN_WIDTH - MENU_RECT_WIDTH) Shr 1) ' / 2
+		Global CASE_X:Int = ((SCREEN_WIDTH - MENU_RECT_WIDTH) / 2) ' Shr 1 ' Const
+		
 		Const CASE_Y:Int = 30
 		
 		Const COMFIRM_FRAME_ID:Int = 100
 		Const COMFIRM_ID:Int = 10
-		Const COMFIRM_X:Int = (SCREEN_WIDTH Shr 1) ' / 2
-		Const COMFIRM_Y:Int = (SCREEN_HEIGHT Shr 1) ' / 2
+		
+		Global COMFIRM_X:Int = (SCREEN_WIDTH / 2) ' Shr 1 ' Const
+		Global COMFIRM_Y:Int = (SCREEN_HEIGHT / 2) ' Shr 1 ' Const
 		
 		Const DRAW_NUM:Int = 2
 		
@@ -180,7 +182,7 @@ Class State Implements StringIndex Abstract ' SonicDef
 		
 		Global RESET_STR:String[] = MyAPI.getStrings("History reset!", WARNING_FONT_WIDTH) ' ~u8bb0~u5f55~u5df2~u91cd~u7f6e~uff01
 		Global RESET_HEIGHT:Int = (RESET_STR.Length * LINE_SPACE) + BAR_HEIGHT ' Const
-		Const RESET_Y_DES:Int = (SCREEN_HEIGHT - RESET_HEIGHT)
+		Global RESET_Y_DES:Int = (SCREEN_HEIGHT - RESET_HEIGHT) ' Const
 		
 		Const RETURN_PRESSED:Int = 400
 		
@@ -203,8 +205,8 @@ Class State Implements StringIndex Abstract ' SonicDef
 		
 		Const TEXT_DISPLAY_WIDTH:Int = 188
 		
-		Const TOOL_TIP_FONT_WIDTH:Int = WARNING_FONT_WIDTH
-		Const TOOL_TIP_WIDTH:Int = WARNING_WIDTH
+		Global TOOL_TIP_FONT_WIDTH:Int = WARNING_FONT_WIDTH ' Const
+		Global TOOL_TIP_WIDTH:Int = WARNING_WIDTH ' Const
 		
 		Global WARNING_FONT_WIDTH:Int = (SCREEN_WIDTH - ((WARNING_X + 5) * 2)) ' (10 / 2) ' Const
 		Global WARNING_HEIGHT:Int = ((WARNING_STR.Length * LINE_SPACE) + BAR_HEIGHT) ' Const
@@ -301,7 +303,7 @@ Class State Implements StringIndex Abstract ' SonicDef
 		Global touchkeyboardDrawer:AnimationDrawer
 		Global trytimes:Int = 3 ' STATE_SELECT_RACE_STAGE
 		Global upArrowDrawer:AnimationDrawer
-		Global VOLUME_X:Int = (SCREEN_WIDTH - (((VOL_IMAGE_WIDTH - 1) * 10) + 1)) Shr 1
+		Global VOLUME_X:Int = ((SCREEN_WIDTH - (((VOL_IMAGE_WIDTH - 1) * 10) + 1)) / 2) ' Shr 1
 		Global warningY:Int = WARNING_Y_DES_2
 	Private
 		' Fields:

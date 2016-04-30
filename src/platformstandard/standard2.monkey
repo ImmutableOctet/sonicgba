@@ -29,6 +29,8 @@ Private
 	Import com.sega.mobile.framework.device.mfimage
 	Import com.sega.mobile.framework.ui.mfbutton
 	
+	Import regal.typetool
+	
 	Import application
 Public
 
@@ -565,6 +567,7 @@ Class Standard2 ' Implements Def ' Final
 				Local countDiff:Int
 				
 				Local countBase:= ((SPLASH_2_COME_IN_COUNT - ((i * FRAME_DIFF) / CLIP_NUM)) - 1)
+				
 				Local countDiff2:= (countBase - count)
 				
 				If (countDiff2 < 0) Then
@@ -573,10 +576,8 @@ Class Standard2 ' Implements Def ' Final
 					countDiff = countDiff2
 				EndIf
 				
-				countDiff2 = g
-				
-				MyAPI.drawImage(countDiff2, image, 0, i * space, image.getWidth(), clipHeight + 1, 0, x + ((((-screenWidth) - ((24 - i) * STATE_OVER)) * countDiff) / countBase), y + (i * space), 17)
-				MyAPI.drawImage(countDiff2, image, 0, (i * space) + clipHeight, image.getWidth(), clipHeight + 1, 0, x + (((((24 - i) * STATE_OVER) + screenWidth) * countDiff) / countBase), ((i * space) + y) + clipHeight, 17)
+				MyAPI.drawImage(g, image, 0, i * space, image.getWidth(), clipHeight + 1, 0, x + ((((-screenWidth) - ((24 - i) * STATE_OVER)) * countDiff) / countBase), y + (i * space), 17)
+				MyAPI.drawImage(g, image, 0, (i * space) + clipHeight, image.getWidth(), clipHeight + 1, 0, x + (((((24 - i) * STATE_OVER) + screenWidth) * countDiff) / countBase), ((i * space) + y) + clipHeight, 17)
 			Next
 		End
 		

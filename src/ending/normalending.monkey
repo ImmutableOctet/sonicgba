@@ -958,7 +958,7 @@ Class NormalEnding Extends PlainEnding ' Final
 		End
 		
 		Method interruptInit:Void()
-			If (Self.interruptDrawer = Null) Then
+			If (Self.interruptDrawer.Length = 0) Then
 				Key.touchInterruptInit()
 				
 				Self.interruptDrawer = Animation.getInstanceFromQi("/animation/utl_res/suspend_resume.dat")[0].getDrawer(0, True, 0)

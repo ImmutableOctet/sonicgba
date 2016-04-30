@@ -472,7 +472,11 @@ Class GameState Extends State
 	Public
 		' Functions:
 		Function setPauseMenu:Void()
-			PAUSE_NORMAL_MODE = PickValue(State.IsToolsCharge(), PAUSE_NORMAL_MODE_SHOP, PAUSE_NORMAL_MODE_NOSHOP)
+			If (State.IsToolsCharge()) Then
+				PAUSE_NORMAL_MODE = PAUSE_NORMAL_MODE_SHOP
+			Else
+				PAUSE_NORMAL_MODE = PAUSE_NORMAL_MODE_NOSHOP
+			EndIf
 		End
 		
 		Function enterSpStage:Void(ringNum:Int, chekPointID:Int, timeCount:Int)
@@ -2868,7 +2872,7 @@ Class GameState Extends State
 		End
 		
 		Method interruptInit:Void()
-			If (Self.interruptDrawer = Null) Then
+			If (Self.interruptDrawer.Length = 0) Then
 				Self.interruptDrawer = Animation.getInstanceFromQi("/animation/utl_res/suspend_resume.dat")[0].getDrawer(0, True, 0)
 			EndIf
 			
@@ -3479,7 +3483,7 @@ Class GameState Extends State
 		End
 		
 		Method initStageInfoClearRes:Void()
-			If (Self.stageInfoClearAni = Null) Then
+			If (Self.stageInfoClearAni.Length = 0) Then
 				Self.stageInfoClearAni = Animation.getInstanceFromQi("/animation/utl_res/stage_intro_clear.dat")
 				
 				stageInfoAniDrawer = Self.stageInfoClearAni[0].getDrawer(0, False, 0)

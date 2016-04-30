@@ -2,6 +2,9 @@
 
 Public
 
+' Friends:
+Friend sonicgba.stagemanager
+
 ' Imports:
 Private
 	Import gameengine.def
@@ -28,6 +31,8 @@ Private
 	Import special.ssdef
 	
 	Import state.state
+	Import state.gamestate
+	Import state.specialstagestate
 	
 	'Import android.os.message
 	
@@ -40,6 +45,56 @@ Private
 Public
 
 Class TitleState Extends State
+	Protected
+		' Constant variable(s):
+		Const STATE_ABOUT:Int = 11
+		Const STATE_BP_TRY_PAYING:Int = 22
+		Const STATE_CHARACTER_RECORD:Int = 25
+		Const STATE_CHARACTER_SELECT:Int = 23
+		Const STATE_EXIT:Int = 12
+		Const STATE_GAMEOVER_RANKING:Int = 15
+		Const STATE_GOTO_GAME:Int = 5
+		Const STATE_HELP:Int = 10
+		Const STATE_INTERGRADE_RECORD:Int = 26
+		Const STATE_INTERRUPT:Int = 16
+		Const STATE_MAIN_MENU:Int = 2
+		Const STATE_MORE_GAME:Int = 7
+		Const STATE_MOVING:Int = 2
+		Const STATE_OPENING:Int = 3
+		Const STATE_OPTION:Int = 9
+		Const STATE_OPTION_CREDIT:Int = 35
+		Const STATE_OPTION_DIFF:Int = 27
+		Const STATE_OPTION_HELP:Int = 34
+		Const STATE_OPTION_KEY_SET:Int = 31
+		Const STATE_OPTION_LANGUAGE:Int = 33
+		Const STATE_OPTION_RESET_RECORD:Int = 36
+		Const STATE_OPTION_RESET_RECORD_ENSURE:Int = 37
+		Const STATE_OPTION_SENSOR_SET:Int = 40
+		Const STATE_OPTION_SOUND:Int = 28
+		Const STATE_OPTION_SOUND_VOLUMN:Int = 39
+		Const STATE_OPTION_SP_SET:Int = 32
+		Const STATE_OPTION_TIME_LIMIT:Int = 30
+		Const STATE_OPTION_VIBRATION:Int = 29
+		Const STATE_PRESS_START:Int = 1
+		Const STATE_PRE_PRESS_START:Int = 38
+		Const STATE_PRO_RACE_MODE:Int = 24
+		Const STATE_QUIT:Int = 13
+		Const STATE_RACE_MODE:Int = 6
+		Const STATE_RANKING:Int = 8
+		Const STATE_RESET_RECORD_ASK:Int = 17
+		Const STATE_RETURN_TO_LOGO_1:Int = 20
+		Const STATE_RETURN_TO_LOGO_2:Int = 21
+		Const STATE_SCORE_UPDATE:Int = 42
+		Const STATE_SCORE_UPDATED:Int = 44
+		Const STATE_SCORE_UPDATE_ENSURE:Int = 43
+		Const STATE_SEGA_LOGO:Int = 0
+		Const STATE_SEGA_MORE:Int = 41
+		Const STATE_SELECT:Int = 1
+		Const STATE_STAGE_SELECT:Int = 14
+		Const STATE_START_GAME:Int = 4
+		Const STATE_START_TO_MENU_1:Int = 18
+		Const STATE_START_TO_MENU_2:Int = 19
+		Const STATE_UP:Int = 0
 	Private
 		' Constant variable(s):
 		Const ACTION_NUM_OFFSET:Int = 49
@@ -167,54 +222,6 @@ Class TitleState Extends State
 		
 		Global START_GAME_MENU:Int[] = [145, 12] ' Const
 		
-		Const STATE_ABOUT:Int = 11
-		Const STATE_BP_TRY_PAYING:Int = 22
-		Const STATE_CHARACTER_RECORD:Int = 25
-		Const STATE_CHARACTER_SELECT:Int = 23
-		Const STATE_EXIT:Int = 12
-		Const STATE_GAMEOVER_RANKING:Int = 15
-		Const STATE_GOTO_GAME:Int = 5
-		Const STATE_HELP:Int = 10
-		Const STATE_INTERGRADE_RECORD:Int = 26
-		Const STATE_INTERRUPT:Int = 16
-		Const STATE_MAIN_MENU:Int = 2
-		Const STATE_MORE_GAME:Int = 7
-		Const STATE_MOVING:Int = 2
-		Const STATE_OPENING:Int = 3
-		Const STATE_OPTION:Int = 9
-		Const STATE_OPTION_CREDIT:Int = 35
-		Const STATE_OPTION_DIFF:Int = 27
-		Const STATE_OPTION_HELP:Int = 34
-		Const STATE_OPTION_KEY_SET:Int = 31
-		Const STATE_OPTION_LANGUAGE:Int = 33
-		Const STATE_OPTION_RESET_RECORD:Int = 36
-		Const STATE_OPTION_RESET_RECORD_ENSURE:Int = 37
-		Const STATE_OPTION_SENSOR_SET:Int = 40
-		Const STATE_OPTION_SOUND:Int = 28
-		Const STATE_OPTION_SOUND_VOLUMN:Int = 39
-		Const STATE_OPTION_SP_SET:Int = 32
-		Const STATE_OPTION_TIME_LIMIT:Int = 30
-		Const STATE_OPTION_VIBRATION:Int = 29
-		Const STATE_PRESS_START:Int = 1
-		Const STATE_PRE_PRESS_START:Int = 38
-		Const STATE_PRO_RACE_MODE:Int = 24
-		Const STATE_QUIT:Int = 13
-		Const STATE_RACE_MODE:Int = 6
-		Const STATE_RANKING:Int = 8
-		Const STATE_RESET_RECORD_ASK:Int = 17
-		Const STATE_RETURN_TO_LOGO_1:Int = 20
-		Const STATE_RETURN_TO_LOGO_2:Int = 21
-		Const STATE_SCORE_UPDATE:Int = 42
-		Const STATE_SCORE_UPDATED:Int = 44
-		Const STATE_SCORE_UPDATE_ENSURE:Int = 43
-		Const STATE_SEGA_LOGO:Int = 0
-		Const STATE_SEGA_MORE:Int = 41
-		Const STATE_SELECT:Int = 1
-		Const STATE_STAGE_SELECT:Int = 14
-		Const STATE_START_GAME:Int = 4
-		Const STATE_START_TO_MENU_1:Int = 18
-		Const STATE_START_TO_MENU_2:Int = 19
-		Const STATE_UP:Int = 0
 		Const TIME_ATTACK_SPEED_X:Int = -2
 		Const TIME_ATTACK_WIDTH:Int = 128
 		Const TITLE_BG_COLOR_1:Int = 15530750
@@ -804,7 +811,7 @@ Class TitleState Extends State
 					menuBgDraw(g)
 					optionDraw(g)
 					State.drawFade(g)
-					comfirmDraw(g, StringIndex.STR_RESET_RECORD_COMFIRM)
+					comfirmDraw(g, 147)
 					State.drawSoftKey(g, True, True)
 				Case STATE_START_TO_MENU_1, STATE_START_TO_MENU_2, STATE_RETURN_TO_LOGO_1, STATE_RETURN_TO_LOGO_2
 					titleBgDraw0(g)
@@ -1874,7 +1881,7 @@ Class TitleState Extends State
 			EndIf
 			
 			animationDrawer.setActionId(i + STATE_OPTION_DIFF)
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + StringIndex.STR_SOUND_OPEN) + Self.optionArrowDriveY)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + 144) + Self.optionArrowDriveY)
 			
 			If (Key.touchmenuoptionitems[STATE_STAGE_SELECT].Isin() And Self.menuOptionCursor = STATE_MORE_GAME And Self.isSelectable) Then
 				i = ZONE_NUM_OFFSET
@@ -1899,7 +1906,7 @@ Class TitleState Extends State
 			EndIf
 			
 			If (Self.optionDownArrowAvailable) Then
-				Self.optionArrowDownDrawer.draw(g, (SCREEN_WIDTH Shr 1) + def.TOUCH_OPTION_ARROW_OFFSET_X, (SCREEN_HEIGHT Shr 1) + STATE_CHARACTER_RECORD)
+				Self.optionArrowDownDrawer.draw(g, (SCREEN_WIDTH Shr 1) + def.TOUCH_OPTION_ARROW_OFFSET_X, (SCREEN_HEIGHT Shr 1) + 25)
 			EndIf
 			
 			Self.optionOffsetX -= STATE_START_GAME
@@ -2348,7 +2355,7 @@ Class TitleState Extends State
 		End
 		
 		Method interruptInit:Void()
-			If (Self.interruptDrawer = Null) Then
+			If (Self.interruptDrawer.Length = 0) Then
 				Self.interruptDrawer = Animation.getInstanceFromQi("/animation/utl_res/suspend_resume.dat")[0].getDrawer(0, True, 0)
 			EndIf
 			
@@ -2363,7 +2370,7 @@ Class TitleState Extends State
 			Self.openingFrame = 0
 			Self.openingState = OPENING_STATE_EMERALD
 			
-			If (Self.openingAnimation = Null) Then
+			If (Self.openingAnimation.Length = 0) Then
 				Self.openingAnimation = Animation.getInstanceFromQi("/animation/opening/opening.dat")
 				Self.openingDrawer = New AnimationDrawer[Self.openingAnimation.Length]
 				
@@ -2547,7 +2554,7 @@ Class TitleState Extends State
 		End
 		
 		Method initTitleRes2:Void()
-			If (Self.titleAni = Null) Then
+			If (Self.titleAni.Length = 0) Then
 				Self.titleAni = Animation.getInstanceFromQi("/animation/utl_res/title.dat")
 				Self.titleAniDrawer = Self.titleAni[0].getDrawer(0, True, 0)
 			EndIf
@@ -3021,7 +3028,7 @@ Class TitleState Extends State
 		End
 		
 		Method initTimeStageRes:Void()
-			If (Self.timeAttAni = Null) Then
+			If (Self.timeAttAni.Length = 0) Then
 				Self.timeAttAni = Animation.getInstanceFromQi("/animation/utl_res/time_attack.dat")
 				Self.timeAttAniDrawer = Self.timeAttAni[0].getDrawer(0, True, 0)
 			EndIf
@@ -3135,7 +3142,7 @@ Class TitleState Extends State
 		End
 		
 		Method initStageSelectRes:Void()
-			If (Self.stageSelAni.Length > 0) Then
+			If (Self.stageSelAni.Length = 0) Then
 				Self.stageSelAni = Animation.getInstanceFromQi("/animation/utl_res/stage_select.dat")
 				Self.stageSelAniDrawer = Self.stageSelAni[0].getDrawer(0, True, 0)
 				Self.stageSelArrowUpDrawer = Self.stageSelAni[0].getDrawer(MAIN_MENU_CENTER_X, True, 0)
@@ -3555,30 +3562,30 @@ Class TitleState Extends State
 		End
 		
 		Method drawStageEmerald:Void(g:MFGraphics, stageId:Int)
-			If (stageId <> STATE_MORE_GAME) Then
+			If (stageId <> 7) Then
 				Select (SpecialStageState.emeraldState(stageId))
-					Case STATE_SELECT
-						Self.stageSelEmeraldDrawer.draw(g, PickValue((stageId < STATE_MORE_GAME), (stageId Shr 1) + 2, ((stageId Shr 1) + 2)) + 2, SCREEN_WIDTH, Self.stageSelectArrowDriveY + ((((Self.stageDrawStartY + Self.offsetY[((stageId Shr 1) * 2) + ZONE_NUM_OFFSET]) + (((stageId Shr 1) + ZONE_NUM_OFFSET) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y), False, 0)
-					Case STATE_MOVING
+					Case EMERALD_STATE_SUCCESS
+						Self.stageSelEmeraldDrawer.draw(g, PickValue((stageId < 7), (stageId Shr 1) + 2, ((stageId Shr 1) + 2)) + 2, SCREEN_WIDTH, Self.stageSelectArrowDriveY + ((((Self.stageDrawStartY + Self.offsetY[((stageId Shr 1) * 2) + ZONE_NUM_OFFSET]) + (((stageId Shr 1) + ZONE_NUM_OFFSET) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y), False, 0)
+					Case EMERALD_STATE_FAILD
 						Self.stageSelEmeraldDrawer.draw(g, 0, SCREEN_WIDTH, ((((Self.stageDrawStartY + Self.offsetY[((stageId Shr 1) * 2) + ZONE_NUM_OFFSET]) + (((stageId Shr 1) + ZONE_NUM_OFFSET) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y) + Self.stageSelectArrowDriveY, False, 0)
 					Default
 						' Nothing so far.
 				End Select
 			ElseIf (SpecialStageState.emeraldState(stageId - 1) = 0) Then
 				Select (SpecialStageState.emeraldState(stageId))
-					Case STATE_SELECT
-						Self.stageSelEmeraldDrawer.draw(g, STATE_RACE_MODE, SCREEN_WIDTH, Self.stageSelectArrowDriveY + ((((Self.stageDrawStartY + Self.offsetY[((stageId Shr 1) * 2) + ZONE_NUM_OFFSET]) + (((stageId Shr 1) + ZONE_NUM_OFFSET) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y), False, 0)
-					Case STATE_MOVING
+					Case EMERALD_STATE_SUCCESS
+						Self.stageSelEmeraldDrawer.draw(g, 6, SCREEN_WIDTH, Self.stageSelectArrowDriveY + ((((Self.stageDrawStartY + Self.offsetY[((stageId Shr 1) * 2) + ZONE_NUM_OFFSET]) + (((stageId Shr 1) + ZONE_NUM_OFFSET) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y), False, 0)
+					Case EMERALD_STATE_FAILD
 						Self.stageSelEmeraldDrawer.draw(g, 0, SCREEN_WIDTH, ((((Self.stageDrawStartY + Self.offsetY[((stageId Shr 1) * 2) + ZONE_NUM_OFFSET]) + (((stageId Shr 1) + ZONE_NUM_OFFSET) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y) + Self.stageSelectArrowDriveY, False, 0)
 					Default
 						' Nothing so far.
 				End Select
 			Else
 				Select (SpecialStageState.emeraldState(stageId))
-					Case STATE_SELECT
-						Self.stageSelEmeraldDrawer.draw(g, STATE_MORE_GAME, SCREEN_WIDTH, Self.stageSelectArrowDriveY + ((((Self.stageDrawStartY + Self.offsetY[((stageId Shr 1) * 2) + ZONE_NUM_OFFSET]) + (((stageId Shr 1) + ZONE_NUM_OFFSET) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y), False, 0)
-					Case STATE_MOVING
-						Self.stageSelEmeraldDrawer.draw(g, ZONE_NUM_OFFSET, SCREEN_WIDTH, ((((Self.stageDrawStartY + Self.offsetY[((stageId Shr 1) * 2) + ZONE_NUM_OFFSET]) + (((stageId Shr 1) + ZONE_NUM_OFFSET) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y) + Self.stageSelectArrowDriveY, False, 0)
+					Case EMERALD_STATE_SUCCESS
+						Self.stageSelEmeraldDrawer.draw(g, 7, SCREEN_WIDTH, Self.stageSelectArrowDriveY + ((((Self.stageDrawStartY + Self.offsetY[((stageId Shr 1) * 2) + ZONE_NUM_OFFSET]) + (((stageId Shr 1) + ZONE_NUM_OFFSET) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y), False, 0)
+					Case EMERALD_STATE_FAILD
+						Self.stageSelEmeraldDrawer.draw(g, 1, SCREEN_WIDTH, ((((Self.stageDrawStartY + Self.offsetY[((stageId Shr 1) * 2) + ZONE_NUM_OFFSET]) + (((stageId Shr 1) + ZONE_NUM_OFFSET) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y) + Self.stageSelectArrowDriveY, False, 0) ' ZONE_NUM_OFFSET
 					Default
 						' Nothing so far.
 				End Select
@@ -3586,7 +3593,7 @@ Class TitleState Extends State
 		End
 		
 		Method initRecordRes:Void()
-			If (Self.recordAni = Null) Then
+			If (Self.recordAni.Length = 0) Then
 				Self.recordAni = Animation.getInstanceFromQi("/animation/utl_res/record.dat")
 				Self.recordAniDrawer = Self.recordAni[0].getDrawer(0, True, 0)
 			EndIf
@@ -3725,7 +3732,7 @@ Class TitleState Extends State
 		End
 		
 		Method initIntergradeRecordRes:Void()
-			If (Self.recordAni = Null) Then
+			If (Self.recordAni.Length = 0) Then
 				Self.recordAni = Animation.getInstanceFromQi("/animation/utl_res/record.dat")
 				Self.recordAniDrawer = Self.recordAni[0].getDrawer(0, True, 0)
 			EndIf

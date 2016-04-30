@@ -741,7 +741,7 @@ Class StageManager ' Implements SonicDef
 		End
 		
 		Function getOpenedStageId:Int()
-			If (TitleState.preStageSelectState = STATE_PRO_RACE_MODE) Then
+			If (TitleState.preStageSelectState = TitleState.STATE_PRO_RACE_MODE) Then
 				Return getMaxStageID()
 			EndIf
 			
