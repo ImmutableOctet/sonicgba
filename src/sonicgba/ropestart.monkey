@@ -10,21 +10,22 @@ Friend sonicgba.ropeend
 Private
 	Import lib.myapi
 	Import lib.soundsystem
+	Import lib.crlfp32
 	
-	Import special.specialmap
+	Import sonicgba.gimmickobject
+	Import sonicgba.playerobject
+	Import sonicgba.stagemanager
 	
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
-	
-	Import sonicgba.gimmickobject
 Public
 
 ' Classes:
 Class RopeStart Extends GimmickObject
 	Public
 		' Constant variable(s):
-		Const COLLISION_WIDTH:= SpecialMap.MAP_LENGTH ' 1024
-		Const COLLISION_HEIGHT:= SpecialMap.MAP_LENGTH ' 2560
+		Const COLLISION_WIDTH:= 1024
+		Const COLLISION_HEIGHT:= 2560 ' 1024
 		
 		' Fields:
 		Field degree:Int
