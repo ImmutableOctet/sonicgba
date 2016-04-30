@@ -407,11 +407,15 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const ANI_WIND_JUMP:Int = 29
 		Const ANI_YELL:Int = 30
 		
-		Const ATTACK_POP_POWER:Int = (GRAVITY + 774)
+		Global ATTACK_POP_POWER:Int = (GRAVITY + 774) ' Const
+		
 		Const BALL_HEIGHT_OFFSET:Int = 1024
 		Const BANKING_MIN_SPEED:Int = 500
+		
 		Const BIG_NUM:Int = 2
+		
 		Const CAN_BE_SQUEEZE:Bool = True
+		
 		Const DETECT_HEIGHT:Int = 2048
 		
 		Const FALL_IN_SAND_SLIP_NONE:Int = 0
@@ -444,7 +448,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const NUM_RIGHT:Int = 2
 		
 		Const PAUSE_FRAME_HEIGHT:Int =  (MENU_SPACE * 5) + 20
-		Const PAUSE_FRAME_OFFSET_X:Int = ((-PAUSE_FRAME_WIDTH) / 2)
+		
+		Global PAUSE_FRAME_OFFSET_X:Int = ((-PAUSE_FRAME_WIDTH) / 2) ' Const
+		
 		Const PAUSE_FRAME_OFFSET_Y:Int = ((-PAUSE_FRAME_HEIGHT) / 2)
 		
 		Const RED_NUM:Int = 3
@@ -483,7 +489,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Global cursorIndex:Int
 		Global cursorMax:Int = 5
 		Global FAKE_GRAVITY_ON_BALL:Int = 224
-		Global FAKE_GRAVITY_ON_WALK:Int = NUM_DISTANCE_BIG
+		Global FAKE_GRAVITY_ON_WALK:Int = 72 ' NUM_DISTANCE_BIG
 		Global HURT_POWER_X:Int = 384
 		Global HURT_POWER_Y:Int = -992
 		Global isbarOut:Bool = False
