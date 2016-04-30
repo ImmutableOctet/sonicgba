@@ -148,6 +148,15 @@ Class MFDevice Final
 		' Functions:
 		
 		' Extensions:
+		Function FixResourcePath:String(url:String)
+			If (url.StartsWith("/")) Then
+				' Skip the first slash.
+				Return url[1..]
+			EndIf
+			
+			Return url
+		End
+		
 		Function Update:Void()
 			MFGamePad.keyTick()
 			
@@ -585,15 +594,6 @@ Class MFDevice Final
 		' Record-related:
 		Function ToRecordPath:String(name:String)
 			Return ("records/" + name + ".rms")
-		End
-		
-		Function FixResourcePath:String(url:String)
-			If (url.StartsWith("/")) Then
-				' Skip the first slash.
-				Return url[1..]
-			EndIf
-			
-			Return url
 		End
 		
 		Function readRecord:DataBuffer(dis:Stream)

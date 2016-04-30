@@ -41,6 +41,17 @@ Class TouchDirectKey Implements MFComponent
 		Field OrgVKey:Int
 		Field OutCircleR:Int
 		Field PointDegree:Int
+	Protected
+		' Constructor(s):
+		Method Construct_TouchDirectKey:Void(centerx:Int, centery:Int, outr:Int, noner:Int, type:Int)
+			setCenterPoint(centerx, centery)
+			setCircleRadius(outr)
+			setNoneCircleRadius(noner)
+			
+			type = type
+			
+			reset()
+		End
 	Public
 		' Functions:
 		Function getPressedPointX:Int()
@@ -65,17 +76,11 @@ Class TouchDirectKey Implements MFComponent
 		
 		' Constructor(s):
 		Method New()
-			Self(-1, -1, 1, 0, -1)
+			Construct_TouchDirectKey(-1, -1, 1, 0, -1)
 		End
 		
 		Method New(centerx:Int, centery:Int, outr:Int, noner:Int, type:Int)
-			setCenterPoint(centerx, centery)
-			setCircleRadius(outr)
-			setNoneCircleRadius(noner)
-			
-			type = type
-			
-			reset()
+			Construct_TouchDirectKey(centerx, centery, outr, noner, type)
 		End
 		
 		' Methods:

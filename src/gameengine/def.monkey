@@ -15,7 +15,7 @@ Public
 Global SCREEN_WIDTH:Int = MyAPI.zoomIn(MFDevice.getScreenWidth(), True) ' Const
 Global SCREEN_HEIGHT:Int = MyAPI.zoomIn(MFDevice.getScreenHeight(), True) ' Const
 
-Global FONT_H:= MyAPI.zoomIn(MFGraphics.charHeight(def.FONT)) ' Const
+Global FONT_H:= MyAPI.zoomIn(MFGraphics.charHeight(FONT)) ' Const
 
 Global MOVING_TITLE_TOP:Bool = (SCREEN_WIDTH < SCREEN_HEIGHT) ' Const
 

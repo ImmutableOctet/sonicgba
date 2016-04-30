@@ -612,7 +612,7 @@ Class TitleState Extends State
 					
 					initStageSelectRes()
 					
-					PlayerObject.stageModestate = STATE_PRESS_START
+					GameObject.stageModeState = GameObject.STATE_RACE_MODE
 					
 					SoundSystem.getInstance().playBgm(STATE_OPENING)
 					
@@ -2677,14 +2677,17 @@ Class TitleState Extends State
 		End
 		
 		Method initCharacterSelectRes:Void()
-			If (Self.charSelAni = Null Or Self.charSelFilAni = Null) Then
+			If (Self.charSelAni.Length = 0 Or Self.charSelFilAni.Length = 0) Then
 				Self.charSelAni = Animation.getInstanceFromQi("/animation/utl_res/character_select.dat")
+				
 				Self.charSelAniDrawer = Self.charSelAni[0].getDrawer(0, False, 0)
 				Self.charSelCaseDrawer = Self.charSelAni[0].getDrawer(STATE_OPENING, False, 0)
 				Self.charSelRoleDrawer = Self.charSelAni[0].getDrawer(STATE_START_GAME, False, 0)
 				Self.charSelArrowDrawer = Self.charSelAni[0].getDrawer(STATE_QUIT, True, 0)
 				Self.charSelTitleDrawer = Self.charSelAni[0].getDrawer(STATE_STAGE_SELECT, True, 0)
+				
 				Self.charSelFilAni = Animation.getInstanceFromQi("/animation/utl_res/character_select_filter.dat")
+				
 				Self.charSelFilAniDrawer = Self.charSelFilAni[0].getDrawer(0, False, 0)
 			EndIf
 			
@@ -3146,12 +3149,17 @@ Class TitleState Extends State
 			Key.touchStageSelectModeInit()
 			
 			Self.stageItemNumForShow = STATE_RACE_MODE
-			Self.stageDrawEndY = (Self.stageDrawStartY + (Self.stageItemNumForShow * ITEM_SPACE)) - (ITEM_SPACE Shr 1)
+			
+			Self.stageDrawEndY = (Self.stageDrawStartY + (Self.stageItemNumForShow * ITEM_SPACE)) - (ITEM_SPACE / 2) ' Shr 1
+			
 			Self.stageStartIndex = 0
 			Self.stageDrawOffsetY = 0
+			
 			Self.offsetY = New Int[Self.STAGE_TOTAL_NUM]
 			Self.vY = New Int[Self.STAGE_TOTAL_NUM]
-			Self.offsetY[0] = SCREEN_HEIGHT Shr 1
+			
+			Self.offsetY[0] = (SCREEN_HEIGHT / 2) ' Shr 1
+			
 			Self.vY[0] = STATE_RACE_MODE
 			
 			For Local i:= 1 Until Self.STAGE_TOTAL_NUM
@@ -3488,7 +3496,7 @@ Class TitleState Extends State
 					drawStageName(g, STATE_OPTION_VIBRATION, i, (Self.stageDrawOffsetY + Self.stageselectslide_y) + Self.stageSelectArrowDriveY)
 				ElseIf (i <= StageManager.getOpenedStageId()) Then
 					drawStageName(g, STATE_GAMEOVER_RANKING, i, (Self.stageDrawOffsetY + Self.stageselectslide_y) + Self.stageSelectArrowDriveY)
-				ElseIf ((GameObject.stageModeState = 0 And i < STATE_QUIT) Or (GameObject.stageModestate = STATE_PRESS_START And i < STATE_EXIT)) Then
+				ElseIf ((GameObject.stageModeState = 0 And i < STATE_QUIT) Or (GameObject.stageModeState = GameObject.STATE_RACE_MODE And i < STATE_EXIT)) Then
 					drawStageName(g, ZONE_NUM_OFFSET, i, (Self.stageDrawOffsetY + Self.stageselectslide_y) + Self.stageSelectArrowDriveY)
 				EndIf
 			Next
