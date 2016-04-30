@@ -53,8 +53,8 @@ Class RollHobin Extends BallHobin
 
 		Function staticLogic:Void()
 			degree += DEGREE_VELOCITY
-			degree += MDPhone.SCREEN_WIDTH
-			degree Mod= MDPhone.SCREEN_WIDTH
+			degree += 360
+			degree Mod= 360
 		End
 
 		Method close:Void()
