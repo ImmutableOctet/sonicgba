@@ -2,23 +2,31 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.boss6
+Friend sonicgba.enemyobject
+Friend sonicgba.bulletobject
+
 ' Imports:
 Private
 	Import lib.animation
 	
-	Import com.sega.mobile.framework.device.mfgraphics
-	
 	Import sonicgba.bulletobject
+	
+	Import com.sega.mobile.framework.device.mfgraphics
+	Import com.sega.mobile.framework.utility.mfmath
 Public
 
 ' Classes:
 Class Boss6Bullet Extends BulletObject
 	Private
+		' Constant variable(s):
 		Const COLLISION_WIDTH:Int = 1024
 		Const COLLISION_HEIGHT:Int = 1024
 		
 		Const TOTAL_SPEED:Int = 240
 	Protected
+		' Constructor(s):
 		Method New(x:Int, y:Int, playerx:Int, playery:Int)
 			Super.New(x, y, playerx, playery, False)
 			
@@ -31,12 +39,13 @@ Class Boss6Bullet Extends BulletObject
 			Self.posX = x
 			Self.posY = y
 			
-			Local root:= (Sqrt(((playerx - Self.posX) * (playerx - Self.posX)) + ((playery - Self.posY) * (playery - Self.posY))) Shr 6)
+			Local root:= (MFMath.sqrt(((playerx - Self.posX) * (playerx - Self.posX)) + ((playery - Self.posY) * (playery - Self.posY))) Shr 6)
 			
 			Self.velX = (((playerx - Self.posX) * TOTAL_SPEED) / root)
 			Self.velY = (((playery - Self.posY) * TOTAL_SPEED) / root)
 		End
 	Public
+		' Methods:
 		Method bulletLogic:Void()
 			checkWithPlayer(Self.posX, Self.posY, Self.posX + Self.velX, Self.posY + Self.velY)
 			
