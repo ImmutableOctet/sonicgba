@@ -2,6 +2,11 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.enemyobject
+Friend sonicgba.bossobject
+Friend sonicgba.bossf2
+
 ' Imports:
 Private
 	Import lib.animation

@@ -34,6 +34,8 @@ Private
 	
 	Import com.sega.engine.action.acblock
 	Import com.sega.engine.action.acobject
+	Import com.sega.engine.action.acparam
+	
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
 	

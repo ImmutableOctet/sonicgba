@@ -2,6 +2,11 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.enemyobject
+Friend sonicgba.bossobject
+Friend sonicgba.boss5
+
 ' Imports:
 Private
 	'Import sonicgba.sonicdef

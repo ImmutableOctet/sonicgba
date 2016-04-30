@@ -2,6 +2,12 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.bulletobject
+Friend sonicgba.enemyobject
+Friend sonicgba.bossobject
+Friend sonicgba.bossf3
+
 ' Imports:
 Private
 	Import lib.myapi

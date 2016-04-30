@@ -2,6 +2,11 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.enemyobject
+Friend sonicgba.bossobject
+Friend sonicgba.bossf1
+
 ' Imports:
 Private
 	Import com.sega.mobile.framework.device.mfgraphics

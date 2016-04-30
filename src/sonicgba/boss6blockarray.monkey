@@ -4,6 +4,7 @@ Public
 
 ' Friends:
 Friend sonicgba.gimmickobject
+Friend sonicgba.bossobject
 Friend sonicgba.enemyobject
 'Friend sonicgba.boss6block
 Friend sonicgba.boss6

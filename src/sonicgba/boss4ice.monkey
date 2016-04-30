@@ -3,8 +3,10 @@ Strict
 Public
 
 ' Friends:
-Friend sonicgba.enemyobject
+Friend sonicgba.platform
 Friend sonicgba.gimmickobject
+Friend sonicgba.enemyobject
+Friend sonicgba.bossobject
 Friend sonicgba.boss4
 
 ' Imports:
