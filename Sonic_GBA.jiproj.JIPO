@@ -2104,8 +2104,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\specialstagestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>21</X>
-        <Y>668</Y>
+        <X>27</X>
+        <Y>1419</Y>
       </CursorPos>
       <DocGUID>90388f2f-e393-42b7-8b34-cef34e64cc81</DocGUID>
       <Bookmarks />
@@ -2128,8 +2128,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>21</X>
-        <Y>3735</Y>
+        <X>28</X>
+        <Y>2373</Y>
       </CursorPos>
       <DocGUID>9d1657fc-323e-48aa-9f99-561461902166</DocGUID>
       <Bookmarks />

@@ -2355,7 +2355,7 @@ Class TitleState Extends State
 		End
 		
 		Method interruptInit:Void()
-			If (Self.interruptDrawer.Length = 0) Then
+			If (Self.interruptDrawer = Null) Then
 				Self.interruptDrawer = Animation.getInstanceFromQi("/animation/utl_res/suspend_resume.dat")[0].getDrawer(0, True, 0)
 			EndIf
 			
