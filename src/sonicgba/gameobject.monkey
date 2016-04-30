@@ -429,7 +429,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 					' Check if we should be rendering this currentObject.
 					If (Not currentObject.isFarAwayCamera()) Then
 						' Add this currentObject-objData to its preferred layer.
-						paint[currentObject.getPaintLayer()].Push(currentObject)
+						paintVec[currentObject.getPaintLayer()].Push(currentObject)
 					EndIf
 				Next
 			EndIf
@@ -846,11 +846,11 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 					currentX = 0
 					currentY = 0
 				Case 1 ' LOAD_CONTENT (Release content)
-					If (allGameObject <> Null) Then
+					If (allGameObject.Length <> 0) Then
 						nextStep = False
 						
 						For Local J:= 0 Until SEARCH_RANGE
-							Local current:= allGameobject[currentX][currentY]
+							Local current:= allGameObject[currentX][currentY]
 							
 							For Local O:= EachIn current
 								O.close()
@@ -868,7 +868,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 									nextStep = True
 									
 									' Not the best strategy, but I'm keeping things accurate.
-									allGameObject = Null
+									allGameObject = []
 									
 									Exit
 								EndIf
@@ -1625,6 +1625,10 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		
 		Method updateResetRect:Void(camera:Coordinate)
 			resetRect.setRect(((camera.x + (MapManager.CAMERA_WIDTH / 2)) Shl 6) - INIT_DISTANCE, ((camera.y + (MapManager.CAMERA_HEIGHT / 2)) Shl 6) - INIT_DISTANCE, 29440, 29440)
+		End
+		
+		Method checkWithMap:Void()
+			' Empty implementation.
 		End
 		
 		Method updateDirection:Int(player:PlayerObject)

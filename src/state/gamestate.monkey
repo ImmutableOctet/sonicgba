@@ -2089,7 +2089,7 @@ Class GameState Extends State
 			If (Not fading) Then
 				fading = True
 				
-				If (nstate = STATE_PAUSE_OPTION) Then
+				If (nState = STATE_PAUSE_OPTION) Then
 					State.fadeInit(102, 255)
 				Else
 					State.fadeInit(0, 255)

@@ -16,6 +16,7 @@ Private
 	Import sonicgba.playerobject
 	
 	' Bullet types:
+	Import sonicgba.gameobject
 	Import sonicgba.beebullet
 	Import sonicgba.doublegravityflashbullet
 	Import sonicgba.monkeybullet

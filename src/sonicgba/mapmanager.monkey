@@ -149,11 +149,11 @@ Class MapManager ' Implements SonicDef
 		
 		Global tileimage:MFImage[]
 		
-		Global mapBack:DataBuffer ' Short[][]
-		Global mapFront:DataBuffer ' Short[][]
-		
 		' A collection of tile-maps.
 		Global mapModel:DataBuffer[] ' Short[][][]
+		
+		Global mapBack:DataBuffer ' Short[][]
+		Global mapFront:DataBuffer ' Short[][]
 		
 		Global mapWidth:Int
 		Global mapHeight:Int
@@ -682,7 +682,7 @@ Class MapManager ' Implements SonicDef
 			mapFront.Discard()
 			mapBack.Discard()
 			
-			mapModel = Null
+			mapModel = []
 			mapFront = Null
 			mapBack = Null
 			
