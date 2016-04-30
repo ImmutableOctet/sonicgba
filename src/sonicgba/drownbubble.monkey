@@ -2,19 +2,27 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.enemyobject
+Friend sonicgba.playerobject
+
 ' Imports:
 Private
 	Import lib.animation
 	Import lib.animationdrawer
 	
+	Import sonicgba.enemyobject
+	Import sonicgba.playerobject
+	Import sonicgba.stagemanager
+	
 	Import com.sega.mobile.framework.device.mfgraphics
 	
 	Import monkey.random
-	
-	Import sonicgba.enemyobject
 Public
 
 ' Classes:
+
+' Of all things they could have made this, they decided to make it an enemy.
 Class DrownBubble Extends EnemyObject
 	Private
 		' Constant variable(s):

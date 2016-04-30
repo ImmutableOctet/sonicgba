@@ -1046,12 +1046,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\drownbubble.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\drownbubble.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>39</X>
-        <Y>83</Y>
+        <X>8</X>
+        <Y>26</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>88c6048b-5641-4d94-88fb-4215695a6330</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\effect.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1518,8 +1519,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>10</X>
-        <Y>15</Y>
+        <X>0</X>
+        <Y>1068</Y>
       </CursorPos>
       <DocGUID>3983a364-cdf4-4a70-96d3-ef0a7b319549</DocGUID>
       <Bookmarks />
