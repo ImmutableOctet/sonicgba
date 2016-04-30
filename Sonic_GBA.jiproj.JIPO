@@ -1231,8 +1231,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>22</X>
-        <Y>520</Y>
+        <X>29</X>
+        <Y>402</Y>
       </CursorPos>
       <DocGUID>5d6c419a-dc6c-43d5-910f-a52148ad368b</DocGUID>
       <Bookmarks />
@@ -1704,8 +1704,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ropeturn.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>17</X>
-        <Y>37</Y>
+        <X>0</X>
+        <Y>4</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
