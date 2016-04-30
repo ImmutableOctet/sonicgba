@@ -10,11 +10,11 @@ Private
 	Import lib.animation
 	Import lib.animationdrawer
 	
-	'Import special.specialmap
+	Import sonicgba.gimmickobject
+	Import sonicgba.playerobject
+	Import sonicgba.stagemanager
 	
 	Import com.sega.mobile.framework.device.mfgraphics
-	
-	Import sonicgba.gimmickobject
 Public
 
 ' Classes:

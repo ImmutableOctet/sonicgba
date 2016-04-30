@@ -23,7 +23,6 @@ Class BasicPipe Extends GimmickObject Abstract
 		' Constant variable(s):
 		Global TRANS:Int[] = [TRANS_NONE, TRANS_ROT180, TRANS_ROT270, TRANS_ROT90, TRANS_MIRROR, TRANS_MIRROR_ROT180] ' [0, 3, 6, 5, 2, 1] ' Const
 	Private
-		
 		' Fields:
 		Field drawer:AnimationDrawer
 		
