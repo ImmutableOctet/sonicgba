@@ -67,13 +67,11 @@ Class ImageInfo
 		Method close:Void()
 			Self.img_clip = Null
 			
-			If (Self.imageSeperate <> Null) Then
-				For Local i:= 0 Until Self.imageSeperate.Length
-					Self.imageSeperate[i] = Null
-				Next
-			EndIf
+			For Local i:= 0 Until Self.imageSeperate.Length
+				Self.imageSeperate[i] = Null
+			Next
 			
-			Self.imageSeperate = Null
+			Self.imageSeperate = []
 		End
 
 		Method loadInfo:Void(ds:Stream)

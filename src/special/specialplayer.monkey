@@ -308,8 +308,8 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 			
 			Self.velZ = ACC_NORMAL
 			
-			Self.rect1 = Null
-			Self.rect2 = Null
+			Self.rect1 = []
+			Self.rect2 = []
 			
 			Self.isPause = False
 			
@@ -331,6 +331,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 			Self.preState = Self.state
 			
 			Self._isNeedTouchPad = False
+			
 			Self.whiteBar = WhiteBarDrawer.getInstance()
 			
 			Local tutorAnimation:= Animation.getInstanceFromQi("/animation/special/sp_control_change_hint.dat")[0]

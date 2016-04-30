@@ -5,8 +5,8 @@ Public
 ' Imports:
 Private
 	'Import special.specialobject
-	Import special.ssdef
 Public
+	Import special.ssdef
 
 ' Classes / Interfaces:
 Class SSMapData2 ' Interface ' Implements ' Extends ' SSDef

@@ -3,6 +3,7 @@ Strict
 Public
 
 ' Friends:
+Friend lib.animationdrawer
 Friend lib.animationaction
 Friend lib.animationframe
 Friend lib.animationimageinfo
@@ -122,7 +123,7 @@ Class Animation
 	Protected
 		' Methods / Destructor(s):
 		Method close:Void()
-			If (imageInfo <> Null) Then
+			If (imageInfo.Length > 0) Then
 				For Local I:= 0 Until imageInfo.Length
 					If (imageInfo[I] <> Null) Then
 						imageInfo[I].close()

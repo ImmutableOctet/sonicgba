@@ -379,8 +379,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animation.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>20</X>
-        <Y>497</Y>
+        <X>30</X>
+        <Y>479</Y>
       </CursorPos>
       <DocGUID>343b410a-aeaf-457a-b3d8-7e067a8d51bd</DocGUID>
       <Bookmarks />
@@ -392,12 +392,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\animationdrawer.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\lib\animationdrawer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>10</X>
-        <Y>138</Y>
+        <X>20</X>
+        <Y>5</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>fdc466a0-97a9-4fa4-bd4b-aaa6db85dfe8</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationframe.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -409,16 +410,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationimageinfo.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
-        <Y>162</Y>
+        <X>3</X>
+        <Y>68</Y>
       </CursorPos>
       <DocGUID>9552ab5b-dd38-4003-a4bf-f5f3af080763</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\constutil.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>17</X>
-        <Y>6</Y>
+        <X>14</X>
+        <Y>18</Y>
       </CursorPos>
       <DocGUID>15119811-332c-4118-984d-b3cb7f3ab61e</DocGUID>
       <Bookmarks />
@@ -2017,8 +2018,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\specialplayer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>4</Y>
+        <X>3</X>
+        <Y>333</Y>
       </CursorPos>
       <DocGUID>6e1c6c40-04ad-47d9-bb8a-35953f47a663</DocGUID>
       <Bookmarks />
@@ -2037,12 +2038,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\special\ssdef.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\special\ssdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>16</X>
+        <Y>35</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>0f166a44-00ea-4ebe-bdfd-33d30b152f1e</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssfollowring.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -2065,19 +2067,21 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\special\ssmapdata.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\special\ssmapdata.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>93</X>
+        <Y>961</Y>
+      </CursorPos>
+      <DocGUID>c1503fb3-1d9f-479f-9853-4e32de976bd7</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\special\ssmapdata2.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>0</X>
         <Y>0</Y>
       </CursorPos>
-      <DocGUID />
-    </DocUserOptions>
-    <DocUserOptions Filename=".\src\special\ssmapdata2.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
-      <CursorPos>
-        <X>53</X>
-        <Y>11</Y>
-      </CursorPos>
-      <DocGUID />
+      <DocGUID>07791235-37b0-4372-8b3c-9743e57f336a</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssring.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -2133,8 +2137,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\state.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>21</X>
-        <Y>1725</Y>
+        <X>32</X>
+        <Y>1775</Y>
       </CursorPos>
       <DocGUID>4881fd61-67b4-4b4b-af2c-8c071806d8a6</DocGUID>
       <Bookmarks />

@@ -5,8 +5,8 @@ Public
 ' Imports:
 Private
 	'Import special.specialobject
-	Import special.ssmapdata2
 Public
+	Import special.ssmapdata2
 
 ' Classes / Interfaces:
 Class SSMapData Extends SSMapData2 ' Interface
@@ -959,5 +959,5 @@ Class SSMapData Extends SSMapData2 ' Interface
 								[0, 0, 34144, SSOBJ_BOMB_ID],
 								[0, 0, 35072, SSOBJ_GOAL]]
 	
-	Global STAGE_LIST:Int[][][] = [STAGE_1, STAGE_2, STAGE_3, STAGE_4, STAGE_5, STAGE_6, STAGE_SSOBJ_BNRD_ID] ' Const
+	Global STAGE_LIST:Int[][][] = [STAGE_1, STAGE_2, STAGE_3, STAGE_4, STAGE_5, STAGE_6, STAGE_7] ' Const
 End

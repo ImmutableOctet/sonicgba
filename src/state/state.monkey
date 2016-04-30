@@ -1716,44 +1716,44 @@ Class State Implements StringIndex Abstract ' SonicDef
 		Method soundVolumnDraw:Void(g:MFGraphics)
 			If (muiAniDrawer = Null) Then
 				muiAniDrawer = New Animation("/animation/mui").getDrawer(0, False, 0)
+				
 				Return
 			EndIf
 			
 			Local i:Int
 			
-			muiAniDrawer.setActionId(54)
-			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
-			AnimationDrawer animationDrawer = muiAniDrawer
+			Local animationDrawer:= muiAniDrawer
+			
+			animationDrawer.setActionId(54)
+			animationDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
 			
 			i = Int(Key.touchsecondensureyes.Isin() And Self.confirmcursor = 0)
 			
 			animationDrawer.setActionId(i + 59)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
-			animationDrawer = muiAniDrawer
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
 			
 			i = Int(Key.touchsecondensureno.Isin() And Self.confirmcursor = 1)
 			
 			animationDrawer.setActionId(i + 59)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
 			
-			muiAniDrawer.setActionId(89)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) - FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
+			animationDrawer.setActionId(89)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
 			
-			muiAniDrawer.setActionId(90)
-			muiAniDrawer.draw(g, (SCREEN_WIDTH Shr 1) + FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
+			animationDrawer.setActionId(90)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
 			
-			muiAniDrawer.setActionId(71)
-			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
+			animationDrawer.setActionId(71)
+			animationDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
 			
-			muiAniDrawer.setActionId(72)
+			animationDrawer.setActionId(72)
 			
 			For Local i2:= 0 Until GlobalResource.soundConfig
-				muiAniDrawer.draw(g, ((SCREEN_WIDTH Shr 1) - PAGE_BACKGROUND_HEIGHT) + ((i2 - 1) * STATE_ENDING), (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
+				animationDrawer.draw(g, ((SCREEN_WIDTH Shr 1) - PAGE_BACKGROUND_HEIGHT) + ((i2 - 1) * STATE_ENDING), (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
 			Next
 			
-			muiAniDrawer.setActionId(GlobalResource.soundConfig + 73)
-			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, SCREEN_HEIGHT Shr 1)
-			animationDrawer = muiAniDrawer
+			animationDrawer.setActionId(GlobalResource.soundConfig + 73)
+			animationDrawer.draw(g, SCREEN_WIDTH Shr 1, SCREEN_HEIGHT Shr 1)
 			
 			If (Key.touchsecondensurereturn.Isin()) Then
 				i = 5
@@ -1762,7 +1762,7 @@ Class State Implements StringIndex Abstract ' SonicDef
 			EndIf
 			
 			animationDrawer.setActionId(i + 61)
-			muiAniDrawer.draw(g, 0, SCREEN_HEIGHT)
+			animationDrawer.draw(g, 0, SCREEN_HEIGHT)
 		End
 		
 		Method spSenorSetInit:Void()

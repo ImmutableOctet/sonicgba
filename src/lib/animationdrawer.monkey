@@ -2,6 +2,9 @@ Strict
 
 Public
 
+' Friends:
+Friend lib.animation
+
 ' Imports:
 Private
 	Import lib.animation
