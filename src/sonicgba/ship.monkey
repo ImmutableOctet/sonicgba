@@ -11,6 +11,10 @@ Friend sonicgba.shipsystem
 Private
 	Import lib.myapi
 	
+	Import sonicgba.gimmickobject
+	Import sonicgba.playerobject
+	Import sonicgba.shipsystem
+	
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
 	
