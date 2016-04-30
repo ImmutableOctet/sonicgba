@@ -38,10 +38,6 @@ Class SlipStart Extends GimmickObject
 			' Empty implementation.
 		End
 		
-		Method onCollision:Void(aCObject:ACObject, aCCollision:ACCollision, direction:Int, touchX:Int, touchY:Int, objTouchX:Int, objTouchY:Int)
-			' Empty implementation.
-		End
-		
 		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
 			If (player.slipping And ((player.getCharacterID() = CHARACTER_SONIC) Or (player.getCharacterID() = CHARACTER_AMY))) Then
 				player.setSlip0()

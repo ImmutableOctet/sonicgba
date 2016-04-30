@@ -247,10 +247,6 @@ Class ItemObject Extends GameObject
 			' Empty implementation.
 		End
 		
-		Method onCollision:Void(aCObject:ACObject, aCCollision:ACCollision, direction:Int, touchX:Int, touchY:Int, objTouchX:Int, objTouchY:Int)
-			' Empty implementation.
-		End
-		
 		Method getPaintLayer:Int()
 			Return DRAW_BEFORE_SONIC
 		End

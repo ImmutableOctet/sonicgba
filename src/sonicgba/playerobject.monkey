@@ -6436,10 +6436,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			' Empty implementation.
 		End
 		
-		Method onCollision:Void(aCObject:ACObject, aCCollision:ACCollision, direction:Int, touchX:Int, touchY:Int, objTouchX:Int, objTouchY:Int)
-			' Empty implementation.
-		End
-		
 		Method doWhileLeaveGround:Void()
 			calDivideVelocity()
 			

@@ -274,10 +274,6 @@ Class SmallAnimal Extends GameObject Implements MapBehavior
 			' Empty implementation.
 		End
 		
-		Method onCollision:Void(aCObject:ACObject, aCCollision:ACCollision, direction:Int, touchX:Int, touchY:Int, objTouchX:Int, objTouchY:Int)
-			' Empty implementation.
-		End
-		
 		Method hasDownCollision:Bool()
 			Return True
 		End
