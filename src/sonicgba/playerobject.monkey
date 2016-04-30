@@ -75,6 +75,7 @@ Private
 	
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
+	Import com.sega.mobile.framework.utility.mfmath
 	
 	'Import brl.stream
 	
@@ -4566,7 +4567,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Self.pipeDesY = (y + BODY_OFFSET)
 				
 				Local degree:= ATan2(vy, vx)
-				Local sourceSpeed:= (Sqrt((vy * vy) + (vx * vx)) Shr 6)
+				Local sourceSpeed:= (MFMath.sqrt((vy * vy) + (vx * vx)) Shr 6)
 				
 				Self.nextVelX = vx
 				Self.nextVelY = vy
@@ -4598,7 +4599,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.footPointY = y
 			
 			degree = ATan2(vy, vx)
-			sourceSpeed = (Sqrt((vy * vy) + (vx * vx)) Shr 6)
+			
+			sourceSpeed = (MFMath.sqrt((vy * vy) + (vx * vx)) Shr 6)
 			
 			Self.nextVelX = vx
 			Self.nextVelY = vy
