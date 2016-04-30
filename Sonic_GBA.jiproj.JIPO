@@ -855,24 +855,24 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bossextra.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>26</X>
-        <Y>425</Y>
+        <X>0</X>
+        <Y>0</Y>
       </CursorPos>
       <DocGUID>4a05c209-9491-45f1-8546-308d37f5d802</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bossextrapacman.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>27</X>
-        <Y>6</Y>
+        <X>21</X>
+        <Y>30</Y>
       </CursorPos>
       <DocGUID>705e94bc-6330-4015-b876-f18676c3cfec</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bossextrastone.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>28</X>
-        <Y>5</Y>
+        <X>20</X>
+        <Y>31</Y>
       </CursorPos>
       <DocGUID>ab7bf994-ef52-4152-8c44-230a77a8d026</DocGUID>
       <Bookmarks />
