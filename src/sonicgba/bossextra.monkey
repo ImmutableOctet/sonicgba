@@ -3,8 +3,9 @@ Strict
 Public
 
 ' Friends:
-Friend sonicgba.stagemanager
 Friend sonicgba.enemyobject
+Friend sonicgba.bossobject
+Friend sonicgba.stagemanager
 Friend sonicgba.playersupersonic
 
 ' Imports:

@@ -272,24 +272,24 @@ Class EnemyObject Extends GameObject Abstract
 								Case ENEMY_BOSSF1
 									IsBoss = True
 									
-									Return New BossF1(id, x, y, left, top, width, height)
+									'''Return New BossF1(id, x, y, left, top, width, height)
 								Case ENEMY_BOSSF2
 									IsBoss = True
 									
-									Return New BossF2(id, x, y, left, top, width, height)
+									'''Return New BossF2(id, x, y, left, top, width, height)
 								Case ENEMY_BOSSF3
 									IsBoss = True
 									
-									Return New BossF3(id, x, y, left, top, width, height)
+									'''Return New BossF3(id, x, y, left, top, width, height)
 								Case ENEMY_BOSS_EXTRA
 									IsBoss = True
 									
 									Return New BossExtra(id, x, y, left, top, width, height)
-								Default
-									Return Null
 							End Select
 					End Select
 			End Select
+			
+			Return Null
 		End
 		
 		Function releaseAllEnemyResource:Void()
