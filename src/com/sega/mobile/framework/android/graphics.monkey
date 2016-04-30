@@ -122,17 +122,30 @@ Class Graphics
 			#Rem
 				Self.mPath = New Path()
 				Self.mPaint = New Paint()
-				Self.mFont = Font.getFont(TRANS_NONE, TRANS_NONE, RIGHT) ' 0, 0, 8
+				Self.NativeFont = Font.getFont(TRANS_NONE, TRANS_NONE, RIGHT) ' 0, 0, 8
 				
 				Self.mPaint.setAntiAlias(True)
 				Self.mPaint.setFilterBitmap(True)
-				Self.mPaint.setTextSize(Float(Self.mFont.getHeight()))
+				Self.mPaint.setTextSize(Float(FontHeight()))
 			#End
+		End
+		
+		' Properties (Extensions):
+		Method NativeFont:Font() Property
+			Return mCanvas.Font
+		End
+		
+		Method NativeFont:Void(font:Font) Property
+			Return mCanvas.SetFont(font)
 		End
 		
 		' Methods:
 		
 		' Extensions:
+		Method FontHeight:Int()
+			Return NativeFont.TextHeight(" ") ' "A"
+		End
+		
 		Method clear:Void()
 			mCanvas.Clear()
 		End
@@ -291,7 +304,7 @@ Class Graphics
 		End
 		
 		Method setFont:Void(font:Font)
-			'Self.mFont = font
+			Self.NativeFont = font
 			
 			'Self.mPaint.setTextSize((Float) font.getHeight())
 			
@@ -299,28 +312,26 @@ Class Graphics
 		End
 		
 		Method getFont:Font()
-			'Return Self.mFont
-			
-			Return mCanvas.Font
+			Return Self.NativeFont
 		End
 		
 		Method drawString:Void(str:String, x:Int, y:Int, anchor:Int)
 			#Rem
 			If (Self.mCanvas <> Null) Then
-				Self.mCanvas.drawText(str, (Float) x, (Float) (y - Self.mFont.getFontAscent()), Self.mPaint)
+				Self.mCanvas.drawText(str, (Float) x, (Float) (y - Self.NativeFont.getFontAscent()), Self.mPaint)
 			EndIf
 			#End
 			
 			If ((anchor & TRANS_MIRROR_ROT180) <> 0) Then
-				x -= Self.mFont.stringWidth(str) / 2 ' VCENTER
+				x -= Self.NativeFont.TextWidth(str) / 2 ' VCENTER
 			ElseIf ((anchor & RIGHT) <> 0) Then
-				x -= Self.mFont.stringWidth(str)
+				x -= Self.NativeFont.TextWidth(str)
 			EndIf
 			
 			If ((anchor & VCENTER) <> 0) Then
-				y -= Self.mFont.getHeight() / 2 ' VCENTER
+				y -= FontHeight() / 2 ' VCENTER
 			ElseIf ((anchor & BOTTOM) <> 0) Then
-				y -= Self.mFont.getHeight()
+				y -= FontHeight()
 			EndIf
 			
 			mCanvas.DrawText(str, Float(x), Float(y))

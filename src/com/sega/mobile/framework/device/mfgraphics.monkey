@@ -135,21 +135,21 @@ Class MFGraphics
 		Function stringWidth:Int(font:Int, str:String) ' Final
 			If (MFDevice.preScaleZoomOutFlag) Then
 				If (font_type = font) Then
-					Return (currentFont.stringWidth(str) Shl MFDevice.preScaleShift)
+					Return (currentFont.TextWidth(str) Shl MFDevice.preScaleShift)
 				EndIf
 				
-				Return (getFont(font).stringWidth(str) Shl MFDevice.preScaleShift)
+				Return (getFont(font).TextWidth(str) Shl MFDevice.preScaleShift)
 			ElseIf (MFDevice.preScaleZoomInFlag) Then
 				If (font_type = font) Then
-					Return (currentFont.stringWidth(str) Shr MFDevice.preScaleShift)
+					Return (currentFont.TextWidth(str) Shr MFDevice.preScaleShift)
 				EndIf
 				
-				Return (getFont(font).stringWidth(str) Shr MFDevice.preScaleShift)
+				Return (getFont(font).TextWidth(str) Shr MFDevice.preScaleShift)
 			ElseIf (font_type = font) Then
-				Return currentFont.stringWidth(str)
+				Return currentFont.TextWidth(str)
 			EndIf
 			
-			Return getFont(font).stringWidth(str)
+			Return getFont(font).TextWidth(str)
 		End
 	
 		' Methods:

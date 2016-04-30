@@ -157,8 +157,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>4</Y>
+        <X>14</X>
+        <Y>327</Y>
       </CursorPos>
       <DocGUID>f612fdef-d4a3-4c36-8738-bf21b21271fe</DocGUID>
       <Bookmarks />
@@ -194,8 +194,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>1222</Y>
+        <X>11</X>
+        <Y>134</Y>
       </CursorPos>
       <DocGUID>b26246c3-c0e3-41e9-b25c-57c29b2ccdec</DocGUID>
       <Bookmarks />
@@ -349,8 +349,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\gameengine\def.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>35</X>
+        <Y>25</Y>
       </CursorPos>
       <DocGUID>df64ab73-38ea-4819-b13f-33d1ae7ad78b</DocGUID>
       <Bookmarks />
@@ -461,8 +461,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>33</X>
-        <Y>569</Y>
+        <X>21</X>
+        <Y>591</Y>
       </CursorPos>
       <DocGUID>582c93b4-fa29-4d34-a53a-e6e74c6f26d5</DocGUID>
       <Bookmarks />
@@ -1537,8 +1537,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
-        <Y>72</Y>
+        <X>64</X>
+        <Y>185</Y>
       </CursorPos>
       <DocGUID>24b76472-c1f1-4a17-ba62-2ddbe5185d0c</DocGUID>
       <Bookmarks />
@@ -2145,12 +2145,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>270</Y>
+        <X>62</X>
+        <Y>1325</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>9d1657fc-323e-48aa-9f99-561461902166</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\application.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
