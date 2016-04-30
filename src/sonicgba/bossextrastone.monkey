@@ -5,7 +5,7 @@ Public
 ' Friends:
 Friend sonicgba.bulletobject
 Friend sonicgba.enemyobject
-Friend sonicgba.boss6
+Friend sonicgba.bossextra
 
 ' Imports:
 Private

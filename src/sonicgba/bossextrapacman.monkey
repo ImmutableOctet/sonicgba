@@ -2,6 +2,11 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.bulletobject
+Friend sonicgba.enemyobject
+Friend sonicgba.bossextra
+
 ' Imports:
 Private
 	Import gameengine.key
