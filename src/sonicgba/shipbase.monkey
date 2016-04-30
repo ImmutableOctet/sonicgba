@@ -2,6 +2,11 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.gimmickobject
+Friend sonicgba.ship
+Friend sonicgba.shipsystem
+
 ' Imports:
 Private
 	Import sonicgba.platformobject

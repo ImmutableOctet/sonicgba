@@ -9,6 +9,9 @@ Public
 	can't take advantage of inheritance easily.
 #End
 
+' Friends:
+Friend sonicgba.gimmickobject
+
 ' Imports:
 Private
 	Import sonicgba.basicgimmick

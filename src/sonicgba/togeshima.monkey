@@ -2,6 +2,10 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.gimmickobject
+Friend sonicgba.shimasting
+
 ' Imports:
 Private
 	Import lib.animation

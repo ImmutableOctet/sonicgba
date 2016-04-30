@@ -2,6 +2,10 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.gimmickobject
+Friend sonicgba.railin
+
 ' Imports:
 Private
 	Import com.sega.mobile.framework.device.mfgraphics

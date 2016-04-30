@@ -2,6 +2,11 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.gimmickobject
+Friend sonicgba.seabedvolcanoasynbase
+Friend sonicgba.seabedvolcanoasynhurt
+
 ' Imports:
 Private
 	Import sonicgba.collisionrect

@@ -2,6 +2,11 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.gimmickobject
+Friend sonicgba.seabedvolcanoasynhurt
+Friend sonicgba.seabedvolcanoasynplatform
+
 ' Imports:
 Private
 	Import lib.animation

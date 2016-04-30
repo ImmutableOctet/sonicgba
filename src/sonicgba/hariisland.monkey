@@ -8,6 +8,10 @@ Public
 		* Compare behavior of this class with 'DekaPlatform'.
 #End
 
+' Friends:
+Friend sonicgba.gimmickobject
+Friend sonicgba.hari
+
 ' Imports:
 Private
 	Import lib.constutil

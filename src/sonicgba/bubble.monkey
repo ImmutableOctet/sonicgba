@@ -2,6 +2,11 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.gimmickobject
+Friend sonicgba.breathebubble
+Friend sonicgba.upbubble
+
 ' Imports:
 Private
 	Import lib.animation

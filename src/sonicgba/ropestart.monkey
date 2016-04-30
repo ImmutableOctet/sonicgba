@@ -2,6 +2,10 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.gimmickobject
+Friend sonicgba.ropeend
+
 ' Imports:
 Private
 	Import lib.myapi

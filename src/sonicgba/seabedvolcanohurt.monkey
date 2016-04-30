@@ -13,6 +13,11 @@ Public
 	player when they collide with the collision-rect.
 #End
 
+' Friends:
+Friend sonicgba.gimmickobject
+Friend sonicgba.seabedvolcanobase
+Friend sonicgba.seabedvolcanoplatform
+
 ' Imports:
 Private
 	Import monkey.math

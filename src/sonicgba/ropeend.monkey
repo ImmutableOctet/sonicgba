@@ -2,6 +2,10 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.gimmickobject
+Friend sonicgba.ropestart
+
 ' Imports:
 Private
 	Import sonicgba.gimmickobject

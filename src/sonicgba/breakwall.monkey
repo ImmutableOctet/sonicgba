@@ -9,6 +9,9 @@ Public
 		* Test 'logic' for unknown behavior.
 #End
 
+' Friends:
+Friend sonicgba.gimmickobject
+
 ' Imports:
 Private
 	Import lib.soundsystem

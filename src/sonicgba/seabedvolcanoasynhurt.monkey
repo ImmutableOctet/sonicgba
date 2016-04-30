@@ -9,6 +9,11 @@ Public
 	This is definitely an area where templates could do wonders.
 #End
 
+' Friends:
+Friend sonicgba.gimmickobject
+Friend sonicgba.seabedvolcanoasynbase
+Friend sonicgba.seabedvolcanoasynplatform
+
 ' Imports:
 Private
 	Import monkey.math

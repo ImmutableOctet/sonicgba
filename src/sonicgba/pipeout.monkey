@@ -3,6 +3,7 @@ Strict
 Public
 
 ' Friends:
+Friend sonicgba.gimmickobject
 Friend sonicgba.pipein
 
 ' Imports:
@@ -77,6 +78,13 @@ Class PipeOut Extends BasicPipe
 			makeDrawer()
 		End
 	Public
+		' Functions:
+		Function releaseAllResource:Void()
+			Animation.closeAnimation(pipeAnimation)
+			
+			pipeAnimation = Null
+		End
+		
 		' Methods:
 		Method refreshCollisionRect:Void(x:Int, y:Int)
 			updateCollisionInfo()

@@ -2,6 +2,11 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.gimmickobject
+Friend sonicgba.togeshima
+Friend sonicgba.shimasting
+
 ' Imports:
 Private
 	Import lib.myapi

@@ -2,6 +2,11 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.gimmickobject
+Friend sonicgba.freefallsystem
+Friend sonicgba.freefallplatform
+
 ' Imports:
 Private
 	Import lib.coordinate

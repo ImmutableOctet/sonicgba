@@ -2,6 +2,11 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.gimmickobject
+Friend sonicgba.freefallplatform
+Friend sonicgba.freefallbar
+
 ' Imports:
 Private
 	Import gameengine.key

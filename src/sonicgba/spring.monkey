@@ -7,6 +7,10 @@ Public
 	#SONICGBA_SPRING_EASTEREGG = True
 #End
 
+' Friends:
+Friend sonicgba.gimmickobject
+Friend sonicgba.spspring
+
 ' Imports:
 Private
 	Import lib.animation

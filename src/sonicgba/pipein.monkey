@@ -3,6 +3,7 @@ Strict
 Public
 
 ' Friends:
+Friend sonicgba.gimmickobject
 Friend sonicgba.pipeout
 
 ' Imports:
@@ -30,6 +31,10 @@ Class PipeIn Extends BasicPipe
 		Global pipeAnimation:Animation
 	Protected
 		' Functions:
+		Function releaseAllResource:Void()
+			BasicPipe.releaseAllResource()
+		End
+		
 		Function updateCollisionInfo:Void()
 			If (StageManager.getCurrentZoneId() = 2 Or StageManager.getStageID() = 10) Then
 				If (Self.actionID = 0) Then

@@ -688,7 +688,7 @@ Class GimmickObject Extends GameObject
 			Ice.releaseAllResource()
 			SeabedVolcanoBase.releaseAllResource()
 			SeabedVolcanoAsynBase.releaseAllResource()
-			Accelerate.releaseAllResource()
+			'Accelerate.releaseAllResource()
 			Fan.releaseAllResource()
 			FinalShima.releaseAllResource()
 			AirRoot.releaseAllResource()

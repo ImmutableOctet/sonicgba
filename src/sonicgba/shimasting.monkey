@@ -2,6 +2,11 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.gimmickobject
+Friend sonicgba.togeshima
+Friend sonicgba.finalshima
+
 ' Imports:
 Private
 	Import com.sega.mobile.framework.device.mfgraphics

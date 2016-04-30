@@ -2,6 +2,9 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.gimmickobject
+
 ' Imports:
 Private
 
