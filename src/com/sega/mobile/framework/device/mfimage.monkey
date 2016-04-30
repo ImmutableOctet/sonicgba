@@ -2,16 +2,22 @@ Strict
 
 Public
 
+' Friends:
+Friend com.sega.mobile.framework.device.mfgraphics
+
 ' Imports:
 Private
-	Import mfgraphics
-	
 	Import brl.databuffer
 	Import brl.stream
 	Import brl.datastream
 	Import brl.filepath
 	
+	Import opengl.gles20
+	
 	Import mojo2.graphics
+	
+	Import com.sega.mobile.framework.device.mfgraphics
+	Import com.sega.mobile.framework.device.mfdevice
 Public
 
 ' Classes:

@@ -38,7 +38,7 @@ Private
 	Import com.sega.mobile.framework.device.mfsensor
 	Import com.sega.mobile.framework.ui.mftouchkey
 	
-	'Import java.lang.reflect.array
+	Import regal.typetool
 Public
 
 ' Classes:

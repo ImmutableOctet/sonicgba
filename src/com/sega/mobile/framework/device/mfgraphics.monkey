@@ -4,9 +4,12 @@ Public
 
 ' Friends:
 Friend com.sega.mobile.framework.device.mfdevice
+Friend com.sega.mobile.framework.device.mfimage
 
 ' Imports:
 Private
+	Import com.sega.mobile.framework.device.mfimage
+	
 	'Import sonicgba.mapmanager
 	'Import com.sega.mobile.framework.android.font
 	Import com.sega.mobile.framework.android.graphics
@@ -407,7 +410,7 @@ Class MFGraphics
 			
 			Return (Self.clipY - Self.transY)
 		End
-	
+		
 		Method getClipWidth:Int() Final
 			If (MFDevice.preScaleZoomOutFlag) Then
 				Return (Self.clipWidth Shl MFDevice.preScaleShift)
@@ -419,7 +422,7 @@ Class MFGraphics
 			
 			Return Self.clipWidth
 		End
-	
+		
 		Method getClipHeight:Int() Final
 			If (MFDevice.preScaleZoomOutFlag) Then
 				Return (Self.clipHeight Shl MFDevice.preScaleShift)
@@ -431,7 +434,7 @@ Class MFGraphics
 			
 			Return Self.clipHeight
 		End
-	
+		
 		Method drawImage:Void(image:MFImage, x:Int, y:Int, anchor:Int) Final
 			Local imageWidth:= image.getWidth()
 			Local imageHeight:= image.getHeight()
@@ -454,7 +457,7 @@ Class MFGraphics
 			
 			drawImageImpl(image, xOff + x, yOff + y)
 		End
-	
+		
 		Method drawImage:Void(image:MFImage, x:Int, y:Int) Final
 			drawImage(image, x, y, (TOP|RIGHT))
 		End
@@ -462,7 +465,7 @@ Class MFGraphics
 		Method drawImage:Void(image:MFImage, x:Int, y:Int, flipMode:Int, anchor:Int) Final
 			drawRegion(image, TRANS_NONE, TRANS_NONE, image.getWidth(), image.getHeight(), flipMode, x, y, anchor)
 		End
-	
+		
 		Method drawImage:Void(image:MFImage, x:Int, y:Int, regionX:Int, regionY:Int, regionW:Int, regionH:Int) Final
 			drawRegion(image, regionX, regionY, regionW, regionH, TRANS_NONE, x, y, (TOP|RIGHT))
 		End
@@ -1217,7 +1220,6 @@ Class MFGraphics
 		End
 		
 		Method drawRegionImpl:Void(image:MFImage, regionX:Int, regionY:Int, regionW:Int, regionH:Int, flipMode:Int, x:Int, y:Int) Final
-			
 			If (Not Self.effectFlag) Then
 				Self.context.drawRegion(image.image, regionX, regionY, regionW, regionH, flipMode, x + Self.transX, y + Self.transY, (TOP|RIGHT))
 			ElseIf (Self.alphaValue <> 0) Then
@@ -1245,7 +1247,7 @@ Class MFGraphics
 				
 				drawRGBFlip(Self.drawEffectRGB, x + Self.transX, y + Self.transY, regionW, regionH, flipMode)
 				
-				Self.drawEffectRGB = Null
+				Self.drawEffectRGB = []
 			EndIf
 		End
 		

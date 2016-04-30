@@ -13,7 +13,7 @@ Public
 Class MyRandom
 	' Functions:
 	Function nextInt:Int(min:Int, max:Int)
-		Return ((Abs(rnd.nextInt()) Mod (Abs(max - min) + 1)) + Min(min, max))
+		Return ((Abs(nextInt()) Mod (Abs(max - min) + 1)) + Min(min, max))
 	End
 
 	Function nextInt:Int(range:Int)

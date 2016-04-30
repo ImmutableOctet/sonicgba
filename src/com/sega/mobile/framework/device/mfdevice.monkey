@@ -1055,7 +1055,7 @@ Class MFDevice Final
 		End
 		
 		Function setUseMultitouch:Void(b:Bool)
-			mainCanvas.setUseMultitouch(b)
+			'mainCanvas.setUseMultitouch(b)
 		End
 		
 		Function setVibrationFlag:Void(enable:Bool)

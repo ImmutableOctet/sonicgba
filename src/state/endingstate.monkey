@@ -36,13 +36,14 @@ Class EndingState Extends State
 					PlayerObject.resetGameParam()
 					
 					Self.normalEndingInstance = New NormalEnding()
-					Self.normalEndingInstance.init(0, PlayerObject.getCharacterID())
+					
+					Self.normalEndingInstance.initialize(state, PlayerObject.getCharacterID()) ' 0
 				Case EMERALD_STATE_SUCCESS ' 1
 					PlayerObject.resetGameParam()
 					
 					Self.SuperSonicEndingInstance = New SuperSonicEnding()
 				Case EMERALD_STATE_FAILD ' 2
-					Self.specialEndingInstance = New SpecialEnding(3, 5)
+					Self.specialEndingInstance = New SpecialEnding(CHARACTER_AMY, 5) ' 3
 				Default
 					' Nothing so far.
 			End Select

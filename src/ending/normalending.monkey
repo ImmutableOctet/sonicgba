@@ -288,7 +288,7 @@ Class NormalEnding Extends PlainEnding ' Final
 		End
 		
 		' Methods:
-		Method init:Void(type:Int, characterID:Int)
+		Method initialize:Void(type:Int, characterID:Int) ' Method init:Void(type:Int, characterID:Int)
 			Self.characterDrawer = New Animation(ENDING_ANIMATION_PATH + CHARACTER_ANIMATION_NAME[characterID]).getDrawer()
 			
 			Self.lookUpImage = MFImage.createImage(ENDING_ANIMATION_PATH + LOOK_UP_IMAGE_NAME[characterID])

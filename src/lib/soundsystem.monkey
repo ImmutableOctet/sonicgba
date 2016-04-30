@@ -4,10 +4,8 @@ Public
 
 ' Imports:
 Private
-	'Import mflib.bpdef
-	'Import sonicgba.globalresource
-	'Import sonicgba.playerobject
-	'Import state.titlestate
+	Import sonicgba.globalresource
+	Import sonicgba.playerobject
 	
 	'Import com.sega.mobile.framework.device.mfplayer
 	'Import com.sega.mobile.framework.device.mfsound
@@ -309,7 +307,7 @@ Class SoundSystem
 			If (Self.nextBgmWaiting And Not bgmPlaying()) Then
 				Self.nextBgmWaiting = False
 				
-				If (Not PlayerObject.isTerminal) Then
+				If (Not PlayerObject.isTerminal) Then ' player.isTerminal
 					playBgm(Self.nextBgmIndex, Self.nextBgmLoop)
 				EndIf
 			EndIf

@@ -610,8 +610,8 @@ Class State Implements StringIndex Abstract ' SonicDef
 					preFadeAlpha = fadeAlpha
 				EndIf
 				
-				For Local w:= 0 Until MyAPI.zoomOut(SCREEN_WIDTH) Step FADE_FILL_WIDTH
-					For Local w:= 0 Until MyAPI.zoomOut(SCREEN_HEIGHT) Step FADE_FILL_HEIGHT
+				For Local h:= 0 Until MyAPI.zoomOut(SCREEN_HEIGHT) Step FADE_FILL_HEIGHT
+					For Local w:= 0 Until MyAPI.zoomOut(SCREEN_WIDTH) Step FADE_FILL_WIDTH
 						g.drawRGB(fadeRGB, 0, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_WIDTH, True)
 					Next
 				Next

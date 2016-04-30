@@ -2,6 +2,10 @@ Strict
 
 Public
 
+' Friends:
+Friend com.sega.mobile.framework.device.mfgraphics
+Friend com.sega.mobile.framework.device.mfimage
+
 ' Imports:
 Private
 	#Rem
