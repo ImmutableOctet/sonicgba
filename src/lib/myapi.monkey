@@ -677,8 +677,8 @@ Class MyAPI ' Implements Def
 			Return output
 		End
 		
-		Function drawStrings:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, beginPosition:Int, bold:Bool, color1:Int, color2:Int, color3:Int)
-			If (drawString.Length > 0) Then
+		Function drawStrings:Void(g2:MFGraphics, str:String[], x:Int, y:Int, width:Int, height:Int, beginPosition:Int, bold:Bool, color1:Int, color2:Int, color3:Int)
+			If (str.Length > 0) Then
 				Local x2:= x
 				
 				Local stringToDraw:String
@@ -693,19 +693,19 @@ Class MyAPI ' Implements Def
 				
 				Local i:= beginPosition
 				
-				While (i < drawString.Length)
+				While (i < str.Length)
 					If ((((i - stringCursol) - beginPosition) * LINE_SPACE) + FONT_H > height) Then
 						downPermit = True
 						
 						Return
 					EndIf
 					
-					If (drawString[i].Find("<") = -1 Or drawString[i].Find(">") = -1) Then
-						stringToDraw = drawString[i]
+					If (str[i].Find("<") = -1 Or str[i].Find(">") = -1) Then
+						stringToDraw = str[i]
 					Else
-						anchor = drawString[i][(drawString[i].Find("<") + 1)..(drawString[i].Find(">"))]
+						anchor = str[i][(str[i].Find("<") + 1)..(str[i].Find(">"))]
 						
-						stringToDraw = drawString[i][(drawString[i].Find(">") + 1)..]
+						stringToDraw = str[i][(str[i].Find(">") + 1)..]
 					EndIf
 					
 					If (i - beginPosition >= stringCursol) Then
@@ -729,8 +729,8 @@ Class MyAPI ' Implements Def
 			EndIf
 		End
 		
-		Function drawStrings:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, beginPosition:Int, bold:Bool, color1:Int, color2:Int, color3:Int, font:Int)
-			If (drawString <> Null) Then
+		Function drawStrings:Void(g2:MFGraphics, str:String[], x:Int, y:Int, width:Int, height:Int, beginPosition:Int, bold:Bool, color1:Int, color2:Int, color3:Int, font:Int)
+			If (str.Length > 0) Then
 				Local x2:= x
 				
 				Local stringToDraw:String
@@ -745,18 +745,18 @@ Class MyAPI ' Implements Def
 				
 				Local i:= beginPosition
 				
-				While (i < drawString.Length)
+				While (i < str.Length)
 					If ((((i - stringCursol) - beginPosition) * LINE_SPACE) + FONT_H > height) Then
 						downPermit = True
 						
 						Exit
 					EndIf
 					
-					If (drawString[i].Find("<") = -1 Or drawString[i].Find(">") = -1) Then
-						stringToDraw = drawString[i]
+					If (str[i].Find("<") = -1 Or str[i].Find(">") = -1) Then
+						stringToDraw = str[i]
 					Else
-						anchor = drawString[i][(drawString[i].Find("<") + 1)..(drawString[i].Find(">"))]
-						stringToDraw = drawString[i][(drawString[i].Find(">") + 1)..]
+						anchor = str[i][(str[i].Find("<") + 1)..(str[i].Find(">"))]
+						stringToDraw = str[i][(str[i].Find(">") + 1)..]
 					EndIf
 					
 					If (i - beginPosition >= stringCursol) Then
@@ -780,8 +780,8 @@ Class MyAPI ' Implements Def
 			EndIf
 		End
 		
-		Function drawStrings:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, fontH:Int, beginPosition:Int, bold:Bool, color1:Int, color2:Int, color3:Int)
-			If (drawString <> Null) Then
+		Function drawStrings:Void(g2:MFGraphics, str:String[], x:Int, y:Int, width:Int, height:Int, fontH:Int, beginPosition:Int, bold:Bool, color1:Int, color2:Int, color3:Int)
+			If (str.Length > 0) Then
 				Local x2:= x
 				
 				Local stringToDraw:String
@@ -796,18 +796,18 @@ Class MyAPI ' Implements Def
 				
 				Local i:= beginPosition
 				
-				While (i < drawString.Length)
+				While (i < str.Length)
 					If ((((i - stringCursol) - beginPosition) * LINE_SPACE) + FONT_H > height) Then
 						downPermit = True
 						
 						Exit
 					EndIf
 					
-					If (drawString[i].Find("<") = -1 Or drawString[i].Find(">") = -1) Then
-						stringToDraw = drawString[i]
+					If (str[i].Find("<") = -1 Or str[i].Find(">") = -1) Then
+						stringToDraw = str[i]
 					Else
-						anchor = drawString[i][(drawString[i].Find("<") + 1)..(drawString[i].Find(">"))]
-						stringToDraw = drawString[i][(drawString[i].Find(">") + 1)..]
+						anchor = str[i][(str[i].Find("<") + 1)..(str[i].Find(">"))]
+						stringToDraw = str[i][(str[i].Find(">") + 1)..]
 					EndIf
 					
 					If (i - beginPosition >= stringCursol) Then
@@ -831,8 +831,8 @@ Class MyAPI ' Implements Def
 			EndIf
 		End
 		
-		Function drawStringsContinue:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, beginPosition:Int, bold:Bool, color1:Int, color2:Int, color3:Int)
-			If (drawString <> Null) Then
+		Function drawStringsContinue:Void(g2:MFGraphics, str:String[], x:Int, y:Int, width:Int, height:Int, beginPosition:Int, bold:Bool, color1:Int, color2:Int, color3:Int)
+			If (str.Length > 0) Then
 				Local x2:= x
 				
 				Local stringToDraw:String
@@ -847,12 +847,12 @@ Class MyAPI ' Implements Def
 				
 				height = beginPosition
 				
-				While (height < drawString.Length)
-					If (drawString[height].Find("<") = -1 Or drawString[height].Find(">") = -1) Then
-						stringToDraw = drawString[height]
+				While (height < str.Length)
+					If (str[height].Find("<") = -1 Or str[height].Find(">") = -1) Then
+						stringToDraw = str[height]
 					Else
-						anchor = drawString[height][(drawString[height].Find("<") + 1)..(drawString[height].Find(">"))]
-						stringToDraw = drawString[height][(drawString[height].Find(">") + 1)..]
+						anchor = str[height][(str[height].Find("<") + 1)..(str[height].Find(">"))]
+						stringToDraw = str[height][(str[height].Find(">") + 1)..]
 					EndIf
 					
 					If (anchor.Find("H") <> -1) Then
@@ -874,8 +874,8 @@ Class MyAPI ' Implements Def
 			EndIf
 		End
 		
-		Function drawStringsNarrow:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, interval:Int, beginPosition:Int, bold:Bool, color1:Int, color2:Int, color3:Int)
-			If (drawString <> Null) Then
+		Function drawStringsNarrow:Void(g2:MFGraphics, str:String[], x:Int, y:Int, width:Int, height:Int, interval:Int, beginPosition:Int, bold:Bool, color1:Int, color2:Int, color3:Int)
+			If (str.Length > 0) Then
 				Local x2:= x
 				
 				Local stringToDraw:String
@@ -890,18 +890,18 @@ Class MyAPI ' Implements Def
 				
 				Local i:= beginPosition
 				
-				While (i < drawString.Length)
+				While (i < str.Length)
 					If ((((i - stringCursol) - beginPosition) * interval) + FONT_H > height) Then
 						downPermit = True
 						
 						Exit
 					EndIf
 					
-					If (drawString[i].Find("<") = -1 Or drawString[i].Find(">") = -1) Then
-						stringToDraw = drawString[i]
+					If (str[i].Find("<") = -1 Or str[i].Find(">") = -1) Then
+						stringToDraw = str[i]
 					Else
-						anchor = drawString[i][(drawString[i].Find("<") + 1)..(drawString[i].Find(">"))]
-						stringToDraw = drawString[i][(drawString[i].Find(">") + 1)..]
+						anchor = str[i][(str[i].Find("<") + 1)..(str[i].Find(">"))]
+						stringToDraw = str[i][(str[i].Find(">") + 1)..]
 					EndIf
 					
 					If (i - beginPosition >= stringCursol) Then
@@ -925,20 +925,20 @@ Class MyAPI ' Implements Def
 			EndIf
 		End
 		
-		Function drawStrings:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int)
-			drawStrings(g2, drawString, x, y, width, height, 0, False, 0, 0, 0)
+		Function drawStrings:Void(g2:MFGraphics, str:String[], x:Int, y:Int, width:Int, height:Int)
+			drawStrings(g2, str, x, y, width, height, 0, False, 0, 0, 0)
 		End
 		
-		Function drawBoldStrings:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, color1:Int, color2:Int, color3:Int)
-			drawStrings(g2, drawString, x, y, width, height, 0, True, color1, color2, color3)
+		Function drawBoldStrings:Void(g2:MFGraphics, str:String[], x:Int, y:Int, width:Int, height:Int, color1:Int, color2:Int, color3:Int)
+			drawStrings(g2, str, x, y, width, height, 0, True, color1, color2, color3)
 		End
 		
-		Function drawBoldStringsNarrow:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, interval:Int, color1:Int, color2:Int, color3:Int)
-			drawStringsNarrow(g2, drawString, x, y, width, height, interval, 0, True, color1, color2, color3)
+		Function drawBoldStringsNarrow:Void(g2:MFGraphics, str:String[], x:Int, y:Int, width:Int, height:Int, interval:Int, color1:Int, color2:Int, color3:Int)
+			drawStringsNarrow(g2, str, x, y, width, height, interval, 0, True, color1, color2, color3)
 		End
 		
-		Function drawStrings:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, fontH:Int, color1:Int, color2:Int, color3:Int)
-			drawStrings(g2, drawString, x, y, width, height, fontH, BMF_COLOR_WHITE, True, color1, color2, color3)
+		Function drawStrings:Void(g2:MFGraphics, str:String[], x:Int, y:Int, width:Int, height:Int, fontH:Int, color1:Int, color2:Int, color3:Int)
+			drawStrings(g2, str, x, y, width, height, fontH, BMF_COLOR_WHITE, True, color1, color2, color3)
 		End
 		
 		Function logicString:Void(keyDown:Bool, keyUp:Bool)
@@ -1024,7 +1024,7 @@ Class MyAPI ' Implements Def
 		End
 		
 		Function drawBoldString:Void(g2:MFGraphics, a:String, x:Int, y:Int, anchor:Int, color:Int, color2:Int, color3:Int)
-			If (a <> Null) Then
+			If (a.Length > 0) Then
 				x = zoomOut(x)
 				y = zoomOut(y)
 				
@@ -1041,7 +1041,7 @@ Class MyAPI ' Implements Def
 		End
 		
 		Function drawBoldString2:Void(g2:MFGraphics, a:String, x:Int, y:Int, anchor:Int, color:Int, color2:Int, color3:Int)
-			If (a <> Null) Then
+			If (a.Length > 0) Then
 				x = zoomOut(x)
 				y = zoomOut(y)
 				

@@ -439,8 +439,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\def.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>23</X>
+        <Y>12</Y>
       </CursorPos>
       <DocGUID>2a562f0a-7cf8-4b1c-8fdc-3a687fe831be</DocGUID>
       <Bookmarks />
@@ -461,8 +461,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>28</X>
-        <Y>680</Y>
+        <X>20</X>
+        <Y>988</Y>
       </CursorPos>
       <DocGUID>582c93b4-fa29-4d34-a53a-e6e74c6f26d5</DocGUID>
       <Bookmarks />
@@ -2133,8 +2133,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\state.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>1</X>
-        <Y>34</Y>
+        <X>21</X>
+        <Y>1725</Y>
       </CursorPos>
       <DocGUID>4881fd61-67b4-4b4b-af2c-8c071806d8a6</DocGUID>
       <Bookmarks />

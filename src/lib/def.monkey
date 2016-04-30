@@ -9,7 +9,7 @@ Public
 
 ' Constant variable(s):
 Global FONT:= def.FONT ' Const
-Global FONT_H:= FONT_H ' Const
+Global FONT_H:= def.FONT_H ' Const
 Global FONT_H_HALF:= (FONT_H / 2) ' Const
 Global LINE_SPACE:= (FONT_H + 2) ' Const
 
