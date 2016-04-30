@@ -318,8 +318,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\ending\normalending.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>290</Y>
+        <X>3</X>
+        <Y>329</Y>
       </CursorPos>
       <DocGUID>a5802ab4-77a1-4bd0-8b67-ab63066288a1</DocGUID>
       <Bookmarks />
@@ -340,12 +340,13 @@
       <DocGUID>eb49745d-ed0d-4d04-9e0e-7d5aec621e8e</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\ending\supersonicending.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\ending\supersonicending.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>13</X>
+        <Y>176</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>3257b075-6bc7-47b0-8cba-e12bac5b97d6</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\gameengine\def.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -379,8 +380,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animation.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>30</X>
-        <Y>479</Y>
+        <X>11</X>
+        <Y>492</Y>
       </CursorPos>
       <DocGUID>343b410a-aeaf-457a-b3d8-7e067a8d51bd</DocGUID>
       <Bookmarks />
@@ -1312,12 +1313,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\lightfont.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\lightfont.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>40</X>
-        <Y>89</Y>
+        <X>13</X>
+        <Y>51</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>2eae2503-53b5-4571-a932-a637cdb61deb</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\lizard.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -2018,8 +2020,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\specialplayer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>333</Y>
+        <X>13</X>
+        <Y>877</Y>
       </CursorPos>
       <DocGUID>6e1c6c40-04ad-47d9-bb8a-35953f47a663</DocGUID>
       <Bookmarks />
@@ -2121,8 +2123,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\gamestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>91</Y>
+        <X>13</X>
+        <Y>1720</Y>
       </CursorPos>
       <DocGUID>a731f3e2-29cc-4ebe-8ccf-e7ebfd249836</DocGUID>
       <Bookmarks />
@@ -2152,8 +2154,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>12</X>
-        <Y>1330</Y>
+        <X>13</X>
+        <Y>2391</Y>
       </CursorPos>
       <DocGUID>9d1657fc-323e-48aa-9f99-561461902166</DocGUID>
       <Bookmarks />

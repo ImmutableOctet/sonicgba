@@ -316,7 +316,7 @@ Class NormalEnding Extends PlainEnding ' Final
 			planeHeadDrawer = Null
 			
 			Animation.closeAnimationDrawerArray(birdDrawer)
-			birdDrawer = Null
+			birdDrawer = []
 			
 			Animation.closeAnimationDrawer(needEmeraldDrawer)
 			needEmeraldDrawer = Null

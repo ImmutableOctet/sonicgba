@@ -477,13 +477,11 @@ Class Animation
 		End
 		
 		Function closeAnimationArray:Void(animation:Animation[])
-			If (animation <> Null) Then
-				For Local i:= 0 Until animation.Length
-					closeAnimation(animation[i])
-					
-					animation[i] = Null
-				Next
-			EndIf
+			For Local i:= 0 Until animation.Length
+				closeAnimation(animation[i])
+				
+				animation[i] = Null
+			Next
 		End
 		
 		Function closeAnimationDrawer:Void(drawer:AnimationDrawer)

@@ -1689,7 +1689,7 @@ Class GameState Extends State
 			State.releaseTouchkeyBoard()
 			
 			Animation.closeAnimationArray(Self.stageInfoClearAni)
-			Self.stageInfoClearAni = Null
+			Self.stageInfoClearAni = []
 			
 			Animation.closeAnimationDrawer(stageInfoAniDrawer)
 			stageInfoAniDrawer = Null

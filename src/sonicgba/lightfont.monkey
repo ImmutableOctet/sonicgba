@@ -51,7 +51,7 @@ Class LightFont Extends GimmickObject
 		Function releaseAllResource:Void()
 			Animation.closeAnimationArray(lightFontAnimation)
 			
-			lightFontAnimation = Null
+			lightFontAnimation = []
 		End
 	Protected
 		' Constructor(s):

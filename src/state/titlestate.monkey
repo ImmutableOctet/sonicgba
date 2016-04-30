@@ -659,13 +659,13 @@ Class TitleState Extends State
 			titleSegaImage = Null
 			
 			Animation.closeAnimationArray(Self.titleAni)
-			Self.titleAni = Null
+			Self.titleAni = []
 			
 			Animation.closeAnimationDrawer(Self.titleAniDrawer)
 			Self.titleAniDrawer = Null
 			
 			Animation.closeAnimationArray(Self.stageSelAni)
-			Self.stageSelAni = Null
+			Self.stageSelAni = []
 			
 			Animation.closeAnimationDrawer(Self.stageSelAniDrawer)
 			Self.stageSelAniDrawer = Null
@@ -686,19 +686,19 @@ Class TitleState Extends State
 			Self.optionArrowDownDrawer = Null
 			
 			Animation.closeAnimationArray(Self.timeAttAni)
-			Self.timeAttAni = Null
+			Self.timeAttAni = []
 			
 			Animation.closeAnimationDrawer(Self.timeAttAniDrawer)
 			Self.timeAttAniDrawer = Null
 			
 			Animation.closeAnimationArray(Self.recordAni)
-			Self.recordAni = Null
+			Self.recordAni = []
 			
 			Animation.closeAnimationDrawer(Self.recordAniDrawer)
 			Self.recordAniDrawer = Null
 			
 			Animation.closeAnimationArray(Self.charSelAni)
-			Self.charSelAni = Null
+			Self.charSelAni = []
 			
 			Animation.closeAnimationDrawer(Self.charSelAniDrawer)
 			Self.charSelAniDrawer = Null
@@ -716,7 +716,7 @@ Class TitleState Extends State
 			Self.charSelTitleDrawer = Null
 			
 			Animation.closeAnimationArray(Self.charSelFilAni)
-			Self.charSelFilAni = Null
+			Self.charSelFilAni = []
 			
 			Animation.closeAnimationDrawer(Self.charSelFilAniDrawer)
 			Self.charSelFilAniDrawer = Null
@@ -2387,10 +2387,10 @@ Class TitleState Extends State
 		
 		Method openingClose:Void()
 			Animation.closeAnimationArray(Self.openingAnimation)
-			Self.openingAnimation = Null
+			Self.openingAnimation = []
 			
 			Animation.closeAnimationDrawerArray(Self.openingDrawer)
-			Self.openingDrawer = Null
+			Self.openingDrawer = []
 			
 			Animation.closeAnimationDrawer(Self.skipDrawer)
 			Self.skipDrawer = Null

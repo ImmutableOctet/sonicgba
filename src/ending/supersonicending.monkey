@@ -175,7 +175,7 @@ Class SuperSonicEnding Extends BaseEnding ' Final
 			Self.faceChangeDrawer = Null
 			
 			Animation.closeAnimationDrawerArray(Self.starDrawer)
-			Self.starDrawer = Null
+			Self.starDrawer = []
 			
 			creditImage = Null
 			
