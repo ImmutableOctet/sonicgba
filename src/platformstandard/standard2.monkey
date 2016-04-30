@@ -582,7 +582,7 @@ Class Standard2 ' Implements Def ' Final
 		End
 		
 		Function soundInit:Void()
-			soundUIDrawer = Animation.getInstanceFromQi("/standard/enable_sound.dat")[STATE_INIT].getDrawer()
+			soundUIDrawer = Animation.getInstanceFromQi("/standard/enable_sound.dat")[0].getDrawer()
 			
 			yesButton = New MFButton((SCREEN_WIDTH / 2) - 72, (SCREEN_HEIGHT / 2) + 28, 64, 24) ' Shr 1
 			noButton = New MFButton((SCREEN_WIDTH / 2) + 8, (SCREEN_HEIGHT / 2) + 28, 64, 24) ' Shr 1 ' ((SCREEN_WIDTH / 2) + FRAME_DIFF, ...)

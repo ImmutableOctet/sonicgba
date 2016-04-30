@@ -2868,8 +2868,7 @@ Class TitleState Extends State
 						If (Self.arrowPressState = 0) Then
 							Self.character_sel_offset_x = MyAPI.calNextPosition(Double(Self.character_sel_offset_x), 0.0, ZONE_NUM_OFFSET, 2)
 						Else
-							
-							If (Self.arrowPressstate = STATE_PRESS_START) Then
+							If (Self.arrowPressState = STATE_PRESS_START) Then
 								Self.character_sel_offset_x = MyAPI.calNextPosition(Double(Self.character_sel_offset_x), 128.0, ZONE_NUM_OFFSET, 2)
 								
 								If (Self.character_sel_offset_x = TIME_ATTACK_WIDTH) Then

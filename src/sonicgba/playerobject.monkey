@@ -4930,8 +4930,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			resetFlyCount()
 		End
 		
-		Method setDie:Void(isDrowning:Bool)
-			setDie(isDrowning, DIE_DRIP_STATE_JUMP_V0)
+		Method setDie:Void(isDrowning:Bool, vel:Int)
+			setDieInit(isDrowning, vel)
 		End
 		
 		Method setDieWithoutSE:Void()
