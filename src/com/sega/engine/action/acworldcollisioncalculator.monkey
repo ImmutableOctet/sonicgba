@@ -2,6 +2,9 @@ Strict
 
 Public
 
+' Friends:
+Friend com.sega.engine.action.acobject
+
 ' Imports:
 Private
 	Import com.sega.engine.action.acblock
@@ -388,7 +391,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				newX = Self.collisionData.newPosX
 			EndIf
 			
-			If (newX <> NO_COLLISION) Then
+			If (newX <> ACParam.NO_COLLISION) Then
 				If (isVertical) Then
 					sideOffset = Abs(newX - Self.footY)
 				Else
@@ -410,7 +413,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				newX = Self.collisionData.newPosX
 			EndIf
 			
-			If (newX <> NO_COLLISION) Then
+			If (newX <> ACParam.NO_COLLISION) Then
 				If (sideCollision) Then
 					Local sideOffset2:Int
 					
@@ -633,7 +636,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 						newX = Self.collisionData.newPosX
 					EndIf
 					
-					If (newX <> NO_COLLISION) Then
+					If (newX <> ACParam.NO_COLLISION) Then
 						Self.user.doWhileTouchWorld(ACParam.DIRECTION_RIGHT, getDegreeFromWorld((Self.footDegree + 270) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ))
 						
 						If (isVertical) Then
@@ -659,7 +662,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 						newX = Self.collisionData.newPosX
 					EndIf
 					
-					If (newX <> NO_COLLISION) Then
+					If (newX <> ACParam.NO_COLLISION) Then
 						Self.user.doWhileTouchWorld(ACParam.DIRECTION_LEFT, getDegreeFromWorld((Self.footDegree + 90) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ))
 						
 						If (isVertical) Then
@@ -817,14 +820,14 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				Select (var1)
 					Case ACParam.DIRECTION_UP, ACParam.DIRECTION_DOWN
 						Local var10:= Self.footDegree
-						Local var11:= NO_COLLISION
+						Local var11:= ACParam.NO_COLLISION
 						Local var12:= -1
 						
 						For Local var13:= 0 Until Self.footCollisionPointOffsetX.Length
 							Self.footCollisionPointResaultX[var13] = ACUtilities.getRelativePointX(Self.footX, Self.footCollisionPointOffsetX[var13], Self.footCollisionPointOffsetY, var10)
 							Self.footCollisionPointResaultY[var13] = Self.getWorldY(Self.footCollisionPointResaultX[var13], ACUtilities.getRelativePointY(Self.footY, Self.footCollisionPointOffsetX[var13], Self.footCollisionPointOffsetY + Self.user.getPressToGround(), var10), var1)
 							
-							If (Self.footCollisionPointResaultY[var13] <> NO_COLLISION And (var11 = NO_COLLISION Or var1 = ACParam.DIRECTION_UP And Self.footCollisionPointResaultY[var13] < var11 Or var1 = ACParam.DIRECTION_DOWN And Self.footCollisionPointResaultY[var13] > var11 Or var13 = Self.priorityChkId)) Then
+							If (Self.footCollisionPointResaultY[var13] <> ACParam.NO_COLLISION And (var11 = ACParam.NO_COLLISION Or var1 = ACParam.DIRECTION_UP And Self.footCollisionPointResaultY[var13] < var11 Or var1 = ACParam.DIRECTION_DOWN And Self.footCollisionPointResaultY[var13] > var11 Or var13 = Self.priorityChkId)) Then
 								var12 = var13
 								var11 = Self.footCollisionPointResaultY[var13]
 								
@@ -882,7 +885,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 							Return
 						EndIf
 					Case ACParam.DIRECTION_RIGHT, ACParam.DIRECTION_LEFT
-						Local var2:= NO_COLLISION
+						Local var2:= ACParam.NO_COLLISION
 						Local var3:= Self.footDegree
 						Local var4:= -1
 						
@@ -899,7 +902,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 							
 							Self.footCollisionPointResaultX[var5] = Self.getWorldX(ACUtilities.getRelativePointX(Self.footX, Self.footCollisionPointOffsetX[var5], Self.footCollisionPointOffsetY + Self.user.getPressToGround(), var3), Self.footCollisionPointResaultY[var5], var1)
 							
-							If (Self.footCollisionPointResaultX[var5] <> NO_COLLISION And (var2 = NO_COLLISION Or var1 = ACParam.DIRECTION_RIGHT And Self.footCollisionPointResaultX[var5] > var2 Or var1 = ACParam.DIRECTION_LEFT And Self.footCollisionPointResaultX[var5] < var2 Or var5 = Self.priorityChkId)) Then
+							If (Self.footCollisionPointResaultX[var5] <> ACParam.NO_COLLISION And (var2 = ACParam.NO_COLLISION Or var1 = ACParam.DIRECTION_RIGHT And Self.footCollisionPointResaultX[var5] > var2 Or var1 = ACParam.DIRECTION_LEFT And Self.footCollisionPointResaultX[var5] < var2 Or var5 = Self.priorityChkId)) Then
 								var4 = var5
 								var2 = Self.footCollisionPointResaultX[var5]
 								
@@ -1009,7 +1012,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				
 				newY = getWorldY(Self.chkPointX, Self.chkPointY + (DSgn((direction = ACParam.DIRECTION_UP)) * (Abs(Self.chkPointX - startPointX) + Self.user.getPressToGround())), direction)
 				
-				If (newY <> NO_COLLISION) Then
+				If (newY <> ACParam.NO_COLLISION) Then
 					Self.chkPointY = newY
 					
 					Self.footDegree = getDegreeFromWorld(Self.footDegree, Self.chkPointX, Self.chkPointY, Self.acObj.posZ)
@@ -1026,7 +1029,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				
 				newY = getWorldY(Self.chkPointX, Self.chkPointY + (DSgn((direction = ACParam.DIRECTION_UP)) * (Abs(Self.chkPointX - startPointX) + Self.user.getPressToGround())), direction)
 				
-				If (newY <> NO_COLLISION) Then
+				If (newY <> ACParam.NO_COLLISION) Then
 					Self.chkPointY = newY
 				EndIf
 			Else
@@ -1050,7 +1053,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				
 				newX = getWorldX(Self.chkPointX + (DSgn((direction = ACParam.DIRECTION_LEFT)) * (Abs(Self.chkPointY - startPointY) + Self.user.getPressToGround())), Self.chkPointY, direction)
 				
-				If (newX <> NO_COLLISION) Then
+				If (newX <> ACParam.NO_COLLISION) Then
 					Self.chkPointX = newX
 					Self.footDegree = getDegreeFromWorld(Self.footDegree, Self.chkPointX, Self.chkPointY, Self.acObj.posZ)
 				EndIf
@@ -1069,7 +1072,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 							newY = Self.collisionData.newPosY
 						EndIf
 						
-						If (newY <> NO_COLLISION) Then
+						If (newY <> ACParam.NO_COLLISION) Then
 							Self.footY = newY
 							
 							calChkPointFromPos()
@@ -1090,7 +1093,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 							newY = Self.collisionData.newPosY
 						EndIf
 						
-						If (newY <> NO_COLLISION) Then
+						If (newY <> ACParam.NO_COLLISION) Then
 							Self.footY = newY
 							
 							calChkPointFromPos()
@@ -1107,7 +1110,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				
 				newX = getWorldX(Self.chkPointX + (DSgn((direction = ACParam.DIRECTION_LEFT)) * (Abs(Self.chkPointY - startPointY) + Self.user.getPressToGround())), Self.chkPointY, direction)
 				
-				If (newX <> NO_COLLISION) Then
+				If (newX <> ACParam.NO_COLLISION) Then
 					Self.chkPointX = newX
 				EndIf
 			EndIf
@@ -1118,25 +1121,25 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				Case ACParam.DIRECTION_UP
 					newY = getWorldY(Self.footX, Self.footY + Self.worldInstance.getTileHeight(), ACParam.DIRECTION_UP)
 					
-					If (newY <> NO_COLLISION) Then
+					If (newY <> ACParam.NO_COLLISION) Then
 						Self.footY = newY
 					EndIf
 				Case ACParam.DIRECTION_RIGHT
 					newX = getWorldX(Self.footX - Self.worldInstance.getTileHeight(), Self.footY, ACParam.DIRECTION_RIGHT)
 					
-					If (newX <> NO_COLLISION) Then
+					If (newX <> ACParam.NO_COLLISION) Then
 						Self.footX = newX
 					EndIf
 				Case ACParam.DIRECTION_DOWN
 					newY = getWorldY(Self.footX, Self.footY - Self.worldInstance.getTileHeight(), ACParam.DIRECTION_DOWN)
 					
-					If (newY <> NO_COLLISION) Then
+					If (newY <> ACParam.NO_COLLISION) Then
 						Self.footY = newY
 					EndIf
 				Case ACParam.DIRECTION_LEFT
 					newX = getWorldX(Self.footX + Self.worldInstance.getTileHeight(), Self.footY, ACParam.DIRECTION_LEFT)
 					
-					If (newX <> NO_COLLISION) Then
+					If (newX <> ACParam.NO_COLLISION) Then
 						Self.footX = newX
 					EndIf
 			End Select

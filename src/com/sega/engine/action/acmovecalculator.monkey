@@ -2,6 +2,10 @@ Strict
 
 Public
 
+' Friends:
+Friend com.sega.engine.action.acworldcollisioncalculator
+Friend com.sega.engine.action.acobject
+
 ' Imports:
 Private
 	Import com.sega.engine.lib.myapi

@@ -6,7 +6,6 @@ Public
 Private
 	Import com.sega.engine.action.accollision
 	Import com.sega.engine.action.acdegreegetter
-	Import com.sega.engine.action.acdegreegetter.degreereturner
 	Import com.sega.engine.action.acparam
 	
 	Import com.sega.mobile.define.mdphone

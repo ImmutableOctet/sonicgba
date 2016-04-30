@@ -148,9 +148,9 @@ Class ACCollision Implements ACParam Abstract
 			Local refX:= ACParam.NO_COLLISION
 			
 			Select (direction)
-				Case DIRECTION_RIGHT
+				Case ACParam.DIRECTION_RIGHT
 					refX = getCollisionXFromRight(y)
-				Case DIRECTION_LEFT
+				Case ACParam.DIRECTION_LEFT
 					refX = getCollisionXFromLeft(y)
 			End Select
 			
@@ -171,9 +171,9 @@ Class ACCollision Implements ACParam Abstract
 			Local refY:= ACParam.NO_COLLISION
 			
 			Select (direction)
-				Case DIRECTION_UP
+				Case ACParam.DIRECTION_UP
 					refY = getCollisionYFromUp(x)
-				Case DIRECTION_DOWN
+				Case ACParam.DIRECTION_DOWN
 					refY = getCollisionYFromDown(x)
 			End Select
 			
@@ -195,26 +195,26 @@ Class ACCollision Implements ACParam Abstract
 		
 		Method doHorizontalCollision:Void(obj:ACCollision)
 			If (Self.isLeftCollision) Then
-				doObjCollision(obj, DIRECTION_LEFT, Self.thisLeftHighPointX, Self.thisLeftHighPointY, Self.objLeftHighPointX, Self.thisLeftHighPointY)
-				obj.doObjCollision(Self, DIRECTION_RIGHT, Self.objLeftHighPointX, Self.thisLeftHighPointY, Self.thisLeftHighPointX, Self.thisLeftHighPointY)
+				doObjCollision(obj, ACParam.DIRECTION_LEFT, Self.thisLeftHighPointX, Self.thisLeftHighPointY, Self.objLeftHighPointX, Self.thisLeftHighPointY)
+				obj.doObjCollision(Self, ACParam.DIRECTION_RIGHT, Self.objLeftHighPointX, Self.thisLeftHighPointY, Self.thisLeftHighPointX, Self.thisLeftHighPointY)
 				
 				Return
 			EndIf
 			
-			doObjCollision(obj, DIRECTION_RIGHT, Self.thisRightHighPointX, Self.thisRightHighPointY, Self.objRightHighPointX, Self.thisRightHighPointY)
-			obj.doObjCollision(Self, DIRECTION_LEFT, Self.objRightHighPointX, Self.thisRightHighPointY, Self.thisRightHighPointX, Self.thisRightHighPointY)
+			doObjCollision(obj, ACParam.DIRECTION_RIGHT, Self.thisRightHighPointX, Self.thisRightHighPointY, Self.objRightHighPointX, Self.thisRightHighPointY)
+			obj.doObjCollision(Self, ACParam.DIRECTION_LEFT, Self.objRightHighPointX, Self.thisRightHighPointY, Self.thisRightHighPointX, Self.thisRightHighPointY)
 		End
 		
 		Method doVerticalCollision:Void(obj:ACCollision)
 			If (Self.isUpCollision) Then
-				doObjCollision(obj, DIRECTION_UP, Self.thisUpHighPointX, Self.thisUpHighPointY, Self.thisUpHighPointX, Self.objUpHighPointY)
-				obj.doObjCollision(Self, DIRECTION_DOWN, Self.thisUpHighPointX, Self.objUpHighPointY, Self.thisUpHighPointX, Self.thisUpHighPointY)
+				doObjCollision(obj, ACParam.DIRECTION_UP, Self.thisUpHighPointX, Self.thisUpHighPointY, Self.thisUpHighPointX, Self.objUpHighPointY)
+				obj.doObjCollision(Self, ACParam.DIRECTION_DOWN, Self.thisUpHighPointX, Self.objUpHighPointY, Self.thisUpHighPointX, Self.thisUpHighPointY)
 				
 				Return
 			EndIf
 			
-			doObjCollision(obj, DIRECTION_DOWN, Self.thisDownHighPointX, Self.thisDownHighPointY, Self.thisDownHighPointX, Self.objDownHighPointY)
-			obj.doObjCollision(Self, DIRECTION_UP, Self.thisDownHighPointX, Self.objDownHighPointY, Self.thisDownHighPointX, Self.thisDownHighPointY)
+			doObjCollision(obj, ACParam.DIRECTION_DOWN, Self.thisDownHighPointX, Self.thisDownHighPointY, Self.thisDownHighPointX, Self.objDownHighPointY)
+			obj.doObjCollision(Self, ACParam.DIRECTION_UP, Self.thisDownHighPointX, Self.objDownHighPointY, Self.thisDownHighPointX, Self.thisDownHighPointY)
 		End
 		
 		Method doCheckCollisionX:Void(obj:ACCollision, moveDistanceX:Int)
@@ -238,10 +238,10 @@ Class ACCollision Implements ACParam Abstract
 				Local i2:= topY
 				
 				While (i2 < bottomY)
-					Local thisLeftX:= getCollisionX(i2, DIRECTION_LEFT)
-					Local objRightX:= obj.getCollisionX(i2, DIRECTION_RIGHT)
-					Local thisRightX:= getCollisionX(i2, DIRECTION_RIGHT)
-					Local objLeftX:= obj.getCollisionX(i2, DIRECTION_LEFT)
+					Local thisLeftX:= getCollisionX(i2, ACParam.DIRECTION_LEFT)
+					Local objRightX:= obj.getCollisionX(i2, ACParam.DIRECTION_RIGHT)
+					Local thisRightX:= getCollisionX(i2, ACParam.DIRECTION_RIGHT)
+					Local objLeftX:= obj.getCollisionX(i2, ACParam.DIRECTION_LEFT)
 					
 					If (Not (thisLeftX = ACParam.NO_COLLISION Or objRightX = ACParam.NO_COLLISION Or thisLeftX > objRightX)) Then
 						i = Self.thisLeftHighPointX
@@ -348,10 +348,10 @@ Class ACCollision Implements ACParam Abstract
 				Local i:= leftX
 				
 				While (i < rightX)
-					Local thisUpY:= getCollisionY(i, DIRECTION_UP)
-					Local thisDownY:= getCollisionY(i, DIRECTION_DOWN)
-					Local objUpY:= obj.getCollisionY(i, DIRECTION_UP)
-					Local objDownY:= obj.getCollisionY(i, DIRECTION_DOWN)
+					Local thisUpY:= getCollisionY(i, ACParam.DIRECTION_UP)
+					Local thisDownY:= getCollisionY(i, ACParam.DIRECTION_DOWN)
+					Local objUpY:= obj.getCollisionY(i, ACParam.DIRECTION_UP)
+					Local objDownY:= obj.getCollisionY(i, ACParam.DIRECTION_DOWN)
 					
 					If (thisUpY <> ACParam.NO_COLLISION And objDownY <> ACParam.NO_COLLISION And thisUpY <= objDownY And (Self.thisUpHighPointY = ACParam.NO_COLLISION Or Abs(thisUpY - objDownY) > upMaxDistance)) Then
 						Self.thisUpHighPointY = thisUpY

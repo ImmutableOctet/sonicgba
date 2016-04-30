@@ -5,9 +5,9 @@ Public
 ' Imports:
 Private
 	Import lib.def
-	Import lib.bitmapfont
 	Import lib.coordinate
 	Import lib.animationdrawer
+	'Import lib.bitmapfont
 	
 	Import sonicgba.globalresource
 	

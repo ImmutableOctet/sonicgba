@@ -57,7 +57,7 @@ Private
 	Import sonicgba.spring
 	Import sonicgba.stagemanager
 	
-	Import mflib.bpdef
+	'Import mflib.bpdef
 	
 	Import special.ssdef
 	Import special.specialmap

@@ -9,7 +9,7 @@ Friend application
 Private
 	Import lib.rect
 	
-	Import mflib.bpdef
+	'Import mflib.bpdef
 	
 	#Rem
 		Import android.content.context
