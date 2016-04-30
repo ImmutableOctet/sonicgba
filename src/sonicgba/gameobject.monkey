@@ -1350,8 +1350,8 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			Local objectRect:= player.getCollisionRect()
 			Local thisRect:= getCollisionRect()
 			
-			rectH.setRect(objectRect.x0, objectRect.y0 + CHECK_OFFSET, objectRect.getWidth(), objectRect.getHeight() - PlayerSonic.BACK_JUMP_SPEED_X)
-			rectV.setRect(objectRect.x0 + CHECK_OFFSET, objectRect.y0, objectRect.getWidth() - PlayerSonic.BACK_JUMP_SPEED_Y, objectRect.getHeight()) ' BACK_JUMP_SPEED_X
+			rectH.setRect(objectRect.x0, objectRect.y0 + CHECK_OFFSET, objectRect.getWidth(), objectRect.getHeight() - (PlayerObject.BODY_OFFSET / 2))
+			rectV.setRect(objectRect.x0 + CHECK_OFFSET, objectRect.y0, objectRect.getWidth() - (PlayerObject.BODY_OFFSET / 2), objectRect.getHeight()) ' BACK_JUMP_SPEED_X
 			
 			Return (thisRect.collisionChk(rectH) Or thisRect.collisionChk(rectV))
 		End
@@ -1360,8 +1360,8 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			Local objectRect:= player.getCollisionRect()
 			Local thisRect:= getCollisionRect()
 			
-			rectH.setRect(objectRect.x0, objectRect.y0 + CHECK_OFFSET, objectRect.getWidth(), objectRect.getHeight() - PlayerSonic.BACK_JUMP_SPEED_X)
-			rectV.setRect(objectRect.x0 + CHECK_OFFSET, objectRect.y0, objectRect.getWidth() - PlayerSonic.BACK_JUMP_SPEED_X, objectRect.getHeight())
+			rectH.setRect(objectRect.x0, objectRect.y0 + CHECK_OFFSET, objectRect.getWidth(), objectRect.getHeight() - (PlayerObject.BODY_OFFSET / 2))
+			rectV.setRect(objectRect.x0 + CHECK_OFFSET, objectRect.y0, objectRect.getWidth() - (PlayerObject.BODY_OFFSET / 2), objectRect.getHeight())
 			
 			Return thisRect.collisionChk(rectV)
 		End

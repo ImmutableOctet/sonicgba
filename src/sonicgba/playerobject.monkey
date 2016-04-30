@@ -85,8 +85,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const BACKGROUND_WIDTH:Int = 80
 		Const BG_NUM:Int = (((SCREEN_WIDTH + BACKGROUND_WIDTH) - 1) / BACKGROUND_WIDTH)
 		
-		Const BODY_OFFSET:Int = 768
-		
 		Const BREATHE_IMAGE_HEIGHT:Int = 16
 		Const BREATHE_IMAGE_WIDTH:Int = 16
 		Const BREATHE_TIME_COUNT:Int = 21000
@@ -337,6 +335,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		' Constant variable(s):
 		Const WIDTH:Int = 1024
 		Const HEIGHT:Int = 1536
+		
+		Const BODY_OFFSET:Int = 768
 		
 		Const ANI_ATTACK_1:Int = 18
 		Const ANI_ATTACK_2:Int = 19

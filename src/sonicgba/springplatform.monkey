@@ -116,7 +116,7 @@ Class SpringPlatform Extends GimmickObject
 			Local thisRect:= getCollisionRect()
 			
 			' Magic numbers: 192, 384
-			rectV.setRect(objectRect.x0 + 192, objectRect.y0, objectRect.getWidth() - 384, objectRect.getHeight()) ' (PlayerSonic.BACK_JUMP_SPEED_X / 2)
+			rectV.setRect(objectRect.x0 + 192, objectRect.y0, objectRect.getWidth() - 384, objectRect.getHeight()) ' ((PlayerObject.BODY_OFFSET / 2) / 2)
 			
 			Return thisRect.collisionChk(rectV)
 		End

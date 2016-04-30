@@ -81,7 +81,7 @@ Class CrlFP32 ' Final
 				i2 = ERROR_BAD_INPUT
 			EndIf
 			
-			Local flag:Bool = (i3 ~ i2)
+			Local flag:= Bool(i3 ~ i2)
 			
 			If (i < 0) Then
 				i = -i
@@ -156,7 +156,7 @@ Class CrlFP32 ' Final
 				i2 = ERROR_BAD_INPUT
 			EndIf
 			
-			Local flag:Bool = (i3 ~ i2)
+			Local flag:= Bool(i3 ~ i2)
 			
 			If (i < 0) Then
 				i = -i

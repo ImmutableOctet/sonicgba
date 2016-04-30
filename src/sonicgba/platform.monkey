@@ -206,7 +206,7 @@ Class Platform Extends GimmickObject
 			Local objectRect:= object.getCollisionRect()
 			Local thisRect:= getCollisionRect()
 			
-			rectV.setRect(objectRect.x0 + STAND_OFFSET, objectRect.y0 + Self.offsetY2, objectRect.getWidth() - PlayerSonic.BACK_JUMP_SPEED_X, objectRect.getHeight()) ' (DRAW_OFFSET_Y / 2)
+			rectV.setRect(objectRect.x0 + STAND_OFFSET, objectRect.y0 + Self.offsetY2, objectRect.getWidth() - (PlayerObject.BODY_OFFSET / 2), objectRect.getHeight()) ' (DRAW_OFFSET_Y / 2)
 			
 			Return thisRect.collisionChk(rectV)
 		End
