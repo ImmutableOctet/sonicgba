@@ -36,26 +36,6 @@ Class PipeIn Extends BasicPipe
 			BasicPipe.releaseAllResource()
 		End
 		
-		Function updateCollisionInfo:Void()
-			If (StageManager.getCurrentZoneId() = 2 Or StageManager.getStageID() = 10) Then
-				If (Self.actionID = 0) Then
-					COLLISION_WIDTH = 2944
-					COLLISION_HEIGHT = 5632
-				ElseIf (Self.actionID = 2) Then
-					COLLISION_WIDTH = 6144
-					COLLISION_HEIGHT = 2432
-				EndIf
-			ElseIf (StageManager.getStageID() = 11) Then
-				If (Self.actionID = 0) Then
-					COLLISION_WIDTH = 3712
-					COLLISION_HEIGHT = 5504
-				ElseIf (Self.actionID = 2) Then
-					COLLISION_WIDTH = 6912
-					COLLISION_HEIGHT = 3456
-				EndIf
-			EndIf
-		End
-		
 		' Constructor(s):
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, direction_or__width:Int, __height:Int)
 			Super.New(id, x, y, left, top, direction_or__width, __height)
@@ -77,6 +57,29 @@ Class PipeIn Extends BasicPipe
 			updateCollisionInfo()
 			
 			makeDrawer()
+		End
+		
+		' Methods:
+		
+		' Extensions:
+		Method updateCollisionInfo:Void()
+			If (StageManager.getCurrentZoneId() = 2 Or StageManager.getStageID() = 10) Then
+				If (Self.actionID = 0) Then
+					COLLISION_WIDTH = 2944
+					COLLISION_HEIGHT = 5632
+				ElseIf (Self.actionID = 2) Then
+					COLLISION_WIDTH = 6144
+					COLLISION_HEIGHT = 2432
+				EndIf
+			ElseIf (StageManager.getStageID() = 11) Then
+				If (Self.actionID = 0) Then
+					COLLISION_WIDTH = 3712
+					COLLISION_HEIGHT = 5504
+				ElseIf (Self.actionID = 2) Then
+					COLLISION_WIDTH = 6912
+					COLLISION_HEIGHT = 3456
+				EndIf
+			EndIf
 		End
 	Public
 		' Methods:

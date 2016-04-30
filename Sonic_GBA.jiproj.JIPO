@@ -1055,8 +1055,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\damagearea.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>13</Y>
+        <X>0</X>
+        <Y>18</Y>
       </CursorPos>
       <DocGUID>22a895a3-3648-483a-bb62-cca9dffb6650</DocGUID>
       <Bookmarks />
@@ -1505,18 +1505,19 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\pipein.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>40</Y>
+        <X>35</X>
+        <Y>64</Y>
       </CursorPos>
       <DocGUID>ce2a3f55-b577-4135-a452-8070ca48d31d</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\pipeout.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\pipeout.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>8</X>
+        <Y>63</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>7af6d376-ed32-4007-a42c-5ef112a6f8c2</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\pipeset.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
