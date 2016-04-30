@@ -461,8 +461,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>40</X>
-        <Y>111</Y>
+        <X>33</X>
+        <Y>569</Y>
       </CursorPos>
       <DocGUID>582c93b4-fa29-4d34-a53a-e6e74c6f26d5</DocGUID>
       <Bookmarks />
@@ -2124,8 +2124,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\specialstagestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>25</X>
-        <Y>1378</Y>
+        <X>3</X>
+        <Y>1377</Y>
       </CursorPos>
       <DocGUID>94b9439f-5db3-473f-bac7-47de9c24014c</DocGUID>
       <Bookmarks />

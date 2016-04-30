@@ -364,11 +364,11 @@ Class MyAPI ' Implements Def
 				
 				Local nextWord:= s[currentPosition..endOfCurrentWord]
 				
-				If (nextWord.Equals("\")) Then ' "~~"
+				If (nextWord = "\") Then ' "~~"
 					ConcealEnterPosition = (currentPosition - startOfLine)
 					
 					isSpace = False
-				ElseIf (nextWord.Equals("|") Or nextWord.Equals("~n")) Then
+				ElseIf (nextWord = "|" Or nextWord = "~n") Then
 					ConcealEnterPosition = 0
 					
 					Local startOfLine2:= endOfCurrentWord
@@ -383,7 +383,7 @@ Class MyAPI ' Implements Def
 				Else
 					answerWord = (answerWord + nextWord)
 					
-					If (nextWord.Equals("<")) Then
+					If (nextWord = "<") Then
 						func = True
 						
 						currentPosition = endOfCurrentWord
@@ -464,11 +464,11 @@ Class MyAPI ' Implements Def
 				
 				Local nextWord:= s[(currentPosition)..(endOfCurrentWord)]
 				
-				If (nextWord.Equals("^")) Then
+				If (nextWord = "^") Then
 					ConcealEnterPosition = (currentPosition - startOfLine)
 					
 					isSpace = False
-				ElseIf (nextWord.Equals("|") Or nextWord.Equals("~n")) Then
+				ElseIf (nextWord = "|" Or nextWord = "~n") Then
 					ConcealEnterPosition = 0
 					
 					Local startOfLine2:= endOfCurrentWord
@@ -483,7 +483,7 @@ Class MyAPI ' Implements Def
 				Else
 					answerWord += nextWord
 					
-					If (nextWord.Equals("<")) Then
+					If (nextWord = "<") Then
 						func = True
 						
 						currentPosition = endOfCurrentWord
@@ -556,9 +556,9 @@ Class MyAPI ' Implements Def
 				
 				Local nextWord:= s[(currentPosition)..(endOfCurrentWord)]
 				
-				If (nextWord.Equals("^") Or nextWord.Equals(" ")) Then
+				If (nextWord = "^" Or nextWord = " ") Then
 					'Local ConcealEnterPosition:= (currentPosition - startOfLine)
-				ElseIf (nextWord.Equals("|") Or nextWord.Equals("~n")) Then
+				ElseIf (nextWord = "|" Or nextWord = "~n") Then
 					startOfLine = endOfCurrentWord
 					
 					strings.Push(answerWord)
@@ -567,7 +567,7 @@ Class MyAPI ' Implements Def
 				Else
 					answerWord = answerWord + nextWord
 					
-					If (Not nextWord.Equals("<")) Then
+					If (Not nextWord = "<") Then
 						Local i:= 0
 						
 						While (i < Symbol.Length)
