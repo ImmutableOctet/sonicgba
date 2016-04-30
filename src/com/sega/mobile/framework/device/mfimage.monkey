@@ -142,12 +142,13 @@ Class MFImage
 			Local ret:= New MFImage()
 			
 			ret.image = New Image(width, height, 0.0, 0.0)
-			ret.graphics = MFGraphics.createMFGraphics(ret.getGraphics().getSystemgraphics(), width, height)
+			ret.graphics = MFGraphics.createMFGraphics(ret.getGraphics().getSystemGraphics(), width, height)
 			ret.mutable = True
 			
 			Return ret
 		End
-	
+		
+		#Rem
 		Function createImage:MFImage(data:DataBuffer) ' Final
 			Local bais:= New DataStream(data)
 			Local ret:= createImage(bais)
@@ -165,6 +166,7 @@ Class MFImage
 			
 			Return ret
 		End
+		#End
 		
 		' Methods:
 		

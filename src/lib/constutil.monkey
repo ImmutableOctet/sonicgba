@@ -7,6 +7,8 @@ Private
 	'Import com.sega.mobile.framework.device.mfgamepad
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
+	
+	Import regal.typetool
 Public
 
 ' Functions:
@@ -47,7 +49,7 @@ Class ConstUtil
 		Const ROTATE_270:Short = 4096
 		
 		' The math used to make up this array may change in the future.
-		Global TRANS:Short[] = [FLIP_Y, FLIP_X, ROTATE_180, (ROTATE_180 - ROTATE_270), (ROTATE_180 | ROTATE_270), ROTATE_270, (FLIP_Y - ROTATE_270)]
+		Global TRANS:Short[] = [FLIP_Y, FLIP_X, ROTATE_180, (ROTATE_180 - ROTATE_270), (ROTATE_180 | ROTATE_270), ROTATE_270, (FLIP_Y - ROTATE_270)] ' Const
 		
 		' Functions:
 		Function DrawImage:Void(g:MFGraphics, img:MFImage, dx:Int, dy:Int, anchor:Int, tmp_attr:Int)

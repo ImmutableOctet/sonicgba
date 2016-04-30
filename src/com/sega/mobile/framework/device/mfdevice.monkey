@@ -869,10 +869,10 @@ Class MFDevice Final
 		Function enableLayer:Void(layer:Int)
 			If (layer <= 0 Or layer > MAX_LAYER) Then ' (layer <> MAX_LAYER)
 				If (layer < 0 And layer >= -MAX_LAYER And preLayer[(-layer) - MAX_LAYER] = Null) Then
-					preLayer[(-layer) - MAX_LAYER] = MFImage.generateImage(screenWidth, screenHeight)
+					preLayer[(-layer) - MAX_LAYER] = MFImage.createImage(screenWidth, screenHeight)
 				EndIf
 			ElseIf (postLayer[layer - MAX_LAYER] = Null) Then
-				postLayer[layer - MAX_LAYER] = MFImage.generateImage(screenWidth, screenHeight)
+				postLayer[layer - MAX_LAYER] = MFImage.createImage(screenWidth, screenHeight)
 			EndIf
 		End
 		

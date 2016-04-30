@@ -49,13 +49,13 @@ Class Frame
 		
 		' Methods:
 		Method InitializeClips:Short[][](nSize:Int)
-			Self.m_ClipInfo = New Short[nSize]
+			Self.m_ClipInfo = New Short[nSize][]
 				
 			For Local i:= 0 Until nSize
 				Self.m_ClipInfo[i] = New Short[CLIP_DATA_SIZE]
 			Next
 			
-			Self.m_ClipInfo
+			Return Self.m_ClipInfo
 		End
 	Public
 		' Constructor(s):
@@ -163,11 +163,11 @@ Class Frame
 		End
 		
 		Method loadFrameG2:Void(ds:Stream)
-			If (in <> Null) Then
+			If (ds <> Null) Then
 				Return
 			EndIf
 			
-			Self.m_nClips = in.ReadByte()
+			Self.m_nClips = ds.ReadByte()
 			
 			InitializeClips(Self.m_nClips)
 			
@@ -176,26 +176,26 @@ Class Frame
 			For Local i:= 0 Until Self.m_nClips
 				Self.functionID[i] = ds.ReadByte()
 				
-				sArr = Self.m_ClipInfo[i]
+				Local clipInfo:= Self.m_ClipInfo[i]
 				
 				Select Self.functionID[i]
 					Case 0
-						sArr[4] = ds.ReadByte()
-						sArr[2] = ds.ReadByte()
-						sArr[3] = ds.ReadByte()
+						clipInfo[4] = ds.ReadByte()
+						clipInfo[2] = ds.ReadByte()
+						clipInfo[3] = ds.ReadByte()
 						
-						sArr[3] = Short(sArr[3] Shl 4)
+						clipInfo[3] = Short(clipInfo[3] Shl 4)
 						
-						If (sArr[4] < 0) Then
-							sArr[4] = Short(sArr[4] + UOCTET_MAX_POSITIVE_NUMBERS)
+						If (clipInfo[4] < 0) Then
+							clipInfo[4] = Short(clipInfo[4] + UOCTET_MAX_POSITIVE_NUMBERS)
 						EndIf
 						
-						If (sArr[2] < 0) Then
-							sArr[2] = Short(sArr[2] + UOCTET_MAX_POSITIVE_NUMBERS)
+						If (clipInfo[2] < 0) Then
+							clipInfo[2] = Short(clipInfo[2] + UOCTET_MAX_POSITIVE_NUMBERS)
 						EndIf
 						
-						sArr[0] = ds.ReadShort()
-						sArr[1] = ds.ReadShort()
+						clipInfo[0] = ds.ReadShort()
+						clipInfo[1] = ds.ReadShort()
 						
 						If (Animation.isFrameWanted) Then
 							Continue
@@ -203,18 +203,18 @@ Class Frame
 						
 						For Local j:= 0 Until Animation.imageIdArray.Length
 							If (Animation.imageIdArray[j] <> -1) Then
-								If (Animation.imageIdArray[j] = sArr[4]) Then
+								If (Animation.imageIdArray[j] = clipInfo[4]) Then
 									Exit
 								EndIf
 							Else
-								Animation.imageIdArray[j] = sArr[4]
+								Animation.imageIdArray[j] = clipInfo[4]
 								
 								Exit
 							EndIf
 						Next
 					Case 1, 2
-						sArr[2] = ds.ReadShort()
-						sArr[3] = ds.ReadShort()
+						clipInfo[2] = ds.ReadShort()
+						clipInfo[3] = ds.ReadShort()
 						
 						Self.color = 0
 						
@@ -223,18 +223,18 @@ Class Frame
 						Self.color |= ((ds.ReadByte() Shl 8) & 65280)
 						Self.color |= ((ds.ReadByte() Shl 0) & 255)
 						
-						sArr[0] = ds.ReadShort()
-						sArr[1] = ds.ReadShort()
+						clipInfo[0] = ds.ReadShort()
+						clipInfo[1] = ds.ReadShort()
 					Case 3
-						sArr[2] = ds.ReadByte()
-						sArr[3] = ds.ReadByte()
+						clipInfo[2] = ds.ReadByte()
+						clipInfo[3] = ds.ReadByte()
 						
-						If (sArr[3] < 0) Then
-							sArr[3] = Short(sArr[3] + UOCTET_MAX_POSITIVE_NUMBERS)
+						If (clipInfo[3] < 0) Then
+							clipInfo[3] = Short(clipInfo[3] + UOCTET_MAX_POSITIVE_NUMBERS)
 						EndIf
 						
-						sArr[0] = ds.ReadShort()
-						sArr[1] = ds.ReadShort()
+						clipInfo[0] = ds.ReadShort()
+						clipInfo[1] = ds.ReadShort()
 				End Select
 			Next
 		End

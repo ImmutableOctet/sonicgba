@@ -595,7 +595,7 @@ Class TitleState Extends State
 				Case STATE_MOVING
 					state = STATE_PRESS_START
 					
-					Self.nextstate = STATE_PRESS_START
+					Self.nextState = STATE_PRESS_START
 					Self.logoY = LOGO_POSITION_Y
 					
 					SoundSystem.getInstance().playBgm(ZONE_NUM_OFFSET, False)
@@ -609,6 +609,7 @@ Class TitleState Extends State
 					Self.preCharaterSelectState = STATE_PRO_RACE_MODE
 					
 					menuInit(Self.STAGE_TOTAL_NUM)
+					
 					initStageSelectRes()
 					
 					PlayerObject.stageModestate = STATE_PRESS_START
@@ -1087,7 +1088,7 @@ Class TitleState Extends State
 					If (Self.logoX = LOGO_POSITION_X) Then
 						state = STATE_PRESS_START
 						
-						Self.nextstate = STATE_PRESS_START
+						Self.nextState = STATE_PRESS_START
 					EndIf
 					
 					If (Self.mainMenuBackFlag And Not Self.menuMoving) Then
@@ -2534,7 +2535,7 @@ Class TitleState Extends State
 				titleRightImage = MFImage.createImage("/title/title_right.png")
 				titleSegaImage = MFImage.createImage("/title/title_sega.png")
 				
-				If (Self.titleAni = Null) Then
+				If (Self.titleAni.Length = 0) Then
 					Self.titleAni = Animation.getInstanceFromQi("/animation/utl_res/title.dat")
 					Self.titleAniDrawer = Self.titleAni[0].getDrawer(0, True, 0)
 				EndIf
@@ -3131,7 +3132,7 @@ Class TitleState Extends State
 		End
 		
 		Method initStageSelectRes:Void()
-			If (Self.stageSelAni = Null) Then
+			If (Self.stageSelAni.Length > 0) Then
 				Self.stageSelAni = Animation.getInstanceFromQi("/animation/utl_res/stage_select.dat")
 				Self.stageSelAniDrawer = Self.stageSelAni[0].getDrawer(0, True, 0)
 				Self.stageSelArrowUpDrawer = Self.stageSelAni[0].getDrawer(MAIN_MENU_CENTER_X, True, 0)

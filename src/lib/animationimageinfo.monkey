@@ -22,6 +22,7 @@ Private
 	Import com.sega.mobile.framework.device.mfimage
 	
 	Import brl.stream
+	Import brl.datastream
 	
 	Import regal.typetool
 Public
@@ -102,7 +103,7 @@ Class ImageInfo
 			EndIf
 		End
 		
-		Method loadInfo:Void(ds:Stream)
+		Method loadInfo:Void(ds:DataStream)
 			If (ds = Null) Then
 				Self.m_nClips = 1
 				

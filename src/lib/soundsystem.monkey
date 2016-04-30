@@ -13,6 +13,8 @@ Private
 	'Import com.sega.mobile.framework.device.mfsound
 	
 	Import mojo.audio
+	
+	Import regal.typetool
 Public
 
 ' Classes:
@@ -177,14 +179,14 @@ Class SoundSystem
 		Field bgmIndex:Int
 		Field currentIntroMsec:Int
 		Field currentLoopMsec:Int
-		Field longSeplayer:MFPlayer
+		'Field longSeplayer:MFPlayer
 		Field mediaTime:Long
 		Field nextBgmIndex:Int
 		Field nextBgmLoop:Bool
 		Field nextBgmWaiting:Bool
 		Field preSpeed:Float
 		Field seIndex:Int
-		Field seplayer:MFPlayer
+		'Field seplayer:MFPlayer
 		Field speed:Float
 	Public
 		' Constructor(s):
@@ -384,6 +386,7 @@ Class SoundSystem
 		End
 		
 		Method restartBgm:Void()
+			#Rem
 			Self.mediaTime = MFSound.getBgmMediaTime()
 			
 			Print("mediaTime get:" + Self.mediaTime)
@@ -393,6 +396,7 @@ Class SoundSystem
 			MFSound.stopBgm()
 			
 			playBgm(Self.bgmIndex, True)
+			#End
 		End
 		
 		Method playBgmInSpeed:Void(index:Int, loop:Bool, speed:Float)
@@ -417,7 +421,7 @@ Class SoundSystem
 			
 			Print(fileName)
 			
-			MFSound.playBgm(fileName, loop)
+			'MFSound.playBgm(fileName, loop)
 			
 			Print("play bgm")
 			
@@ -501,22 +505,24 @@ Class SoundSystem
 		End
 		
 		Method playLoopSe:Void(index:Int)
-			If (MFSound.getSeFlag() And Not isLoopSePlaying()) Then
-				Self.seplayer = Null
-				Self.seplayer = MFPlayer.createMFPlayer(getSoundEffectName(index))
-				Self.seIndex = index
-				Self.seplayer.realize()
-				Self.seplayer.prefetch()
-				Self.seplayer.setLoop(True)
-				
-				If (volume = 0) Then
-					Self.seplayer.setVolume(0)
-				Else
-					Self.seplayer.setVolume(100)
+			#Rem
+				If (MFSound.getSeFlag() And Not isLoopSePlaying()) Then
+					Self.seplayer = Null
+					Self.seplayer = MFPlayer.createMFPlayer(getSoundEffectName(index))
+					Self.seIndex = index
+					Self.seplayer.realize()
+					Self.seplayer.prefetch()
+					Self.seplayer.setLoop(True)
+					
+					If (volume = 0) Then
+						Self.seplayer.setVolume(0)
+					Else
+						Self.seplayer.setVolume(100)
+					EndIf
+					
+					Self.seplayer.start()
 				EndIf
-				
-				Self.seplayer.start()
-			EndIf
+			#End
 		End
 		
 		Method playSequenceSe:Void(index:Int)

@@ -69,7 +69,6 @@ Class Animation
 		' Constructor(s):
 		Method New()
 			Self.isDoubleScale = False
-			Self.fileName = Null
 			Self.isAnimationQi = False
 			
 			Self.m_CurAni = 0
@@ -80,7 +79,6 @@ Class Animation
 		' Constructor(s):
 		Method New(fileName:String)
 			Self.isDoubleScale = False
-			Self.fileName = Null
 			Self.isAnimationQi = False
 			
 			For Local name:= EachIn DOUBLE_ANIMATION_NAME
@@ -101,7 +99,6 @@ Class Animation
 		
 		Method New(image:MFImage, fileName:String)
 			Self.isDoubleScale = False
-			Self.fileName = Null
 			Self.isAnimationQi = False
 			
 			For Local name:= EachIn DOUBLE_ANIMATION_NAME
@@ -114,6 +111,7 @@ Class Animation
 			
 			Self.m_CurAni = 0
 			Self.m_OldAni = 0
+			
 			Self.fileName = fileName
 			
 			Self.imageInfo = New ImageInfo[1]
@@ -213,7 +211,7 @@ Class Animation
 			EndIf
 		End
 		
-		Method LoadAnimation:Void(in:InputStream)
+		Method LoadAnimation:Void(in:Stream)
 			If (in <> Null) Then
 				Self.imageInfo[0].loadInfo(in)
 				Self.m_nFrames = in.ReadByte()
@@ -249,8 +247,6 @@ Class Animation
 				
 				If (Self.isDoubleScale) Then
 					Self.imageInfo[0].doubleParam()
-					
-					Return
 				EndIf
 				
 				Return
@@ -293,7 +289,7 @@ Class Animation
 			
 			Self.m_Frames = New Frame[Self.m_nFrames]
 			
-			For Local I:= 0 Until Self.m_nFrames
+			For Local i:= 0 Until Self.m_nFrames
 				Self.m_Frames[i] = New Frame(Self)
 				Self.m_Frames[i].loadFrameG2(ds)
 				
@@ -357,7 +353,8 @@ Class Animation
 				animationInstance = New Animation[animationNum]
 				
 				For Local i:= 0 Until animationNum
-					a = New Animation()
+					Local a:= New Animation()
+					
 					a.LoadAnimationG2(ds2)
 					
 					animationInstance[i] = a
@@ -386,7 +383,7 @@ Class Animation
 					inst.qiAnimationArray = animationInstance
 				Next
 				
-				imageInfo = Null
+				'imageInfo = []
 				
 				If (ds2 <> Null) Then
 					ds2.Close()
@@ -460,7 +457,7 @@ Class Animation
 					inst.qiAnimationArray = animationInstance
 				Next
 				
-				imageInfo = Null
+				'imageInfo = []
 				
 				If (ds <> Null) Then
 					ds.Close()
@@ -495,15 +492,13 @@ Class Animation
 		End
 	
 		Function closeAnimationDrawerArray:Void(drawer:AnimationDrawer[])
-			If (drawer <> Null) Then
-				For Local i:= 0 Until drawer.Length
-					closeAnimationDrawer(drawer[i])
-					
-					drawer[i] = Null
-				Next
-			EndIf
+			For Local i:= 0 Until drawer.Length
+				closeAnimationDrawer(drawer[i])
+				
+				drawer[i] = Null
+			Next
 			
-			drawer = []
+			'drawer = []
 		End
 		
 		' Methods:
