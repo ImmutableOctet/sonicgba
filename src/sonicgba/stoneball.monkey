@@ -152,7 +152,7 @@ Class StoneBall Extends GimmickObject
 					If (Self.posX > Self.originalX + PlayerObject.DETECT_HEIGHT) Then
 						Self.state = STATE_GO
 						
-						Self.mapObj.setPosition(Self.posX, Self.posY, OUT_VELOCITY, 0, Self)
+						Self.mapObj.setMapPosition(Self.posX, Self.posY, OUT_VELOCITY, 0, Self)
 						Self.mapObj.setCrashCount(2)
 					EndIf
 					

@@ -41,7 +41,7 @@ Class PatrolAnimal Extends SmallAnimal
 			Self.rightLimit = right
 			
 			If (Self.mObj <> Null) Then
-				Self.mObj.setPosition(Self.posX, Self.posY, DSgn(Self.direction) * MyRandom.nextInt(-FLY_VELOCITY_Y), 0, Self)
+				Self.mObj.setMapPosition(Self.posX, Self.posY, DSgn(Self.direction) * MyRandom.nextInt(-FLY_VELOCITY_Y), 0, Self)
 			EndIf
 			
 			Self.flyLimit = (y - FLY_HEIGHT)

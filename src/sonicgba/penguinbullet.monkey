@@ -38,7 +38,7 @@ Class PenguinBullet Extends BulletObject
 			Self.velY = velY
 			
 			Self.mapObj = New MapObject(Self.posX, Self.posY, 0, 0, Self, 1)
-			Self.mapObj.setPosition(Self.posX, Self.posY, Self.velX, 0, Self)
+			Self.mapObj.setMapPosition(Self.posX, Self.posY, Self.velX, 0, Self)
 			Self.mapObj.setCrashCount(2)
 			
 			Self.broken = False

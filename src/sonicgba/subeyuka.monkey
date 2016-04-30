@@ -97,7 +97,7 @@ Class Subeyuka Extends GimmickObject
 						If (Not Self.moving) Then
 							Self.moving = True
 							
-							Self.mapObj.setPosition(Self.posX, Self.posY, 0, 0, Self)
+							Self.mapObj.setMapPosition(Self.posX, Self.posY, 0, 0, Self)
 							
 							#Rem
 								If (StageManager.getCurrentZoneId() <> 4) Then
@@ -124,7 +124,7 @@ Class Subeyuka Extends GimmickObject
 							If (Not Self.moving) Then
 								Self.moving = True
 								
-								Self.mapObj.setPosition(Self.posX, Self.posY, 0, 0, Self)
+								Self.mapObj.setMapPosition(Self.posX, Self.posY, 0, 0, Self)
 								Self.mapObj.setCrashCount(2)
 								
 								If (Not (StageManager.getCurrentZoneId() = 4 Or StageManager.getCurrentZoneId() = 5)) Then

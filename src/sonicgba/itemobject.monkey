@@ -132,7 +132,7 @@ Class ItemObject Extends GameObject
 								
 								Self.velY = -(PlayerObject.HINER_JUMP_LIMIT / 2) ' -512
 								
-								Self.mapObj.setPosition(Self.posX, player.getCollisionRect().y0, 0, Self.velY, Self)
+								Self.mapObj.setMapPosition(Self.posX, player.getCollisionRect().y0, 0, Self.velY, Self)
 							EndIf
 						Case DIRECTION_DOWN
 							If (p = player And p.isAttackingItem() And Self.firstTouch And Not player.isAntiGravity) Then
@@ -220,7 +220,7 @@ Class ItemObject Extends GameObject
 				If (Self.mapObj = Null) Then
 					Self.mapObj = New MapObject(Self.posX + COLLISION_WIDTH, Self.posY, 0, 0, Self, 1)
 					
-					Self.mapObj.setPosition(Self.posX, Self.posY, 0, Self.velY, Self)
+					Self.mapObj.setMapPosition(Self.posX, Self.posY, 0, Self.velY, Self)
 					Self.mapObj.setCrashCount(1)
 				EndIf
 				

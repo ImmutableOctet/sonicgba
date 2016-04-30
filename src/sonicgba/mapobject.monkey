@@ -101,7 +101,7 @@ Class MapObject Extends GameObject Implements ACWorldCalUser, ACWorldCollisionLi
 			Self.obj = object
 			Self.currentLayer = layer
 			
-			setPosition(x, y, vx, vy, object)
+			setMapPosition(x, y, vx, vy, object)
 			
 			MapObject_InitializeWorldCal()
 			MapObject_InitializeGravity()
@@ -113,14 +113,14 @@ Class MapObject Extends GameObject Implements ACWorldCalUser, ACWorldCollisionLi
 			Self.obj = obj
 			Self.currentLayer = layer
 			
-			setPosition(x, y, vx, vy, obj) ' + offsetvx
+			setMapPosition(x, y, vx, vy, obj) ' + offsetvx
 			
 			MapObject_InitializeWorldCal()
 			MapObject_InitializeGravity()
 		End
 		
 		' Methods:
-		Method setPosition:Void(x:Int, y:Int, vx:Int, vy:Int, object:GameObject)
+		Method setMapPosition:Void(x:Int, y:Int, vx:Int, vy:Int, object:GameObject)
 			Self.state = STATE_SKY
 			
 			Self.posX = x
