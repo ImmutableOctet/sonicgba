@@ -563,12 +563,12 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 							
 							Self.user.doWhileTouchWorld(ACParam.DIRECTION_UP, degree)
 							
-							tangentDistance = (((Self.moveDistanceX * MyAPI.dCos(degree)) + (Self.moveDistanceY * MyAPI.dSin(degree))) / 100)
+							Local tangentDistance:= (((Self.moveDistanceX * MyAPI.dCos(degree)) + (Self.moveDistanceY * MyAPI.dSin(degree))) / 100)
 							
 							Self.moveDistanceX = ((MyAPI.dCos(degree) * tangentDistance) / 100)
 							Self.moveDistanceY = ((MyAPI.dSin(degree) * tangentDistance) / 100)
 							
-							tangentVel = (((Self.acObj.velX * MyAPI.dCos(degree)) + (Self.acObj.velY * MyAPI.dSin(degree))) / 100)
+							Local tangentVel:= (((Self.acObj.velX * MyAPI.dCos(degree)) + (Self.acObj.velY * MyAPI.dSin(degree))) / 100)
 							
 							Self.acObj.velX = ((MyAPI.dCos(degree) * tangentVel) / 100)
 							Self.acObj.velY = ((MyAPI.dSin(degree) * tangentVel) / 100)
@@ -617,12 +617,12 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 						
 						Self.user.doWhileTouchWorld(ACParam.DIRECTION_UP, collisionDegree)
 						
-						tangentDistance = (((Self.moveDistanceX * MyAPI.dCos(collisionDegree)) + (Self.moveDistanceY * MyAPI.dSin(collisionDegree))) / 100)
+						Local tangentDistance:= (((Self.moveDistanceX * MyAPI.dCos(collisionDegree)) + (Self.moveDistanceY * MyAPI.dSin(collisionDegree))) / 100)
 						
 						Self.moveDistanceX = (MyAPI.dCos(collisionDegree) * tangentDistance) / 100
 						Self.moveDistanceY = (MyAPI.dSin(collisionDegree) * tangentDistance) / 100
 						
-						tangentVel = (((Self.acObj.velX * MyAPI.dCos(collisionDegree)) + (Self.acObj.velY * MyAPI.dSin(collisionDegree))) / 100)
+						Local tangentVel:= (((Self.acObj.velX * MyAPI.dCos(collisionDegree)) + (Self.acObj.velY * MyAPI.dSin(collisionDegree))) / 100)
 						
 						Self.acObj.velX = (MyAPI.dCos(collisionDegree) * tangentVel) / 100
 						Self.acObj.velY = (MyAPI.dSin(collisionDegree) * tangentVel) / 100
@@ -713,12 +713,12 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 						
 						Self.user.doWhileTouchWorld(ACParam.DIRECTION_UP, degree)
 						
-						tangentDistance = (((Self.moveDistanceX * MyAPI.dCos(degree)) + (Self.moveDistanceY * MyAPI.dSin(degree))) / 100)
+						Local tangentDistance:= (((Self.moveDistanceX * MyAPI.dCos(degree)) + (Self.moveDistanceY * MyAPI.dSin(degree))) / 100)
 						
 						Self.moveDistanceX = ((MyAPI.dCos(degree) * tangentDistance) / 100)
 						Self.moveDistanceY = ((MyAPI.dSin(degree) * tangentDistance) / 100)
 						
-						tangentVel = (((Self.acObj.velX * MyAPI.dCos(degree)) + (Self.acObj.velY * MyAPI.dSin(degree))) / 100)
+						Local tangentVel:= (((Self.acObj.velX * MyAPI.dCos(degree)) + (Self.acObj.velY * MyAPI.dSin(degree))) / 100)
 						
 						Self.acObj.velX = ((MyAPI.dCos(degree) * tangentVel) / 100)
 						Self.acObj.velY = ((MyAPI.dSin(degree) * tangentVel) / 100)
@@ -1207,7 +1207,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 						objX = ACUtilities.getRelativePointX(x, Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
 						objY = ACUtilities.getRelativePointY(y, Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
 						
-						Local blockPixX:= getWorldX(objX, objY, (direction + DIRECTION_OFFSET_RIGHT) Mod DIRECTION_NUM)
+						Local blockPixX:= getWorldX(objX, objY, (direction + DIRECTION_OFFSET_RIGHT) Mod ACParam.DIRECTION_NUM)
 						
 						If (blockPixX <> ACParam.NO_COLLISION) Then
 							diff = Abs(blockPixX - objX)
@@ -1240,7 +1240,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 					objX = ACUtilities.getRelativePointX(x, Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
 					objY = ACUtilities.getRelativePointY(y, Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
 					
-					Local blockPixY:= getWorldY(objX, objY, (direction + DIRECTION_OFFSET_RIGHT) Mod DIRECTION_NUM)
+					Local blockPixY:= getWorldY(objX, objY, (direction + DIRECTION_OFFSET_RIGHT) Mod ACParam.DIRECTION_NUM)
 					
 					If (blockPixY <> ACParam.NO_COLLISION) Then
 						diff = Abs(blockPixY - objY)
@@ -1313,7 +1313,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 						objX = ACUtilities.getRelativePointX(x, -Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
 						objY = ACUtilities.getRelativePointY(y, -Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
 						
-						Local blockPixX:= getWorldX(objX, objY, (direction + DIRECTION_OFFSET_LEFT) Mod DIRECTION_NUM)
+						Local blockPixX:= getWorldX(objX, objY, (direction + DIRECTION_OFFSET_LEFT) Mod ACParam.DIRECTION_NUM)
 						
 						If (blockPixX <> ACParam.NO_COLLISION) Then
 							diff = Abs(blockPixX - objX)
@@ -1346,7 +1346,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 					objX = ACUtilities.getRelativePointX(x, -Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
 					objY = ACUtilities.getRelativePointY(y, -Self.bodyCollisionPointOffsetX, Self.bodyCollisionPointOffsetY[i], Self.user.getBodyDegree())
 					
-					Local blockPixY:= getWorldY(objX, objY, (direction + DIRECTION_OFFSET_LEFT) Mod DIRECTION_NUM)
+					Local blockPixY:= getWorldY(objX, objY, (direction + DIRECTION_OFFSET_LEFT) Mod ACParam.DIRECTION_NUM)
 					
 					If (blockPixY <> ACParam.NO_COLLISION) Then
 						diff = Abs(blockPixY - objY)
@@ -1408,7 +1408,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 							objX = ACUtilities.getRelativePointX(x, Self.headCollisionPointOffsetX[i], Self.headCollisionPointOffsetY, Self.footDegree)
 							objY = ACUtilities.getRelativePointY(y, Self.headCollisionPointOffsetX[i], Self.headCollisionPointOffsetY, Self.footDegree)
 							
-							Local blockPixY:= getWorldY(objX, objY, (direction + DIRECTION_OFFSET_UP) Mod DIRECTION_NUM)
+							Local blockPixY:= getWorldY(objX, objY, (direction + DIRECTION_OFFSET_UP) Mod ACParam.DIRECTION_NUM)
 							
 							If (blockPixY <> ACParam.NO_COLLISION) Then
 								diff = Abs(objY - blockPixY)
@@ -1452,7 +1452,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 					While (True)
 						If (i < Self.headCollisionPointOffsetX.Length) Then
 							objX = ACUtilities.getRelativePointX(x, Self.headCollisionPointOffsetX[i], Self.headCollisionPointOffsetY, Self.footDegree)
-							Local blockPixX:= getWorldX(objX, ACUtilities.getRelativePointY(y, Self.headCollisionPointOffsetX[i], Self.headCollisionPointOffsetY, Self.footDegree), (direction + DIRECTION_OFFSET_UP) Mod DIRECTION_NUM)
+							Local blockPixX:= getWorldX(objX, ACUtilities.getRelativePointY(y, Self.headCollisionPointOffsetX[i], Self.headCollisionPointOffsetY, Self.footDegree), (direction + DIRECTION_OFFSET_UP) Mod ACParam.DIRECTION_NUM)
 							
 							If (blockPixX <> ACParam.NO_COLLISION) Then
 								diff = Abs(objX - blockPixX)
@@ -1517,7 +1517,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 							objX = ACUtilities.getRelativePointX(x, Self.footCollisionPointOffsetX[i], Self.footCollisionPointOffsetY, Self.footDegree)
 							objY = ACUtilities.getRelativePointY(y, Self.footCollisionPointOffsetX[i], Self.footCollisionPointOffsetY, Self.footDegree)
 							
-							Local blockPixY:= getWorldY(objX, objY, (direction + DIRECTION_OFFSET_DOWN) Mod DIRECTION_NUM)
+							Local blockPixY:= getWorldY(objX, objY, (direction + DIRECTION_OFFSET_DOWN) Mod ACParam.DIRECTION_NUM)
 							
 							If (blockPixY <> ACParam.NO_COLLISION) Then
 								diff = Abs(objY - blockPixY)
@@ -1565,7 +1565,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 						If (i < Self.footCollisionPointOffsetX.Length) Then
 							objX = ACUtilities.getRelativePointX(x, Self.footCollisionPointOffsetX[i], Self.footCollisionPointOffsetY, Self.footDegree)
 							
-							Local blockPixX:= getWorldX(objX, ACUtilities.getRelativePointY(y, Self.footCollisionPointOffsetX[i], Self.footCollisionPointOffsetY, Self.footDegree), (direction + DIRECTION_OFFSET_DOWN) Mod DIRECTION_NUM)
+							Local blockPixX:= getWorldX(objX, ACUtilities.getRelativePointY(y, Self.footCollisionPointOffsetX[i], Self.footCollisionPointOffsetY, Self.footDegree), (direction + DIRECTION_OFFSET_DOWN) Mod ACParam.DIRECTION_NUM)
 							
 							If (blockPixX <> ACParam.NO_COLLISION) Then
 								diff = Abs(objX - blockPixX)
@@ -1724,7 +1724,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 					
 					aCWorldCalUser = Self.user
 					
-					If (direction = DIRECTIONUP) Then
+					If (direction = ACParam.DIRECTION_UP) Then
 						i = ACParam.DIRECTION_LEFT
 					Else
 						i = ACParam.DIRECTION_RIGHT

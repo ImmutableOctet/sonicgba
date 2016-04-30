@@ -2282,7 +2282,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Self.worldCal.actionLogic(Self.velX, Self.velY)
 			EndIf
 			
-			If (Self.worldCal.actionState = Null) Then
+			If (Self.worldCal.actionState = 0) Then
 				Self.onObjectContinue = False
 			ElseIf (Not (Self.checkedObject Or Self.footOnObject = Null Or Not Self.footOnObject.onObjectChk(Self))) Then
 				Self.footOnObject.doWhileCollisionWrap(Self)
