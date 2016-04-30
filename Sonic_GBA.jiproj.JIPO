@@ -128,8 +128,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\lib\crlfp32.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>21</X>
-        <Y>197</Y>
+        <X>24</X>
+        <Y>196</Y>
       </CursorPos>
       <DocGUID>b31abd43-af95-4cef-a95a-3aaeaf47d6fa</DocGUID>
       <Bookmarks />
@@ -1534,8 +1534,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>20</X>
-        <Y>633</Y>
+        <X>34</X>
+        <Y>5126</Y>
       </CursorPos>
       <DocGUID>3983a364-cdf4-4a70-96d3-ef0a7b319549</DocGUID>
       <Bookmarks />

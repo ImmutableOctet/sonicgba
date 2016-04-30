@@ -194,7 +194,7 @@ Class CrlFP32 ' Final
 			Return l
 		End
 		
-		Function sqrt:Int(r5:Int) ' Final
+		Function sqrt:Int(var0:Int) ' Final
 			If (var0 < 0) Then
 				errorCode = 1
 			Endif
