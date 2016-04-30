@@ -263,7 +263,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				Return ACParam.DIRECTION_LEFT
 			EndIf
 			
-			If (degree <= StringIndex.FONT_COLON_RED Or degree >= 225) Then
+			If (degree <= 135 Or degree >= 225) Then
 				Return ACParam.DIRECTION_RIGHT
 			EndIf
 			

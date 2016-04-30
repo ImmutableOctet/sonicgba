@@ -4479,7 +4479,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Return
 				EndIf
 				
-				If (Self.faceDegree > StringIndex.FONT_COLON_RED And Self.faceDegree < 225) Then
+				If (Self.faceDegree > 135 And Self.faceDegree < 225) Then
 					Return
 				EndIf
 			EndIf

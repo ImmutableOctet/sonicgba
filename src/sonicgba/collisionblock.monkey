@@ -342,7 +342,7 @@ Class CollisionBlock Extends ACBlock ' Implements SonicDef
 				Next
 				
 				If (allEight) Then
-					If (degree > StringIndex.FONT_COLON_RED And degree < 225) Then
+					If (degree > 135 And degree < 225) Then
 						Return True
 					EndIf
 					
