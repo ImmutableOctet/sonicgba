@@ -435,11 +435,11 @@ Class State Implements StringIndex Abstract ' SonicDef
 					Case STATE_SPECIAL_TO_GMAE
 						state = New GameState(stateId)
 					Case STATE_NORMAL_ENDING
-						state = New EndingState(0)
+						state = New EndingState(EMERALD_STATE_NONENTER) ' 0
 					Case STATE_EXTRA_ENDING
-						state = New EndingState(1)
+						state = New EndingState(EMERALD_STATE_SUCCESS) ' 1
 					Case STATE_SPECIAL_ENDING
-						state = New EndingState(2)
+						state = New EndingState(EMERALD_STATE_FAILD) ' 2
 				End Select
 				
 				state.init()

@@ -32,16 +32,16 @@ Class EndingState Extends State
 			Self.endingState = state
 			
 			Select (state)
-				Case TitleState.STAGE_SELECT_KEY_RECORD_1
+				Case EMERALD_STATE_NONENTER ' 0
 					PlayerObject.resetGameParam()
 					
 					Self.normalEndingInstance = New NormalEnding()
 					Self.normalEndingInstance.init(0, PlayerObject.getCharacterID())
-				Case TitleState.STAGE_SELECT_KEY_RECORD_2
+				Case EMERALD_STATE_SUCCESS ' 1
 					PlayerObject.resetGameParam()
 					
 					Self.SuperSonicEndingInstance = New SuperSonicEnding()
-				Case 2
+				Case EMERALD_STATE_FAILD ' 2
 					Self.specialEndingInstance = New SpecialEnding(3, 5)
 				Default
 					' Nothing so far.
@@ -55,11 +55,11 @@ Class EndingState Extends State
 		
 		Method draw:Void(g:MFGraphics)
 			Select (Self.endingState)
-				Case TitleState.STAGE_SELECT_KEY_RECORD_1
+				Case EMERALD_STATE_NONENTER
 					Self.normalEndingInstance.draw(g)
-				Case TitleState.STAGE_SELECT_KEY_RECORD_2
+				Case EMERALD_STATE_SUCCESS
 					Self.SuperSonicEndingInstance.draw(g)
-				Case 2
+				Case EMERALD_STATE_FAILD
 					Self.specialEndingInstance.draw(g)
 				Default
 					' Nothing so far.
@@ -72,11 +72,11 @@ Class EndingState Extends State
 		
 		Method logic:Void()
 			Select (Self.endingState)
-				Case TitleState.STAGE_SELECT_KEY_RECORD_1
+				Case EMERALD_STATE_NONENTER
 					Self.normalEndingInstance.logic()
-				Case TitleState.STAGE_SELECT_KEY_RECORD_2
+				Case EMERALD_STATE_SUCCESS
 					Self.SuperSonicEndingInstance.logic()
-				Case 2
+				Case EMERALD_STATE_FAILD
 					Self.specialEndingInstance.logic()
 				Default
 					' Nothing so far.
@@ -85,11 +85,11 @@ Class EndingState Extends State
 		
 		Method pause:Void()
 			Select (Self.endingState)
-				Case TitleState.STAGE_SELECT_KEY_RECORD_1
+				Case EMERALD_STATE_NONENTER
 					Self.normalEndingInstance.pause()
-				Case TitleState.STAGE_SELECT_KEY_RECORD_2
+				Case EMERALD_STATE_SUCCESS
 					Self.SuperSonicEndingInstance.pause()
-				Case 2
+				Case EMERALD_STATE_FAILD
 					Self.specialEndingInstance.pause()
 				Default
 					' Nothing so far.
