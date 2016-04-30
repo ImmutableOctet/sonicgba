@@ -10,8 +10,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\accollision.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>119</X>
-        <Y>187</Y>
+        <X>36</X>
+        <Y>93</Y>
       </CursorPos>
       <DocGUID>4b9cb237-7fe2-450e-b7a4-a5add564cbe5</DocGUID>
       <Bookmarks />
@@ -44,12 +44,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\engine\action\acmapdegreegetter.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\engine\action\acmapdegreegetter.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>23</X>
-        <Y>15</Y>
+        <X>38</X>
+        <Y>105</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>84e9849a-bd13-4768-86f4-2c845d5bce24</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acmovecalculator.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -108,12 +109,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\engine\action\acworldcollisioncalculator.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\engine\action\acworldcollisioncalculator.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>79</Y>
+        <X>19</X>
+        <Y>939</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>4265d7d4-f7ac-4a31-9650-3afcbc9aa247</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acworldcollisionlimit.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -122,12 +124,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\engine\lib\crlfp32.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\engine\lib\crlfp32.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>11</X>
-        <Y>56</Y>
+        <X>6</X>
+        <Y>10</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>b7850a24-f95c-44b3-8ead-caa685ff9218</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\lib\line.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -355,12 +358,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\gameengine\touchdirectkey.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\gameengine\touchdirectkey.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>27</X>
+        <Y>244</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>2b737acb-b2e5-478c-99c4-d35fbc217059</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\gameengine\touchkeyrange.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -615,12 +619,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\ballhobin.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\ballhobin.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>4</X>
-        <Y>96</Y>
+        <X>29</X>
+        <Y>107</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>401d8430-9a98-4f7c-adfa-7db233926f3c</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\balloon.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -699,12 +704,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\bee.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\bee.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>47</X>
-        <Y>211</Y>
+        <X>54</X>
+        <Y>223</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>76cae5b2-67ae-4159-8feb-67952b679b0f</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\beebullet.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1546,12 +1552,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\playertails.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\playertails.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>17</X>
+        <Y>550</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>777f6119-a711-4aa4-b3f3-13e7e46c2e14</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\poal.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1590,8 +1597,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ringobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>5</X>
-        <Y>276</Y>
+        <X>28</X>
+        <Y>229</Y>
       </CursorPos>
       <DocGUID>315c4fca-2dc2-4d31-b65f-697928c4474f</DocGUID>
       <Bookmarks />

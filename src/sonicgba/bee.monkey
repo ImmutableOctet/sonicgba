@@ -218,11 +218,11 @@ Class Bee Extends EnemyObject
 		End
 		
 		Method beeBulletVx:Int(distanceX:Int, distanceY:Int)
-			Return (((DSgn(distanceX > 0) * BEE_BULLET_SPEED_ABS) * MyAPI.dSin(crlFP32.actTanDegree(Abs(distanceX), Abs(distanceY)))) / 100)
+			Return (((DSgn(distanceX > 0) * BEE_BULLET_SPEED_ABS) * MyAPI.dSin(CrlFP32.actTanDegree(Abs(distanceX), Abs(distanceY)))) / 100)
 		End
 		
 		Method beeBulletVy:Int(distanceX:Int, distanceY:Int)
-			Return (((DSgn(distanceY > 0) * BEE_BULLET_SPEED_ABS) * MyAPI.dCos(crlFP32.actTanDegree(Abs(distanceX), Abs(distanceY)))) / 100)
+			Return (((DSgn(distanceY > 0) * BEE_BULLET_SPEED_ABS) * MyAPI.dCos(CrlFP32.actTanDegree(Abs(distanceX), Abs(distanceY)))) / 100)
 		End
 		
 		Method IsFacePlayer:Bool()

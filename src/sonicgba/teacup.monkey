@@ -188,7 +188,7 @@ Class TeaCup Extends GimmickObject
 						EndIf
 						
 						' Magic number: 5017600
-						Self.playerDegree = crlFP32.actTanDegree(Self.playerX, crlFP32.sqrt(5017600 - (Self.playerX * Self.playerX)) Shr 3)
+						Self.playerDegree = CrlFP32.actTanDegree(Self.playerX, CrlFP32.sqrt(5017600 - (Self.playerX * Self.playerX)) Shr 3)
 						
 						p.beStop(Self.collisionRect.y0, DIRECTION_DOWN, Self)
 						

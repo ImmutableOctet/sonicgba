@@ -227,7 +227,7 @@ Class RingObject Extends GameObject
 					Return
 				EndIf
 				
-				Local degree:= ((crlFP32.actTanDegree(distanceY, distanceX) + 360) Mod 360)
+				Local degree:= ((CrlFP32.actTanDegree(distanceY, distanceX) + 360) Mod 360)
 				
 				Local powerX:= ((Self.velocity * MyAPI.dCos(degree)) / 100)
 				Local powerY:= ((Self.velocity * MyAPI.dSin(degree)) / 100)

@@ -242,7 +242,7 @@ Class TouchDirectKey Implements MFComponent
 			Local reset_x:= (x - Self.CenterX)
 			Local reset_y:= (y - Self.CenterY)
 			
-			Local degree:= ((crlFP32.actTanDegree(reset_y, reset_x) + 360) Mod 360)
+			Local degree:= ((CrlFP32.actTanDegree(reset_y, reset_x) + 360) Mod 360)
 			
 			If ((reset_x * reset_x) + (reset_y * reset_y) >= Self.OutCircleR * Self.OutCircleR) Then
 				Return MFGamePad.KEY_NULL
@@ -302,7 +302,7 @@ Class TouchDirectKey Implements MFComponent
 		End
 		
 		Method getPointerDegree:Int(x:Int, y:Int)
-			Return ((crlFP32.actTanDegree(y - Self.CenterY, x - Self.CenterX) + 360) Mod 360)
+			Return ((CrlFP32.actTanDegree(y - Self.CenterY, x - Self.CenterX) + 360) Mod 360)
 		End
 		
 		Method rangeChk:Bool(x:Int, y:Int)

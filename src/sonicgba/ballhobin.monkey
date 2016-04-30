@@ -105,7 +105,7 @@ Class BallHobin Extends HexHobin
 				Local distanceY:= (player.getCheckPositionY() - Self.collisionRect.getCenterY())
 				
 				If (distanceX <> 0 Or distanceY <> 0) Then
-					Local degree:= ((crlFP32.actTanDegree(distanceY, distanceX) + 360) Mod 360)
+					Local degree:= ((CrlFP32.actTanDegree(distanceY, distanceX) + 360) Mod 360)
 					
 					Self.hobinCal.startHobin(0, (degree + 180), 10)
 					

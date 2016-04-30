@@ -91,8 +91,8 @@ Class ACCollision Implements ACParam Abstract
 			update()
 			obj.update()
 			
-			Self.horizontalDistance = crlFP32.MAX_VALUE
-			Self.verticalDistance = crlFP32.MAX_VALUE
+			Self.horizontalDistance = CrlFP32.MAX_VALUE
+			Self.verticalDistance = CrlFP32.MAX_VALUE
 			
 			doCheckCollisionX(obj, moveDistanceX)
 			doCheckCollisionY(obj, moveDistanceY)
