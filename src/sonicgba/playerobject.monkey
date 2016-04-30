@@ -56,11 +56,7 @@ Private
 	Import sonicgba.rocketseparateeffect
 	Import sonicgba.spring
 	Import sonicgba.stagemanager
-	
-	'Import mflib.bpdef
-	
-	Import special.ssdef
-	Import special.specialmap
+	Import sonicgba.playeranimationcollisionrect
 	
 	Import state.gamestate
 	Import state.state
@@ -73,9 +69,13 @@ Private
 	Import com.sega.engine.action.acutilities
 	Import com.sega.engine.action.acworldcaluser
 	Import com.sega.engine.action.acworldcollisioncalculator
-	Import com.sega.mobile.define.mdphone
+	
+	'Import com.sega.mobile.define.mdphone
+	
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
+	
+	'Import brl.stream
 	
 	Import regal.typetool
 Public

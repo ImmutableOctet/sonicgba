@@ -767,6 +767,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		End
 		
 		' This is a custom routine used to reduce boilerplate.
+		' This method will likely be modified later for performance reasons.
 		Function collisionChkWithAllGameObject_HandleObject:Void(player:PlayerObject, currentObject:GameObject, attackFlag:Bool)
 			If (attackFlag) Then
 				For Local animRect:= EachIn player.attackRectVec
@@ -775,12 +776,14 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			EndIf
 			
 			' Detect if this is a 'RingObject':
-			ring = RingObject(currentObject)
+			
+			' Optimization potential; dynamic cast.
+			Local ring:= RingObject(currentObject)
 			
 			' Check if the player is attracting rings (Electric shield, etc):
 			If (ring <> Null And player.isAttracting()) Then
-				' Check this ring is within our collection radius ('attractRing'):
-				If (player.attractRing.collisionChk(ring.getCollisionRect())) Then
+				' Check this ring is within our collection radius ('attractRect'):
+				If (player.attractRect.collisionChk(ring.getCollisionRect())) Then
 					' Tell the ring to come toward us.
 					ring.beAttract()
 				EndIf

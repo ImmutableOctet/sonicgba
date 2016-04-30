@@ -75,13 +75,12 @@
       <DocGUID>47e3918d-a5f8-4a9f-8591-c1e5ba9b8ff5</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\engine\action\acparam.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\engine\action\acparam.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>7</X>
         <Y>14</Y>
       </CursorPos>
-      <DocGUID>3f10814e-5735-4859-88db-125b541c23a7</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acutilities.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -127,19 +126,21 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\engine\lib\crlfp32.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\com\sega\engine\lib\crlfp32.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>21</X>
+        <Y>197</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>b31abd43-af95-4cef-a95a-3aaeaf47d6fa</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\engine\lib\line.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\engine\lib\line.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
-        <Y>8</Y>
+        <X>15</X>
+        <Y>5</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>f860e9e2-197a-4558-95f2-bc4162bb3b68</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\lib\myapi.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -443,12 +444,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\line.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\lib\line.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>31</X>
-        <Y>5</Y>
+        <X>43</X>
+        <Y>138</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>15804f07-0e67-4351-af9a-65a23238f37a</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1194,7 +1196,7 @@
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>39</X>
-        <Y>771</Y>
+        <Y>786</Y>
       </CursorPos>
       <DocGUID>f60e84fa-6197-43b4-90a7-0d27f6232dd2</DocGUID>
       <Bookmarks />
@@ -1532,8 +1534,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>8</X>
-        <Y>860</Y>
+        <X>20</X>
+        <Y>633</Y>
       </CursorPos>
       <DocGUID>3983a364-cdf4-4a70-96d3-ef0a7b319549</DocGUID>
       <Bookmarks />
