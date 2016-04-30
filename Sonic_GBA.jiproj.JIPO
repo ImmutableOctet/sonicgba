@@ -341,8 +341,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\gameengine\def.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
-        <Y>82</Y>
+        <X>30</X>
+        <Y>137</Y>
       </CursorPos>
       <DocGUID>f0708780-717b-449c-b2e7-00f0ba237a3d</DocGUID>
       <Bookmarks />
@@ -833,8 +833,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss6blockarray.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>119</Y>
+        <X>21</X>
+        <Y>24</Y>
       </CursorPos>
       <DocGUID>57bb964f-a4d7-4441-88d2-c0a48d12dff7</DocGUID>
       <Bookmarks />
@@ -1550,8 +1550,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>38</X>
-        <Y>5606</Y>
+        <X>19</X>
+        <Y>371</Y>
       </CursorPos>
       <DocGUID>31953c9f-014b-4a6c-bbf6-5c5c5ba82d55</DocGUID>
       <Bookmarks />

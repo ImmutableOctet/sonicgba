@@ -32,7 +32,7 @@ Class Boss6BlockArray Extends GimmickObject
 		Const COLLISION_WIDTH:Int = 18432
 		Const COLLISION_HEIGHT:Int = 1536
 		
-		Const DEEP_STANDARD_OFFSET:Int = 8
+		Const DEEP_STANDARD_OFFSET:Int = 8 ' (BLOCK_NUM - 1)
 		
 		Const TYPE_NORMAL:Int = 0
 		Const TYPE_DEEP:Int = 1
@@ -85,6 +85,291 @@ Class Boss6BlockArray Extends GimmickObject
 			Self.deep_cn = 0
 			Self.normal_cn = 0
 		End
+	Private
+		' Methods:
+		
+		' This method will likely be reimplemented at some point.
+		Method logicShake:Void()
+			Local blockID:= (((player.getFootPositionX() - Self.blockStartX) + (BLOCK_SIZE / 2)) / BLOCK_SIZE)
+			
+			If (Self.collisionFlag And Self.type = TYPE_DEEP) Then
+				' Bounce-effect logic:
+				Select (Self.deep_cn)
+					Case 0
+						If (blockID = 1) Then
+							Self.blockOffsetY[0] = 256 ' (BLOCK_SIZE / 8)
+							
+							For Local i:= 1 Until BLOCK_NUM
+								Self.blockOffsetY[i] = ((BLOCK_NUM - i) * 2) Shl 6
+							Next
+						ElseIf (blockID = 7) Then
+							Self.blockOffsetY[(BLOCK_NUM - 1)] = 256 ' (BLOCK_SIZE / 8)
+							
+							For Local i:= 0 Until (BLOCK_NUM - 1) ' DEEP_STANDARD_OFFSET
+								Self.blockOffsetY[i] = ((i + 1) * 2) Shl 6
+							Next
+						ElseIf (blockID = 0) Then
+							Self.blockOffsetY[0] = 256
+							
+							Self.blockOffsetY[1] = 384
+							Self.blockOffsetY[2] = 384
+							Self.blockOffsetY[3] = 256
+							Self.blockOffsetY[4] = 256
+							Self.blockOffsetY[5] = 256
+							Self.blockOffsetY[6] = 128
+							Self.blockOffsetY[7] = 128
+							Self.blockOffsetY[8] = 128
+						ElseIf (blockID = 8) Then
+							Self.blockOffsetY[0] = 128
+							Self.blockOffsetY[1] = 128
+							Self.blockOffsetY[2] = 128
+							Self.blockOffsetY[3] = 256
+							Self.blockOffsetY[4] = 256
+							Self.blockOffsetY[5] = 256
+							Self.blockOffsetY[6] = 384
+							Self.blockOffsetY[7] = 384
+							
+							Self.blockOffsetY[8] = 256
+						Else
+							For Local i:= 0 Until BLOCK_NUM
+								If (i = (blockID - 4) Or i = (blockID + 4)) Then
+									Self.blockOffsetY[i] = 128
+								ElseIf (i = (blockID - 3) Or i = (blockID + 3)) Then
+									Self.blockOffsetY[i] = 256
+								ElseIf (i = (blockID - 2) Or i = (blockID + 2)) Then
+									Self.blockOffsetY[i] = MDPhone.SCREEN_HEIGHT
+								ElseIf (i = (blockID - 1) Or i = (blockID + 1)) Then
+									Self.blockOffsetY[i] = 896
+								ElseIf (i = blockID) Then
+									Self.blockOffsetY[i] = 1024 ' (BLOCK_SIZE / 2)
+								Else
+									Self.blockOffsetY[i] = 128
+								EndIf
+							Next
+						EndIf
+						
+						If (Self.blockOffsetY[0] >= 256) Then
+							Self.blockOffsetY[0] = 256
+						EndIf
+						
+						If (Self.blockOffsetY[8] >= 256) Then
+							Self.blockOffsetY[8] = 256
+						EndIf
+						
+						Self.deep_cn += 1
+					Case 1
+						If (blockID = 1) Then
+							Self.blockOffsetY[0] = 256
+							
+							For Local i:= 1 Until BLOCK_NUM
+								Self.blockOffsetY[i] = (BLOCK_NUM - i) Shl 6
+							Next
+						ElseIf (blockID = 7) Then
+							Self.blockOffsetY[8] = 256
+							
+							For Local i:= 0 Unitl (BLOCK_NUM - 1)
+								Self.blockOffsetY[i] = ((i + 1) Shl 6)
+							Next
+						ElseIf (blockID = 0) Then
+							Self.blockOffsetY[0] = 256
+							
+							Self.blockOffsetY[1] = 192
+							Self.blockOffsetY[2] = 192
+							Self.blockOffsetY[3] = 128
+							Self.blockOffsetY[4] = 128
+							Self.blockOffsetY[5] = 128
+							Self.blockOffsetY[6] = 64
+							Self.blockOffsetY[7] = 64
+							Self.blockOffsetY[8] = 64
+						ElseIf (blockID = (BLOCK_NUM - 1)) Then
+							Self.blockOffsetY[0] = 64
+							Self.blockOffsetY[1] = 64
+							Self.blockOffsetY[2] = 64
+							Self.blockOffsetY[3] = 128
+							Self.blockOffsetY[4] = 128
+							Self.blockOffsetY[5] = 128
+							Self.blockOffsetY[6] = 192
+							Self.blockOffsetY[7] = 192
+							
+							Self.blockOffsetY[8] = 256
+						Else
+							For Local i:= 0 Until BLOCK_NUM
+								If (i = (blockID - 4) Or i = (blockID - 4)) Then
+									Self.blockOffsetY[i] = 64
+								ElseIf (i = (blockID - 3) Or i = (blockID + 3)) Then
+									Self.blockOffsetY[i] = 128
+								ElseIf (i = (blockID - 2) Or i = (blockID + 2)) Then
+									Self.blockOffsetY[i] = 320
+								ElseIf (i = (blockID - 1) Or i = (blockID + 1)) Then
+									Self.blockOffsetY[i] = 448
+								ElseIf (i = blockID) Then
+									Self.blockOffsetY[i] = 512
+								Else
+									Self.blockOffsetY[i] = 64
+								EndIf
+							Next
+						EndIf
+						
+						If (Self.blockOffsetY[0] >= 256) Then
+							Self.blockOffsetY[0] = 256
+						EndIf
+						
+						If (Self.blockOffsetY[8] >= 256) Then
+							Self.blockOffsetY[8] = 256
+						EndIf
+						
+						Self.deep_cn += 1
+					Case 2
+						For Local i:= 0 Until BLOCK_NUM
+							Self.blockOffsetY[i] = 0
+						Next
+						
+						Self.deep_cn += 1
+					Case 3
+						If (blockID = 1) Then
+							Self.blockOffsetY[0] = 0
+							
+							For Local i:= 1 Until BLOCK_NUM
+								Self.blockOffsetY[i] = (-(BLOCK_NUM - i)) Shl 6
+							Next
+						ElseIf (blockID = 7) Then
+							Self.blockOffsetY[8] = 0
+							
+							For Local i:= 0 Until (BLOCK_NUM - 1)
+								Self.blockOffsetY[i] = (-(i + 1)) Shl 6
+							Next
+						ElseIf (blockID = 0) Then
+							Self.blockOffsetY[0] = 0
+							
+							Self.blockOffsetY[1] = -192
+							Self.blockOffsetY[2] = -192
+							Self.blockOffsetY[3] = -128
+							Self.blockOffsetY[4] = -128
+							Self.blockOffsetY[5] = -128
+							Self.blockOffsetY[6] = -64
+							Self.blockOffsetY[7] = -64
+							Self.blockOffsetY[8] = -64
+						ElseIf (blockID = (BLOCK_NUM - 1)) Then
+							Self.blockOffsetY[0] = -64
+							Self.blockOffsetY[1] = -64
+							Self.blockOffsetY[2] = -64
+							Self.blockOffsetY[3] = -128
+							Self.blockOffsetY[4] = -128
+							Self.blockOffsetY[5] = -128
+							Self.blockOffsetY[6] = -192
+							Self.blockOffsetY[7] = -192
+							
+							Self.blockOffsetY[8] = 0
+						Else
+							For Local i:= 0 Until BLOCK_NUM
+								If (i = (blockID - 4) Or i = (blockID + 4)) Then
+									Self.blockOffsetY[i] = -64
+								ElseIf (i = (blockID - 3) Or i = (blockID + 3)) Then
+									Self.blockOffsetY[i] = -128
+								ElseIf (i = (blockID - 2) Or i = (blockID + 2)) Then
+									Self.blockOffsetY[i] = -320
+								ElseIf (i = (blockID - 1) Or i = (blockID + 1)) Then
+									Self.blockOffsetY[i] = -448
+								ElseIf (i = blockID) Then
+									Self.blockOffsetY[i] = -512
+								Else
+									Self.blockOffsetY[i] = -64
+								EndIf
+							Next
+						EndIf
+						
+						If (Self.blockOffsetY[0] <= 0) Then
+							Self.blockOffsetY[0] = 0
+						EndIf
+						
+						If (Self.blockOffsetY[8] <= 0) Then
+							Self.blockOffsetY[8] = 0
+						EndIf
+						
+						Self.deep_cn += 1
+					Case 4
+						For Local i:= 0 Until BLOCK_NUM
+							Self.blockOffsetY[i] = 0
+						EndIf
+						
+						Self.deep_cn += 1
+					Case 5
+						Self.type = TYPE_NORMAL
+						
+						Self.normal_cn = 0
+				End Select
+			EndIf
+			
+			If (Self.collisionFlag And Self.type = TYPE_NORMAL) Then
+				If (Self.preblockID <> blockID) Then
+					Self.normal_cn = 0
+				EndIf
+				
+				Self.preblockID = blockID
+				
+				Self.deep_cn = 0
+				
+				If (blockID = 1) Then
+					Self.blockOffsetY[0] = 256
+					
+					For Local i:= 1 Until BLOCK_NUM
+						Self.blockOffsetY[i] = (BLOCK_NUM - i) Shl 6
+					Next
+				ElseIf (blockID = 7) Then
+					Self.blockOffsetY[8] = 256
+					
+					For Local i:= 0 Until (BLOCK_NUM - 1)
+						Self.blockOffsetY[i] = (i + 1) Shl 6
+					Next
+				ElseIf (blockID = 0) Then
+					Self.blockOffsetY[0] = 256
+					
+					Self.blockOffsetY[1] = 192
+					Self.blockOffsetY[2] = 192
+					Self.blockOffsetY[3] = 128
+					Self.blockOffsetY[4] = 128
+					Self.blockOffsetY[5] = 128
+					Self.blockOffsetY[6] = 64
+					Self.blockOffsetY[7] = 64
+					Self.blockOffsetY[8] = 64
+				ElseIf (blockID = (BLOCK_NUM - 1)) Then
+					Self.blockOffsetY[0] = 64
+					Self.blockOffsetY[1] = 64
+					Self.blockOffsetY[2] = 64
+					Self.blockOffsetY[3] = 128
+					Self.blockOffsetY[4] = 128
+					Self.blockOffsetY[5] = 128
+					Self.blockOffsetY[6] = 192
+					Self.blockOffsetY[7] = 192
+					
+					Self.blockOffsetY[8] = 256
+				Else
+					For Local i:= 0 Until BLOCK_NUM
+						If (i = (blockID - 4) Or i = (blockID + 4)) Then
+							Self.blockOffsetY[i] = 64
+						ElseIf (i = (blockID - 3) Or i = (blockID + 3)) Then
+							Self.blockOffsetY[i] = 128
+						ElseIf (i = (blockID - 2) Or i = (blockID + 2)) Then
+							Self.blockOffsetY[i] = 320
+						ElseIf (i = (blockID - 1) Or i = (blockID + 1)) Then
+							Self.blockOffsetY[i] = 448
+						ElseIf (i = blockID) Then
+							Self.blockOffsetY[i] = 512
+						Else
+							Self.blockOffsetY[i] = 64
+						EndIf
+					Next
+				EndIf
+				
+				If (Self.blockOffsetY[0] >= 256) Then
+					Self.blockOffsetY[0] = 256
+				EndIf
+				
+				If (Self.blockOffsetY[8] >= 256) Then
+					Self.blockOffsetY[8] = 256
+				EndIf
+			EndIf
+		End
 	Public
 		' Methods:
 		Method draw:Void(g:MFGraphics)
@@ -118,338 +403,7 @@ Class Boss6BlockArray Extends GimmickObject
 			Return (Self.blockOrgPosY + Self.blockOffsetY[((bossPosX - Self.blockStartX) + (BLOCK_SIZE / 2)) / BLOCK_SIZE])
 		End
 		
-		Private Method logicShake:Void()
-			Int i
-			Int[] iArr
-			Int[] iArr2
-			Int blockID = ((player.getFootPositionX() - Self.blockStartX) + (BLOCK_SIZE / 2)) / BLOCK_SIZE
-			
-			If (Self.collisionFlag And Self.type = 1) Then
-				Select (Self.deep_cn)
-					Case 0
-						
-						If (blockID = 1) Then
-							Self.blockOffsetY[0] = 256
-							For (i = 1; i < BLOCK_NUM; i += 1)
-								Self.blockOffsetY[i] = ((BLOCK_NUM - i) * 2) Shl 6
-							Next
-						ElseIf (blockID = 7) Then
-							Self.blockOffsetY[DEEP_STANDARD_OFFSET] = 256
-							For (i = 0; i < DEEP_STANDARD_OFFSET; i += 1)
-								Self.blockOffsetY[i] = ((i + 1) * 2) Shl 6
-							Next
-						ElseIf (blockID = 0) Then
-							Self.blockOffsetY[0] = 256
-							iArr = Self.blockOffsetY
-							Self.blockOffsetY[2] = 384
-							iArr[1] = 384
-							iArr = Self.blockOffsetY
-							iArr2 = Self.blockOffsetY
-							Self.blockOffsetY[5] = 256
-							iArr2[4] = 256
-							iArr[3] = 256
-							iArr = Self.blockOffsetY
-							iArr2 = Self.blockOffsetY
-							Self.blockOffsetY[DEEP_STANDARD_OFFSET] = 128
-							iArr2[7] = 128
-							iArr[6] = 128
-						ElseIf (blockID = DEEP_STANDARD_OFFSET) Then
-							Self.blockOffsetY[DEEP_STANDARD_OFFSET] = 256
-							iArr = Self.blockOffsetY
-							Self.blockOffsetY[6] = 384
-							iArr[7] = 384
-							iArr = Self.blockOffsetY
-							iArr2 = Self.blockOffsetY
-							Self.blockOffsetY[3] = 256
-							iArr2[4] = 256
-							iArr[5] = 256
-							iArr = Self.blockOffsetY
-							iArr2 = Self.blockOffsetY
-							Self.blockOffsetY[0] = 128
-							iArr2[1] = 128
-							iArr[2] = 128
-						Else
-							i = 0
-							While (i < BLOCK_NUM) {
-								
-								If (i = blockID - 4 Or i = blockID + 4) Then
-									Self.blockOffsetY[i] = 128
-								ElseIf (i = blockID - 3 Or i = blockID + 3) Then
-									Self.blockOffsetY[i] = 256
-								ElseIf (i = blockID - 2 Or i = blockID + 2) Then
-									Self.blockOffsetY[i] = MDPhone.SCREEN_HEIGHT
-								ElseIf (i = blockID - 1 Or i = blockID + 1) Then
-									Self.blockOffsetY[i] = 896
-								ElseIf (i = blockID) Then
-									Self.blockOffsetY[i] = 1024 ' (BLOCK_SIZE / 2)
-								Else
-									Self.blockOffsetY[i] = 128
-								EndIf
-								
-								i += 1
-							}
-						EndIf
-						
-						If (Self.blockOffsetY[0] >= 256) Then
-							Self.blockOffsetY[0] = 256
-						EndIf
-						
-						If (Self.blockOffsetY[DEEP_STANDARD_OFFSET] >= 256) Then
-							Self.blockOffsetY[DEEP_STANDARD_OFFSET] = 256
-						EndIf
-						
-						Self.deep_cn += 1
-						break
-					Case 1
-						
-						If (blockID = 1) Then
-							Self.blockOffsetY[0] = 256
-							For (i = 1; i < BLOCK_NUM; i += 1)
-								Self.blockOffsetY[i] = (BLOCK_NUM - i) Shl 6
-							Next
-						ElseIf (blockID = 7) Then
-							Self.blockOffsetY[DEEP_STANDARD_OFFSET] = 256
-							For (i = 0; i < DEEP_STANDARD_OFFSET; i += 1)
-								Self.blockOffsetY[i] = (i + 1) Shl 6
-							Next
-						ElseIf (blockID = 0) Then
-							Self.blockOffsetY[0] = 256
-							iArr = Self.blockOffsetY
-							Self.blockOffsetY[2] = 192
-							iArr[1] = 192
-							iArr = Self.blockOffsetY
-							iArr2 = Self.blockOffsetY
-							Self.blockOffsetY[5] = 128
-							iArr2[4] = 128
-							iArr[3] = 128
-							iArr = Self.blockOffsetY
-							iArr2 = Self.blockOffsetY
-							Self.blockOffsetY[DEEP_STANDARD_OFFSET] = 64
-							iArr2[7] = 64
-							iArr[6] = 64
-						ElseIf (blockID = DEEP_STANDARD_OFFSET) Then
-							Self.blockOffsetY[DEEP_STANDARD_OFFSET] = 256
-							iArr = Self.blockOffsetY
-							Self.blockOffsetY[6] = 192
-							iArr[7] = 192
-							iArr = Self.blockOffsetY
-							iArr2 = Self.blockOffsetY
-							Self.blockOffsetY[3] = 128
-							iArr2[4] = 128
-							iArr[5] = 128
-							iArr = Self.blockOffsetY
-							iArr2 = Self.blockOffsetY
-							Self.blockOffsetY[0] = 64
-							iArr2[1] = 64
-							iArr[2] = 64
-						Else
-							i = 0
-							While (i < BLOCK_NUM) {
-								
-								If (i = blockID - 4 Or i = blockID + 4) Then
-									Self.blockOffsetY[i] = 64
-								ElseIf (i = blockID - 3 Or i = blockID + 3) Then
-									Self.blockOffsetY[i] = 128
-								ElseIf (i = blockID - 2 Or i = blockID + 2) Then
-									Self.blockOffsetY[i] = 320
-								ElseIf (i = blockID - 1 Or i = blockID + 1) Then
-									Self.blockOffsetY[i] = 448
-								ElseIf (i = blockID) Then
-									Self.blockOffsetY[i] = 512
-								Else
-									Self.blockOffsetY[i] = 64
-								EndIf
-								
-								i += 1
-							}
-						EndIf
-						
-						If (Self.blockOffsetY[0] >= 256) Then
-							Self.blockOffsetY[0] = 256
-						EndIf
-						
-						If (Self.blockOffsetY[DEEP_STANDARD_OFFSET] >= 256) Then
-							Self.blockOffsetY[DEEP_STANDARD_OFFSET] = 256
-						EndIf
-						
-						Self.deep_cn += 1
-						break
-					Case 2
-						For (i = 0; i < BLOCK_NUM; i += 1)
-							Self.blockOffsetY[i] = 0
-						EndIf
-						Self.deep_cn += 1
-						break
-					Case SpecialObject.Z_ZOOM
-						
-						If (blockID = 1) Then
-							Self.blockOffsetY[0] = 0
-							For (i = 1; i < BLOCK_NUM; i += 1)
-								Self.blockOffsetY[i] = (-(BLOCK_NUM - i)) Shl 6
-							Next
-						ElseIf (blockID = 7) Then
-							Self.blockOffsetY[DEEP_STANDARD_OFFSET] = 0
-							For (i = 0; i < DEEP_STANDARD_OFFSET; i += 1)
-								Self.blockOffsetY[i] = (-(i + 1)) Shl 6
-							Next
-						ElseIf (blockID = 0) Then
-							Self.blockOffsetY[0] = 0
-							iArr = Self.blockOffsetY
-							Self.blockOffsetY[2] = -192
-							iArr[1] = -192
-							iArr = Self.blockOffsetY
-							iArr2 = Self.blockOffsetY
-							Self.blockOffsetY[5] = def.TOUCH_HELP_LEFT_X
-							iArr2[4] = def.TOUCH_HELP_LEFT_X
-							iArr[3] = def.TOUCH_HELP_LEFT_X
-							iArr = Self.blockOffsetY
-							iArr2 = Self.blockOffsetY
-							Self.blockOffsetY[DEEP_STANDARD_OFFSET] = -64
-							iArr2[7] = -64
-							iArr[6] = -64
-						ElseIf (blockID = DEEP_STANDARD_OFFSET) Then
-							Self.blockOffsetY[DEEP_STANDARD_OFFSET] = 0
-							iArr = Self.blockOffsetY
-							Self.blockOffsetY[6] = -192
-							iArr[7] = -192
-							iArr = Self.blockOffsetY
-							iArr2 = Self.blockOffsetY
-							Self.blockOffsetY[3] = def.TOUCH_HELP_LEFT_X
-							iArr2[4] = def.TOUCH_HELP_LEFT_X
-							iArr[5] = def.TOUCH_HELP_LEFT_X
-							iArr = Self.blockOffsetY
-							iArr2 = Self.blockOffsetY
-							Self.blockOffsetY[0] = -64
-							iArr2[1] = -64
-							iArr[2] = -64
-						Else
-							i = 0
-							While (i < BLOCK_NUM) {
-								
-								If (i = blockID - 4 Or i = blockID + 4) Then
-									Self.blockOffsetY[i] = -64
-								ElseIf (i = blockID - 3 Or i = blockID + 3) Then
-									Self.blockOffsetY[i] = def.TOUCH_HELP_LEFT_X
-								ElseIf (i = blockID - 2 Or i = blockID + 2) Then
-									Self.blockOffsetY[i] = -320
-								ElseIf (i = blockID - 1 Or i = blockID + 1) Then
-									Self.blockOffsetY[i] = -448
-								ElseIf (i = blockID) Then
-									Self.blockOffsetY[i] = -512
-								Else
-									Self.blockOffsetY[i] = -64
-								EndIf
-								
-								i += 1
-							}
-						EndIf
-						
-						If (Self.blockOffsetY[0] <= 0) Then
-							Self.blockOffsetY[0] = 0
-						EndIf
-						
-						If (Self.blockOffsetY[DEEP_STANDARD_OFFSET] <= 0) Then
-							Self.blockOffsetY[DEEP_STANDARD_OFFSET] = 0
-						EndIf
-						
-						Self.deep_cn += 1
-						break
-					Case 4
-						For (i = 0; i < BLOCK_NUM; i += 1)
-							Self.blockOffsetY[i] = 0
-						EndIf
-						Self.deep_cn += 1
-						break
-					Case SSdef.SSOBJ_BNRU_ID
-						Self.type = 0
-						Self.normal_cn = 0
-						break
-				End Select
-			EndIf
-			
-			If (Self.collisionFlag And Self.type = 0) Then
-				If (Self.preblockID <> blockID) Then
-					Self.normal_cn = 0
-				EndIf
-				
-				Self.preblockID = blockID
-				Self.deep_cn = 0
-				
-				If (blockID = 1) Then
-					Self.blockOffsetY[0] = 256
-					For (i = 1; i < BLOCK_NUM; i += 1)
-						Self.blockOffsetY[i] = (BLOCK_NUM - i) Shl 6
-					Next
-				ElseIf (blockID = 7) Then
-					Self.blockOffsetY[DEEP_STANDARD_OFFSET] = 256
-					For (i = 0; i < DEEP_STANDARD_OFFSET; i += 1)
-						Self.blockOffsetY[i] = (i + 1) Shl 6
-					Next
-				ElseIf (blockID = 0) Then
-					Self.blockOffsetY[0] = 256
-					iArr = Self.blockOffsetY
-					Self.blockOffsetY[2] = 192
-					iArr[1] = 192
-					iArr = Self.blockOffsetY
-					iArr2 = Self.blockOffsetY
-					Self.blockOffsetY[5] = 128
-					iArr2[4] = 128
-					iArr[3] = 128
-					iArr = Self.blockOffsetY
-					iArr2 = Self.blockOffsetY
-					Self.blockOffsetY[DEEP_STANDARD_OFFSET] = 64
-					iArr2[7] = 64
-					iArr[6] = 64
-				ElseIf (blockID = DEEP_STANDARD_OFFSET) Then
-					Self.blockOffsetY[DEEP_STANDARD_OFFSET] = 256
-					iArr = Self.blockOffsetY
-					Self.blockOffsetY[6] = 192
-					iArr[7] = 192
-					iArr = Self.blockOffsetY
-					iArr2 = Self.blockOffsetY
-					Self.blockOffsetY[3] = 128
-					iArr2[4] = 128
-					iArr[5] = 128
-					iArr = Self.blockOffsetY
-					iArr2 = Self.blockOffsetY
-					Self.blockOffsetY[0] = 64
-					iArr2[1] = 64
-					iArr[2] = 64
-				Else
-					i = 0
-					While (i < BLOCK_NUM) {
-						
-						If (i = blockID - 4 Or i = blockID + 4) Then
-							Self.blockOffsetY[i] = 64
-						ElseIf (i = blockID - 3 Or i = blockID + 3) Then
-							Self.blockOffsetY[i] = 128
-						ElseIf (i = blockID - 2 Or i = blockID + 2) Then
-							Self.blockOffsetY[i] = 320
-						ElseIf (i = blockID - 1 Or i = blockID + 1) Then
-							Self.blockOffsetY[i] = 448
-						ElseIf (i = blockID) Then
-							Self.blockOffsetY[i] = 512
-						Else
-							Self.blockOffsetY[i] = 64
-						EndIf
-						
-						i += 1
-					}
-				EndIf
-				
-				If (Self.blockOffsetY[0] >= 256) Then
-					Self.blockOffsetY[0] = 256
-				EndIf
-				
-				If (Self.blockOffsetY[DEEP_STANDARD_OFFSET] >= 256) Then
-					Self.blockOffsetY[DEEP_STANDARD_OFFSET] = 256
-				EndIf
-			EndIf
-			
-		End
-		
-		Public Method logic:Void()
-			Int i
+		Method logic:Void()
 			refreshCollisionRect(Self.posX, Self.posY)
 			
 			If (collisionChkWithObject(player)) Then
@@ -458,30 +412,34 @@ Class Boss6BlockArray Extends GimmickObject
 				doWhileNoCollision()
 			EndIf
 			
-			If (player.collisionState = 1) Then
-				For (i = 0; i < BLOCK_NUM; i += 1)
+			If (player.collisionState = PlayerObject.COLLISION_STATE_JUMP) Then
+				For Local i:= 0 Until BLOCK_NUM
 					Self.blockOffsetY[i] = 0
-				EndIf
+				Next
 			EndIf
 			
 			logicShake()
-			For (i = 0; i < BLOCK_NUM; i += 1)
+			
+			For Local i:= 0 Until BLOCK_NUM
 				Self.block[i].logic(Self.blockStartX + (i * BLOCK_SIZE), Self.blockOrgPosY + Self.blockOffsetY[i])
 			EndIf
 		End
 		
-		Public Method setDisplayState:Void()
-			For (Int i = 0; i < BLOCK_NUM; i += 1)
+		' This triggers the floor to break:
+		Method setDisplayState:Void()
+			For Local i:= 0 Until BLOCK_NUM
 				Self.block[i].setDisplayState(False)
+				
+				' Magic number: 10
 				Effect.showEffect(destroyEffectAnimation, 0, (Self.blockStartX + (i * BLOCK_SIZE)) Shr 6, (Self.posY Shr 6) - 10, 0)
 			EndIf
-			PlayerObject playerObject = player
-			PlayerObject playerObject2 = player
-			playerObject.collisionState = (Byte) 1
-			player.setAnimationId(10)
+			
+			player.collisionState = PlayerObject.COLLISION_STATE_JUMP
+			
+			player.setAnimationId(PlayerObject.ANI_FALLING)
 		End
 		
-		Public Method refreshCollisionRect:Void(x:Int, y:Int)
+		Method refreshCollisionRect:Void(x:Int, y:Int)
 			Self.collisionRect.setRect(x - (COLLISION_WIDTH / 2), y - (COLLISION_HEIGHT / 2), COLLISION_WIDTH, COLLISION_HEIGHT)
 		End
 End
