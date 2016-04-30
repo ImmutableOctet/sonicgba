@@ -65,8 +65,8 @@ Class SpecialEnding Extends PlainEnding
 		
 		Field planeVelY:Int
 		
-		Field planeX:Int
-		Field planeY:Int
+		Field playerX:Int
+		Field playerY:Int
 		
 		Field endingBackGround:MFImage
 		

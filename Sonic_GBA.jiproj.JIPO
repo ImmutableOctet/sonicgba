@@ -310,7 +310,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\ending\baseending.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>27</X>
+        <X>7</X>
         <Y>24</Y>
       </CursorPos>
       <DocGUID>16b1efdd-0e92-42cd-a5f7-8ac775ed1cad</DocGUID>
@@ -326,7 +326,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\ending\plainending.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>29</X>
+        <X>33</X>
         <Y>11</Y>
       </CursorPos>
       <DocGUID>02af1fab-8dd6-40af-b5b8-ee23ecad39b2</DocGUID>
@@ -334,8 +334,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\ending\specialending.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>36</X>
-        <Y>86</Y>
+        <X>14</X>
+        <Y>68</Y>
       </CursorPos>
       <DocGUID>eb49745d-ed0d-4d04-9e0e-7d5aec621e8e</DocGUID>
       <Bookmarks />
@@ -541,8 +541,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\antigravity.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
-        <Y>27</Y>
+        <X>13</X>
+        <Y>14</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -2006,17 +2006,18 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\special\specialobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\special\specialobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>33</X>
-        <Y>39</Y>
+        <X>17</X>
+        <Y>187</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>7f7cc54c-69ab-40b9-a28e-a7a86962b339</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\specialplayer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>16</X>
-        <Y>1092</Y>
+        <X>66</X>
+        <Y>508</Y>
       </CursorPos>
       <DocGUID>6e1c6c40-04ad-47d9-bb8a-35953f47a663</DocGUID>
       <Bookmarks />
@@ -2123,8 +2124,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\specialstagestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>4</X>
-        <Y>762</Y>
+        <X>25</X>
+        <Y>1378</Y>
       </CursorPos>
       <DocGUID>94b9439f-5db3-473f-bac7-47de9c24014c</DocGUID>
       <Bookmarks />

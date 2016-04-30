@@ -185,7 +185,7 @@ Class SpecialObject Abstract ' Implements SSDef
 			Else
 				For Local i:= firstObj Until objectArray.Length
 					If (objectArray[i] <> Null) Then
-						objZ = objectArray[i].posZ
+						Local objZ:= objectArray[i].posZ
 						
 						If (startZ <= objZ And endZ > objZ) Then
 							lastObj = i

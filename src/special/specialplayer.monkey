@@ -503,8 +503,10 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 					
 					If (Not isInCenter() Or Self.checkCount <= WHITE_BAR_HEIGHT) Then
 						Self.count = 0
+						
 						Self.actionID = ANI_STAND
-						Self.checkSuccess = (Int(Self.ringNum >= Self.targetRingNum) | Self.debugPassStage)
+						
+						Self.checkSuccess = ((Self.ringNum >= Self.targetRingNum) Or Self.debugPassStage)
 					ElseIf (Self.checkSuccess) Then
 						If (Not (Self.actionID = ANI_VICTORY_1 Or Self.actionID = ANI_VICTORY_2)) Then
 							Self.actionID = ANI_VICTORY_1

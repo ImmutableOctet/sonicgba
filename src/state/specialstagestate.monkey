@@ -62,16 +62,16 @@ Class SpecialStageState Extends State Implements BarWord ' SSDef
 		' Constant variable(s):
 		Global BONUS_ID:Int[] = [22, 23, 24] ' Const
 		
-		Const BONUS_NUM_X:Int = ((SCREEN_WIDTH Shr 1) + 75)
-		Const BONUS_X:Int = ((SCREEN_WIDTH Shr 1) - 79)
-		Const BONUS_Y_ORIGINAL:Int = (SCREEN_HEIGHT + 40)
-		Const BONUS_Y_SPACE:Int = 18
-		Const BONUS_Y_START:Int = ((SCREEN_HEIGHT Shr 1) - 7)
+		Global BONUS_NUM_X:Int = ((SCREEN_WIDTH / 2) + 75) ' Shr 1 ' Const
+		Global BONUS_X:Int = ((SCREEN_WIDTH / 2) - 79) ' Shr 1 ' Const
+		Global BONUS_Y_ORIGINAL:Int = (SCREEN_HEIGHT + 40)
+		Global BONUS_Y_SPACE:Int = 18
+		Global BONUS_Y_START:Int = ((SCREEN_HEIGHT / 2) - 7) ' Shr 1 ' Const
 		
-		Const EMERALD_SPACE:Int = 32
-		Const EMERALD_X_ORIGINAL:Int = (SCREEN_WIDTH + 30)
-		Const EMERALD_X_START:Int = ((SCREEN_WIDTH Shr 1) - 96)
-		Const EMERALD_Y:Int = ((SCREEN_HEIGHT Shr 1) - EMERALD_SPACE)
+		Global EMERALD_SPACE:Int = 32 ' Const
+		Global EMERALD_X_ORIGINAL:Int = (SCREEN_WIDTH + 30) ' Const
+		Global EMERALD_X_START:Int = ((SCREEN_WIDTH / 2) - 96) ' Shr 1 ' Const
+		Global EMERALD_Y:Int = ((SCREEN_HEIGHT / 2) - EMERALD_SPACE) ' Shr 1 ' Const
 		
 		Const IS_EMERALD_DEBUG_FULL:Bool = False
 		Const OPTION_MOVING_INTERVAL:Int = 100
@@ -1378,10 +1378,7 @@ Class SpecialStageState Extends State Implements BarWord ' SSDef
 			
 			State.fadeInit(102, 0)
 			
-			SoundSystem instance = SoundSystem.getInstance()
-			SoundSystem.getInstance()
-			
-			instance.playBgm(SoundSystem.BGM_SP)
+			SoundSystem.getInstance().playBgm(SoundSystem.BGM_SP)
 			
 			Key.initSonic()
 			
