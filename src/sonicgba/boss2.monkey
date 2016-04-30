@@ -12,6 +12,7 @@ Private
 	Import lib.animationdrawer
 	Import lib.soundsystem
 	
+	Import sonicgba.gameobject
 	Import sonicgba.boss2spring
 	Import sonicgba.bossbroken
 	Import sonicgba.bossobject

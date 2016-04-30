@@ -13,14 +13,16 @@ Private
 	Import lib.myrandom
 	Import lib.soundsystem
 	
+	Import sonicgba.gameobject
+	Import sonicgba.playerobject
+	Import sonicgba.bossobject
+	
 	Import sonicgba.boss3pipe
 	Import sonicgba.boss3shadow
 	Import sonicgba.bossbroken
-	Import sonicgba.bossobject
 	Import sonicgba.cage
 	Import sonicgba.mapmanager
 	Import sonicgba.platform
-	Import sonicgba.playerobject
 	Import sonicgba.stagemanager
 	
 	Import com.sega.mobile.framework.device.mfgraphics

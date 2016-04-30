@@ -249,10 +249,8 @@ Class StageManager ' Implements SonicDef
 					EndIf
 				Case LOAD_GIMMICK
 					nextStep = GameObject.loadObjectStep("/map/" + STAGE_NAME[stageIDArray[PlayerObject.getCharacterID()]] + ".gi", 0)
-					break
 				Case LOAD_RING
 					nextStep = GameObject.loadObjectStep("/map/" + STAGE_NAME[stageIDArray[PlayerObject.getCharacterID()]] + ".ri", 1)
-					break
 				Case LOAD_ENEMY
 					nextStep = GameObject.loadObjectStep("/map/" + STAGE_NAME[stageIDArray[PlayerObject.getCharacterID()]] + ".en", 2)
 					

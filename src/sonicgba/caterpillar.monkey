@@ -4,15 +4,18 @@ Public
 
 ' Friends:
 Friend sonicgba.enemyobject
+Friend sonicgba.caterpillarbody
 
 ' Imports:
 Private
 	Import lib.animation
 	Import lib.myapi
 	
-	Import sonicgba.caterpillarbody
+	Import sonicgba.gameobject
 	Import sonicgba.enemyobject
 	Import sonicgba.playerobject
+	
+	Import sonicgba.caterpillarbody
 	
 	Import com.sega.mobile.framework.device.mfgraphics
 Public
@@ -85,7 +88,7 @@ Class Caterpillar Extends EnemyObject
 		End
 		
 		Method makePositions:Void()
-			Self.pos = New Int[5]
+			Self.pos = New Int[5][]
 			
 			For Local i:= 0 Until Self.pos.Length ' 5
 				Self.pos[i] = New Int[2]

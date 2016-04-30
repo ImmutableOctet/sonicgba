@@ -77,7 +77,7 @@ Class Boss1Arm Extends EnemyObject
 		Field velY:Int
 	Protected
 		' Functions:
-		Function generatePositionArray:Int[]()
+		Function generatePositionArray:Int[][]()
 			Local pos:= New Int[6][]
 			
 			For Local i:= 0 Until pos.Length

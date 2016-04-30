@@ -5,6 +5,8 @@ Public
 ' Friends:
 Friend sonicgba.gimmickobject
 
+Friend sonicgba.boss3
+
 ' Imports:
 Private
 	Import lib.constutil

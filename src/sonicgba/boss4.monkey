@@ -212,7 +212,7 @@ Class Boss4 Extends BossObject
 				Self.parts_pos[i] = New Int[2]
 			Next
 			
-			Self.parts_v = New Int[3]
+			Self.parts_v = New Int[3][]
 			
 			For Local i:= 0 Until Self.parts_v.Length
 				Self.parts_v[i] = New Int[2]

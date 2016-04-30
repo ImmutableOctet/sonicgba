@@ -158,8 +158,9 @@ Class Boss1 Extends BossObject
 			
 			Self.plus = 1
 			
-			Self.con_size = BarHorbinV.HOBIN_POWER
-			Self.ball_size = PlayerObject.HEIGHT
+			Self.con_size = 1152
+			
+			Self.ball_size = PlayerObject.HEIGHT ' 1536
 			
 			Self.side_left = 0
 			Self.side_right = 0

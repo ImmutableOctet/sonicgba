@@ -8,20 +8,25 @@ Friend sonicgba.bossobject
 
 ' Imports:
 Private
+	Import gameengine.def
+	
 	Import lib.animation
 	Import lib.animationdrawer
 	Import lib.myrandom
 	Import lib.soundsystem
 	Import lib.constutil
 	
+	
+	Import sonicgba.gameobject
+	Import sonicgba.playerobject
+	Import sonicgba.bulletobject
+	
 	Import sonicgba.boss5flydefence
 	Import sonicgba.bossbroken
 	Import sonicgba.bossobject
-	Import sonicgba.bulletobject
 	Import sonicgba.cage
 	Import sonicgba.globalresource
 	Import sonicgba.mapmanager
-	Import sonicgba.playerobject
 	Import sonicgba.stagemanager
 	
 	Import com.sega.mobile.framework.device.mfgamepad

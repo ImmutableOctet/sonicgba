@@ -119,7 +119,7 @@ Class PyxAnimation
 						
 						currentNode.doCalBeforeDraw()
 					EndIf
-				ElseIf (Not Self.nodeStack.empty()) Then
+				ElseIf (Not Self.nodeStack.IsEmpty()) Then
 					currentNode = Self.nodeStack.Pop()
 				Else
 					Exit
@@ -300,7 +300,7 @@ Class Action
 			Self.trackArray = New ActionTrack[trackNum]
 			
 			For Local i:= 0 Until trackNum ' Self.trackArray.Length
-				Self.trackArray[i] = New ActionTrack(ds)
+				Self.trackArray[i] = New ActionTrack(Self.parent, ds)
 			Next
 			
 			Local strLen:= ds.ReadShort()
@@ -482,7 +482,7 @@ Class ConnectPoint
 		' Methods:
 		Method linkByID:Void()
 			If (Self.linkNodeId >= 0 And Self.linkPointId >= 0) Then
-				Self.linkPoint = Self.parent.nodeArray[Self.linkNodeId].connectPointArray[Self.linkPointId]
+				Self.linkPoint = Self.node.pyx.nodeArray[Self.linkNodeId].connectPointArray[Self.linkPointId]
 			EndIf
 		End
 		
@@ -552,7 +552,7 @@ Class Node
 		
 		Field pyx:PyxAnimation ' parent:PyxAnimation
 		
-		Field node:Node
+		Field node:Node ' superNode:Node
 	Public
 		' Fields:
 		Field centerPoint:ConnectPoint
@@ -595,7 +595,7 @@ Class Node
 			Self.animationX = ds.ReadByte()
 			Self.animationY = ds.ReadByte()
 			
-			Self.drawer = Self.parent.animationArray[Self.animationID].getDrawer(actionID, True, 0)
+			Self.drawer = Self.pyx.animationArray[Self.animationID].getDrawer(actionID, True, 0)
 		End
 	Public
 		' Methods:
@@ -648,14 +648,14 @@ Class Node
 			Local node:Node = Null
 			Local point:ConnectPoint = Null
 			
-			While ((node = Null Or node = Self.superNode) And Self.returnId < Self.connectPointArray.Length)
+			While ((node = Null Or node = Self.node) And Self.returnId < Self.connectPointArray.Length)
 				node = Self.connectPointArray[Self.returnId].getLinkNode()
 				point = Self.connectPointArray[Self.returnId].getLinkConnectPoint()
 				
 				Self.returnId += 1
 			Wend
 			
-			If (node <> Null And node <> Self.superNode) Then
+			If (node <> Null And node <> Self.node) Then
 				node.setSuperNode(Self)
 				node.setCenterPoint(point)
 				
@@ -707,9 +707,9 @@ Class Node
 		End
 		
 		Method setAnimation:Void(animationID:Int, actionID:Int)
-			If (animationID >= 0 And animationID < Self.parent.animationArray.Length) Then
+			If (animationID >= 0 And animationID < Self.pyx.animationArray.Length) Then
 				If (Self.animationID <> animationID) Then
-					Self.drawer = Self.parent.animationArray[animationID].getDrawer(0, False, 0)
+					Self.drawer = Self.pyx.animationArray[animationID].getDrawer(0, False, 0)
 					
 					Self.animationID = animationID
 				EndIf
