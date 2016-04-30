@@ -136,7 +136,7 @@ Class Graphics
 		End
 		
 		Method NativeFont:Void(font:Font) Property
-			Return mCanvas.SetFont(font)
+			mCanvas.SetFont(font)
 		End
 		
 		' Methods:

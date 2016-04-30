@@ -157,8 +157,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
-        <Y>327</Y>
+        <X>24</X>
+        <Y>138</Y>
       </CursorPos>
       <DocGUID>f612fdef-d4a3-4c36-8738-bf21b21271fe</DocGUID>
       <Bookmarks />
@@ -194,8 +194,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>11</X>
-        <Y>134</Y>
+        <X>14</X>
+        <Y>514</Y>
       </CursorPos>
       <DocGUID>b26246c3-c0e3-41e9-b25c-57c29b2ccdec</DocGUID>
       <Bookmarks />
@@ -334,8 +334,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\ending\specialending.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
-        <Y>68</Y>
+        <X>35</X>
+        <Y>259</Y>
       </CursorPos>
       <DocGUID>eb49745d-ed0d-4d04-9e0e-7d5aec621e8e</DocGUID>
       <Bookmarks />
@@ -401,8 +401,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationframe.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>39</X>
-        <Y>178</Y>
+        <X>4</X>
+        <Y>409</Y>
       </CursorPos>
       <DocGUID>a0349a00-8d34-4250-ad25-f47f01701ae5</DocGUID>
       <Bookmarks />
@@ -417,8 +417,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\constutil.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>22</X>
-        <Y>10</Y>
+        <X>17</X>
+        <Y>6</Y>
       </CursorPos>
       <DocGUID>15119811-332c-4118-984d-b3cb7f3ab61e</DocGUID>
       <Bookmarks />
@@ -461,8 +461,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>21</X>
-        <Y>591</Y>
+        <X>28</X>
+        <Y>680</Y>
       </CursorPos>
       <DocGUID>582c93b4-fa29-4d34-a53a-e6e74c6f26d5</DocGUID>
       <Bookmarks />
@@ -1999,25 +1999,26 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\special\specialmap.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\special\specialmap.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>6</X>
-        <Y>16</Y>
+        <X>42</X>
+        <Y>81</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>4081107d-6315-4e09-9229-3d56bffde283</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\specialobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>17</X>
-        <Y>187</Y>
+        <X>25</X>
+        <Y>5</Y>
       </CursorPos>
       <DocGUID>7f7cc54c-69ab-40b9-a28e-a7a86962b339</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\specialplayer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>66</X>
-        <Y>508</Y>
+        <X>0</X>
+        <Y>4</Y>
       </CursorPos>
       <DocGUID>6e1c6c40-04ad-47d9-bb8a-35953f47a663</DocGUID>
       <Bookmarks />
@@ -2124,8 +2125,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\specialstagestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>1377</Y>
+        <X>7</X>
+        <Y>1307</Y>
       </CursorPos>
       <DocGUID>94b9439f-5db3-473f-bac7-47de9c24014c</DocGUID>
       <Bookmarks />
@@ -2147,8 +2148,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>62</X>
-        <Y>1325</Y>
+        <X>12</X>
+        <Y>1330</Y>
       </CursorPos>
       <DocGUID>9d1657fc-323e-48aa-9f99-561461902166</DocGUID>
       <Bookmarks />

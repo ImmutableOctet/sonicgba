@@ -411,6 +411,8 @@ Class MyAPI ' Implements Def
 				EndIf
 				
 				If (currentPosition >= lineLength And endOfCurrentWord < s.Length) Then
+					Local startOfLine2:Int
+					
 					If (ConcealEnterPosition = 0) Then
 						strings.Push(answerWord[..(answerWord.Length - 1)])
 						
@@ -511,6 +513,8 @@ Class MyAPI ' Implements Def
 				EndIf
 				
 				If (currentPosition >= lineLength And endOfCurrentWord < s.Length) Then
+					Local startOfLine2:Int
+					
 					If (ConcealEnterPosition = 0) Then
 						strings.Push(answerWord[..(answerWord.Length - 1)])
 						
@@ -674,7 +678,7 @@ Class MyAPI ' Implements Def
 		End
 		
 		Function drawStrings:Void(g2:MFGraphics, drawString:String[], x:Int, y:Int, width:Int, height:Int, beginPosition:Int, bold:Bool, color1:Int, color2:Int, color3:Int)
-			If (drawString <> Null) Then
+			If (drawString.Length > 0) Then
 				Local x2:= x
 				
 				Local stringToDraw:String

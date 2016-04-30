@@ -2,6 +2,9 @@ Strict
 
 Public
 
+' Friends:
+Friend special.specialmap
+
 ' Imports:
 Private
 	Import lib.animation

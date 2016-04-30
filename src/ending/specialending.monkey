@@ -257,7 +257,7 @@ Class SpecialEnding Extends PlainEnding
 			
 			Local z:Bool = (PLAYER_TO_ANIMATION[Self.characterID][Self.playerActionID][2] <> 0)
 			
-			animationDrawer.draw(g, i2, x, y, z, 0)
+			animationDrawer.draw(g, actionID, x, y, z, 0)
 			
 			If (animationDrawer.checkEnd()) Then
 				Select (Self.playerActionID)

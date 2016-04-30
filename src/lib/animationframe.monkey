@@ -312,7 +312,7 @@ Class Frame
 		End
 		
 		Method Draw:Void(g:MFGraphics, x:Int, y:Int, attr:Short)
-			If (Self.m_nClips <> Null) Then
+			If (Self.m_nClips <> 0) Then
 				For Local i:= 0 Until Self.m_nClips
 					Select (Self.functionID[i])
 						Case 0
@@ -356,7 +356,7 @@ Class Frame
 		End
 		
 		Method DrawImage:Void(g:MFGraphics, i:Int, x:Int, y:Int, attr:Short)
-			If (Self.m_nClips <> Null) Then
+			If (Self.m_nClips <> 0) Then
 				Local image:= m_Ani.imageInfo[Self.m_ClipInfo[i][4]].getImage()
 				
 				Local m_Clips_2:= m_Ani.imageInfo[Self.m_ClipInfo[i][4]].getClips()[Self.m_ClipInfo[i][2]]
@@ -407,7 +407,7 @@ Class Frame
 					tmp_attr ~= ConstUtil.TRANS[3]
 				EndIf
 				
-				ConstUtil.DrawImage(g, image, tmp_x + x, tmp_y + y, m_Clips_2[0], m_Clips_2[1], m_Clips_2[2], m_Clips_2[3], tmp_attr)
+				ConstUtil.DrawImage(g, tmp_x + x, tmp_y + y, image, m_Clips_2[0], m_Clips_2[1], m_Clips_2[2], m_Clips_2[3], tmp_attr)
 			EndIf
 		End
 	Private

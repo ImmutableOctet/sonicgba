@@ -511,7 +511,8 @@ Class MFGraphics
 					Return font_small
 			End Select
 			
-			Return Font.getFont(type)
+			'Return Font.getFont(type)
+			Return Null
 		End
 		
 		' Methods:

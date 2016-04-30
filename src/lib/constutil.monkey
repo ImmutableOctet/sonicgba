@@ -4,6 +4,8 @@ Public
 
 ' Imports:
 Private
+	Import lib.myapi
+	
 	'Import com.sega.mobile.framework.device.mfgamepad
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage

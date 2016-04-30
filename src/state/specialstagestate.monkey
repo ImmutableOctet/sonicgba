@@ -1303,7 +1303,7 @@ Class SpecialStageState Extends State Implements BarWord ' SSDef
 			' Magic number: 48 (Width and height?)
 			For Local x:= 0 Until ((SCREEN_WIDTH / 48) + 1)
 				For Local y:= 0 Until ((SCREEN_HEIGHT / 48) + 1)
-					animationDrawer.draw(g, i2 * 48, j * 48)
+					animationDrawer.draw(g, (x * 48), (y * 48))
 				Next
 			Next
 			
