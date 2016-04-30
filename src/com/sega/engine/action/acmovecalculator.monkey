@@ -42,6 +42,10 @@ Class ACMoveCalculator
 			checkInMap()
 		End
 		
+		Method actionLogic:Void(moveDistanceX:Int, moveDistanceY:Int, totalVelocity:Int)
+			actionLogic(moveDistanceX, moveDistanceY)
+		End
+		
 		Method stopMove:Void(degree:Int)
 			Local moveDistanceY2:= (((-Self.moveDistanceX) * MyAPI.dSin(degree)) + (Self.moveDistanceY * MyAPI.dCos(degree))) ' / 1
 			
