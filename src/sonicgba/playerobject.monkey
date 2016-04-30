@@ -1066,7 +1066,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					
 					If ((Self.drownCnt Mod 2) = 0) Then
 						' Add a bubble effect to represent that the player is drowning.
-						GameObject.addGameObject(New DrownBubble(ANI_DEAD, Self.footPointX, Self.footPointY - HEIGHT, 0, 0, 0, 0))
+						GameObject.addGameObject(New DrownBubble(EnemyObject.ENEMY_DROWN_BUBBLE, Self.footPointX, Self.footPointY - HEIGHT, 0, 0, 0, 0)) ' ANI_DEAD ' 41
 					EndIf
 				EndIf
 				
@@ -1247,7 +1247,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 								xOff = -HURT_POWER_X
 							EndIf
 							
-							GameObject.addGameObject(New AspirateBubble(ENEMY_ASPIRATE_BUBBLE, player.getFootPositionX() + xOff, player.getFootPositionY() - HEIGHT, 0, 0, 0, 0))
+							GameObject.addGameObject(New AspirateBubble(EnemyObject.ENEMY_ASPIRATE_BUBBLE, player.getFootPositionX() + xOff, player.getFootPositionY() - HEIGHT, 0, 0, 0, 0))
 						EndIf
 					EndIf
 				EndIf
