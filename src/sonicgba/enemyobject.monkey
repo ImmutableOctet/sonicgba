@@ -117,6 +117,7 @@ Class EnemyObject Extends GameObject Abstract
 		Const ENEMY_YOKOYUKIMAL:Int = 17
 		Const ENEMY_YUKIMAL:Int = 16
 		
+		Const ENEMY_PROBOSS1:Int = 21
 		Const ENEMY_BOSS1:Int = 22
 		Const ENEMY_BOSS2:Int = 23
 		Const ENEMY_BOSS3:Int = 24
@@ -129,7 +130,6 @@ Class EnemyObject Extends GameObject Abstract
 		Const ENEMY_BOSSF3:Int = 30
 		
 		Const ENEMY_BOSS_EXTRA:Int = 36
-		Const ENEMY_PROBOSS1:Int = 21
 	Protected
 		' Constant variable(s):
 		Const POS_TOP:Int = 0
