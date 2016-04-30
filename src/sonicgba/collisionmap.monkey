@@ -12,8 +12,8 @@ Private
 	Import com.sega.engine.action.acutilities
 	Import com.sega.engine.action.acworld
 	
-	'Import com.sega.mobile.framework.device.mfdevice
 	'Import com.sega.mobile.framework.device.mfgamepad
+	Import com.sega.mobile.framework.device.mfdevice
 	
 	Import brl.databuffer
 	Import brl.stream
@@ -87,7 +87,7 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 		Const COLLISION_FILE_NAME:String = ".co"
 		Const MODEL_FILE_NAME:String = ".ci"
 		
-		Const MODEL_INFO_SIZE:= ((GRID_NUM_PER_MODEL*GRID_NUM_PER_MODEL)*SizeOf_Short)
+		Const MODEL_INFO_SIZE:= ((GRID_NUM_PER_MODEL*GRID_NUM_PER_MODEL) * 2) ' SizeOf_Short
 		Const COLLISION_INFO_STRIDE:= 8
 		
 		' Functions:

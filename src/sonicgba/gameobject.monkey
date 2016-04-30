@@ -36,6 +36,8 @@ Private
 	
 	Import regal.typetool
 	
+	Import brl.filestream
+	
 	Import monkey.stack
 Public
 	Import sonicgba.sonicdebug
@@ -197,7 +199,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		Global endX:Int
 		Global endY:Int
 		
-		Global groundBlock:ACBlock
+		Global groundBlock:ACBlock = CollisionMap.getInstance().getNewCollisionBlock()
 		
 		' Rectangles:
 		Global resetRect:= New CollisionRect()
@@ -229,10 +231,6 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 	Public
 		' Functions:
 		Function initObject:Void(mapPixelWidth:Int, mapPixelHeight:Int, sameStage:Bool)
-			If (groundblock = Null) Then
-				groundblock = CollisionMap.getInstance().getNewCollisionBlock()
-			EndIf
-			
 			' Deinitialize the active context.
 			closeObject(sameStage)
 			
@@ -484,7 +482,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			EndIf
 		End
 		
-		Method drawObjectAfterEveryThing:Void(graphics:MFGraphics)
+		Function drawObjectAfterEveryThing:Void(graphics:MFGraphics)
 			camera = MapManager.getCamera()
 			
 			Local layer:= paintVec[DRAW_AFTER_MAP]
@@ -499,7 +497,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			RingObject.ringDraw(graphics)
 		End
 		
-		Method drawObjects:Void(graphics:MFGraphics)
+		Function drawObjects:Void(graphics:MFGraphics)
 			' Removing the pause-check here may actually be interesting.
 			If (Not (ringDrawer = Null Or IsGamePause)) Then
 				' From what I understand, this is updating the rings' shared animation objData.
@@ -529,43 +527,38 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				Case LOAD_OPEN_FILE
 					ds = FileStream.Open(fileName, "r")
 					
-					If (ds = Null) Then
-						Exit
-					EndIf
-					
-					loadNum = ds.ReadShort()
-					currentLoadIndex = 0
-				Case LOAD_CONTENT
-					If (ds = Null) Then
-						Exit
-					EndIf
-					
-					Try
-						For Local I:= 0 Until loadNum
-							Select loadId
-								Case LOAD_INDEX_GIMMICK
-									loadGimmickByStream(ds)
-								Case LOAD_INDEX_RING
-									loadRingByStream(ds)
-								Case LOAD_INDEX_ENEMY
-									loadEnemyByStream(ds)
-								Case LOAD_INDEX_ITEM
-									loadItemByStream(ds)
-								Default
-									' Nothing so far.
-							End Select
-							
-							currentLoadIndex += 1
-						Next
+					If (ds <> Null) Then
+						loadNum = ds.ReadShort()
 						
-						If (currentLoadIndex < loadNum) Then
-							nextStep = False
+						currentLoadIndex = 0
+					EndIf
+				Case LOAD_CONTENT
+					If (ds <> Null) Then
+						Try
+							For Local I:= 0 Until loadNum
+								Select loadId
+									Case LOAD_INDEX_GIMMICK
+										loadGimmickByStream(ds)
+									Case LOAD_INDEX_RING
+										loadRingByStream(ds)
+									Case LOAD_INDEX_ENEMY
+										loadEnemyByStream(ds)
+									Case LOAD_INDEX_ITEM
+										loadItemByStream(ds)
+									Default
+										' Nothing so far.
+								End Select
+								
+								currentLoadIndex += 1
+							Next
 							
-							Exit
-						EndIf
-					Catch err:StreamError
-						Exit
-					End Try
+							If (currentLoadIndex < loadNum) Then
+								nextStep = False
+							EndIf
+						Catch err:StreamError
+							' Nothing so far.
+						End Try
+					EndIf
 				Case LOAD_END
 					Try
 						ds.Close()
@@ -803,7 +796,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				player.close()
 			EndIf
 			
-			If (allGameObject <> Null) Then
+			If (allGameObject.Length > 0) Then
 				' Close every objData handle:
 				For Local W:= 0 Until objVecWidth
 					For Local H:= 0 Until objVecHeight
@@ -818,7 +811,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				Next
 				
 				' For now, we'll keep the behavior like this.
-				allGameObject = Null
+				allGameObject = []
 			EndIf
 			
 			For Local I:= 0 Until paintVec.Length
@@ -828,7 +821,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			releaseSpecialObjects()
 		End
 		
-		Method closeObject:Void(sameStage:Bool)
+		Function closeObject:Void(sameStage:Bool)
 			closeObject()
 			
 			releaseStageSpecificResources(sameStage)
@@ -904,6 +897,15 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			ItemObject.closeItem()
 			SmallAnimal.releaseAllResource()
 			PlayerObject.doWhileQuitGame()
+		End
+		
+		Function setPlayerPosition:Void(x:Int, y:Int)
+			If (player <> Null) Then
+				Local playerObject:= player
+				
+				playerObject.posX = (x Shl 6)
+				playerObject.posY = (y Shr 6)
+			EndIf
 		End
 		
 		Function checkPaintNecessary:Bool(obj:GameObject)
@@ -1013,15 +1015,6 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 						EndIf
 					Next
 				EndIf
-			EndIf
-		End
-		
-		Function setPlayerPosition:Void(x:Int, y:Int)
-			If (player <> Null) Then
-				Local playerObject:= player
-				
-				playerObject.posX = (x Shl 6)
-				playerObject.posY = (y Shr 6)
 			EndIf
 		End
 		

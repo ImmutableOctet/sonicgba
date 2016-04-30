@@ -150,6 +150,7 @@ Private
 	Import sonicgba.waterslip
 	Import sonicgba.windparts
 Public
+	Import sonicgba.sonicdef
 	Import sonicgba.gameobject
 
 ' Classes:

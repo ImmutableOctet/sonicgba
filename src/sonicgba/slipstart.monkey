@@ -2,6 +2,9 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.gimmickobject
+
 ' Imports:
 Private
 	Import sonicgba.gimmickobject
@@ -12,7 +15,6 @@ Private
 	Import com.sega.engine.action.accollision
 	Import com.sega.engine.action.acobject
 Public
-
 
 ' Classes:
 Class SlipStart Extends GimmickObject

@@ -338,7 +338,7 @@ Class EnemyObject Extends GameObject Abstract
 			AspirateBubble.releaseAllResource()
 		End
 		
-		Function enemyinit:Void()
+		Function enemyInit:Void()
 			magmaEnable = False
 		End
 		

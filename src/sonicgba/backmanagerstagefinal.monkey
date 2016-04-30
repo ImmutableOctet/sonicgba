@@ -28,7 +28,7 @@ Class BackManagerStageFinal Extends BackGroundManager
 				bgImage = MFImage.createImage("/map/final_bg.png")
 			EndIf
 			
-			Self.Height = 20
+			Self.height = 20
 		End
 		
 		' Methods:

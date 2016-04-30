@@ -11,6 +11,7 @@ Private
 	Import lib.animationdrawer
 	Import lib.soundsystem
 	
+	'Import sonicgba.sonicdef
 	Import sonicgba.gimmickobject
 	Import sonicgba.playerknuckles
 	Import sonicgba.playerobject

@@ -119,7 +119,7 @@ Class MapManager ' Implements SonicDef
 		Global zone4TileLoopID:Int[] = [0, 1, 2, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 6, 7, 8, 9, 9, 9, 9, 9, 9, 9, 9, 10, 11, 12, 13, 14, 14, 14, 14, 14, 14, 14, 14, 15, 16, 17, 18, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19]
 	Protected
 		' Constant variable(s):
-		Const MODE_CHUNK_SIZE:= ((MODEL_WIDTH * MODEL_HEIGHT) * SizeOf_Short)
+		Const MODE_CHUNK_SIZE:= ((MODEL_WIDTH * MODEL_HEIGHT) * 2) ' SizeOf_Short
 	Public
 		' Constant variable(s):
 		Global CAMERA_WIDTH:Int = SCREEN_WIDTH ' Const
@@ -552,7 +552,7 @@ Class MapManager ' Implements SonicDef
 							Next
 						EndIf
 						
-						IMAGE_TILE_WIDTH = MyAPI.zoomIn(tileimage[Null].getWidth() / TILE_WIDTH)
+						IMAGE_TILE_WIDTH = MyAPI.zoomIn(tileimage[0].getWidth() / TILE_WIDTH)
 					EndIf
 				Case LOAD_OPEN_FILE
 					ds = MFDevice.getResourceAsStream("/map/" + stageName + MAP_EXTEND_NAME)
