@@ -1108,14 +1108,14 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\enemyobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>316</Y>
+        <X>6</X>
+        <Y>330</Y>
       </CursorPos>
       <DocGUID>92a5a34c-0623-4549-be2e-8997d65f89a5</DocGUID>
       <Bookmarks>
         <Point>
           <X>0</X>
-          <Y>326</Y>
+          <Y>330</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
@@ -1142,8 +1142,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\fan.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>29</X>
-        <Y>5</Y>
+        <X>42</X>
+        <Y>26</Y>
       </CursorPos>
       <DocGUID>dad94260-ddf0-43a5-b913-ecec2916119f</DocGUID>
       <Bookmarks />
@@ -1234,16 +1234,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>22</X>
-        <Y>52</Y>
+        <X>40</X>
+        <Y>759</Y>
       </CursorPos>
       <DocGUID>549e1c3e-db5c-4941-9937-de18d8b63c85</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>44</X>
-        <Y>524</Y>
+        <X>84</X>
+        <Y>621</Y>
       </CursorPos>
       <DocGUID>3af5bdaf-31ee-40e2-9238-fb8c1ff5d006</DocGUID>
       <Bookmarks />

@@ -328,9 +328,9 @@ Class EnemyObject Extends GameObject Abstract
 			
 			ProBoss1.releaseAllResource()
 			
-			BossF1.releaseAllResource()
-			BossF2.releaseAllResource()
-			BossF3.releaseAllResource()
+			'''BossF1.releaseAllResource()
+			'''BossF2.releaseAllResource()
+			'''BossF3.releaseAllResource()
 			
 			Boom.releaseAllResource()
 			BreakingParts.releaseAllResource()

@@ -757,7 +757,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		Function releaseStageSpecificResources:Void(sameStage:Bool)
 			If (Not sameStage) Then
 				EnemyObject.releaseAllEnemyResource()
-				GimmickObject.releaseAllGimmickResource()
+				GimmickObject.releaseGimmickResource()
 			EndIf
 		End
 		

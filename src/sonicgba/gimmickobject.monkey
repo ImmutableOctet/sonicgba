@@ -619,7 +619,7 @@ Class GimmickObject Extends GameObject
 			EndIf
 		End
 	
-		Function releaseGimmickResource:Void()
+		Function releaseGimmickResource:Void() ' Function releaseAllGimmickResource:Void()
 			doorAnimation = Null
 			shipRingImage = Null
 			platformImage = Null
