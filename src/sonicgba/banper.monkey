@@ -3,9 +3,12 @@ Strict
 Public
 
 #Rem
-	Terrifying names aside, this seems to be the standard bumper objData.
+	Terrifying names aside, this seems to be the standard bumper object.
 	Although, that does make me wonder what the heck a "hobin/horbin" is...
 #End
+
+' Friends:
+Friend sonicgba.gimmickobject
 
 ' Imports:
 Private

@@ -5,6 +5,7 @@ Public
 ' Friends:
 Friend sonicgba.gimmickobject
 Friend sonicgba.pipein
+Friend sonicgba.pipeset
 
 ' Imports:
 Private

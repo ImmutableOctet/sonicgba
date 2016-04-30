@@ -2,11 +2,15 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.gimmickobject
+
 ' Imports:
 Private
 	Import gameengine.key
 	
 	Import sonicgba.gimmickobject
+	Import sonicgba.playerobject
 Public
 
 ' Classes:

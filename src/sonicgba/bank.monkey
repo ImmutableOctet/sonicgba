@@ -14,6 +14,9 @@ Public
 	Either way, it slows the character down, that's what matters right now.
 #End
 
+' Friends:
+Friend sonicgba.gimmickobject
+
 ' Imports:
 Private
 	Import sonicgba.gimmickobject
