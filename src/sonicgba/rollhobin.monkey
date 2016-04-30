@@ -7,6 +7,8 @@ Friend sonicgba.gimmickobject
 
 ' Imports:
 Private
+	Import lib.myapi
+	
 	Import sonicgba.ballhobin
 Public
 
