@@ -8,6 +8,9 @@ Public
 #End
 
 ' Imports:
+Public
+	Import sonicgba.sonicdebug
+	Import sonicgba.sonicdef
 Private
 	Import lib.animation
 	Import lib.animationdrawer
@@ -40,8 +43,6 @@ Private
 	
 	Import monkey.stack
 Public
-	Import sonicgba.sonicdebug
-	Import sonicgba.sonicdef
 
 ' Classes:
 Class GameObject Extends ACObject Abstract ' Implements SonicDef

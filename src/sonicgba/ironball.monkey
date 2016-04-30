@@ -12,6 +12,7 @@ Private
 	Import sonicgba.gimmickobject
 	Import sonicgba.movecalculator
 	Import sonicgba.playerobject
+	Import sonicgba.stagemanager
 	
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage

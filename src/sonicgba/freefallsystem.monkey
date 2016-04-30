@@ -14,9 +14,9 @@ Private
 	Import lib.coordinate
 	Import lib.soundsystem
 	
+	Import sonicgba.gimmickobject
 	Import sonicgba.freefallbar
 	Import sonicgba.freefallplatform
-	Import sonicgba.gimmickobject
 	
 	Import com.sega.mobile.framework.device.mfgamepad
 Public

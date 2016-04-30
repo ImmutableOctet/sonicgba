@@ -18,7 +18,13 @@ Public
 		This will need to change before this is considered ready for use.
 #End
 
+' Friends:
+Friend sonicgba.gameobject
+
 ' Imports:
+Public
+	Import sonicgba.sonicdef
+	Import sonicgba.gameobject
 Private
 	Import gameengine.def
 	
@@ -150,8 +156,6 @@ Private
 	Import sonicgba.waterslip
 	Import sonicgba.windparts
 Public
-	Import sonicgba.sonicdef
-	Import sonicgba.gameobject
 
 ' Classes:
 Class GimmickObject Extends GameObject

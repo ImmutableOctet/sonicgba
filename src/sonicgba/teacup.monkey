@@ -17,6 +17,8 @@ Private
 	
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
+	
+	Import regal.typetool
 Public
 
 ' Classes:
