@@ -61,7 +61,7 @@ Class LightFont Extends GimmickObject
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
 			Super.New(id, x, y, left, top, width, height)
 			
-			If (lightFontAnimation = Null) Then
+			If (lightFontAnimation.Length = 0) Then
 				lightFontAnimation = New Animation[FONT_NUM]
 			EndIf
 			
@@ -70,6 +70,7 @@ Class LightFont Extends GimmickObject
 			EndIf
 			
 			Self.drawer = lightFontAnimation[left].getDrawer(1, False, 0) ' FONT_O ' FONT_S
+			
 			Self.drawer.setPause(True)
 			
 			Self.logicDelay = width
