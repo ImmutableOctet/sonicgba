@@ -125,10 +125,15 @@ Class MFDevice Final
 		' Graphis:
 		'Global bufferImage:Image ' <-- Used to be used to represent the screen.
 		
+		#Rem
 		Global postLayerGraphics:MFGraphics[] = New MFGraphics[MAX_LAYER]
 		Global postLayerImage:Image[] = New Image[MAX_LAYER]
 		Global preLayerGraphics:MFGraphics[] = New MFGraphics[MAX_LAYER]
 		Global preLayerImage:Image[] = New Image[MAX_LAYER]
+		#End
+		
+		Global postLayer:MFImage[] = New MFImage[MAX_LAYER]
+		Global preLayer:MFImage[] = New MFImage[MAX_LAYER]
 	Public ' Protected
 		' Global variable(s):
 		'Global mainRunnable:Runnable = New C00011()
@@ -188,17 +193,21 @@ Class MFDevice Final
 			
 			If (Not interruptPauseFlag) Then
 				If (Not exitFlag) Then
-					For Local i:= preLayerImage.Length Until 0 Step -1 ' MAX_LAYER ' To 0
-						If (preLayerGraphics[i - 1] <> Null) Then
-							currentState.onRender(preLayerGraphics[i - 1], -i)
+					For Local i:= preLayer.Length Until 0 Step -1 ' MAX_LAYER ' To 0
+						Local layer:= preLayer[i - 1]
+						
+						If (layer <> Null) Then
+							currentState.onRender(layer.getGraphics(), -i)
 						EndIf
 					Next
 					
 					currentState.onRender(graphics)
 					
-					For Local i:= postLayerImage.Length To postLayerImage.Length ' MAX_LAYER
-						If (postLayerGraphics[i - MAX_LAYER] <> Null) Then
-							currentState.onRender(postLayerGraphics[i - MAX_LAYER], i)
+					For Local i:= postLayer.Length To postLayer.Length ' MAX_LAYER
+						Local layer:= postLayer[i - MAX_LAYER]
+						
+						If (layer <> Null) Then
+							currentState.onRender(layer.getGraphics(), i)
 						EndIf
 					Next
 				EndIf
@@ -206,9 +215,11 @@ Class MFDevice Final
 		End
 		
 		Function deviceDraw:Void(g:Graphics)
-			For Local i:= preLayerImage.Length Until 0 Step -1 ' MAX_LAYER ' To 0
-				If (preLayerImage[i - preLayerImage.Length] <> Null) Then
-					g.drawImage(preLayerImage[i - preLayerImage.Length], 0, 0, 0)
+			For Local i:= preLayer.Length Until 0 Step -1 ' MAX_LAYER ' To 0
+				Local layer:= preLayer[i - preLayer.Length]
+				
+				If (layer <> Null) Then
+					g.drawImage(layer.getNativeImage(), 0, 0, 0)
 				EndIf
 			Next
 			
@@ -218,9 +229,11 @@ Class MFDevice Final
 			EndIf
 			#End
 			
-			For Local i:= postLayerImage.Length To postLayerImage.Length ' MAX_LAYER
-				If (postLayerImage[i - MAX_LAYER] <> Null) Then
-					g.drawImage(postLayerImage[i - MAX_LAYER], 0, 0, 0)
+			For Local i:= postLayer.Length To postLayer.Length ' Until 0 Step -1 ' MAX_LAYER
+				Local layer:= postLayer[i - MAX_LAYER]
+				
+				If (layer <> Null) Then
+					g.drawImage(layer.getNativeImage(), 0, 0, 0)
 				EndIf
 			Next
 		End
@@ -339,13 +352,14 @@ Class MFDevice Final
 		End
 		
 		Function clearScreen:Void()
-			For Local i:= preLayerImage.Length Until 0 Step -1 ' MAX_LAYER ' To 0
+			For Local i:= preLayer.Length Until 0 Step -1 ' MAX_LAYER ' To 0
 				Local revIndex:= (i - MAX_LAYER) ' preLayerImage.Length
-				Local img:= preLayerImage[revIndex]
+				Local img:= preLayer[revIndex]
 				
 				If (img <> Null) Then
 					'img.earseColor(0)
-					preLayerGraphics[i].clear()
+					
+					img.getGraphics().clear()
 				EndIf
 			Next
 			
@@ -357,14 +371,14 @@ Class MFDevice Final
 			
 			graphics.clear()
 			
-			For Local i:= postLayerImage.Length To postLayerImage.Length ' MAX_LAYER
-				Local revIndex:= (i - MAX_LAYER) ' postLayerImage.Length
-				Local img:= postLayerImage[revIndex]
+			For Local i:= postLayer.Length To postLayer.Length ' MAX_LAYER
+				Local revIndex:= (i - MAX_LAYER) ' postLayer.Length
+				Local img:= postLayer[revIndex]
 				
 				If (img <> Null) Then
 					'img.earseColor(0)
 					
-					postLayerGraphics[revIndex].clear()
+					img.getGraphics().clear()
 				EndIf
 			Next
 		End
@@ -854,23 +868,19 @@ Class MFDevice Final
 		
 		Function enableLayer:Void(layer:Int)
 			If (layer <= 0 Or layer > MAX_LAYER) Then ' (layer <> MAX_LAYER)
-				If (layer < 0 And layer >= -MAX_LAYER And preLayerImage[(-layer) - MAX_LAYER] = Null) Then
-					preLayerImage[(-layer) - MAX_LAYER] = MFImage.generateNativeImage(screenWidth, screenHeight)
-					preLayerGraphics[(-layer) - MAX_LAYER] = MFGraphics.createMFGraphics(preLayerImage[(-layer) - MAX_LAYER].getGraphics(), screenWidth, screenHeight)
+				If (layer < 0 And layer >= -MAX_LAYER And preLayer[(-layer) - MAX_LAYER] = Null) Then
+					preLayer[(-layer) - MAX_LAYER] = MFImage.generateImage(screenWidth, screenHeight)
 				EndIf
-			ElseIf (postLayerImage[layer - MAX_LAYER] = Null) Then
-				postLayerImage[layer - MAX_LAYER] = MFImage.generateNativeImage(screenWidth, screenHeight)
-				postLayerGraphics[layer - MAX_LAYER] = MFGraphics.createMFGraphics(postLayerImage[layer - MAX_LAYER].getGraphics(), screenWidth, screenHeight)
+			ElseIf (postLayer[layer - MAX_LAYER] = Null) Then
+				postLayer[layer - MAX_LAYER] = MFImage.generateImage(screenWidth, screenHeight)
 			EndIf
 		End
 		
 		Function disableLayer:Void(layer:Int)
 			If (layer > 0 And layer <= MAX_LAYER) Then
-				postLayerImage[layer - MAX_LAYER] = Null
-				postLayerGraphics[layer - MAX_LAYER] = Null
+				postLayer[layer - MAX_LAYER] = Null
 			ElseIf (layer < 0 And layer >= -MAX_LAYER) Then
-				preLayerImage[(-layer) - MAX_LAYER] = Null
-				preLayerGraphics[(-layer) - MAX_LAYER] = Null
+				preLayer[(-layer) - MAX_LAYER] = Null
 			EndIf
 		End
 		

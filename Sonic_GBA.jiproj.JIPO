@@ -157,8 +157,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphics.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>21</X>
-        <Y>332</Y>
+        <X>7</X>
+        <Y>28</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -178,8 +178,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>43</X>
-        <Y>38</Y>
+        <X>45</X>
+        <Y>1035</Y>
       </CursorPos>
       <DocGUID>5667d516-48b1-471a-ad0c-88ea24fd3834</DocGUID>
       <Bookmarks />
@@ -193,16 +193,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>12</X>
-        <Y>94</Y>
+        <X>24</X>
+        <Y>72</Y>
       </CursorPos>
       <DocGUID>b26246c3-c0e3-41e9-b25c-57c29b2ccdec</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfimage.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>6</X>
-        <Y>172</Y>
+        <X>20</X>
+        <Y>175</Y>
       </CursorPos>
       <DocGUID>d948e4cf-b98f-43d6-a297-8883d76629a0</DocGUID>
       <Bookmarks />
@@ -256,12 +256,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\mobile\framework\mfgamestate.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\mfgamestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>21</X>
-        <Y>25</Y>
+        <X>9</X>
+        <Y>22</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>72850c9b-63e5-4b40-bf4a-56f5493fec43</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\mdversion.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
