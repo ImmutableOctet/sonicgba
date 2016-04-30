@@ -2,6 +2,17 @@
 
 Public
 
+' Friends:
+Friend sonicgba.gameobject
+Friend sonicgba.stagemanager
+Friend sonicgba.rocketseparateeffect
+
+Friend sonicgba.playersonic
+Friend sonicgba.playertails
+Friend sonicgba.playerknuckles
+Friend sonicgba.playeramy
+Friend sonicgba.playersupersonic
+
 ' Imports:
 Private
 	Import common.numberdrawer

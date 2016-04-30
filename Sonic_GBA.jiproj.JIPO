@@ -50,12 +50,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\engine\action\acmovecalculator.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\engine\action\acmovecalculator.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>5</X>
-        <Y>52</Y>
+        <X>7</X>
+        <Y>14</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>15e4eca0-aa58-4c06-87ba-8d2bd282dfb4</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acmovecaluser.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -73,8 +74,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acparam.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
-        <Y>14</Y>
+        <X>11</X>
+        <Y>5</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -106,12 +107,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\engine\action\acworldcollisioncalculator.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\com\sega\engine\action\acworldcollisioncalculator.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>1</X>
+        <Y>19</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>d8d3f946-3843-4347-b599-7bd72b2576f8</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acworldcollisionlimit.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -136,8 +138,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\lib\myapi.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>44</Y>
+        <X>14</X>
+        <Y>43</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -442,10 +444,10 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>11</X>
+        <Y>638</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -1179,8 +1181,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>116</X>
-        <Y>1353</Y>
+        <X>22</X>
+        <Y>15</Y>
       </CursorPos>
       <DocGUID>f60e84fa-6197-43b4-90a7-0d27f6232dd2</DocGUID>
       <Bookmarks />
@@ -1516,8 +1518,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>29</X>
-        <Y>338</Y>
+        <X>10</X>
+        <Y>15</Y>
       </CursorPos>
       <DocGUID>3983a364-cdf4-4a70-96d3-ef0a7b319549</DocGUID>
       <Bookmarks />
@@ -1595,7 +1597,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\rocketseparateeffect.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
+        <X>25</X>
         <Y>141</Y>
       </CursorPos>
       <DocGUID>9f066a25-b5b4-47cc-9d46-a7ba1a1390a3</DocGUID>

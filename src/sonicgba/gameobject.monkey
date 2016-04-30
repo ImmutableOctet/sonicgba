@@ -13,6 +13,7 @@ Private
 	Import lib.animationdrawer
 	Import lib.myapi
 	Import lib.soundsystem
+	Import lib.coordinate
 	
 	Import sonicgba.bulletobject
 	Import sonicgba.collisionmap

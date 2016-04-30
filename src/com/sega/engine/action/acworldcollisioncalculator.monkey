@@ -16,7 +16,7 @@ Private
 	Import com.sega.engine.action.acworldcollisionlimit
 	
 	Import com.sega.engine.lib.crlfp32
-	Import com.sega.engine.lib.MyAPI
+	Import com.sega.engine.lib.myapi
 	
 	Import lib.constutil
 	
@@ -227,7 +227,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 		Method stopMoveX:Void()
 			Super.stopMoveX()
 			
-			If (Self.actionState = Null) Then
+			If (Self.actionState = 0) Then
 				Local tmpMoveDistanceX:= ((Self.totalDistance * MyAPI.dCos(Self.user.getBodyDegree())) / 100)
 				
 				Self.totalDistance = ACUtilities.getTotalFromDegree(0, (Self.totalDistance * MyAPI.dSin(Self.user.getBodyDegree())) / 100, Self.user.getBodyDegree())
@@ -237,7 +237,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 		Method stopMoveY:Void()
 			Super.stopMoveY()
 			
-			If (Self.actionState = Null) Then
+			If (Self.actionState = 0) Then
 				Local dSin:= ((Self.totalDistance * MyAPI.dSin(Self.user.getBodyDegree())) / 100)
 				
 				Self.totalDistance = ACUtilities.getTotalFromDegree(((Self.totalDistance * MyAPI.dCos(Self.user.getBodyDegree())) / 100), 0, Self.user.getBodyDegree())
@@ -764,7 +764,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 							Self.moveDistanceY = 0
 						EndIf
 						
-						If (Self.actionState = Null) Then
+						If (Self.actionState = 0) Then
 							Self.totalDistance = ACUtilities.getTotalFromDegree(Self.moveDistanceX, Self.moveDistanceY, landDegree)
 							
 							Self.footDegree = landDegree
@@ -791,7 +791,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				Self.moveDistanceY = 0
 			EndIf
 			
-			If (Self.actionState = Null) Then
+			If (Self.actionState = 0) Then
 				Self.totalDistance = ACUtilities.getTotalFromDegree(Self.moveDistanceX, Self.moveDistanceY, landDegree)
 				
 				Self.footDegree = landDegree
