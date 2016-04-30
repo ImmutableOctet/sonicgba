@@ -32,7 +32,7 @@ Private
 	Import com.sega.mobile.framework.device.mfimage
 	Import com.sega.mobile.framework.ui.mftouchkey
 	
-	'Import com.sega.mobile.framework.device.mfsensor
+	Import com.sega.mobile.framework.device.mfsensor
 	'Import com.sega.mobile.framework.device.mfsound
 	'Import com.sega.mobile.framework.mfmain
 	'Import com.sega.mobile.framework.android.canvas
@@ -1131,7 +1131,7 @@ Function InitializeMobileFramework:Void()
 	MFGraphics.init()
 	
 	'MFSound.init()
-	'MFSensor.init()
+	MFSensor.init()
 	MFGamePad.resetKeys()
 	
 	'MFDevice.vibrator = (Vibrator)MFMain.getInstance().getSystemService("vibrator")

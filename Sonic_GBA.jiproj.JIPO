@@ -179,7 +179,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>42</X>
+        <X>41</X>
         <Y>34</Y>
       </CursorPos>
       <DocGUID>5667d516-48b1-471a-ad0c-88ea24fd3834</DocGUID>
@@ -206,6 +206,14 @@
         <Y>4</Y>
       </CursorPos>
       <DocGUID>d948e4cf-b98f-43d6-a297-8883d76629a0</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfsensor.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>6</X>
+        <Y>20</Y>
+      </CursorPos>
+      <DocGUID>fd8f57d5-0eba-4940-8919-243f90f71c42</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\ui\mfbutton.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
@@ -2007,8 +2015,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\specialplayer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>34</X>
-        <Y>1091</Y>
+        <X>16</X>
+        <Y>1092</Y>
       </CursorPos>
       <DocGUID>6e1c6c40-04ad-47d9-bb8a-35953f47a663</DocGUID>
       <Bookmarks />
