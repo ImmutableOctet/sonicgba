@@ -12,6 +12,7 @@ Private
 	
 	Import pyxeditor.pyxanimation
 	
+	Import sonicgba.sonicdef
 	import sonicgba.boom
 	import sonicgba.bossobject
 	import sonicgba.bulletobject
@@ -155,9 +156,68 @@ Class BossExtra Extends BossObject
 			
 			setBossHP()
 		End
+		
+		' Methods:
+		
+		' Extensions:
+		Method onPlayerAttack:Void(player:PlayerObject, direction:Int) ' animationID:Int
+			If (Self.state <> STATE_DEAD) Then
+				For Local i:= 0 Until COLLISION_BODY_NAME.Length
+					Self.pyxAnimation.getNodeInfo(nodeInfo, COLLISION_BODY_NAME[i])
+					
+					If (nodeInfo.hasNode()) Then
+						Local animationRect:= nodeInfo.drawer.getCRect()
+						
+						If (animationRect <> Null) Then
+							bodyRect.setRect(Self.posX + ((nodeInfo.animationX + animationRect[0]) Shl 6), Self.posY + ((nodeInfo.animationY + animationRect[1]) Shl 6), animationRect[2] Shl 6, animationRect[3] Shl 6)
+							bodyRect.setRotate(nodeInfo.degree, ((-animationRect[0]) + (nodeInfo.rotateX - nodeInfo.animationX)) Shl 6, ((-animationRect[1]) + (nodeInfo.rotateY - nodeInfo.animationY)) Shl 6)
+							
+							If (bodyRect.collisionChk(player.getCollisionRect())) Then
+								If (i <> 1) Then
+									player.beHurt()
+								ElseIf (player.isAttackingEnemy() And Self.damageCount = 0) Then
+									Self.HP -= 1
+									
+									If (Self.HP = 0) Then
+										Self.state = STATE_DEAD
+										
+										' Magic number: 10 (Duration)
+										Self.pyxAnimation.changeToAction(ANI_DEAD, 10)
+										Self.pyxAnimation.setLoop(False)
+										
+										player.getBossScore()
+										
+										If (player.getCharacterID() = CHARACTER_SUPER_SONIC) Then
+											' Optimization potential; dynamic cast.
+											Local supersonic:= PlayerSuperSonic(player)
+											
+											If (supersonic <> Null) Then
+												supersonic.setBossDieFlag(True)
+											EndIf
+										EndIf
+									Else
+										Self.damageCount = 10
+									EndIf
+									
+									player.doBossAttackPose(Self, DIRECTION_LEFT)
+								Else
+									If (Self.damageCount = 0) Then
+										player.beHurt()
+									EndIf
+								EndIf
+								
+								Exit
+							EndIf
+						Else
+							Continue
+						EndIf
+					EndIf
+				Next
+			EndIf
+		End
 	Public
 		' Methods:
-		Public Method logic:Void()
+		Method logic:Void()
 			Select (Self.state)
 				Case STATE_NONE
 					Self.posX = APPEAR_X
@@ -384,26 +444,32 @@ Class BossExtra Extends BossObject
 			EndIf
 		End
 		
-		Public Method draw:Void(g:MFGraphics)
-			
+		Method draw:Void(g:MFGraphics)
 			If (PlayerObject.getTimeCount() <> 0) Then
-				Graphics g2
-				Coordinate camera = MapManager.getCamera()
+				Local camera:= MapManager.getCamera()
+				
 				Self.pyxAnimation.drawAction(g, (Self.posX Shr 6) - camera.x, (Self.posY Shr 6) - camera.y)
+				
 				Select (Self.state)
-					Case 0
-						Self.warningDrawer.draw(g, SCREEN_WIDTH Shr 1, SCREEN_HEIGHT Shr 1)
-						break
-				EndIf
+					Case STATE_NONE
+						Self.warningDrawer.draw(g, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2)) ' Shr 1
+				End Select
+				
 				If (Self.isShotting) Then
-					Int laserX = Self.pyxAnimation.getNodeXByAnimationNamed("head", -20, -12)
-					Int laserY = Self.pyxAnimation.getNodeYByAnimationNamed("head", -20, -12)
-					g2 = (Graphics) g.getSystemGraphics()
+					Local laserX:= Self.pyxAnimation.getNodeXByAnimationNamed("head", -20, -12)
+					Local laserY:= Self.pyxAnimation.getNodeYByAnimationNamed("head", -20, -12)
+					
+					Local g2:= g.getSystemGraphics()
+					
 					g2.save()
-					g2.translate((Float) (((Self.posX Shr 6) + laserX) - camera.x), (Float) (((Self.posY Shr 6) + laserY) - camera.y))
-					g2.rotate((Float) (Self.laserDegree Shr 6))
+					
+					g2.translate(Float(((Self.posX Shr 6) + laserX) - camera.x), Float(((Self.posY Shr 6) + laserY) - camera.y))
+					g2.rotate(Float(Self.laserDegree Shr 6))
+					
 					g.setColor(MapManager.END_COLOR)
-					g.fillRect(0, (-Self.laserHeight) Shr 1, PlayerObject.BANKING_MIN_SPEED, Self.laserHeight)
+					
+					g.fillRect(0, ((-Self.laserHeight) / 2), 500, Self.laserHeight) ' Shr 1
+					
 					Self.laserHeight += 1
 					
 					If (Self.laserHeight > 4) Then
@@ -425,118 +491,30 @@ Class BossExtra Extends BossObject
 					Self.pyxAnimation.getNodeInfo(nodeInfo, "head")
 					
 					If (nodeInfo.hasNode()) Then
-						g2 = (Graphics) g.getSystemGraphics()
+						Local g2:= g.getSystemGraphics()
+						
 						g2.save()
-						g2.translate((Float) ((nodeInfo.animationX + (Self.posX Shr 6)) - camera.x), (Float) ((nodeInfo.animationY + (Self.posY Shr 6)) - camera.y))
-						g2.rotate((Float) nodeInfo.degree)
+						
+						g2.translate(Float((nodeInfo.animationX + (Self.posX Shr 6)) - camera.x), Float((nodeInfo.animationY + (Self.posY Shr 6)) - camera.y))
+						g2.rotate(Float(nodeInfo.degree))
+						
 						Self.headFlashDrawer.draw(g, 0, 0)
+						
 						g2.restore()
 					EndIf
 				EndIf
 			EndIf
-			
 		End
 		
-		Public Method refreshCollisionRect:Void(x:Int, y:Int)
-			Self.collisionRect.setRect(15360, 0, 15360, COLLISION_HEIGHT)
+		Method refreshCollisionRect:Void(x:Int, y:Int)
+			Self.collisionRect.setRect((COLLISION_WIDTH / 2), 0, (COLLISION_WIDTH / 2), COLLISION_HEIGHT)
 		End
 		
-		Public Method doWhileCollision:Void(object:PlayerObject, direction:Int)
-			
-			If (Self.state <> 8) Then
-				For (Int i = 0; i < COLLISION_BODY_NAME.Length; i += 1)
-					Self.pyxAnimation.getNodeInfo(nodeInfo, COLLISION_BODY_NAME[i])
-					
-					If (nodeInfo.hasNode()) Then
-						Byte[] animationRect = nodeInfo.drawer.getCRect()
-						
-						If (animationRect <> Null) Then
-							bodyRect.setRect(Self.posX + ((nodeInfo.animationX + animationRect[0]) Shl 6), Self.posY + ((nodeInfo.animationY + animationRect[1]) Shl 6), animationRect[2] Shl 6, animationRect[3] Shl 6)
-							bodyRect.setRotate(nodeInfo.degree, ((-animationRect[0]) + (nodeInfo.rotateX - nodeInfo.animationX)) Shl 6..((-animationRect[1]) + (nodeInfo.rotateY - nodeInfo.animationY)) Shl 6)
-							
-							If (bodyRect.collisionChk(player.getCollisionRect())) Then
-								If (i <> 1) Then
-									player.beHurt()
-									Return
-								ElseIf (player.isAttackingEnemy() And Self.damageCount = 0) Then
-									Self.HP -= 1
-									
-									If (Self.HP = 0) Then
-										Self.state = 8
-										Self.pyxAnimation.changeToAction(ANI_DEAD, 10)
-										Self.pyxAnimation.setLoop(False)
-										player.getBossScore()
-										
-										If (player instanceof PlayerSuperSonic) Then
-											((PlayerSuperSonic) player).setBossDieFlag(True)
-										EndIf
-										
-									Else
-										Self.damageCount = 10
-									EndIf
-									
-									player.doBossAttackPose(Self, 2)
-									Return
-								ElseIf (Self.damageCount = 0) Then
-									player.beHurt()
-									Return
-								Else
-									Return
-								EndIf
-							EndIf
-							
-						Else
-							continue
-						EndIf
-					EndIf
-				EndIf
-			EndIf
-			
+		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
+			onPlayerAttack(player, direction)
 		End
 		
-		Public Method doWhileBeAttack:Void(object:PlayerObject, direction:Int, animationID:Int)
-			
-			If (Self.state <> 8) Then
-				For (Int i = 0; i < COLLISION_BODY_NAME.Length; i += 1)
-					Self.pyxAnimation.getNodeInfo(nodeInfo, COLLISION_BODY_NAME[i])
-					
-					If (nodeInfo.hasNode()) Then
-						Byte[] animationRect = nodeInfo.drawer.getCRect()
-						
-						If (animationRect <> Null) Then
-							bodyRect.setRect(Self.posX + ((nodeInfo.animationX + animationRect[0]) Shl 6), Self.posY + ((nodeInfo.animationY + animationRect[1]) Shl 6), animationRect[2] Shl 6, animationRect[3] Shl 6)
-							bodyRect.setRotate(nodeInfo.degree, ((-animationRect[0]) + (nodeInfo.rotateX - nodeInfo.animationX)) Shl 6..((-animationRect[1]) + (nodeInfo.rotateY - nodeInfo.animationY)) Shl 6)
-							
-							If (bodyRect.collisionChk(player.getCollisionRect())) Then
-								If (i = 1 And Self.damageCount = 0) Then
-									Self.HP -= 1
-									
-									If (Self.HP = 0) Then
-										Self.state = 8
-										Self.pyxAnimation.changeToAction(ANI_DEAD, 10)
-										Self.pyxAnimation.setLoop(False)
-										player.getBossScore()
-										
-										If (player instanceof PlayerSuperSonic) Then
-											((PlayerSuperSonic) player).setBossDieFlag(True)
-										EndIf
-										
-									Else
-										Self.damageCount = 10
-									EndIf
-									
-									player.doBossAttackPose(Self, 2)
-									Return
-								EndIf
-								
-								Return
-							EndIf
-							
-						Else
-							continue
-						EndIf
-					EndIf
-				EndIf
-			EndIf
+		Method doWhileBeAttack:Void(player:PlayerObject, direction:Int, animationID:Int)
+			onPlayerAttack(player, direction)
 		End
 End

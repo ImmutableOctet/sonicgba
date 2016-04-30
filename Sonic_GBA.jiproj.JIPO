@@ -382,10 +382,10 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\animationdrawer.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\lib\animationdrawer.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>10</X>
+        <Y>357</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -505,7 +505,7 @@
     <DocUserOptions Filename=".\src\pyxeditor\pyxanimation.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>10</X>
-        <Y>242</Y>
+        <Y>182</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -856,8 +856,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bossextra.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>5</X>
-        <Y>407</Y>
+        <X>15</X>
+        <Y>30</Y>
       </CursorPos>
       <DocGUID>4a05c209-9491-45f1-8546-308d37f5d802</DocGUID>
       <Bookmarks />
@@ -1560,8 +1560,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>27</X>
-        <Y>329</Y>
+        <X>35</X>
+        <Y>412</Y>
       </CursorPos>
       <DocGUID>31953c9f-014b-4a6c-bbf6-5c5c5ba82d55</DocGUID>
       <Bookmarks />
@@ -1573,10 +1573,10 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\playersupersonic.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\playersupersonic.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
-        <X>24</X>
-        <Y>37</Y>
+        <X>0</X>
+        <Y>0</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -1818,10 +1818,10 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>0</X>
-        <Y>0</Y>
+        <Y>16</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
