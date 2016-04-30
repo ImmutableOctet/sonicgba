@@ -15,6 +15,7 @@ Friend sonicgba.hari
 ' Imports:
 Private
 	Import lib.constutil
+	Import lib.myapi
 	
 	Import sonicgba.gimmickobject
 	Import sonicgba.movecalculator
