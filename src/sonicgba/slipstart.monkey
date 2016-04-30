@@ -38,7 +38,7 @@ Class SlipStart Extends GimmickObject
 			' Empty implementation.
 		End
 		
-		Method doWhileCollision:Void(arg0:ACObject, arg1:ACCollision, arg2:Int, arg3:Int, arg4:Int, arg5:Int, arg6:Int)
+		Method onCollision:Void(aCObject:ACObject, aCCollision:ACCollision, direction:Int, touchX:Int, touchY:Int, objTouchX:Int, objTouchY:Int)
 			' Empty implementation.
 		End
 		

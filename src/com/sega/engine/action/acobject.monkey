@@ -33,7 +33,10 @@ Class ACObject Implements ACParam Abstract
 		
 		' Methods (Abstract):
 		Method doBeforeCollisionCheck:Void() Abstract
-		Method doWhileCollision:Void(aCObject:ACObject, aCCollision:ACCollision, i:Int, i2:Int, i3:Int, i4:Int, i5:Int) Abstract
+		
+		Method onCollision:Void(aCObject:ACObject, aCCollision:ACCollision, direction:Int, touchX:Int, touchY:Int, objTouchX:Int, objTouchY:Int)
+			' Empty implementation.
+		End
 		
 		' Constructor(s):
 		Method New(worldInstance:ACWorld)

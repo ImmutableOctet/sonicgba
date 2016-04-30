@@ -15,6 +15,8 @@ Private
 	Import sonicgba.seabedvolcanoasynplatform
 	
 	Import com.sega.mobile.framework.device.mfgraphics
+	
+	Import regal.typetool
 Public
 
 ' Classes:

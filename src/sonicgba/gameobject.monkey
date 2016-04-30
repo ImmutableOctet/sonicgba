@@ -1139,7 +1139,6 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		' This acts as the primary destructor for a 'GameObject'.
 		Method close:Void() Abstract
 		
-		' From what I understand, the second argument is the collision-type.
 		Method doWhileCollision:Void(player:PlayerObject, direction:Int) Abstract
 		
 		' This is very likely the main update routine.

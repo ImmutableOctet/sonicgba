@@ -189,7 +189,7 @@ Class ACCollision Implements ACParam Abstract
 			Local obj:= collision.getObject()
 			
 			If (Self.acObj <> Null And obj <> Null) Then
-				Self.acObj.doWhileCollision(obj, Self, direction, touchX, touchY, objTouchX, objTouchY)
+				Self.acObj.onCollision(obj, Self, direction, touchX, touchY, objTouchX, objTouchY)
 			EndIf
 		End
 		
