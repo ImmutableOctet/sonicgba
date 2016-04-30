@@ -167,7 +167,7 @@ Class Boss6BlockArray Extends GimmickObject
 						ElseIf (blockID = 7) Then
 							Self.blockOffsetY[8] = 256
 							
-							For Local i:= 0 Unitl (BLOCK_NUM - 1)
+							For Local i:= 0 Until (BLOCK_NUM - 1)
 								Self.blockOffsetY[i] = ((i + 1) Shl 6)
 							Next
 						ElseIf (blockID = 0) Then
@@ -290,7 +290,7 @@ Class Boss6BlockArray Extends GimmickObject
 					Case 4
 						For Local i:= 0 Until BLOCK_NUM
 							Self.blockOffsetY[i] = 0
-						EndIf
+						Next
 						
 						Self.deep_cn += 1
 					Case 5
@@ -422,7 +422,7 @@ Class Boss6BlockArray Extends GimmickObject
 			
 			For Local i:= 0 Until BLOCK_NUM
 				Self.block[i].logic(Self.blockStartX + (i * BLOCK_SIZE), Self.blockOrgPosY + Self.blockOffsetY[i])
-			EndIf
+			Next
 		End
 		
 		' This triggers the floor to break:
@@ -432,7 +432,7 @@ Class Boss6BlockArray Extends GimmickObject
 				
 				' Magic number: 10
 				Effect.showEffect(destroyEffectAnimation, 0, (Self.blockStartX + (i * BLOCK_SIZE)) Shr 6, (Self.posY Shr 6) - 10, 0)
-			EndIf
+			Next
 			
 			player.collisionState = PlayerObject.COLLISION_STATE_JUMP
 			

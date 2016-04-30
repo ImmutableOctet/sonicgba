@@ -2,12 +2,15 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.enemyobject
+
 ' Imports:
 Private
 	Import lib.animation
 	
 	Import sonicgba.bulletobject
-	Import sonicgba.enemeyobject
+	Import sonicgba.enemyobject
 	
 	Import com.sega.mobile.framework.device.mfgraphics
 Public
