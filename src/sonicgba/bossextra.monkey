@@ -37,6 +37,17 @@ Class BossExtra Extends BossObject
 		
 		Global COLLISION_BODY_NAME:String[] = ["body", "head", "hand_f", "hand_b", "leg_front", "leg_back"] ' Const
 		
+		' States:
+		Const STATE_NONE:Int = 0
+		Const STATE_APPEAR_1:Int = 1
+		Const STATE_APPEAR_2:Int = 2
+		Const STATE_FIRST_DEFENCE:Int = 3
+		Const STATE_SEQUENCE_1:Int = 4
+		Const STATE_GROUND:Int = 5
+		Const STATE_LASER:Int = 6
+		Const STATE_DEFENCE:Int = 7
+		Const STATE_DEAD:Int = 8
+		
 		' Animations:
 		Const ANI_APPEAR_1:Int = 0
 		Const ANI_FIRST_DEFENCE:Int = 1
@@ -48,17 +59,6 @@ Class BossExtra Extends BossObject
 		Const ANI_DEFENCE:Int = 7
 		Const ANI_APPEAR_2:Int = 8
 		Const ANI_DEAD:Int = 9
-		
-		' States:
-		Const STATE_NONE:Int = 0
-		Const STATE_APPEAR_1:Int = 1
-		Const STATE_APPEAR_2:Int = 2
-		Const STATE_FIRST_DEFENCE:Int = 3
-		Const STATE_SEQUENCE_1:Int = 4
-		Const STATE_GROUND:Int = 5
-		Const STATE_LASER:Int = 6
-		Const STATE_DEFENCE:Int = 7
-		Const STATE_DEAD:Int = 8
 		
 		Const APPEAR_VELOCITY_1:Int = 1920
 		Const APPEAR_VELOCITY_2:Int = -960
@@ -129,175 +129,198 @@ Class BossExtra Extends BossObject
 			
 			Self.laserNumCount = 0
 			Self.laserCount = 0
-			Self.state = 0
-			Self.bossAnimation = New Animation[STATE_APPEAR_1]
+			
+			Self.state = STATE_NONE
+			
+			Self.bossAnimation = New Animation[1]
+			
 			Self.bossAnimation[0] = New Animation("/animation/boss_extra")
+			
 			Self.pyxAnimation = New PyxAnimation("/animation/aaa.pyx", Self.bossAnimation)
+			
 			Self.warningDrawer = Animation.getInstanceFromQi("/animation/utl_res/warning.dat")[0].getDrawer(0, True, 0)
+			
+			' Magic number: 15
 			Self.headFlashDrawer = Self.bossAnimation[0].getDrawer(15, False, 0)
+			
 			Self.posX = APPEAR_X
 			Self.posY = APPEAR_Y
+			
 			Self.velY = 0
+			
+			' Magic number: 2800
 			Self.distanceToGround = 2800
+			
 			Self.pyxAnimation.setSpeed(PYX_ANI_SPEED)
 			
-			If (GlobalResource.isEasyMode() And stageModeState = 0) Then
-				Self.HP = STATE_LASER
-			Else
-				Self.HP = STATE_DEAD
-			EndIf
+			setBossHP()
 		End
 	Public
 		' Methods:
 		Public Method logic:Void()
 			Select (Self.state)
-				Case 0
+				Case STATE_NONE
 					Self.posX = APPEAR_X
 					Self.posY = APPEAR_Y
+					
 					Self.isOnLand = False
 					
 					If (PlayerObject.getTimeCount() > 0) Then
-						Self.count += STATE_APPEAR_1
+						Self.count += 1
 						
 						If (Self.count = WARNING_COUNT) Then
 							Self.state = STATE_APPEAR_1
+							
 							Self.count = 0
-							Self.pyxAnimation.setAction(STATE_DEAD)
+							
+							Self.pyxAnimation.setAction(ANI_APPEAR_2)
+							
 							Self.velX = APPEAR_VELOCITY_1
+							
 							Self.velY = 0
-							break
 						EndIf
 					EndIf
-					
-					break
 				Case STATE_APPEAR_1
 					Self.posX += Self.velX
 					Self.posY += Self.velY
-					Self.count += STATE_APPEAR_1
 					
+					Self.count += 1
+					
+					' Magic number: 32
 					If (Self.count = 32) Then
-						Self.pyxAnimation.changeToAction(0, 14)
+						' Magic number: 14 (Duration)
+						Self.pyxAnimation.changeToAction(ANI_APPEAR_1, 14)
+						
+						' Magic number: 128
 						Self.velY = 128
+						
 						Self.state = STATE_APPEAR_2
+						
 						Self.count = 0
-						break
 					EndIf
-					
-					break
 				Case STATE_APPEAR_2
 					Self.posX += Self.velX
 					Self.posY += Self.velY
-					Self.count += STATE_APPEAR_1
 					
+					Self.count += 1
+					
+					' Magic number: 14
 					If (Self.count > 14) Then
 						Self.velX = APPEAR_VELOCITY_2
-						Self.posY = getGroundY(Self.posX, Self.posY + Self.distanceToGround) - Self.distanceToGround
 						
+						Self.posY = (getGroundY(Self.posX, Self.posY + Self.distanceToGround) - Self.distanceToGround)
+						
+						' Magic number: 26368
 						If (Self.posX < 26368) Then
 							Self.posX = 26368
+							
 							Self.state = STATE_FIRST_DEFENCE
-							Self.pyxAnimation.setAction(STATE_APPEAR_1)
+							
+							Self.pyxAnimation.setAction(ANI_FIRST_DEFENCE)
+							
 							Self.actionID = 0
+							
 							Self.isOnLand = True
+							
 							Self.pacmanFlag = True
+							
 							Self.pacmanCount = 0
-							break
 						EndIf
 					EndIf
-					
-					break
 				Case STATE_FIRST_DEFENCE
-					
 					If (Self.pyxAnimation.chkEnd()) Then
 						Self.state = STATE_SEQUENCE_1
+						
 						Self.pyxAnimation.setAction(ANI_SEQUENCE_1[Self.actionID])
-						Self.actionID += STATE_APPEAR_1
-						break
+						
+						Self.actionID += 1
 					EndIf
-					
-					break
 				Case STATE_SEQUENCE_1
-					
 					If (Self.pyxAnimation.chkEnd()) Then
 						If (Self.actionID >= ANI_SEQUENCE_1.Length) Then
 							Self.state = STATE_GROUND
-							Self.pyxAnimation.setAction(STATE_GROUND)
+							
+							Self.pyxAnimation.setAction(ANI_GROUND)
 							Self.pyxAnimation.setLoop(True)
+							
 							Self.count = 0
-							break
+						Else
+							Self.pyxAnimation.setAction(ANI_SEQUENCE_1[Self.actionID])
+							
+							Self.actionID += 1
 						EndIf
-						
-						Self.pyxAnimation.setAction(ANI_SEQUENCE_1[Self.actionID])
-						Self.actionID += STATE_APPEAR_1
-						break
 					EndIf
-					
-					break
 				Case STATE_GROUND
-					Self.count += STATE_APPEAR_1
+					Self.count += 1
 					
-					If (Self.count Mod 15 = 0) Then
-						BulletObject.addBullet(24, Self.posX + MyRandom.nextInt(GimmickObject.PLATFORM_OFFSET_Y, 256), (Self.posY + 3072) + MyRandom.nextInt(def.TOUCH_HELP_LEFT_X, 128), 0, 0)
-						BulletObject.addBullet(24, Self.posX + MyRandom.nextInt(GimmickObject.PLATFORM_OFFSET_Y, 256), (Self.posY + 3072) + MyRandom.nextInt(def.TOUCH_HELP_LEFT_X, 128), 0, 0)
+					' Magic number: 15
+					If ((Self.count Mod 15) = 0) Then
+						' Magic numbers: -256, 256, 3072, -128, 128
+						BulletObject.addBullet(BulletObject.BULLET_BOSS_STONE, Self.posX + MyRandom.nextInt(-256, 256), (Self.posY + 3072) + MyRandom.nextInt(-128, 128), 0, 0)
+						BulletObject.addBullet(BulletObject.BULLET_BOSS_STONE, Self.posX + MyRandom.nextInt(-256, 256), (Self.posY + 3072) + MyRandom.nextInt(-128, 128), 0, 0)
 					EndIf
 					
 					If (Self.count > GROUND_COUNT) Then
 						Self.state = STATE_LASER
-						Self.pyxAnimation.setAction(STATE_LASER)
+						
+						Self.pyxAnimation.setAction(ANI_LASER)
 						Self.pyxAnimation.setLoop(False)
+						
 						Self.count = 0
 						Self.laserNumCount = 0
-						break
 					EndIf
-					
-					break
 				Case STATE_LASER
 					Self.pyxAnimation.chkEnd()
 					
-					If (Self.count Mod LASER_DIVIDE_COUNT = 0 And Self.laserNumCount < STATE_SEQUENCE_1) Then
+					If ((Self.count Mod LASER_DIVIDE_COUNT) = 0 And Self.laserNumCount < 4) Then
 						Self.laserDegree = LASER_DEGREE_START
 						Self.laserDegreeVelocity = 0
+						
 						Self.laserCount = 0
+						
 						Self.isShotting = True
+						
 						Self.afterLaserCount = 0
-						Self.laserHeight = STATE_APPEAR_1
-						Self.laserNumCount += STATE_APPEAR_1
-						Self.pyxAnimation.changeAnimation("head", 0, STATE_FIRST_DEFENCE)
+						
+						Self.laserHeight = 1
+						Self.laserNumCount += 1
+						
+						Self.pyxAnimation.changeAnimation("head", 0, ANI_ATTACK_2)
 					EndIf
 					
-					If (Not Self.isShotting And Self.laserNumCount = STATE_SEQUENCE_1) Then
+					If (Not Self.isShotting And Self.laserNumCount = 4) Then
 						Self.state = STATE_DEFENCE
-						Self.pyxAnimation.setAction(STATE_DEFENCE)
+						
+						Self.pyxAnimation.setAction(ANI_DEFENCE)
 					EndIf
 					
-					Self.count += STATE_APPEAR_1
-					break
+					Self.count += 1
 				Case STATE_DEFENCE
-					
 					If (Self.pyxAnimation.chkEnd()) Then
 						Self.state = STATE_SEQUENCE_1
+						
 						Self.actionID = 0
+						
 						Self.pyxAnimation.setAction(ANI_SEQUENCE_1[Self.actionID])
-						Self.actionID += STATE_APPEAR_1
-						break
+						
+						Self.actionID += 1
 					EndIf
-					
-					break
 				Case STATE_DEAD
-					damageframe += STATE_APPEAR_1
+					damageframe += 1
 					damageframe Mod= 11
 					
-					If (damageframe Mod STATE_APPEAR_2 = 0) Then
-						SoundSystem.getInstance().playSe(35)
+					If ((damageframe Mod 2) = 0) Then
+						SoundSystem.getInstance().playSe(SoundSystem.SE_144)
 					EndIf
 					
-					Int cameraX = MapManager.getCamera().x
-					Int cameraY = MapManager.getCamera().y
+					Local cameraX:= MapManager.getCamera().x
+					Local cameraY:= MapManager.getCamera().y
 					
-					If (damageframe Mod STATE_FIRST_DEFENCE = 0) Then
-						GameObject.addGameObject(New Boom(37, (((Self.posX Shr STATE_LASER) - 50) + MyRandom.nextInt(0, 100)) Shl STATE_LASER, (((Self.posY Shr STATE_LASER) - 50) + MyRandom.nextInt(0, 100)) Shl STATE_LASER, 0, 0, 0, 0))
+					If ((damageframe Mod 3) = 0) Then
+						GameObject.addGameObject(New Boom(ENEMY_BOOM, (((Self.posX Shr 6) - 50) + MyRandom.nextInt(0, 100)) Shl 6, (((Self.posY Shr 6) - 50) + MyRandom.nextInt(0, 100)) Shl 6, 0, 0, 0, 0))
 					EndIf
 					
+					' Magic number: 120
 					Self.distanceToGround -= 120
 					
 					If (Self.distanceToGround < DEAD_DISTANCE_TO_GROUND) Then
@@ -305,25 +328,25 @@ Class BossExtra Extends BossObject
 					EndIf
 					
 					If (Self.distanceToGround = DEAD_DISTANCE_TO_GROUND) Then
-						Self.posX -= MDPhone.SCREEN_HEIGHT
+						' Magic number: 640
+						Self.posX -= 640
 					EndIf
 					
+					' Magic number: -12800
 					If (Self.posX < -12800) Then
 						StageManager.setStagePass()
-						break
 					EndIf
-					
-					break
-			EndIf
+			End Select
+			
 			If (Self.isOnLand) Then
-				Self.posY = getGroundY(Self.posX, Self.posY + Self.distanceToGround) - Self.distanceToGround
+				Self.posY = (getGroundY(Self.posX, Self.posY + Self.distanceToGround) - Self.distanceToGround)
 			EndIf
 			
 			If (Self.isShotting) Then
 				If (Self.laserDegree > LASER_DEGREE_END) Then
 					Self.isShotting = False
 					Self.bulletShowing = True
-					Self.pyxAnimation.changeAnimation("head", 0, STATE_APPEAR_2)
+					Self.pyxAnimation.changeAnimation("head", 0, 2)
 				Else
 					Self.laserDegree += Self.laserDegreeVelocity
 					Self.laserDegreeVelocity += LASER_VELOCITY_ACCELERATE
@@ -332,31 +355,33 @@ Class BossExtra Extends BossObject
 			
 			If (Self.state <> STATE_DEAD) Then
 				If (Self.pacmanFlag) Then
-					Self.pacmanCount += STATE_APPEAR_1
+					Self.pacmanCount += 1
 					
-					If (Self.pacmanCount >= PYX_ANI_SPEED_GROUND) Then
+					If (Self.pacmanCount >= 64) Then ' PYX_ANI_SPEED_GROUND
 						Self.pacmanCount = 0
-						BulletObject.addBullet(22, Self.posX - BarHorbinV.HOBIN_POWER, Self.posY - 896, 0, 0)
+						
+						' Magic numbers: 1152, 896
+						BulletObject.addBullet(BulletObject.BULLET_BOSS_EXTRA_PACMAN, Self.posX - 1152, Self.posY - 896, 0, 0)
 					EndIf
 				EndIf
 				
 				If (Self.bulletShowing) Then
-					Self.afterLaserCount += STATE_APPEAR_1
+					Self.afterLaserCount += 1
 					
-					If (Self.afterLaserCount >= STATE_GROUND And (Self.afterLaserCount - STATE_GROUND) Mod STATE_SEQUENCE_1 = 0) Then
-						Int x = 320 - (((Self.afterLaserCount - STATE_GROUND) * 32) / STATE_SEQUENCE_1)
+					If (Self.afterLaserCount >= 5 And ((Self.afterLaserCount - 5) Mod 4) = 0) Then
+						' Magic number: 320
+						Local x:= (320 - (((Self.afterLaserCount - 5) * 32) / 4))
 						
 						If (x > 0) Then
-							BulletObject.addBullet(23, x Shl STATE_LASER, Self.posY + Self.distanceToGround, 0, 0)
-							SoundSystem.getInstance().playSe(81)
-							Return
+							BulletObject.addBullet(BulletObject.BULLET_BOSS_EXTRA_LASER, (x Shl 6), Self.posY + Self.distanceToGround, 0, 0)
+							
+							SoundSystem.getInstance().playSe(SoundSystem.SE_162)
+						Else
+							Self.bulletShowing = False
 						EndIf
-						
-						Self.bulletShowing = False
 					EndIf
 				EndIf
 			EndIf
-			
 		End
 		
 		Public Method draw:Void(g:MFGraphics)
@@ -364,10 +389,10 @@ Class BossExtra Extends BossObject
 			If (PlayerObject.getTimeCount() <> 0) Then
 				Graphics g2
 				Coordinate camera = MapManager.getCamera()
-				Self.pyxAnimation.drawAction(g, (Self.posX Shr STATE_LASER) - camera.x, (Self.posY Shr STATE_LASER) - camera.y)
+				Self.pyxAnimation.drawAction(g, (Self.posX Shr 6) - camera.x, (Self.posY Shr 6) - camera.y)
 				Select (Self.state)
 					Case 0
-						Self.warningDrawer.draw(g, SCREEN_WIDTH Shr STATE_APPEAR_1, SCREEN_HEIGHT Shr STATE_APPEAR_1)
+						Self.warningDrawer.draw(g, SCREEN_WIDTH Shr 1, SCREEN_HEIGHT Shr 1)
 						break
 				EndIf
 				If (Self.isShotting) Then
@@ -375,34 +400,34 @@ Class BossExtra Extends BossObject
 					Int laserY = Self.pyxAnimation.getNodeYByAnimationNamed("head", -20, -12)
 					g2 = (Graphics) g.getSystemGraphics()
 					g2.save()
-					g2.translate((Float) (((Self.posX Shr STATE_LASER) + laserX) - camera.x), (Float) (((Self.posY Shr STATE_LASER) + laserY) - camera.y))
-					g2.rotate((Float) (Self.laserDegree Shr STATE_LASER))
+					g2.translate((Float) (((Self.posX Shr 6) + laserX) - camera.x), (Float) (((Self.posY Shr 6) + laserY) - camera.y))
+					g2.rotate((Float) (Self.laserDegree Shr 6))
 					g.setColor(MapManager.END_COLOR)
-					g.fillRect(0, (-Self.laserHeight) Shr STATE_APPEAR_1, PlayerObject.BANKING_MIN_SPEED, Self.laserHeight)
-					Self.laserHeight += STATE_APPEAR_1
+					g.fillRect(0, (-Self.laserHeight) Shr 1, PlayerObject.BANKING_MIN_SPEED, Self.laserHeight)
+					Self.laserHeight += 1
 					
-					If (Self.laserHeight > STATE_SEQUENCE_1) Then
-						Self.laserHeight = STATE_SEQUENCE_1
+					If (Self.laserHeight > 4) Then
+						Self.laserHeight = 4
 					EndIf
 					
 					g2.restore()
 				EndIf
 				
 				If (Not IsGamePause) Then
-					Self.damageCount -= STATE_APPEAR_1
+					Self.damageCount -= 1
 				EndIf
 				
 				If (Self.damageCount < 0) Then
 					Self.damageCount = 0
 				EndIf
 				
-				If ((Self.damageCount / STATE_APPEAR_1) Mod STATE_APPEAR_2 = STATE_APPEAR_1) Then
+				If ((Self.damageCount / 1) Mod 2 = 1) Then
 					Self.pyxAnimation.getNodeInfo(nodeInfo, "head")
 					
 					If (nodeInfo.hasNode()) Then
 						g2 = (Graphics) g.getSystemGraphics()
 						g2.save()
-						g2.translate((Float) ((nodeInfo.animationX + (Self.posX Shr STATE_LASER)) - camera.x), (Float) ((nodeInfo.animationY + (Self.posY Shr STATE_LASER)) - camera.y))
+						g2.translate((Float) ((nodeInfo.animationX + (Self.posX Shr 6)) - camera.x), (Float) ((nodeInfo.animationY + (Self.posY Shr 6)) - camera.y))
 						g2.rotate((Float) nodeInfo.degree)
 						Self.headFlashDrawer.draw(g, 0, 0)
 						g2.restore()
@@ -418,26 +443,26 @@ Class BossExtra Extends BossObject
 		
 		Public Method doWhileCollision:Void(object:PlayerObject, direction:Int)
 			
-			If (Self.state <> STATE_DEAD) Then
-				For (Int i = 0; i < COLLISION_BODY_NAME.Length; i += STATE_APPEAR_1)
+			If (Self.state <> 8) Then
+				For (Int i = 0; i < COLLISION_BODY_NAME.Length; i += 1)
 					Self.pyxAnimation.getNodeInfo(nodeInfo, COLLISION_BODY_NAME[i])
 					
 					If (nodeInfo.hasNode()) Then
 						Byte[] animationRect = nodeInfo.drawer.getCRect()
 						
 						If (animationRect <> Null) Then
-							bodyRect.setRect(Self.posX + ((nodeInfo.animationX + animationRect[0]) Shl STATE_LASER), Self.posY + ((nodeInfo.animationY + animationRect[STATE_APPEAR_1]) Shl STATE_LASER), animationRect[STATE_APPEAR_2] Shl STATE_LASER, animationRect[STATE_FIRST_DEFENCE] Shl STATE_LASER)
-							bodyRect.setRotate(nodeInfo.degree, ((-animationRect[0]) + (nodeInfo.rotateX - nodeInfo.animationX)) Shl STATE_LASER..((-animationRect[STATE_APPEAR_1]) + (nodeInfo.rotateY - nodeInfo.animationY)) Shl STATE_LASER)
+							bodyRect.setRect(Self.posX + ((nodeInfo.animationX + animationRect[0]) Shl 6), Self.posY + ((nodeInfo.animationY + animationRect[1]) Shl 6), animationRect[2] Shl 6, animationRect[3] Shl 6)
+							bodyRect.setRotate(nodeInfo.degree, ((-animationRect[0]) + (nodeInfo.rotateX - nodeInfo.animationX)) Shl 6..((-animationRect[1]) + (nodeInfo.rotateY - nodeInfo.animationY)) Shl 6)
 							
 							If (bodyRect.collisionChk(player.getCollisionRect())) Then
-								If (i <> STATE_APPEAR_1) Then
+								If (i <> 1) Then
 									player.beHurt()
 									Return
 								ElseIf (player.isAttackingEnemy() And Self.damageCount = 0) Then
-									Self.HP -= STATE_APPEAR_1
+									Self.HP -= 1
 									
 									If (Self.HP = 0) Then
-										Self.state = STATE_DEAD
+										Self.state = 8
 										Self.pyxAnimation.changeToAction(ANI_DEAD, 10)
 										Self.pyxAnimation.setLoop(False)
 										player.getBossScore()
@@ -450,7 +475,7 @@ Class BossExtra Extends BossObject
 										Self.damageCount = 10
 									EndIf
 									
-									player.doBossAttackPose(Self, STATE_APPEAR_2)
+									player.doBossAttackPose(Self, 2)
 									Return
 								ElseIf (Self.damageCount = 0) Then
 									player.beHurt()
@@ -471,23 +496,23 @@ Class BossExtra Extends BossObject
 		
 		Public Method doWhileBeAttack:Void(object:PlayerObject, direction:Int, animationID:Int)
 			
-			If (Self.state <> STATE_DEAD) Then
-				For (Int i = 0; i < COLLISION_BODY_NAME.Length; i += STATE_APPEAR_1)
+			If (Self.state <> 8) Then
+				For (Int i = 0; i < COLLISION_BODY_NAME.Length; i += 1)
 					Self.pyxAnimation.getNodeInfo(nodeInfo, COLLISION_BODY_NAME[i])
 					
 					If (nodeInfo.hasNode()) Then
 						Byte[] animationRect = nodeInfo.drawer.getCRect()
 						
 						If (animationRect <> Null) Then
-							bodyRect.setRect(Self.posX + ((nodeInfo.animationX + animationRect[0]) Shl STATE_LASER), Self.posY + ((nodeInfo.animationY + animationRect[STATE_APPEAR_1]) Shl STATE_LASER), animationRect[STATE_APPEAR_2] Shl STATE_LASER, animationRect[STATE_FIRST_DEFENCE] Shl STATE_LASER)
-							bodyRect.setRotate(nodeInfo.degree, ((-animationRect[0]) + (nodeInfo.rotateX - nodeInfo.animationX)) Shl STATE_LASER..((-animationRect[STATE_APPEAR_1]) + (nodeInfo.rotateY - nodeInfo.animationY)) Shl STATE_LASER)
+							bodyRect.setRect(Self.posX + ((nodeInfo.animationX + animationRect[0]) Shl 6), Self.posY + ((nodeInfo.animationY + animationRect[1]) Shl 6), animationRect[2] Shl 6, animationRect[3] Shl 6)
+							bodyRect.setRotate(nodeInfo.degree, ((-animationRect[0]) + (nodeInfo.rotateX - nodeInfo.animationX)) Shl 6..((-animationRect[1]) + (nodeInfo.rotateY - nodeInfo.animationY)) Shl 6)
 							
 							If (bodyRect.collisionChk(player.getCollisionRect())) Then
-								If (i = STATE_APPEAR_1 And Self.damageCount = 0) Then
-									Self.HP -= STATE_APPEAR_1
+								If (i = 1 And Self.damageCount = 0) Then
+									Self.HP -= 1
 									
 									If (Self.HP = 0) Then
-										Self.state = STATE_DEAD
+										Self.state = 8
 										Self.pyxAnimation.changeToAction(ANI_DEAD, 10)
 										Self.pyxAnimation.setLoop(False)
 										player.getBossScore()
@@ -500,7 +525,7 @@ Class BossExtra Extends BossObject
 										Self.damageCount = 10
 									EndIf
 									
-									player.doBossAttackPose(Self, STATE_APPEAR_2)
+									player.doBossAttackPose(Self, 2)
 									Return
 								EndIf
 								

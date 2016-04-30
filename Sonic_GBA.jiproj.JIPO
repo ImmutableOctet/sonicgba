@@ -148,12 +148,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\mobile\define\mdphone.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\mobile\define\mdphone.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>8</X>
         <Y>40</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>9e2f6a8c-9929-41b2-bd69-9181376d22df</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphics.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -341,7 +342,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\gameengine\def.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>30</X>
+        <X>6</X>
         <Y>137</Y>
       </CursorPos>
       <DocGUID />
@@ -474,8 +475,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>19</X>
-        <Y>26</Y>
+        <X>14</X>
+        <Y>115</Y>
       </CursorPos>
       <DocGUID>dc8ff588-9d6e-4f45-9b52-cc2d2cbdbb98</DocGUID>
       <Bookmarks />
@@ -501,10 +502,10 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\pyxeditor\pyxanimation.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\pyxeditor\pyxanimation.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>10</X>
+        <Y>242</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -732,12 +733,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\boom.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\boom.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>82</X>
-        <Y>46</Y>
+        <X>29</X>
+        <Y>15</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>2c5b24fb-01b0-4fe1-9c7e-7656e014f3e7</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss1.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -854,8 +856,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bossextra.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>12</X>
-        <Y>150</Y>
+        <X>5</X>
+        <Y>407</Y>
       </CursorPos>
       <DocGUID>4a05c209-9491-45f1-8546-308d37f5d802</DocGUID>
       <Bookmarks />
@@ -890,8 +892,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bossobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>18</X>
+        <Y>50</Y>
       </CursorPos>
       <DocGUID>5112b8b0-9d40-44b1-a196-516dd6580ac3</DocGUID>
       <Bookmarks />
@@ -933,10 +935,10 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bulletobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>20</X>
-        <Y>63</Y>
+        <X>31</X>
+        <Y>67</Y>
       </CursorPos>
-      <DocGUID>1cb1ed7f-b416-4135-909c-2bd0dfad0c13</DocGUID>
+      <DocGUID>a6fb9719-3f98-4f82-98c2-a47d083c89a3</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\cage.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
@@ -1095,8 +1097,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\enemyobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>19</X>
-        <Y>124</Y>
+        <X>18</X>
+        <Y>91</Y>
       </CursorPos>
       <DocGUID>92a5a34c-0623-4549-be2e-8997d65f89a5</DocGUID>
       <Bookmarks>
@@ -1228,8 +1230,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>27</X>
-        <Y>201</Y>
+        <X>8</X>
+        <Y>180</Y>
       </CursorPos>
       <DocGUID>3af5bdaf-31ee-40e2-9238-fb8c1ff5d006</DocGUID>
       <Bookmarks />
@@ -2215,7 +2217,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\lib\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\mflib" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\platformstandard" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\pyxeditor" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\pyxeditor" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\animation" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\animation\ending" Expanded="false" />
