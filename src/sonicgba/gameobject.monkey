@@ -1103,7 +1103,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		End
 		
 		' This locates the map segment 'currentObject' is in, then outputs the area's contents into 'objVec'.
-		Function getGameObjectVecArray:Void(currentObject:GameObject, objVec:Stack<GameObject>)
+		Function getGameObjectVecArray:Void(currentObject:GameObject, objVec:Stack<Stack<GameObject>>)
 			objVec.Clear()
 			
 			Local centerX:Int = ((MapManager.getCamera().x + (MapManager.CAMERA_WIDTH/2)) / ROOM_WIDTH)
@@ -1115,7 +1115,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				Local endX:= Min(centerX + 1, objVecWidth-1)
 				Local endY:= Min(centerY + 1, objVecHeight-1)
 				
-				If (allGameObject <> Null) Then
+				If (allGameObject.Length > 0) Then
 					For Local x:= startX To endX
 						For Local y:= startY To endY
 							objVec.Push(allGameObject[x][y])
@@ -1624,7 +1624,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			resetRect.setRect(((camera.x + (MapManager.CAMERA_WIDTH / 2)) Shl 6) - INIT_DISTANCE, ((camera.y + (MapManager.CAMERA_HEIGHT / 2)) Shl 6) - INIT_DISTANCE, 29440, 29440)
 		End
 		
-		Method updateDirection:Int()
+		Method updateDirection:Int(player:PlayerObject)
 			Local xFirst:Bool
 			
 			Local colRect:= player.getCollisionRect()

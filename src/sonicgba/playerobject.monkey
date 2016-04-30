@@ -687,6 +687,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Field attractRect:CollisionRect
 		Field preCollisionRect:CollisionRect
 		
+		Field attackRectVec:Stack<PlayerAnimationCollisionRect>
+		
 		Field footOnObject:GameObject
 		Field outOfControlObject:GameObject
 		
@@ -703,7 +705,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Field moveLimit:Int
 		Field terminalCount:Int
 		Field terminalOffset:Int
-		Field attackRectVec:Stack<CollisionRect>
 	Public
 		' Methods (Abstract):
 		Method closeImpl:Void() Abstract
@@ -855,7 +856,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.footObjectLogic = False
 			Self.outOfControlObject = Null
 			
-			Self.attackRectVec = New Stack<CollisionRect>()
+			Self.attackRectVec = New Stack<PlayerAnimationCollisionRect>()
 			
 			Self.jumpAttackRect = New CollisionRect()
 			Self.attractRect = New CollisionRect()
