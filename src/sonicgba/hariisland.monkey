@@ -96,7 +96,7 @@ Class HariIsland Extends GimmickObject
 				ratio = (Self.iTop <> 0)
 			EndIf
 			
-			mCalc = new MoveCalculator(PickValue(Self.isH, Self.posX, Self.posY), PickValue(Self.isH, Self.mWidth, Self.mHeight), ratio)
+			mCalc = New MoveCalculator(PickValue(Self.isH, Self.posX, Self.posY), PickValue(Self.isH, Self.mWidth, Self.mHeight), ratio)
 		End
 	Public
 		' Functions:

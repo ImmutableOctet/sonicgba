@@ -85,7 +85,7 @@ Class RingObject Extends GameObject
 				Local var39:= ((-var37) * MyAPI.dCos(var38) / 100)
 				Local var40:= (var37 * MyAPI.dSin(var38) / 100 + VELOCITY_OFFSET_Y2)
 				
-				addGameObject(new MoveRingObject(x, y, var39, var40, layer, systemClock))
+				addGameObject(New MoveRingObject(x, y, var39, var40, layer, systemClock))
 			Else
 				Local ringCount:= 0
 				Local ringCount2:= velocity

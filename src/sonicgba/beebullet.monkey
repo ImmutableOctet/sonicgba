@@ -19,7 +19,7 @@ Class BeeBullet Extends BasicBullet
 			Super.New(x, y, velX, velY)
 			
 			If (beebulletAnimation = Null) Then
-				beebulletAnimation = new Animation("/animation/bee_bullet")
+				beebulletAnimation = New Animation("/animation/bee_bullet")
 			EndIf
 			
 			Self.drawer = beebulletAnimation.getDrawer(0, True, 0)

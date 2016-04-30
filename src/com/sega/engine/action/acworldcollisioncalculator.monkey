@@ -164,7 +164,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 			
 			Local len:= (DIRECTION_OFFSET_UP + (collisionHeight - bodyOffset * DIRECTION_OFFSET_UP - DIRECTION_OFFSET_LEFT) / Self.worldInstance.getTileHeight())
 			
-			Self.bodyCollisionPointOffsetY = new Int[len]
+			Self.bodyCollisionPointOffsetY = New Int[len]
 			Self.bodyCollisionPointOffsetY[DIRECTION_OFFSET_DOWN] = -bodyOffset
 			Self.bodyCollisionPointOffsetY[len - 1] = bodyOffset + -collisionHeight
 			
@@ -889,9 +889,9 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 						Local var3:= Self.footDegree
 						Local var4:= -1
 						
-						If (Self.checkArrayForShowX = Null) Then
-							Self.checkArrayForShowX = new Int[Self.footCollisionPointOffsetX.Length]
-							Self.checkArrayForShowY = new Int[Self.footCollisionPointOffsetX.Length]
+						If (Self.checkArrayForShowX.Length = 0) Then
+							Self.checkArrayForShowX = New Int[Self.footCollisionPointOffsetX.Length]
+							Self.checkArrayForShowY = New Int[Self.footCollisionPointOffsetX.Length]
 						EndIf
 						
 						For Local var5:= 0 Until Self.footCollisionPointOffsetX.Length

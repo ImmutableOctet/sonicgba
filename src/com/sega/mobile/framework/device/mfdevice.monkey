@@ -649,7 +649,7 @@ Class MFDevice Final
 			Try
 				ret = loadRecordFrom(path)
 			Catch notFound:FileNotFoundException
-				Print("Create new record file: " + path)
+				Print("Create New record file: " + path)
 				
 				ret = NULL_RECORD
 				
@@ -686,7 +686,7 @@ Class MFDevice Final
 			Const DEFAULT_FILE_SIZE:= 1024 ' Bytes.
 			
 			' Local variable(s):
-			Local dos:= new PublicDataStream(DEFAULT_FILE_SIZE)
+			Local dos:= New PublicDataStream(DEFAULT_FILE_SIZE)
 			
 			dos.WriteInt(records.Count())
 			

@@ -292,7 +292,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			EndIf
 			
 			If (platformBreakAnimation = Null) Then
-				platformBreakAnimation = new Animation("/animation/subehahen_5")
+				platformBreakAnimation = New Animation("/animation/subehahen_5")
 			EndIf
 			
 			' I'm unsure of what these are for, at the moment.
@@ -1132,7 +1132,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			Self.firstTouch = True
 			Self.preCollisionRect = New CollisionRect()
 			Self.collisionRect = New CollisionRect()
-			Self.moveDistance = new Coordinate()
+			Self.moveDistance = New Coordinate()
 		End
 		
 		' Methods (Abstract):

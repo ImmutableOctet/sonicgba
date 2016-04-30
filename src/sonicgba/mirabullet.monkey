@@ -19,7 +19,7 @@ Class MiraBullet Extends BasicBullet
 			Super.New(x, y, velX, velY)
 			
 			If (mirabulletAnimation = Null) Then
-				mirabulletAnimation = new Animation("/animation/mira_bullet")
+				mirabulletAnimation = New Animation("/animation/mira_bullet")
 			EndIf
 			
 			Self.drawer = mirabulletAnimation.getDrawer(0, True, 0)

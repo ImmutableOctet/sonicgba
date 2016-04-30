@@ -114,8 +114,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acworldcollisioncalculator.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>1181</Y>
+        <X>60</X>
+        <Y>185</Y>
       </CursorPos>
       <DocGUID>d8d3f946-3843-4347-b599-7bd72b2576f8</DocGUID>
       <Bookmarks />
@@ -185,8 +185,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>20</X>
-        <Y>11</Y>
+        <X>21</X>
+        <Y>651</Y>
       </CursorPos>
       <DocGUID>ed2edad5-4337-440e-93a5-41ee07445ba8</DocGUID>
       <Bookmarks />
@@ -1192,8 +1192,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>22</X>
-        <Y>15</Y>
+        <X>32</X>
+        <Y>294</Y>
       </CursorPos>
       <DocGUID>f60e84fa-6197-43b4-90a7-0d27f6232dd2</DocGUID>
       <Bookmarks />
