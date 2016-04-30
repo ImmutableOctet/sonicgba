@@ -12,9 +12,9 @@ Friend sonicgba.bossf3
 Private
 	Import lib.animation
 	
-	Import com.sega.mobile.framework.device.mfgraphics
-	
 	Import sonicgba.bulletobject
+	
+	Import com.sega.mobile.framework.device.mfgraphics
 Public
 
 ' Classes:

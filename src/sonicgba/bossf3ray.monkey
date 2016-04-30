@@ -12,9 +12,12 @@ Friend sonicgba.bossf3
 Private
 	Import lib.myapi
 	
-	Import com.sega.mobile.framework.device.mfgraphics
-	
 	Import sonicgba.bulletobject
+	Import sonicgba.mapmanager
+	
+	'Import sonicgba.playerobject
+	
+	Import com.sega.mobile.framework.device.mfgraphics
 Public
 
 ' Classes:
