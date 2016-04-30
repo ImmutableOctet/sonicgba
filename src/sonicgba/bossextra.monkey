@@ -2,6 +2,11 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.stagemanager
+Friend sonicgba.enemyobject
+Friend sonicgba.playersupersonic
+
 ' Imports:
 Private
 	Import lib.animation
@@ -13,15 +18,18 @@ Private
 	Import pyxeditor.pyxanimation
 	
 	Import sonicgba.sonicdef
-	import sonicgba.boom
-	import sonicgba.bossobject
-	import sonicgba.bulletobject
-	import sonicgba.collisionrect
-	import sonicgba.globalresource
-	import sonicgba.mapmanager
-	import sonicgba.playerobject
-	import sonicgba.playersupersonic
-	import sonicgba.stagemanager
+	Import sonicgba.boom
+	Import sonicgba.bossobject
+	Import sonicgba.bulletobject
+	Import sonicgba.collisionrect
+	Import sonicgba.globalresource
+	Import sonicgba.mapmanager
+	Import sonicgba.playerobject
+	Import sonicgba.playersupersonic
+	Import sonicgba.stagemanager
+	
+	Import sonicgba.bossextrapacman
+	Import sonicgba.bossextrastone
 	
 	Import com.sega.mobile.framework.android.graphics
 	Import com.sega.mobile.framework.device.mfgraphics
@@ -417,7 +425,7 @@ Class BossExtra Extends BossObject
 				If (Self.pacmanFlag) Then
 					Self.pacmanCount += 1
 					
-					If (Self.pacmanCount >= 64) Then ' PYX_ANI_SPEED_GROUND
+					If (Self.pacmanCount >= BossExtraPacman.PACMAN_LIFE) Then ' PYX_ANI_SPEED_GROUND
 						Self.pacmanCount = 0
 						
 						' Magic numbers: 1152, 896
