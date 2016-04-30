@@ -675,12 +675,13 @@
       <DocGUID>9f870d44-71d7-4431-bc12-2ca1a3fe6b4a</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\basicrollplatformspeed.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\basicrollplatformspeed.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>22</X>
-        <Y>86</Y>
+        <X>36</X>
+        <Y>25</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>5f497050-8d01-4f50-9ca8-0fcb938ca201</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bat.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1234,8 +1235,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>26</X>
-        <Y>21</Y>
+        <X>32</X>
+        <Y>795</Y>
       </CursorPos>
       <DocGUID>5d6c419a-dc6c-43d5-910f-a52148ad368b</DocGUID>
       <Bookmarks />
@@ -1686,12 +1687,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\rollplatformspeedc.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\rollplatformspeedc.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>29</X>
-        <Y>5</Y>
+        <X>41</X>
+        <Y>13</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>955ff36a-a890-41d4-a0bb-44bee7d44c0c</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ropeend.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1960,8 +1962,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\torchfire.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>43</Y>
+        <X>19</X>
+        <Y>25</Y>
       </CursorPos>
       <DocGUID>16d44cfb-bc8d-4373-908c-1ec3e94dfd31</DocGUID>
       <Bookmarks />

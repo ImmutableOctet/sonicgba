@@ -23,6 +23,7 @@ Class TorchFire Extends GimmickObject
 		Global drawer:AnimationDrawer
 		Global drawer2:AnimationDrawer
 	Protected
+		' Constructor(s):
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
 			Super.New(id, x, y, left, top, width, height)
 			
@@ -41,8 +42,9 @@ Class TorchFire Extends GimmickObject
 				drawer.setPause(True)
 			EndIf
 			
-			Self.posX += RollPlatformSpeedC.COLLISION_OFFSET_Y
-			Self.posY += SpecialMap.MAP_LENGTH
+			' Magic numbers: 256, 1024
+			Self.posX += 256
+			Self.posY += 1024
 		End
 	Public
 		' Functions:

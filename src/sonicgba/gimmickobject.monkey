@@ -793,7 +793,7 @@ Class GimmickObject Extends GameObject
 						EndIf
 					Case GIMMICK_FALL
 						If (Self.firstTouch And StageManager.getCurrentZoneId() <> 3) Then
-							p.setFall(Self.posX - RollPlatformSpeedC.COLLISION_OFFSET_Y, Self.posY, Self.iLeft, Self.iTop)
+							p.setFall(Self.posX - 256, Self.posY, Self.iLeft, Self.iTop)
 							p.stopMove()
 						EndIf
 					Case GIMMICK_SEE
@@ -885,7 +885,7 @@ Class GimmickObject Extends GameObject
 					EndIf
 				Case GIMMICK_FALL
 					If (Self.firstTouch) Then
-						player.setFall(Self.posX - RollPlatformSpeedC.COLLISION_OFFSET_Y, Self.posY, Self.iLeft, Self.iTop)
+						player.setFall(Self.posX - 256, Self.posY, Self.iLeft, Self.iTop)
 					EndIf
 				Case GIMMICK_SEE
 					If (Not Self.used And Self.collisionRect.collisionChk(player.getCheckPositionX(), player.getCheckPositionY())) Then
