@@ -1234,7 +1234,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
+        <X>34</X>
         <Y>696</Y>
       </CursorPos>
       <DocGUID>98f8fc8f-5eb5-43f7-8c5c-4c3dd928ec6a</DocGUID>
@@ -1965,12 +1965,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\tutorialpoint.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\tutorialpoint.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>30</X>
+        <Y>12</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>af0f55a1-24e5-4ff3-8188-b6cf66af9432</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\unseenspring.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>

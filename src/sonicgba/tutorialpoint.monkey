@@ -10,6 +10,8 @@ Private
 	Import lib.animation
 	Import lib.animationdrawer
 	
+	Import sonicgba.gimmickobject
+	
 	Import com.sega.mobile.framework.device.mfgraphics
 Public
 
