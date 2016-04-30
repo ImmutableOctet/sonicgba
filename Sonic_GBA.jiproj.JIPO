@@ -662,12 +662,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\basicgimmick.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\basicgimmick.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>5</X>
-        <Y>30</Y>
+        <X>21</X>
+        <Y>26</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>148c4583-8cdb-4ba2-b156-1ee15412a8d9</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\basicpipe.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1107,8 +1108,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\enemyobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>22</X>
-        <Y>119</Y>
+        <X>3</X>
+        <Y>316</Y>
       </CursorPos>
       <DocGUID>92a5a34c-0623-4549-be2e-8997d65f89a5</DocGUID>
       <Bookmarks>
@@ -1139,12 +1140,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\fan.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\fan.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>8</X>
-        <Y>11</Y>
+        <X>29</X>
+        <Y>5</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>dad94260-ddf0-43a5-b913-ecec2916119f</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\finalshima.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>

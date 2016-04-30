@@ -2,9 +2,12 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.gimmickobject
+
 ' Imports:
 Private
-	Import sonicgba.basicgimmickobject
+	Import sonicgba.basicgimmick
 Public
 
 ' Classes:
@@ -15,6 +18,7 @@ Class Fan Extends BasicGimmickObject
 		' Shared animation for this gimmick. (Atlas descriptor)
 		Global animation:Animation
 	Protected
+		' Constructor(s):
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
 			Super.New(id, x, y, left, top, width, height)
 			
