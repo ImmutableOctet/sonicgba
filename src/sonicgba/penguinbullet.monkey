@@ -10,9 +10,10 @@ Friend sonicgba.penguinbullet
 Private
 	Import lib.animation
 	
-	Import com.sega.mobile.framework.device.mfgraphics
-	
 	Import sonicgba.bulletobject
+	Import sonicgba.mapobject
+	
+	Import com.sega.mobile.framework.device.mfgraphics
 Public
 
 ' Classes:

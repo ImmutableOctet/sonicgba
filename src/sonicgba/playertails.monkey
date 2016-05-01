@@ -307,12 +307,12 @@ Class PlayerTails Extends PlayerObject
 				If (Self.isAntiGravity) Then
 					Local rectTmp:= Self.drawer.getARect()
 					
-					If (rectTmp <> Null) Then
+					If (rectTmp.Length > 0) Then
 						rect[0] = Byte((-rectTmp[0]) - rectTmp[2])
 					EndIf
 				EndIf
 				
-				If (rect <> Null) Then
+				If (rect.Length > 0) Then
 					If (SonicDebug.showCollisionRect) Then
 						g.setColor(65280)
 						g.drawRect(((Self.footPointX Shr 6) + rect[0]) - camera.x, ((Self.footPointY Shr 6) + PickValue(Self.isAntiGravity, (-rect[1]) - rect[3], rect[1])) - camera.y, rect[2], rect[3])

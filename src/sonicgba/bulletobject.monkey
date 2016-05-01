@@ -258,8 +258,4 @@ Class BulletObject Extends MoveObject Abstract
 		Method doBeforeCollisionCheck:Void()
 			' Empty implementation.
 		End
-		
-		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
-			' Empty implementation.
-		End
 End

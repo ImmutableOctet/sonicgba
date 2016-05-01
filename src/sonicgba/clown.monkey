@@ -9,6 +9,8 @@ Friend sonicgba.enemyobject
 Private
 	Import lib.animation
 	
+	Import sonicgba.sonicdef
+	
 	Import sonicgba.enemyobject
 	Import sonicgba.playerobject
 	
@@ -78,7 +80,7 @@ Class Clown Extends EnemyObject
 			Self.touching = False
 		End
 		
-		Method PlayerHurtBall:Void(player:Playerplayer, direction:Int)
+		Method PlayerHurtBall:Void(player:PlayerObject, direction:Int)
 			Local playerVelX:= -player.getVelX()
 			
 			If (Self.velocity > 0) Then

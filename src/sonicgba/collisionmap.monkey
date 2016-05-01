@@ -1,5 +1,8 @@
 Strict
 
+' Friends:
+Friend sonicgba.collisionblock
+
 ' Imports:
 Private
 	Import sonicgba.collisionblock
@@ -24,11 +27,12 @@ Public
 
 ' Classes:
 Class CollisionMap Extends ACWorld ' Implements SonicDef
+	Protected
+		' Constant variable(s):
+		Global BLANK_BLOCK:DataBuffer = CollisionBlock.BLANK_COLLISION_INFO ' New DataBuffer(8) ' Byte[] = New Byte[8] ' Const
+		'Global FULL_BLOCK:Byte[] = [-120, -120, -120, -120, -120, -120, -120, -120] ' Const
 	Private
 		' Constant variable(s):
-		Global BLANK_BLOCK:Byte[] = New Int[8] ' Const
-		Global FULL_BLOCK:Byte[] = [-120, -120, -120, -120, -120, -120, -120, -120] ' Const
-		
 		Const GRID_NUM_PER_MODEL:Int = 12
 		
 		Const LOAD_OPEN_FILE:Int = 0
@@ -189,9 +193,9 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 				myBlock.setPosition((getTileWidth() * blockX) + (MapManager.mapOffsetX Shl 6), getTileHeight() * blockY) ' getZoom()
 				
 				If (blockX < 0) Then
-					myBlock.setProperty(BLANK_BLOCK, False, False, 64, False)
+					myBlock.setProperty(BLANK_BLOCK, 0, False, False, 64, False)
 				ElseIf (blockY < 0 Or blockY >= (MapManager.mapHeight * GRID_NUM_PER_MODEL)) Then
-					myBlock.setProperty(BLANK_BLOCK, False, False, 0, False)
+					myBlock.setProperty(BLANK_BLOCK, 0, False, False, 0, False)
 				Else
 					Local tileId:= getBlockIndexWithBlock((MapManager.getConvertX(blockX / GRID_NUM_PER_MODEL) * GRID_NUM_PER_MODEL) + (blockX Mod GRID_NUM_PER_MODEL), blockY, layer)
 					

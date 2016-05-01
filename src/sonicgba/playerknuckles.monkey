@@ -244,11 +244,13 @@ Class PlayerKnuckles Extends PlayerObject
 					EndIf
 				ElseIf (Self.animationID = KNUCKLES_ANI_JUMP) Then
 					' Magic numbers: -512, 512
-					bodyCenterX = getNewPointX(Self.footPointX, 0, -512, Self.faceDegree) ' -(SIDE_FOOT_FROM_CENTER * 2) ' -(WIDTH / 2)
-					bodyCenterY = getNewPointY(Self.footPointY, 0, -512, Self.faceDegree)
+					Local bodyCenterX:= getNewPointX(Self.footPointX, 0, -512, Self.faceDegree) ' -(SIDE_FOOT_FROM_CENTER * 2) ' -(WIDTH / 2)
+					Local bodyCenterY:= getNewPointY(Self.footPointY, 0, -512, Self.faceDegree)
 					
 					Local drawX:= getNewPointX(bodyCenterX, 0, 512, 0) ' (SIDE_FOOT_FROM_CENTER * 2) ' (WIDTH / 2)
 					Local drawY:= getNewPointY(bodyCenterY, 0, 512, 0)
+					
+					Local trans:Int
 					
 					If (Self.collisionState = COLLISION_STATE_WALK) Then
 						If (Self.isAntiGravity) Then
@@ -266,7 +268,6 @@ Class PlayerKnuckles Extends PlayerObject
 						Else
 							trans = PickValue((Self.totalVelocity > 0), TRANS_NONE, TRANS_MIRROR)
 						EndIf
-						
 					ElseIf (Self.isAntiGravity) Then
 						If (Self.faceDirection) Then
 							trans = PickValue((Self.velX <= 0), TRANS_ROT180, TRANS_MIRROR_ROT180)
@@ -277,7 +278,6 @@ Class PlayerKnuckles Extends PlayerObject
 							
 							drawY -= WIDTH
 						EndIf
-						
 					ElseIf (Self.faceDirection) Then
 						trans = PickValue((Self.velX >= 0), TRANS_NONE, TRANS_MIRROR)
 					Else
@@ -289,22 +289,24 @@ Class PlayerKnuckles Extends PlayerObject
 					drawDrawerByDegree(g, Self.drawer, drawerActionID, (Self.footPointX Shr 6) - camera.x, (Self.footPointY Shr 6) - camera.y, loop, Self.degreeForDraw, Not Self.faceDirection)
 				Else
 					If (Self.myAnimationID = KNUCKLES_ANI_FLY_1 Or Self.myAnimationID = KNUCKLES_ANI_FLY_2 Or Self.myAnimationID = KNUCKLES_ANI_FLY_3 Or Self.myAnimationID = KNUCKLES_ANI_SWIM_1) Then
-						Local degre:Int
+						Local trans:Int
 						
 						If (Self.flyDegree >= 0) Then
 							If (Self.isAntiGravity) Then
-								degre = TRANS_MIRROR_ROT180
+								trans = TRANS_MIRROR_ROT180
 							Else
-								degre = TRANS_NONE
+								trans = TRANS_NONE
 							EndIf
 						ElseIf (Self.isAntiGravity) Then
-							degre = TRANS_ROT180
+							trans = TRANS_ROT180
 						Else
-							degre = TRANS_MIRROR
+							trans = TRANS_MIRROR
 						EndIf
 						
-						Self.drawer.draw(g, drawerActionID, (Self.footPointX Shr 6) - camera.x, (Self.footPointY Shr 6) - camera.y, loop, degre)
+						Self.drawer.draw(g, drawerActionID, (Self.footPointX Shr 6) - camera.x, (Self.footPointY Shr 6) - camera.y, loop, trans)
 					Else
+						Local trans:Int
+						
 						If (Self.myAnimationID = KNUCKLES_ANI_CLIFF_1 Or Self.myAnimationID = KNUCKLES_ANI_CLIFF_2 Or Self.myAnimationID = KNUCKLES_ANI_LOOK_UP_1 Or Self.myAnimationID = KNUCKLES_ANI_LOOK_UP_2) Then
 							Self.degreeForDraw = Self.degreeStable
 							Self.faceDegree = Self.degreeStable
@@ -333,8 +335,8 @@ Class PlayerKnuckles Extends PlayerObject
 						EndIf
 						
 						If (Self.degreeForDraw <> Self.faceDegree) Then
-							bodyCenterX = getNewPointX(Self.footPointX, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree) ' Shr 1
-							bodyCenterY = getNewPointY(Self.footPointY, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree) ' Shr 1
+							Local bodyCenterX:= getNewPointX(Self.footPointX, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree) ' Shr 1
+							Local bodyCenterY:= getNewPointY(Self.footPointY, 0, (-Self.collisionRect.getHeight()) / 2, Self.faceDegree) ' Shr 1
 							
 							g.saveCanvas()
 							
@@ -378,7 +380,7 @@ Class PlayerKnuckles Extends PlayerObject
 					EndIf
 				EndIf
 				
-				If (rect <> Null) Then
+				If (rect.Length > 0) Then
 					If (SonicDebug.showCollisionRect) Then
 						g.setColor(65280)
 						
@@ -693,11 +695,11 @@ Class PlayerKnuckles Extends PlayerObject
 				Local climbPointY:= (Self.posY + (DSgn(Self.isAntiGravity) * (getCollisionRectHeight() / 2))) + Self.velY ' Shr 1
 				
 				If (climbPointY < (MapManager.getPixelHeight() Shl 6) - HEIGHT Or Not Self.isAntiGravity) Then
-					If (Self.worldInstance.getWorldX(climbPointX, climbPointY, Self.currentLayer, PickValue((Self.faceDirection <> Self.isAntiGravity), TRANS_ROT180, TRANS_MIRROR_ROT180)) = ACParam.NO_COLLISION) Then ' 3, 1
+					If (Self.worldInstance.getWorldX(climbPointX, climbPointY, Self.currentLayer, PickValue((Self.faceDirection <> Self.isAntiGravity), TRANS_ROT180, TRANS_MIRROR_ROT180)) = 400) Then ' 3, 1
 						Local footX:= (Self.posX + (DSgn(Self.faceDirection <> Self.isAntiGravity) * WIDTH))
 						Local newY:= (Self.worldInstance.getWorldY(footX, Self.posY, Self.currentLayer, PickValue(Self.isAntiGravity, TRANS_MIRROR, TRANS_NONE))) ' 2, 0
 						
-						If (newY <> ACParam.NO_COLLISION) Then
+						If (newY <> 400) Then
 							playingLoopSeIndex = (footX - (DSgn(Self.faceDirection <> Self.isAntiGravity) * (Self.worldInstance.getTileWidth() / 2))) ' Shr 1
 							
 							Self.posX = playingLoopSeIndex

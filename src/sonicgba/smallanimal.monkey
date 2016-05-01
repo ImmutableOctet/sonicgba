@@ -279,7 +279,7 @@ Class SmallAnimal Extends GameObject Implements MapBehavior
 			Return True
 		End
 		
-		Method doWhileToucRoof:Void(vx:Int, vy:Int)
+		Method doWhileTouchRoof:Void(vx:Int, vy:Int)
 			' Empty implementation.
 		End
 		

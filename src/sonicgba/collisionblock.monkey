@@ -1,5 +1,8 @@
 Strict
 
+' Friends:
+Friend sonicgba.collisionmap
+
 ' Imports:
 Private
 	Import lib.constutil
@@ -17,10 +20,10 @@ Public
 
 ' Classes:
 Class CollisionBlock Extends ACBlock ' Implements SonicDef
-	Private
+	Protected
 		' Constant variable(s):
 		Global BLANK_COLLISION_INFO:DataBuffer = New DataBuffer(8) ' Const
-		
+	Private
 		' Fields:
 		Field collisionInfo:DataBuffer
 		Field collisionInfoOffset:Int

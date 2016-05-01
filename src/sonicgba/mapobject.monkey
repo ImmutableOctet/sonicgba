@@ -351,7 +351,7 @@ Class MapObject Extends GameObject Implements ACWorldCalUser, ACWorldCollisionLi
 			Select (direction)
 				Case DIRECTION_UP
 					If (Self.collisionBehavior <> Null) Then
-						Self.collisionBehavior.doWhileToucRoof(Self.velX, Self.velY)
+						Self.collisionBehavior.doWhileTouchRoof(Self.velX, Self.velY)
 					EndIf
 				Case DIRECTION_DOWN
 					If (ACUtilities.getTotalFromDegree(Self.velX, Self.velY, 0) > 0) Then

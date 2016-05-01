@@ -132,7 +132,7 @@ Class MoveRingObject Extends RingObject Implements MapBehavior
 			Return Not Self.isAntiGravity
 		End
 		
-		Method doWhileToucRoof:Void(vx:Int, vy:Int)
+		Method doWhileTouchRoof:Void(vx:Int, vy:Int)
 			If (Not Self.poping) Then
 				Self.poping = True
 				
