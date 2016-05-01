@@ -455,7 +455,7 @@ Class TitleState Extends State
 		Field recordArrowOffsetXArray:Int[]
 		Field recordArrowOffsetXID:Int
 		Field resetInfoCount:Int
-		'Field returnCursor:Int
+		Field title_returnCursor:Int
 		Field scoreUpdateCursor:Int
 		Field shakeCount:Int
 		Field sonicBigX:Int
@@ -1263,7 +1263,7 @@ Class TitleState Extends State
 			mainMenuInit()
 			Key.touchMainMenuInit2()
 			
-			Self.returnCursor = 0
+			Self.title_returnCursor = 0
 			
 			Key.touchanykeyClose()
 			Key.touchkeyboardInit()
@@ -1555,7 +1555,7 @@ Class TitleState Extends State
 				For Local i:= 0 Until Key.touchmenuoptionitems.Length
 					If (Key.touchmenuoptionitems[i].Isin() And Key.touchmenuoption.IsClick()) Then
 						Self.menuOptionCursor = (i / STATE_MOVING)
-						Self.returnCursor = 0
+						Self.title_returnCursor = 0
 						
 						Exit
 					EndIf
@@ -1563,10 +1563,10 @@ Class TitleState Extends State
 			EndIf
 			
 			If (Key.touchmenuoptionreturn.Isin() And Key.touchmenuoption.IsClick()) Then
-				Self.returnCursor = 1
+				Self.title_returnCursor = 1
 			EndIf
 			
-			If ((Key.press(Key.B_BACK) Or (Key.touchmenuoptionreturn.IsButtonPress() And Self.returnCursor = 1)) And State.fadeChangeOver()) Then
+			If ((Key.press(Key.B_BACK) Or (Key.touchmenuoptionreturn.IsButtonPress() And Self.title_returnCursor = 1)) And State.fadeChangeOver()) Then
 				changeStateWithFade(STATE_MOVING)
 				
 				Self.isTitleBGMPlay = False
@@ -1578,7 +1578,7 @@ Class TitleState Extends State
 				
 				GlobalResource.saveSystemConfig()
 				
-				Self.returnCursor = 0
+				Self.title_returnCursor = 0
 				
 				menuInit(Self.multiMainItems)
 			EndIf
@@ -2242,7 +2242,7 @@ Class TitleState Extends State
 					changeStateWithFade(STATE_MOVING)
 					menuInit(MAIN_MENU)
 					mainMenuInit()
-					Self.returnCursor = 0
+					Self.title_returnCursor = 0
 					StageManager.drawHighScoreEnd()
 				Default
 					' Nothing so far.
@@ -2722,7 +2722,7 @@ Class TitleState Extends State
 			
 			Key.touchCharacterSelectModeInit()
 			
-			Self.returnCursor = 0
+			Self.title_returnCursor = 0
 		End
 		
 		Method characterSelectLogic:Void()
@@ -2753,25 +2753,25 @@ Class TitleState Extends State
 			EndIf
 			
 			If (Self.character_sel_frame_cnt <= STATE_INTERRUPT) Then
-				Self.returnCursor = 0
+				Self.title_returnCursor = 0
 			ElseIf (Not Self.character_move) Then
 				If (Key.touchcharsel <> Null And Key.touchcharsElselect.Isin() And Key.touchcharsel.IsClick()) Then
 					Self.cursor = STATE_MOVING
-					Self.returnCursor = 0
+					Self.title_returnCursor = 0
 				EndIf
 				
 				If (Key.touchcharsel <> Null And Key.touchcharselleftarrow.Isin() And Key.touchcharsel.IsClick()) Then
 					Self.cursor = STATE_OPENING
-					Self.returnCursor = 0
+					Self.title_returnCursor = 0
 				EndIf
 				
 				If (Key.touchcharsel <> Null And Key.touchcharselrightarrow.Isin() And Key.touchcharsel.IsClick()) Then
 					Self.cursor = STATE_START_GAME
-					Self.returnCursor = 0
+					Self.title_returnCursor = 0
 				EndIf
 				
 				If (Key.touchcharselreturn <> Null And Key.touchcharsel.IsClick() And Key.touchcharselreturn.Isin()) Then
-					Self.returnCursor = 1
+					Self.title_returnCursor = 1
 				EndIf
 				
 				If (Not Self.character_outer) Then
@@ -2936,7 +2936,7 @@ Class TitleState Extends State
 						Self.character_preid = Self.character_id
 					EndIf
 					
-					If (Self.character_sel_offset_x = 0 And ((Key.press(Key.B_BACK) Or (Key.touchcharselreturn.IsButtonPress() And Self.returnCursor = 1)) And State.fadeChangeOver())) Then
+					If (Self.character_sel_offset_x = 0 And ((Key.press(Key.B_BACK) Or (Key.touchcharselreturn.IsButtonPress() And Self.title_returnCursor = 1)) And State.fadeChangeOver())) Then
 						changeStateWithFade(Self.preCharaterSelectState)
 						
 						Select (Self.preCharaterSelectState)
@@ -3081,7 +3081,7 @@ Class TitleState Extends State
 					Key.touchMainMenuInit2()
 					initTitleRes2()
 					
-					Self.returnCursor = 0
+					Self.title_returnCursor = 0
 					
 					SoundSystem.getInstance().playSe(SoundSystem.SE_107)
 					SoundSystem.getInstance().stopBgm(False)
@@ -3435,7 +3435,7 @@ Class TitleState Extends State
 				
 				If (Self.stageYDirect = 0) Then
 					If (Key.touchstageselectreturn.Isin() And Key.touchstageselect.IsClick()) Then
-						Self.returnCursor = 1
+						Self.title_returnCursor = 1
 					EndIf
 					
 					If (Self.isSelectable) Then
@@ -3444,7 +3444,7 @@ Class TitleState Extends State
 						While (i < Key.touchstageselectitem.Length)
 							If (Key.touchstageselectitem[i].Isin() And Key.touchstageselect.IsClick() And i <= StageManager.getOpenedStageId()) Then
 								Self.optionMenuCursor = i
-								Self.returnCursor = 0
+								Self.title_returnCursor = 0
 							Else
 								i += 1
 							EndIf
@@ -3452,7 +3452,7 @@ Class TitleState Extends State
 					EndIf
 				EndIf
 				
-				If ((Key.press(Key.B_BACK) Or (Key.touchstageselectreturn.IsButtonPress() And Self.returnCursor = 1)) And State.fadeChangeOver()) Then
+				If ((Key.press(Key.B_BACK) Or (Key.touchstageselectreturn.IsButtonPress() And Self.title_returnCursor = 1)) And State.fadeChangeOver()) Then
 					SoundSystem.getInstance().stopBgm(False)
 					
 					changeStateWithFade(preStageSelectState)
@@ -3863,7 +3863,7 @@ Class TitleState Extends State
 			EndIf
 			
 			If (Key.touchmainmenureturn.Isin() And Key.touchmainmenu.IsClick()) Then
-				Self.returnCursor = 1
+				Self.title_returnCursor = 1
 			EndIf
 			
 			If (Key.touchmainmenustart.IsButtonPress() And Self.cursor = 0 And (State.fadeChangeOver() Or Self.isFromStartGame)) Then
@@ -3920,7 +3920,7 @@ Class TitleState Extends State
 				Self.quitFlag = 0
 			EndIf
 			
-			If (Not Key.press(Key.B_BACK) And (Not Key.touchmainmenureturn.IsButtonPress() Or Self.returnCursor <> 1)) Then
+			If (Not Key.press(Key.B_BACK) And (Not Key.touchmainmenureturn.IsButtonPress() Or Self.title_returnCursor <> 1)) Then
 				Return
 			EndIf
 			
@@ -3950,7 +3950,7 @@ Class TitleState Extends State
 			
 			If (Self.menuMoving) Then
 				Self.mainMenuCursor = 0
-				Self.returnCursor = 0
+				Self.title_returnCursor = 0
 				Self.mainMenuEnsureFlag = False
 				
 				Return
@@ -3966,7 +3966,7 @@ Class TitleState Extends State
 			EndIf
 			
 			If (Key.touchmainmenureturn.Isin() And Key.touchmainmenu.IsClick()) Then
-				Self.returnCursor = 1
+				Self.title_returnCursor = 1
 			EndIf
 			
 			If (Key.touchmainmenuup.IsButtonPress() And Self.mainMenuCursor = 1) Then
@@ -4035,7 +4035,7 @@ Class TitleState Extends State
 				SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 			EndIf
 			
-			If (Not Key.press(Key.B_BACK) And (Not Key.touchmainmenureturn.IsButtonPress() Or Self.returnCursor <> 1)) Then
+			If (Not Key.press(Key.B_BACK) And (Not Key.touchmainmenureturn.IsButtonPress() Or Self.title_returnCursor <> 1)) Then
 				Return
 			EndIf
 			
@@ -4169,7 +4169,7 @@ Class TitleState Extends State
 				
 				initTitleRes2()
 				
-				Self.returnCursor = 0
+				Self.title_returnCursor = 0
 			EndIf
 		End
 		
@@ -4643,7 +4643,7 @@ Class TitleState Extends State
 			
 			GameState.guiAniDrawer = GameState.guiAnimation.getDrawer(0, False, 0)
 			
-			Self.returnCursor = 0
+			Self.title_returnCursor = 0
 			Self.scoreUpdateCursor = 0
 			Self.characterRecordScoreUpdateIconY = -32
 			Self.characterRecordScoreUpdateCursor = 0
@@ -4652,7 +4652,7 @@ Class TitleState Extends State
 		Method scoreUpdateLogic:Void()
 			If (State.fadeChangeOver()) Then
 				If (Key.touchscoreupdatereturn.Isin() And Key.touchscoreupdate.IsClick()) Then
-					Self.returnCursor = 1
+					Self.title_returnCursor = 1
 				EndIf
 				
 				If (Key.touchscoreupdateyes.Isin() And Key.touchscoreupdate.IsClick()) Then
@@ -4673,7 +4673,7 @@ Class TitleState Extends State
 					SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 				EndIf
 				
-				If ((Key.press(Key.B_BACK) Or (Key.touchscoreupdatereturn.IsButtonPress() And Self.returnCursor = 1)) And State.fadeChangeOver()) Then
+				If ((Key.press(Key.B_BACK) Or (Key.touchscoreupdatereturn.IsButtonPress() And Self.title_returnCursor = 1)) And State.fadeChangeOver()) Then
 					state = STATE_CHARACTER_RECORD
 					State.setFadeOver()
 					
@@ -4744,7 +4744,7 @@ Class TitleState Extends State
 					State.fadeInit(110, 0)
 					State.setFadeOver()
 					
-					Self.returnCursor = 0
+					Self.title_returnCursor = 0
 					Self.scoreUpdateCursor = 0
 				Default
 					' Nothing so far.

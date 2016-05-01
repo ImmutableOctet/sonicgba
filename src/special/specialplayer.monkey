@@ -184,9 +184,12 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 		Field noMoving:Bool
 		
 		Field hurtRect:CollisionRect
+		
 		Field rect1:Byte[]
 		Field rect2:Byte[]
+		
 		Field targetRingNum:Int
+		
 		Field velX:Int
 		Field velY:Int
 		Field velZ:Int
@@ -238,7 +241,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 		Field tutorSkip:MFTouchKey
 		
 		Field characterBoardDrawer:AnimationDrawer
-		'Field drawer:AnimationDrawer
+		Field special_drawer:AnimationDrawer
 		Field fontAnimationDrawer:AnimationDrawer
 		Field spObjDrawer:AnimationDrawer
 		Field tutorialSkipDrawer:AnimationDrawer
@@ -275,7 +278,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 			
 			Local animation:= New Animation(ssdef.SPECIAL_ANIMATION_PATH + ANIMATION_NAME[characterID])
 			
-			Self.drawer = animation.getDrawer()
+			Self.special_drawer = animation.getDrawer()
 			
 			Self.characterBoardDrawer = animation.getDrawer(ANI_DIE_BOARD, True, 0)
 			Self.actionID = STATE_INIT
@@ -427,7 +430,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 					Self.posX = preX
 					Self.posY = preY
 					
-					If (Self.drawer.checkEnd()) Then
+					If (Self.special_drawer.checkEnd()) Then
 						Self.state = Self.preState
 					EndIf
 				Case STATE_DASH
@@ -449,7 +452,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 						Self.posX = MyAPI.calNextPosition(Double(Self.posX), 0.0, 1, 4)
 						Self.posY = MyAPI.calNextPosition(Double(Self.posY), 0.0, 1, 4)
 						
-						If (Self.drawer.checkEnd()) Then
+						If (Self.special_drawer.checkEnd()) Then
 							Self.actionID = ANI_DASH_2
 						EndIf
 					EndIf
@@ -696,12 +699,12 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 				scale = Self.pauseKeepScale
 			EndIf
 			
-			Self.drawer.setActionId(Self.actionID)
-			Self.drawer.setLoop(ANI_LOOP[Self.actionID])
+			Self.special_drawer.setActionId(Self.actionID)
+			Self.special_drawer.setLoop(ANI_LOOP[Self.actionID])
 			
-			drawObj(g, Self.drawer, (((Int((Float(Self.posX) * scale) - Float(Self.posX)))) / 4) Shr 6, (((Int((Float(Self.posY) * scale) - Float(Self.posY)))) / 4) Shr 6)
+			drawObj(g, Self.special_drawer, (((Int((Float(Self.posX) * scale) - Float(Self.posX)))) / 4) Shr 6, (((Int((Float(Self.posY) * scale) - Float(Self.posY)))) / 4) Shr 6)
 			
-			If (Self.drawer.checkEnd()) Then
+			If (Self.special_drawer.checkEnd()) Then
 				Select (Self.actionID)
 					Case ANI_VICTORY_1
 						Self.actionID = ANI_VICTORY_2
@@ -868,7 +871,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 				action = ANI_WELCOME_7
 			EndIf
 			
-			Self.drawer.draw(g, action, Self.welcomeX Shr 6, Self.welcomeY Shr 6, True, 0)
+			Self.special_drawer.draw(g, action, Self.welcomeX Shr 6, Self.welcomeY Shr 6, True, 0)
 			Self.fontAnimationDrawer.draw(g, 0, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) + 40, True, 0) ' Shr 1
 		End
 		
@@ -1070,8 +1073,8 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 	Private
 		' Methods:
 		Method refreshCollision:Void(x:Int, y:Int)
-			Self.rect1 = Self.drawer.getCRect()
-			Self.rect2 = Self.drawer.getARect()
+			Self.rect1 = Self.special_drawer.getCRect()
+			Self.rect2 = Self.special_drawer.getARect()
 			
 			If (Self.rect1.Length > 0) Then
 				Self.collisionRect.setTwoPosition((x Shr 6) + Self.rect1[0], ((-y) Shr 6) - Self.rect1[1], ((x Shr 6) + Self.rect1[0]) + Self.rect1[2], (((-y) Shr 6) - Self.rect1[1]) - Self.rect1[3])
