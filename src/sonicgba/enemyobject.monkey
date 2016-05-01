@@ -78,7 +78,6 @@ Class EnemyObject Extends GameObject Abstract
 		' Fields:
 		Field currentBlock:CollisionBlock
 		
-		Field objId:Int
 		Field faceDegree:Int
 	Protected
 		' Constant variable(s):

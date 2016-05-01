@@ -4,10 +4,10 @@ Public
 
 ' Imports:
 Private
-	Import com.sega.mobile.define.mdphone
+	Import lib.myapi
 	
 	Import sonicgba.sonicdef
-	Import sonicgba.playerobject
+	'Import sonicgba.playerobject
 Public
 
 ' Classes:
@@ -27,10 +27,10 @@ Class HobinCal ' Implements SonicDef
 			Self.power = 1200
 			
 			While (degree < 0)
-				degree += MDPhone.SCREEN_WIDTH
+				degree += 360
 			Wend
 			
-			Self.degree = (degree Mod MDPhone.SCREEN_WIDTH)
+			Self.degree = (degree Mod 360)
 			Self.timeCount = 10
 		End
 		

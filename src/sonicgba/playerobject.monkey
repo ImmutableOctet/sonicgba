@@ -4,7 +4,9 @@ Public
 
 ' Friends:
 Friend sonicgba.gameobject
+Friend sonicgba.enemyobject
 Friend sonicgba.gimmickobject
+Friend sonicgba.itemobject
 Friend sonicgba.stagemanager
 Friend sonicgba.rocketseparateeffect
 
@@ -13,6 +15,20 @@ Friend sonicgba.playertails
 Friend sonicgba.playerknuckles
 Friend sonicgba.playeramy
 Friend sonicgba.playersupersonic
+
+Friend sonicgba.playeranimationcollisionrect
+Friend sonicgba.seabedvolcanoplatform
+Friend sonicgba.seabedvolcanoasynplatform
+Friend sonicgba.hexhobin
+Friend sonicgba.ballhobin
+Friend sonicgba.belt
+Friend sonicgba.springisland
+Friend sonicgba.caperbed
+Friend sonicgba.changerectregion
+
+Friend sonicgba.bossf3arm
+
+Friend sonicgba.spring
 
 Friend state.gamestate
 
@@ -1375,6 +1391,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					pipeLogic()
 					
 					checkWithObject(preX, preY, Self.footPointX, Self.footPointY)
+					
 					Self.animationID = ANI_JUMP
 				Else
 					bankLogic()
@@ -3624,13 +3641,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				curx = Self.footPointX
 				
 				If (Not alt) Then
-					Self.bePushedFootX = Self.footPointX - RIGHT_WALK_COLLISION_CHECK_OFFSET_X
+					Self.bePushedFootX = (Self.footPointX - RIGHT_WALK_COLLISION_CHECK_OFFSET_X)
 				EndIf
 				
 				Self.movedSpeedX = (curx - prex)
 				
 				' Optimization potential; dynamic cast.
-				If (DekaPlatform(obj) = Null) Then
+				'If (DekaPlatform(obj) = Null) Then
+				If (obj.getObjectId() = GimmickObject.GIMMICK_BIG_FLOATING_ISLAND) Then
 					Self.movedSpeedX = 0
 					
 					isSomethingElse = True
@@ -3725,7 +3743,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Case DIRECTION_DOWN
 					beStop_Down(newPosition, obj, isDirectionDown) ' True
 				Case DIRECTION_LEFT, DIRECTION_RIGHT
-					beStop_Left_Right(newPosition, direction, obj)
+					beStop_Left_Right(newPosition, direction, obj, isDirectionDown)
 			End Select
 			
 			Self.posX = Self.footPointX

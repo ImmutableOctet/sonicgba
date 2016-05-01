@@ -223,7 +223,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		
 		' Fields:
 		
-		' From what I know, this is different for every objData type.
+		' From what I know, this is different for every 'GameObject' type.
 		' Essentially, objData identifiers represent literal classes.
 		' They're mainly used for "meta" behavior like deserialization.
 		Field objId:Int

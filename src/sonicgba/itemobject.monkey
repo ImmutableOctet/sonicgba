@@ -37,7 +37,6 @@ Class ItemObject Extends GameObject
 		Field mapObj:MapObject
 		
 		Field moveCount:Int
-		Field objId:Int
 		Field originalY:Int
 		Field posYoffset:Int
 		
