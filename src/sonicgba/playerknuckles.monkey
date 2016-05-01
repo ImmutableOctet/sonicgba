@@ -85,7 +85,7 @@ Class PlayerKnuckles Extends PlayerObject
 		' Fields:
 		Field attackRect:PlayerAnimationCollisionRect
 		
-		Field effectDrawer:AnimationDrawer
+		Field knuckles_effectDrawer:AnimationDrawer
 		
 		Field knucklesDrawer1:AnimationDrawer
 		Field knucklesDrawer2:AnimationDrawer
@@ -182,7 +182,7 @@ Class PlayerKnuckles Extends PlayerObject
 			Local animation1:= New Animation(chaImage, "/animation/player/chr_knuckles_01")
 			
 			Self.knucklesDrawer1 = animation1.getDrawer()
-			Self.effectDrawer = animation1.getDrawer()
+			Self.knuckles_effectDrawer = animation1.getDrawer()
 			
 			Self.knucklesDrawer2 = New Animation(chaImage, "/animation/player/chr_knuckles_02").getDrawer()
 			
@@ -199,8 +199,8 @@ Class PlayerKnuckles Extends PlayerObject
 			Animation.closeAnimationDrawer(Self.knucklesDrawer2)
 			Self.knucklesDrawer2 = Null
 			
-			Animation.closeAnimationDrawer(Self.effectDrawer)
-			Self.effectDrawer = Null
+			Animation.closeAnimationDrawer(Self.knuckles_effectDrawer)
+			Self.knuckles_effectDrawer = Null
 		End
 		
 		Method drawCharacter:Void(g:MFGraphics)
@@ -356,7 +356,7 @@ Class PlayerKnuckles Extends PlayerObject
 					EndIf
 					
 					If (Self.myAnimationID = KNUCKLES_ANI_SWIM_2 And Self.swimWaterEffectFlag) Then
-						Self.effectDrawer.draw(g, KNUCKLES_ANI_SWIM_EFFECT, (Self.footPointX Shr 6) - camera.x, (((StageManager.getWaterLevel() Shl 6) Shr 6) + 14) - camera.y, True, getTrans()) ' + KNUCKLES_ANI_SPRING_1
+						Self.knuckles_effectDrawer.draw(g, KNUCKLES_ANI_SWIM_EFFECT, (Self.footPointX Shr 6) - camera.x, (((StageManager.getWaterLevel() Shl 6) Shr 6) + 14) - camera.y, True, getTrans()) ' + KNUCKLES_ANI_SPRING_1
 					EndIf
 				EndIf
 				
