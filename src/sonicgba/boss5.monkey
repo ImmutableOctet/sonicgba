@@ -361,6 +361,8 @@ Class Boss5 Extends BossObject
 		
 		' This method's behavior may change in the future:
 		Method pickRandomState:Int()
+			Local random:Int
+			
 			Select (Self.prestate)
 				Case STATE_FRESH_READY
 					If (Not CanFreshFight()) Then

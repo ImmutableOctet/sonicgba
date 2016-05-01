@@ -409,7 +409,7 @@ Class Boss4 Extends BossObject
 		Method doWhileBeAttack:Void(player:PlayerObject, direction:Int, animationID:Int)
 			If (Self.state = STATE_PRO And Self.HP > 0) Then
 				If (((player.getCharacterID() <> CHARACTER_TAILS) Or (Not (player.getCharacterAnimationID() = PlayerTails.TAILS_ANI_FLY_1 Or player.getCharacterAnimationID() = PlayerTails.TAILS_ANI_FLY_2) Or player.getVelY() <= 0)) And Self.face_state <> FACE_HURT) Then
-					onPlayerAttack(p, direction)
+					onPlayerAttack(player, direction)
 				EndIf
 			EndIf
 		End
