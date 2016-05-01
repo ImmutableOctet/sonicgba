@@ -1553,8 +1553,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerknuckles.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>32</X>
-        <Y>103</Y>
+        <X>28</X>
+        <Y>93</Y>
       </CursorPos>
       <DocGUID>34de7f60-1d6d-4725-8e5b-e5509ded2030</DocGUID>
       <Bookmarks />

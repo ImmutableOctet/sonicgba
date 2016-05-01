@@ -90,8 +90,8 @@ Class PlayerKnuckles Extends PlayerObject
 		Field knucklesDrawer1:AnimationDrawer
 		Field knucklesDrawer2:AnimationDrawer
 		
-		Field attackCount:Int
-		Field attackLevel:Int
+		Field knuckles_attackCount:Int
+		Field knuckles_attackLevel:Int
 		Field attackLevelNext:Int
 		Field flyDegree:Int
 		Field flyDegreeStable:Int
@@ -369,7 +369,7 @@ Class PlayerKnuckles Extends PlayerObject
 					Local rectTmp:= Self.drawer.getARect()
 					
 					If (rectTmp.Length > 0) Then
-						If (Self.attackLevel <> 0) Then
+						If (Self.knuckles_attackLevel <> 0) Then
 							rect[0] = Byte((-rectTmp[0]) - rectTmp[2])
 						Else
 							If (Self.flying And Self.faceDirection) Then
@@ -471,7 +471,7 @@ Class PlayerKnuckles Extends PlayerObject
 		End
 		
 		Method needRetPower:Bool()
-			If ((Self.attackLevel = ATTACK_LEVEL_NONE Or Self.attackLevel = ATTACK_LEVEL_3) And Self.myAnimationID <> KNUCKLES_ANI_FLY_4) Then
+			If ((Self.knuckles_attackLevel = ATTACK_LEVEL_NONE Or Self.knuckles_attackLevel = ATTACK_LEVEL_3) And Self.myAnimationID <> KNUCKLES_ANI_FLY_4) Then
 				Return Super.needRetPower()
 			EndIf
 			
@@ -479,7 +479,7 @@ Class PlayerKnuckles Extends PlayerObject
 		End
 		
 		Method getRetPower:Int()
-			If (Self.attackLevel = ATTACK_LEVEL_NONE Or Self.attackLevel = ATTACK_LEVEL_3) Then
+			If (Self.knuckles_attackLevel = ATTACK_LEVEL_NONE Or Self.knuckles_attackLevel = ATTACK_LEVEL_3) Then
 				Return Super.getRetPower()
 			EndIf
 			
@@ -520,9 +520,9 @@ Class PlayerKnuckles Extends PlayerObject
 		End
 		
 		Method doJump:Void()
-			Self.attackLevel = ATTACK_LEVEL_NONE
+			Self.knuckles_attackLevel = ATTACK_LEVEL_NONE
 			Self.attackLevelNext = ATTACK_LEVEL_NONE
-			Self.attackCount = 0
+			Self.knuckles_attackCount = 0
 			
 			Super.doJump()
 		End
@@ -924,14 +924,14 @@ Class PlayerKnuckles Extends PlayerObject
 				EndIf
 			EndIf
 			
-			If (Self.attackCount > 0) Then
-				Self.attackCount -= 1
+			If (Self.knuckles_attackCount > 0) Then
+				Self.knuckles_attackCount -= 1
 			EndIf
 			
-			Select (Self.attackLevel)
+			Select (Self.knuckles_attackLevel)
 				Case ATTACK_LEVEL_NONE
 					If ((Self.animationID = KNUCKLES_ANI_STAND Or Self.animationID = KNUCKLES_ANI_WALK_1 Or Self.animationID = KNUCKLES_ANI_WALK_2 Or Self.animationID = KNUCKLES_ANI_RUN Or Self.animationID = KNUCKLES_ANI_BAR_MOVE Or Self.animationID = KNUCKLES_ANI_WIND Or Self.animationID = KNUCKLES_ANI_SPIN_1) And Key.press(Key.gSelect) And Self.myAnimationID <> KNUCKLES_ANI_PUSH_WALL) Then
-						Self.attackLevel = ATTACK_LEVEL_1
+						Self.knuckles_attackLevel = ATTACK_LEVEL_1
 						
 						Self.animationID = NO_ANIMATION
 						Self.myAnimationID = KNUCKLES_ANI_ATTACK_1
@@ -942,7 +942,7 @@ Class PlayerKnuckles Extends PlayerObject
 						
 						calTotalVelocity()
 						
-						Self.attackCount = PickValue(Self.isInWater, (KNUCKLES_ATTACK_2_COUNT * 2), KNUCKLES_ATTACK_2_COUNT)
+						Self.knuckles_attackCount = PickValue(Self.isInWater, (KNUCKLES_ATTACK_2_COUNT * 2), KNUCKLES_ATTACK_2_COUNT)
 						
 						Self.attackLevelNext = ATTACK_LEVEL_NONE
 						
@@ -951,10 +951,10 @@ Class PlayerKnuckles Extends PlayerObject
 						Self.drawer.setActionId(KNUCKLES_ANI_ATTACK_1)
 					EndIf
 				Case ATTACK_LEVEL_1
-					If (Self.attackCount <> 0 And Key.press(Key.gSelect)) Then
+					If (Self.knuckles_attackCount <> 0 And Key.press(Key.gSelect)) Then
 						Self.attackLevelNext = ATTACK_LEVEL_2
 					Else
-						Self.attackLevel = Self.attackLevelNext
+						Self.knuckles_attackLevel = Self.attackLevelNext
 						
 						Select (Self.attackLevelNext)
 							Case ATTACK_LEVEL_NONE
@@ -969,7 +969,7 @@ Class PlayerKnuckles Extends PlayerObject
 								
 								calTotalVelocity()
 								
-								Self.attackCount = PickValue(Self.isInWater, (KNUCKLES_ATTACK_2_COUNT * 2), KNUCKLES_ATTACK_2_COUNT)
+								Self.knuckles_attackCount = PickValue(Self.isInWater, (KNUCKLES_ATTACK_2_COUNT * 2), KNUCKLES_ATTACK_2_COUNT)
 								
 								soundInstance.playSe(SoundSystem.SE_126)
 						End Select
@@ -977,10 +977,10 @@ Class PlayerKnuckles Extends PlayerObject
 						Self.attackLevelNext = ATTACK_LEVEL_NONE
 					EndIf
 				Case ATTACK_LEVEL_2
-					If (Self.attackCount <> 0 And Key.press(Key.gSelect)) Then
+					If (Self.knuckles_attackCount <> 0 And Key.press(Key.gSelect)) Then
 						Self.attackLevelNext = ATTACK_LEVEL_3
 					Else
-						Self.attackLevel = Self.attackLevelNext
+						Self.knuckles_attackLevel = Self.attackLevelNext
 						
 						Select (Self.attackLevelNext)
 							Case ATTACK_LEVEL_NONE
@@ -1000,7 +1000,7 @@ Class PlayerKnuckles Extends PlayerObject
 								
 								Self.velX = (DSgn(Self.isAntiGravity <> Self.faceDirection) * jump)
 								
-								Self.attackCount = PickValue(Self.isInWater, (WATER_FRAME_INTERVAL * 2), WATER_FRAME_INTERVAL)
+								Self.knuckles_attackCount = PickValue(Self.isInWater, (WATER_FRAME_INTERVAL * 2), WATER_FRAME_INTERVAL)
 								
 								soundInstance.playSe(SoundSystem.SE_127)
 						End Select
@@ -1009,7 +1009,7 @@ Class PlayerKnuckles Extends PlayerObject
 					EndIf
 				Case ATTACK_LEVEL_3
 					If (Self.animationID <> NO_ANIMATION) Then
-						Self.attackLevel = ATTACK_LEVEL_NONE
+						Self.knuckles_attackLevel = ATTACK_LEVEL_NONE
 					EndIf
 			End Select
 			
@@ -1019,7 +1019,7 @@ Class PlayerKnuckles Extends PlayerObject
 				Self.Floating = False
 			EndIf
 			
-			Self.isAttacking = (Self.attackLevel <> ATTACK_LEVEL_NONE)
+			Self.isAttacking = (Self.knuckles_attackLevel <> ATTACK_LEVEL_NONE)
 		End
 		
 		Method extraLogicOnObject:Void()
@@ -1052,14 +1052,14 @@ Class PlayerKnuckles Extends PlayerObject
 				EndIf
 			EndIf
 			
-			If (Self.attackCount > 0) Then
-				Self.attackCount -= 1
+			If (Self.knuckles_attackCount > 0) Then
+				Self.knuckles_attackCount -= 1
 			EndIf
 			
-			Select (Self.attackLevel)
+			Select (Self.knuckles_attackLevel)
 				Case ATTACK_LEVEL_NONE
 					If ((Self.animationID = KNUCKLES_ANI_STAND Or Self.animationID = KNUCKLES_ANI_WALK_1 Or Self.animationID = KNUCKLES_ANI_WALK_2 Or Self.animationID = KNUCKLES_ANI_RUN Or Self.animationID = KNUCKLES_ANI_BAR_MOVE Or Self.animationID = KNUCKLES_ANI_WIND Or Self.animationID = KNUCKLES_ANI_SPIN_1) And Key.press(Key.gSelect) And Self.myAnimationID <> KNUCKLES_ANI_PUSH_WALL) Then
-						Self.attackLevel = ATTACK_LEVEL_1
+						Self.knuckles_attackLevel = ATTACK_LEVEL_1
 						
 						Self.animationID = NO_ANIMATION
 						
@@ -1067,7 +1067,7 @@ Class PlayerKnuckles Extends PlayerObject
 						
 						Self.velX = PickValue((Self.isAntiGravity <> Self.faceDirection), PUNCH_MOVE01, -PUNCH_MOVE01)
 						
-						Self.attackCount = PickValue(Self.isInWater, (KNUCKLES_ATTACK_2_COUNT * 2), KNUCKLES_ATTACK_2_COUNT)
+						Self.knuckles_attackCount = PickValue(Self.isInWater, (KNUCKLES_ATTACK_2_COUNT * 2), KNUCKLES_ATTACK_2_COUNT)
 						
 						Self.attackLevelNext = ATTACK_LEVEL_NONE
 						
@@ -1076,10 +1076,10 @@ Class PlayerKnuckles Extends PlayerObject
 						Self.drawer.setActionId(KNUCKLES_ANI_ATTACK_1)
 					EndIf
 				Case ATTACK_LEVEL_1
-					If (Self.attackCount <> 0 And Key.press(Key.gSelect)) Then
+					If (Self.knuckles_attackCount <> 0 And Key.press(Key.gSelect)) Then
 						Self.attackLevelNext = ATTACK_LEVEL_2
 					Else
-						Self.attackLevel = Self.attackLevelNext
+						Self.knuckles_attackLevel = Self.attackLevelNext
 						
 						Select (Self.attackLevelNext)
 							Case ATTACK_LEVEL_NONE
@@ -1090,7 +1090,7 @@ Class PlayerKnuckles Extends PlayerObject
 								
 								Self.velX = PickValue((Self.isAntiGravity <> Self.faceDirection), PUNCH_MOVE01, -PUNCH_MOVE01)
 								
-								Self.attackCount = PickValue(Self.isInWater, (KNUCKLES_ATTACK_2_COUNT * 2), KNUCKLES_ATTACK_2_COUNT)
+								Self.knuckles_attackCount = PickValue(Self.isInWater, (KNUCKLES_ATTACK_2_COUNT * 2), KNUCKLES_ATTACK_2_COUNT)
 								
 								soundInstance.playSe(SoundSystem.SE_126)
 						End Select
@@ -1098,10 +1098,10 @@ Class PlayerKnuckles Extends PlayerObject
 						Self.attackLevelNext = ATTACK_LEVEL_NONE
 					EndIf
 				Case ATTACK_LEVEL_2
-					If (Self.attackCount <> 0 And Key.press(Key.gSelect)) Then
+					If (Self.knuckles_attackCount <> 0 And Key.press(Key.gSelect)) Then
 						Self.attackLevelNext = ATTACK_LEVEL_3
 					Else
-						Self.attackLevel = Self.attackLevelNext
+						Self.knuckles_attackLevel = Self.attackLevelNext
 						
 						Select (Self.attackLevelNext)
 							Case ATTACK_LEVEL_NONE
@@ -1121,7 +1121,7 @@ Class PlayerKnuckles Extends PlayerObject
 								
 								Self.velX = (DSgn((Self.isAntiGravity <> Self.faceDirection)) * jump)
 								
-								Self.attackCount = PickValue(Self.isInWater, (WATER_FRAME_INTERVAL * 2), WATER_FRAME_INTERVAL)
+								Self.knuckles_attackCount = PickValue(Self.isInWater, (WATER_FRAME_INTERVAL * 2), WATER_FRAME_INTERVAL)
 								
 								soundInstance.playSe(SoundSystem.SE_127)
 						End Select
@@ -1130,11 +1130,11 @@ Class PlayerKnuckles Extends PlayerObject
 					EndIf
 				Case ATTACK_LEVEL_3
 					If (Self.animationID <> NO_ANIMATION) Then
-						Self.attackLevel = ATTACK_LEVEL_NONE
+						Self.knuckles_attackLevel = ATTACK_LEVEL_NONE
 					EndIf
 			End Select
 			
-			Self.isAttacking = (Self.attackLevel <> ATTACK_LEVEL_NONE)
+			Self.isAttacking = (Self.knuckles_attackLevel <> ATTACK_LEVEL_NONE)
 		End
 		
 		Method extraInputLogic:Void()
