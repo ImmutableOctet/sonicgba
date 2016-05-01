@@ -148,8 +148,8 @@ Class PlayerAmy Extends PlayerObject
 		
 		Field attackRect:PlayerAnimationCollisionRect
 		
-		Field attackCount:Int
-		Field attackLevel:Int
+		Field amy_attackCount:Int
+		Field amy_attackLevel:Int
 	Public
 		' Constructor(s):
 		Method New()
@@ -363,10 +363,10 @@ Class PlayerAmy Extends PlayerObject
 							Case AMY_ANI_DASH_5
 								Self.animationID = AMY_ANI_STAND
 							Case AMY_ANI_ATTACK_1
-								If (Self.attackLevel <> 2) Then
+								If (Self.amy_attackLevel <> 2) Then
 									Self.animationID = AMY_ANI_STAND
 									
-									Self.attackLevel = 0
+									Self.amy_attackLevel = 0
 									
 									Self.isAttacking = False
 								Else
@@ -378,7 +378,7 @@ Class PlayerAmy Extends PlayerObject
 								EndIf
 							Case AMY_ANI_ATTACK_2
 								Self.animationID = AMY_ANI_STAND
-								Self.attackLevel = 0
+								Self.amy_attackLevel = 0
 								
 								Self.isAttacking = False
 							Case AMY_ANI_JUMP_ATTACK_1
@@ -536,8 +536,8 @@ Class PlayerAmy Extends PlayerObject
 		End
 		
 		Method beSpring:Void(springPower:Int, direction:Int)
-			Self.attackLevel = 0
-			Self.attackCount = 0
+			Self.amy_attackLevel = 0
+			Self.amy_attackCount = 0
 			
 			Self.jumpAttackUsed = False
 			
@@ -603,8 +603,8 @@ Class PlayerAmy Extends PlayerObject
 		End
 		
 		Method resetAttackLevel:Void()
-			Self.attackLevel = 0
-			Self.attackCount = 0
+			Self.amy_attackLevel = 0
+			Self.amy_attackCount = 0
 		End
 		
 		Method setCannotAttack:Void(cannot:Bool)
@@ -688,19 +688,19 @@ Class PlayerAmy Extends PlayerObject
 				Self.attack2Flag = False
 			EndIf
 			
-			If (Self.attackCount > 0) Then
-				Self.attackCount -= 1
+			If (Self.amy_attackCount > 0) Then
+				Self.amy_attackCount -= 1
 				
-				If (Self.attackCount = 0) Then
-					Self.attackLevel = 0
+				If (Self.amy_attackCount = 0) Then
+					Self.amy_attackLevel = 0
 				EndIf
 			EndIf
 			
-			If (Self.attackLevel > 0) Then
+			If (Self.amy_attackLevel > 0) Then
 				Self.totalVelocity = 0
 			EndIf
 			
-			If (Self.attackLevel = 0) Then
+			If (Self.amy_attackLevel = 0) Then
 				isCanJump = True
 			Else
 				isCanJump = False
@@ -715,11 +715,11 @@ Class PlayerAmy Extends PlayerObject
 					
 					Self.attack1Flag = True
 					
-					Self.attackCount = PickValue(Self.isInWater, (ATTACK_COUNT_MAX * 2), ATTACK_COUNT_MAX) ' 20 ' AMY_ANI_JUMP_ATTACK_1
+					Self.amy_attackCount = PickValue(Self.isInWater, (ATTACK_COUNT_MAX * 2), ATTACK_COUNT_MAX) ' 20 ' AMY_ANI_JUMP_ATTACK_1
 					
-					Self.attackLevel = 1
-				ElseIf (Self.attackCount > 0 And Self.attackLevel < 2) Then
-					Self.attackLevel += 1
+					Self.amy_attackLevel = 1
+				ElseIf (Self.amy_attackCount > 0 And Self.amy_attackLevel < 2) Then
+					Self.amy_attackLevel += 1
 				EndIf
 			EndIf
 			
@@ -834,19 +834,19 @@ Class PlayerAmy Extends PlayerObject
 				Self.attack2Flag = False
 			EndIf
 			
-			If (Self.attackCount > 0) Then
-				Self.attackCount -= 1
+			If (Self.amy_attackCount > 0) Then
+				Self.amy_attackCount -= 1
 				
-				If (Self.attackCount = 0) Then
-					Self.attackLevel = 0
+				If (Self.amy_attackCount = 0) Then
+					Self.amy_attackLevel = 0
 				EndIf
 			EndIf
 			
-			If (Self.attackLevel > 0) Then
+			If (Self.amy_attackLevel > 0) Then
 				Self.totalVelocity = 0
 			EndIf
 			
-			isCanJump = (Self.attackLevel = 0)
+			isCanJump = (Self.amy_attackLevel = 0)
 			
 			If (Self.myAnimationID = AMY_ANI_DASH_4 And Self.velX = 0 And Self.velY = 0) Then
 				Self.myAnimationID = AMY_ANI_DASH_5
@@ -860,11 +860,11 @@ Class PlayerAmy Extends PlayerObject
 					Self.myAnimationID = AMY_ANI_ATTACK_1
 					
 					Self.attack1Flag = True
-					Self.attackCount = PickValue(Self.isInWater, (ATTACK_COUNT_MAX * 2), ATTACK_COUNT_MAX) ' 20
+					Self.amy_attackCount = PickValue(Self.isInWater, (ATTACK_COUNT_MAX * 2), ATTACK_COUNT_MAX) ' 20
 					
-					Self.attackLevel = 1
-				ElseIf (Self.attackCount > 0 And Self.attackLevel < 2) Then
-					Self.attackLevel += 1
+					Self.amy_attackLevel = 1
+				ElseIf (Self.amy_attackCount > 0 And Self.amy_attackLevel < 2) Then
+					Self.amy_attackLevel += 1
 				EndIf
 			EndIf
 		End
