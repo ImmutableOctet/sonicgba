@@ -184,7 +184,7 @@ Class DekaPlatform Extends GimmickObject
 				If ((player.velX < 0 And direction = DIRECTION_RIGHT Or player.velX > 0 And direction = DIRECTION_LEFT) And (player.collisionRect.x1 + player.velX + PlayerObject.WIDTH / 2 < Self.collisionRect.x0 Or player.collisionRect.x0 + player.velX - PlayerObject.WIDTH / 2 > Self.collisionRect.x1)) Then ' 1024
 					player.posX += player.velX
 				Else
-					player.beStop(0, direction, this, Self.isDirectionDown)
+					player.beStop(0, direction, Self, Self.isDirectionDown)
 				EndIf
 			EndIf
 			

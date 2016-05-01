@@ -163,7 +163,7 @@ Class BreakPlatform Extends GimmickObject
 						Local block:= Self.breakVelY[(Self.blockNumX - 1) - (i Mod Self.blockNumX)]
 						Local index:= i / Self.blockNumX
 						
-						block[i2] += GRAVITY
+						block[index] += GRAVITY
 					Next
 					
 					Self.breakCount += 1

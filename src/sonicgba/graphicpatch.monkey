@@ -198,18 +198,14 @@ Class GraphicPatch Extends GimmickObject
 					Local startX:= Self.posX
 					Local startY:= Self.posY
 					
-					Local i2:= Self.posX
-					
-					If (r0 > endX) Then
+					If (Self.posX > endX) Then
 						startX = endX
 						startY = endY
 						
 						endX = Self.posX
 						endY = Self.posY
 					Else
-						i2 = Self.posY
-						
-						If (r0 > endY) Then
+						If (Self.posY > endY) Then
 							If (RollIsland.DIRECTION[Self.direction][1] * RollIsland.DIRECTION[Self.direction][0] <> -1) Then
 								startX = endX
 								startY = endY

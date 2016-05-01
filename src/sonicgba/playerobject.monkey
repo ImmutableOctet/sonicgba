@@ -17,14 +17,29 @@ Friend sonicgba.playeramy
 Friend sonicgba.playersupersonic
 
 Friend sonicgba.playeranimationcollisionrect
+Friend sonicgba.cage
+Friend sonicgba.cagebutton
 Friend sonicgba.seabedvolcanoplatform
 Friend sonicgba.seabedvolcanoasynplatform
 Friend sonicgba.hexhobin
 Friend sonicgba.ballhobin
+Friend sonicgba.cornerhobin
 Friend sonicgba.belt
+Friend sonicgba.rollisland
 Friend sonicgba.springisland
 Friend sonicgba.caperbed
+Friend sonicgba.caperblock
 Friend sonicgba.changerectregion
+Friend sonicgba.slipstart
+Friend sonicgba.ironbar
+Friend sonicgba.marker
+Friend sonicgba.poal
+Friend sonicgba.neji
+Friend sonicgba.arm
+
+Friend sonicgba.pipein
+Friend sonicgba.pipeout
+Friend sonicgba.pipeset
 
 Friend sonicgba.bossf3arm
 
@@ -336,22 +351,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Const PLAYER_ANIMATION_PATH:String = "/animation/player"
 		
-		Const ROTATE_MODE_NEGATIVE:Int = 2
 		Const ROTATE_MODE_NEVER_MIND:Int = 0
 		Const ROTATE_MODE_POSITIVE:Int = 1
-		
-		Const STATE_PIPE_IN:= 0
-		Const STATE_PIPE_OVER:= 2
-		Const STATE_PIPING:= 1
-		
-		Const TER_STATE_RUN:= 0
-		Const TER_STATE_BRAKE:= 1
-		Const TER_STATE_LOOK_MOON:= 2
-		Const TER_STATE_LOOK_MOON_WAIT:= 3
-		Const TER_STATE_CHANGE_1:= 4
-		Const TER_STATE_CHANGE_2:= 5
-		Const TER_STATE_GO_AWAY:= 6
-		Const TER_STATE_SHINING_2:= 7
+		Const ROTATE_MODE_NEGATIVE:Int = 2
 		
 		' Immutable Arrays (Constant):
 		Global TRANS:Int[] = [0, 5, 3, 6]
@@ -369,6 +371,19 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const HEIGHT:Int = 1536
 		
 		Const BODY_OFFSET:Int = 768
+		
+		Const STATE_PIPE_IN:= 0
+		Const STATE_PIPE_OVER:= 2
+		Const STATE_PIPING:= 1
+		
+		Const TER_STATE_RUN:= 0
+		Const TER_STATE_BRAKE:= 1
+		Const TER_STATE_LOOK_MOON:= 2
+		Const TER_STATE_LOOK_MOON_WAIT:= 3
+		Const TER_STATE_CHANGE_1:= 4
+		Const TER_STATE_CHANGE_2:= 5
+		Const TER_STATE_GO_AWAY:= 6
+		Const TER_STATE_SHINING_2:= 7
 		
 		Const ANI_ATTACK_1:Int = 18
 		Const ANI_ATTACK_2:Int = 19
@@ -3757,7 +3772,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Case DIRECTION_UP
 					beStop_Up(newPosition, obj)
 				Case DIRECTION_DOWN
-					beStop_Down(newPosition, obj, isDirectionDown, True) ' True
+					beStop_Down(newPosition, obj, True, True) ' True
 				Case DIRECTION_LEFT, DIRECTION_RIGHT
 					beStop_Left_Right(newPosition, direction, obj, False)
 			End Select
@@ -4376,7 +4391,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			setNoKey()
 			
-			Self.totalVelocity = DSgn(Not Self.faceDirection) * ssdef.PLAYER_MOVE_WIDTH
+			Self.totalVelocity = DSgn(Not Self.faceDirection) * (DO_POAL_MOTION_SPEED / 2)
 			
 			Self.worldCal.stopMoveX()
 			

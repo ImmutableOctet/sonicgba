@@ -9,6 +9,8 @@ Friend sonicgba.bossbroken
 
 ' Imports:
 Private
+	Import gameengine.def
+	
 	Import lib.animation
 	Import lib.animationdrawer
 	Import lib.soundsystem

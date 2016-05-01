@@ -140,11 +140,11 @@ Class FreeFallBar Extends GimmickObject
 				
 				Select (direction)
 					Case DIRECTION_LEFT
-						player.setAnimationId(SoundSystem.ANI_BAR_ROLL_1)
+						player.setAnimationId(PlayerObject.ANI_BAR_ROLL_1)
 						
 						Self.isLeftEnter = True
 					Case DIRECTION_RIGHT
-						player.setAnimationId(SoundSystem.ANI_BAR_ROLL_2)
+						player.setAnimationId(PlayerObject.ANI_BAR_ROLL_2)
 						
 						Self.isLeftEnter = False
 				End Select

@@ -199,11 +199,14 @@ Class Arm Extends GimmickObject
 		Method draw:Void(g:MFGraphics)
 			drawInMap(g, baseImage, 0, 0, 8, 8, 0, TOP|HCENTER)
 			
-			For Local i:= 0 Until ((Self.posY - Self.posYOriginal) - BAR_LENGTH) Step BAR_LENGTH
+			Local i:Int
+			
+			For i = 0 Until ((Self.posY - Self.posYOriginal) - BAR_LENGTH) Step BAR_LENGTH
 				drawInMap(g, barImage, Self.posX, Self.posYOriginal + i, TOP|HCENTER)
 			Next
 			
 			drawInMap(g, barImage, 0, 0, 6, ((Self.posY - Self.posYOriginal) - i) Shr 6, 0, Self.posX, Self.posYOriginal + i, TOP|HCENTER)
+			
 			drawInMap(g, armplusImage, 0, 0, 8, 8, 1, Self.posX, Self.posYOriginal - 256, TOP|HCENTER)
 			drawInMap(g, armImage, 0, PickValue(catching(), 0, ARM_DRAW_HEIGHT_1), ARM_DRAW_WIDTH, PickValue(catching(), ARM_DRAW_HEIGHT_1, ARM_DRAW_WIDTH), 0, TOP|HCENTER)
 			

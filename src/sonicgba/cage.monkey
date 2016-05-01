@@ -15,6 +15,7 @@ Friend sonicgba.boss6
 ' Imports:
 Private
 	Import lib.myapi
+	Import lib.soundsystem
 	
 	Import sonicgba.cagebutton
 	Import sonicgba.gimmickobject

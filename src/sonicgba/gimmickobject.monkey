@@ -934,6 +934,10 @@ Class GimmickObject Extends GameObject
 			' Empty implementation.
 		End
 		
+		Method logic:Void(x:Int, y:Int)
+			' Empty implementation.
+		End
+		
 		Method close:Void()
 			' Empty implementation.
 		End

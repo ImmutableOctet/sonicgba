@@ -8,6 +8,8 @@ Friend sonicgba.gimmickobject
 ' Imports:
 Private
 	Import lib.myapi
+	Import lib.soundsystem
+	Import lib.constutil
 	
 	'Import sonicgba.sonicdef
 	Import sonicgba.gimmickobject

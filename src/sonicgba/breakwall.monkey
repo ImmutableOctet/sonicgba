@@ -141,7 +141,7 @@ Class BreakWall Extends GimmickObject
 						EndIf
 						
 						For Local y:= (BREAK_NUM_HEIGHT - 1) To 0 Step -1
-							Local offset:= getBreakOffset(w, h)
+							Local offset:= getBreakOffset(x, y)
 							
 							Local currentGrav:= Self.breakPosition[offset+2]
 							

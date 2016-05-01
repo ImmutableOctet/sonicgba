@@ -103,7 +103,7 @@ Class SpringIsland Extends GimmickObject
 		
 		' Methods:
 		Method refreshCollisionRect:Void(x:Int, y:Int)
-			Self.collisionRect.setRect(x - RollPlatformSpeedC.COLLISION_HEIGHT, (y + COLLSION_OFFSET_Y) - COLLISION_HEIGHT, COLLISION_WIDTH, PickValue((Self.debugCollisionHeight = 0), COLLISION_HEIGHT, Self.debugCollisionHeight))
+			Self.collisionRect.setRect(x - (COLLISION_WIDTH / 2), (y + COLLSION_OFFSET_Y) - COLLISION_HEIGHT, COLLISION_WIDTH, PickValue((Self.debugCollisionHeight = 0), COLLISION_HEIGHT, Self.debugCollisionHeight))
 		End
 		
 		Method draw:Void(g:MFGraphics)

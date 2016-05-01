@@ -11,9 +11,10 @@ Private
 	Import lib.animationdrawer
 	Import lib.soundsystem
 	
-	Import com.sega.mobile.framework.device.mfgraphics
-	
 	Import sonicgba.gimmickobject
+	Import sonicgba.playerobject
+	
+	Import com.sega.mobile.framework.device.mfgraphics
 Public
 
 ' Classes:
@@ -53,7 +54,7 @@ Class Balloon Extends GimmickObject
 		Method draw:Void(graphics:MFGraphics)
 			drawInMap(graphics, Self.drawer)
 		End
-	
+		
 		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
 			If (Not Self.used) Then
 				player.bePop(POP_POWER, 1)
@@ -63,8 +64,7 @@ Class Balloon Extends GimmickObject
 				Self.drawer.setActionId(((Abs(Self.iLeft) Mod 3) * 2) + 1)
 				Self.drawer.setLoop(False)
 				
-				' Magic number: Sound-effect ID from what I understand.
-				SoundSystem.getInstance().playSe(57)
+				SoundSystem.getInstance().playSe(SoundSystem.SE_189)
 			EndIf
 		End
 		

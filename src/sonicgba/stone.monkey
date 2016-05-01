@@ -7,6 +7,8 @@ Friend sonicgba.gimmickobject
 
 ' Imports:
 Private
+	Import lib.soundsystem
+	
 	Import sonicgba.effect
 	Import sonicgba.gimmickobject
 	Import sonicgba.playerobject

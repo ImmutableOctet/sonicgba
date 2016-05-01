@@ -14,6 +14,7 @@ Private
 	Import lib.coordinate
 	Import lib.soundsystem
 	
+	Import sonicgba.playerobject
 	Import sonicgba.gimmickobject
 	Import sonicgba.freefallbar
 	Import sonicgba.freefallplatform

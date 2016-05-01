@@ -16,7 +16,7 @@ Private
 	Import lib.animation
 	Import lib.animationdrawer
 	Import lib.constutil
-	'Import lib.soundsystem
+	Import lib.soundsystem
 	
 	Import sonicgba.gimmickobject
 	Import sonicgba.playeramy

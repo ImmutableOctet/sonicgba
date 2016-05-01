@@ -573,7 +573,7 @@ Class Boss6 Extends BossObject
 							
 							player.setOutOfControl(Null)
 							
-							player.totalVelocity = 0
+							player.setTotalVelocity(0)
 						EndIf
 					Case STATE_ESCAPE
 						Self.wait_cnt += 1

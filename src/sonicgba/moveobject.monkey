@@ -20,22 +20,31 @@ Class MoveObject Extends GameObject Abstract
 		
 		' Property potential:
 		Method getVelX:Int()
-			Return velX
+			Return Self.velX
 		End
 		
 		Method getVelY:Int()
-			Return velY
+			Return Self.velY
 		End
 		
 		Method setVelX:Void(value:Int)
-			velX = value
+			Self.velX = value
 			
 			Return 
 		End
 		
 		Method setVelY:Void(value:Int)
-			velY = value
+			Self.velY = value
 			
 			Return 
+		End
+		
+		' Extensions:
+		Method getTotalVelocity:Int()
+			Return totalVelocity
+		End
+		
+		Method setTotalVelocity:Void(value:Int)
+			Self.totalVelocity = value
 		End
 End
