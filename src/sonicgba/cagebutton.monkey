@@ -4,6 +4,7 @@ Public
 
 ' Friends:
 Friend sonicgba.gimmickobject
+Friend sonicgba.cage
 
 ' Imports:
 Private

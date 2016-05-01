@@ -5,6 +5,13 @@ Public
 ' Friends:
 Friend sonicgba.gimmickobject
 
+Friend sonicgba.boss1
+Friend sonicgba.boss2
+Friend sonicgba.boss3
+Friend sonicgba.boss4
+Friend sonicgba.boss5
+Friend sonicgba.boss6
+
 ' Imports:
 Private
 	Import lib.myapi

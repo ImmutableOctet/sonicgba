@@ -460,7 +460,7 @@ Class Boss1Arm Extends EnemyObject
 			Local position:= Self.pos[5]
 			
 			If (Self.state <> STATE_BROKEN) Then
-				Self.collisionRect.setRect(position[0] - (COLLISION_WIDTH / 2), position[5][1] - (COLLISION_HEIGHT / 2), COLLISION_WIDTH, COLLISION_HEIGHT)
+				Self.collisionRect.setRect(position[0] - (COLLISION_WIDTH / 2), position[1] - (COLLISION_HEIGHT / 2), COLLISION_WIDTH, COLLISION_HEIGHT)
 			EndIf
 		End
 		
