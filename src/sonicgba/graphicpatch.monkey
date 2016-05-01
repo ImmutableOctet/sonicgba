@@ -50,7 +50,7 @@ Class GraphicPatch Extends GimmickObject
 		
 		' Fields:
 		Field direction:Int
-		Field moveDistance:Int
+		Field moveDistance__graphicpatch:Int
 		
 		Field drawer:AnimationDrawer
 	Protected
@@ -111,7 +111,7 @@ Class GraphicPatch Extends GimmickObject
 					
 					Print("6 height:" + height)
 					
-					Self.moveDistance = height
+					Self.moveDistance__graphicpatch = height
 			End Select
 		End
 	Public
@@ -192,8 +192,8 @@ Class GraphicPatch Extends GimmickObject
 						EndIf
 					Wend
 				Case 6
-					Local endX:= Self.posX + (RollIsland.DIRECTION[Self.direction][0] * ((Self.moveDistance / RAIL_SPACE) * RAIL_SPACE))
-					Local endY:= Self.posY + (RollIsland.DIRECTION[Self.direction][1] * ((Self.moveDistance / RAIL_SPACE) * RAIL_SPACE))
+					Local endX:= Self.posX + (RollIsland.DIRECTION[Self.direction][0] * ((Self.moveDistance__graphicpatch / RAIL_SPACE) * RAIL_SPACE))
+					Local endY:= Self.posY + (RollIsland.DIRECTION[Self.direction][1] * ((Self.moveDistance__graphicpatch / RAIL_SPACE) * RAIL_SPACE))
 					
 					Local startX:= Self.posX
 					Local startY:= Self.posY
@@ -224,7 +224,7 @@ Class GraphicPatch Extends GimmickObject
 						MyAPI.setClip(g, ((startX Shr 6) - camera.x) - 2, ((Min(startY, endY) Shr 6) - camera.y) - 2, (Abs(endX - startX) Shr 6) + 4, (Abs(endY - startY) Shr 6) + 4)
 					EndIf
 					
-					For i = 0 Until Self.moveDistance Step RAIL_SPACE
+					For i = 0 Until Self.moveDistance__graphicpatch Step RAIL_SPACE
 						Local x:Int, y:Int
 						
 						If (RollIsland.DIRECTION[Self.direction][1] * RollIsland.DIRECTION[Self.direction][0] = -1) Then
@@ -298,8 +298,8 @@ Class GraphicPatch Extends GimmickObject
 				Case 3
 					Self.collisionRect.setRect(x + MAP_PATCH_OFFSET_X, y + MAP_PATCH_OFFSET_Y, Self.mWidth, Self.mHeight)
 				Case 6
-					Local endX:= Self.posX + (RollIsland.DIRECTION[Self.direction][0] * Self.moveDistance)
-					Local endY:= Self.posY + (RollIsland.DIRECTION[Self.direction][1] * Self.moveDistance)
+					Local endX:= Self.posX + (RollIsland.DIRECTION[Self.direction][0] * Self.moveDistance__graphicpatch)
+					Local endY:= Self.posY + (RollIsland.DIRECTION[Self.direction][1] * Self.moveDistance__graphicpatch)
 					
 					Local startX:= Self.posX
 					Local startY:= Self.posY
