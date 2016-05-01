@@ -7,6 +7,9 @@ Public
 	In addition to this, the basic behavior of most objects is declared and/or defined here.
 #End
 
+' Friends:
+Friend state.gamestate
+
 ' Imports:
 Public
 	Import sonicgba.sonicdebug
@@ -270,11 +273,11 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			
 			' Allocate our layers:
 			If (paintVec.Length > 0 And paintVec[0] <> Null) Then
-				For Local I:= 0 Until 4
+				For Local I:= 0 Until paintVec.Length ' 4
 					paintVec[I].Clear()
 				Next
 			Else
-				For Local I:= 0 Until 4
+				For Local I:= 0 Until paintVec.Length ' 4
 					paintVec[I] = New Stack<GameObject>()
 				Next
 			EndIf
@@ -466,15 +469,15 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			Local backRow:= paintVec[DRAW_BEFORE_BEFORE_SONIC]
 			
 			' Draw everything two layers behind "Sonic":
-			For Local I:= 0 Until backRow.Length
-				backRow[I].draw(graphics)
+			For Local obj:= EachIn backRow
+				obj.draw(graphics)
 			Next
 			
 			Local middleRow:= paintVec[DRAW_BEFORE_SONIC]
 			
 			' Draw everything one layer behind "Sonic":
-			For Local I:= 0 Until middleRow.Length
-				middleRow[I].draw(graphics)
+			For Local obj:= EachIn middleRow
+				obj.draw(graphics)
 			Next
 			
 			' Everything from here onward is before the character, but above the back two layers:
@@ -490,8 +493,8 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			
 			Local layer:= paintVec[DRAW_AFTER_MAP]
 			
-			For Local I:= 0 Until layer.Length
-				layer[I].draw(graphics)
+			For Local obj:= EachIn layer
+				obj.draw(graphics)
 			Next
 			
 			' Everything from here onward is drawn above the actual game world:
@@ -511,8 +514,8 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			
 			Local layer:= paintVec[DRAW_AFTER_SONIC]
 			
-			For Local I:= 0 Until layer.Length
-				layer[I].draw(graphics)
+			For Local obj:= EachIn layer
+				obj.draw(graphics)
 			Next
 			
 			' Draw animals here if the capsule has been broken:
@@ -1573,27 +1576,27 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			EndIf
 		End
 		
-		Function drawInMap:Void(graphics:MFGraphics, drawer:AnimationDrawer, x:Int, y:Int)
+		Method drawInMap:Void(graphics:MFGraphics, drawer:AnimationDrawer, x:Int, y:Int)
 			drawer.draw(graphics, (x Shr 6) - camera.x, (y Shr 6) - camera.y)
 		End
 		
-		Function drawInMap:Void(graphics:MFGraphics, drawer:AnimationDrawer)
+		Method drawInMap:Void(graphics:MFGraphics, drawer:AnimationDrawer)
 			drawInMap(graphics, drawer, Self.posX, Self.posY)
 		End
 		
-		Function drawInMap:Void(graphics:MFGraphics, image:MFImage, x:Int, y:Int, anchor:Int)
+		Method drawInMap:Void(graphics:MFGraphics, image:MFImage, x:Int, y:Int, anchor:Int)
 			MyAPI.drawImage(graphics, image, (x Shr 6) - camera.x, (y Shr 6) - camera.y, anchor)
 		End
 		
-		Function drawInMap:Void(graphics:MFGraphics, image:MFImage, anchor:Int)
+		Method drawInMap:Void(graphics:MFGraphics, image:MFImage, anchor:Int)
 			drawInMap(graphics, image, Self.posX, Self.posY, anchor)
 		End
 		
-		Function drawInMap:Void(graphics:MFGraphics, image:MFImage, srcX:Int, srcY:Int, width:Int, height:Int, trans:Int, x:Int, y:Int, anchor:Int)
+		Method drawInMap:Void(graphics:MFGraphics, image:MFImage, srcX:Int, srcY:Int, width:Int, height:Int, trans:Int, x:Int, y:Int, anchor:Int)
 			MyAPI.drawRegion(graphics, image, srcX, srcY, width, height, trans, (x Shr 6) - camera.x, (y Shr 6) - camera.y, anchor)
 		End
 		
-		Function drawInMap:Void(graphics:MFGraphics, image:MFImage, srcX:Int, srcY:Int, width:Int, height:Int, trans:Int, anchor:Int)
+		Method drawInMap:Void(graphics:MFGraphics, image:MFImage, srcX:Int, srcY:Int, width:Int, height:Int, trans:Int, anchor:Int)
 			drawInMap(graphics, image, srcX, srcY, width, height, trans, Self.posX, Self.posY, anchor)
 		End
 	Private

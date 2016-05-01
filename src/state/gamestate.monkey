@@ -1328,7 +1328,7 @@ Class GameState Extends State
 									Self.continueNumberScale = 2.0
 								EndIf
 							ElseIf (Self.continueNumberState = 1) Then
-								Self.continueNumberScale -= 0.125f
+								Self.continueNumberScale -= 0.125
 								
 								If (Self.continueNumberScale <= 1.0) Then
 									Self.continueNumberScale = 1.0
@@ -1371,7 +1371,7 @@ Class GameState Extends State
 									Self.continueNumberScale = 2.0
 								EndIf
 							ElseIf (Self.continueNumberState = 4) Then
-								Self.continueNumberScale -= 0.125f
+								Self.continueNumberScale -= 0.125
 								
 								If (Self.continueNumberScale <= 1.0) Then
 									Self.continueNumberScale = 1.0
@@ -3089,7 +3089,7 @@ Class GameState Extends State
 			
 			For Local x:= 0 To (SCREEN_WIDTH / 48)
 				For Local y:= 0 To (SCREEN_HEIGHT / 48)
-					animationDrawer.draw(g, i2 * 48, j * 48)
+					animationDrawer.draw(g, (x * 48), (y * 48))
 				Next
 			Next
 			
@@ -3150,7 +3150,7 @@ Class GameState Extends State
 			animationDrawer.setActionId(51)
 			
 			For Local x:= Self.optionOffsetX Until (SCREEN_WIDTH * 2) Step OPTION_MOVING_INTERVAL
-				animationDrawer.draw(g, x1, 0)
+				animationDrawer.draw(g, x, 0)
 			Next
 			
 			animationDrawer.setActionId(PickValue(Key.touchmenuoptionreturn.Isin(), 66, 61))

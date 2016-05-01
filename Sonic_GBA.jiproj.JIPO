@@ -1233,12 +1233,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>8</X>
+        <Y>1598</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>2dec2668-e2b1-4dac-af74-6c4576ca60b4</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -1572,8 +1573,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>25</X>
-        <Y>349</Y>
+        <X>47</X>
+        <Y>6196</Y>
       </CursorPos>
       <DocGUID>125be833-239d-405e-baaa-a97bfdfd0669</DocGUID>
       <Bookmarks />
@@ -1881,8 +1882,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\stagemanager.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>5</X>
-        <Y>286</Y>
+        <X>10</X>
+        <Y>163</Y>
       </CursorPos>
       <DocGUID>469fb0b4-27de-4666-a824-3109fd9ed425</DocGUID>
       <Bookmarks />
@@ -2153,12 +2154,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\state\gamestate.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\state\gamestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>62</X>
-        <Y>3720</Y>
+        <X>29</X>
+        <Y>3152</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>092317ae-3a4b-4be8-a3b1-23fd21b77d6f</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\specialstagestate.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>

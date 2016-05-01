@@ -13,6 +13,8 @@ Friend sonicgba.playerknuckles
 Friend sonicgba.playeramy
 Friend sonicgba.playersupersonic
 
+Friend state.gamestate
+
 ' Imports:
 Private
 	Import common.numberdrawer
@@ -5839,11 +5841,15 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			itemOffsetX Mod= space
 			
 			' Magic number: 294
-			For Local x1:= (itemOffsetX - 294) Until (x1 < SCREEN_WIDTH * 2) Step space
+			Local x1:= (itemOffsetX - 294)
+			
+			While (x1 < (SCREEN_WIDTH * 2))
 				GameState.stageInfoAniDrawer.draw(g, getCharacterID() + 29, x1, (y - 10) + 2, False, 0)
 				GameState.stageInfoAniDrawer.draw(g, 34, x1, (y - 10) + 2, False, 0)
 				GameState.stageInfoAniDrawer.draw(g, passStageActionID, x1, (y - 10) + 2, False, 0)
-			Next
+				
+				x1 += space
+			Wend
 		End
 		
 		Function drawStagePassInfoScroll:Void(g:MFGraphics, offset_x:Int, y:Int, speed:Int, space:Int)
@@ -5860,11 +5866,15 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				itemOffsetX Mod= space
 			EndIf
 			
-			For Local x1:= (itemOffsetX - 294) Until (SCREEN_WIDTH * 2) Step space
+			Local x1:= (itemOffsetX - 294)
+			
+			While (x1 < (SCREEN_WIDTH * 2))
 				GameState.stageInfoAniDrawer.draw(g, getCharacterID() + ANI_WIND_JUMP, x1 + offset_x, (y - 10) + 2, False, 0)
 				GameState.stageInfoAniDrawer.draw(g, 34, x1 + offset_x, (y - 10) + 2, False, 0)
 				GameState.stageInfoAniDrawer.draw(g, passStageActionID, x1 + offset_x, (y - 10) + 2, False, 0)
-			Next
+				
+				x1 += space
+			Wend
 		End
 		
 		Function drawMovingbar:Void(g:MFGraphics, space:Int)
@@ -6182,17 +6192,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 								GameState.guiAniDrawer.draw(g, ANI_ROTATE_JUMP, SCREEN_WIDTH / 2, (SCREEN_HEIGHT / 2) + ANI_BANK_2, False, 0)
 							EndIf
 							
-							If (StageManager.isSaveTimeModeScore = Null And IsStarttoCnt) Then
+							If (Not StageManager.isSaveTimeModeScore And IsStarttoCnt) Then
 								StageManager.setTimeModeScore(characterID, timeCount)
 								StageManager.isSaveTimeModeScore = True
-								
-								Return
 							EndIf
-							
-							Return
+						Else
+							drawMovingbar(g, STAGE_PASS_STR_SPACE) ' 182
 						EndIf
-						
-						drawMovingbar(g, STAGE_PASS_STR_SPACE) ' 182
 				End Select
 			EndIf
 		End
