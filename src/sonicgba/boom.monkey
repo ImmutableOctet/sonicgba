@@ -23,7 +23,8 @@ Class Boom Extends EnemyObject
 		Const COLLISION_HEIGHT:Int = 64
 		Const COLLISION_WIDTH:Int = 64
 	Private
-		Global boomdrawer:AnimationDrawer
+		' Fields:
+		Field boomdrawer:AnimationDrawer
 	Public
 		' Functions:
 		Function releaseAllResource:Void()
@@ -41,6 +42,7 @@ Class Boom Extends EnemyObject
 			EndIf
 			
 			Self.boomdrawer = BoomAni.getDrawer(0, False, 0)
+			
 			Self.posX = x
 			Self.posY = y
 		End
