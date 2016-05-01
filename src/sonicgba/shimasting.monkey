@@ -5,7 +5,7 @@ Public
 ' Friends:
 Friend sonicgba.gimmickobject
 Friend sonicgba.togeshima
-Friend sonicgba.finalshima
+'Friend sonicgba.finalshima
 
 ' Imports:
 Private
@@ -42,7 +42,7 @@ Class ShimaSting Extends GimmickObject
 		End
 	Public	
 		' Methods:
-		Method logic:Void(x:Int, y:Int, frame:Int)
+		Method sting_logic:Void(x:Int, y:Int, frame:Int)
 			Local preX:= Self.posX
 			Local preY:= Self.posY
 			

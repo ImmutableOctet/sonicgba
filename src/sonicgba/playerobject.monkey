@@ -36,6 +36,7 @@ Friend sonicgba.marker
 Friend sonicgba.poal
 Friend sonicgba.neji
 Friend sonicgba.arm
+Friend sonicgba.ice
 
 Friend sonicgba.pipein
 Friend sonicgba.pipeout
@@ -654,13 +655,20 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Protected
 		' Fields:
 		Field worldCal:ACWorldCollisionCalculator
+		
 		Field dustEffectAnimation:Animation
+		
 		Field drawer:AnimationDrawer
+		
+		Field railLine:Line
+		
 		Field dashRolling:Bool
 		Field doJumpForwardly:Bool
 		Field fading:Bool
 		Field isInWater:Bool
+		
 		Field pipeState:Byte
+		
 		Field animationID:Int
 		Field breatheCount:Int
 		Field breatheFrame:Int
@@ -673,7 +681,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Field focusMovingState:Int
 		Field maxVelocity:Int
 		Field myAnimationID:Int
-		Field railLine:Line
 	Public
 		' Fields:
 		Field bankwalking:Bool

@@ -381,6 +381,12 @@ Class EnemyObject Extends GameObject Abstract
 		End
 	Public
 		' Methods:
+		
+		' Extensions:
+		Method isDead:Bool()
+			Return Self.dead
+		End
+		
 		Method getPaintLayer:Int()
 			Return DRAW_BEFORE_SONIC
 		End

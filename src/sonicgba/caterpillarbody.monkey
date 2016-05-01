@@ -34,12 +34,19 @@ Class CaterpillarBody Extends EnemyObject
 			
 			Self.controller = controller
 		End
+		
+		' Methods:
+		
+		' Extensions:
+		Method setDead:Void()
+			Self.dead = True
+		End
 	Public
 		' Methods:
 		Method doWhileCollision:Void(p:PlayerObject, direction:Int)
 			If (Not Self.dead) Then
-				If (Self.controller.dead) Then
-					Self.dead = True
+				If (Self.controller.isDead()) Then
+					setDead()
 				ElseIf (p <> player) Then
 					' Nothing so far; this behavior may change in the future.
 				Else
@@ -52,7 +59,7 @@ Class CaterpillarBody Extends EnemyObject
 						
 						Self.controller.setDead()
 						
-						Self.dead = True
+						setDead()
 					Else
 						p.beHurt()
 					EndIf
@@ -63,7 +70,7 @@ Class CaterpillarBody Extends EnemyObject
 		Method doWhileBeAttack:Void(p:PlayerObject, direction:Int, animationID:Int)
 			If (Not Self.dead) Then
 				If (Self.controller.dead) Then
-					Self.dead = True
+					setDead()
 				ElseIf (p <> player) Then
 					' Nothing so far; this behavior may change in the future.
 				Else
@@ -73,7 +80,7 @@ Class CaterpillarBody Extends EnemyObject
 						beAttack()
 						
 						Self.controller.setDead()
-						Self.dead = True
+						setDead()
 						
 						Return
 					EndIf
@@ -90,7 +97,7 @@ Class CaterpillarBody Extends EnemyObject
 		Method logic:Void(x:Int, y:Int)
 			If (Not Self.dead) Then
 				If (Self.controller.dead) Then
-					Self.dead = True
+					setDead()
 				EndIf
 				
 				Local preX:= Self.posX

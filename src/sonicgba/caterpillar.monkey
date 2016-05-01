@@ -221,7 +221,7 @@ Class Caterpillar Extends EnemyObject
 		
 		Method setDead:Void()
 			For Local body:= EachIn Self.body
-				body.dead = True
+				body.setDead()
 			Next
 			
 			Self.dead = True

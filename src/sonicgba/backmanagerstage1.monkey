@@ -58,7 +58,7 @@ Class BackManagerStage1 Extends BackGroundManager
 		
 		' Methods:
 		Method close:Void()
-			Self.posX = Null
+			Self.posX = []
 			
 			If (Self.imageBG.Length > 0) Then
 				For Local i:= 0 Until Self.imageBG.Length

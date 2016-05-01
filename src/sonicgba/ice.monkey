@@ -62,10 +62,11 @@ Class Ice Extends GimmickObject
 							Self.used = True
 							
 							p.setVelY(0)
-							p.animationID = 1
+							
+							p.animationID = PlayerObject.ANI_RUN_1
 						EndIf
 					Case DIRECTION_LEFT, DIRECTION_RIGHT
-						If (p <> player Or Not p.isAttackingEnemy() Or Not Self.firstTouch Or player.collisionState = COLLISION_STATE_WALK) Then
+						If (p <> player Or Not p.isAttackingEnemy() Or Not Self.firstTouch Or player.collisionState = PlayerObject.COLLISION_STATE_WALK) Then
 							p.beStop(Self.collisionRect.y0, direction, Self)
 						Else
 							Self.used = True

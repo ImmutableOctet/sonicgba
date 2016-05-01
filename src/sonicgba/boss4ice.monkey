@@ -85,7 +85,7 @@ Class Boss4Ice Extends Platform ' Implements SonicDef...?
 					Self.offsetY = 0
 				EndIf
 				
-				If (Self.boss4.dead Or Self.posY < (StageManager.getWaterLevel() Shl 6)) Then
+				If (Self.boss4.isDead() Or Self.posY < (StageManager.getWaterLevel() Shl 6)) Then
 					' Magic number: 6
 					Self.posY += (Self.drop_vel * 6)
 				Else

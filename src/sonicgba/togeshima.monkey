@@ -103,7 +103,7 @@ Class TogeShima Extends GimmickObject
 			
 			refreshCollisionRect(Self.posX, Self.posY)
 			
-			Self.ss.logic(Self.posX, Self.posY, Self.frame)
+			Self.ss.sting_logic(Self.posX, Self.posY, Self.frame)
 			
 			checkWithPlayer(preX, preY, Self.posX, Self.posY)
 		End

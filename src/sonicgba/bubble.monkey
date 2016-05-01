@@ -17,6 +17,8 @@ Private
 	Import sonicgba.upbubble
 	
 	Import com.sega.mobile.framework.device.mfgraphics
+	
+	Import mojo.app
 Public
 
 ' Classes:
