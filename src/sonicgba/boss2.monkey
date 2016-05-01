@@ -136,8 +136,8 @@ Class Boss2 Extends BossObject
 		
 		Field velocity:Int
 		
-		Field velX:Int
-		Field velY:Int
+		Field velX__boss2:Int
+		Field velY__boss2:Int
 		
 		Field v_x_frame:Int
 		
@@ -176,8 +176,8 @@ Class Boss2 Extends BossObject
 			Self.range = 28800
 			Self.start_pos = 16640
 			
-			Self.velX = 0
-			Self.velY = 0
+			Self.velX__boss2 = 0
+			Self.velY__boss2 = 0
 			
 			' Magic number: 19
 			Self.v_x_frame = 19 ' (display_wait_cnt_max + 3)
@@ -349,7 +349,7 @@ Class Boss2 Extends BossObject
 					
 					Self.IsBroken = True
 					
-					Self.velY = 0
+					Self.velY__boss2 = 0
 					
 					Self.side_left = MapManager.getCamera().x
 					Self.side_right = (Self.side_left + MapManager.CAMERA_WIDTH)
@@ -426,12 +426,12 @@ Class Boss2 Extends BossObject
 							EndIf
 						EndIf
 					Case STATE_SHOW_DROP
-						Self.velY += GRAVITY
-						Self.posY += Self.velY
+						Self.velY__boss2 += GRAVITY
+						Self.posY += Self.velY__boss2
 						
 						Local groundY:= getGroundY(Self.posX, Self.posY)
 						
-						If (Self.posY + Self.velY >= groundY) Then
+						If (Self.posY + Self.velY__boss2 >= groundY) Then
 							Self.posY = groundY
 							
 							Self.state = STATE_SHOW_SPRING_DAMPING
@@ -508,20 +508,20 @@ Class Boss2 Extends BossObject
 							Self.spring.setSpringAni(SPRING_FLYING, True) ' 0
 							
 							If (HighJump()) Then
-								Self.velX = 0
-								Self.velY = Self.lowerHP_jump_startVerlY
+								Self.velX__boss2 = 0
+								Self.velY__boss2 = Self.lowerHP_jump_startVerlY
 								
 								Self.IsinHighJump = False
 							Else
 								If (player.getFootPositionX() - Self.posX > Self.min_range_x Or player.getFootPositionX() - Self.posX < (-Self.min_range_x)) Then
-									Self.velX = ((player.getFootPositionX() - Self.posX) / Self.v_x_frame)
+									Self.velX__boss2 = ((player.getFootPositionX() - Self.posX) / Self.v_x_frame)
 								ElseIf (player.getFootPositionX() - Self.posX <= Self.min_range_x And player.getFootPositionX() - Self.posX > 0) Then
-									Self.velX = (Self.min_range_x / Self.v_x_frame)
+									Self.velX__boss2 = (Self.min_range_x / Self.v_x_frame)
 								ElseIf (player.getFootPositionX() - Self.posX >= (-Self.min_range_x) And player.getFootPositionX() - Self.posX < 0) Then
-									Self.velX = ((-Self.min_range_x) / Self.v_x_frame)
+									Self.velX__boss2 = ((-Self.min_range_x) / Self.v_x_frame)
 								EndIf
 								
-								Self.velY = Self.normal_jump_startVerlY
+								Self.velY__boss2 = Self.normal_jump_startVerlY
 							EndIf
 						EndIf
 						
@@ -530,7 +530,7 @@ Class Boss2 Extends BossObject
 					Case STATE_ATTACK_JUMPING
 						resetBossDisplayState()
 						
-						If (Self.posY + Self.velY > getGroundY(Self.posX, Self.posY)) Then
+						If (Self.posY + Self.velY__boss2 > getGroundY(Self.posX, Self.posY)) Then
 							Self.posY = getGroundY(Self.posX, Self.posY)
 							
 							Self.state = STATE_RELASE_SPRING_DAMPING
@@ -558,17 +558,17 @@ Class Boss2 Extends BossObject
 							
 							SoundSystem.getInstance().playSe(SoundSystem.SE_145)
 						Else
-							If (Self.posX + Self.velX >= Self.limitRightX) Then
+							If (Self.posX + Self.velX__boss2 >= Self.limitRightX) Then
 								Self.posX = Self.limitRightX
-							ElseIf (Self.posX + Self.velX <= Self.limitLeftX) Then
+							ElseIf (Self.posX + Self.velX__boss2 <= Self.limitLeftX) Then
 								Self.posX = Self.limitLeftX
 							Else
-								Self.posX += Self.velX
+								Self.posX += Self.velX__boss2
 							EndIf
 							
 							If (Not IsJumpOutScreen() Or Self.IsinHighJump) Then
-								Self.velY += GRAVITY
-								Self.posY += Self.velY
+								Self.velY__boss2 += GRAVITY
+								Self.posY += Self.velY__boss2
 								
 								Self.high_jump_wait_cnt = 0
 							ElseIf (Self.high_jump_wait_cnt < high_jump_wait_cnt_max) Then
@@ -576,7 +576,7 @@ Class Boss2 Extends BossObject
 							Else
 								Self.posX = player.getFootPositionX()
 								
-								Self.velY = (GRAVITY * 2)
+								Self.velY__boss2 = (GRAVITY * 2)
 								
 								Self.IsinHighJump = True
 							EndIf
@@ -606,7 +606,7 @@ Class Boss2 Extends BossObject
 						Self.springH = 0
 						
 						Local groundY:= getGroundY(Self.posX, Self.posY)
-						Local velPosY:= (Self.posY + Self.velY)
+						Local velPosY:= (Self.posY + Self.velY__boss2)
 						
 						Local velPosY_aboveGround:Bool = (velPosY > groundY)
 						
@@ -614,14 +614,14 @@ Class Boss2 Extends BossObject
 							Self.posY = groundY
 							
 							' Magic number: -640
-							Self.velY = -640
+							Self.velY__boss2 = -640
 							
 							Self.drop_cnt = 1
 						ElseIf (velPosY_aboveGround And Self.drop_cnt = 1) Then
 							Self.posY = groundY
 							
 							' Magic number: -320
-							Self.velY = -320
+							Self.velY__boss2 = -320
 							
 							Self.drop_cnt = 2
 						ElseIf (velPosY_aboveGround And Self.drop_cnt = 2) Then
@@ -629,8 +629,8 @@ Class Boss2 Extends BossObject
 							
 							Self.drop_cnt = 3
 						ElseIf (Self.drop_cnt <> 3) Then
-							Self.velY += GRAVITY
-							Self.posY += Self.velY
+							Self.velY__boss2 += GRAVITY
+							Self.posY += Self.velY__boss2
 						EndIf
 						
 						If (Self.bossbroken.getEndState()) Then
