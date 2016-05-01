@@ -73,8 +73,8 @@ Class Boss1Arm Extends EnemyObject
 		Field pos:Int[][]
 		Field prepos:Int[][]
 		
-		Field velX:Int[]
-		Field velY:Int
+		Field velXInfo:Int[]
+		Field velY__boss1arm:Int
 	Protected
 		' Functions:
 		Function generatePositionArray:Int[][]()
@@ -124,16 +124,16 @@ Class Boss1Arm Extends EnemyObject
 			
 			Self.IsBreaking = False
 			
-			Self.velX = New Int[6]
+			Self.velXInfo = New Int[6]
 			
-			Self.velX[0] = -450
-			Self.velX[1] = -300
-			Self.velX[2] = -150
-			Self.velX[3] = 150
-			Self.velX[4] = 300
-			Self.velX[5] = 450
+			Self.velXInfo[0] = -450
+			Self.velXInfo[1] = -300
+			Self.velXInfo[2] = -150
+			Self.velXInfo[3] = 150
+			Self.velXInfo[4] = 300
+			Self.velXInfo[5] = 450
 			
-			Self.velY = -1200
+			Self.velY__boss1arm = -1200
 		End
 	Private
 		' Methods:
@@ -357,15 +357,15 @@ Class Boss1Arm Extends EnemyObject
 					
 					If (Not Self.IsBreaking) Then
 						If (Self.pos[5][0] < Self.pos[0][0]) Then
-							For Local i:= 0 Until Self.velX.Length
-								Self.velX[i] = -Self.velX[i]
+							For Local i:= 0 Until Self.velXInfo.Length
+								Self.velXInfo[i] = -Self.velXInfo[i]
 							Next
 						EndIf
 						
 						Self.IsBreaking = True
 					EndIf
 					
-					For Local i:= 0 Until Self.velX.Length
+					For Local i:= 0 Until Self.velXInfo.Length
 						Local tmpcol:Int
 						
 						If (i <> 5) Then
@@ -383,11 +383,11 @@ Class Boss1Arm Extends EnemyObject
 							
 							Select (Self.drop_cnt)
 								Case 0
-									Self.velY = -900
+									Self.velY__boss1arm = -900
 									
 									Self.drop_cnt = 1
 								Case 1
-									Self.velY = -600
+									Self.velY__boss1arm = -600
 									
 									Self.drop_cnt = 2
 								Default
@@ -398,11 +398,11 @@ Class Boss1Arm Extends EnemyObject
 						Self.prepos[i][0] = position[0]
 						Self.prepos[i][1] = position[1]
 						
-						position[0] += Self.velX[i]
+						position[0] += Self.velXInfo[i]
 						
-						Self.velY += (GRAVITY Shr 3) ' / 8
+						Self.velY__boss1arm += (GRAVITY Shr 3) ' / 8
 						
-						position[1] += Self.velY
+						position[1] += Self.velY__boss1arm
 					Next
 					
 					checkWithPlayer(preX, preY, Self.pos[5][0], Self.pos[5][1])
@@ -470,6 +470,6 @@ Class Boss1Arm Extends EnemyObject
 			
 			Self.pos = []
 			Self.prepos = []
-			Self.velX = []
+			Self.velXInfo = []
 		End
 End

@@ -746,12 +746,13 @@
       <DocGUID>9208a50f-121e-4031-a52e-71dacb819bef</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\boss1arm.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\boss1arm.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>76</X>
-        <Y>462</Y>
+        <X>2</X>
+        <Y>74</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>60d51ecf-b24f-43ea-ac87-6604bb64af11</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss2.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
