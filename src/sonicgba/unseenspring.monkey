@@ -10,6 +10,7 @@ Friend sonicgba.spring
 Private
 	Import lib.animation
 	Import lib.animationdrawer
+	Import lib.soundsystem
 	
 	Import sonicgba.gimmickobject
 	Import sonicgba.playerobject
@@ -62,10 +63,9 @@ Class UnseenSpring Extends GimmickObject ' Spring
 		
 		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
 			If (player.collisionState = PlayerObject.COLLISION_STATE_WALK) Then
-				player.beSpring(SPRING_POWER, 1)
+				player.beSpring(SPRING_POWER, DIRECTION_DOWN)
 				
-				' Magic numbers: 17 and 32. Unsure about the action
-				' ID, but the second is probably a sound-effect ID.
+				' Magic number: 17
 				Self.drawer.setActionId(17)
 				
 				soundInstance.playSe(SoundSystem.SE_148)

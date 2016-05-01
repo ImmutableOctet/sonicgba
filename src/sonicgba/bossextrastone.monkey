@@ -133,7 +133,7 @@ Class BossExtraStone Extends BulletObject Implements ACMoveCalUser
 		End
 		
 		Method refreshCollisionRect:Void(x:Int, y:Int)
-			If (Self.rect <> Null) Then
+			If (Self.rect.Length > 0) Then
 				Self.collisionRect.setRect((Self.rect[0] Shl 6) + x, (Self.rect[1] Shl 6) + y, Self.rect[2] Shl 6, Self.rect[3] Shl 6)
 			EndIf
 		End

@@ -7,6 +7,8 @@ Friend sonicgba.ringobject
 Friend sonicgba.gimmickobject
 Friend sonicgba.playerobject
 
+Friend sonicgba.bossextrapacman
+
 ' Imports:
 Private
 	Import sonicgba.collisionrect

@@ -206,7 +206,7 @@ Class PyxAnimation
 		
 		Method getNodeXByAnimationNamed:Int(name:String, xOffset:Int, yOffset:Int)
 			For Local i:= 0 Until Self.nodeArray.Length
-				If (Self.nodeArray[i].label.equals(name)) Then
+				If (Self.nodeArray[i].label = name) Then
 					Return (MyAPI.getRelativePointX(Self.nodeArray[i].centerPoint.showX, ((Self.nodeArray[i].animationX - Self.nodeArray[i].centerPoint.f21x) + xOffset) Shl ZOOM, ((Self.nodeArray[i].animationY - Self.nodeArray[i].centerPoint.f22y) + yOffset) Shl ZOOM, Self.nodeArray[i].calDegree) Shr ZOOM)
 				EndIf
 			Next
@@ -216,7 +216,7 @@ Class PyxAnimation
 		
 		Method getNodeYByAnimationNamed:Int(name:String, xOffset:Int, yOffset:Int)
 			For Local i:= 0 Until Self.nodeArray.Length
-				If (Self.nodeArray[i].label.equals(name)) Then
+				If (Self.nodeArray[i].label = name) Then
 					Return (MyAPI.getRelativePointY(Self.nodeArray[i].centerPoint.showY, ((Self.nodeArray[i].animationX - Self.nodeArray[i].centerPoint.f21x) + xOffset) Shl ZOOM, ((Self.nodeArray[i].animationY - Self.nodeArray[i].centerPoint.f22y) + yOffset) Shl ZOOM, Self.nodeArray[i].calDegree) Shr ZOOM)
 				EndIf
 			Next
@@ -232,7 +232,7 @@ Class PyxAnimation
 		
 		Method getNodeByName:Node(nodeName:String)
 			For Local i:= 0 Until Self.nodeArray.Length
-				If (Self.nodeArray[i].label.equals(nodeName)) Then
+				If (Self.nodeArray[i].label = nodeName) Then
 					Return Self.nodeArray[i]
 				EndIf
 			Next

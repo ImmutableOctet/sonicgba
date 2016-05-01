@@ -17,6 +17,7 @@ Private
 	Import lib.soundsystem
 	
 	Import sonicgba.sonicdef
+	Import sonicgba.gameobject
 	Import sonicgba.bulletobject
 	Import sonicgba.moveringobject
 	Import sonicgba.playerobject

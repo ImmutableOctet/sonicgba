@@ -22,7 +22,7 @@ Private
 	Import pyxeditor.pyxanimation
 	
 	Import sonicgba.sonicdef
-	Import sonicgba.boom
+	Import sonicgba.gameobject
 	Import sonicgba.bossobject
 	Import sonicgba.bulletobject
 	Import sonicgba.collisionrect
@@ -31,6 +31,7 @@ Private
 	Import sonicgba.playerobject
 	Import sonicgba.playersupersonic
 	Import sonicgba.stagemanager
+	Import sonicgba.boom
 	
 	Import sonicgba.bossextrapacman
 	Import sonicgba.bossextrastone
@@ -182,7 +183,7 @@ Class BossExtra Extends BossObject
 					If (nodeInfo.hasNode()) Then
 						Local animationRect:= nodeInfo.drawer.getCRect()
 						
-						If (animationRect <> Null) Then
+						If (animationRect.Length > 0) Then
 							bodyRect.setRect(Self.posX + ((nodeInfo.animationX + animationRect[0]) Shl 6), Self.posY + ((nodeInfo.animationY + animationRect[1]) Shl 6), animationRect[2] Shl 6, animationRect[3] Shl 6)
 							bodyRect.setRotate(nodeInfo.degree, ((-animationRect[0]) + (nodeInfo.rotateX - nodeInfo.animationX)) Shl 6, ((-animationRect[1]) + (nodeInfo.rotateY - nodeInfo.animationY)) Shl 6)
 							

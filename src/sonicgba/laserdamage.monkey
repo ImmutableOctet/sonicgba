@@ -8,11 +8,13 @@ Friend sonicgba.bulletobject
 ' Imports:
 Private
 	Import lib.animation
+	
+	Import sonicgba.bulletobject
+	Import sonicgba.playerobject
+	
 	Import com.sega.mobile.framework.device.mfgraphics
 	
 	Import regal.typetool
-	
-	Import sonicgba.bulletobject
 Public
 
 ' Classes:
@@ -22,6 +24,7 @@ Class LaserDamage Extends BulletObject
 		Field isDead:Bool
 		Field rect:Byte[]
 	Protected
+		' Constructor(s):
 		Method New(x:Int, y:Int)
 			Super.New(x, y, 0, 0, False)
 			
@@ -33,9 +36,11 @@ Class LaserDamage Extends BulletObject
 			Self.drawer.setPause(True)
 			
 			Self.isDead = False
+			
 			Self.posY = getGroundY(Self.posX, Self.posY)
 		End
 	Public
+		' Methods:
 		Method bulletLogic:Void()
 			If (Self.drawer.checkEnd()) Then
 				Self.isDead = True
@@ -55,7 +60,7 @@ Class LaserDamage Extends BulletObject
 		End
 	
 		Method refreshCollisionRect:Void(x:Int, y:Int)
-			If (Self.rect <> Null) Then
+			If (Self.rect.Length > 0) Then
 				Self.collisionRect.setRect((Self.rect[0] Shl 6) + x, (Self.rect[1] Shl 6) + y, Self.rect[2] Shl 6, Self.rect[3] Shl 6)
 			EndIf
 		End

@@ -90,18 +90,20 @@ Class CollisionBlock Extends ACBlock ' Implements SonicDef
 			setProperty(anotherBlock.collisionInfo, anotherBlock.collisionInfoOffset, anotherBlock.FLIP_X, anotherBlock.FLIP_Y, anotherBlock.degree, anotherBlock.throughable)
 		End
 		
-		Method getCollisionY:Int(x:Int)
-			While (x < 0)
-				x += 8
+		Method getCollisionY:Int(value:Int)
+			While (value < 0)
+				value += 8
 			Wend
 			
-			x Mod= 8
+			value Mod= 8
 			
 			If (Self.FLIP_X) Then
-				x = (7 - x)
+				value = (7 - value)
 			EndIf
 			
-			Local colInfo:= ((getCollisionInfo(x) & 240) Shr 4)
+			' Magic number: 240 (Screen related?)
+			Local colInfo:= ((getCollisionInfo(value) & 240) Shr 4)
+			
 			Local re:= 0
 			
 			If (colInfo = 8) Then

@@ -44,7 +44,7 @@ Class AntiGravity Extends GimmickObject
 			If (p = player) Then
 				If (Self.activeAfterNoCollison) Then
 					If (Self.firstTouch) Then
-						Self.enterpX = p.getCheckPositionX()
+						Self.enterPlayerX = p.getCheckPositionX()
 						Self.used = True
 					EndIf
 				ElseIf (Not Self.collisionRect.collisionChk(p.getCheckPositionX(), p.getCheckPositionY())) Then
