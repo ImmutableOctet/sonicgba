@@ -195,7 +195,7 @@ Class Fountain Extends GimmickObject
 		End
 		
 		Method close:Void()
-			drawer = Null
+			drawer = []
 		End
 		
 		Method getPaintLayer:Int()

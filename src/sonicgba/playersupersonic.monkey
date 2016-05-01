@@ -371,9 +371,11 @@ Class PlayerSuperSonic Extends PlayerObject
 			Return Super.getFocusX() + (SCREEN_WIDTH / 4) ' Shr 2
 		End
 		
-		Method doWhileCollision:Void()
-			' Empty implementation.
-		End
+		#Rem
+			Method doWhileCollision:Void()
+				' Empty implementation.
+			End
+		#End
 		
 		Method beHurt:Void()
 			' This behavior may change in the future:

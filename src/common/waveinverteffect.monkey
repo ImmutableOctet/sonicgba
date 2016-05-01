@@ -26,7 +26,7 @@ Class WaveInvertEffect Final
 		
 		' Functions:
 		Function sin:Int(degrees:Long)
-			Return Int(Sinr(((Double((degrees Mod 360) * 2)) * PI) / 360.0) * 1024.0)
+			Return Int(Sinr(((Double((degrees Mod 360) * 2)) * math.PI) / 360.0) * 1024.0)
 		End
 	Public
 		' Functions:
@@ -45,7 +45,7 @@ Class WaveInvertEffect Final
 			
 			For speed = 0 Until height
 				Local offsetX:= ((sin(Long((speed * bX) Shr 2)) * aX) Shr 14)
-				Local offsetY:= ((sin(((Long(speed) + time) * r0) Shr 2) * aY) Shr 14)
+				Local offsetY:= ((sin(((Long(speed) + time) * bY) Shr 2) * aY) Shr 14)
 				
 				Local j:= Long(bY)
 				

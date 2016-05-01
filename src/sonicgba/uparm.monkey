@@ -18,6 +18,8 @@ Private
 	
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
+	
+	Import regal.typetool
 Public
 
 ' Classes:
@@ -65,7 +67,9 @@ Class UpArm Extends GimmickObject
 		
 		' Fields:
 		Field collisionRect2:CollisionRect
+		
 		Field state:Byte
+		
 		Field upLimit:Int
 		Field waitCount:Int
 	Protected

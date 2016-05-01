@@ -77,7 +77,7 @@ Class UpPlatform Extends Platform
 		
 		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
 			If (Not Self.initFlag) Then
-				If (Not (Not player.isFootOnObject(Self) Or Self.worldInstance.getWorldY(player.collisionRect.x0, player.footPointY - PlayerObject.HEIGHT, 1, 0) = ACParam.NO_COLLISION Or Self.worldInstance.getWorldY(player.collisionRect.x1, player.footPointY - PlayerObject.HEIGHT, 1, 0) = ACParam.NO_COLLISION)) Then
+				If (Not (Not player.isFootOnObject(Self) Or Self.worldInstance.getWorldY(player.collisionRect.x0, player.footPointY - PlayerObject.HEIGHT, 1, 0) = -1000 Or Self.worldInstance.getWorldY(player.collisionRect.x1, player.footPointY - PlayerObject.HEIGHT, 1, 0) = -1000)) Then
 					player.setDie(False)
 				EndIf
 				

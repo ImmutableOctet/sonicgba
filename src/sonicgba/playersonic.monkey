@@ -102,8 +102,8 @@ Class PlayerSonic Extends PlayerObject
 		' Constant variable(s):
 		Const AIR_DASH_TIME_COUNT:Int = 5
 		
-		Const ATTACK4_ISINWATER_JUMP_START_V:Int = (-1354 - GRAVITY)
-		Const ATTACK4_JUMP_START_V:Int = (-1188 - GRAVITY)
+		Global ATTACK4_ISINWATER_JUMP_START_V:Int = (-1354 - GRAVITY) ' Const
+		Global ATTACK4_JUMP_START_V:Int = (-1188 - GRAVITY) ' Const
 		
 		Const EFFECT_NONE:Int = 0
 		Const EFFECT_JUMP:Int = 1
@@ -303,7 +303,6 @@ Class PlayerSonic Extends PlayerObject
 				Select (terminalState)
 					Case TER_STATE_LOOK_MOON, TER_STATE_LOOK_MOON_WAIT
 						Self.SuperSonicAnimationID = 0
-						break
 					Case TER_STATE_CHANGE_1, TER_STATE_CHANGE_2
 						If (Not (Self.SuperSonicAnimationID = SUPER_SONIC_ANI_CHANGE_1 Or Self.SuperSonicAnimationID = SUPER_SONIC_ANI_CHANGE_2)) Then
 							Self.SuperSonicAnimationID = SUPER_SONIC_ANI_CHANGE_1
@@ -517,13 +516,13 @@ Class PlayerSonic Extends PlayerObject
 				If (Self.isAntiGravity) Then
 					Local rectTmp:= Self.drawer.getARect()
 					
-					If (rectTmp <> Null) Then
+					If (rectTmp.Length > 0) Then
 						rect[0] = Byte((-rectTmp[0]) - rectTmp[2])
 						rect[1] = Byte((-rectTmp[1]) - rectTmp[3])
 					EndIf
 				EndIf
 				
-				If (rect <> Null) Then
+				If (rect.Length > 0) Then
 					If (SonicDebug.showCollisionRect) Then
 						g.setColor(65280)
 						
@@ -666,7 +665,7 @@ Class PlayerSonic Extends PlayerObject
 		End
 	Private
 		' Methods:
-		Method startSpeedSet:Int(confFlag:Bool, sourceSpeed:Int, conf:Int)
+		Method getStartSpeed:Int(confFlag:Bool, sourceSpeed:Int, conf:Int)
 			Return PickValue(confFlag, ((sourceSpeed * conf) / 100), sourceSpeed)
 		End
 		
@@ -842,17 +841,17 @@ Class PlayerSonic Extends PlayerObject
 						
 						If (Self.collisionState = COLLISION_STATE_NONE) Then
 							If (Self.faceDirection) Then
-								startSpeedSet = startSpeedSet(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
-								startSpeedSet = startSpeedSet(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
 							EndIf
 							
 							Self.totalVelocity = startSpeedSet
 						Else
 							If (Self.faceDirection) Then
-								startSpeedSet = startSpeedSet(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
-								startSpeedSet = startSpeedSet(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
 							EndIf
 							
 							setVelX(startSpeedSet)
@@ -870,17 +869,17 @@ Class PlayerSonic Extends PlayerObject
 						
 						If (Self.collisionState = COLLISION_STATE_NONE) Then
 							If (Self.faceDirection) Then
-								startSpeedSet = startSpeedSet(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
-								startSpeedSet = startSpeedSet(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
 							EndIf
 							
 							Self.totalVelocity = startSpeedSet
 						Else
 							If (Self.faceDirection) Then
-								startSpeedSet = startSpeedSet(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
-								startSpeedSet = startSpeedSet(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
 							EndIf
 							
 							setVelX(startSpeedSet)
@@ -960,17 +959,17 @@ Class PlayerSonic Extends PlayerObject
 						
 						If (Self.collisionState = COLLISION_STATE_NONE) Then
 							If (Self.faceDirection) Then
-								startSpeedSet = startSpeedSet(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
-								startSpeedSet = startSpeedSet(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
 							EndIf
 							
 							Self.totalVelocity = startSpeedSet
 						Else
 							If (Self.faceDirection) Then
-								startSpeedSet = startSpeedSet(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
-								startSpeedSet = startSpeedSet(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
 							EndIf
 							
 							setVelX(startSpeedSet)
@@ -1031,17 +1030,17 @@ Class PlayerSonic Extends PlayerObject
 						
 						If (Self.collisionState = COLLISION_STATE_NONE) Then
 							If ((Self.isAntiGravity ~ Self.faceDirection) <> 0) Then
-								startSpeedSet = startSpeedSet(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
-								startSpeedSet = startSpeedSet(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
 							EndIf
 							
 							Self.totalVelocity = startSpeedSet
 						Else
 							If ((Self.isAntiGravity ~ Self.faceDirection) <> 0) Then
-								startSpeedSet = startSpeedSet(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
-								startSpeedSet = startSpeedSet(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
 							EndIf
 							
 							setVelX(startSpeedSet)
@@ -1067,17 +1066,17 @@ Class PlayerSonic Extends PlayerObject
 						
 						If (Self.collisionState = COLLISION_STATE_NONE) Then
 							If ((Self.isAntiGravity ~ Self.faceDirection) <> 0) Then
-								startSpeedSet = startSpeedSet(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
-								startSpeedSet = startSpeedSet(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
 							EndIf
 							
 							Self.totalVelocity = startSpeedSet
 						Else
 							If ((Self.isAntiGravity ~ Self.faceDirection) <> 0) Then
-								startSpeedSet = startSpeedSet(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
-								startSpeedSet = startSpeedSet(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
 							EndIf
 							
 							setVelX(startSpeedSet)
@@ -1116,17 +1115,17 @@ Class PlayerSonic Extends PlayerObject
 						
 						If (Self.collisionState = COLLISION_STATE_NONE) Then
 							If ((Self.isAntiGravity ~ Self.faceDirection) <> 0) Then
-								startSpeedSet = startSpeedSet(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
-								startSpeedSet = startSpeedSet(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
 							EndIf
 							
 							Self.totalVelocity = startSpeedSet
 						Else
 							If ((Self.isAntiGravity ~ Self.faceDirection) <> 0) Then
-								startSpeedSet = startSpeedSet(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
-								startSpeedSet = startSpeedSet(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
+								startSpeedSet = getStartSpeed(Self.isInSnow, -v0, SNOW_DIVIDE_COUNT)
 							EndIf
 							
 							setVelX(startSpeedSet)

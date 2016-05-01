@@ -4,15 +4,18 @@ Public
 
 ' Friends:
 Friend sonicgba.gimmickobject
+Friend sonicgba.pipein
+Friend sonicgba.pipeout
 
 ' Imports:
 Private
 	Import lib.soundsystem
 	
-	Import com.sega.mobile.framework.device.mfgraphics
-	
-	Import sonicgba.playerobject
 	Import sonicgba.gimmickobject
+	Import sonicgba.playerobject
+	Import sonicgba.stagemanager
+	
+	Import com.sega.mobile.framework.device.mfgraphics
 Public
 
 ' Classes:

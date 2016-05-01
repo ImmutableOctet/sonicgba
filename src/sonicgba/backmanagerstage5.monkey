@@ -10,7 +10,7 @@ Private
 	
 	Import sonicgba.backgroundmanager
 	Import sonicgba.gameobject
-	Import sonicgba.mapamanger
+	Import sonicgba.mapmanager
 	
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
@@ -63,8 +63,12 @@ Class BackManagerStage5 Extends BackGroundManager
 				Self.cloudPosX Mod= IMAGE_WIDTH
 			EndIf
 			
-			For Local j:= -IMAGE_WIDTH Until (MapManager.CAMERA_WIDTH + Self.cloudPosX) Step IMAGE_WIDTH
+			Local j:= -IMAGE_WIDTH
+			
+			While (j < (MapManager.CAMERA_WIDTH + Self.cloudPosX))
 				MyAPI.drawImage(graphics, Self.cloudImage, Self.cloudPosX + j, CLOUD_Y, CLOUD_ANCHOR)
-			Next
+				
+				j += IMAGE_WIDTH
+			Wend
 		End
 End

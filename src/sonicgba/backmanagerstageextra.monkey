@@ -38,7 +38,7 @@ Class BackManagerStageExtra Extends BackGroundManager
 		Method close:Void()
 			bgImage = Null
 			
-			Self.xOffset = Null
+			Self.xOffset = []
 		End
 		
 		Method draw:Void(g:MFGraphics)

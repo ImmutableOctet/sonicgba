@@ -8,11 +8,13 @@ Friend sonicgba.railin
 
 ' Imports:
 Private
+	Import sonicgba.collisionrect
+	Import sonicgba.gimmickobject
+	Import sonicgba.playerobject
+	Import sonicgba.railin
+	
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
-	
-	Import sonicgba.gimmickobject
-	Import sonicgba.railin
 Public
 
 ' Classes:

@@ -4,6 +4,8 @@ Public
 
 ' Imports:
 Private
+	Import gameengine.def
+	
 	Import common.waveinverteffect
 	
 	Import lib.myapi
@@ -19,9 +21,9 @@ Public
 ' Classes:
 Class BackManagerStage4 Extends BackGroundManager
 	Private
-		' Global variable(s):
-		Global IMAGE_WIDTH:Int = 240 ' ssdef.PLAYER_MOVE_WIDTH
-		Global IMAGE_HEIGHT:Int = 512
+		' Constant variable(s):
+		Const IMAGE_WIDTH:Int = 240
+		Const IMAGE_HEIGHT:Int = 512
 		
 		' Fields:
 		Field image:MFImage

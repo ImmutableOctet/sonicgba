@@ -4619,8 +4619,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Self.pipeDesX = x
 				Self.pipeDesY = (y + BODY_OFFSET)
 				
-				Local degree:= ATan2(vy, vx)
-				Local sourceSpeed:= (MFMath.sqrt((vy * vy) + (vx * vx)) Shr 6)
+				'Local degree:= ATan2(vy, vx)
+				'Local sourceSpeed:= (MFMath.sqrt((vy * vy) + (vx * vx)) Shr 6)
 				
 				Self.nextVelX = vx
 				Self.nextVelY = vy
@@ -4645,28 +4645,27 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				Self.collisionChkBreak = True
 				
-				Return
+			Else
+				Self.footPointX = x
+				Self.footPointY = y
+				
+				'Local degree:= ATan2(vy, vx)
+				'Local sourceSpeed:= (MFMath.sqrt((vy * vy) + (vx * vx)) Shr 6)
+				
+				Self.nextVelX = vx
+				Self.nextVelY = vy
+				
+				Self.velX = vx
+				Self.velY = vy
+				
+				Self.pipeState = STATE_PIPING
+				
+				Self.piping = True
+				
+				Self.collisionChkBreak = True
+				
+				Self.worldCal.stopMove()
 			EndIf
-			
-			Self.footPointX = x
-			Self.footPointY = y
-			
-			degree = ATan2(vy, vx)
-			
-			sourceSpeed = (MFMath.sqrt((vy * vy) + (vx * vx)) Shr 6)
-			
-			Self.nextVelX = vx
-			Self.nextVelY = vy
-			
-			Self.velX = vx
-			Self.velY = vy
-			
-			Self.pipeState = STATE_PIPING
-			Self.piping = True
-			
-			Self.collisionChkBreak = True
-			
-			Self.worldCal.stopMove()
 		End
 		
 		Method pipeOut:Void()
