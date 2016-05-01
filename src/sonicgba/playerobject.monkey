@@ -25,6 +25,8 @@ Friend sonicgba.hexhobin
 Friend sonicgba.ballhobin
 Friend sonicgba.cornerhobin
 Friend sonicgba.belt
+Friend sonicgba.spring
+Friend sonicgba.unseenspring
 Friend sonicgba.rollisland
 Friend sonicgba.springisland
 Friend sonicgba.caperbed
@@ -43,8 +45,6 @@ Friend sonicgba.pipeout
 Friend sonicgba.pipeset
 
 Friend sonicgba.bossf3arm
-
-Friend sonicgba.spring
 
 Friend state.gamestate
 

@@ -9,9 +9,11 @@ Friend sonicgba.togeshima
 
 ' Imports:
 Private
-	Import com.sega.mobile.framework.device.mfgraphics
-	
+	Import sonicgba.collisionrect
 	Import sonicgba.gimmickobject
+	Import sonicgba.playerobject
+	
+	Import com.sega.mobile.framework.device.mfgraphics
 Public
 
 ' Classes:

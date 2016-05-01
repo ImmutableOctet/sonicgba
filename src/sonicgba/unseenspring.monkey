@@ -11,10 +11,11 @@ Private
 	Import lib.animation
 	Import lib.animationdrawer
 	
-	Import com.sega.mobile.framework.device.mfgraphics
-	
-	Import sonicgba.spring
 	Import sonicgba.gimmickobject
+	Import sonicgba.playerobject
+	Import sonicgba.spring
+	
+	Import com.sega.mobile.framework.device.mfgraphics
 Public
 
 ' Classes:
@@ -60,7 +61,7 @@ Class UnseenSpring Extends GimmickObject ' Spring
 		End
 		
 		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
-			If (player.collisionState = COLLISION_STATE_WALK) Then
+			If (player.collisionState = PlayerObject.COLLISION_STATE_WALK) Then
 				player.beSpring(SPRING_POWER, 1)
 				
 				' Magic numbers: 17 and 32. Unsure about the action
