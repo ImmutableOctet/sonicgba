@@ -62,7 +62,7 @@ Class Frog Extends EnemyObject
 		
 		Field starty:Int
 		
-		Field velY:Int
+		Field velY__frog:Int
 	Protected
 		' Constructor(s):
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
@@ -116,7 +116,7 @@ Class Frog Extends EnemyObject
 				Self.beRight = True
 			EndIf
 			
-			Self.velY = FROG_JUMP_START_SPEED
+			Self.velY__frog = FROG_JUMP_START_SPEED
 		End
 		
 		Method jumpChk:Bool()
@@ -237,7 +237,7 @@ Class Frog Extends EnemyObject
 					Case STATE_JUMP
 						Self.posX += Self.velocity
 						
-						If (Self.posY + Self.velY > getGroundY(Self.posX, Self.posY)) Then
+						If (Self.posY + Self.velY__frog > getGroundY(Self.posX, Self.posY)) Then
 							Self.posY = getGroundY(Self.posX, Self.posY)
 							
 							Self.state = STATE_WAIT
@@ -252,8 +252,8 @@ Class Frog Extends EnemyObject
 								Self.drawer.setLoop(False)
 							EndIf
 						Else
-							Self.velY += DRIP_ACC
-							Self.posY += Self.velY
+							Self.velY__frog += DRIP_ACC
+							Self.posY += Self.velY__frog
 						EndIf
 						
 						If (Self.drawer.checkEnd()) Then

@@ -48,7 +48,7 @@ Class SnowRobotV Extends EnemyObject
 		Field startPosY:Int
 		Field endPosY:Int
 		
-		Field iLeft:Int
+		Field iLeft__snowrobotv:Int
 		
 		Field wait_cn:Int
 	Protected
@@ -63,9 +63,9 @@ Class SnowRobotV Extends EnemyObject
 				snowrobotAnimation = New Animation("/animation/yukimal")
 			EndIf
 			
-			Self.iLeft = left
+			Self.iLeft__snowrobotv = left
 			
-			Self.iTrans = PickValue((Self.iLeft = 0), TRANS_ROT90, TRANS_ROT270)
+			Self.iTrans = PickValue((Self.iLeft__snowrobotv = 0), TRANS_ROT90, TRANS_ROT270)
 			
 			Self.drawer = snowrobotAnimation.getDrawer(0, True, Self.iTrans)
 			
@@ -130,12 +130,12 @@ Class SnowRobotV Extends EnemyObject
 							If (Self.drawer.checkEnd() And Self.IsFire) Then
 								Self.IsFire = False
 								
-								Local xOffset:= PickValue((Self.iLeft = 0), COLLISION_WIDTH, -COLLISION_WIDTH)
+								Local xOffset:= PickValue((Self.iLeft__snowrobotv = 0), COLLISION_WIDTH, -COLLISION_WIDTH)
 								
 								Local x:= (Self.posX + xOffset)
 								Local y:= Self.posY
 								
-								Local launchSpeed:= PickValue((Self.iLeft = 0), LAUNCH_SPEED, -LAUNCH_SPEED)
+								Local launchSpeed:= PickValue((Self.iLeft__snowrobotv = 0), LAUNCH_SPEED, -LAUNCH_SPEED)
 								
 								BulletObject.addBullet(BulletObject.BULLET_ROBOT, x, y, launchSpeed, 0)
 							EndIf
@@ -155,7 +155,7 @@ Class SnowRobotV Extends EnemyObject
 		End
 		
 		Method refreshCollisionRect:Void(x:Int, y:Int)
-			Self.collisionRect.setRect(PickValue((Self.iLeft = 0), 0, -COLLISION_WIDTH) + x, y, COLLISION_WIDTH, COLLISION_HEIGHT)
+			Self.collisionRect.setRect(PickValue((Self.iLeft__snowrobotv = 0), 0, -COLLISION_WIDTH) + x, y, COLLISION_WIDTH, COLLISION_HEIGHT)
 		End
 		
 		Method draw:Void(g:MFGraphics)
