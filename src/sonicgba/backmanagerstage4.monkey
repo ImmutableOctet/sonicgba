@@ -8,12 +8,12 @@ Private
 	
 	Import lib.myapi
 	
-	'Import special.ssdef
+	Import sonicgba.backgroundmanager
+	Import sonicgba.mapmanager
+	Import sonicgba.stagemanager
 	
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
-	
-	Import sonicgba.backgroundmanager
 Public
 
 ' Classes:
@@ -54,6 +54,7 @@ Class BackManagerStage4 Extends BackGroundManager
 		
 		Method draw:Void(g:MFGraphics)
 			Local camera:= MapManager.getCamera()
+			
 			Local cameraX:= camera.x
 			Local cameraY:= camera.y
 			

@@ -8,10 +8,12 @@ Private
 	
 	Import lib.myapi
 	
+	Import sonicgba.backgroundmanager
+	Import sonicgba.gameobject
+	Import sonicgba.mapamanger
+	
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
-	
-	Import sonicgba.backgroundmanager
 Public
 
 ' Classes:

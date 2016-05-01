@@ -5,6 +5,7 @@ Public
 ' Imports:
 Private
 	Import gameengine.def
+	
 	Import lib.myapi
 	
 	Import sonicgba.backgroundmanager
