@@ -455,7 +455,7 @@ Class TitleState Extends State
 		Field recordArrowOffsetXArray:Int[]
 		Field recordArrowOffsetXID:Int
 		Field resetInfoCount:Int
-		Field returnCursor:Int
+		'Field returnCursor:Int
 		Field scoreUpdateCursor:Int
 		Field shakeCount:Int
 		Field sonicBigX:Int

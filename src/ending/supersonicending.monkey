@@ -82,7 +82,6 @@ Class SuperSonicEnding Extends BaseEnding ' Final
 		
 		Field thankY:Int
 		
-		Field count:Int
 		Field count2:Int
 		
 		Field moonImage:MFImage[]
@@ -101,7 +100,7 @@ Class SuperSonicEnding Extends BaseEnding ' Final
 		Field interrupt_state:Int
 		
 		Field moonOffset:Int[]
-		Field pilotHeadID:Int
+		
 		Field planeDegree:Int
 		
 		Field planeScale:Double ' Float

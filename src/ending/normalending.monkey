@@ -144,8 +144,6 @@ Class NormalEnding Extends PlainEnding ' Final
 		
 		Field interrupt_state:Int
 		
-		Field pilotHeadID:Int
-		
 		Field degree:Int
 		Field endcount:Int
 		

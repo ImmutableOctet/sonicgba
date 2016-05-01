@@ -77,7 +77,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 		Field priorityChkId:Int
 		Field totalDistance:Int
 		
-		Field user:ACWorldCalUser
+		'Field user:ACWorldCalUser
 	Public
 		' Constant variable(s):
 		Const JUMP_ACTION_STATE:Byte = 1

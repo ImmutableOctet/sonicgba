@@ -238,7 +238,7 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 		Field tutorSkip:MFTouchKey
 		
 		Field characterBoardDrawer:AnimationDrawer
-		Field drawer:AnimationDrawer
+		'Field drawer:AnimationDrawer
 		Field fontAnimationDrawer:AnimationDrawer
 		Field spObjDrawer:AnimationDrawer
 		Field tutorialSkipDrawer:AnimationDrawer
