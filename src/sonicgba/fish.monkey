@@ -36,8 +36,8 @@ Class Fish Extends EnemyObject
 		Field state:Int
 		Field alert_state:Int
 		
-		Field velX:Int
-		Field velY:Int
+		Field velX__fish:Int
+		Field velY__fish:Int
 		
 		Field iTrans:Int
 	Protected
@@ -89,32 +89,32 @@ Class Fish Extends EnemyObject
 							Self.drawer.setLoop(True)
 							Self.drawer.setTrans(Self.iTrans)
 							
-							Self.velX = ((-(Self.posX - player.getCheckPositionX())) / 8)
-							Self.velY = ((-(Self.posY - player.getCheckPositionY())) / 8)
+							Self.velX__fish = ((-(Self.posX - player.getCheckPositionX())) / 8)
+							Self.velY__fish = ((-(Self.posY - player.getCheckPositionY())) / 8)
 							
-							If (Self.velX > FISH_XY_MAX_SPEED) Then
-								Self.velX = FISH_XY_MAX_SPEED
-							ElseIf (Self.velX < -FISH_XY_MAX_SPEED) Then
-								Self.velX = -FISH_XY_MAX_SPEED
+							If (Self.velX__fish > FISH_XY_MAX_SPEED) Then
+								Self.velX__fish = FISH_XY_MAX_SPEED
+							ElseIf (Self.velX__fish < -FISH_XY_MAX_SPEED) Then
+								Self.velX__fish = -FISH_XY_MAX_SPEED
 							EndIf
 							
-							If (Self.velY > FISH_XY_MAX_SPEED) Then
-								Self.velY = FISH_XY_MAX_SPEED
-							ElseIf (Self.velY < -FISH_XY_MAX_SPEED) Then
-								Self.velY = -FISH_XY_MAX_SPEED
+							If (Self.velY__fish > FISH_XY_MAX_SPEED) Then
+								Self.velY__fish = FISH_XY_MAX_SPEED
+							ElseIf (Self.velY__fish < -FISH_XY_MAX_SPEED) Then
+								Self.velY__fish = -FISH_XY_MAX_SPEED
 							EndIf
 							
-							If (Abs(Self.velY) > Abs(Self.velX)) Then
-								If (Self.velY <= 0 And Self.velY < 0) Then
-									Self.velY = -Abs(Self.velX)
+							If (Abs(Self.velY__fish) > Abs(Self.velX__fish)) Then
+								If (Self.velY__fish <= 0 And Self.velY__fish < 0) Then
+									Self.velY__fish = -Abs(Self.velX__fish)
 								Else
-									Self.velY = Abs(Self.velX)
+									Self.velY__fish = Abs(Self.velX__fish)
 								EndIf
 							EndIf
 						EndIf
 					Case STATE_ATTACK
-						Self.posX += Self.velX
-						Self.posY += Self.velY
+						Self.posX += Self.velX__fish
+						Self.posY += Self.velY__fish
 				End Select
 				
 				checkWithPlayer(preX, preY, Self.posX, Self.posY)
