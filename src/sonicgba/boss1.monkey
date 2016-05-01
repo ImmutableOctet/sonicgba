@@ -28,6 +28,17 @@ Public
 
 ' Classes:
 Class Boss1 Extends BossObject
+	Protected
+		' Constant variable(s):
+		
+		' States:
+		Const STATE_WAIT:Int = 0
+		Const STATE_ATTACK_1:Int = 1
+		Const STATE_READY:Int = 2
+		Const STATE_ATTACK_2:Int = 3
+		Const STATE_ATTACK_3:Int = 4
+		Const STATE_BROKEN:Int = 5
+		Const STATE_ESCAPE:Int = 6
 	Private
 		' Constant variable(s):
 		Const COLLISION_WIDTH:Int = 4608
@@ -57,15 +68,6 @@ Class Boss1 Extends BossObject
 		
 		Const CAR_MOVE:Int = 0
 		Const CAR_HURT:Int = 1
-		
-		' States:
-		Const STATE_WAIT:Int = 0
-		Const STATE_ATTACK_1:Int = 1
-		Const STATE_READY:Int = 2
-		Const STATE_ATTACK_2:Int = 3
-		Const STATE_ATTACK_3:Int = 4
-		Const STATE_BROKEN:Int = 5
-		Const STATE_ESCAPE:Int = 6
 		
 		Const cnt_max:Int = 8
 		Const stop_wait_cnt_max:Int = 32

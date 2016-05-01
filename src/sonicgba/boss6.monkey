@@ -34,10 +34,8 @@ Public
 
 ' Classes:
 Class Boss6 Extends BossObject
-	Private
+	Protected
 		' Constant variable(s):
-		Const COLLISION_WIDTH:Int = 3072
-		Const COLLISION_HEIGHT:Int = 4096
 		
 		' States:
 		Const STATE_INIT:Int = 0
@@ -46,6 +44,10 @@ Class Boss6 Extends BossObject
 		Const STATE_BROKEN:Int = 3
 		Const STATE_FALL:Int = 4
 		Const STATE_ESCAPE:Int = 5
+	Private
+		' Constant variable(s):
+		Const COLLISION_WIDTH:Int = 3072
+		Const COLLISION_HEIGHT:Int = 4096
 		
 		Const MACHINE_NORMAL_UP:Int = 0
 		Const MACHINE_NORMAL_DOWN:Int = 1

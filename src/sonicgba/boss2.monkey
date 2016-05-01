@@ -29,6 +29,22 @@ Public
 
 ' Classes:
 Class Boss2 Extends BossObject
+	Protected
+		' Constant variable(s):
+		
+		' States:
+		Const STATE_WAIT:Int = -1
+		Const STATE_SHOW_DROP:Int = 0
+		Const STATE_SHOW_SPRING_DAMPING:Int = 1
+		Const STATE_SHOW_WAITING:Int = 2
+		Const STATE_SHOW_LAUGH:Int = 3
+		Const STATE_SHOW_WAITING_2:Int = 4
+		Const STATE_ATTACK_WAITING:Int = 5
+		Const STATE_ATTACK_SPRING_DAMPING:Int = 6
+		Const STATE_ATTACK_JUMPING:Int = 7
+		Const STATE_RELASE_SPRING_DAMPING:Int = 8
+		Const STATE_BROKEN:Int = 9
+		Const STATE_ESCAPE:Int = 10
 	Private
 		' Constant variable(s):
 		Const COLLISION_WIDTH:Int = 3072
@@ -44,20 +60,6 @@ Class Boss2 Extends BossObject
 		Const SPRING_FLYING:Int = 0
 		Const SPRING_WAITING:Int = 1
 		Const SPRING_DAMPING:Int = 2
-		
-		' States:
-		Const STATE_WAIT:Int = -1
-		Const STATE_SHOW_DROP:Int = 0
-		Const STATE_SHOW_SPRING_DAMPING:Int = 1
-		Const STATE_SHOW_WAITING:Int = 2
-		Const STATE_SHOW_LAUGH:Int = 3
-		Const STATE_SHOW_WAITING_2:Int = 4
-		Const STATE_ATTACK_WAITING:Int = 5
-		Const STATE_ATTACK_SPRING_DAMPING:Int = 6
-		Const STATE_ATTACK_JUMPING:Int = 7
-		Const STATE_RELASE_SPRING_DAMPING:Int = 8
-		Const STATE_BROKEN:Int = 9
-		Const STATE_ESCAPE:Int = 10
 		
 		Const BOSS_DRIP_X_ST2:Int = 572672
 		Const BOSS_DRIP_X_ST5:Int = 603136

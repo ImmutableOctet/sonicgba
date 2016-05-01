@@ -40,7 +40,7 @@ Public
 ' This acts as the implementation of Mecha Knuckles, AKA Fake Knuckles, or simply "Knuck" or "Knuckle".
 ' This single boss class covers both the first and second phase forms of Mecha Knuckles.
 Class Boss5 Extends BossObject
-	Private
+	Protected
 		' Constant variable(s):
 		
 		' States:
@@ -89,7 +89,8 @@ Class Boss5 Extends BossObject
 		Const STATE_MACHINE_BROKEN:Int = 38
 		Const STATE_MACHINE_PIECES:Int = 39
 		Const STATE_ESCAPE:Int = 40
-		
+	Private
+		' Constant variable(s):
 		Const F_READY:Int = 0
 		Const F_WAIT:Int = 1
 		Const F_WAIT_HURT:Int = 2

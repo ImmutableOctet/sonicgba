@@ -41,14 +41,8 @@ Public
 
 ' Classes:
 Class BossExtra Extends BossObject
-	Private
+	Protected
 		' Constant variable(s):
-		Const COLLISION_WIDTH:Int = 30720
-		Const COLLISION_HEIGHT:Int = 18432
-		
-		Global ANI_SEQUENCE_1:Int[] = [ANI_ATTACK_1, ANI_ATTACK_2, ANI_GROUND_READY] ' [2, 3, 4] ' Const
-		
-		Global COLLISION_BODY_NAME:String[] = ["body", "head", "hand_f", "hand_b", "leg_front", "leg_back"] ' Const
 		
 		' States:
 		Const STATE_NONE:Int = 0
@@ -60,6 +54,14 @@ Class BossExtra Extends BossObject
 		Const STATE_LASER:Int = 6
 		Const STATE_DEFENCE:Int = 7
 		Const STATE_DEAD:Int = 8
+	Private
+		' Constant variable(s):
+		Const COLLISION_WIDTH:Int = 30720
+		Const COLLISION_HEIGHT:Int = 18432
+		
+		Global ANI_SEQUENCE_1:Int[] = [ANI_ATTACK_1, ANI_ATTACK_2, ANI_GROUND_READY] ' [2, 3, 4] ' Const
+		
+		Global COLLISION_BODY_NAME:String[] = ["body", "head", "hand_f", "hand_b", "leg_front", "leg_back"] ' Const
 		
 		' Animations:
 		Const ANI_APPEAR_1:Int = 0

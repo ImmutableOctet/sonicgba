@@ -33,6 +33,15 @@ Public
 
 ' Classes:
 Class Boss3 Extends BossObject
+	Protected
+		
+		' Constant variable(s):
+		' States:
+		Const STATE_INIT:Int = 0
+		Const STATE_ENTER_SHOW:Int = 1
+		Const STATE_PRO:Int = 2
+		Const STATE_BROKEN:Int = 3
+		Const STATE_ESCAPE:Int = 4
 	Private
 		' Constant variable(s):
 		Const COLLISION_WIDTH:Int = 3200
@@ -52,13 +61,6 @@ Class Boss3 Extends BossObject
 		Const FACE_NORMAL:Int = 0
 		Const FACE_SMILE:Int = 1
 		Const FACE_HURT:Int = 2
-		
-		' States:
-		Const STATE_INIT:Int = 0
-		Const STATE_ENTER_SHOW:Int = 1
-		Const STATE_PRO:Int = 2
-		Const STATE_BROKEN:Int = 3
-		Const STATE_ESCAPE:Int = 4
 		
 		Const PLATFORM_ID:Int = 21
 		Const PLATFORM_LEFT:Int = 5312

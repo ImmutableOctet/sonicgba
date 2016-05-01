@@ -37,6 +37,15 @@ Public
 
 ' Classes:
 Class Boss4 Extends BossObject
+	Protected
+		' Constant variable(s):
+		
+		' States:
+		Const STATE_INIT:Int = 0
+		Const STATE_ENTER_SHOW:Int = 1
+		Const STATE_PRO:Int = 2
+		Const STATE_BROKEN:Int = 3
+		Const STATE_ESCAPE:Int = 4
 	Private
 		' Constant variable(s):
 		Const ATTACK_INIT:Int = 0
@@ -58,13 +67,6 @@ Class Boss4 Extends BossObject
 		Const MACHINE_ATTACK_HURT:Int = 3
 		Const MACHINE_WAIT:Int = 4
 		Const MACHINE_WAIT_HURT:Int = 5
-		
-		' States:
-		Const STATE_INIT:Int = 0
-		Const STATE_ENTER_SHOW:Int = 1
-		Const STATE_PRO:Int = 2
-		Const STATE_BROKEN:Int = 3
-		Const STATE_ESCAPE:Int = 4
 		
 		Const MACHINE_BASE_HALF_HEIGHT:Int = 1280
 		Const BOSS_SHOW_END_POSX:Int = 556544
