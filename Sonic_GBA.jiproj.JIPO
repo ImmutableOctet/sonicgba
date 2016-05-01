@@ -640,12 +640,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\barhorbinh.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\barhorbinh.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
-        <Y>21</Y>
+        <X>35</X>
+        <Y>30</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>0cd6240a-e19a-45c6-8cfd-76aa764757bd</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\barhorbinv.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1250,7 +1251,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\graphicpatch.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>34</X>
+        <X>38</X>
         <Y>52</Y>
       </CursorPos>
       <DocGUID>749f045c-2482-4802-b816-f9eab79263b8</DocGUID>

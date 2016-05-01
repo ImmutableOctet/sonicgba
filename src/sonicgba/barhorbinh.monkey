@@ -22,7 +22,9 @@ Public
 Class BarHorbinH Extends BarHorbinV
 	Private
 		' Fields:
-		Field functionDirection:Int
+		
+		' This may end up being replaced by the super-class's version.
+		Field functionDirection__barhorbinh:Int
 	Protected
 		' Constructor(s):
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
@@ -32,10 +34,10 @@ Class BarHorbinH Extends BarHorbinV
 				barImage = MFImage.createImage("/gimmick/bar.png")
 			EndIf
 			
-			Self.functionDirection = 1
+			Self.functionDirection__barhorbinh = 1
 			
 			If (Self.iLeft = 0) Then
-				Self.functionDirection = 0
+				Self.functionDirection__barhorbinh = 0
 			EndIf
 		End
 	Public
@@ -76,7 +78,7 @@ Class BarHorbinH Extends BarHorbinV
 							If (p.getCheckPositionX() <= Self.collisionRect.getCenterX()) Then
 								p.bePop(HOBIN_POWER, DIRECTION_RIGHT)
 								
-								If (Self.functionDirection = DIRECTION_DOWN) Then
+								If (Self.functionDirection__barhorbinh = DIRECTION_DOWN) Then
 									Self.hobinCal.startHobin(0, 45, 10)
 								Else
 									Self.hobinCal.startHobin(0, -45, 10)
@@ -84,7 +86,7 @@ Class BarHorbinH Extends BarHorbinV
 							Else
 								p.bePop(HOBIN_POWER, DIRECTION_LEFT)
 								
-								If (Self.functionDirection = 1) Then
+								If (Self.functionDirection__barhorbinh = 1) Then
 									Self.hobinCal.startHobin(0, 135, 10)
 								Else
 									Self.hobinCal.startHobin(0, 225, 10)
@@ -95,18 +97,18 @@ Class BarHorbinH Extends BarHorbinV
 						EndIf
 					Case DIRECTION_LEFT
 						p.bePop(HOBIN_POWER, direction)
-						p.bePop(HOBIN_POWER, Self.functionDirection)
+						p.bePop(HOBIN_POWER, Self.functionDirection__barhorbinh)
 						
-						If (Self.functionDirection = DIRECTION_DOWN) Then
+						If (Self.functionDirection__barhorbinh = DIRECTION_DOWN) Then
 							Self.hobinCal.startHobin(0, 135, 10)
 						Else
 							Self.hobinCal.startHobin(0, 225, 10)
 						EndIf
 					Case DIRECTION_RIGHT
 						p.bePop(HOBIN_POWER, direction)
-						p.bePop(HOBIN_POWER, Self.functionDirection)
+						p.bePop(HOBIN_POWER, Self.functionDirection__barhorbinh)
 						
-						If (Self.functionDirection = DIRECTION_DOWN) Then
+						If (Self.functionDirection__barhorbinh = DIRECTION_DOWN) Then
 							Self.hobinCal.startHobin(0, 45, 10)
 						Else
 							Self.hobinCal.startHobin(0, -45, 10)
