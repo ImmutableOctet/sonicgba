@@ -240,8 +240,10 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 		
 		Field tutorSkip:MFTouchKey
 		
-		Field characterBoardDrawer:AnimationDrawer
+		' This may end up just being replaced with 'SpecialObject.drawer'.
 		Field special_drawer:AnimationDrawer
+		
+		Field characterBoardDrawer:AnimationDrawer
 		Field fontAnimationDrawer:AnimationDrawer
 		Field spObjDrawer:AnimationDrawer
 		Field tutorialSkipDrawer:AnimationDrawer

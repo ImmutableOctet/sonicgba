@@ -318,7 +318,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\ending\plainending.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>31</X>
+        <X>27</X>
         <Y>11</Y>
       </CursorPos>
       <DocGUID />
@@ -326,7 +326,7 @@
     <DocUserOptions Filename=".\src\ending\specialending.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>8</X>
-        <Y>78</Y>
+        <Y>12</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -2042,19 +2042,21 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\special\specialobject.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\special\specialobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>3</X>
+        <Y>331</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>c0f1f970-abf7-4bb0-87b6-d4d7eae62b8a</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\special\specialplayer.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\special\specialplayer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>21</X>
-        <Y>1076</Y>
+        <X>68</X>
+        <Y>242</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>4b6bdb02-aa24-40bb-8975-bb9a9738a1b1</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssbomb.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -2063,10 +2065,10 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\special\sscheckpoint.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\special\sscheckpoint.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>25</X>
+        <Y>19</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -2084,10 +2086,10 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\special\ssgoal.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\special\ssgoal.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>30</X>
+        <Y>10</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -2128,7 +2130,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssusableobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>54</X>
+        <X>7</X>
         <Y>11</Y>
       </CursorPos>
       <DocGUID />
@@ -2177,8 +2179,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>22</X>
-        <Y>459</Y>
+        <X>26</X>
+        <Y>457</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
