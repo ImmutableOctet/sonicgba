@@ -10,6 +10,7 @@ Private
 	Import sonicgba.sonicdef
 	Import sonicgba.collisionmap
 	
+	Import com.sega.engine.action.acparam
 	Import com.sega.engine.action.acblock
 	Import com.sega.engine.action.acworld
 	
@@ -37,7 +38,7 @@ Class CollisionBlock Extends ACBlock ' Implements SonicDef
 		
 		' Extensions:
 		Method getCollisionInfo:Byte(index:Int)
-			Return Self.collisionInfo.PeekByte(index + Self.collisionInfo)
+			Return Self.collisionInfo.PeekByte(index + Self.collisionInfoOffset)
 		End
 	Public
 		' Constant variable(s):
@@ -90,19 +91,19 @@ Class CollisionBlock Extends ACBlock ' Implements SonicDef
 			setProperty(anotherBlock.collisionInfo, anotherBlock.collisionInfoOffset, anotherBlock.FLIP_X, anotherBlock.FLIP_Y, anotherBlock.degree, anotherBlock.throughable)
 		End
 		
-		Method getBlockCollisionY:Int(value:Int)
-			While (value < 0)
-				value += 8
+		Method getBlockCollisionY:Int(x:Int)
+			While (x < 0)
+				x += 8
 			Wend
 			
-			value Mod= 8
+			x Mod= 8
 			
 			If (Self.FLIP_X) Then
-				value = (7 - value)
+				x = (7 - x)
 			EndIf
 			
 			' Magic number: 240 (Screen related?)
-			Local colInfo:= ((getCollisionInfo(value) & 240) Shr 4)
+			Local colInfo:= ((getCollisionInfo(x) & 240) Shr 4)
 			
 			Local re:= 0
 			
@@ -173,7 +174,7 @@ Class CollisionBlock Extends ACBlock ' Implements SonicDef
 				y = (7 - y)
 			EndIf
 			
-			Local re:= (Self.collisionInfo[y] & 15) ' Shr 0
+			Local re:= (getCollisionInfo(y) & 15) ' Shr 0
 			
 			If (re = 8 Or re = 0) Then
 				Return re
@@ -197,7 +198,7 @@ Class CollisionBlock Extends ACBlock ' Implements SonicDef
 				x = (7 - x)
 			EndIf
 			
-			Local re:= ((Self.collisionInfo[x] & 240) Shr 4)
+			Local re:= ((getCollisionInfo(x) & 240) Shr 4)
 			
 			If (re = 8 Or re = 0) Then
 				Return re
@@ -256,7 +257,7 @@ Class CollisionBlock Extends ACBlock ' Implements SonicDef
 				y = (7 - y)
 			EndIf
 			
-			Local colInfo:= (Self.collisionInfo[y] & 15) ' Shr 0
+			Local colInfo:= (getCollisionInfo(y) & 15) ' Shr 0
 			
 			If (colInfo > 8) Then
 				reverse = True
@@ -447,7 +448,7 @@ Class CollisionBlock Extends ACBlock ' Implements SonicDef
 				x = (7 - x)
 			EndIf
 			
-			Local colInfo:= ((Self.collisionInfo[x] & 240) Shr 4)
+			Local colInfo:= ((getCollisionInfo(x) & 240) Shr 4)
 			
 			If (colInfo = 8) Then
 				Return 0
@@ -487,7 +488,7 @@ Class CollisionBlock Extends ACBlock ' Implements SonicDef
 				y = 7 - y
 			EndIf
 			
-			Local colInfo:= (Self.collisionInfo[y] & 15) ' Shr 0
+			Local colInfo:= (getCollisionInfo(y) & 15) ' Shr 0
 			
 			If (colInfo = 8) Then
 				Return 0
@@ -527,7 +528,7 @@ Class CollisionBlock Extends ACBlock ' Implements SonicDef
 				y = (7 - y)
 			EndIf
 			
-			Local colInfo:= (Self.collisionInfo[y] & 15) ' Shr 0
+			Local colInfo:= (getCollisionInfo(y) & 15) ' Shr 0
 			
 			If (colInfo = 8) Then
 				Return rightSide
