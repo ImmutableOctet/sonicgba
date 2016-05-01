@@ -642,8 +642,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\barhorbinh.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>35</X>
-        <Y>30</Y>
+        <X>2</X>
+        <Y>24</Y>
       </CursorPos>
       <DocGUID>0cd6240a-e19a-45c6-8cfd-76aa764757bd</DocGUID>
       <Bookmarks />
@@ -1235,12 +1235,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>23</X>
-        <Y>498</Y>
+        <X>8</X>
+        <Y>161</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>fac107b1-5a8c-4202-9633-c3d9fc4033ad</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\globalresource.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -1865,12 +1866,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\springplatform.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\springplatform.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>19</X>
+        <Y>35</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>995b8ef5-5c43-4cc9-b1d3-f08a8672f5a2</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\spspring.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>

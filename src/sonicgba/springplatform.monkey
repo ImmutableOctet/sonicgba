@@ -31,7 +31,7 @@ Class SpringPlatform Extends GimmickObject
 		
 		' Fields:
 		Field centerY:Int
-		Field velY:Int
+		Field velY__springplatform:Int
 	Protected
 		' Constructor(s):
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
@@ -43,7 +43,7 @@ Class SpringPlatform Extends GimmickObject
 			
 			Self.centerY = Self.posY
 			
-			Self.velY = 0
+			Self.velY__springplatform = 0
 		End
 	Public
 		' Functions:
@@ -64,7 +64,7 @@ Class SpringPlatform Extends GimmickObject
 			Select (direction)
 				Case DIRECTION_DOWN
 					If (Self.firstTouch) Then
-						Self.velY += player.getVelY()
+						Self.velY__springplatform += player.getVelY()
 					EndIf
 					
 					player.beStop(0, direction, Self)
@@ -85,27 +85,27 @@ Class SpringPlatform Extends GimmickObject
 			Local preX:= Self.posX
 			Local preY:= Self.posY
 			
-			Self.velY += accelerate
+			Self.velY__springplatform += accelerate
 			
 			' Magic number: 10
-			If (Self.velY > 0) Then
-				Self.velY -= 10
-			ElseIf (Self.velY < 0) Then
-				Self.velY += 10
+			If (Self.velY__springplatform > 0) Then
+				Self.velY__springplatform -= 10
+			ElseIf (Self.velY__springplatform < 0) Then
+				Self.velY__springplatform += 10
 			EndIf
 			
-			Self.posY += Self.velY
+			Self.posY += Self.velY__springplatform
 			
 			If (Self.posY > (Self.centerY + FAR_DISTANCE)) Then
 				Self.posY = (Self.centerY + FAR_DISTANCE)
 				
-				Self.velY = 0
+				Self.velY__springplatform = 0
 			EndIf
 			
 			If (Self.posY < (Self.centerY - FAR_DISTANCE)) Then
 				Self.posY = (Self.centerY - FAR_DISTANCE)
 				
-				Self.velY = 0
+				Self.velY__springplatform = 0
 			EndIf
 			
 			checkWithPlayer(preX, preY, Self.posX, Self.posY)
