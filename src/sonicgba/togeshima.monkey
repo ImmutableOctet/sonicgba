@@ -37,7 +37,7 @@ Class TogeShima Extends GimmickObject
 		Field posEndY:Int
 		Field posOriginalY:Int
 		Field range:Int
-		Field velY:Int
+		Field velY__togeshima:Int
 		
 		Field ss:ShimaSting
 		
@@ -48,7 +48,7 @@ Class TogeShima Extends GimmickObject
 			Super.New(id, x, y, left, top, width, height)
 			
 			' Magic number: 192
-			Self.velY = 192
+			Self.velY__togeshima = 192
 			
 			Self.dir = False
 			
