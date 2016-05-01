@@ -66,6 +66,11 @@ Class Boss2Spring Extends EnemyObject
 			Self.IsBossBroken = False
 			Self.IsAttack = False
 		End
+	Private
+		' Methods:
+		Method logic:Void()
+			' Empty implementation.
+		End
 	Public
 		' Functions:
 		Function releaseAllResource:Void()
@@ -87,10 +92,6 @@ Class Boss2Spring Extends EnemyObject
 		End
 		
 		Method doWhileBeAttack:Void(object:PlayerObject, direction:Int, animationID:Int)
-			' Empty implementation.
-		End
-		
-		Method logic:Void()
 			' Empty implementation.
 		End
 		
@@ -120,7 +121,7 @@ Class Boss2Spring Extends EnemyObject
 			Self.IsBossBroken = isBossBroekn
 		End
 		
-		Method logic:Void(posx:Int, posy:Int, state:Int, vel:Int)
+		Method spring_logic:Void(posx:Int, posy:Int, state:Int, vel:Int)
 			Self.posX = posx
 			Self.posY = posy
 			

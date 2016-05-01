@@ -702,7 +702,7 @@ Class Boss2 Extends BossObject
 						EndIf
 				End Select
 				
-				Self.spring.logic(Self.posX, Self.posY, Self.spring_state, Self.velocity)
+				Self.spring.spring_logic(Self.posX, Self.posY, Self.spring_state, Self.velocity)
 				Self.spring.getIsHurt((Self.boat_state = BOAT_HURT))
 				
 				refreshCollisionRect((Self.posX Shr 6), (Self.posY Shr 6))

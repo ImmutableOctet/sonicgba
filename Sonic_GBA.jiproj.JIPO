@@ -754,22 +754,23 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss2.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>25</X>
-        <Y>32</Y>
+        <X>28</X>
+        <Y>704</Y>
       </CursorPos>
       <DocGUID>417ecb17-6698-47fb-ad08-c5aa094a2e0e</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\boss2spring.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\boss2spring.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>5</X>
+        <Y>72</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>9dc3c632-79ab-4f18-8eed-f03c9888f03b</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss3.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>25</X>
+        <X>2</X>
         <Y>36</Y>
       </CursorPos>
       <DocGUID>cb3e6863-1d3e-401d-8b97-0d8af744c90e</DocGUID>
