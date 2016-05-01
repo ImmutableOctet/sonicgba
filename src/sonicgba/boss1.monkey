@@ -99,8 +99,8 @@ Class Boss1 Extends BossObject
 		
 		Field velocity:Int
 		
-		Field velX:Int
-		Field velY:Int
+		Field velX__boss1:Int
+		Field velY__boss1:Int
 		
 		Field WaitCnt:Int
 		
@@ -169,8 +169,8 @@ Class Boss1 Extends BossObject
 			Self.side_left = 0
 			Self.side_right = 0
 			
-			Self.velX = 0
-			Self.velY = 0
+			Self.velX__boss1 = 0
+			Self.velY__boss1 = 0
 			
 			Self.wait_cnt_max = 10
 			
@@ -340,13 +340,13 @@ Class Boss1 Extends BossObject
 					Self.posY -= Self.con_size
 					
 					' Magic number: -600
-					Self.velY = -600
+					Self.velY__boss1 = -600
 					
 					' Magic numbers: -150, 150
 					If (player.getVelX() < 0) Then
-						Self.velX = -150
+						Self.velX__boss1 = -150
 					Else
-						Self.velX = 150
+						Self.velX__boss1 = 150
 					EndIf
 					
 					Local flyWheelOffset:= ((COLLISION_WIDTH / 2) Shl 6)
@@ -553,25 +553,25 @@ Class Boss1 Extends BossObject
 						
 						Local groundY:= getGroundY(Self.posX, Self.posY)
 						
-						If (Self.posY + Self.velY >= groundY) Then
+						If (Self.posY + Self.velY__boss1 >= groundY) Then
 							Self.posY = groundY
 							
 							' Magic numbers: -450, 300, etc.
 							Select (Self.drop_cnt)
 								Case 0
-									Self.velY = -450
+									Self.velY__boss1 = -450
 									
 									Self.drop_cnt = 1
 								Case 1
-									Self.velY = -300
+									Self.velY__boss1 = -300
 									
 									Self.drop_cnt = 2
 							End Select
 						EndIf
 						
-						Self.posX += Self.velX
-						Self.velY += GRAVITY
-						Self.posY += Self.velY
+						Self.posX += Self.velX__boss1
+						Self.velY__boss1 += GRAVITY
+						Self.posY += Self.velY__boss1
 						
 						Local fwGroundY:= getGroundY(Self.flywheel_lx, Self.flywheel_y)
 						
