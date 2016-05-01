@@ -135,6 +135,11 @@ Class Boss1Arm Extends EnemyObject
 			
 			Self.velY = -1200
 		End
+	Private
+		' Methods:
+		Method logic:Void()
+			' Empty implementation.
+		End
 	Public
 		' Functions:
 		Function releaseAllResource:Void()
@@ -185,23 +190,13 @@ Class Boss1Arm Extends EnemyObject
 			Self.dg_plus = speed
 		End
 		
-		Method logic:Void()
-			#Rem
-				If (Not Self.dead) Then
-					' Nothing so far.
-				EndIf
-			#End
-		End
-		
-		Public Method logic:Int[](posx:Int, posy:Int, boss_state:Int, boss_velocity:Int)
+		Method arm_logic:Int[](posx:Int, posy:Int, boss_state:Int, boss_velocity:Int)
 			If (Self.dead) Then
 				Return Self.pos[0]
 			EndIf
 			
 			Local preX:= Self.pos[5][0] ' (Self.pos.Length - 1)
 			Local preY:= Self.pos[5][1]
-			
-			Int i
 			
 			Select (boss_state)
 				Case STATE_ATTACK_1

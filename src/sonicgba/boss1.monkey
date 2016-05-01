@@ -463,7 +463,7 @@ Class Boss1 Extends BossObject
 							Self.velocity = -Self.velocity
 						EndIf
 						
-						Self.arm.logic(Self.posX, Self.posY - Self.offsetY, Self.state, Self.velocity)
+						Self.arm.arm_logic(Self.posX, Self.posY - Self.offsetY, Self.state, Self.velocity)
 					Case STATE_ATTACK_2
 						If (Self.face_state <> FACE_NORMAL) Then
 							If (Self.face_cnt < cnt_max) Then
@@ -488,7 +488,7 @@ Class Boss1 Extends BossObject
 						changeAniState(Self.cardrawer, Self.car_state)
 						changeAniState(Self.facedrawer, Self.face_state)
 						
-						Self.ArmSharpPos = Self.arm.logic(Self.posX, Self.posY - Self.offsetY, Self.state, Self.velocity)
+						Self.ArmSharpPos = Self.arm.arm_logic(Self.posX, Self.posY - Self.offsetY, Self.state, Self.velocity)
 						
 						Self.posX = Self.ArmSharpPos[0]
 						Self.posY = (Self.ArmSharpPos[1] + Self.offsetY)
@@ -537,7 +537,7 @@ Class Boss1 Extends BossObject
 							EndIf
 						EndIf
 						
-						Self.arm.logic(Self.posX, Self.posY - Self.offsetY, Self.state, Self.velocity)
+						Self.arm.arm_logic(Self.posX, Self.posY - Self.offsetY, Self.state, Self.velocity)
 					Case STATE_BROKEN
 						If (Self.face_state <> FACE_NORMAL) Then
 							If (Self.face_cnt < cnt_max) Then
@@ -590,7 +590,7 @@ Class Boss1 Extends BossObject
 							Self.flywheel_y += Self.flywheel_vy
 						EndIf
 						
-						Self.arm.logic(Self.posX, Self.posY, Self.state, Self.velocity)
+						Self.arm.arm_logic(Self.posX, Self.posY, Self.state, Self.velocity)
 						
 						Self.bossbroken.logicBoom(Self.posX, Self.posY)
 						

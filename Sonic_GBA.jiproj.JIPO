@@ -738,16 +738,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss1.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>28</X>
-        <Y>40</Y>
+        <X>21</X>
+        <Y>594</Y>
       </CursorPos>
       <DocGUID>36ef3750-8914-439b-aef2-d8cacd12c377</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss1arm.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>32</X>
-        <Y>44</Y>
+        <X>2</X>
+        <Y>191</Y>
       </CursorPos>
       <DocGUID>079ca52d-82c0-489e-b10d-882f7a43a136</DocGUID>
       <Bookmarks />
