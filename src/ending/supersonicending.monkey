@@ -144,21 +144,22 @@ Class SuperSonicEnding Extends BaseEnding ' Final
 			Animation.closeAnimationDrawer(Self.interruptDrawer)
 			Self.interruptDrawer = Null
 			
-			If (Self.moonImage <> Null) Then
+			If (Self.moonImage.Length > 0) Then
 				For Local i:= 0 Until Self.moonImage.Length
 					Self.moonImage[i] = Null
 				Next
 			EndIf
 			
-			Self.moonImage = Null
+			Self.moonImage = []
 			
-			If (Self.catchImage <> Null) Then
+			If (Self.catchImage.Length > 0) Then
 				For Local i:= 0 Until Self.catchImage.Length
 					Self.catchImage[i] = Null
 				Next
 			EndIf
 			
-			Self.catchImage = Null
+			Self.catchImage = []
+			
 			Self.daysLaterImage = Null
 			Self.endingWordImage = Null
 			Self.endingBgImage = Null

@@ -71,10 +71,11 @@ Class Frame
 			Self.frameWidth = -1
 			Self.frameHeight = -1
 		End
-
+		
+		' Methods:
 		Method GetARect:Byte[]()
-			If (Self.rect1[0] = Null And Self.rect1[1] = Null And Self.rect1[2] = 1 And Self.rect1[3] = 1) Then
-				Return Null
+			If (Self.rect1[0] = 0 And Self.rect1[1] = 0 And Self.rect1[2] = 1 And Self.rect1[3] = 1) Then
+				Return []
 			EndIf
 			
 			For Local i:= 0 Until Self.rect1.Length ' 4
@@ -83,10 +84,10 @@ Class Frame
 			
 			Return Self.tmp_rect1
 		End
-
+		
 		Method GetCRect:Byte[]()
-			If (Self.rect2[0] = Null And Self.rect2[1] = Null And Self.rect2[2] = 1 And Self.rect2[3] = 1) Then
-				Return Null
+			If (Self.rect2[0] = 0 And Self.rect2[1] = 0 And Self.rect2[2] = 1 And Self.rect2[3] = 1) Then
+				Return []
 			EndIf
 			
 			For Local i:= 0 Until Self.rect1.Length ' 4
@@ -163,7 +164,7 @@ Class Frame
 		End
 		
 		Method loadFrameG2:Void(ds:Stream)
-			If (ds <> Null) Then
+			If (ds = Null) Then
 				Return
 			EndIf
 			

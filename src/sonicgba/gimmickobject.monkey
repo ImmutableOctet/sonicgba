@@ -726,7 +726,7 @@ Class GimmickObject Extends GameObject
 		End
 		
 		Method doWhileCollision:Void(p:PlayerObject, direction:Int)
-			' This behavior may change in the future.
+			' This behavior may change in the future:
 			If (p = player) Then
 				Select (Self.objId)
 					Case GIMMICK_CHANGE_LAYER_A

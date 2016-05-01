@@ -4,6 +4,9 @@ Public
 
 ' Friends:
 Friend special.specialmap
+Friend special.ssring
+Friend special.ssfollowring
+Friend special.sslostring
 
 ' Imports:
 Private
@@ -252,49 +255,6 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 		
 		Field wordX:Int
 	Public
-		' Functions:
-		Function updateScale:Void()
-			Local previousCount:= Self.scaleCount
-			
-			Self.scaleCount += 1 ' i + 1
-			
-			If (previousCount >= (TOTAL_COUNT_SCALE_ZOOM-1)) Then
-				Self.scaleCount = 0
-			EndIf
-			
-			If (Self.scaleCount < SCALE_ZOOM_0_FRAME_COUNT) Then
-				'scale = 0.92
-				scale = 1.0+SCALE_ZOOM_0
-			ElseIf (Self.scaleCount < (SCALE_ZOOM_0_FRAME_COUNT+SCALE_ZOOM_1_FRAME_COUNT)) Then
-				'scale = 0.952
-				scale = 1.0+SCALE_ZOOM_1
-			ElseIf (Self.scaleCount < (SCALE_ZOOM_0_FRAME_COUNT+SCALE_ZOOM_1_FRAME_COUNT+SCALE_ZOOM_2_FRAME_COUNT)) Then
-				'scale = 0.984
-				scale = 1.0+SCALE_ZOOM_2
-			ElseIf (Self.scaleCount < (SCALE_ZOOM_0_FRAME_COUNT+SCALE_ZOOM_1_FRAME_COUNT+SCALE_ZOOM_2_FRAME_COUNT+SCALE_ZOOM_3_FRAME_COUNT)) Then
-				'scale = 1.016
-				scale = 1.0+SCALE_ZOOM_3
-			ElseIf (Self.scaleCount < (SCALE_ZOOM_0_FRAME_COUNT+SCALE_ZOOM_1_FRAME_COUNT+SCALE_ZOOM_2_FRAME_COUNT+SCALE_ZOOM_3_FRAME_COUNT+SCALE_ZOOM_4_FRAME_COUNT)) Then
-				'scale = 1.048
-				scale = 1.0+SCALE_ZOOM_4
-			ElseIf (Self.scaleCount < (SCALE_ZOOM_IN+SCALE_ZOOM_0_FRAME_COUNT)) Then
-				'scale = 1.08
-				scale = 1.0+SCALE_ZOOM_5
-			ElseIf (Self.scaleCount < (SCALE_ZOOM_IN+SCALE_ZOOM_0_FRAME_COUNT+SCALE_ZOOM_1_FRAME_COUNT)) Then
-				'scale = 1.048
-				scale = 1.0+SCALE_ZOOM_4
-			ElseIf (Self.scaleCount < (SCALE_ZOOM_IN+SCALE_ZOOM_0_FRAME_COUNT+SCALE_ZOOM_1_FRAME_COUNT+SCALE_ZOOM_2_FRAME_COUNT)) Then
-				'scale = 1.016
-				scale = 1.0+SCALE_ZOOM_3
-			ElseIf (Self.scaleCount < (SCALE_ZOOM_IN+SCALE_ZOOM_0_FRAME_COUNT+SCALE_ZOOM_1_FRAME_COUNT+SCALE_ZOOM_2_FRAME_COUNT+SCALE_ZOOM_3_FRAME_COUNT)) Then
-				'scale = 0.984
-				scale = 1.0+SCALE_ZOOM_2
-			ElseIf (Self.scaleCount < TOTAL_COUNT_SCALE_ZOOM) Then
-				'scale = 0.952
-				scale = 1.0+SCALE_ZOOM_1
-			EndIf
-		End
-		
 		' Constructor(s):
 		Method New(characterID:Int)
 			Super.New(-1, 0, 0, 0)
@@ -675,6 +635,48 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 			EndIf
 		End
 		
+		Method updateScale:Void()
+			Local previousCount:= Self.scaleCount
+			
+			Self.scaleCount += 1 ' i + 1
+			
+			If (previousCount >= (TOTAL_COUNT_SCALE_ZOOM-1)) Then
+				Self.scaleCount = 0
+			EndIf
+			
+			If (Self.scaleCount < SCALE_ZOOM_0_FRAME_COUNT) Then
+				'scale = 0.92
+				scale = 1.0+SCALE_ZOOM_0
+			ElseIf (Self.scaleCount < (SCALE_ZOOM_0_FRAME_COUNT+SCALE_ZOOM_1_FRAME_COUNT)) Then
+				'scale = 0.952
+				scale = 1.0+SCALE_ZOOM_1
+			ElseIf (Self.scaleCount < (SCALE_ZOOM_0_FRAME_COUNT+SCALE_ZOOM_1_FRAME_COUNT+SCALE_ZOOM_2_FRAME_COUNT)) Then
+				'scale = 0.984
+				scale = 1.0+SCALE_ZOOM_2
+			ElseIf (Self.scaleCount < (SCALE_ZOOM_0_FRAME_COUNT+SCALE_ZOOM_1_FRAME_COUNT+SCALE_ZOOM_2_FRAME_COUNT+SCALE_ZOOM_3_FRAME_COUNT)) Then
+				'scale = 1.016
+				scale = 1.0+SCALE_ZOOM_3
+			ElseIf (Self.scaleCount < (SCALE_ZOOM_0_FRAME_COUNT+SCALE_ZOOM_1_FRAME_COUNT+SCALE_ZOOM_2_FRAME_COUNT+SCALE_ZOOM_3_FRAME_COUNT+SCALE_ZOOM_4_FRAME_COUNT)) Then
+				'scale = 1.048
+				scale = 1.0+SCALE_ZOOM_4
+			ElseIf (Self.scaleCount < (SCALE_ZOOM_IN+SCALE_ZOOM_0_FRAME_COUNT)) Then
+				'scale = 1.08
+				scale = 1.0+SCALE_ZOOM_5
+			ElseIf (Self.scaleCount < (SCALE_ZOOM_IN+SCALE_ZOOM_0_FRAME_COUNT+SCALE_ZOOM_1_FRAME_COUNT)) Then
+				'scale = 1.048
+				scale = 1.0+SCALE_ZOOM_4
+			ElseIf (Self.scaleCount < (SCALE_ZOOM_IN+SCALE_ZOOM_0_FRAME_COUNT+SCALE_ZOOM_1_FRAME_COUNT+SCALE_ZOOM_2_FRAME_COUNT)) Then
+				'scale = 1.016
+				scale = 1.0+SCALE_ZOOM_3
+			ElseIf (Self.scaleCount < (SCALE_ZOOM_IN+SCALE_ZOOM_0_FRAME_COUNT+SCALE_ZOOM_1_FRAME_COUNT+SCALE_ZOOM_2_FRAME_COUNT+SCALE_ZOOM_3_FRAME_COUNT)) Then
+				'scale = 0.984
+				scale = 1.0+SCALE_ZOOM_2
+			ElseIf (Self.scaleCount < TOTAL_COUNT_SCALE_ZOOM) Then
+				'scale = 0.952
+				scale = 1.0+SCALE_ZOOM_1
+			EndIf
+		End
+		
 		Method draw:Void(g:MFGraphics)
 			SpecialObject.calDrawPosition(Self.posX Shr 6, (-Self.posY) Shr 6, Self.posZ - (Self.boardOffsetX Shr 6))
 			
@@ -951,13 +953,17 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 		End
 		
 		Method setCheckPoint:Void()
-			Self.checkSuccess = (Int(Self.ringNum >= Self.targetRingNum) | Self.debugPassStage)
+			Self.checkSuccess = ((Self.ringNum >= Self.targetRingNum) Or Self.debugPassStage)
 			
 			Self.noMoving = True
+			
 			Self.state = STATE_CHECK_POINT
+			
 			Self.count = 0
 			Self.checkCount = 0
+			
 			Self.isGoal = False
+			
 			Self.velZ = ACC_NORMAL
 		End
 		
@@ -1067,11 +1073,11 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 			Self.rect1 = Self.drawer.getCRect()
 			Self.rect2 = Self.drawer.getARect()
 			
-			If (Self.rect1 <> Null) Then
+			If (Self.rect1.Length > 0) Then
 				Self.collisionRect.setTwoPosition((x Shr 6) + Self.rect1[0], ((-y) Shr 6) - Self.rect1[1], ((x Shr 6) + Self.rect1[0]) + Self.rect1[2], (((-y) Shr 6) - Self.rect1[1]) - Self.rect1[3])
 			EndIf
 			
-			If (Self.rect2 <> Null) Then
+			If (Self.rect2.Length > 0) Then
 				If (Self.attackCollisionRect = Null) Then
 					Self.attackCollisionRect = New CollisionRect()
 				EndIf
@@ -1081,13 +1087,13 @@ Class SpecialPlayer Extends SpecialObject Implements BarWord
 		End
 		
 		Method drawcollisionRect:Void(g:MFGraphics)
-			If (Self.rect1 <> Null And SonicDebug.showCollisionRect) Then
+			If (Self.rect1.Length > 0 And SonicDebug.showCollisionRect) Then
 				g.setColor(16711680)
 				
 				g.drawRect(((drawX + (SCREEN_WIDTH / 2)) - SpecialMap.getCameraOffsetX()) + Self.rect1[0], ((drawY + (SCREEN_HEIGHT / 2)) - SpecialMap.getCameraOffsetY()) + Self.rect1[1], Self.rect1[2], Self.rect1[3]) ' Shr 1
 			EndIf
 			
-			If (Self.rect2 <> Null And SonicDebug.showCollisionRect) Then
+			If (Self.rect2.Length > 0 And SonicDebug.showCollisionRect) Then
 				g.setColor(65280)
 				
 				g.drawRect(((drawX + (SCREEN_WIDTH / 2)) - SpecialMap.getCameraOffsetX()) + Self.rect2[0], ((drawY + (SCREEN_HEIGHT / 2)) - SpecialMap.getCameraOffsetY()) + Self.rect2[1], Self.rect2[2], Self.rect2[3])

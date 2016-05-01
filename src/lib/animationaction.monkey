@@ -86,7 +86,7 @@ Class Action
 		
 		Method GetARect:Byte[]()
 			If (Self.m_nFrames = 0) Then
-				Return Null
+				Return []
 			EndIf
 			
 			Return Self.m_Ani.m_Frames[GetTempFrame()].GetARect()
@@ -94,7 +94,7 @@ Class Action
 		
 		Method GetCRect:Byte[]()
 			If (Self.m_nFrames = 0) Then
-				Return Null
+				Return []
 			EndIf
 			
 			Return Self.m_Ani.m_Frames[GetTempFrame()].GetCRect()

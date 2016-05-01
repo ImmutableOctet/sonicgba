@@ -53,7 +53,7 @@ Class SSBomb Extends SpecialObject
 			SpecialObject.calDrawPosition(Self.posX, Self.posY, Self.posZ)
 			drawObj(g, Self.drawer, 0, 0)
 			
-			drawCollisionRect(g, (drawX + (SCREEN_WIDTH / 2)) - SpecialMap.getCameraOffsetX(), (drawY + (SCREEN_HEIGHT / 2)) - SpecialMap.getCameraOffsetY()) ' / 2
+			SSBomb_drawCollisionRect(g, (drawX + (SCREEN_WIDTH / 2)) - SpecialMap.getCameraOffsetX(), (drawY + (SCREEN_HEIGHT / 2)) - SpecialMap.getCameraOffsetY()) ' / 2
 		End
 		
 		Method logic:Void()
@@ -63,8 +63,9 @@ Class SSBomb Extends SpecialObject
 		Method refreshCollision:Void(x:Int, y:Int)
 			Self.collisionRect.setRect(x - (COLLISION_WIDTH / 2), y - (COLLISION_HEIGHT / 2), COLLISION_WIDTH, COLLISION_HEIGHT)
 		End
-		
-		Method drawCollisionRect:Void(g:MFGraphics, x:Int, y:Int)
+	Protected
+		' Methods:
+		Method SSBomb_drawCollisionRect:Void(g:MFGraphics, x:Int, y:Int)
 			If (SonicDebug.showCollisionRect) Then
 				g.setColor(16711680)
 				

@@ -4,6 +4,7 @@ Public
 
 ' Friends:
 Friend sonicgba.gameobject
+Friend sonicgba.gimmickobject
 Friend sonicgba.stagemanager
 Friend sonicgba.rocketseparateeffect
 
@@ -1659,6 +1660,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		' Extensions:
+		Method slipEnd:Void()
+			' Empty implementation.
+		End
+		
 		Method updateFootPoint:Void()
 			Self.footPointX += Self.velX
 			Self.footPointY += Self.velY
@@ -4342,7 +4347,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method doPoalMotion2:Bool(x:Int, y:Int, direction:Bool)
-			If (Self.collisionState <> Null Or ((Not Self.faceDirection Or Not direction Or Self.totalVelocity < DO_POAL_MOTION_SPEED) And (Self.faceDirection Or direction Or Self.totalVelocity > -DO_POAL_MOTION_SPEED))) Then
+			If (Self.collisionState <> COLLISION_STATE_WALK Or ((Not Self.faceDirection Or Not direction Or Self.totalVelocity < DO_POAL_MOTION_SPEED) And (Self.faceDirection Or direction Or Self.totalVelocity > -DO_POAL_MOTION_SPEED))) Then
 				Return False
 			EndIf
 			
@@ -4997,7 +5002,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method beUnseenPop:Bool()
-			If (Self.collisionState <> Null Or Abs(getVelX()) <= WIDTH) Then
+			If (Self.collisionState <> COLLISION_STATE_WALK Or Abs(getVelX()) <= WIDTH) Then
 				Return False
 			EndIf
 			

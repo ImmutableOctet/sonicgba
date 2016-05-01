@@ -61,31 +61,26 @@ Class RingObject Extends GameObject
 			Return reElement
 		End
 		
-		Function hurtRingExplosion:Void(ringNum:Int, x:Int, y:Int, layer:Int, antiGrivity:Bool)
+		Function hurtRingExplosion:Void(ringNum:Int, x:Int, y:Int, layer:Int, antiGravity:Bool)
 			If (ringNum > MAX_RING_POP) Then
 				ringNum = MAX_RING_POP
 			EndIf
 			
-			If (antiGrivity) Then
+			If (antiGravity) Then
 				' Magic number: 3072
 				y += 3072
 			EndIf
 			
-			Local var5:Int
-			
-			If (antiGrivity) Then
-				var5 = -VELOCITY_START
-			Else
-				var5 = VELOCITY_START
-			EndIf
+			Local velocity:Int = PickValue(antiGravity, -VELOCITY_START, VELOCITY_START)
 			
 			If (ringNum = 1) Then
-				Local var37:= (DSgn(Not var4) * VELOCITY_START)
-				Local var38:= (((DEGREE_START / 2) + DEGREE_CAL_START Mod 170) Mod 360) ' 10
-				Local var39:= ((-var37) * MyAPI.dCos(var38) / 100)
-				Local var40:= (var37 * MyAPI.dSin(var38) / 100 + VELOCITY_OFFSET_Y2)
+				Local vel:= PickValue((antiGravity), -VELOCITY_START, VELOCITY_START)
+				Local degree:= (((DEGREE_START / 2) + DEGREE_CAL_START Mod 170) Mod 360) ' 10
 				
-				addGameObject(New MoveRingObject(x, y, var39, var40, layer, systemClock))
+				Local vx:= ((-vel) * MyAPI.dCos(degree) / 100)
+				Local vy:= (vel * MyAPI.dSin(degree) / 100 + VELOCITY_OFFSET_Y2)
+				
+				addGameObject(New MoveRingObject(x, y, vx, vy, layer, systemClock))
 			Else
 				Local ringCount:= 0
 				Local ringCount2:= velocity
@@ -95,7 +90,7 @@ Class RingObject Extends GameObject
 				While (ringCount < (ringNum / 2))
 					degree = ringCount * DEGREE_START
 					
-					Local velocity3:= ((degree / 170) * VELOCITY_CHANGE) + (DSgn(Not antiGrivity) * VELOCITY_START)
+					Local velocity3:= ((degree / 170) * VELOCITY_CHANGE) + (DSgn(Not antiGravity) * VELOCITY_START)
 					
 					ringCount2 = (degree Mod 170)
 					

@@ -94,7 +94,7 @@ Class MFButton Implements MFComponent
 		End
 		
 		Method tick:Void()
-			For Local i:= 0 Until Self.buttonFlag.Legth
+			For Local i:= 0 Until Self.buttonFlag.Length
 				Self.buttonFlag[i] = False
 				
 				If (Self.buttonTmpFlag[i]) Then

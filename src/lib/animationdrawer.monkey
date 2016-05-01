@@ -118,9 +118,9 @@ Class AnimationDrawer
 	Private
 		' Methods:
 		Method getRect:Void(getter:Byte[], source:Byte[])
-			If (source <> Null And getter <> Null) Then
+			If (source.Length > 0 And getter.Length > 0) Then
 				Select (Self.transId)
-					Case 2
+					Case TRANS_MIRROR
 						getter[0] = Byte((-source[0]) - source[2])
 						getter[1] = source[1]
 						getter[2] = source[2]

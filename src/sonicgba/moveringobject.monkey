@@ -2,6 +2,11 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.ringobject
+Friend sonicgba.gimmickobject
+Friend sonicgba.playerobject
+
 ' Imports:
 Private
 	Import sonicgba.collisionrect
