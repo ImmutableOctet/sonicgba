@@ -253,8 +253,8 @@ Class Boss5 Extends BossObject
 		Field ready_cnt:Int
 		Field talk_cnt:Int
 		
-		Field velX:Int
-		Field velY:Int
+		Field velX__boss5:Int
+		Field velY__boss5:Int
 		
 		Field velocity:Int
 	Protected
@@ -639,20 +639,20 @@ Class Boss5 Extends BossObject
 		End
 		
 		Method hurt_side_cotrol:Void()
-			If ((Self.posX + Self.velX) + Self.BOSS5_WIDTH >= ((MapManager.getCamera().x + MapManager.CAMERA_WIDTH) Shl 6)) Then
+			If ((Self.posX + Self.velX__boss5) + Self.BOSS5_WIDTH >= ((MapManager.getCamera().x + MapManager.CAMERA_WIDTH) Shl 6)) Then
 				'Self.posX += 0
-			ElseIf ((Self.posX + Self.velX) - Self.BOSS5_WIDTH <= (MapManager.getCamera().x Shl 6)) Then
+			ElseIf ((Self.posX + Self.velX__boss5) - Self.BOSS5_WIDTH <= (MapManager.getCamera().x Shl 6)) Then
 				'Self.posX += 0
 			Else
-				Self.posX += Self.velX
+				Self.posX += Self.velX__boss5
 			EndIf
 		End
 		
 		Method hurt_air_control:Void()
 			hurt_side_cotrol()
 			
-			Self.velY += GRAVITY
-			Self.posY += Self.velY
+			Self.velY__boss5 += GRAVITY
+			Self.posY += Self.velY__boss5
 		End
 	Public
 		' Functions:
@@ -715,12 +715,12 @@ Class Boss5 Extends BossObject
 				
 				Self.HP -= 1
 				
-				Self.velY = -Abs(Self.velocity)
+				Self.velY__boss5 = -Abs(Self.velocity)
 				
 				If (player.getVelX() > 0) Then
-					Self.velX = (Abs(Self.velocity) / 2) ' Shr 1
+					Self.velX__boss5 = (Abs(Self.velocity) / 2) ' Shr 1
 				Else
-					Self.velX = ((-Abs(Self.velocity)) / 2) ' Shr 1
+					Self.velX__boss5 = ((-Abs(Self.velocity)) / 2) ' Shr 1
 				EndIf
 				
 				hurt_side_cotrol()
@@ -807,7 +807,7 @@ Class Boss5 Extends BossObject
 				Local boomGroundY:= getGroundY(Self.boomX, Self.boomY)
 				
 				' Magic number: 1024
-				If ((1024 + Self.boomY + Self.velY) > boomGroundY) Then
+				If ((1024 + Self.boomY + Self.velY__boss5) > boomGroundY) Then
 					Self.boomY = (boomGroundY - 1024)
 				EndIf
 	
@@ -1015,10 +1015,10 @@ Class Boss5 Extends BossObject
 							
 							Self.state = STATE_FRESH_FLY_DRIPPING
 							
-							Self.velY = 0
+							Self.velY__boss5 = 0
 						EndIf
 					Case STATE_FRESH_FLY_DRIPPING
-						If (Self.posY + Self.velY >= getGroundY(Self.posX, Self.posY)) Then
+						If (Self.posY + Self.velY__boss5 >= getGroundY(Self.posX, Self.posY)) Then
 							Self.posY = getGroundY(Self.posX, Self.posY)
 							
 							Self.changeAniStateNoTrans(Self.knuckdrawer, F_DRIP_LAND, False)
@@ -1029,8 +1029,8 @@ Class Boss5 Extends BossObject
 							
 							Self.state = STATE_FRESH_FLY_DRIP_LAND
 						Else
-							Self.velY += GRAVITY
-							Self.posY += Self.velY
+							Self.velY__boss5 += GRAVITY
+							Self.posY += Self.velY__boss5
 						EndIf
 					Case STATE_FRESH_FLY_DRIP_LAND
 						If (Self.knuckdrawer.checkEnd()) Then
@@ -1080,7 +1080,7 @@ Class Boss5 Extends BossObject
 						
 						Local groundY:= getGroundY(Self.posX, Self.posY)
 						
-						If (Self.posY + Self.velY >= groundY) Then
+						If (Self.posY + Self.velY__boss5 >= groundY) Then
 							Self.posY = groundY
 							
 							Self.changeAniStateNoTrans(Self.knuckdrawer, F_HURT_LAND, False)
@@ -1277,12 +1277,12 @@ Class Boss5 Extends BossObject
 							
 							Self.state = STATE_MACHINE_FLY_DRIPPING
 							
-							Self.velY = 0
+							Self.velY__boss5 = 0
 						EndIf
 					Case STATE_MACHINE_FLY_DRIPPING
 						Local groundY:= getGroundY(Self.posX, Self.posY)
 						
-						If (Self.posY + Self.velY >= groundY) Then
+						If (Self.posY + Self.velY__boss5 >= groundY) Then
 							Self.posY = groundY
 							
 							Self.changeAniStateNoTrans(Self.knuckdrawer, M_DRIP_LAND, False)
@@ -1293,9 +1293,9 @@ Class Boss5 Extends BossObject
 							
 							Self.state = STATE_MACHINE_FLY_DRIP_LAND
 						Else
-							Self.velY += GRAVITY
+							Self.velY__boss5 += GRAVITY
 							
-							Self.posY += Self.velY
+							Self.posY += Self.velY__boss5
 						EndIf
 					Case STATE_MACHINE_FLY_DRIP_LAND
 						If (Self.knuckdrawer.checkEnd()) Then
@@ -1343,7 +1343,7 @@ Class Boss5 Extends BossObject
 						
 						Local groundY:= getGroundY(Self.posX, Self.posY)
 						
-						If ((Self.posY + Self.velY) >= groundY) Then
+						If ((Self.posY + Self.velY__boss5) >= groundY) Then
 							Self.posY = groundY
 							
 							Self.changeAniStateNoTrans(Self.knuckdrawer, M_HURT_LAND, False)
@@ -1395,7 +1395,7 @@ Class Boss5 Extends BossObject
 					Case STATE_MACHINE_KO_AIR
 						Local groundY:= getGroundY(Self.posX, Self.posY)
 						
-						If (Self.posY + Self.velY >= groundY) Then
+						If (Self.posY + Self.velY__boss5 >= groundY) Then
 							Self.posY = groundY
 							
 							changeAniState(Self.knuckdrawer, M_KO_LAND, True)
