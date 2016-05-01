@@ -54,8 +54,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acmovecalculator.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>10</X>
-        <Y>41</Y>
+        <X>26</X>
+        <Y>26</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -101,17 +101,18 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\engine\action\acworldcaluser.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\com\sega\engine\action\acworldcaluser.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>22</X>
+        <Y>19</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>2a9e2b67-3728-4999-819c-b995bc203208</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acworldcollisioncalculator.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>79</Y>
+        <X>73</X>
+        <Y>130</Y>
       </CursorPos>
       <DocGUID>9e202bf9-0878-4124-928e-359f2a15c13d</DocGUID>
       <Bookmarks />
