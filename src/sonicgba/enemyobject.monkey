@@ -141,6 +141,8 @@ Class EnemyObject Extends GameObject Abstract
 		Global snowrobotAnimation:Animation = Null
 		
 		' Fields:
+		Field enemyID:Int
+		
 		Field iLeft:Int
 		Field iTop:Int
 		
@@ -349,7 +351,7 @@ Class EnemyObject Extends GameObject Abstract
 	Protected
 		' Constructor(s):
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
-			Self.objId = id
+			Self.enemyID = id
 			
 			Self.posX = (x Shl 6)
 			Self.posY = (y Shl 6)
@@ -401,14 +403,14 @@ Class EnemyObject Extends GameObject Abstract
 			
 			g.setColor(0)
 			
-			g.drawString("ID:" + Self.objId + ";iLeft:" + Self.iLeft + ";iTop:" + Self.iTop, (Self.posX - camera.x) - POS_BOTTOM, (Self.posY - camera.y) - POS_BOTTOM, ENEMY_BOSS_EXTRA)
-			g.drawString("ID:" + Self.objId + ";iLeft:" + Self.iLeft + ";iTop:" + Self.iTop, (Self.posX - camera.x) + POS_BOTTOM, (Self.posY - camera.y) - POS_BOTTOM, ENEMY_BOSS_EXTRA)
-			g.drawString("ID:" + Self.objId + ";iLeft:" + Self.iLeft + ";iTop:" + Self.iTop, Self.posX - camera.x, ((Self.posY - camera.y) - POS_BOTTOM) - POS_BOTTOM, ENEMY_BOSS_EXTRA)
-			g.drawString("ID:" + Self.objId + ";iLeft:" + Self.iLeft + ";iTop:" + Self.iTop, Self.posX - camera.x, ((Self.posY - camera.y) - POS_BOTTOM) + POS_BOTTOM, ENEMY_BOSS_EXTRA)
+			g.drawString("ID:" + Self.enemyID + ";iLeft:" + Self.iLeft + ";iTop:" + Self.iTop, (Self.posX - camera.x) - POS_BOTTOM, (Self.posY - camera.y) - POS_BOTTOM, ENEMY_BOSS_EXTRA)
+			g.drawString("ID:" + Self.enemyID + ";iLeft:" + Self.iLeft + ";iTop:" + Self.iTop, (Self.posX - camera.x) + POS_BOTTOM, (Self.posY - camera.y) - POS_BOTTOM, ENEMY_BOSS_EXTRA)
+			g.drawString("ID:" + Self.enemyID + ";iLeft:" + Self.iLeft + ";iTop:" + Self.iTop, Self.posX - camera.x, ((Self.posY - camera.y) - POS_BOTTOM) - POS_BOTTOM, ENEMY_BOSS_EXTRA)
+			g.drawString("ID:" + Self.enemyID + ";iLeft:" + Self.iLeft + ";iTop:" + Self.iTop, Self.posX - camera.x, ((Self.posY - camera.y) - POS_BOTTOM) + POS_BOTTOM, ENEMY_BOSS_EXTRA)
 			
 			g.setColor(16776960)
 			
-			g.drawString("ID:" + Self.objId + ";iLeft:" + Self.iLeft + ";iTop:" + Self.iTop, Self.posX - camera.x, (Self.posY - camera.y) - POS_BOTTOM, ENEMY_BOSS_EXTRA)
+			g.drawString("ID:" + Self.enemyID + ";iLeft:" + Self.iLeft + ";iTop:" + Self.iTop, Self.posX - camera.x, (Self.posY - camera.y) - POS_BOTTOM, ENEMY_BOSS_EXTRA)
 		End
 		
 		Method beAttack:Void()
@@ -417,7 +419,7 @@ Class EnemyObject Extends GameObject Abstract
 				
 				Effect.showEffect(destroyEffectAnimation, 0, (Self.posX Shr 6), (Self.posY Shr 6) - 10, 0)
 				
-				If (Self.objId = ENEMY_LADYBUG Or Self.objId = ENEMY_HERIKO) Then
+				If (Self.enemyID = ENEMY_LADYBUG Or Self.enemyID = ENEMY_HERIKO) Then
 					SmallAnimal.addAnimal(Self.posX, Self.posY, getLayer(), True)
 				Else
 					SmallAnimal.addAnimal(Self.posX, Self.posY, getLayer())
