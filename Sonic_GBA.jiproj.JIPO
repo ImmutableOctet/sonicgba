@@ -807,8 +807,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss5.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>33</X>
-        <Y>1544</Y>
+        <X>5</X>
+        <Y>1550</Y>
       </CursorPos>
       <DocGUID>a8cb2406-51f6-4319-90fc-e52faed89795</DocGUID>
       <Bookmarks />
@@ -836,12 +836,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\boss6blockarray.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\boss6blockarray.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>35</X>
+        <Y>140</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>2fa9dc44-40d1-4b61-9361-06cfbc0399c8</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss6bullet.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>

@@ -138,7 +138,7 @@ Class Boss6BlockArray Extends GimmickObject
 								ElseIf (i = (blockID - 3) Or i = (blockID + 3)) Then
 									Self.blockOffsetY[i] = 256
 								ElseIf (i = (blockID - 2) Or i = (blockID + 2)) Then
-									Self.blockOffsetY[i] = MDPhone.SCREEN_HEIGHT
+									Self.blockOffsetY[i] = 640
 								ElseIf (i = (blockID - 1) Or i = (blockID + 1)) Then
 									Self.blockOffsetY[i] = 896
 								ElseIf (i = blockID) Then
