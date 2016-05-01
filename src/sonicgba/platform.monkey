@@ -19,6 +19,7 @@ Private
 	Import sonicgba.stagemanager
 	
 	'Import com.sega.mobile.define.mdphone
+	
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
 Public

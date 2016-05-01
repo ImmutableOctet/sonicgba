@@ -22,7 +22,8 @@ Private
 	import sonicgba.sonicdebug
 	import sonicgba.stagemanager
 	
-	import com.sega.engine.action.acworld
+	Import com.sega.engine.action.acparam
+	Import com.sega.engine.action.acworld
 	
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
@@ -695,11 +696,11 @@ Class PlayerKnuckles Extends PlayerObject
 				Local climbPointY:= (Self.posY + (DSgn(Self.isAntiGravity) * (getCollisionRectHeight() / 2))) + Self.velY ' Shr 1
 				
 				If (climbPointY < (MapManager.getPixelHeight() Shl 6) - HEIGHT Or Not Self.isAntiGravity) Then
-					If (Self.worldInstance.getWorldX(climbPointX, climbPointY, Self.currentLayer, PickValue((Self.faceDirection <> Self.isAntiGravity), TRANS_ROT180, TRANS_MIRROR_ROT180)) = -1000) Then ' 3, 1
+					If (Self.worldInstance.getWorldX(climbPointX, climbPointY, Self.currentLayer, PickValue((Self.faceDirection <> Self.isAntiGravity), TRANS_ROT180, TRANS_MIRROR_ROT180)) = ACParam.NO_COLLISION) Then ' 3, 1
 						Local footX:= (Self.posX + (DSgn(Self.faceDirection <> Self.isAntiGravity) * WIDTH))
 						Local newY:= (Self.worldInstance.getWorldY(footX, Self.posY, Self.currentLayer, PickValue(Self.isAntiGravity, TRANS_MIRROR, TRANS_NONE))) ' 2, 0
 						
-						If (newY <> -1000) Then
+						If (newY <> ACParam.NO_COLLISION) Then
 							playingLoopSeIndex = (footX - (DSgn(Self.faceDirection <> Self.isAntiGravity) * (Self.worldInstance.getTileWidth() / 2))) ' Shr 1
 							
 							Self.posX = playingLoopSeIndex
