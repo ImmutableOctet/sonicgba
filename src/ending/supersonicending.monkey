@@ -20,15 +20,20 @@ Class SuperSonicEnding Extends BaseEnding ' Final
 		Global WORD_PARAM:Int[][] = [[0, 0, 184, 24], [0, 24, 184, 48]] ' Const
 		
 		Const BGM_ENDING_COUNT:Int = 205
+		
 		Const CLOUD_NUM:Int = 10
 		Const CLOUD_TYPE:Int = 0
 		Const CLOUD_X:Int = 1
 		Const CLOUD_Y:Int = 2
+		
 		Const MOON_BG_MOVE_FRAME:Int = 56
+		
 		Const OFFSET_RANGE:Int = 8
 		Const OFFSET_SPEED:Int = 5
+		
 		Const PLANE_CATCH_UP_FRAME:Int = 30
 		Const PLANE_PULL_DOWN_VEL:Int = 10
+		
 		Const SHINING_VEL_H:Int = 4
 		Const SHINING_VEL_V:Int = 7
 		
@@ -70,6 +75,7 @@ Class SuperSonicEnding Extends BaseEnding ' Final
 		Field cloudCount:Int
 		Field cloudInfo:Int[][]
 		
+		Field planeDrawer:AnimationDrawer
 		Field cloudDrawer:AnimationDrawer
 		
 		Field congratulationY:Int
@@ -399,7 +405,7 @@ Class SuperSonicEnding Extends BaseEnding ' Final
 					
 					Self.faceChangeDrawer = New Animation("/animation/ending/ed_SuperSonic_b").getDrawer(0, False, 0)
 					
-					Animation starAnimation = New Animation("/animation/ending/ending_star")
+					Local starAnimation:= New Animation("/animation/ending/ending_star")
 					
 					Self.starDrawer = New AnimationDrawer[STAR_POSITION.Length]
 					

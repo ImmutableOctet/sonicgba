@@ -304,41 +304,42 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\ending\baseending.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>26</X>
-        <Y>15</Y>
+        <X>7</X>
+        <Y>30</Y>
       </CursorPos>
-      <DocGUID>bc4cda68-6b25-42ea-8255-6dcb84c693f7</DocGUID>
+      <DocGUID>fc834b30-9e73-4e40-bac7-cc6db1d69d64</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\ending\normalending.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>31</X>
-        <Y>10</Y>
+        <X>46</X>
+        <Y>889</Y>
       </CursorPos>
-      <DocGUID>bca81bc6-e020-4f15-8437-9a5a42ac33a6</DocGUID>
+      <DocGUID>34c3ce36-e29a-4d88-8f0f-51eb77fcba35</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\ending\plainending.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>5</Y>
+        <X>31</X>
+        <Y>11</Y>
       </CursorPos>
       <DocGUID>8803abf6-df70-43c2-9059-cde35d169950</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\ending\specialending.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\ending\specialending.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>26</X>
-        <Y>6</Y>
+        <X>8</X>
+        <Y>78</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>f8b3e988-c753-428b-9425-560b648d5a1f</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\ending\supersonicending.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>1</X>
-        <Y>7</Y>
+        <X>25</X>
+        <Y>407</Y>
       </CursorPos>
-      <DocGUID>96e26efc-d066-4907-9c64-286583498f08</DocGUID>
+      <DocGUID>02a06d9c-e445-455c-8717-d1eabb7c315b</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\gameengine\def.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
@@ -2147,8 +2148,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\gamestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>75</X>
-        <Y>2571</Y>
+        <X>8</X>
+        <Y>372</Y>
       </CursorPos>
       <DocGUID>88e3df66-94df-429b-b61a-52495e9a1807</DocGUID>
       <Bookmarks />
@@ -2266,7 +2267,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\title" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\tuch" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\water" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonicgba" Expanded="true" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonicgba" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonicgba\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\special" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\state" Expanded="true" />

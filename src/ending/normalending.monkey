@@ -887,14 +887,14 @@ Class NormalEnding Extends PlainEnding ' Final
 			For Local i:= HALF_BIRD_NUM_INDEX To 0 Step -1 ' Until 0
 				Self.birdInfo[i][1] = ((Self.planeY - ((HALF_BIRD_NUM - i) * BIRD_SPACE_1)) - 30) - 20
 				Self.birdInfo[i][0] = (HALF_BIRD_NUM - i) * BIRD_SPACE_1 ' ((BIRD_SPACE_1 / 2) - i)
-				Self.birdInfo[i][2] = MyRandom.nextInt(MDPhone.SCREEN_WIDTH)
+				Self.birdInfo[i][2] = MyRandom.nextInt(360)
 			Next
 			
 			' Bottom half?
 			For Local i:= HALF_BIRD_NUM Until BIRD_NUM
 				Self.birdInfo[i][1] = ((Self.planeY - ((HALF_BIRD_NUM_INDEX - i) * BIRD_SPACE_2)) - 15) - 20 ' (BIRD_SPACE_2 + BIRD_Y) ' 15
 				Self.birdInfo[i][0] = (HALF_BIRD_NUM_INDEX - i) * -BIRD_SPACE_2
-				Self.birdInfo[i][2] = MyRandom.nextInt(MDPhone.SCREEN_WIDTH)
+				Self.birdInfo[i][2] = MyRandom.nextInt(360)
 			Next
 			
 			Self.birdX = SCREEN_WIDTH + 30
@@ -931,7 +931,7 @@ Class NormalEnding Extends PlainEnding ' Final
 		
 		Method degreeLogic:Void()
 			Self.degree += DEGREE_VELOCITY
-			Self.degree Mod= MDPhone.SCREEN_WIDTH
+			Self.degree Mod= 360
 		End
 		
 		Method getOffsetY:Int(degreeOffset:Int)
