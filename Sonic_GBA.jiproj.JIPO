@@ -807,16 +807,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss5.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>362</Y>
+        <X>33</X>
+        <Y>1544</Y>
       </CursorPos>
       <DocGUID>a8cb2406-51f6-4319-90fc-e52faed89795</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss5flydefence.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>75</Y>
+        <X>22</X>
+        <Y>76</Y>
       </CursorPos>
       <DocGUID>0cc84b79-5511-478b-b176-7c3dc1ed8806</DocGUID>
       <Bookmarks />

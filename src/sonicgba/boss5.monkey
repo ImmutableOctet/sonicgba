@@ -1542,7 +1542,7 @@ Class Boss5 Extends BossObject
 						Self.checkWithPlayer(preX, preY, Self.posX, Self.posY)
 				End Select
 				
-				Self.flydefence.logic(Self.posX, Self.posY, Self.AttackStartDirection)
+				Self.flydefence.defence_logic(Self.posX, Self.posY, Self.AttackStartDirection)
 				
 				If (Self.state <> STATE_FRESH_FLY And Self.state <> STATE_MACHINE_FLY) Then
 					Self.flydefence.setCollAvailable(False)

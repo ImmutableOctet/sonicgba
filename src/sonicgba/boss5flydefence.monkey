@@ -48,6 +48,11 @@ Class Boss5FlyDefence Extends EnemyObject
 			Self.COLLISION_WIDTH = 1920
 			Self.COLLISION_HEIGHT = 1472
 		End
+	Private
+		' Methods:
+		Method logic:Void()
+			' Empty implementation.
+		End
 	Public
 		' Methods:
 		Method doWhileCollision:Void(p:PlayerObject, direction:Int)
@@ -65,15 +70,11 @@ Class Boss5FlyDefence Extends EnemyObject
 			' Empty implementation.
 		End
 		
-		Method logic:Void()
-			' Empty implementation.
-		End
-		
 		Method draw:Void(g:MFGraphics)
 			drawCollisionRect(g)
 		End
 		
-		Method logic:Void(posx:Int, posy:Int, AttackDir:Int)
+		Method defence_logic:Void(posx:Int, posy:Int, AttackDir:Int)
 			Self.posX = posx
 			Self.posY = posy
 			
