@@ -90,7 +90,7 @@ Class CollisionBlock Extends ACBlock ' Implements SonicDef
 			setProperty(anotherBlock.collisionInfo, anotherBlock.collisionInfoOffset, anotherBlock.FLIP_X, anotherBlock.FLIP_Y, anotherBlock.degree, anotherBlock.throughable)
 		End
 		
-		Method getCollisionY:Int(value:Int)
+		Method getBlockCollisionY:Int(value:Int)
 			While (value < 0)
 				value += 8
 			Wend
@@ -127,7 +127,7 @@ Class CollisionBlock Extends ACBlock ' Implements SonicDef
 			Return re
 		End
 		
-		Method getCollisionX:Int(y:Int)
+		Method getBlockCollisionX:Int(y:Int)
 			While (y < 0)
 				y += 8
 			Wend
