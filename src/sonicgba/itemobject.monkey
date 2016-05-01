@@ -36,6 +36,8 @@ Class ItemObject Extends GameObject
 		' Fields:
 		Field mapObj:MapObject
 		
+		Field itemID:Int
+		
 		Field moveCount:Int
 		Field originalY:Int
 		Field posYoffset:Int
@@ -74,7 +76,7 @@ Class ItemObject Extends GameObject
 		Method New(id:Int, x:Int, y:Int)
 			Self.poping = False
 			
-			Self.objId = id
+			Self.itemID = id
 			
 			Self.mWidth = COLLISION_WIDTH
 			Self.mHeight = COLLISION_HEIGHT
@@ -170,9 +172,9 @@ Class ItemObject Extends GameObject
 		
 		Method draw:Void(g:MFGraphics)
 			If (Not Self.used Or Self.moveCount >= 0) Then
-				If (Self.objId <> 0) Then
+				If (Self.itemID <> 0) Then
 					' Magic number: 896
-					drawInMap(g, itemContentImage, Self.objId * gridWidth, 0, gridWidth, gridWidth, 0, Self.posX, (Self.posY - 896) + PickValue(Self.poping, Self.posYoffset, 0), VCENTER|HCENTER)
+					drawInMap(g, itemContentImage, Self.itemID * gridWidth, 0, gridWidth, gridWidth, 0, Self.posX, (Self.posY - 896) + PickValue(Self.poping, Self.posYoffset, 0), VCENTER|HCENTER)
 				ElseIf (PlayerObject.getCharacterID() = CHARACTER_SONIC) Then
 					' Magic number: 896
 					drawInMap(g, itemContentImage, 0, 0, gridWidth, gridWidth, 0, Self.posX, (Self.posY - 896) + PickValue(Self.poping, Self.posYoffset, 0), VCENTER|HCENTER)
@@ -196,8 +198,8 @@ Class ItemObject Extends GameObject
 				If (Self.moveCount > 0) Then
 					Self.moveCount -= 1
 					
-					If (Self.moveCount = (MOVE_COUNT - 1) And Self.objId >= 5 And Self.objId <= 7) Then
-						PlayerObject.getTmpRing(Self.objId)
+					If (Self.moveCount = (MOVE_COUNT - 1) And Self.itemID >= 5 And Self.itemID <= 7) Then
+						PlayerObject.getTmpRing(Self.itemID)
 					EndIf
 					
 					' Magic number: 200
@@ -209,7 +211,7 @@ Class ItemObject Extends GameObject
 					Self.moveCount = -1 ' -= 1
 					
 					' Check if this is a ring monitor:
-					If (Self.objId >= 5 And Self.objId <= 7) Then
+					If (Self.itemID >= 5 And Self.itemID <= 7) Then
 						soundInstance.playSe(SoundSystem.SE_117)
 					EndIf
 				EndIf
@@ -263,7 +265,7 @@ Class ItemObject Extends GameObject
 			Self.used = True
 			Self.moveCount = MOVE_COUNT
 			
-			player.getPreItem(Self.objId)
+			player.getPreItem(Self.itemID)
 			
 			SoundSystem.getInstance().playSe(SoundSystem.SE_138)
 		End
