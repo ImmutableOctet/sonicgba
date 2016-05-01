@@ -50,7 +50,7 @@ Class RollIsland Extends GimmickObject
 		
 		Field frame:Int
 		
-		Field moveDistance:Int
+		Field moveDistance__rollisland:Int
 		
 		Field velocity:Int
 		
@@ -70,10 +70,10 @@ Class RollIsland Extends GimmickObject
 			
 			Self.drawer = animation.getDrawer(0, True, 0)
 			
-			Self.moveDistance = ((width * 42) * 4) + (top * 4) ' (MOVE_POWER - 2)
+			Self.moveDistance__rollisland = ((width * 42) * 4) + (top * 4) ' (MOVE_POWER - 2)
 			
 			If ((Self.iLeft Mod 2) = 1) Then
-				Self.moveDistance Shr= 1 ' /= 2
+				Self.moveDistance__rollisland Shr= 1 ' /= 2
 			EndIf
 			
 			Self.posOriginalX = Self.posX
@@ -278,19 +278,19 @@ Class RollIsland Extends GimmickObject
 			
 			If (Self.velocity > 0) Then
 				If (DIRECTION[Self.iLeft][0] > 0) Then
-					If (Self.posX > Self.posOriginalX + Self.moveDistance) Then
-						Self.posX = Self.posOriginalX + Self.moveDistance
+					If (Self.posX > Self.posOriginalX + Self.moveDistance__rollisland) Then
+						Self.posX = Self.posOriginalX + Self.moveDistance__rollisland
 					EndIf
-				ElseIf (DIRECTION[Self.iLeft][0] < 0 And Self.posX < Self.posOriginalX - Self.moveDistance) Then
-					Self.posX = Self.posOriginalX - Self.moveDistance
+				ElseIf (DIRECTION[Self.iLeft][0] < 0 And Self.posX < Self.posOriginalX - Self.moveDistance__rollisland) Then
+					Self.posX = Self.posOriginalX - Self.moveDistance__rollisland
 				EndIf
 				
 				If (DIRECTION[Self.iLeft][1] > 0) Then
-					If (Self.posY > Self.posOriginalY + Self.moveDistance) Then
-						Self.posY = Self.posOriginalY + Self.moveDistance
+					If (Self.posY > Self.posOriginalY + Self.moveDistance__rollisland) Then
+						Self.posY = Self.posOriginalY + Self.moveDistance__rollisland
 					EndIf
-				ElseIf (DIRECTION[Self.iLeft][1] < 0 And Self.posY < Self.posOriginalY - Self.moveDistance) Then
-					Self.posY = Self.posOriginalY - Self.moveDistance
+				ElseIf (DIRECTION[Self.iLeft][1] < 0 And Self.posY < Self.posOriginalY - Self.moveDistance__rollisland) Then
+					Self.posY = Self.posOriginalY - Self.moveDistance__rollisland
 				EndIf
 				
 				Self.drawer.setActionId(1)
