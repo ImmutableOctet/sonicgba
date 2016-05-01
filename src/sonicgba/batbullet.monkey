@@ -2,6 +2,10 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.bulletobject
+Friend sonicgba.bat
+
 ' Imports:
 Private
 	Import lib.animation

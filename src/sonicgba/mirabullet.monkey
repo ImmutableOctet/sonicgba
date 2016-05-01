@@ -2,6 +2,10 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.bulletobject
+Friend sonicgba.mira
+
 ' Imports:
 Private
 	Import sonicgba.basicbullet

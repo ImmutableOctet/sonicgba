@@ -2,13 +2,19 @@ Strict
 
 Public
 
+' Friends:
+Friend sonicgba.bulletobject
+
+Friend sonicgba.snowroboth
+Friend sonicgba.snowrobotv
+
 ' Imports:
 Private
 	Import sonicgba.basicbullet
 Public
 
 ' Classes:
-Class RobotBullet Extends BasicBulletObject
+Class RobotBullet Extends BasicBullet
 	Private
 		' Constant variable(s):
 		Const COLLISION_WIDTH:= 512
