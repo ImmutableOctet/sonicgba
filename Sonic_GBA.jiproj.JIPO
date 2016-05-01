@@ -785,8 +785,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss3shadow.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>12</X>
-        <Y>44</Y>
+        <X>29</X>
+        <Y>14</Y>
       </CursorPos>
       <DocGUID>efa85c9e-ef60-404b-8bf6-a1a01bc6b289</DocGUID>
       <Bookmarks />
@@ -1231,8 +1231,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>34</X>
-        <Y>1121</Y>
+        <X>8</X>
+        <Y>179</Y>
       </CursorPos>
       <DocGUID>56447b26-bbad-4b6a-a418-c54ce50cbc1b</DocGUID>
       <Bookmarks />
@@ -1570,8 +1570,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>22</X>
-        <Y>28</Y>
+        <X>21</X>
+        <Y>749</Y>
       </CursorPos>
       <DocGUID>ea575a38-03a8-436e-b09f-95dda225a2e9</DocGUID>
       <Bookmarks />
@@ -2159,19 +2159,21 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\state\specialstagestate.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
-      <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
-      </CursorPos>
-      <DocGUID />
-    </DocUserOptions>
-    <DocUserOptions Filename=".\src\state\state.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\state\specialstagestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>29</X>
-        <Y>221</Y>
+        <Y>155</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>5e12400b-1519-447d-9c20-aca092372c74</DocGUID>
+      <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\state\state.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>17</X>
+        <Y>450</Y>
+      </CursorPos>
+      <DocGUID>08f0bc70-e343-4a96-9d7b-246b0f5fadbd</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\stringindex.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>

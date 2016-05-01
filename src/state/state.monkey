@@ -86,6 +86,8 @@ Class State Implements StringIndex Abstract ' SonicDef
 		Const STR_NO:Int = 149
 		
 		' Global variable(s):
+		Global stateInst:State
+		
 		Global fadeAlpha:Int = FADE_FILL_WIDTH
 		Global fadeToValue:Int
 		Global fadeFromValue:Int
@@ -103,7 +105,6 @@ Class State Implements StringIndex Abstract ' SonicDef
 		Global softKeyHeight:Int = WARNING_HEIGHT
 		Global softKeyImage:MFImage
 		
-		Global state:State
 		Global stateId:Int = -1
 	Protected
 		' Constant variable(s):
@@ -412,10 +413,10 @@ Class State Implements StringIndex Abstract ' SonicDef
 		
 		Function setState:Void(mStateId:Int)
 			If (stateId <> mStateId) Then
-				If (state <> Null) Then
-					state.close()
+				If (stateInst <> Null) Then
+					stateInst.close()
 					
-					state = Null
+					stateInst = Null
 					
 					'System.gc()
 				EndIf
@@ -424,27 +425,36 @@ Class State Implements StringIndex Abstract ' SonicDef
 				
 				Select (stateId)
 					Case STATE_TITLE
-						state = New TitleState()
+						stateInst = New TitleState()
 					Case STATE_GAME
 						Key.touchCharacterSelectModeClose()
-						state = New GameState()
+						
+						stateInst = New GameState()
 					Case STATE_RETURN_FROM_GAME
 						Key.touchkeyboardClose()
+						
+						' This is the same as the below case.
+						' I'm just doing the same thing since falling
+						' through cases isn't possible in Monkey. (Auto-breaks)
+						stateInst = New TitleState(stateId)
 					Case STATE_SELECT_RACE_STAGE, STATE_SCORE_RANKING, STATE_SELECT_NORMAL_STAGE, STATE_SELECT_CHARACTER
-						state = New TitleState(stateId)
+						stateInst = New TitleState(stateId)
 					Case STATE_SPECIAL
-						state = New SpecialStageState()
+						stateInst = New SpecialStageState()
 					Case STATE_SPECIAL_TO_GMAE
-						state = New GameState(stateId)
+						stateInst = New GameState(stateId)
 					Case STATE_NORMAL_ENDING
-						state = New EndingState(EMERALD_STATE_NONENTER) ' 0
+						stateInst = New EndingState(EMERALD_STATE_NONENTER) ' 0
 					Case STATE_EXTRA_ENDING
-						state = New EndingState(EMERALD_STATE_SUCCESS) ' 1
+						stateInst = New EndingState(EMERALD_STATE_SUCCESS) ' 1
 					Case STATE_SPECIAL_ENDING
-						state = New EndingState(EMERALD_STATE_FAILD) ' 2
+						stateInst = New EndingState(EMERALD_STATE_FAILD) ' 2
+					Default ' Case STATE_ENDING
+						' Nothing so far.
 				End Select
 				
-				state.init()
+				stateInst.init()
+				
 				isDrawTouchPad = False
 				
 				If (stateId = STATE_SPECIAL) Then
@@ -458,17 +468,18 @@ Class State Implements StringIndex Abstract ' SonicDef
 		Function stateLogic:Void()
 			SoundSystem.getInstance().exec()
 			
-			If (state <> Null) Then
+			If (stateInst <> Null) Then
 				arrowLogic()
-				state.logic()
+				
+				stateInst.logic()
 			EndIf
 		End
 		
 		Function stateDraw:Void(g:MFGraphics)
-			If (state <> Null) Then
+			If (stateInst <> Null) Then
 				MyAPI.setClip(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 				
-				state.draw(g)
+				stateInst.draw(g)
 				
 				If (fading) Then
 					drawFade(g)
@@ -487,18 +498,18 @@ Class State Implements StringIndex Abstract ' SonicDef
 		End
 		
 		Function exitGame:Void()
-			If (state <> Null) Then
-				state.close()
+			If (stateInst <> Null) Then
+				stateInst.close()
 				
-				state = Null
+				stateInst = Null
 			EndIf
 			
 			MFDevice.notifyExit()
 		End
 		
 		Function statePause:Void()
-			If (state <> Null) Then
-				state.pause()
+			If (stateInst <> Null) Then
+				stateInst.pause()
 			EndIf
 			
 			SoundSystem.getInstance().stopBgm(True)
@@ -659,7 +670,7 @@ Class State Implements StringIndex Abstract ' SonicDef
 		End
 		
 		Function staticDrawFadeSlow:Void(g:MFGraphics)
-			If (state <> Null) Then
+			If (stateInst <> Null) Then
 				drawFadeSlow(g)
 			EndIf
 		End
@@ -813,8 +824,8 @@ Class State Implements StringIndex Abstract ' SonicDef
 			Return False
 		End
 		
-		Function activeGameProcess:Void(state:Bool)
-			IsPaid = state
+		Function activeGameProcess:Void(value:Bool)
+			IsPaid = value
 		End
 		
 		Function load_bp_string:Void()
@@ -897,7 +908,7 @@ Class State Implements StringIndex Abstract ' SonicDef
 			ElseIf (degree >= 157 And degree < 202) Then
 				id = STATE_SPECIAL_TO_GMAE
 			ElseIf (degree >= 202 And degree < 248) Then
-				id = STATE_ENDING
+				id = 8
 			EndIf
 			
 			drawTouchGameKeyBoardById(g, id, 32, 128)
@@ -1001,7 +1012,7 @@ Class State Implements StringIndex Abstract ' SonicDef
 		Method drawScrollFont:Void(g:MFGraphics, id:Int, y:Int, width:Int)
 			drawBar(g, 0, y)
 			
-			Self.selectMenuOffsetX += STATE_ENDING
+			Self.selectMenuOffsetX += 8
 			Self.selectMenuOffsetX Mod= width
 			
 			Local x:= 0
@@ -1383,7 +1394,7 @@ Class State Implements StringIndex Abstract ' SonicDef
 			If (Self.isConfirm) Then
 				Self.confirmframe += 1
 				
-				If (Self.confirmframe > STATE_ENDING) Then
+				If (Self.confirmframe > 8) Then
 					Return 1
 				EndIf
 			EndIf
@@ -1516,7 +1527,7 @@ Class State Implements StringIndex Abstract ' SonicDef
 			If (Self.isItemsSelect) Then
 				Self.itemsselectframe += 1
 				
-				If (Self.itemsselectframe > STATE_ENDING) Then
+				If (Self.itemsselectframe > 8) Then
 					fadeInit(220, 102)
 					
 					If (Self.Finalitemsselectcursor = 0) Then
@@ -1751,7 +1762,7 @@ Class State Implements StringIndex Abstract ' SonicDef
 			animationDrawer.setActionId(72)
 			
 			For Local i2:= 0 Until GlobalResource.soundConfig
-				animationDrawer.draw(g, ((SCREEN_WIDTH Shr 1) - PAGE_BACKGROUND_HEIGHT) + ((i2 - 1) * STATE_ENDING), (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
+				animationDrawer.draw(g, ((SCREEN_WIDTH Shr 1) - PAGE_BACKGROUND_HEIGHT) + ((i2 - 1) * 8), (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
 			Next
 			
 			animationDrawer.setActionId(GlobalResource.soundConfig + 73)
@@ -1800,7 +1811,7 @@ Class State Implements StringIndex Abstract ' SonicDef
 			If (Self.isItemsSelect) Then
 				Self.itemsselectframe += 1
 				
-				If (Self.itemsselectframe > STATE_ENDING) Then
+				If (Self.itemsselectframe > 8) Then
 					fadeInit(220, 102)
 					
 					If (Self.Finalitemsselectcursor = 0) Then

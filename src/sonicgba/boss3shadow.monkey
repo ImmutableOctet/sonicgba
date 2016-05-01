@@ -12,6 +12,7 @@ Private
 	Import com.sega.mobile.framework.device.mfgraphics
 	
 	Import sonicgba.enemyobject
+	Import sonicgba.playerobject
 	
 	Import sonicgba.boss3
 Public

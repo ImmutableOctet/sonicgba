@@ -160,7 +160,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const FADE_FILL_HEIGHT:Int = 40
 		Const FADE_FILL_WIDTH:Int = 40
 		
-		Const FOCUS_MAX_OFFSET:Int = (MapManager.CAMERA_HEIGHT / 2) - 16
+		Global FOCUS_MAX_OFFSET:Int = (MapManager.CAMERA_HEIGHT / 2) - 16 ' Const
+		
 		Const FOCUS_MOVE_SPEED:Int = 15
 		Const FOCUS_MOVING_NONE:Int = 0
 		
@@ -734,7 +735,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Field collisionState:Byte
 		
 		Field attractRect:CollisionRect
-		Field preCollisionRect:CollisionRect
 		
 		Field attackRectVec:Stack<PlayerAnimationCollisionRect>
 		
