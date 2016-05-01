@@ -6,6 +6,8 @@ Public
 Friend sonicgba.enemyobject
 Friend sonicgba.bossobject
 
+Friend sonicgba.boss1arm
+
 ' Imports:
 Private
 	Import lib.animation

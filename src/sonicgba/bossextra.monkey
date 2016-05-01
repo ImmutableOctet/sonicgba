@@ -8,6 +8,9 @@ Friend sonicgba.bossobject
 Friend sonicgba.stagemanager
 Friend sonicgba.playersupersonic
 
+Friend sonicgba.bossextrapacman
+Friend sonicgba.bossextrastone
+
 ' Imports:
 Private
 	Import lib.animation

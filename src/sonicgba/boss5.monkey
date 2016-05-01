@@ -6,6 +6,8 @@ Public
 Friend sonicgba.enemyobject
 Friend sonicgba.bossobject
 
+Friend sonicgba.boss5flydefence
+
 ' Imports:
 Private
 	Import gameengine.def
