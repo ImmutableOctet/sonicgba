@@ -36,7 +36,7 @@ Public
 
 ' Classes:
 Class BulletObject Extends MoveObject Abstract
-	Protected
+	Public
 		' Constant variable(s):
 		Const BULLET_ANIMAL:= 0
 		Const BULLET_MONKEY:= 0
@@ -68,7 +68,7 @@ Class BulletObject Extends MoveObject Abstract
 		Const BULLET_BOSS_EXTRA_LASER:= 23
 		Const BULLET_BOSS_STONE:= 24
 		Const BULLET_BOSS_STONE_SMALL:= 25
-		
+	Protected
 		' Global variable(s):
 		
 		' Animations:

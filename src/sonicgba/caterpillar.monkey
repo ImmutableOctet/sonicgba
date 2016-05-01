@@ -174,7 +174,7 @@ Class Caterpillar Extends EnemyObject
 		
 		Method refreshCollisionRect:Void(x:Int, y:Int)
 			' This behavior may change in the future.
-			If (Self.pos = Null) Then
+			If (Self.pos.Length = 0) Then
 				makePositions()
 			EndIf
 			

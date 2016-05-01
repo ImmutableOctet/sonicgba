@@ -1624,6 +1624,10 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			EndIf
 		End
 		
+		Method logic:Void(x:Int, y:Int)
+			logic()
+		End
+		
 		Method updateScreenRect:Void(camera:Coordinate)
 			screenRect.setRect((camera.x + MapManager.CAMERA_OFFSET_X) Shl 6, (camera.y + MapManager.CAMERA_OFFSET_Y) Shl 6, MapManager.CAMERA_WIDTH Shl 6, MapManager.CAMERA_HEIGHT Shl 6)
 		End

@@ -12,6 +12,8 @@ Private
 	Import lib.animation
 	Import lib.constutil
 	
+	Import sonicgba.sonicdef
+	
 	Import sonicgba.bulletobject
 	Import sonicgba.enemyobject
 	Import sonicgba.playerobject

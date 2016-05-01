@@ -7,6 +7,7 @@ Friend sonicgba.enemyobject
 
 ' Imports:
 Private
+	Import lib.constutil
 	Import lib.animation
 	
 	'Import sonicgba.penguinbullet
