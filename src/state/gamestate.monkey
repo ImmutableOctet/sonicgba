@@ -2556,7 +2556,7 @@ Class GameState Extends State
 			While (i < currentBPItems.Length)
 				Local mFImage:= BP_itemsImg
 				
-				MyAPI.drawImage(g, mFImage, (BP_itemsWidth * currentBPItems[i]), PickValue((BP_items_num[currentBPItems[i]] = Null Or IsToolsUsed(currentBPItems[i])), BP_itemsHeight, 0), BP_itemsWidth, BP_itemsHeight, 0, (SCREEN_WIDTH / 2) - (BP_itemsWidth * 2), (MENU_SPACE * i) + (((((SCREEN_HEIGHT / 2) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE / 2)) + MENU_SPACE), PAUSE_OPTION_ITEMS_NUM) ' Shr 1
+				MyAPI.drawImage(g, mFImage, (BP_itemsWidth * currentBPItems[i]), PickValue(((BP_items_num[currentBPItems[i]] = BP_ITEM_INVINCIBILITY) Or IsToolsUsed(currentBPItems[i])), BP_itemsHeight, 0), BP_itemsWidth, BP_itemsHeight, 0, (SCREEN_WIDTH / 2) - (BP_itemsWidth * 2), (MENU_SPACE * i) + (((((SCREEN_HEIGHT / 2) + PlayerObject.PAUSE_FRAME_OFFSET_Y) + 10) + (MENU_SPACE / 2)) + MENU_SPACE), PAUSE_OPTION_ITEMS_NUM) ' Shr 1
 				
 				g.setColor(0)
 				
@@ -2566,7 +2566,7 @@ Class GameState Extends State
 				i += 1
 			Wend
 			
-			If (BP_items_num[currentBPItems[PlayerObject.cursor]] = Null) Then
+			If (BP_items_num[currentBPItems[PlayerObject.cursor]] = BP_ITEM_INVINCIBILITY) Then
 				Self.tooltipY = MyAPI.calNextPosition(Double(Self.tooltipY), Double(TOOL_TIP_Y_DES), 1, 3)
 			Else
 				Self.tooltipY = MyAPI.calNextPositionReverse(Self.tooltipY, TOOL_TIP_Y_DES, TOOL_TIP_Y_DES_2, 1, 3)

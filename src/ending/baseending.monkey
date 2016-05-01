@@ -3,18 +3,24 @@ Strict
 Public
 
 ' Imports:
+Import gameengine.key
+
 Import lib.animation
 Import lib.animationdrawer
+Import lib.myapi
 Import lib.myrandom
 Import lib.soundsystem
 Import lib.constutil
 
 Import sonicgba.sonicdef
+Import sonicgba.mapmanager
 
 Import state.state
 
 Import com.sega.mobile.framework.device.mfgraphics
 Import com.sega.mobile.framework.device.mfimage
+
+'Import com.sega.mobile.define.mdphone
 
 Import regal.typetool
 

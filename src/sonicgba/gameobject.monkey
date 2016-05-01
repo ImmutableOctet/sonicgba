@@ -1147,7 +1147,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		' This is very likely the main update routine.
 		Method logic:Void() Abstract
 		
-		' This is definitely the main render routine.
+		' This is the main draw routine.
 		Method draw:Void(graphics:MFGraphics) Abstract
 		
 		' This is used to update the collision bounds of a 'GameObject'.
@@ -1618,6 +1618,12 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		End
 	Protected
 		' Extensions:
+		Method draw:Void(g:MFGraphics, visible:Bool)
+			If (visible) Then
+				draw(g)
+			EndIf
+		End
+		
 		Method updateScreenRect:Void(camera:Coordinate)
 			screenRect.setRect((camera.x + MapManager.CAMERA_OFFSET_X) Shl 6, (camera.y + MapManager.CAMERA_OFFSET_Y) Shl 6, MapManager.CAMERA_WIDTH Shl 6, MapManager.CAMERA_HEIGHT Shl 6)
 		End

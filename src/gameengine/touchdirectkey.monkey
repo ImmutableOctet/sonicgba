@@ -286,7 +286,7 @@ Class TouchDirectKey Implements MFComponent
 				Return MFGamePad.KEY_NULL
 			Else
 				If (degree >= 235 And degree < 305) Then
-					Return Key.B_LOOK
+					Return MFGamePad.KEY_JOYSTICK_START
 				EndIf
 				
 				If ((degree >= 0 And degree < 54) Or (degree >= 305 And degree <= 360)) Then

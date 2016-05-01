@@ -5455,7 +5455,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				GameState.guiAniDrawer.draw(g, 5, uiOffsetX + 0, 0, False, 0)
 				
 				' Rings.
-				drawNum(g, ringNum, (uiOffsetX + 12), 15, 0, PickValue((ringNum = 0 And (timeCount / ssdef.PLAYER_MOVE_HEIGHT) Mod 2 = 0), 3, 0))
+				drawNum(g, ringNum, (uiOffsetX + 12), 15, 0, PickValue((ringNum = 0 And (timeCount / 240) Mod 2 = 0), 3, 0))
 				
 				' Score.
 				drawNum(g, PickValue((stageModeState = STATE_RACE_MODE), raceScoreNum, scoreNum), NumberSideX + uiOffsetX, 8, 2, 0)
@@ -5727,9 +5727,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Local min:= (timeCount / 60000)
 			Local sec:= (timeCount Mod 60000) / 1000
 			Local msec:= ((timeCount Mod 60000) Mod 1000) / 10
+			
 			Local numType:= 0
 			
-			If ((GlobalResource.timeIsLimit() Or stageModeState = STATE_RACE_MODE) And (((overTime > timeCount And timeCount > 540000) Or (overTime < timeCount And timeCount < 60000)) And (timeCount / ssdef.PLAYER_MOVE_HEIGHT) Mod 2 = 0)) Then
+			If ((GlobalResource.timeIsLimit() Or stageModeState = STATE_RACE_MODE) And (((overTime > timeCount And timeCount > 540000) Or (overTime < timeCount And timeCount < 60000)) And (timeCount / 240) Mod 2 = 0)) Then
 				numType = 3
 			EndIf
 			

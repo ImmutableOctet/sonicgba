@@ -4,18 +4,11 @@ Public
 
 ' Imports:
 Private
-	Import gameengine.key
-	
 	Import ending.plainending
 	
 	Import platformstandard.standard2
 	
-	Import sonicgba.mapmanager
-	
 	Import state.specialstagestate
-	Import state.titlestate
-	
-	'Import com.sega.mobile.define.mdphone
 Public
 
 ' Classes:
@@ -681,7 +674,7 @@ Class NormalEnding Extends PlainEnding ' Final
 		End
 		
 		Method draw:Void(g:MFGraphics)
-			MyAPI.drawImage(g, endingBackGround, (SCREEN_WIDTH / 2), Self.backGroundY, 17) ' Shr 1
+			MyAPI.drawImage(g, endingBackGround, (SCREEN_WIDTH / 2), Self.backGroundY, TOP|HCENTER) ' Shr 1
 			
 			Select (Self.state)
 				Case STATE_FALLING
