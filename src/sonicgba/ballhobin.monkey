@@ -34,8 +34,8 @@ Class BallHobin Extends HexHobin
 		Global ballHobinImage:MFImage = Null
 		
 		' Fields:
-		Field isH:Bool
 		Field CanAddScore:Bool
+		Field isH__bhobin:Bool
 		
 		Field initPos:Int
 		Field offset_distance:Int
@@ -50,9 +50,9 @@ Class BallHobin Extends HexHobin
 				ballHobinImage = MFImage.createImage("/gimmick/ball_hobin.png")
 			EndIf
 			
-			Self.isH = (Self.mWidth >= Self.mHeight)
+			Self.isH__bhobin = (Self.mWidth >= Self.mHeight)
 			
-			Self.initPos = PickValue(Self.isH, Self.posX, Self.posY)
+			Self.initPos = PickValue(Self.isH__bhobin, Self.posX, Self.posY)
 		End
 	Public
 		' Functions:
@@ -71,7 +71,7 @@ Class BallHobin Extends HexHobin
 			Local preX:= Self.posX
 			Local preY:= Self.posY
 			
-			If (Self.isH) Then
+			If (Self.isH__bhobin) Then
 				If (Self.iLeft = 0) Then
 					Self.posX = Self.moveCal.getPosition()
 				Else

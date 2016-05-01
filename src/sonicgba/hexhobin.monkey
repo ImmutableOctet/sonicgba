@@ -37,7 +37,7 @@ Class HexHobin Extends GimmickObject
 		Global hexHobinImage:MFImage = Null
 		
 		' Fields:
-		Field isH:Bool
+		Field isH__hhobin:Bool
 	Public
 		' Fields:
 		Field hobinCal:HobinCal
@@ -54,16 +54,16 @@ Class HexHobin Extends GimmickObject
 			Local moveDirection:Bool
 			
 			If (Self.mWidth >= Self.mHeight) Then
-				Self.isH = True
+				Self.isH__hhobin = True
 				
 				moveDirection = (Self.iLeft <> 0)
 			Else
-				Self.isH = False
+				Self.isH__hhobin = False
 				
 				moveDirection = (Self.iTop <> 0)
 			EndIf
 			
-			Self.moveCal = New MoveCalculator(PickValue(Self.isH, Self.posX, Self.posY), PickValue(Self.isH, Self.mWidth, Self.mHeight), moveDirection)
+			Self.moveCal = New MoveCalculator(PickValue(Self.isH__hhobin, Self.posX, Self.posY), PickValue(Self.isH__hhobin, Self.mWidth, Self.mHeight), moveDirection)
 			
 			Self.hobinCal = New HobinCal()
 		End
@@ -109,7 +109,7 @@ Class HexHobin Extends GimmickObject
 			Local preX:= Self.posX
 			Local preY:= Self.posY
 			
-			If (Self.isH) Then
+			If (Self.isH__hhobin) Then
 				Self.posX = Self.moveCal.getPosition()
 			Else
 				Self.posY = Self.moveCal.getPosition()
