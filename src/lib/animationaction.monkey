@@ -35,7 +35,10 @@ Class Action
 		' Fields:
 		Field img_clip:MFImage
 		Field m_CurFrame:Short
+		
+		' This may be replaced with a 'DataBuffer' at a later date.
 		Field m_FrameInfo:Byte[][]
+		
 		Field m_OldFrame:Byte
 		Field m_Timer:Short
 		Field m_bLoop:Bool
@@ -43,12 +46,14 @@ Class Action
 		Field m_nFrames:Short
 		
 		' Methods:
-		Method InitializeFrameInfo:Byte[][](nFrames:Int)
+		Method InitializeFrameInfo:Byte[][](nFrames:Int) ' Void
 			Self.m_FrameInfo = New Byte[nFrames][]
 			
 			For Local i:= 0 Until Self.m_nFrames ' Self.m_FrameInfo.Length
 				Self.m_FrameInfo[i] = New Byte[FRAME_DATA_SIZE]
 			Next
+			
+			Return Self.m_FrameInfo
 		End
 	Protected
 		' Fields:

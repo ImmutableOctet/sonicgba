@@ -55,12 +55,14 @@ Class ImageInfo
 		End
 		
 		' Methods:
-		Method InitializeClips:Short[][](nSize:Int)
+		Method InitializeClips:Short[][](nSize:Int) ' Void
 			Self.m_Clips = New Short[nSize][]
 			
 			For Local i:= 0 Until nSize
 				Self.m_Clips[i] = New Short[CLIP_DATA_SIZE]
 			Next
+			
+			Return Self.m_Clips
 		End
 	Public
 		' Methods:
