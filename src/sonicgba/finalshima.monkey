@@ -42,13 +42,14 @@ Class FinalShima Extends GimmickObject ' Final
 		Field dropState:Int
 		
 		Field posOriginalY:Int
-		Field velY:Int
+		
+		Field velY__finalshima:Int
 	Protected
 		' Constructor(s):
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
 			Super.New(id, x, y, left, top, width, height)
 			
-			Self.velY = 0
+			Self.velY__finalshima = 0
 			Self.dropState = 0
 			
 			If (image = Null) Then
@@ -63,7 +64,7 @@ Class FinalShima Extends GimmickObject ' Final
 		Method resetShima:Void()
 			Self.posY = Self.posOriginalY
 			
-			Self.velY = 0
+			Self.velY__finalshima = 0
 			Self.dropState = 0
 			
 			Self.used = False
@@ -103,8 +104,8 @@ Class FinalShima Extends GimmickObject ' Final
 				Self.currentTime = Millisecs()
 				
 				If (Self.currentTime - Self.startTime >= 1000) Then
-					Self.velY += GRAVITY
-					Self.posY += Self.velY
+					Self.velY__finalshima += GRAVITY
+					Self.posY += Self.velY__finalshima
 				EndIf
 			ElseIf (Self.used) Then
 				Self.posY = MyAPI.calNextPosition(Double(Self.posY), Double(Self.posOriginalY + (COLLISION_HEIGHT / 2)), 1, 6)

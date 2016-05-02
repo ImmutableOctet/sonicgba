@@ -41,7 +41,7 @@ Class SpSpring Extends Spring
 		Const VELOCITY_MINUS:Int = 7
 		
 		' Fields:
-		Field drawer:AnimationDrawer
+		Field drawer__spspring:AnimationDrawer
 		
 		Field spEntered:Bool
 	Public
@@ -65,7 +65,7 @@ Class SpSpring Extends Spring
 			
 			Self.springPower = SP_SPRING_POWER
 			
-			Self.drawer = springAnimation.getDrawer(0, False, 0)
+			Self.drawer__spspring = springAnimation.getDrawer(0, False, 0)
 			Self.spEntered = GameState.isBackFromSpStage
 		End
 		
@@ -81,10 +81,10 @@ Class SpSpring Extends Spring
 		End
 		
 		Method draw:Void(g:MFGraphics)
-			drawInMap(g, Self.drawer, Self.posX, Self.posY)
+			drawInMap(g, Self.drawer__spspring, Self.posX, Self.posY)
 			
-			If (Self.drawer.checkEnd()) Then
-				Self.drawer.setActionId(0)
+			If (Self.drawer__spspring.checkEnd()) Then
+				Self.drawer__spspring.setActionId(0)
 			EndIf
 			
 			drawCollisionRect(g)
@@ -109,7 +109,7 @@ Class SpSpring Extends Spring
 								StageManager.saveSpecialStagePoint(Self.posX - COLLISION_WIDTH, Self.posY)
 							EndIf
 							
-							Self.drawer.setActionId(1)
+							Self.drawer__spspring.setActionId(1)
 						Default
 							' Nothing so far.
 					End Select
@@ -132,7 +132,7 @@ Class SpSpring Extends Spring
 					StageManager.saveSpecialStagePoint((Self.posX - COLLISION_WIDTH), Self.posY)
 				EndIf
 				
-				Self.drawer.setActionId(1)
+				Self.drawer__spspring.setActionId(1)
 			EndIf
 		End
 		
@@ -141,6 +141,6 @@ Class SpSpring Extends Spring
 		End
 		
 		Method close:Void()
-			Self.drawer = Null
+			Self.drawer__spspring = Null
 		End
 End
