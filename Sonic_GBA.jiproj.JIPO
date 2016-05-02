@@ -1573,8 +1573,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>11</X>
-        <Y>582</Y>
+        <X>26</X>
+        <Y>645</Y>
       </CursorPos>
       <DocGUID>3f379cf1-3d58-40e6-a7ce-66cfb2563819</DocGUID>
       <Bookmarks />
@@ -1590,7 +1590,7 @@
     <DocUserOptions Filename=".\src\sonicgba\playersupersonic.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>2</X>
-        <Y>77</Y>
+        <Y>91</Y>
       </CursorPos>
       <DocGUID>a7c78a22-a8ef-41dc-a0c2-96239d2071e0</DocGUID>
       <Bookmarks />

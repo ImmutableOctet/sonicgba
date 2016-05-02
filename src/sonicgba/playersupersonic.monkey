@@ -92,7 +92,8 @@ Class PlayerSuperSonic Extends PlayerObject
 		
 		Field starVec:Stack<StarEffect>
 		
-		Field smallJumpCount:Int
+		Field supersonic_smallJumpCount:Int
+		
 		Field starCount:Int
 	Public
 		' Constructor(s):
@@ -477,7 +478,7 @@ Class PlayerSuperSonic Extends PlayerObject
 					
 					SoundSystem.getInstance().playSe(SoundSystem.SE_116)
 					
-					Self.smallJumpCount = SUPER_ANI_STAR_1
+					Self.supersonic_smallJumpCount = SUPER_ANI_STAR_1
 				EndIf
 				
 				If (Key.press(Key.gSelect) And Not Self.attackEffectShow) Then
@@ -527,8 +528,8 @@ Class PlayerSuperSonic Extends PlayerObject
 				EndIf
 			EndIf
 			
-			If (Self.smallJumpCount > 0) Then
-				Self.smallJumpCount -= 1
+			If (Self.supersonic_smallJumpCount > 0) Then
+				Self.supersonic_smallJumpCount -= 1
 				
 				If (Not Key.repeated(Key.gUp | Key.B_HIGH_JUMP)) Then
 					Self.velY += (GRAVITY / 2) ' Shr 1
