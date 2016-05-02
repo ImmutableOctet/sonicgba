@@ -16,16 +16,18 @@ Class AntiGravity Extends GimmickObject
 	Private
 		' Fields:
 		Field activeAfterNoCollison:Bool
+		
 		Field enterPlayerX:Int
-		Field iLeft:Int
+		
+		Field iLeft__antigravity:Int
 	Protected
 		' Constructor(s):
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
 			Super.New(id, x, y, left, top, width, height)
 			
-			Self.iLeft = left
+			Self.iLeft__antigravity = left
 			
-			If (Self.iLeft = 0 And Self.iTop = 0) Then
+			If (Self.iLeft__antigravity = 0 And Self.iTop = 0) Then
 				Self.activeAfterNoCollison = True
 			EndIf
 		End
@@ -51,7 +53,7 @@ Class AntiGravity Extends GimmickObject
 					Self.used = False
 				ElseIf (Not Self.used) Then
 					' Magic numbers: Not sure if these are directions or not.
-					Select (Self.iLeft)
+					Select (Self.iLeft__antigravity)
 						Case 0 ' DIRECTION_UP
 							If (Self.iTop <> 0) Then
 								p.setAntiGravity(False)
