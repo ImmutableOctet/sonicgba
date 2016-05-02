@@ -372,12 +372,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\animationaction.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\lib\animationaction.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>13</X>
-        <Y>88</Y>
+        <X>0</X>
+        <Y>45</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>d62aec2d-ca5d-41d5-8f4b-6546e092ef86</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationdrawer.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -393,12 +394,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\animationimageinfo.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\lib\animationimageinfo.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>7</X>
+        <Y>62</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>fcf46441-aa44-4e1e-a620-bb24b7fb7b1b</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\constutil.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -2218,7 +2220,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\common" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\ending" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\gameengine" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\lib\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\mflib" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\platformstandard" Expanded="false" />
