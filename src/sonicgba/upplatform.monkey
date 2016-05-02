@@ -20,7 +20,7 @@ Public
 Class UpPlatform Extends Platform
 	Private
 		' Fields:
-		Field offsetY:Int
+		Field offsetY__upplatform:Int
 		Field posOriginalY:Int
 		Field velocity:Int
 		
@@ -31,7 +31,7 @@ Class UpPlatform Extends Platform
 			Super.New(id, x, y, left, top, width, height)
 			
 			Self.velocity = 128 ' (COLLISION_OFFSET_Y / 2)
-			Self.offsetY = COLLISION_OFFSET_Y
+			Self.offsetY__upplatform = COLLISION_OFFSET_Y
 			
 			Self.posOriginalY = Self.posY
 			Self.initFlag = False
@@ -90,7 +90,7 @@ Class UpPlatform Extends Platform
 		
 		Method draw:Void(g:MFGraphics)
 			If (Not Self.initFlag) Then
-				drawInMap(g, platformImage, Self.posX, (Self.posY + DRAW_OFFSET_Y) + Self.offsetY, BOTTOM|HCENTER)
+				drawInMap(g, platformImage, Self.posX, (Self.posY + DRAW_OFFSET_Y) + Self.offsetY__upplatform, BOTTOM|HCENTER)
 			EndIf
 		End
 End

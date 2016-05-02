@@ -327,10 +327,10 @@ Class GimmickObject Extends GameObject
 		Global firemtAnimation:Animation
 		
 		' Fields:
-		Field iHeight:Int
-		Field iLeft:Int
-		Field iTop:Int
 		Field iWidth:Int
+		Field iHeight:Int
+		Field iTop:Int
+		Field iLeft:Int
 		
 		Field used:Bool
 	Public
