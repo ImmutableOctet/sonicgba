@@ -77,26 +77,35 @@ Class MFImage
 				
 				Local imageName:= is.ReadString(is.ReadByte(), "ascii")
 				
-				Local palData:= is.ReadAll()
+				#If TARGET <> "html5"
+					Local palData:= is.ReadAll()
+				#EndIf
 				
 				is.Close()
 				
-				Local info:= New Int[2]
+				Local pixMapPath:= (ExtractDir(paletteFileName) + "/" + imageName)
 				
-				Local pixMap:= LoadImageData(ExtractDir(paletteFileName) + "/" + imageName, info)
-				
-				For Local i:= 0 Until palData.Length
-					pixMap.PokeByte((i + 37), palData.PeekByte(i))
-				Next
-				
-				Local width:= info[0]
-				Local height:= info[1]
-				
-				Local img:= generateImage(width, height)
-				
-				img.WritePixels(0, 0, width, height, pixMap)
-				
-				Return createImage(img)
+				' This behavior will change in the future:
+				#If TARGET <> "html5"
+					Local info:= New Int[2]
+					
+					Local pixMap:= LoadImageData(pixMapPath, info)
+					
+					For Local i:= 0 Until palData.Length
+						pixMap.PokeByte((i + 37), palData.PeekByte(i))
+					Next
+					
+					Local width:= info[0]
+					Local height:= info[1]
+					
+					Local img:= generateImage(width, height)
+					
+					img.WritePixels(0, 0, width, height, pixMap)
+					
+					Return createImage(img)
+				#Else
+					Return createImage(pixMapPath)
+				#End
 			Catch E:StreamError ' E:Throwable
 				' Nothing so far.
 			End Try

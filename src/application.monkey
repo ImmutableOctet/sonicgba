@@ -18,8 +18,10 @@ Public
 ' Imports:
 Private
 	Import mflib.mainstate
-	'Import sonicgba.globalresource
 	Import state.state
+	
+	Import sonicgba.effect
+	'Import sonicgba.globalresource
 	
 	Import com.sega.mobile.framework.mfgamestate
 	'Import com.sega.mobile.framework.mfmain
@@ -53,6 +55,13 @@ Private
 	
 	Import monkey.random
 Public
+
+' Functions:
+#If TARGET <> "glfw"
+	Function Confirm:Bool(title:String, text:String, serious:Bool=False)
+		Return True ' False
+	End
+#End
 
 ' Classes:
 Class Application Extends App ' Main Extends MFMain
@@ -111,6 +120,9 @@ Class Application Extends App ' Main Extends MFMain
 			
 			' Initialize the framework.
 			InitializeMobileFramework()
+			
+			' Initialize the global "effect array".
+			Effect.effectArray = Effect.GenerateEffectArray()
 			
 			MFDevice.notifyStart(graphics, getEntryGameState(), DeviceWidth(), DeviceHeight())
 			

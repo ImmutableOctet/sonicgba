@@ -23,8 +23,8 @@ Class Effect
 		Const EFFECT_NUM:Int = 10
 		
 		' Global variable(s):
-		Global effectArray:Effect[][] = GenerateEffectArray()
-	Private
+		Global effectArray:Effect[][]
+		
 		' Functions:
 		Function GenerateEffectArray:Effect[][]()
 			Local effectArray:= New Effect[EFFECT_LAYER_NUM][]
@@ -37,7 +37,7 @@ Class Effect
 			
 			Return effectArray
 		End
-		
+	Private
 		' Fields:
 		Field drawer:AnimationDrawer
 		Field mPosX:Int
@@ -78,6 +78,7 @@ Class Effect
 			
 			If (animation <> Null) Then
 				Self.drawer = animation.getDrawer(id, False, trans)
+				
 				Self.mPosX = x
 				Self.mPosY = y
 			EndIf

@@ -45,13 +45,15 @@ Private
 	Import brl.stream
 	
 	Import brl.datastream
-	Import brl.filestream
+	'Import brl.filestream
 	
 	Import monkey.map
 	Import monkey.stack
 	
 	Import regal.typetool
 	Import regal.ioutil.publicdatastream
+	
+	Import regal.autostream
 Public
 
 ' Classes:
@@ -155,6 +157,17 @@ Class MFDevice Final
 			EndIf
 			
 			Return url
+		End
+		
+		Function OpenFileStream:Stream(path:String, mode:String) ' FileStream
+			'Local f:= FileStream.Open(path, mode)
+			Local f:= OpenAutoStream(path, mode)
+			
+			If (f = Null) Then
+				Throw New FileNotFoundException(f, path)
+			EndIf
+			
+			Return f
 		End
 		
 		Function Update:Void()
@@ -581,15 +594,6 @@ Class MFDevice Final
 		' Functions:
 		
 		' Extensions:
-		Function OpenFileStream:FileStream(path:String, mode:String)
-			Local f:= FileStream.Open(path, mode)
-			
-			If (f = Null) Then
-				Throw New FileNotFoundException(f, path)
-			EndIf
-			
-			Return f
-		End
 		
 		' Record-related:
 		Function ToRecordPath:String(name:String)

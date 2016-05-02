@@ -229,6 +229,6 @@ Class Bee Extends EnemyObject
 		End
 		
 		Method IsFacePlayer:Bool()
-			IsFacePlayer(player)
+			Return IsFacePlayer(player)
 		End
 End

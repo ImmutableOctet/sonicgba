@@ -98,7 +98,7 @@ Class RabbitFish Extends EnemyObject
 		End
 		
 		Method IsFacetoPlayer:Bool()
-			IsFacetoPlayer(player)
+			Return IsFacetoPlayer(player)
 		End
 		
 		

@@ -23,7 +23,8 @@ Class HobinCal ' Implements SonicDef
 		Field power:Int
 		Field timeCount:Int
 	Public
-		Method startHobin:Int(power:Int, degree:Int, time:Int)
+		' Methods:
+		Method startHobin:Void(power:Int, degree:Int, time:Int)
 			Self.power = 1200
 			
 			While (degree < 0)
