@@ -33,29 +33,32 @@ Class BreatheBubble Extends UpBubble
 		' Fields:
 		Field CanBreathe:Bool
 		
-		Field initFlag:Bool
+		Field initFlag__breathebubble:Bool
+		
 		Field isBeginPlayStageBGM:Bool
 		Field isFirstUp:Bool
 		
-		Field LIFE_RANGE:Int ' Final
-		
 		Field breathCnt:Int
-		Field direct:Int
-		Field posOriginalY:Int
-		Field velx:Int
-		Field vely:Int
+		Field posOriginalY__breathebubble:Int
 		
-		Field drawer:AnimationDrawer
+		Field direct__breathebubble:Int
+		
+		Field velx__breathebubble:Int
+		Field vely__breathebubble:Int
+		
+		Field drawer__breathebubble:AnimationDrawer
 	Protected
 		' Constructor(s):
 		Method Construct_BreatheBubble:Void()
-			Self.velx = 0
-			Self.vely = -120
-			Self.direct = 0
-			Self.LIFE_RANGE = 6400
+			Self.velx__breathebubble = 0
+			Self.vely__breathebubble = -120
+			
+			Self.direct__breathebubble = 0 ' DIRECTION_UP
+			
 			Self.CanBreathe = False
 			Self.isBeginPlayStageBGM = False
 			Self.isFirstUp = True
+			
 			Self.breathCnt = 0
 		End
 		
@@ -83,14 +86,15 @@ Class BreatheBubble Extends UpBubble
 			EndIf
 			
 			If (bubbleAnimation <> Null) Then
-				Self.drawer = bubbleAnimation.getDrawer(3, False, 0)
+				Self.drawer__breathebubble = bubbleAnimation.getDrawer(3, False, 0)
 				
-				Self.direct = MyRandom.nextInt(-1, 1)
+				Self.direct__breathebubble = MyRandom.nextInt(-1, 1)
 			EndIf
 			
-			Self.posOriginalY = Self.posY
+			Self.posOriginalY__breathebubble = Self.posY
 			
-			Self.initFlag = False
+			Self.initFlag__breathebubble = False
+			
 			Self.CanBreathe = False
 			Self.isFirstUp = True
 			
@@ -99,11 +103,11 @@ Class BreatheBubble Extends UpBubble
 		
 		' Methods:
 		Method logic:Void()
-			If (Not Self.used And Not Self.initFlag) Then
-				If (Self.direct >= 0) Then
-					Self.velx = MyRandom.nextInt(0, 20)
+			If (Not Self.used And Not Self.initFlag__breathebubble) Then
+				If (Self.direct__breathebubble >= 0) Then
+					Self.velx__breathebubble = MyRandom.nextInt(0, 20)
 				Else
-					Self.velx = MyRandom.nextInt(-20, 0)
+					Self.velx__breathebubble = MyRandom.nextInt(-20, 0)
 				EndIf
 				
 				If (Self.breathCnt >= 1) Then
@@ -111,15 +115,15 @@ Class BreatheBubble Extends UpBubble
 				EndIf
 				
 				If (Self.breathCnt < BUBBLE_LIFE) Then
-					Self.posX += Self.velx
-					Self.posY += Self.vely
+					Self.posX += Self.velx__breathebubble
+					Self.posY += Self.vely__breathebubble
 				Else
 					Self.used = True
 				EndIf
 				
 				refreshCollisionRect(Self.posX, Self.posY)
 				
-				If (Self.drawer <> Null And Self.drawer.getCurrentFrame() = 5) Then
+				If (Self.drawer__breathebubble <> Null And Self.drawer__breathebubble.getCurrentFrame() = 5) Then
 					Self.CanBreathe = True
 				EndIf
 				
@@ -130,7 +134,7 @@ Class BreatheBubble Extends UpBubble
 				EndIf
 				
 				If (Self.posY <= (StageManager.getWaterLevel() Shl 6) + (BUBBLE_RANGE / 2)) Then
-					Self.initFlag = True
+					Self.initFlag__breathebubble = True
 					
 					Self.CanBreathe = False
 				EndIf
@@ -138,12 +142,12 @@ Class BreatheBubble Extends UpBubble
 		End
 		
 		Method draw:Void(g:MFGraphics)
-			If (Not Self.used And Not Self.initFlag) Then
-				If (Self.drawer.checkEnd()) Then
-					Self.drawer = bubbleAnimation.getDrawer(4, True, TRANS_NONE)
+			If (Not Self.used And Not Self.initFlag__breathebubble) Then
+				If (Self.drawer__breathebubble.checkEnd()) Then
+					Self.drawer__breathebubble = bubbleAnimation.getDrawer(4, True, TRANS_NONE)
 				EndIf
 				
-				drawInMap(g, Self.drawer, Self.posX, Self.posY)
+				drawInMap(g, Self.drawer__breathebubble, Self.posX, Self.posY)
 				
 				drawCollisionRect(g)
 			EndIf
@@ -190,6 +194,6 @@ Class BreatheBubble Extends UpBubble
 		End
 		
 		Method close:Void()
-			Self.drawer = Null
+			Self.drawer__breathebubble = Null
 		End
 End

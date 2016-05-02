@@ -26,6 +26,7 @@ Class UpBubble Extends GimmickObject
 		Field direct:Int
 		
 		Field posOriginalY:Int
+		
 		Field velx:Int
 		Field vely:Int
 		
