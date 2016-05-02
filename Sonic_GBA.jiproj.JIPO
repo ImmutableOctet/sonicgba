@@ -1572,18 +1572,19 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>599</Y>
+        <X>11</X>
+        <Y>582</Y>
       </CursorPos>
       <DocGUID>3f379cf1-3d58-40e6-a7ce-66cfb2563819</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\playersonic.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\playersonic.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>2</X>
+        <Y>143</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>97133f51-8d87-4ab9-a2d2-8a87807722dc</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playersupersonic.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>

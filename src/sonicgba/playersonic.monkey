@@ -130,14 +130,16 @@ Class PlayerSonic Extends PlayerObject
 		
 		Field attackRect:PlayerAnimationCollisionRect
 		
-		Field effectDrawer:AnimationDrawer
+		Field sonic_effectDrawer:AnimationDrawer
+		
 		Field SuperSonicDrawer:AnimationDrawer
 		
-		Field attackCount:Int
-		Field attackLevel:Int
+		Field sonic_attackCount:Int
+		Field sonic_attackLevel:Int
 		
 		Field leftCount:Int
 		Field rightCount:Int
+		
 		Field SuperSonicAnimationID:Int
 		
 		Field firstJump:Bool
@@ -151,7 +153,7 @@ Class PlayerSonic Extends PlayerObject
 			Local animation:= New Animation("/animation/player/chr_sonic")
 			
 			Self.drawer = animation.getDrawer()
-			Self.effectDrawer = animation.getDrawer()
+			Self.sonic_effectDrawer = animation.getDrawer()
 			
 			Self.attackRect = New PlayerAnimationCollisionRect(Self)
 			
@@ -165,8 +167,8 @@ Class PlayerSonic Extends PlayerObject
 			Animation.closeAnimationDrawer(Self.SuperSonicDrawer)
 			Self.SuperSonicDrawer = Null
 			
-			Animation.closeAnimationDrawer(Self.effectDrawer)
-			Self.effectDrawer = Null
+			Animation.closeAnimationDrawer(Self.sonic_effectDrawer)
+			Self.sonic_effectDrawer = Null
 		End
 		
 		Method slipStart:Void()
@@ -352,19 +354,19 @@ Class PlayerSonic Extends PlayerObject
 									Self.drawer.draw(g, Self.myAnimationID, ((Self.footPointX Shr 6) - camera.x), ((Self.footPointY Shr 6) - camera.y), loop, 0)
 									
 									If (Not Self.isInWater) Then
-										Self.effectDrawer.setSpeed(1, 1) ' EFFECT_JUMP
+										Self.sonic_effectDrawer.setSpeed(1, 1) ' EFFECT_JUMP
 									Else
-										Self.effectDrawer.setSpeed(1, 2) ' EFFECT_JUMP ' EFFECT_SLIP
+										Self.sonic_effectDrawer.setSpeed(1, 2) ' EFFECT_JUMP ' EFFECT_SLIP
 									EndIf
 								Case SONIC_ANI_SLIDE_D45
-									Self.effectDrawer.draw(g, SONIC_ANI_SLIDE_D45_EFFECT, ((Self.footPointX Shr 6) - camera.x) + 8, ((Self.footPointY Shr 6) - camera.y), loop, 0)
+									Self.sonic_effectDrawer.draw(g, SONIC_ANI_SLIDE_D45_EFFECT, ((Self.footPointX Shr 6) - camera.x) + 8, ((Self.footPointY Shr 6) - camera.y), loop, 0)
 									
 									Self.drawer.draw(g, Self.myAnimationID, ((Self.footPointX Shr 6) - camera.x) + 8, ((Self.footPointY Shr 6) - camera.y), loop, 0)
 									
 									If (Not Self.isInWater) Then
-										Self.effectDrawer.setSpeed(1, 1) ' EFFECT_JUMP
+										Self.sonic_effectDrawer.setSpeed(1, 1) ' EFFECT_JUMP
 									Else
-										Self.effectDrawer.setSpeed(1, 2) ' EFFECT_JUMP ' EFFECT_SLIP
+										Self.sonic_effectDrawer.setSpeed(1, 2) ' EFFECT_JUMP ' EFFECT_SLIP
 									EndIf
 								Default
 									If (Self.isInWater) Then
@@ -492,23 +494,23 @@ Class PlayerSonic Extends PlayerObject
 							trans = PickValue((Self.velX > 0), TRANS_NONE, TRANS_MIRROR)
 						EndIf
 						
-						Self.effectDrawer.draw(g, SONIC_ANI_JUMP_ATTACK_EFFECT, (Self.posX Shr 6) - camera.x, (((Self.posY + PickValue(Self.isAntiGravity, BALL_HEIGHT_OFFSET, 0)) Shr 6) + (drawY Shr 6)) - camera.y, False, trans) ' 12 ' 1024
+						Self.sonic_effectDrawer.draw(g, SONIC_ANI_JUMP_ATTACK_EFFECT, (Self.posX Shr 6) - camera.x, (((Self.posY + PickValue(Self.isAntiGravity, BALL_HEIGHT_OFFSET, 0)) Shr 6) + (drawY Shr 6)) - camera.y, False, trans) ' 12 ' 1024
 						
 						If (Not Self.isInWater) Then
-							Self.effectDrawer.setSpeed(1, 1)
+							Self.sonic_effectDrawer.setSpeed(1, 1)
 						Else
-							Self.effectDrawer.setSpeed(1, 2)
+							Self.sonic_effectDrawer.setSpeed(1, 2)
 						EndIf
 				End Select
 				
-				If (Self.effectDrawer.checkEnd()) Then
+				If (Self.sonic_effectDrawer.checkEnd()) Then
 					Self.effectID = EFFECT_NONE
 				EndIf
 				
 				Self.attackRectVec.Clear()
 				
 				If (Self.effectID = EFFECT_JUMP) Then
-					rect = Self.effectDrawer.getARect()
+					rect = Self.sonic_effectDrawer.getARect()
 				Else
 					rect = Self.drawer.getARect()
 				EndIf
@@ -631,9 +633,9 @@ Class PlayerSonic Extends PlayerObject
 		Method beSpring:Void(springPower:Int, direction:Int)
 			Super.beSpring(springPower, direction)
 			
-			If (Self.attackLevel <> 0) Then
-				Self.attackLevel = 0
-				Self.attackCount = 0
+			If (Self.sonic_attackLevel <> 0) Then
+				Self.sonic_attackLevel = 0
+				Self.sonic_attackCount = 0
 				
 				Select (direction)
 					Case DIRECTION_LEFT, DIRECTION_RIGHT
@@ -651,9 +653,9 @@ Class PlayerSonic Extends PlayerObject
 		Method beAccelerate:Bool(power:Int, IsX:Bool, sender:GameObject)
 			Local re:= Super.beAccelerate(power, IsX, sender)
 			
-			If (Self.attackLevel <> 0) Then
-				Self.attackLevel = 0
-				Self.attackCount = 0
+			If (Self.sonic_attackLevel <> 0) Then
+				Self.sonic_attackLevel = 0
+				Self.sonic_attackCount = 0
 				Self.animationID = SUPER_SONIC_ANI_GO
 				
 				If (Key.repeated(Key.gDown)) Then
@@ -747,10 +749,10 @@ Class PlayerSonic Extends PlayerObject
 					
 					soundInstance.playSe(79)
 					
-					Self.effectDrawer.restart()
-					Self.effectDrawer.setActionId(SONIC_ANI_JUMP_ATTACK_EFFECT)
+					Self.sonic_effectDrawer.restart()
+					Self.sonic_effectDrawer.setActionId(SONIC_ANI_JUMP_ATTACK_EFFECT)
 					
-					Local rect:= Self.effectDrawer.getARect()
+					Local rect:= Self.sonic_effectDrawer.getARect()
 					
 					If (rect.Length > 0) Then
 						Self.attackRect.initCollision(rect[0] Shl 6, rect[1] Shl 6, rect[2] Shl 6, rect[3] Shl 6, SONIC_ANI_JUMP_ATTACK_EFFECT)
@@ -801,11 +803,11 @@ Class PlayerSonic Extends PlayerObject
 				EndIf
 			EndIf
 			
-			If (Self.attackCount > 0) Then
-				Self.attackCount -= 1
+			If (Self.sonic_attackCount > 0) Then
+				Self.sonic_attackCount -= 1
 			EndIf
 			
-			If ((Self.myAnimationID = SONIC_ANI_ATTACK_1 Or Self.myAnimationID = SONIC_ANI_ATTACK_2 Or Self.myAnimationID = SONIC_ANI_ATTACK_3) And Self.faceDegree <> 90 And Self.faceDegree <> 270 And Self.attackLevel = 0) Then
+			If ((Self.myAnimationID = SONIC_ANI_ATTACK_1 Or Self.myAnimationID = SONIC_ANI_ATTACK_2 Or Self.myAnimationID = SONIC_ANI_ATTACK_3) And Self.faceDegree <> 90 And Self.faceDegree <> 270 And Self.sonic_attackLevel = 0) Then
 				Self.animationID = SONIC_ANI_STAND
 				Self.myAnimationID = ANIMATION_CONVERT[0]
 				
@@ -821,18 +823,18 @@ Class PlayerSonic Extends PlayerObject
 			
 			Select (Self.myAnimationID)
 				Case SONIC_ANI_ATTACK_1
-					If ((Self.attackCount = 0 Or getVelX() = 0) And Not Self.isStopByObject) Then
-						Self.attackLevel = 0
+					If ((Self.sonic_attackCount = 0 Or getVelX() = 0) And Not Self.isStopByObject) Then
+						Self.sonic_attackLevel = 0
 					Else
 						Self.myAnimationID = SONIC_ANI_ATTACK_1
 					EndIf
 					
-					If (Self.isStopByObject And Self.attackCount = 0) Then
-						Self.attackLevel = 0
+					If (Self.isStopByObject And Self.sonic_attackCount = 0) Then
+						Self.sonic_attackLevel = 0
 					EndIf
 					
 					If (Key.press(Key.gSelect) And Not Self.isCrashPipe) Then
-						Self.attackLevel = 2
+						Self.sonic_attackLevel = 2
 						Self.myAnimationID = SONIC_ANI_ATTACK_2
 						
 						soundInstance.playSe(SoundSystem.SE_117)
@@ -862,7 +864,7 @@ Class PlayerSonic Extends PlayerObject
 				Case SONIC_ANI_ATTACK_2
 					If (Not Self.drawer.checkEnd()) Then
 						Self.myAnimationID = SONIC_ANI_ATTACK_2
-					ElseIf (Self.attackLevel = SUPER_SONIC_ANI_GO And (getVelX() <> 0 Or Self.isStopByObject)) Then
+					ElseIf (Self.sonic_attackLevel = SUPER_SONIC_ANI_GO And (getVelX() <> 0 Or Self.isStopByObject)) Then
 						Self.myAnimationID = SONIC_ANI_ATTACK_3
 						
 						v0 = PickValue(Self.isInWater, SONIC_ATTACK_LEVEL_3_V0_IN_WATER, SONIC_ATTACK_LEVEL_3_V0)
@@ -885,10 +887,10 @@ Class PlayerSonic Extends PlayerObject
 							setVelX(startSpeedSet)
 						EndIf
 						
-						Self.attackCount = 12 ' SONIC_ANI_JUMP_ATTACK_EFFECT
+						Self.sonic_attackCount = 12 ' SONIC_ANI_JUMP_ATTACK_EFFECT
 						
 						soundInstance.playSe(SoundSystem.SE_111)
-					ElseIf (Self.attackLevel = SONIC_ANI_JUMP) Then
+					ElseIf (Self.sonic_attackLevel = SONIC_ANI_JUMP) Then
 						Local preVelX:= PickValue(Self.isStopByObject, PickValue(((Self.faceDirection ~ Self.isAntiGravity) <> 0), BACK_JUMP_SPEED_X, -BACK_JUMP_SPEED_X), getVelX())
 						
 						If (Self.isInSnow) Then
@@ -905,7 +907,7 @@ Class PlayerSonic Extends PlayerObject
 						
 						Super.doJumpV(startSpeedSet)
 						
-						Self.attackLevel = 0
+						Self.sonic_attackLevel = 0
 						
 						setVelX(-preVelX)
 						
@@ -916,29 +918,29 @@ Class PlayerSonic Extends PlayerObject
 					Else
 						Self.animationID = SONIC_ANI_STAND
 						
-						Self.attackLevel = 0
+						Self.sonic_attackLevel = 0
 						
 						setVelX(0)
 						
 						Self.totalVelocity = 0
 					EndIf
 					
-					If (Self.attackLevel <> 0) Then
+					If (Self.sonic_attackLevel <> 0) Then
 						If (Not Key.press(Key.gSelect) And Key.press(Key.B_HIGH_JUMP)) Then
-							Self.attackLevel = 4
+							Self.sonic_attackLevel = 4
 						Else
-							Self.attackLevel = 3
+							Self.sonic_attackLevel = 3
 						EndIf
 					EndIf
 				Case SONIC_ANI_ATTACK_3
 					If (getVelX() <> 0 Or Self.isStopByObject) Then
 						Self.myAnimationID = SONIC_ANI_ATTACK_3
 						
-						If (Self.isStopByObject And Self.attackCount = 0) Then
-							Self.attackLevel = 0
+						If (Self.isStopByObject And Self.sonic_attackCount = 0) Then
+							Self.sonic_attackLevel = 0
 						EndIf
 					Else
-						Self.attackLevel = 0
+						Self.sonic_attackLevel = 0
 					EndIf
 				Default
 					If (Not (Self.animationID = SONIC_ANI_JUMP Or Not Key.press(Key.gSelect) Or Self.slipping Or Self.animationID = SONIC_ANI_LOOK_UP_2 Or Self.isCrashFallingSand)) Then
@@ -946,9 +948,9 @@ Class PlayerSonic Extends PlayerObject
 							Self.onBank = False
 						EndIf
 						
-						Self.attackLevel = 1
+						Self.sonic_attackLevel = 1
 						
-						Self.attackCount = PickValue(Self.isInWater, ATTACK_COUNT_LEVEL_2, ATTACK_COUNT_LEVEL_1)
+						Self.sonic_attackCount = PickValue(Self.isInWater, ATTACK_COUNT_LEVEL_2, ATTACK_COUNT_LEVEL_1)
 						
 						Self.animationID = NO_ANIMATION
 						Self.myAnimationID = SONIC_ANI_ATTACK_1
@@ -989,17 +991,17 @@ Class PlayerSonic Extends PlayerObject
 			
 			Self.isStopByObject = False
 			
-			Self.isAttacking = (Self.attackLevel <> 0)
+			Self.isAttacking = (Self.sonic_attackLevel <> 0)
 		End
 		
 		Method extraLogicOnObject:Void()
 			Self.firstJump = False
 			
-			If (Self.attackCount > 0) Then
-				Self.attackCount -= 1
+			If (Self.sonic_attackCount > 0) Then
+				Self.sonic_attackCount -= 1
 			EndIf
 			
-			If ((Self.myAnimationID = SONIC_ANI_ATTACK_1 Or Self.myAnimationID = SONIC_ANI_ATTACK_2 Or Self.myAnimationID = SONIC_ANI_ATTACK_3) And Self.attackLevel = 0) Then
+			If ((Self.myAnimationID = SONIC_ANI_ATTACK_1 Or Self.myAnimationID = SONIC_ANI_ATTACK_2 Or Self.myAnimationID = SONIC_ANI_ATTACK_3) And Self.sonic_attackLevel = 0) Then
 				Self.animationID = SONIC_ANI_STAND
 				Self.myAnimationID = ANIMATION_CONVERT[0]
 			EndIf
@@ -1009,18 +1011,18 @@ Class PlayerSonic Extends PlayerObject
 			
 			Select (Self.myAnimationID)
 				Case SONIC_ANI_ATTACK_1
-					If ((Self.attackCount = 0 Or getVelX() = 0) And Not Self.isStopByObject) Then
-						Self.attackLevel = 0
+					If ((Self.sonic_attackCount = 0 Or getVelX() = 0) And Not Self.isStopByObject) Then
+						Self.sonic_attackLevel = 0
 					Else
 						Self.myAnimationID = SONIC_ANI_ATTACK_1
 					EndIf
 					
-					If (Self.isStopByObject And Self.attackCount = 0) Then
-						Self.attackLevel = 0
+					If (Self.isStopByObject And Self.sonic_attackCount = 0) Then
+						Self.sonic_attackLevel = 0
 					EndIf
 					
 					If (Key.press(Key.gSelect) And Not Self.isCrashPipe) Then
-						Self.attackLevel = 2
+						Self.sonic_attackLevel = 2
 						
 						Self.myAnimationID = SONIC_ANI_ATTACK_2
 						
@@ -1051,10 +1053,10 @@ Class PlayerSonic Extends PlayerObject
 				Case SONIC_ANI_ATTACK_2
 					If (Not Self.drawer.checkEnd()) Then
 						Self.myAnimationID = SONIC_ANI_ATTACK_2
-					ElseIf (Self.attackLevel < 3 Or (getVelX() = 0 And Not Self.isStopByObject)) Then
+					ElseIf (Self.sonic_attackLevel < 3 Or (getVelX() = 0 And Not Self.isStopByObject)) Then
 						Self.animationID = SONIC_ANI_STAND
 						
-						Self.attackLevel = 0
+						Self.sonic_attackLevel = 0
 						
 						setVelX(0)
 						
@@ -1082,29 +1084,29 @@ Class PlayerSonic Extends PlayerObject
 							setVelX(startSpeedSet)
 						EndIf
 						
-						Self.attackCount = ATTACK_COUNT_LEVEL_2
+						Self.sonic_attackCount = ATTACK_COUNT_LEVEL_2
 						
 						soundInstance.playSe(SoundSystem.SE_111)
 					EndIf
 					
 					If (Key.press(Key.gSelect)) Then
-						Self.attackLevel = 3
+						Self.sonic_attackLevel = 3
 					EndIf
 				Case SONIC_ANI_ATTACK_3
 					If (getVelX() <> 0 Or Self.isStopByObject) Then
 						Self.myAnimationID = SONIC_ANI_ATTACK_3
 					Else
-						Self.attackLevel = 0
+						Self.sonic_attackLevel = 0
 					EndIf
 					
-					If (Self.isStopByObject And Self.attackCount = 0) Then
-						Self.attackLevel = 0
+					If (Self.isStopByObject And Self.sonic_attackCount = 0) Then
+						Self.sonic_attackLevel = 0
 					EndIf
 				Default
 					If (Not (Self.animationID = SONIC_ANI_JUMP Or Not Key.press(Key.gSelect) Or Self.animationID = SONIC_ANI_LOOK_UP_2 Or Self.isCrashFallingSand)) Then
-						Self.attackLevel = SUPER_SONIC_ANI_CHANGE_1
+						Self.sonic_attackLevel = SUPER_SONIC_ANI_CHANGE_1
 						
-						Self.attackCount = PickValue(Self.isInWater, ATTACK_COUNT_LEVEL_2, ATTACK_COUNT_LEVEL_1)
+						Self.sonic_attackCount = PickValue(Self.isInWater, ATTACK_COUNT_LEVEL_2, ATTACK_COUNT_LEVEL_1)
 						
 						Self.animationID = NO_ANIMATION
 						Self.myAnimationID = SONIC_ANI_ATTACK_1
@@ -1144,7 +1146,7 @@ Class PlayerSonic Extends PlayerObject
 			
 			Self.isStopByObject = False
 			
-			If (Self.attackLevel = 0) Then
+			If (Self.sonic_attackLevel = 0) Then
 				Self.isAttacking = False
 			Else
 				Self.isAttacking = True
