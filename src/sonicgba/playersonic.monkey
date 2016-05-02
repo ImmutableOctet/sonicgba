@@ -126,7 +126,7 @@ Class PlayerSonic Extends PlayerObject
 		Global SUPER_SONIC_LOOP:Bool[] = [False, False, True, True] ' Const
 		
 		' Fields:
-		Field effectID:Int
+		Field sonic_effectID:Int
 		
 		Field attackRect:PlayerAnimationCollisionRect
 		
@@ -468,7 +468,7 @@ Class PlayerSonic Extends PlayerObject
 					EndIf
 				EndIf
 				
-				Select (Self.effectID)
+				Select (Self.sonic_effectID)
 					Case EFFECT_JUMP
 						drawY = 0
 						
@@ -504,12 +504,12 @@ Class PlayerSonic Extends PlayerObject
 				End Select
 				
 				If (Self.sonic_effectDrawer.checkEnd()) Then
-					Self.effectID = EFFECT_NONE
+					Self.sonic_effectID = EFFECT_NONE
 				EndIf
 				
 				Self.attackRectVec.Clear()
 				
-				If (Self.effectID = EFFECT_JUMP) Then
+				If (Self.sonic_effectID = EFFECT_JUMP) Then
 					rect = Self.sonic_effectDrawer.getARect()
 				Else
 					rect = Self.drawer.getARect()
@@ -540,7 +540,7 @@ Class PlayerSonic Extends PlayerObject
 					
 					Local animID:Int ' = SONIC_ANI_STAND ' 0
 					
-					If (Self.effectID = EFFECT_JUMP) Then
+					If (Self.sonic_effectID = EFFECT_JUMP) Then
 						animID = SONIC_ANI_JUMP_ATTACK_EFFECT
 					Else
 						animID = Self.myAnimationID
@@ -743,7 +743,7 @@ Class PlayerSonic Extends PlayerObject
 				EndIf
 				
 				If (Self.firstJump And Key.press(Key.gUp | Key.B_HIGH_JUMP)) Then
-					Self.effectID = EFFECT_JUMP
+					Self.sonic_effectID = EFFECT_JUMP
 					
 					Self.firstJump = False
 					
@@ -787,7 +787,7 @@ Class PlayerSonic Extends PlayerObject
 				If (Self.faceDegree = 45) Then
 					Self.myAnimationID = SONIC_ANI_SLIDE_D45
 					
-					Self.effectID = EFFECT_SLIP
+					Self.sonic_effectID = EFFECT_SLIP
 				Else
 					setMinSlipSpeed()
 					
