@@ -76,7 +76,7 @@ Class PlayerSuperSonic Extends PlayerObject
 		
 		Field jumpframe:Int
 		
-		Field myAnimationID:Int
+		Field supersonic_myAnimationID:Int
 		
 		Field shadowPosition:Int[][]
 		
@@ -107,7 +107,7 @@ Class PlayerSuperSonic Extends PlayerObject
 			
 			Self.moveCal = New ACMoveCalculator(Self, Self)
 			
-			Self.myAnimationID = SUPER_ANI_STAND
+			Self.supersonic_myAnimationID = SUPER_ANI_STAND
 			
 			Self.drawer = Self.SuperSonicDrawer
 			
@@ -170,7 +170,7 @@ Class PlayerSuperSonic Extends PlayerObject
 					
 					Self.pacman = Null
 					
-					Self.myAnimationID = SUPER_ANI_DIE_1
+					Self.supersonic_myAnimationID = SUPER_ANI_DIE_1
 				EndIf
 			EndIf
 			
@@ -219,7 +219,7 @@ Class PlayerSuperSonic Extends PlayerObject
 				
 				' Magic number: 12
 				If (Self.hurtCount = 12) Then
-					Self.myAnimationID = SUPER_ANI_STAND
+					Self.supersonic_myAnimationID = SUPER_ANI_STAND
 				EndIf
 				
 				If (Self.hurtCount < 0) Then
@@ -300,9 +300,9 @@ Class PlayerSuperSonic Extends PlayerObject
 			If (Self.pacman = Null) Then
 				Self.drawer.setLoop(True)
 				Self.drawer.setTrans(0)
-				Self.drawer.setActionId(Self.myAnimationID)
+				Self.drawer.setActionId(Self.supersonic_myAnimationID)
 				
-				If (Self.myAnimationID = SUPER_ANI_DIE_1) Then
+				If (Self.supersonic_myAnimationID = SUPER_ANI_DIE_1) Then
 					Self.drawer.setLoop(False)
 				EndIf
 				
@@ -314,15 +314,15 @@ Class PlayerSuperSonic Extends PlayerObject
 					drawShadow(g)
 				EndIf
 				
-				If (Self.myAnimationID = SUPER_ANI_DAMAGE) Then
+				If (Self.supersonic_myAnimationID = SUPER_ANI_DAMAGE) Then
 					drawDamage(g, Self.drawer, Self.posX, Self.posY)
 				ElseIf ((Self.hurtCount Mod 2) = 0) Then
 					drawInMap(g, Self.drawer, Self.posX, Self.posY)
 				Else
 					Self.drawer.moveOn()
 					
-					If (Self.drawer.checkEnd() And Self.myAnimationID = SUPER_ANI_DIE_1) Then
-						Self.myAnimationID = SUPER_ANI_DIE_2
+					If (Self.drawer.checkEnd() And Self.supersonic_myAnimationID = SUPER_ANI_DIE_1) Then
+						Self.supersonic_myAnimationID = SUPER_ANI_DIE_2
 					EndIf
 				EndIf
 				
@@ -338,14 +338,14 @@ Class PlayerSuperSonic Extends PlayerObject
 					If (Self.attackEffectDrawer.checkEnd()) Then
 						Self.attackEffectShow = False
 						
-						If (Self.myAnimationID = SUPER_ANI_ATTACK) Then
-							Self.myAnimationID = SUPER_ANI_STAND
+						If (Self.supersonic_myAnimationID = SUPER_ANI_ATTACK) Then
+							Self.supersonic_myAnimationID = SUPER_ANI_STAND
 						EndIf
 					EndIf
 				EndIf
 				
 				If (Self.isDead And StageManager.isStageTimeover()) Then
-					Self.myAnimationID = SUPER_ANI_DIE_1
+					Self.supersonic_myAnimationID = SUPER_ANI_DIE_1
 					
 					Self.drawer.setLoop(False)
 					
@@ -380,7 +380,7 @@ Class PlayerSuperSonic Extends PlayerObject
 		Method beHurt:Void()
 			' This behavior may change in the future:
 			If (player.canBeHurt()) Then ' canBeHurt()
-				Self.myAnimationID = SUPER_ANI_DAMAGE
+				Self.supersonic_myAnimationID = SUPER_ANI_DAMAGE
 				Self.hurtCount = HURT_COUNT
 				
 				SoundSystem.getInstance().playSe(SoundSystem.SE_119)
@@ -424,7 +424,7 @@ Class PlayerSuperSonic Extends PlayerObject
 				
 				Self.attackEffectShow = False
 				
-				Self.myAnimationID = SUPER_ANI_STAND
+				Self.supersonic_myAnimationID = SUPER_ANI_STAND
 			EndIf
 		End
 		
@@ -487,7 +487,7 @@ Class PlayerSuperSonic Extends PlayerObject
 					
 					Self.attackEffectDrawer.restart()
 					
-					Self.myAnimationID = SUPER_ANI_ATTACK
+					Self.supersonic_myAnimationID = SUPER_ANI_ATTACK
 					
 					Self.attackEffectCount = 0
 					
@@ -549,7 +549,7 @@ Class PlayerSuperSonic Extends PlayerObject
 				
 				Self.attackEffectDrawer.restart()
 				
-				Self.myAnimationID = SUPER_ANI_ATTACK
+				Self.supersonic_myAnimationID = SUPER_ANI_ATTACK
 				
 				Self.attackEffectCount = 0
 				
@@ -596,10 +596,10 @@ Class PlayerSuperSonic Extends PlayerObject
 			
 			Self.frameCount Mod= 3
 			
-			Self.shadowDrawer.setActionId(Self.myAnimationID)
+			Self.shadowDrawer.setActionId(Self.supersonic_myAnimationID)
 			
 			For Local i:= 0 Until Self.shadowPosition.Length
-				If (Self.myAnimationID = SUPER_ANI_DAMAGE) Then
+				If (Self.supersonic_myAnimationID = SUPER_ANI_DAMAGE) Then
 					drawDamage(g, Self.shadowDrawer, Self.shadowPosition[i][0], Self.shadowPosition[i][1])
 				Else
 					If (IsGamePause) Then
