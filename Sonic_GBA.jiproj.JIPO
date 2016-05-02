@@ -721,8 +721,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\block.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>29</X>
-        <Y>18</Y>
+        <X>24</X>
+        <Y>32</Y>
       </CursorPos>
       <DocGUID>c6d90bc8-eaf1-419b-a5e5-824127e9a666</DocGUID>
       <Bookmarks />
@@ -1240,8 +1240,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>16</X>
-        <Y>331</Y>
+        <X>7</X>
+        <Y>851</Y>
       </CursorPos>
       <DocGUID>fac107b1-5a8c-4202-9633-c3d9fc4033ad</DocGUID>
       <Bookmarks />
@@ -1535,10 +1535,10 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\platform.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\platform.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>48</X>
+        <Y>202</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -2017,8 +2017,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\upplatform.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>11</X>
-        <Y>21</Y>
+        <X>20</X>
+        <Y>24</Y>
       </CursorPos>
       <DocGUID>e491f516-0099-4f9a-8ae6-05c5ef508b29</DocGUID>
       <Bookmarks />
