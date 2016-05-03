@@ -2367,12 +2367,20 @@ Class TitleState Extends State
 			Self.openingState = OPENING_STATE_EMERALD
 			
 			If (Self.openingAnimation.Length = 0) Then
+				DebugStop()
+				
 				Self.openingAnimation = Animation.getInstanceFromQi("/animation/opening/opening.dat")
+				
+				DebugStop()
+				
 				Self.openingDrawer = New AnimationDrawer[Self.openingAnimation.Length]
 				
 				For Local i:= 0 Until Self.openingDrawer.Length
-					Self.openingDrawer[i] = Self.openingAnimation[i].getDrawer(0, False, 0)
-					Self.openingDrawer[i].mustKeepFrameTime(63)
+					Local anim:= Self.openingAnimation[i]
+					Local drawer:= anim.getDrawer(0, False, 0)
+					
+					Self.openingDrawer[i] = drawer
+					Self.openingDrawer[i].mustKeepFrameTime(63) ' drawer
 				Next
 			Else
 				For Local i:= 0 Until Self.openingDrawer.Length

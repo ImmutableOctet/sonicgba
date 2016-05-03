@@ -168,7 +168,11 @@ Class Frame
 				Return
 			EndIf
 			
-			Self.m_nClips = ds.ReadByte()
+			Self.m_nClips = ds.ReadByte() ' (ds.ReadByte() & 255)
+			
+			If (Self.m_nClips < 0) Then
+				Self.m_nClips += UOCTET_MAX_POSITIVE_NUMBERS
+			EndIf
 			
 			InitializeClips(Self.m_nClips)
 			

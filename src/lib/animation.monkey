@@ -280,66 +280,77 @@ Class Animation
 		Method LoadAnimationG2:Void(ds:Stream)
 			Self.isAnimationQi = True
 			
-			Local __unknown:= ds.ReadInt()
-			
-			Self.m_nFrames = ds.ReadByte()
-			
-			If (Self.m_nFrames < 0) Then
-				Self.m_nFrames += UOCTET_MAX_POSITIVE_NUMBERS
-			EndIf
-			
-			Self.m_Frames = New Frame[Self.m_nFrames]
-			
-			For Local i:= 0 Until Self.m_nFrames
-				Self.m_Frames[i] = New Frame(Self)
-				Self.m_Frames[i].loadFrameG2(ds)
+			Try
+				'DebugStop()
 				
-				Local rectarrays:= (ds.ReadByte() & 255)
+				Local __unknown:= ds.ReadInt()
 				
-				For Local k:= 0 Until rectarrays
-					Local rectsNum:= (ds.ReadByte() & 255)
+				Self.m_nFrames = ds.ReadByte()
+				
+				If (Self.m_nFrames < 0) Then
+					Self.m_nFrames += UOCTET_MAX_POSITIVE_NUMBERS
+				EndIf
+				
+				Self.m_Frames = New Frame[Self.m_nFrames]
+				
+				For Local i:= 0 Until Self.m_nFrames
+					Self.m_Frames[i] = New Frame(Self)
+					Self.m_Frames[i].loadFrameG2(ds)
 					
-					For Local l:= 0 Until rectsNum
-						Local __0:= ds.ReadShort()
-						Local __1:= ds.ReadShort()
-						Local __2:= ds.ReadShort()
-						Local __3:= ds.ReadShort()
+					Local rectarrays:= (ds.ReadByte() & 255)
+					
+					For Local k:= 0 Until rectarrays
+						Local rectsNum:= (ds.ReadByte() & 255)
+						
+						For Local l:= 0 Until rectsNum
+							Local __0:= ds.ReadShort()
+							Local __1:= ds.ReadShort()
+							Local __2:= ds.ReadShort()
+							Local __3:= ds.ReadShort()
+						Next
+					Next
+					
+					Local crossarrays:= (ds.ReadByte() & 255)
+					
+					For Local k:= 0 Until crossarrays
+						Local crossesNum:= (ds.ReadByte() & 255)
+						
+						For Local l:= 0 Until crossesNum
+							Local __0:= ds.ReadShort()
+							Local __2:= ds.ReadShort()
+						Next
 					Next
 				Next
 				
-				Local crossarrays:= (ds.ReadByte() & 255)
+				Self.m_nActions = ds.ReadByte()
 				
-				For Local k:= 0 Until crossarrays
-					Local crossesNum:= (ds.ReadByte() & 255)
+				'DebugStop()
+				
+				If (Self.m_nActions < 0) Then
+					Self.m_nActions += UOCTET_MAX_POSITIVE_NUMBERS
+				EndIf
+				
+				'If (Self.m_nActions > 0) Then
+				Self.m_Actions = New Action[Self.m_nActions]
+				
+				For Local i:= 0 Until Self.m_nActions
+					Local action:= New Action(Self)
 					
-					For Local l:= 0 Until crossesNum
-						Local __0:= ds.ReadShort()
-						Local __2:= ds.ReadShort()
-					Next
+					action.loadActionG2(ds)
+					action.SetFrames(Self.m_Frames)
+					
+					Self.m_Actions[i] = action
 				Next
-			Next
-			
-			Self.m_nActions = ds.ReadByte()
-			
-			If (Self.m_nActions < 0) Then
-				Self.m_nActions += UOCTET_MAX_POSITIVE_NUMBERS
-			EndIf
-			
-			Self.m_Actions = New Action[Self.m_nActions]
-			
-			For Local i:= 0 Until Self.m_nActions
-				Local action:= New Action(Self)
-				
-				action.loadActionG2(ds)
-				action.SetFrames(Self.m_Frames)
-				
-				Self.m_Actions[i] = action
-			Next
+				'EndIf
+			Catch E:Throwable ' StreamError
+				' Nothing so far.
+			End Try
 		End
 	Public
 		' Functions:
 		Function getInstanceFromQi:Animation[](fileName:String)
 			tmpPath = MyAPI.getPath(fileName)
+			
 			isFrameWanted = False
 			
 			Local ds:Stream = Null
@@ -349,17 +360,21 @@ Class Animation
 				
 				ds = ds2
 				
-				Local animationNum:= ds2.ReadByte() ' & 255
+				Local animationNum:= (ds2.ReadByte() & 255) ' ds2.ReadByte()
 				
 				animationInstance = New Animation[animationNum]
+				
+				DebugStop()
 				
 				For Local i:= 0 Until animationNum
 					Local a:= New Animation()
 					
-					a.LoadAnimationG2(ds2)
-					
 					animationInstance[i] = a
+					
+					a.LoadAnimationG2(ds2) ' animationInstance[i]
 				Next
+				
+				DebugStop()
 				
 				Local imageNum:= ds2.ReadByte()
 				
@@ -388,10 +403,10 @@ Class Animation
 				
 				If (ds2 <> Null) Then
 					ds2.Close()
-					
-					Return animationInstance
 				EndIf
-			Catch E:Throwable
+			Catch E:StreamError ' Throwable
+				DebugStop()
+				
 				If (ds <> Null) Then
 					ds.Close()
 				EndIf
@@ -420,6 +435,7 @@ Class Animation
 					isFrameWanted = index[i]
 					
 					Local anim:= New Animation()
+					
 					anim.LoadAnimationG2(ds)
 					
 					animationInstance[i] = anim
