@@ -736,7 +736,7 @@ Class MFDevice Final
 			Local recordStoreNumber:= dis.ReadInt()
 			
 			For Local i:= 0 Until recordStoreNumber
-				Local nameLen:= dis.ReadShort()
+				Local nameLen:= NToHS(dis.ReadShort())
 				Local name:String = dis.ReadString(nameLen, "utf8") ' "ascii"
 				Local record:= readRecord(dis)
 				
@@ -759,7 +759,7 @@ Class MFDevice Final
 				
 				Local nameLen:= name.Length
 				
-				dos.WriteShort(nameLen)
+				dos.WriteShort(HToNS(nameLen))
 				dos.WriteString(name, "utf8")
 				
 				'writeRecord:Void(dos:Stream, values:DataBuffer, offset:Int=0, count:Int=0)

@@ -17,6 +17,8 @@ Private
 	'Import brl.databuffer
 	
 	Import monkey.stack
+	
+	Import regal.byteorder
 Public
 
 ' Classes:
@@ -303,7 +305,7 @@ Class Action
 				Self.trackArray[i] = New ActionTrack(Self.parent, ds)
 			Next
 			
-			Local strLen:= ds.ReadShort()
+			Local strLen:= NToHS(ds.ReadShort())
 			
 			Self.label = ds.ReadString(strLen, "utf8")
 			
@@ -584,7 +586,7 @@ Class Node
 				Self.connectPointArray[i] = New ConnectPoint(Self, ds)
 			Next
 			
-			Local strLen:= ds.ReadShort()
+			Local strLen:= NToHS(ds.ReadShort())
 			
 			Self.label = ds.ReadString(strLen, "utf8")
 			

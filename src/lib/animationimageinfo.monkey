@@ -25,6 +25,7 @@ Private
 	Import brl.datastream
 	
 	Import regal.typetool
+	Import regal.byteorder
 Public
 
 ' Classes:
@@ -91,7 +92,7 @@ Class ImageInfo
 				Next
 			Next
 			
-			Local fileNameLen:= ds.ReadShort()
+			Local fileNameLen:= NToHS(ds.ReadShort())
 			Local fileName:= ds.ReadString(fileNameLen, "utf8")
 			
 			If (Animation.isImageWanted) Then

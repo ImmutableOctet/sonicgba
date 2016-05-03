@@ -24,6 +24,7 @@ Private
 	Import monkey.boxes
 	
 	Import regal.typetool
+	Import regal.byteorder
 Public
 
 ' Classes:
@@ -664,7 +665,7 @@ Class MyAPI ' Implements Def
 				output = New String[outSize]
 				
 				For Local i:= 0 Until outSize
-					Local strLength:= input.ReadShort()
+					Local strLength:= NToHS(input.ReadShort())
 					
 					output[i] = input.ReadString(strLength, "utf8")
 				Next
