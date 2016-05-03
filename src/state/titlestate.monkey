@@ -1188,15 +1188,11 @@ Class TitleState Extends State
 		End
 		
 		Method init:Void()
-			Try
-				helpStrings = MyAPI.loadText("/help")
-				aboutStrings = MyAPI.loadText("/about")
-				
-				Self.openingOffsetX = (SCREEN_WIDTH - 284) Shr 1
-				Self.openingOffsetY = (SCREEN_HEIGHT - 160) Shr 1
-			Catch E:Throwable
-				' Nothing so far.
-			End Try
+			helpStrings = MyAPI.loadText("/help")
+			aboutStrings = MyAPI.loadText("/about")
+			
+			Self.openingOffsetX = ((SCREEN_WIDTH - 284) / 2) ' Shr 1
+			Self.openingOffsetY = ((SCREEN_HEIGHT - 160) / 2) ' Shr 1
 			
 			Self.count = 50
 			

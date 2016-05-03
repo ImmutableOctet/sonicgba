@@ -30,6 +30,8 @@ Class Effect
 			Local effectArray:= New Effect[EFFECT_LAYER_NUM][]
 			
 			For Local l:= EFFECT_LAYER_TOP Until EFFECT_LAYER_NUM
+				effectArray[l] = New Effect[EFFECT_NUM]
+				
 				For Local i:= EFFECT_LAYER_TOP Until EFFECT_NUM
 					effectArray[l][i] = New Effect(Null, 0, 0, 0, 0)
 				Next

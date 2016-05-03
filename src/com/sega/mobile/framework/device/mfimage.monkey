@@ -79,7 +79,7 @@ Class MFImage
 				
 				#If TARGET <> "html5"
 					Local palData:= is.ReadAll()
-				#EndIf
+				#End
 				
 				is.Close()
 				
@@ -157,7 +157,7 @@ Class MFImage
 			Local ret:= New MFImage()
 			
 			ret.image = New Image(width, height, 0.0, 0.0)
-			ret.graphics = MFGraphics.createMFGraphics(ret.getGraphics().getSystemGraphics(), width, height)
+			ret.graphics = MFGraphics.createMFGraphics(ret, width, height)
 			ret.mutable = True
 			
 			Return ret

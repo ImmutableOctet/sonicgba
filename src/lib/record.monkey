@@ -48,6 +48,8 @@ Class Record
 			Local data:= loadRecord(recordId)
 			
 			If (data = Null) Then
+				Throw New FileNotFoundException(Null, recordId)
+				
 				Return Null
 			EndIf
 			

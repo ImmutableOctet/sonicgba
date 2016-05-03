@@ -1181,7 +1181,13 @@ Class MyAPI ' Implements Def
 		#End
 		
 		Function loadText:String[](fileName:String)
-			Return divideText(getResource(fileName).PeekString(0, "utf8"))
+			Local res:= getResource(fileName)
+			
+			If (res = Null) Then
+				Return []
+			EndIf
+			
+			Return divideText(res.PeekString(0, "utf8"))
 		End
 		
 		Function calNextPositionD:Double(current:Double, destiny:Double, velocity1:Int, velocity2:Int)

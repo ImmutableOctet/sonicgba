@@ -124,7 +124,8 @@ Class Application Extends App ' Main Extends MFMain
 			' Initialize the global "effect array".
 			Effect.effectArray = Effect.GenerateEffectArray()
 			
-			MFDevice.notifyStart(graphics, getEntryGameState(), DeviceWidth(), DeviceHeight())
+			MFDevice.initializeScreen(graphics, DeviceWidth(), DeviceHeight())
+			MFDevice.notifyStart(graphics, getEntryGameState())
 			
 			Return 0
 		End

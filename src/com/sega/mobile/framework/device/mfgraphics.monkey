@@ -114,6 +114,10 @@ Class MFGraphics
 			Return ret
 		End
 		
+		Function createMFGraphics:MFGraphics(surface:MFImage, width:Int, height:Int)
+			Return createMFGraphics(Graphics.createBitmapGraphics(surface.image), width, height)
+		End
+		
 		Function charHeight:Int(_var:Int)
 			Local var:= _var
 			

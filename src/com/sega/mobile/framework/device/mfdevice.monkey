@@ -41,6 +41,11 @@ Private
 	Import mojo.app
 	Import mojo.input
 	
+	#If SONICGBA_FILESYSTEM_ENABLED
+		Import brl.filepath
+		Import brl.filesystem
+	#End
+	
 	Import brl.databuffer
 	Import brl.stream
 	
@@ -150,24 +155,89 @@ Class MFDevice Final
 		' Functions:
 		
 		' Extensions:
-		Function FixResourcePath:String(url:String)
-			If (url.StartsWith("/")) Then
+		Function FixResourcePath:String(path:String)
+			If (path.StartsWith("/")) Then
 				' Skip the first slash.
-				Return url[1..]
+				path = path[1..]
 			EndIf
 			
-			Return url
+			If (path.StartsWith( "." )) Then ' Or path.StartsWith( "/" )
+				Return path
+			EndIf
+			
+			Return ("data/" + path) ' "monkey://data/"
 		End
 		
 		Function OpenFileStream:Stream(path:String, mode:String) ' FileStream
+			If (mode = "w") Then
+				#If SONICGBA_FILESYSTEM_ENABLED
+					If (Not MakeFolderPath(ExtractDir(path))) Then
+						Throw New FileNotFoundException(Null, path)
+					EndIf
+				#End
+			EndIf
+			
 			'Local f:= FileStream.Open(path, mode)
 			Local f:= OpenAutoStream(path, mode)
 			
-			If (f = Null) Then
-				Throw New FileNotFoundException(f, path)
+			If (f = Null) Then ' mode <> "w"
+				Throw New FileNotFoundException(f, path) ' Null
 			EndIf
 			
 			Return f
+		End
+		
+		Function MakeFolderPath:Bool(folder:String)
+			#If SONICGBA_FILESYSTEM_ENABLED
+				' Constant variable(s):
+				Const Slash:= "/"
+				
+				' Local variable(s):
+				Local initPos:= folder.Find(Slash)
+				
+				If (initPos <> -1) Then
+					Local slashPos:= -1
+					
+					Repeat
+						slashPos = folder.Find(Slash, (slashPos + 1))
+						
+						If (slashPos <> -1) Then
+							If (Not CreateDir(folder[..slashPos])) Then
+								Return False
+							EndIf
+						Else
+							If (Not CreateDir(folder[(slashPos + 1)..])) Then
+								Return False
+							EndIf
+							
+							Exit
+						EndIf
+					Forever
+					
+					Return True
+				EndIf
+				
+				Return CreateDir(folder)
+			#Else
+				Return False
+			#End
+		End
+		
+		Function CheckStates:MFGameState()
+			' Handle state changes:
+			If (nextState <> Null) Then
+				If (currentState <> Null) Then
+					currentState.onExit()
+				EndIf
+				
+				currentState = nextState
+				
+				currentState.onEnter()
+				
+				nextState = Null
+			EndIf
+			
+			Return currentState
 		End
 		
 		Function Update:Void()
@@ -192,18 +262,7 @@ Class MFDevice Final
 				EndIf
 			EndIf
 			
-			' Handle state changes:
-			If (nextState <> Null) Then
-				If (currentState <> Null) Then
-					currentState.onExit()
-				EndIf
-				
-				currentState = nextState
-				
-				currentState.onEnter()
-				
-				nextState = Null
-			EndIf
+			CheckStates()
 			
 			If (Not interruptPauseFlag) Then
 				currentState.onTick()
@@ -725,16 +784,10 @@ Class MFDevice Final
 	Public
 		' Functions:
 		
-		' Record-related:
-		Function loadRecord:DataBuffer(recordName:String)
-			Return records.Get(recordName)
-		End
-		
-		' Notifications:
-		Function notifyStart:Void(context:Graphics, startState:MFGameState, width:Int, height:Int)
+		' Extensions:
+		Function initializeScreen:Void(context:Graphics, width:Int, height:Int)
 			Local isSideways:Bool = False ' (MFMain.getInstance().getRequestedOrientation() = SCREEN_ORIENTATION_PORTRAIT)
 			
-			'If (mainThread = Null) Then
 			If (Not isSideways) Then
 				canvasHeight = MDPhone.SCREEN_HEIGHT
 				canvasWidth = MDPhone.SCREEN_WIDTH
@@ -760,8 +813,20 @@ Class MFDevice Final
 			EndIf
 			
 			Print("screenwidth: " + screenWidth + ", screenheight:" + screenHeight)
+		End
+		
+		' Record-related:
+		Function loadRecord:DataBuffer(recordName:String)
+			Return records.Get(recordName)
+		End
+		
+		' Notifications:
+		Function notifyStart:Void(context:Graphics, startState:MFGameState)
+			'If (mainThread = Null) Then
 			
 			changeState(startState)
+			
+			CheckStates()
 			
 			setFullscreenMode(context, False)
 			
@@ -1139,7 +1204,9 @@ Function InitializeMobileFramework:Void()
 	MFGamePad.resetKeys()
 	
 	'MFDevice.vibrator = (Vibrator)MFMain.getInstance().getSystemService("vibrator")
+	
 	MFDevice.componentVector = New Stack<MFComponent>()
+	
 	MFDevice.vibraionFlag = True
 	MFDevice.inVibrationFlag = False
 End

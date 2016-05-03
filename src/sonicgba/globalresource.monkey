@@ -52,12 +52,10 @@ Class GlobalResource
 		End
 		
 		Function loadSystemConfig:Void()
-			Local ds:= Record.loadRecordStream(Record.SYSTEM_RECORD)
+			Local ds:Stream
 			
 			Try
-				If (ds = Null) Then
-					Throw New FileNotFoundException(ds)
-				EndIf
+				ds = Record.loadRecordStream(Record.SYSTEM_RECORD)
 				
 				soundConfig = ds.ReadByte()
 				difficultyConfig = ds.ReadByte()
