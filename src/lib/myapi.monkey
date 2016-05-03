@@ -665,7 +665,7 @@ Class MyAPI ' Implements Def
 				output = New String[outSize]
 				
 				For Local i:= 0 Until outSize
-					Local strLength:= NToHS(input.ReadShort())
+					Local strLength:= input.ReadShort()
 					
 					output[i] = input.ReadString(strLength, "utf8")
 				Next

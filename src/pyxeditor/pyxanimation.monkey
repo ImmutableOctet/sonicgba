@@ -305,7 +305,7 @@ Class Action
 				Self.trackArray[i] = New ActionTrack(Self.parent, ds)
 			Next
 			
-			Local strLen:= NToHS(ds.ReadShort())
+			Local strLen:= ds.ReadShort()
 			
 			Self.label = ds.ReadString(strLen, "utf8")
 			
@@ -586,7 +586,7 @@ Class Node
 				Self.connectPointArray[i] = New ConnectPoint(Self, ds)
 			Next
 			
-			Local strLen:= NToHS(ds.ReadShort())
+			Local strLen:= ds.ReadShort()
 			
 			Self.label = ds.ReadString(strLen, "utf8")
 			

@@ -92,7 +92,10 @@ Class ImageInfo
 				Next
 			Next
 			
-			Local fileNameLen:= NToHS(ds.ReadShort())
+			Local fileNameLen:= ds.ReadShort()
+			
+			DebugStop()
+			
 			Local fileName:= ds.ReadString(fileNameLen, "utf8")
 			
 			If (Animation.isImageWanted) Then

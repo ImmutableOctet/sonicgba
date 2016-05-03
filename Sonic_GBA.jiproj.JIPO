@@ -178,8 +178,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>8</X>
-        <Y>762</Y>
+        <X>23</X>
+        <Y>737</Y>
       </CursorPos>
       <DocGUID>a3a6892c-8077-4c3d-8208-564b8aa06ad8</DocGUID>
       <Bookmarks />
@@ -402,7 +402,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationimageinfo.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>23</X>
+        <X>3</X>
         <Y>95</Y>
       </CursorPos>
       <DocGUID>8d388306-e99a-465f-a904-22dea7baae34</DocGUID>
@@ -452,8 +452,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>23</X>
-        <Y>669</Y>
+        <X>40</X>
+        <Y>667</Y>
       </CursorPos>
       <DocGUID>e403bd98-09da-4655-b1e6-3cda1ca85f78</DocGUID>
       <Bookmarks />
@@ -510,8 +510,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\pyxeditor\pyxanimation.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>19</X>
-        <Y>590</Y>
+        <X>32</X>
+        <Y>588</Y>
       </CursorPos>
       <DocGUID>39c926c0-e9d6-4962-95c5-257c8f678236</DocGUID>
       <Bookmarks />
