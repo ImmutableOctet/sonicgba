@@ -284,6 +284,8 @@ Class Animation
 			Try
 				Local __unknown:= ds.ReadInt()
 				
+				DebugStop()
+				
 				Self.m_nFrames = ds.ReadByte()
 				
 				If (Self.m_nFrames < 0) Then

@@ -1331,8 +1331,18 @@ Class MyAPI ' Implements Def
 			Return out
 		End
 		
-		Function getFileName:String(path:String)
-			Return getPath(path)
+		Function getFileName:String(var0:String)
+			Local var1:String
+			
+			While(var0.Find("/") <> -1)
+				var1 += var0[0..(var0.Find("/") + 1)]
+				
+				var0 = var0[(1 + var0.Find("/"))..]
+			Wend
+			
+			'Return getPath(path)
+			
+			Return var0
 		End
 		
 		Function vibrate:Void()

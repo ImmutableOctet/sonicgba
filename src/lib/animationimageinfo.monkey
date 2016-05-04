@@ -134,7 +134,7 @@ Class ImageInfo
 			EndIf
 			
 			If (Not allow_img) Then
-				Local fileNameLen:= ds.ReadShort()
+				Local fileNameLen:= NToHS(ds.ReadShort())
 				
 				Local fileName:= ds.ReadString(fileNameLen, "utf8")
 				
