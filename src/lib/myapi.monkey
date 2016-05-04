@@ -1334,10 +1334,16 @@ Class MyAPI ' Implements Def
 		Function getFileName:String(var0:String)
 			Local var1:String
 			
-			While(var0.Find("/") <> -1)
-				var1 += var0[0..(var0.Find("/") + 1)]
+			Local slashPos:= var0.Find("/")
+			
+			While(slashPos <> -1)
+				Local after_slashPos:= (slashPos + 1)
 				
-				var0 = var0[(1 + var0.Find("/"))..]
+				var1 += var0[..after_slashPos]
+				
+				var0 = var0[after_slashPos..]
+				
+				slashPos = var0.Find("/")
 			Wend
 			
 			'Return getPath(path)
