@@ -203,20 +203,22 @@ Class Frame
 						clipInfo[1] = ds.ReadShort()
 						
 						If (Animation.isFrameWanted) Then
-							Continue
-						EndIf
-						
-						For Local j:= 0 Until Animation.imageIdArray.Length
-							If (Animation.imageIdArray[j] <> -1) Then
-								If (Animation.imageIdArray[j] = clipInfo[4]) Then
+							Local j:= 0
+							
+							While (j < Animation.imageIdArray.Length)
+								If (Animation.imageIdArray[j] <> -1) Then
+									If (Animation.imageIdArray[j] = clipInfo[4]) Then
+										Exit
+									EndIf
+									
+									j += 1
+								Else
+									Animation.imageIdArray[j] = clipInfo[4]
+									
 									Exit
 								EndIf
-							Else
-								Animation.imageIdArray[j] = clipInfo[4]
-								
-								Exit
-							EndIf
-						Next
+							Wend
+						EndIf
 					Case 1, 2
 						clipInfo[2] = ds.ReadShort()
 						clipInfo[3] = ds.ReadShort()
@@ -230,7 +232,7 @@ Class Frame
 						
 						clipInfo[0] = ds.ReadShort()
 						clipInfo[1] = ds.ReadShort()
-					Case 3
+					Case 6
 						clipInfo[2] = ds.ReadByte()
 						clipInfo[3] = ds.ReadByte()
 						
@@ -240,6 +242,8 @@ Class Frame
 						
 						clipInfo[0] = ds.ReadShort()
 						clipInfo[1] = ds.ReadShort()
+					Default
+						' Nothing so far.
 				End Select
 			Next
 		End

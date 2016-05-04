@@ -80,8 +80,6 @@ Class ImageInfo
 			
 			Local pos:= ds.Position
 			
-			DebugStop()
-			
 			For Local i:= 0 Until Self.m_nClips
 				For Local j:= 0 Until CLIP_DATA_SIZE
 					Local coord:= ds.ReadShort()
@@ -112,7 +110,6 @@ Class ImageInfo
 		End
 
 		Method loadInfo:Void(ds:Stream, allow_img:Bool)
-			DebugStop()
 			If (ds = Null) Then
 				Self.m_nClips = 1
 				

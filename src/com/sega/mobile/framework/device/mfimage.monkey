@@ -45,7 +45,6 @@ Class MFImage
 		End
 		
 		Function generateImage:Image(path:String)
-			DebugStop()
 			Return Image.Load(MFDevice.FixGlobalPath(path), 0.0, 0.0, Image.Mipmap)
 		End
 		

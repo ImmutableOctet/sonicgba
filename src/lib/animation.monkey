@@ -284,8 +284,6 @@ Class Animation
 			Try
 				Local __unknown:= ds.ReadInt()
 				
-				DebugStop()
-				
 				Self.m_nFrames = ds.ReadByte()
 				
 				If (Self.m_nFrames < 0) Then
@@ -318,7 +316,7 @@ Class Animation
 						
 						For Local l:= 0 Until crossesNum
 							Local __0:= ds.ReadShort()
-							Local __2:= ds.ReadShort()
+							Local __1:= ds.ReadShort()
 						Next
 					Next
 				Next
@@ -342,6 +340,8 @@ Class Animation
 				Next
 				'EndIf
 			Catch E:Throwable ' StreamError
+				'DebugStop()
+				
 				' Nothing so far.
 			End Try
 		End
@@ -370,10 +370,6 @@ Class Animation
 					
 					a.LoadAnimationG2(ds2) ' animationInstance[i]
 				Next
-				
-				Local pos:= ds2.Position
-				
-				DebugStop()
 				
 				Local imageNum:= ds2.ReadByte()
 				
@@ -404,7 +400,7 @@ Class Animation
 					ds2.Close()
 				EndIf
 			Catch E:StreamError ' Throwable
-				DebugStop()
+				'DebugStop()
 				
 				If (ds <> Null) Then
 					ds.Close()
