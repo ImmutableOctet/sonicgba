@@ -540,7 +540,7 @@ Class TitleState Extends State
 			Self.offsetOfVolumeInterface = 0
 			Self.pressDelay = PRESS_DELAY
 			Self.pressDelay2 = OPENING_STATE_EMERALD_SHINING
-			Self.rankingScore = New Int[STATE_GOTO_GAME]
+			Self.rankingScore = New Int[5]
 			Self.timecount_ranking = 0
 			Self.offset_flag = 0
 			Self.RecordtimeScrollPosY = 0
@@ -561,15 +561,15 @@ Class TitleState Extends State
 			Local iArr:= New Int[12]
 			
 			iArr[0] = ZONE_NUM_OFFSET
-			iArr[ZONE_NUM_OFFSET] = ZONE_NUM_OFFSET
-			iArr[STATE_MOVING] = STATE_MOVING
-			iArr[STATE_OPENING] = STATE_MOVING
-			iArr[STATE_START_GAME] = STATE_OPENING
-			iArr[STATE_GOTO_GAME] = STATE_OPENING
-			iArr[STATE_RACE_MODE] = STATE_MOVING
-			iArr[STATE_MORE_GAME] = STATE_MOVING
-			iArr[STATE_RANKING] = ZONE_NUM_OFFSET
-			iArr[VISIBLE_OPTION_ITEMS_NUM] = ZONE_NUM_OFFSET
+			iArr[1] = ZONE_NUM_OFFSET
+			iArr[2] = STATE_MOVING
+			iArr[3] = STATE_MOVING
+			iArr[4] = STATE_OPENING
+			iArr[5] = STATE_OPENING
+			iArr[6] = STATE_MOVING
+			iArr[7] = STATE_MOVING
+			iArr[8] = ZONE_NUM_OFFSET
+			iArr[9] = ZONE_NUM_OFFSET
 			
 			Self.recordArrowOffsetXArray = iArr
 			
@@ -1488,9 +1488,9 @@ Class TitleState Extends State
 			Self.optionMenuCursor = 0
 			
 			Self.optionCursor[0] = GlobalResource.difficultyConfig
-			Self.optionCursor[ZONE_NUM_OFFSET] = GlobalResource.soundConfig
-			Self.optionCursor[STATE_MOVING] = GlobalResource.seConfig
-			Self.optionCursor[STATE_OPENING] = GlobalResource.timeLimit
+			Self.optionCursor[1] = GlobalResource.soundConfig
+			Self.optionCursor[2] = GlobalResource.seConfig
+			Self.optionCursor[3] = GlobalResource.timeLimit
 			
 			Self.resetInfoCount = 0
 			
@@ -1690,23 +1690,23 @@ Class TitleState Extends State
 			EndIf
 			
 			If (Self.isSelectable And Self.optionYDirect = 0) Then
-				If (Key.touchmenuoptionitems[ZONE_NUM_OFFSET].IsButtonPress() And Self.menuOptionCursor = 0 And State.fadeChangeOver()) Then
+				If (Key.touchmenuoptionitems[1].IsButtonPress() And Self.menuOptionCursor = 0 And State.fadeChangeOver()) Then
 					state = STATE_OPTION_DIFF
 					itemsSelect2Init()
 					SoundSystem.getInstance().playSe(SoundSystem.SE_106)
-				ElseIf (Key.touchmenuoptionitems[STATE_OPENING].IsButtonPress() And Self.menuOptionCursor = 1 And GlobalResource.soundSwitchConfig <> 0 And State.fadeChangeOver()) Then
+				ElseIf (Key.touchmenuoptionitems[3].IsButtonPress() And Self.menuOptionCursor = 1 And GlobalResource.soundSwitchConfig <> 0 And State.fadeChangeOver()) Then
 					state = STATE_OPTION_SOUND_VOLUMN
 					soundVolumnInit()
 					SoundSystem.getInstance().playSe(SoundSystem.SE_106)
-				ElseIf (Key.touchmenuoptionitems[STATE_GOTO_GAME].IsButtonPress() And Self.menuOptionCursor = STATE_MOVING And State.fadeChangeOver()) Then
+				ElseIf (Key.touchmenuoptionitems[5].IsButtonPress() And Self.menuOptionCursor = STATE_MOVING And State.fadeChangeOver()) Then
 					state = STATE_OPTION_VIBRATION
 					itemsSelect2Init()
 					SoundSystem.getInstance().playSe(SoundSystem.SE_106)
-				ElseIf (Key.touchmenuoptionitems[STATE_MORE_GAME].IsButtonPress() And Self.menuOptionCursor = STATE_OPENING And State.fadeChangeOver()) Then
+				ElseIf (Key.touchmenuoptionitems[7].IsButtonPress() And Self.menuOptionCursor = STATE_OPENING And State.fadeChangeOver()) Then
 					state = STATE_OPTION_TIME_LIMIT
 					itemsSelect2Init()
 					SoundSystem.getInstance().playSe(SoundSystem.SE_106)
-				ElseIf (Key.touchmenuoptionitems[VISIBLE_OPTION_ITEMS_NUM].IsButtonPress() And Self.menuOptionCursor = STATE_START_GAME And State.fadeChangeOver()) Then
+				ElseIf (Key.touchmenuoptionitems[9].IsButtonPress() And Self.menuOptionCursor = STATE_START_GAME And State.fadeChangeOver()) Then
 					state = STATE_OPTION_SP_SET
 					itemsSelect2Init()
 					SoundSystem.getInstance().playSe(SoundSystem.SE_106)
@@ -1765,7 +1765,7 @@ Class TitleState Extends State
 			animationDrawer.setActionId(STATE_START_TO_MENU_2)
 			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, ((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + Self.optionArrowDriveY)
 			
-			If (Key.touchmenuoptionitems[ZONE_NUM_OFFSET].Isin() And Self.menuOptionCursor = 0 And Self.isSelectable) Then
+			If (Key.touchmenuoptionitems[1].Isin() And Self.menuOptionCursor = 0 And Self.isSelectable) Then
 				i = 1
 			Else
 				i = 0
@@ -1788,7 +1788,7 @@ Class TitleState Extends State
 			If (GlobalResource.soundSwitchConfig = 0) Then
 				i = 67
 			Else
-				i = Int(Key.touchmenuoptionitems[STATE_OPENING].Isin() And Self.menuOptionCursor = 1 And Self.isSelectable)
+				i = Int(Key.touchmenuoptionitems[3].Isin() And Self.menuOptionCursor = 1 And Self.isSelectable)
 				i += 57
 			EndIf
 			
@@ -1799,7 +1799,7 @@ Class TitleState Extends State
 			animationDrawer.setActionId(STATE_RETURN_TO_LOGO_2)
 			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + CHARACTER_RECORD_BG_HEIGHT) + Self.optionArrowDriveY)
 			
-			If (Key.touchmenuoptionitems[STATE_GOTO_GAME].Isin() And Self.menuOptionCursor = STATE_MOVING And Self.isSelectable) Then
+			If (Key.touchmenuoptionitems[5].Isin() And Self.menuOptionCursor = STATE_MOVING And Self.isSelectable) Then
 				i = ZONE_NUM_OFFSET
 			Else
 				i = 0
@@ -1819,7 +1819,7 @@ Class TitleState Extends State
 			animationDrawer.setActionId(STATE_BP_TRY_PAYING)
 			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + 72) + Self.optionArrowDriveY)
 			
-			If (Key.touchmenuoptionitems[STATE_MORE_GAME].Isin() And Self.menuOptionCursor = STATE_OPENING And Self.isSelectable) Then
+			If (Key.touchmenuoptionitems[7].Isin() And Self.menuOptionCursor = STATE_OPENING And Self.isSelectable) Then
 				i = 1
 			Else
 				i = 0
@@ -1832,7 +1832,7 @@ Class TitleState Extends State
 			animationDrawer.setActionId(STATE_CHARACTER_SELECT)
 			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + BACK_LINE_SPACE_TIME) + Self.optionArrowDriveY)
 			
-			i = Int(Key.touchmenuoptionitems[VISIBLE_OPTION_ITEMS_NUM].Isin() And Self.menuOptionCursor = STATE_START_GAME And Self.isSelectable)
+			i = Int(Key.touchmenuoptionitems[9].Isin() And Self.menuOptionCursor = STATE_START_GAME And Self.isSelectable)
 			
 			animationDrawer.setActionId(i + 57)
 			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + BACK_LINE_SPACE_TIME) + Self.optionArrowDriveY)
@@ -2418,7 +2418,7 @@ Class TitleState Extends State
 				Self.opengingCursor = 0
 			EndIf
 			
-			If ((Key.touchopeningskip.IsButtonPress() Or Key.press(Key.B_S1)) And Not Self.openingDrawer[STATE_START_GAME].checkEnd()) Then
+			If ((Key.touchopeningskip.IsButtonPress() Or Key.press(Key.B_S1)) And Not Self.openingDrawer[4].checkEnd()) Then
 				SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 				SoundSystem.getInstance().stopBgm(False)
 				SoundSystem.getInstance().playBgm(SoundSystem.BGM_TITLE, False)
@@ -2440,12 +2440,12 @@ Class TitleState Extends State
 					EndIf
 				Case STATE_SELECT
 					If (Self.openingDrawer[0].checkEnd()) Then
-						Self.openingDrawer[ZONE_NUM_OFFSET].setActionId(0)
+						Self.openingDrawer[1].setActionId(0)
 						Self.openingState = OPENING_STATE_SONIC
 					EndIf
 				Case STATE_MOVING
-					If (Self.openingDrawer[ZONE_NUM_OFFSET].checkEnd()) Then
-						Self.openingDrawer[STATE_MOVING].setActionId(0)
+					If (Self.openingDrawer[1].checkEnd()) Then
+						Self.openingDrawer[2].setActionId(0)
 						
 						If (Self.openingStateChanging And State.fadeChangeOver()) Then
 							Self.openingState = OPENING_STATE_TAILS
@@ -2457,8 +2457,8 @@ Class TitleState Extends State
 						EndIf
 					EndIf
 				Case STATE_OPENING
-					If (Self.openingDrawer[STATE_MOVING].checkEnd()) Then
-						Self.openingDrawer[STATE_OPENING].setActionId(0)
+					If (Self.openingDrawer[2].checkEnd()) Then
+						Self.openingDrawer[3].setActionId(0)
 						
 						If (Self.openingStateChanging And State.fadeChangeOver()) Then
 							Self.openingState = OPENING_STATE_KNUCKLES
@@ -2472,9 +2472,9 @@ Class TitleState Extends State
 					EndIf
 				Case STATE_START_GAME
 					
-					If (Self.openingDrawer[STATE_OPENING].checkEnd()) Then
-						Self.openingDrawer[STATE_START_GAME].setActionId(0)
-						Self.openingDrawer[STATE_START_GAME].restart()
+					If (Self.openingDrawer[3].checkEnd()) Then
+						Self.openingDrawer[4].setActionId(0)
+						Self.openingDrawer[4].restart()
 						Self.openingEnding = False
 						
 						If (Self.openingStateChanging And State.fadeChangeOver()) Then
@@ -2488,7 +2488,7 @@ Class TitleState Extends State
 						EndIf
 					EndIf
 				Case STATE_GOTO_GAME
-					If (Self.openingDrawer[STATE_START_GAME].checkEnd() And Self.openingEnding And State.fadeChangeOver()) Then
+					If (Self.openingDrawer[4].checkEnd() And Self.openingEnding And State.fadeChangeOver()) Then
 						Self.openingState = OPENING_STATE_END
 					EndIf
 				Case STATE_RACE_MODE
@@ -2505,15 +2505,15 @@ Class TitleState Extends State
 				Case STATE_SEGA_LOGO, STATE_SELECT
 					Self.openingDrawer[0].draw(g, Self.openingOffsetX, Self.openingOffsetY)
 				Case STATE_MOVING
-					Self.openingDrawer[ZONE_NUM_OFFSET].draw(g, Self.openingOffsetX, Self.openingOffsetY)
+					Self.openingDrawer[1].draw(g, Self.openingOffsetX, Self.openingOffsetY)
 				Case STATE_OPENING
-					Self.openingDrawer[STATE_MOVING].draw(g, Self.openingOffsetX, Self.openingOffsetY)
+					Self.openingDrawer[2].draw(g, Self.openingOffsetX, Self.openingOffsetY)
 				Case STATE_START_GAME
-					Self.openingDrawer[STATE_OPENING].draw(g, Self.openingOffsetX, Self.openingOffsetY)
+					Self.openingDrawer[3].draw(g, Self.openingOffsetX, Self.openingOffsetY)
 				Case STATE_GOTO_GAME
-					Self.openingDrawer[STATE_START_GAME].draw(g, Self.openingOffsetX, Self.openingOffsetY)
+					Self.openingDrawer[4].draw(g, Self.openingOffsetX, Self.openingOffsetY)
 					
-					If (Not Self.openingEnding And Self.openingDrawer[STATE_START_GAME].checkEnd()) Then
+					If (Not Self.openingEnding And Self.openingDrawer[4].checkEnd()) Then
 						Self.openingEnding = True
 						
 						State.setFadeColor(MapManager.END_COLOR)
@@ -2529,7 +2529,7 @@ Class TitleState Extends State
 				State.drawFadeBase(g, 2)
 			EndIf
 			
-			If (Not Self.openingDrawer[STATE_START_GAME].checkEnd()) Then
+			If (Not Self.openingDrawer[4].checkEnd()) Then
 				Local animationDrawer:= Self.skipDrawer
 				
 				animationDrawer.setActionId(Int(Key.touchopeningskip.Isin() And Self.opengingCursor = 0))

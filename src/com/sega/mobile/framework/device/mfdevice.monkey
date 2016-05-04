@@ -155,7 +155,18 @@ Class MFDevice Final
 		' Functions:
 		
 		' Extensions:
+		Function FixGlobalPath:String(path:String)
+			If (path.StartsWith("/")) Then
+				' Skip the first slash.
+				Return path[1..]
+			EndIf
+			
+			Return path
+		End
+		
 		Function FixResourcePath:String(path:String)
+			'path = FixGlobalPath(path)
+			
 			If (path.StartsWith("/")) Then
 				' Skip the first slash.
 				path = path[1..]

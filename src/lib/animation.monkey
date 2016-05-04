@@ -359,7 +359,7 @@ Class Animation
 				
 				ds = ds2
 				
-				Local animationNum:= (ds2.ReadByte() & 255) ' ds2.ReadByte()
+				Local animationNum:= ((ds2.ReadByte()) & 255) ' ds2.ReadByte()
 				
 				animationInstance = New Animation[animationNum]
 				
@@ -370,6 +370,10 @@ Class Animation
 					
 					a.LoadAnimationG2(ds2) ' animationInstance[i]
 				Next
+				
+				Local pos:= ds2.Position
+				
+				DebugStop()
 				
 				Local imageNum:= ds2.ReadByte()
 				

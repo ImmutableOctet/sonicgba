@@ -178,8 +178,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>26</X>
-        <Y>598</Y>
+        <X>12</X>
+        <Y>160</Y>
       </CursorPos>
       <DocGUID>a3a6892c-8077-4c3d-8208-564b8aa06ad8</DocGUID>
       <Bookmarks />
@@ -193,16 +193,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>28</X>
-        <Y>12</Y>
+        <X>0</X>
+        <Y>28</Y>
       </CursorPos>
       <DocGUID>2c3f4af9-bde2-49d9-8107-886d7f2d88a2</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfimage.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>12</X>
-        <Y>42</Y>
+        <X>14</X>
+        <Y>47</Y>
       </CursorPos>
       <DocGUID>7e44736e-5637-46f0-8808-88f19c85d4e7</DocGUID>
       <Bookmarks />
@@ -370,8 +370,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animation.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>350</Y>
+        <X>0</X>
+        <Y>187</Y>
       </CursorPos>
       <DocGUID>7ae3933b-8bd1-4ff1-a1ca-a106ba3de31b</DocGUID>
       <Bookmarks />
@@ -386,24 +386,24 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationdrawer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>114</Y>
+        <X>0</X>
+        <Y>193</Y>
       </CursorPos>
       <DocGUID>e9570406-7a9a-4e01-bd5a-65abae765e65</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationframe.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
-        <Y>355</Y>
+        <X>43</X>
+        <Y>228</Y>
       </CursorPos>
       <DocGUID>7c90b5b7-3a32-4e80-a2e3-7e76aa67e60e</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationimageinfo.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>34</X>
-        <Y>141</Y>
+        <X>0</X>
+        <Y>82</Y>
       </CursorPos>
       <DocGUID>8d388306-e99a-465f-a904-22dea7baae34</DocGUID>
       <Bookmarks />
@@ -453,8 +453,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>20</X>
-        <Y>20</Y>
+        <X>5</X>
+        <Y>1336</Y>
       </CursorPos>
       <DocGUID>e403bd98-09da-4655-b1e6-3cda1ca85f78</DocGUID>
       <Bookmarks />
@@ -1376,12 +1376,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\mapmanager.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\mapmanager.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>53</X>
+        <Y>865</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>705d4dde-00c5-48d9-8f01-62dd9731067f</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\mapobject.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -2176,8 +2177,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>2371</Y>
+        <X>10</X>
+        <Y>571</Y>
       </CursorPos>
       <DocGUID>9a85034f-2cca-468c-9eed-afcc80e7d8ff</DocGUID>
       <Bookmarks />
