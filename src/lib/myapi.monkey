@@ -18,6 +18,7 @@ Private
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
 	
+	Import brl.filepath
 	Import brl.stream
 	
 	Import monkey.stack
@@ -1331,24 +1332,8 @@ Class MyAPI ' Implements Def
 			Return out
 		End
 		
-		Function getFileName:String(var0:String)
-			Local var1:String
-			
-			Local slashPos:= var0.Find("/")
-			
-			While(slashPos <> -1)
-				Local after_slashPos:= (slashPos + 1)
-				
-				var1 += var0[..after_slashPos]
-				
-				var0 = var0[after_slashPos..]
-				
-				slashPos = var0.Find("/")
-			Wend
-			
-			'Return getPath(path)
-			
-			Return var0
+		Function getFileName:String(path:String)
+			Return StripDir(path)
 		End
 		
 		Function vibrate:Void()
