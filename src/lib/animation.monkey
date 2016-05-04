@@ -380,7 +380,7 @@ Class Animation
 				For Local i:= 0 Until imageNum
 					Local img:= New ImageInfo()
 					
-					img.loadInfo(ds2, False)
+					img.loadInfo(ds2, False) ' True
 					
 					imageInfo[i] = img
 				Next

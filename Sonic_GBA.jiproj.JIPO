@@ -369,8 +369,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animation.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>220</Y>
+        <X>12</X>
+        <Y>402</Y>
       </CursorPos>
       <DocGUID>7ae3933b-8bd1-4ff1-a1ca-a106ba3de31b</DocGUID>
       <Bookmarks />
@@ -385,24 +385,24 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationdrawer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>138</Y>
+        <X>3</X>
+        <Y>114</Y>
       </CursorPos>
       <DocGUID>e9570406-7a9a-4e01-bd5a-65abae765e65</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationframe.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>34</X>
-        <Y>138</Y>
+        <X>18</X>
+        <Y>121</Y>
       </CursorPos>
       <DocGUID>7c90b5b7-3a32-4e80-a2e3-7e76aa67e60e</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationimageinfo.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>11</X>
-        <Y>127</Y>
+        <X>3</X>
+        <Y>81</Y>
       </CursorPos>
       <DocGUID>8d388306-e99a-465f-a904-22dea7baae34</DocGUID>
       <Bookmarks />
@@ -2175,7 +2175,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
+        <X>4</X>
         <Y>2371</Y>
       </CursorPos>
       <DocGUID>9a85034f-2cca-468c-9eed-afcc80e7d8ff</DocGUID>
@@ -2234,7 +2234,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\lib" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mflib" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mflib\__test" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile" Expanded="true" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\define" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\__test" Expanded="false" />

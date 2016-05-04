@@ -69,7 +69,7 @@ Class ImageInfo
 		' Methods:
 		
 		' Extensions:
-		Method loadInfo_loadClips:Void(ds:Stream)
+		Method loadInfo_loadClips:Void(ds:Stream, flip_order:Bool=False)
 			Self.m_nClips = ds.ReadByte()
 			
 			If (Self.m_nClips < 0) Then
@@ -78,12 +78,20 @@ Class ImageInfo
 			
 			InitializeClips(Self.m_nClips)
 			
+			Local pos:= ds.Position
+			
+			DebugStop()
+			
 			For Local i:= 0 Until Self.m_nClips
 				For Local j:= 0 Until CLIP_DATA_SIZE
 					Local coord:= ds.ReadShort()
 					
 					If (coord < 0) Then
 						coord += USHORT_MAX_POSITIVE_NUMBERS
+					EndIf
+					
+					If (flip_order) Then
+						coord = NToHS(coord)
 					EndIf
 					
 					Self.m_Clips[i][j] = coord
@@ -122,7 +130,7 @@ Class ImageInfo
 				
 				Return
 			Else
-				loadInfo_loadClips(ds)
+				loadInfo_loadClips(ds, Not allow_img)
 			EndIf
 			
 			If (Not allow_img) Then
