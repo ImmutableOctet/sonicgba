@@ -37,8 +37,8 @@ Interface MDPhone
 	Const MEDIUM_FONT_HEIGHT:Int = 26
 	Const SMALL_FONT_HEIGHT:Int = 24
 	
-	Const SCREEN_WIDTH:Int = 360
-	Const SCREEN_HEIGHT:Int = 640
+	Const SCREEN_WIDTH:Int = 640 ' 360
+	Const SCREEN_HEIGHT:Int = 360 ' 640
 	
 	Const SHIELD_NUMBER_KEY:Bool = True
 	Const SUPPORT_JOYSTICK:Bool = False

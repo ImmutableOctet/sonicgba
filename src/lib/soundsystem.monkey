@@ -10,6 +10,8 @@ Private
 	'Import com.sega.mobile.framework.device.mfplayer
 	'Import com.sega.mobile.framework.device.mfsound
 	
+	Import com.sega.mobile.framework.device.mfdevice
+	
 	Import mojo.audio
 	
 	Import regal.typetool
@@ -463,6 +465,8 @@ Class SoundSystem
 	
 		Method playSe:Void(index:Int, loop:Bool)
 			stopLoopSe()
+			
+			PlaySound(LoadSound(MFDevice.FixGlobalPath(getSoundEffectName(index))))
 			
 			'MFSound.playSe(getSoundEffectName(index), 1)
 		End

@@ -68,8 +68,8 @@ Class MFDevice Final
 		Global bufferWidth:Int
 		Global bufferHeight:Int
 		
-		Global canvasWidth:Int
-		Global canvasHeight:Int
+		Global canvasWidth:Int = MDPhone.SCREEN_WIDTH
+		Global canvasHeight:Int = MDPhone.SCREEN_HEIGHT
 		
 		Global clearBuffer:Bool = True
 		
@@ -281,6 +281,10 @@ Class MFDevice Final
 		End
 		
 		Function Render:Void(context:Graphics)
+			If (KeyDown(KEY_E)) Then
+				DebugStop()
+			EndIf
+			
 			graphics.reset()
 			
 			If (Not interruptPauseFlag) Then
@@ -800,8 +804,8 @@ Class MFDevice Final
 			Local isSideways:Bool = False ' (MFMain.getInstance().getRequestedOrientation() = SCREEN_ORIENTATION_PORTRAIT)
 			
 			If (Not isSideways) Then
-				canvasHeight = MDPhone.SCREEN_HEIGHT
 				canvasWidth = MDPhone.SCREEN_WIDTH
+				canvasHeight = MDPhone.SCREEN_HEIGHT
 				
 				If (width > height) Then
 					screenWidth = height
@@ -824,6 +828,8 @@ Class MFDevice Final
 			EndIf
 			
 			Print("screenwidth: " + screenWidth + ", screenheight:" + screenHeight)
+			
+			context.setInitialClip(0, canvasWidth, 0, canvasHeight)
 		End
 		
 		' Record-related:

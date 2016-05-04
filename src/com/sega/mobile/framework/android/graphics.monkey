@@ -3,6 +3,7 @@ Strict
 Public
 
 ' Friends:
+Friend com.sega.mobile.framework.device.mfdevice
 Friend com.sega.mobile.framework.device.mfgraphics
 Friend com.sega.mobile.framework.device.mfimage
 
@@ -31,7 +32,13 @@ Public
 
 ' Classes:
 Class Graphics
-	Private
+	Protected
+		' Constant variable(s):
+		
+		' Extensions:
+		Const NATIVE_COLOR_COUNT:= 4 ' 3
+		Const NATIVE_CLIP_COUNT:= 4
+		
 		' Fields:
 		Field mCanvas:Canvas ' DrawList
 		'Field mFont:Font
@@ -39,6 +46,12 @@ Class Graphics
 		'Field mPaint:Paint
 		'Field mPath:Path
 		
+		' Extensions:
+		Field clipVec:Stack<Float> = New Stack<Float>()
+		Field colors:Stack<Float> = New Stack<Float>()
+		
+		Field currentClip:Float[] = New Float[NATIVE_CLIP_COUNT]
+	Private
 		' Functions:
 		
 		' Extensions:
@@ -154,10 +167,15 @@ Class Graphics
 			mCanvas.Flush()
 		End
 		
+		' Mojo 2 argument order is used here.
+		Method setInitialClip:Void(left:Float, right:Float, top:Float, bottom:Float)
+			clipRect(left, top, right, bottom)
+		End
+		
 		Method setFilterBitmap:Void(b:Bool)
 			'Self.mPaint.setFilterBitmap(b)
 		End
-	
+		
 		Method setAntiAlias:Void(b:Bool)
 			'Self.mPaint.setAntiAlias(b)
 		End
@@ -165,9 +183,9 @@ Class Graphics
 		Method setAlpha:Void(alpha:Int)
 			'Self.mPaint.setAlpha(alpha)
 			
-			mCanvas.SetAlpha(alpha / 255)
+			mCanvas.SetAlpha(Float(alpha) / 255.0)
 		End
-	
+		
 		Method getAlpha:Int()
 			'Return Self.mPaint.getAlpha()
 			
@@ -189,31 +207,63 @@ Class Graphics
 				mCanvas.DrawRect(x, y, width, height, img)
 			EndIf
 		End
-	
+		
 		Method setCanvas:Void(canvas:Canvas)
 			Self.mCanvas = canvas
 		End
-	
+		
 		Method getCanvas:Canvas()
 			Return Self.mCanvas
 		End
-	
+		
 		Method save:Void()
 			'Self.mCanvas.save()
 			
 			mCanvas.PushMatrix()
+			
+			Local color:= mCanvas.Color
+			
+			For Local i:= 0 Until NATIVE_COLOR_COUNT
+				colors.Push(color[i])
+			Next
+			
+			Local clip:= currentClip
+			
+			For Local i:= 0 Until NATIVE_CLIP_COUNT
+				clipVec.Push(clip[i])
+			Next
 		End
-	
+		
 		Method restore:Void()
 			'Self.mCanvas.restore()
+			
+			Local a:= colors.Pop()
+			Local b:= colors.Pop()
+			Local g:= colors.Pop()
+			Local r:= colors.Pop()
+			
+			mCanvas.SetColor(r, g, b, a)
+			
+			Local bottom:= clipVec.Pop()
+			Local right:= clipVec.Pop()
+			Local top:= clipVec.Pop()
+			Local left:= clipVec.Pop()
+			
+			clipRect(left, top, right, bottom)
 			
 			mCanvas.PopMatrix()
 		End
 	
 		Method clipRect:Void(left:Int, top:Int, right:Int, bottom:Int)
 			'Self.mCanvas.clipRect(left, top, right, bottom)
+			Print("Clip: " + left + ", " + top + ", " + right + ", " + bottom)
 			
-			mCanvas.SetScissor(left, top, right, bottom)
+			currentClip[0] = left
+			currentClip[1] = top
+			currentClip[2] = right
+			currentClip[3] = bottom
+			
+			mCanvas.SetProjection2d(Float(left), Float(right), Float(top), Float(bottom))
 		End
 	
 		Method rotate:Void(degrees:Float)
@@ -464,6 +514,11 @@ Class Graphics
 		End
 		
 		Method drawRegion:Void(image:Image, x_src:Int, y_src:Int, width:Int, height:Int, transform:Int, x_dest:Int, y_dest:Int, anchor:Int)
+			'mCanvas.DrawRect(Float(x_dest + xOffset), Float(y_dest + yOffset), width, height, image)
+			mCanvas.DrawRect(0, 0, image.Width, image.Height, image)
+			
+			Return
+			
 			save()
 			
 			Local drawWidth:= width
@@ -558,7 +613,7 @@ Class Graphics
 			Self.mPaint.setAlpha(alpha)
 			#End
 			
-			mCanvas.DrawRect(Float(x_dest + xOffset), Float(y_dest + yOffset), width, height, image)
+			'DebugStop()
 			
 			restore()
 		End

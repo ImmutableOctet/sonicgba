@@ -368,6 +368,8 @@ Class Frame
 		
 		Method DrawImage:Void(g:MFGraphics, i:Int, x:Int, y:Int, attr:Short)
 			If (Self.m_nClips <> 0) Then
+				'DebugStop()
+				
 				Local image:= m_Ani.imageInfo[Self.m_ClipInfo[i][4]].getImage()
 				
 				Local m_Clips_2:= m_Ani.imageInfo[Self.m_ClipInfo[i][4]].getClips()[Self.m_ClipInfo[i][2]]
@@ -422,6 +424,7 @@ Class Frame
 			EndIf
 		End
 	Private
+		' Methods:
 		Method fillRect:Void(g:MFGraphics, i:Int, iX:Int, iY:Int, attr:Int)
 			Local x:= Self.m_ClipInfo[i][0]
 			Local y:= Self.m_ClipInfo[i][1]
