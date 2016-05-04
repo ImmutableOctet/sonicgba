@@ -135,7 +135,7 @@ Class Frame
 					ElseIf (tmp_attr = ConstUtil.TRANS[3]) Then
 						sArr[0] = Short(sArr[0] - 1)
 						sArr[1] = Short(sArr[1] - 1)
-					ElseIf (tmp_attr = ConstUtil.TRANS[7] Or tmp_attr = ConstUtil.TRANS[7]) Then
+					ElseIf (tmp_attr = ConstUtil.TRANS[6]) Then
 						sArr[0] = Short(sArr[0] - 1)
 						sArr[1] = Short(sArr[1] - 1)
 					EndIf

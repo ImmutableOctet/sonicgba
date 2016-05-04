@@ -67,6 +67,32 @@ Class ImageInfo
 		End
 	Public
 		' Methods:
+		
+		' Extensions:
+		Method loadInfo_loadClips:Void(ds:Stream)
+			Self.m_nClips = ds.ReadByte()
+			
+			If (Self.m_nClips < 0) Then
+				Self.m_nClips = Short(Self.m_nClips + UOCTET_MAX_POSITIVE_NUMBERS)
+			EndIf
+			
+			InitializeClips(Self.m_nClips)
+			
+			For Local i:= 0 Until Self.m_nClips
+				For Local j:= 0 Until CLIP_DATA_SIZE
+					Local coord:= ds.ReadShort()
+					
+					If (coord < 0) Then
+						coord += USHORT_MAX_POSITIVE_NUMBERS
+					EndIf
+					
+					Self.m_Clips[i][j] = coord
+					
+					Print("Self.m_Clips["+i+"]["+j+"]: " + coord)
+				Next
+			Next
+		End
+		
 		Method close:Void()
 			Self.img_clip = Null
 			
@@ -77,65 +103,41 @@ Class ImageInfo
 			Self.imageSeperate = []
 		End
 
-		Method loadInfo:Void(ds:Stream)
-			Self.m_nClips = ds.ReadByte()
-			
-			If (Self.m_nClips < 0) Then
-				Self.m_nClips = Short(Self.m_nClips + UOCTET_MAX_POSITIVE_NUMBERS)
-			EndIf
-			
-			InitializeClips(Self.m_nClips)
-			
-			For Local i:= 0 Until Self.m_nClips
-				For Local j:= 0 Until CLIP_DATA_SIZE
-					Self.m_Clips[i][j] = ds.ReadShort()
-				Next
-			Next
-			
-			Local fileNameLen:= ds.ReadShort()
-			
+		Method loadInfo:Void(ds:Stream, allow_img:Bool)
 			DebugStop()
-			
-			Local fileName:= ds.ReadString(fileNameLen, "utf8")
-			
-			If (Animation.isImageWanted) Then
-				Local tmpFileName:= MyAPI.getFileName(fileName)
-				
-				Self.img_clip = MFImage.createImage(Animation.tmpPath + tmpFileName)
-				
-				Print("image fileName:" + tmpFileName)
-			EndIf
-		End
-		
-		Method loadInfo:Void(ds:DataStream)
 			If (ds = Null) Then
 				Self.m_nClips = 1
 				
 				InitializeClips(Self.m_nClips)
 				
-				For Local i:= 0 Until Self.m_nClips
-					Self.m_Clips[i][0] = 0
-					Self.m_Clips[i][1] = 0
-					Self.m_Clips[i][2] = Short(Self.img_clip.getWidth() & USHORT_MAX)
-					Self.m_Clips[i][3] = Short(Self.img_clip.getHeight() & USHORT_MAX)
+				For Local i:= 0 Until Self.m_nClips ' 1
+					Local clip:= Self.m_Clips[i]
+					
+					clip[0] = 0
+					clip[1] = 0
+					
+					clip[2] = Short(Self.img_clip.getWidth() & USHORT_MAX)
+					clip[3] = Short(Self.img_clip.getHeight() & USHORT_MAX)
 				Next
 				
 				Return
+			Else
+				loadInfo_loadClips(ds)
 			EndIf
 			
-			Self.m_nClips = ds.ReadByte()
-			
-			If (Self.m_nClips < 0) Then
-				Self.m_nClips = Short(Self.m_nClips + UOCTET_MAX_POSITIVE_NUMBERS)
+			If (Not allow_img) Then
+				Local fileNameLen:= ds.ReadShort()
+				
+				Local fileName:= ds.ReadString(fileNameLen, "utf8")
+				
+				If (Animation.isImageWanted) Then
+					Local tmpFileName:= MyAPI.getFileName(fileName)
+					
+					Self.img_clip = MFImage.createImage(Animation.tmpPath + tmpFileName)
+					
+					Print("image fileName:" + tmpFileName)
+				EndIf
 			EndIf
-			
-			InitializeClips(Self.m_nClips)
-			
-			For Local i:= 0 Until Self.m_nClips
-				For Local j:= 0 Until CLIP_DATA_SIZE
-					Self.m_Clips[i][j] = ds.ReadShort()
-				Next
-			Next
 		End
 		
 		Method getImage:MFImage()

@@ -214,7 +214,8 @@ Class Animation
 		
 		Method LoadAnimation:Void(in:Stream)
 			If (in <> Null) Then
-				Self.imageInfo[0].loadInfo(in)
+				Self.imageInfo[0].loadInfo(in, True)
+				
 				Self.m_nFrames = in.ReadByte()
 				
 				If (Self.m_nFrames < 0) Then
@@ -281,8 +282,6 @@ Class Animation
 			Self.isAnimationQi = True
 			
 			Try
-				'DebugStop()
-				
 				Local __unknown:= ds.ReadInt()
 				
 				Self.m_nFrames = ds.ReadByte()
@@ -324,8 +323,6 @@ Class Animation
 				
 				Self.m_nActions = ds.ReadByte()
 				
-				'DebugStop()
-				
 				If (Self.m_nActions < 0) Then
 					Self.m_nActions += UOCTET_MAX_POSITIVE_NUMBERS
 				EndIf
@@ -364,8 +361,6 @@ Class Animation
 				
 				animationInstance = New Animation[animationNum]
 				
-				DebugStop()
-				
 				For Local i:= 0 Until animationNum
 					Local a:= New Animation()
 					
@@ -373,8 +368,6 @@ Class Animation
 					
 					a.LoadAnimationG2(ds2) ' animationInstance[i]
 				Next
-				
-				DebugStop()
 				
 				Local imageNum:= ds2.ReadByte()
 				
@@ -387,7 +380,7 @@ Class Animation
 				For Local i:= 0 Until imageNum
 					Local img:= New ImageInfo()
 					
-					img.loadInfo(ds2)
+					img.loadInfo(ds2, False)
 					
 					imageInfo[i] = img
 				Next
@@ -462,7 +455,7 @@ Class Animation
 					
 					Local info:= New ImageInfo()
 					
-					info.loadInfo(ds)
+					info.loadInfo(ds, False)
 					
 					imageInfo[i] = info
 				Next
