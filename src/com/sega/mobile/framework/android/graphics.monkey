@@ -25,6 +25,11 @@ Private
 	
 	Import regal.typetool
 	'Import regal.matrix2d
+	
+	' Debugging related:
+	Import mojo.input
+	
+	Import mojo.app
 Public
 	Import mojo2.graphics
 	
@@ -47,10 +52,8 @@ Class Graphics
 		'Field mPath:Path
 		
 		' Extensions:
-		Field clipVec:Stack<Float> = New Stack<Float>()
+		Field clipVec:Stack<Int> = New Stack<Int>()
 		Field colors:Stack<Float> = New Stack<Float>()
-		
-		Field currentClip:Float[] = New Float[NATIVE_CLIP_COUNT]
 	Private
 		' Functions:
 		
@@ -168,8 +171,9 @@ Class Graphics
 		End
 		
 		' Mojo 2 argument order is used here.
-		Method setInitialClip:Void(left:Float, right:Float, top:Float, bottom:Float)
-			clipRect(left, top, right, bottom)
+		Method setInitialClip:Void(left:Int, right:Int, top:Int, bottom:Int)
+			mCanvas.SetProjection2d(Float(left), Float(right), Float(top), Float(bottom))
+			mCanvas.SetScissor(0, 0, DeviceWidth(), DeviceHeight())
 		End
 		
 		Method setFilterBitmap:Void(b:Bool)
@@ -183,29 +187,13 @@ Class Graphics
 		Method setAlpha:Void(alpha:Int)
 			'Self.mPaint.setAlpha(alpha)
 			
-			mCanvas.SetAlpha(Float(alpha) / 255.0)
+			''mCanvas.SetAlpha(Float(alpha) / 255.0)
 		End
 		
 		Method getAlpha:Int()
 			'Return Self.mPaint.getAlpha()
 			
 			Return (mCanvas.Alpha / 255)
-		End
-		
-		Method drawScreen:Void(img:Image, orgRect:Rect, targetRect:Rect)
-			'Self.mCanvas.drawBitmap(img.getBitmap(), orgRect, targetRect, Self.mPaint)
-			
-			Local x:= targetRect.left
-			Local y:= targetRect.top
-			
-			Local width:= targetRect.right
-			Local height:= targetRect.bottom
-			
-			If (orgRect <> Null) Then
-				mCanvas.DrawRect(x, y, width, height, img, orgRect.left, orgRect.top, orgRect.right, orgRect.bottom)
-			Else
-				mCanvas.DrawRect(x, y, width, height, img)
-			EndIf
 		End
 		
 		Method setCanvas:Void(canvas:Canvas)
@@ -217,6 +205,8 @@ Class Graphics
 		End
 		
 		Method save:Void()
+			'Print("SAVE")
+			
 			'Self.mCanvas.save()
 			
 			mCanvas.PushMatrix()
@@ -227,14 +217,18 @@ Class Graphics
 				colors.Push(color[i])
 			Next
 			
-			Local clip:= currentClip
+			Local clip:= mCanvas.Scissor
 			
 			For Local i:= 0 Until NATIVE_CLIP_COUNT
+				'Print("clip["+i+"]: " + clip[i])
+				
 				clipVec.Push(clip[i])
 			Next
 		End
 		
 		Method restore:Void()
+			'Print("RESTORE")
+			
 			'Self.mCanvas.restore()
 			
 			Local a:= colors.Pop()
@@ -244,93 +238,57 @@ Class Graphics
 			
 			mCanvas.SetColor(r, g, b, a)
 			
-			Local bottom:= clipVec.Pop()
-			Local right:= clipVec.Pop()
-			Local top:= clipVec.Pop()
-			Local left:= clipVec.Pop()
+			Local height:= clipVec.Pop()
+			Local width:= clipVec.Pop()
+			Local y:= clipVec.Pop()
+			Local x:= clipVec.Pop()
 			
-			clipRect(left, top, right, bottom)
+			If (KeyDown(KEY_Z)) Then
+				Print("scissor: " + x + ", " + y + " {" + width + ", " + height + "}")
+			EndIf
+			
+			mCanvas.SetScissor(x, y, width, height)
 			
 			mCanvas.PopMatrix()
 		End
 	
-		Method clipRect:Void(left:Int, top:Int, right:Int, bottom:Int)
-			'Self.mCanvas.clipRect(left, top, right, bottom)
-			Print("Clip: " + left + ", " + top + ", " + right + ", " + bottom)
-			
-			currentClip[0] = left
-			currentClip[1] = top
-			currentClip[2] = right
-			currentClip[3] = bottom
-			
-			mCanvas.SetProjection2d(Float(left), Float(right), Float(top), Float(bottom))
-		End
-	
 		Method rotate:Void(degrees:Float)
-			'Self.mCanvas.rotate(degrees)
-			
 			mCanvas.Rotate(degrees)
 		End
-	
+		
 		Method rotate:Void(degrees:Float, px:Float, py:Float)
-			'Self.mCanvas.rotate(degrees, px, py)
-			
 			mCanvas.TranslateRotate(px, py, degrees)
 		End
 	
 		Method scale:Void(sx:Float, sy:Float)
-			'Self.mCanvas.scale(sx, sy)
-			
 			mCanvas.Scale(sx, sy)
 		End
 		
 		Method scale:Void(sx:Float, sy:Float, px:Float, py:Float)
-			'Self.mCanvas.scale(sx, sy, px, py)
-			
 			mCanvas.TranslateScale(px, py, sx, sy)
 		End
 		
 		Method translate:Void(dx:Float, dy:Float)
-			'Self.mCanvas.translate(dx, dy)
-			
 			mCanvas.Translate(dx, dy)
 		End
 		
 		Method setColor:Void(color:Int)
 			'Self.mPaint.setColor(-16777216 | color)
 			
-			mCanvas.SetColor(getRf(color), getGf(color), getBf(color))
+			''mCanvas.SetColor(getRf(color), getGf(color), getBf(color))
 		End
 		
 		Method setColor:Void(r:Int, g:Int, b:Int)
 			'Self.mPaint.setColor(((r Shl TOP) + (g Shl RIGHT)) + b)
 			
-			mCanvas.SetColor(colorToFloat(r), colorToFloat(g), colorToFloat(b))
+			''mCanvas.SetColor(colorToFloat(r), colorToFloat(g), colorToFloat(b))
 		End
 		
 		Method fillRect:Void(x:Int, y:Int, w:Int, h:Int)
-			#Rem
-			Self.mPaint.setStyle(Style.FILL)
-			
-			If (Self.mCanvas <> Null) Then
-				Self.mCanvas.drawRect(Float(x), Float(y), Float(x + w), Float(y + h), Self.mPaint)
-			EndIf
-			#End
-			
 			mCanvas.DrawRect(Float(x), Float(y), Float(w), Float(h))
 		End
 		
 		Method fillTriangle:Void(x1:Int, y1:Int, x2:Int, y2:Int, x3:Int, y3:Int)
-			#Rem
-			Self.mPath.reset()
-			Self.mPath.moveTo((Float) x3, (Float) y3)
-			Self.mPath.lineTo((Float) x1, (Float) y1)
-			Self.mPath.lineTo((Float) x2, (Float) y2)
-			Self.mPath.lineTo((Float) x3, (Float) y3)
-			Self.mPaint.setStyle(Style.FILL)
-			Self.mCanvas.drawPath(Self.mPath, Self.mPaint)
-			#End
-			
 			Local fx1:= Float(x1)
 			Local fy1:= Float(y1)
 			Local fx2:= Float(x2)
@@ -344,12 +302,6 @@ Class Graphics
 		End
 		
 		Method drawLine:Void(x1:Int, y1:Int, x2:Int, y2:Int)
-			#Rem
-			If (Self.mCanvas <> Null) Then
-				Self.mCanvas.drawLine((Float) x1, (Float) y1, (Float) x2, (Float) y2, Self.mPaint)
-			EndIf
-			#End
-			
 			mCanvas.DrawLine(Float(x1), Float(y1), Float(x2), Float(y2))
 		End
 		
@@ -400,42 +352,16 @@ Class Graphics
 				y -= image.Height() ' Height
 			EndIf
 			
-			'Local alpha:= mCanvas.Alpha
-			
-			#Rem
-			Local ia:= image.getAlpha()
-			
-			If (ia <> -1) Then
-				setAlpha(ia)
-			EndIf
-			#End
-			
 			mCanvas.DrawImage(image, Float(x), Float(y))
-			
-			'mCanvas.SetAlpha(alpha)
-			
-			#Rem
-			If (Self.mCanvas <> Null) Then
-				Local alpha:= Self.mPaint.getAlpha()
-				
-				If (image.getAlpha() <> -1) Then
-					Self.mPaint.setAlpha(image.getAlpha())
-				EndIf
-				
-				Self.mCanvas.drawBitmap(image.getBitmap(), (Float) x, (Float) y, Self.mPaint)
-				Self.mPaint.setAlpha(alpha)
-			EndIf
-			#End
 		End
 		
 		Method setClip:Void(x:Int, y:Int, w:Int, h:Int)
-			#Rem
-			If (Self.mCanvas <> Null) Then
-				Self.mCanvas.clipRect((Float) x, (Float) y, (Float) (x + w), (Float) (y + h), Op.REPLACE)
-			EndIf
-			#End
-			
-			clipRect(x, y, w, h)
+			''mCanvas.SetScissor(x, y, w, h)
+			'mCanvas.SetScissor(x Shl 6, y Shl 6, w Shl 6, h Shl 6)
+		End
+		
+		Method clipRect:Void(left:Int, top:Int, right:Int, bottom:Int)
+			'setClip(left, top, right, bottom)
 		End
 		
 		Method drawRGB:Void(rgbData:Int[], offset:Int, scanlength:Int, x:Int, y:Int, width:Int, height:Int, processAlpha:Bool)
@@ -449,18 +375,24 @@ Class Graphics
 			
 			Return toColor(mCanvas.Color)
 		End
-
+		
 		Method drawRect:Void(x:Int, y:Int, w:Int, h:Int)
-			#Rem
-			Self.mPaint.setStyle(Style.STROKE)
-			
-			If (Self.mCanvas <> Null) Then
-				Self.mCanvas.drawRect((Float) x, (Float) y, (Float) (x + w), (Float) (y + h), Self.mPaint)
-			EndIf
-			#End
-			
 			' This behavior may change in the future.
-			mCanvas.DrawRect(Float(x), Float(y), Float(w), Float(h))
+			'mCanvas.DrawRect(Float(x), Float(y), Float(w), Float(h))
+			
+			Local fx:= Float(x)
+			Local fy:= Float(y)
+			
+			Local fw:= Float(w)
+			Local fh:= Float(h)
+			
+			Local fullX:= (fx + fw)
+			Local fullY:= (fy + fh)
+			
+			mCanvas.DrawLine(fx, fy, fullX, fy) ' drawLine(..)
+			mCanvas.DrawLine(fx, fy, fx, fullY) ' drawLine(..)
+			mCanvas.DrawLine(fullX, fy, fullX, fullY) ' drawLine(..)
+			mCanvas.DrawLine(fx, fullY, fullX, fullY) ' drawLine(..)
 		End
 		
 		Method drawArc:Void(x:Int, y:Int, width:Int, height:Int, startAngle:Int, arcAngle:Int)
@@ -510,15 +442,10 @@ Class Graphics
 			#End
 			
 			' This behavior may change in the future.
-			drawRect(x, y, width, height)
+			fillRect(x, y, width, height)
 		End
 		
 		Method drawRegion:Void(image:Image, x_src:Int, y_src:Int, width:Int, height:Int, transform:Int, x_dest:Int, y_dest:Int, anchor:Int)
-			'mCanvas.DrawRect(Float(x_dest + xOffset), Float(y_dest + yOffset), width, height, image)
-			mCanvas.DrawRect(0, 0, image.Width, image.Height, image)
-			
-			Return
-			
 			save()
 			
 			Local drawWidth:= width
@@ -599,26 +526,22 @@ Class Graphics
 				x_dest -= drawWidth Shr 1 ' >>> 1
 			EndIf
 			
-			#Rem
-			Self.mCanvas.clipRect(x_dest, y_dest, x_dest + drawWidth, y_dest + drawHeight)
-			Self.mCanvas.translate((Float) (x_dest + xOffset), (Float) (y_dest + yOffset))
-			
-			Local alpha:= Self.mPaint.getAlpha()
-			
-			If (image.getAlpha() <> -1) Then
-				Self.mPaint.setAlpha(image.getAlpha())
+			If (KeyDown(KEY_X)) Then
+				DebugStop()
 			EndIf
 			
-			Self.mCanvas.drawBitmap(image.getBitmap(), Self.mMatrix, Self.mPaint)
-			Self.mPaint.setAlpha(alpha)
-			#End
-			
-			'DebugStop()
-			
 			restore()
+			
+			'mCanvas.Translate(Float(x_dest + xOffset), Float(y_dest + yOffset))
+			
+			mCanvas.DrawRect(0.0, 0.0, drawWidth, drawHeight, image, x_src, y_src, width, height)
 		End
 
 		Method drawRegion:Void(image:Image, x_src:Int, y_src:Int, width:Int, height:Int, rotate_x:Int, rotate_y:Int, degree:Int, scale_x:Int, scale_y:Int, x_dest:Int, y_dest:Int, anchor:Int)
+			Print("Unimplemented overload of 'drawRegion'.")
+			
+			Return
+			
 			save()
 			
 			If ((anchor & BOTTOM) <> 0) Then
@@ -637,7 +560,7 @@ Class Graphics
 			Self.mCanvas.translate((Float) (x_dest - x_src), (Float) (y_dest - y_src))
 			Self.mCanvas.rotate((Float) degree, (Float) (rotate_x + x_src), (Float) (rotate_y + y_src))
 			Self.mCanvas.scale((Float) scale_x, (Float) scale_y, (Float) ((width / VCENTER) + x_src), (Float) ((height / VCENTER) + y_src))
-			Self.mCanvas.clipRect(x_src, y_src, x_src + width, y_src + height)
+			Self.mCanvas.SetScissor(x_src, y_src, x_src + width, y_src + height)
 			#End
 			
 			translate((x_dest - x_src), (y_dest - y_src))

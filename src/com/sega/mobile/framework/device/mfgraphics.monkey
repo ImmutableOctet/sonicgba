@@ -475,7 +475,7 @@ Class MFGraphics
 		End
 		
 		Method drawRegion:Void(image:MFImage, regionX:Int, regionY:Int, regionW:Int, regionH:Int, flipMode:Int, x:Int, y:Int, anchor:Int) Final
-			If (True Or MFDevice.preScaleZoomOutFlag) Then
+			If (MFDevice.preScaleZoomOutFlag) Then
 				x Shr= MFDevice.preScaleShift
 				y Shr= MFDevice.preScaleShift
 				

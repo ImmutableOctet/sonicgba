@@ -740,23 +740,27 @@ Class MFDevice Final
 		End
 		
 		Function initRecords:Void(force:Bool=False)
-			If (Not force And records <> Null) Then
-				Return
-			EndIf
-			
-			records = New StringMap<DataBuffer>()
-			
-			Local dis:= New DataStream(openRecordStore(RECORD_NAME))
-			
-			Local recordStoreNumber:= dis.ReadInt()
-			
-			For Local i:= 0 Until recordStoreNumber
-				Local nameLen:= NToHS(dis.ReadShort())
-				Local name:String = dis.ReadString(nameLen, "utf8") ' "ascii"
-				Local record:= readRecord(dis)
+			Try
+				If (Not force And records <> Null) Then
+					Return
+				EndIf
 				
-				records.Set(name, record)
-			Next
+				records = New StringMap<DataBuffer>()
+				
+				Local dis:= New DataStream(openRecordStore(RECORD_NAME))
+				
+				Local recordStoreNumber:= dis.ReadInt()
+				
+				For Local i:= 0 Until recordStoreNumber
+					Local nameLen:= NToHS(dis.ReadShort())
+					Local name:String = dis.ReadString(nameLen, "utf8") ' "ascii"
+					Local record:= readRecord(dis)
+					
+					records.Set(name, record)
+				Next
+			Catch E:StreamError ' Throwable
+				' Nothing so far.
+			End Try
 		End
 		
 		Function updateRecords:Void()
@@ -845,7 +849,7 @@ Class MFDevice Final
 			
 			CheckStates()
 			
-			setFullscreenMode(context, False)
+			setFullscreenMode(context, False) ' True
 			
 			'startThread()
 			'EndIf

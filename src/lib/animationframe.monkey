@@ -128,11 +128,11 @@ Class Frame
 					
 					Local tmp_attr:= (sArr[3] Shl 8)
 					
-					If (tmp_attr = ConstUtil.TRANS[2] Or tmp_attr = ConstUtil.TRANS[5]) Then
+					If (tmp_attr = ConstUtil.TRANS[1] Or tmp_attr = ConstUtil.TRANS[4]) Then
 						sArr[0] = Short(sArr[0] - 1)
-					ElseIf (tmp_attr = ConstUtil.TRANS[1] Or tmp_attr = ConstUtil.TRANS[6]) Then
+					ElseIf (tmp_attr = ConstUtil.TRANS[0] Or tmp_attr = ConstUtil.TRANS[5]) Then
 						sArr[1] = Short(sArr[1] - 1)
-					ElseIf (tmp_attr = ConstUtil.TRANS[3]) Then
+					ElseIf (tmp_attr = ConstUtil.TRANS[2]) Then
 						sArr[0] = Short(sArr[0] - 1)
 						sArr[1] = Short(sArr[1] - 1)
 					ElseIf (tmp_attr = ConstUtil.TRANS[6]) Then
@@ -141,11 +141,11 @@ Class Frame
 					EndIf
 					
 					If (m_Ani.isDoubleScale) Then
-						Self.m_ClipInfo[i][0] = Short(Self.m_ClipInfo[i][0] Shl 1)
-						Self.m_ClipInfo[i][1] = Short(Self.m_ClipInfo[i][1] Shl 1)
+						sArr[0] = Short(sArr[0] Shl 1)
+						sArr[1] = Short(sArr[1] Shl 1)
 					Else
-						Self.m_ClipInfo[i][0] = Self.m_ClipInfo[i][0]
-						Self.m_ClipInfo[i][1] = Self.m_ClipInfo[i][1]
+						sArr[0] = sArr[0]
+						sArr[1] = sArr[1]
 					EndIf
 				Next
 				
