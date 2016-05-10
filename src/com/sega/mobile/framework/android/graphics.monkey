@@ -36,7 +36,7 @@ Public
 	Import com.sega.mobile.framework.android.graphicsmacros
 
 ' Classes:
-Class Graphics
+Class Graphics ' _Graphics
 	Protected
 		' Constant variable(s):
 		

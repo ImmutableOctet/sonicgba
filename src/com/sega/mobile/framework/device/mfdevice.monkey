@@ -832,8 +832,6 @@ Class MFDevice Final
 			EndIf
 			
 			Print("screenwidth: " + screenWidth + ", screenheight: " + screenHeight)
-			
-			context.setInitialClip(0, canvasWidth, 0, canvasHeight)
 		End
 		
 		' Record-related:
