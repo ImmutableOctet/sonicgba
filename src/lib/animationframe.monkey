@@ -264,7 +264,7 @@ Class Frame
 				Local clipArray:= m_Ani.imageInfo[Self.m_ClipInfo[i][4]].getClips()
 				Local widthId:= 2
 				
-				If (((Short(Self.m_ClipInfo[i][3] Shl 8)) & ConstUtil.TRANS[6]) <> 0) Then
+				If (((Short(Self.m_ClipInfo[i][3] Shl 8)) & ConstUtil.TRANS[5]) <> 0) Then
 					widthId = 3
 				EndIf
 				
@@ -298,7 +298,7 @@ Class Frame
 				Local clipArray:= m_Ani.imageInfo[Self.m_ClipInfo[i][4]].getClips()
 				Local heightId:= 3
 				
-				If (((Short(Self.m_ClipInfo[i][3] Shl 8)) & ConstUtil.TRANS[6]) <> 0) Then
+				If (((Short(Self.m_ClipInfo[i][3] Shl 8)) & ConstUtil.TRANS[5]) <> 0) Then
 					heightId = 2
 				EndIf
 				
@@ -412,12 +412,12 @@ Class Frame
 				
 				tmp_attr ~= draw_attr
 				
-				If ((tmp_attr & ConstUtil.TRANS[6]) <> 0) Then
-					If ((Int((original_attr & ConstUtil.TRANS[2]) <> 0) ~ Int((original_attr & ConstUtil.TRANS[1]) <> 0)) <> 0) Then
-						tmp_attr ~= ConstUtil.TRANS[3]
+				If ((tmp_attr & ConstUtil.TRANS[5]) <> 0) Then
+					If ((Int((original_attr & ConstUtil.TRANS[1]) <> 0) ~ Int((original_attr & ConstUtil.TRANS[0]) <> 0)) <> 0) Then
+						tmp_attr ~= ConstUtil.TRANS[2]
 					EndIf
-				ElseIf (Not ((original_attr & ConstUtil.TRANS[6]) = 0 Or (draw_attr & ConstUtil.TRANS[6]) = 0)) Then
-					tmp_attr ~= ConstUtil.TRANS[3]
+				ElseIf (Not ((original_attr & ConstUtil.TRANS[5]) = 0 Or (draw_attr & ConstUtil.TRANS[5]) = 0)) Then
+					tmp_attr ~= ConstUtil.TRANS[2]
 				EndIf
 				
 				ConstUtil.DrawImage(g, tmp_x + x, tmp_y + y, image, m_Clips_2[0], m_Clips_2[1], m_Clips_2[2], m_Clips_2[3], tmp_attr)
@@ -429,11 +429,11 @@ Class Frame
 			Local x:= Self.m_ClipInfo[i][0]
 			Local y:= Self.m_ClipInfo[i][1]
 			
-			If ((attr & ConstUtil.TRANS[2]) > 0) Then
+			If ((attr & ConstUtil.TRANS[1]) > 0) Then
 				x = ((-x) - Self.m_ClipInfo[i][2]) + 1
 			EndIf
 			
-			If ((attr & ConstUtil.TRANS[1]) > 0) Then
+			If ((attr & ConstUtil.TRANS[0]) > 0) Then
 				y = ((-y) - Self.m_ClipInfo[i][3]) + 1
 			EndIf
 			
@@ -448,11 +448,11 @@ Class Frame
 			Local x:= Self.m_ClipInfo[i][0]
 			Local y:= Self.m_ClipInfo[i][1]
 			
-			If ((attr & ConstUtil.TRANS[2]) > 0) Then
+			If ((attr & ConstUtil.TRANS[1]) > 0) Then
 				x = ((-x) - Self.m_ClipInfo[i][2]) + 1
 			EndIf
 			
-			If ((attr & ConstUtil.TRANS[1]) > 0) Then
+			If ((attr & ConstUtil.TRANS[0]) > 0) Then
 				y = ((-y) - Self.m_ClipInfo[i][3]) + 1
 			EndIf
 			
@@ -466,25 +466,25 @@ Class Frame
 		Method getMIDPTransId:Int(tmp_attr:Int)
 			Local attr:Int = 0
 			
-			If ((tmp_attr & ConstUtil.TRANS[6]) <> 0) Then
+			If ((tmp_attr & ConstUtil.TRANS[5]) <> 0) Then
 				attr = 0 | 6
 				
-				If ((tmp_attr & ConstUtil.TRANS[2]) <> 0) Then
+				If ((tmp_attr & ConstUtil.TRANS[1]) <> 0) Then
 					attr ~= 1
 				EndIf
 				
-				If ((tmp_attr & ConstUtil.TRANS[1]) <> 0) Then
+				If ((tmp_attr & ConstUtil.TRANS[0]) <> 0) Then
 					Return attr ~ 2
 				EndIf
 				
 				Return attr
 			EndIf
 			
-			If ((tmp_attr & ConstUtil.TRANS[2]) <> 0) Then
+			If ((tmp_attr & ConstUtil.TRANS[1]) <> 0) Then
 				attr = 0 | 2
 			EndIf
 			
-			If ((tmp_attr & ConstUtil.TRANS[1]) <> 0) Then
+			If ((tmp_attr & ConstUtil.TRANS[0]) <> 0) Then
 				Return attr | 1
 			EndIf
 			

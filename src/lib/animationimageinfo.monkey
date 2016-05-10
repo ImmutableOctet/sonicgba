@@ -89,7 +89,7 @@ Class ImageInfo
 					EndIf
 					
 					If (flip_order) Then
-						coord = NToHS(coord)
+						coord = NToHS(coord) ' Shr 6
 					EndIf
 					
 					Self.m_Clips[i][j] = coord
@@ -138,7 +138,9 @@ Class ImageInfo
 				If (Animation.isImageWanted) Then
 					Local tmpFileName:= MyAPI.getFileName(fileName)
 					
-					Self.img_clip = MFImage.createImage(Animation.tmpPath + tmpFileName)
+					Local img:= MFImage.createImage(Animation.tmpPath + tmpFileName)
+					 
+					Self.img_clip = img
 					
 					Print("image fileName:" + tmpFileName)
 				EndIf

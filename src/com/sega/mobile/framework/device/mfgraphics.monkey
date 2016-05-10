@@ -1018,7 +1018,7 @@ Class MFGraphics
 		End
 		
 		Method enableEffect:Void() Final
-			Self.pixelInt = New Int[TRANS_MIRROR_ROT180]
+			Self.pixelInt = New Int[1]
 			
 			Self.redValue = 0
 			Self.greenValue = 0
@@ -1214,14 +1214,10 @@ Class MFGraphics
 				
 				If (Self.alphaValue <> 0) Then
 					drawRGBFlip(Self.drawEffectRGB, x + Self.transX, y + Self.transY, image.getWidth(), image.getHeight(), TRANS_NONE) ' 0
-					
-					Return
 				EndIf
-				
-				Return
+			Else
+				Self.context.drawImage(image.image, Self.transX + x, Self.transY + y, (TOP|RIGHT))
 			EndIf
-			
-			Self.context.drawImage(image.image, Self.transX + x, Self.transY + y, (TOP|RIGHT))
 		End
 		
 		Method drawRegionImpl:Void(image:MFImage, regionX:Int, regionY:Int, regionW:Int, regionH:Int, flipMode:Int, x:Int, y:Int) Final

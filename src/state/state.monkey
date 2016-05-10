@@ -612,6 +612,7 @@ Class State Implements StringIndex Abstract ' SonicDef
 		
 		Function drawFadeCore:Void(g:MFGraphics)
 			' This implementation will need to be replaced:
+			#Rem
 			If (fadeAlpha <> 0) Then
 				If (preFadeAlpha <> fadeAlpha) Then
 					For Local w:= 0 Until FADE_FILL_WIDTH
@@ -629,6 +630,9 @@ Class State Implements StringIndex Abstract ' SonicDef
 					Next
 				Next
 			EndIf
+			#End
+			
+			preFadeAlpha = fadeAlpha
 		End
 		
 		Function drawLeftSoftKey:Void(g:MFGraphics)
