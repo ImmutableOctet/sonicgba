@@ -206,8 +206,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>28</X>
-        <Y>522</Y>
+        <X>23</X>
+        <Y>582</Y>
       </CursorPos>
       <DocGUID>cc3104be-d876-4714-b620-ecad9ddd697c</DocGUID>
       <Bookmarks />
@@ -353,12 +353,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\gameengine\def.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\gameengine\def.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
-        <Y>47</Y>
+        <X>35</X>
+        <Y>25</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>2d00bc85-f7e7-4a26-98dc-5056a1042119</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\gameengine\key.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -465,12 +466,13 @@
       <DocGUID>789d249a-c9e8-4943-90f9-6b2d1dc7a261</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>0</X>
-        <Y>96</Y>
+        <Y>1349</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>f7928e36-77fd-4636-8b08-35c5ba5ffd9e</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\myrandom.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>

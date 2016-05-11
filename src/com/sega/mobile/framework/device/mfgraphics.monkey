@@ -117,7 +117,7 @@ Class MFGraphics
 		
 		' Unimplemented feature: Font IDs
 		Function stringWidth:Int(font:Int, str:String) ' Final
-			Return Self.context.Font.TextWidth(str)
+			Return (16 * str.Length) ' Self.context.Font.TextWidth(str)
 		End
 		
 		' Extensions:
@@ -577,7 +577,7 @@ Class MFGraphics
 		End
 		
 		Method setColor:Void(color:Int)
-			Self.context.setColor(color)
+			Self.context.SetColor(getRf(color), getGf(color), getBf(color)) ' getAf(color)
 		End
 		
 		Method getColor:Int()
@@ -938,7 +938,8 @@ Class MFGraphics
 		End
 		
 		Method stringWidth:Int(str:String) Final
-			Return stringWidth(font_type, str)
+			' Magic number: 0 (Font ID; unimplemented)
+			Return stringWidth(0, str)
 		End
 		
 		Method enableEffect:Void() Final
