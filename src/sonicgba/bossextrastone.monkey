@@ -115,17 +115,17 @@ Class BossExtraStone Extends BulletObject Implements ACMoveCalUser
 		End
 		
 		Method draw:Void(g:MFGraphics)
-			Local g2:= g.getSystemGraphics()
+			Local context:= g.getSystemGraphics()
 			
-			g2.save()
+			context.PushMatrix()
 			
-			g2.translate(Float((Self.posX Shr 6) - camera.x), Float((Self.posY Shr 6) - camera.y))
+			context.Translate(Float((Self.posX Shr 6) - camera.x), Float((Self.posY Shr 6) - camera.y))
 			
-			g2.rotate(Float(Self.degree))
+			context.Rotate(Float(Self.degree))
 			
 			Self.drawer.draw(g, 0, 0)
 			
-			g2.restore()
+			context.PopMatrix()
 		End
 		
 		Method chkDestroy:Bool()

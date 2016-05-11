@@ -619,15 +619,15 @@ Class PlayerSuperSonic Extends PlayerObject
 		Method drawDamage:Void(g:MFGraphics, drawer:AnimationDrawer, x:Int, y:Int)
 			Local degree:= (((Self.hurtCount - HURT_COUNT) * 360) / 7)
 			
-			Local g2:= g.getSystemGraphics()
+			Local context:= g.getSystemGraphics()
 			
-			g2.save()
+			context.PushMatrix()
 			
-			g2.translate(Float((x Shr 6) - camera.x), Float((y Shr 6) - camera.y))
-			g2.rotate(Float(degree))
+			context.Translate(Float((x Shr 6) - camera.x), Float((y Shr 6) - camera.y))
+			context.Rotate(Float(degree))
 			
 			drawer.draw(g, 0, 0)
 			
-			g2.restore()
+			context.PopMatrix()
 		End
 End

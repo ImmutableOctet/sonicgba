@@ -324,14 +324,14 @@ Class SpecialObject Abstract ' Implements SSDef
 		Method drawObj:Void(g:MFGraphics, drawer:AnimationDrawer, xOffset:Int, yOffset:Int)
 			Local nativeContext:= g.getSystemGraphics()
 			
-			nativeContext.save()
+			nativeContext.PushMatrix()
 			
-			nativeContext.translate(Float((drawX + (SCREEN_WIDTH Shr 1)) - SpecialMap.getCameraOffsetX()), Float((drawY + (SCREEN_HEIGHT Shr 1)) - SpecialMap.getCameraOffsetY()))
-			nativeContext.scale(scale, scale)
+			nativeContext.Translate(Float((drawX + (SCREEN_WIDTH / 2)) - SpecialMap.getCameraOffsetX()), Float((drawY + (SCREEN_HEIGHT / 2)) - SpecialMap.getCameraOffsetY())) ' Shr 1
+			nativeContext.Scale(scale, scale)
 			
 			drawer.draw(g, xOffset, yOffset)
 			
-			nativeContext.restore()
+			nativeContext.PopMatrix()
 		End
 		
 		Method drawCollisionRect:Void(g:MFGraphics)

@@ -1345,18 +1345,18 @@ Class MyAPI ' Implements Def
 		Function drawScaleAni:Void(g:MFGraphics, drawer:AnimationDrawer, id:Int, x:Int, y:Int, scalex:Float, scaley:Float, pointx:Float, pointy:Float)
 			drawer.setActionId(id)
 			
-			Local g2:= g.getSystemGraphics()
+			Local context:= g.getSystemGraphics()
 			
-			g2.save()
+			context.PushMatrix()
 			
-			g2.translate(Float(x), Float(y))
-			g2.scale(scalex, scaley, pointx, pointy)
+			context.Translate(Float(x), Float(y))
+			context.TranslateScale(Float(pointx), Float(pointy), scalex, scaley)
 			
 			drawer.draw(g, 0, 0)
 			
-			g2.scale(1.0 / scalex, 1.0 / scaley)
-			g2.translate(Float(-x), Float(-y))
+			'context.Scale(1.0 / scalex, 1.0 / scaley)
+			'context.Translate(Float(-x), Float(-y))
 			
-			g2.restore()
+			context.PopMatrix()
 		End
 End

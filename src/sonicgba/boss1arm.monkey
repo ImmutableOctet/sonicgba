@@ -436,16 +436,16 @@ Class Boss1Arm Extends EnemyObject
 				Next
 				
 				If (Self.drop_cnt < 2) Then
-					Local g2:= g.getSystemGraphics()
+					Local context:= g.getSystemGraphics()
 					
-					g2.save()
+					context.PushMatrix()
 					
-					g2.translate(Float((Self.pos[5][0] Shr 6) - camera.x), Float((Self.pos[5][1] Shr 6) - camera.y))
-					g2.rotate(Float((-Self.degree) Shr 6))
+					context.Translate(Float((Self.pos[5][0] Shr 6) - camera.x), Float((Self.pos[5][1] Shr 6) - camera.y))
+					context.Rotate(Float((-Self.degree) Shr 6))
 					
 					Self.hammerdrawer.draw(g, 0, 0)
 					
-					g2.restore()
+					context.PopMatrix()
 				EndIf
 				
 				drawCollisionRect(g)

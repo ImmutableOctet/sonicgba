@@ -693,19 +693,19 @@ Class Node
 			x Shl= PyxAnimation.ZOOM
 			y Shl= PyxAnimation.ZOOM
 			
-			Local g2:= g.getSystemGraphics()
+			Local context:= g.getSystemGraphics()
 			
-			g2.save()
+			context.PushMatrix()
 			
-			g2.translate(Float((Self.centerPoint.showX + x) Shr PyxAnimation.ZOOM), Float((Self.centerPoint.showY + y) Shr PyxAnimation.ZOOM))
-			g2.rotate(Float(Self.calDegree))
-			g2.translate(Float(-Self.centerPoint.f21x), Float(-Self.centerPoint.f22y))
+			context.Translate(Float((Self.centerPoint.showX + x) Shr PyxAnimation.ZOOM), Float((Self.centerPoint.showY + y) Shr PyxAnimation.ZOOM))
+			context.Rotate(Float(Self.calDegree))
+			context.Translate(Float(-Self.centerPoint.f21x), Float(-Self.centerPoint.f22y))
 			
 			If (Self.drawer <> Null) Then
 				Self.drawer.draw(g, Self.animationX, Self.animationY)
 			EndIf
 			
-			g2.restore()
+			context.PopMatrix()
 		End
 		
 		Method setAnimation:Void(animationID:Int, actionID:Int)

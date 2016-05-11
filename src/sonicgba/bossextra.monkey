@@ -474,12 +474,12 @@ Class BossExtra Extends BossObject
 					Local laserX:= Self.pyxAnimation.getNodeXByAnimationNamed("head", -20, -12)
 					Local laserY:= Self.pyxAnimation.getNodeYByAnimationNamed("head", -20, -12)
 					
-					Local g2:= g.getSystemGraphics()
+					Local context:= g.getSystemGraphics()
 					
-					g2.save()
+					context.PushMatrix()
 					
-					g2.translate(Float(((Self.posX Shr 6) + laserX) - camera.x), Float(((Self.posY Shr 6) + laserY) - camera.y))
-					g2.rotate(Float(Self.laserDegree Shr 6))
+					context.Translate(Float(((Self.posX Shr 6) + laserX) - camera.x), Float(((Self.posY Shr 6) + laserY) - camera.y))
+					context.Rotate(Float(Self.laserDegree Shr 6))
 					
 					g.setColor(MapManager.END_COLOR)
 					
@@ -491,7 +491,7 @@ Class BossExtra Extends BossObject
 						Self.laserHeight = 4
 					EndIf
 					
-					g2.restore()
+					context.PopMatrix()
 				EndIf
 				
 				If (Not IsGamePause) Then
@@ -506,16 +506,16 @@ Class BossExtra Extends BossObject
 					Self.pyxAnimation.getNodeInfo(nodeInfo, "head")
 					
 					If (nodeInfo.hasNode()) Then
-						Local g2:= g.getSystemGraphics()
+						Local context:= g.getSystemGraphics()
 						
-						g2.save()
+						context.PushMatrix()
 						
-						g2.translate(Float((nodeInfo.animationX + (Self.posX Shr 6)) - camera.x), Float((nodeInfo.animationY + (Self.posY Shr 6)) - camera.y))
-						g2.rotate(Float(nodeInfo.degree))
+						context.Translate(Float((nodeInfo.animationX + (Self.posX Shr 6)) - camera.x), Float((nodeInfo.animationY + (Self.posY Shr 6)) - camera.y))
+						context.Rotate(Float(nodeInfo.degree))
 						
 						Self.headFlashDrawer.draw(g, 0, 0)
 						
-						g2.restore()
+						context.PopMatrix()
 					EndIf
 				EndIf
 			EndIf
