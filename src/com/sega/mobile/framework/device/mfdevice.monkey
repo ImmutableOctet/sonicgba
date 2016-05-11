@@ -280,7 +280,7 @@ Class MFDevice Final
 			EndIf
 		End
 		
-		Function Render:Void(context:Graphics)
+		Function Render:Void(graphics:MFGraphics) ' Canvas ' Graphics
 			If (KeyDown(KEY_E)) Then
 				DebugStop()
 			EndIf
@@ -310,26 +310,24 @@ Class MFDevice Final
 			EndIf
 		End
 		
-		Function deviceDraw:Void(g:Graphics)
+		Function deviceDraw:Void(g:MFGraphics) ' Canvas ' Graphics
+			Local canvas:= g.getGraphics()
+			
 			For Local i:= preLayer.Length Until 0 Step -1 ' MAX_LAYER ' To 0
 				Local layer:= preLayer[i - preLayer.Length]
 				
 				If (layer <> Null) Then
-					g.drawImage(layer.getNativeImage(), 0, 0, 0)
+					canvas.DrawImage(layer.getNativeImage(), 0.0, 0.0)
 				EndIf
 			Next
 			
-			#Rem
-			If (bufferImage <> Null) Then
-				g.drawScreen(bufferImage, Null, New Rect(0, 0, screenWidth, screenHeight))
-			EndIf
-			#End
+			MFDevice.Render(g)
 			
 			For Local i:= postLayer.Length To postLayer.Length ' Until 0 Step -1 ' MAX_LAYER
 				Local layer:= postLayer[i - MAX_LAYER]
 				
 				If (layer <> Null) Then
-					g.drawImage(layer.getNativeImage(), 0, 0, 0)
+					canvas.DrawImage(layer.getNativeImage(), 0.0, 0.0)
 				EndIf
 			Next
 		End
@@ -442,7 +440,7 @@ Class MFDevice Final
 		End
 		
 		Function flushScreen:Void()
-			deviceDraw(graphics.getSystemGraphics())
+			deviceDraw(graphics)
 			
 			graphics.flush()
 		End
@@ -804,7 +802,7 @@ Class MFDevice Final
 		' Functions:
 		
 		' Extensions:
-		Function initializeScreen:Void(context:Graphics, width:Int, height:Int)
+		Function initializeScreen:Void(context:Canvas, width:Int, height:Int) ' Graphics
 			Local isSideways:Bool = False ' (MFMain.getInstance().getRequestedOrientation() = SCREEN_ORIENTATION_PORTRAIT)
 			
 			If (Not isSideways) Then
@@ -840,7 +838,7 @@ Class MFDevice Final
 		End
 		
 		' Notifications:
-		Function notifyStart:Void(context:Graphics, startState:MFGameState)
+		Function notifyStart:Void(context:Canvas, startState:MFGameState) ' Graphics
 			'If (mainThread = Null) Then
 			
 			changeState(startState)
@@ -976,7 +974,7 @@ Class MFDevice Final
 			'mainCanvas.setFilterBitmap(b)
 		End
 		
-		Function setFullscreenMode:Void(context:Graphics, b:Bool)
+		Function setFullscreenMode:Void(context:Canvas, b:Bool) ' DrawList
 			Local vWidth:Int, vHeight:Int
 			
 			If (b) Then
@@ -1126,7 +1124,7 @@ Class MFDevice Final
 			horizontalOffset = ((drawRect.left * bufferWidth) / screenWidth)
 			verticvalOffset = ((drawRect.top * bufferHeight) / screenHeight)
 			
-			graphics.context.getCanvas().Translate(Float(horizontalOffset), Float(verticvalOffset))
+			context.Translate(Float(horizontalOffset), Float(verticvalOffset)) ' graphics.getGraphics()
 		End
 		
 		Function setPreScale:Void(zoomIn:Bool, zoomOut:Bool)

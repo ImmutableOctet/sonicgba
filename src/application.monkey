@@ -92,24 +92,19 @@ Class Application Extends App ' Main Extends MFMain
 		'Field tMgr:TelephonyManager
 		
 		' Extensions / Replacements:
-		Field graphics:Graphics
-		'Field canvas:Canvas
+		'Field graphics:Graphics
+		Field graphics:Canvas
 		
 		' Booleans / Flags:
 		Field isSuspended:Bool
 	Public
-		' Properties:
-		Method canvas:Canvas() Property
-			Return graphics.getCanvas()
-		End
-		
 		' Methods:
 		Method OnCreate:Int()
 			SetUpdateRate(0) ' 60 ' 30
 			
 			Seed = Millisecs()
 			
-			graphics = New Graphics()
+			graphics = New Canvas(Null)
 			
 			#Rem
 				Self.mScore = ""
@@ -154,17 +149,15 @@ Class Application Extends App ' Main Extends MFMain
 				Return 0
 			EndIf
 			
-			'canvas.Clear()
+			'graphics.Clear()
 			
 			If (MFDevice.clearBuffer) Then
 				MFDevice.clearScreen()
 			EndIf
 			
-			MFDevice.Render(graphics)
-			
 			MFDevice.flushScreen()
 			
-			'canvas.Flush()
+			'graphics.Flush()
 			
 			Return 0
 		End
@@ -208,15 +201,15 @@ Class Application Extends App ' Main Extends MFMain
 		End
 		
 		Method OnRenderWhileSuspended:Void()
-			canvas.Clear()
+			graphics.Clear()
 			
-			canvas.SetFont(Null)
+			graphics.SetFont(Null)
 			
-			canvas.SetColor(0.0, 0.0, 0.0)
+			graphics.SetColor(0.0, 0.0, 0.0)
 			
-			canvas.DrawText("Game Suspended", DeviceWidth() / 2, DeviceHeight() / 2, 0.5, 0.5)
+			graphics.DrawText("Game Suspended", DeviceWidth() / 2, DeviceHeight() / 2, 0.5, 0.5)
 			
-			canvas.Flush()
+			graphics.Flush()
 		End
 		
 		Method getEntryGameState:MFGameState()

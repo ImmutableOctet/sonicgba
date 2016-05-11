@@ -158,8 +158,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>47</X>
-        <Y>358</Y>
+        <X>60</X>
+        <Y>127</Y>
       </CursorPos>
       <DocGUID>d8644e5e-cbb4-4ff0-a584-8e89bb3a9ab3</DocGUID>
       <Bookmarks>
@@ -186,14 +186,14 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>4</X>
-        <Y>614</Y>
+        <X>41</X>
+        <Y>295</Y>
       </CursorPos>
       <DocGUID>1ab30066-841d-4541-9fff-0756a83bf152</DocGUID>
       <Bookmarks>
         <Point>
           <X>0</X>
-          <Y>1087</Y>
+          <Y>1085</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
@@ -206,18 +206,19 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>38</X>
-        <Y>1196</Y>
+        <X>28</X>
+        <Y>522</Y>
       </CursorPos>
       <DocGUID>cc3104be-d876-4714-b620-ecad9ddd697c</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfimage.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfimage.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>32</Y>
+        <X>20</X>
+        <Y>193</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>f5485ae4-cd93-4aa3-89cd-0c327f0fc607</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfsensor.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -2197,8 +2198,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\application.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>20</X>
-        <Y>128</Y>
+        <X>17</X>
+        <Y>157</Y>
       </CursorPos>
       <DocGUID>d4f04e2c-f7b3-4f80-9cc2-193bfbdaa54e</DocGUID>
       <Bookmarks />

@@ -520,7 +520,7 @@ Class MFGraphics
 			drawRegion(image, regionX, regionY, regionW, regionH, 0, x, y, (TOP|RIGHT))
 		End
 		
-		Method drawRegion:Void(image:MFImage, regionX:Int, regionY:Int, regionW:Int, regionH:Int, flipMode:Int, x:Int, y:Int, anchor:Int) Final
+		Method drawRegion:Void(img:MFImage, regionX:Int, regionY:Int, regionW:Int, regionH:Int, flipMode:Int, x:Int, y:Int, anchor:Int) Final
 			If (MFDevice.preScaleZoomOutFlag) Then
 				x Shr= MFDevice.preScaleShift
 				y Shr= MFDevice.preScaleShift
@@ -547,7 +547,7 @@ Class MFGraphics
 				caculateAnchorOffset(regionH, regionW, anchor)
 			EndIf
 			
-			drawRegionImpl(image, regionX, regionY, regionW, regionH, flipMode, x + xOff, y + yOff)
+			drawRegionImpl(img.image, regionX, regionY, regionW, regionH, flipMode, x + xOff, y + yOff)
 		End
 	Private
 		' Methods:
@@ -933,7 +933,8 @@ Class MFGraphics
 		End
 		
 		Method charHeight:Int() Final
-			Return charHeight(font_type)
+			' Magic number: 0 (Font ID; unimplemented)
+			Return charHeight(0)
 		End
 		
 		Method stringWidth:Int(str:String) Final
@@ -1076,7 +1077,7 @@ Class MFGraphics
 			Self.context.TranslateRotate(Float(degree), Float(rotate_x + x_src), Float(rotate_y + y_src))
 			Self.context.TranslateScale(Float(scale_x), Float(scale_y), Float((width / 2) + x_src), Float((height / 2) + y_src))
 			
-			Self.context.DrawRect(0.0, 0.0, Float(width), Float(height), img.image, x_src, y_src, width, height)
+			Self.context.DrawRect(0.0, 0.0, Float(width), Float(height), image, x_src, y_src, width, height)
 			
 			restoreCanvas()
 		End
