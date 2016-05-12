@@ -89,7 +89,7 @@ Class ImageInfo
 					EndIf
 					
 					If (flip_order) Then
-						coord = NToHS(coord) ' Shr 6
+						'coord = NToHS(coord) ' Shr 6
 					EndIf
 					
 					Self.m_Clips[i][j] = coord
@@ -131,7 +131,7 @@ Class ImageInfo
 			EndIf
 			
 			If (Not allow_img) Then
-				Local fileNameLen:= NToHS(ds.ReadShort())
+				Local fileNameLen:= ds.ReadShort()
 				
 				Local fileName:= ds.ReadString(fileNameLen, "utf8")
 				

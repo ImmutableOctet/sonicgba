@@ -79,7 +79,7 @@ Class GlobalResource
 			Const DEFAULT_FILE_SIZE:= 128 ' Bytes.
 			
 			' Local variable(s):
-			Local dos:= New PublicDataStream(DEFAULT_FILE_SIZE)
+			Local dos:= New PublicDataStream(DEFAULT_FILE_SIZE, True) ' False
 			
 			Try
 				If (dos = Null) Then

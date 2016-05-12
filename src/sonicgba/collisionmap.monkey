@@ -10,6 +10,8 @@ Private
 	Import sonicgba.mydegreegetter
 	Import sonicgba.sonicdef
 	
+	Import lib.constutil
+	
 	Import com.sega.engine.action.acblock
 	Import com.sega.engine.action.acdegreegetter
 	Import com.sega.engine.action.acutilities
@@ -23,6 +25,7 @@ Private
 	
 	Import regal.typetool
 	Import regal.sizeof
+	Import regal.byteorder
 Public
 
 ' Classes:
@@ -122,7 +125,11 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 					
 					Try
 						For Local i:= 0 Until Self.modelInfo.Length
-							ds.ReadAll(Self.modelInfo[i], 0, Self.modelInfo[i].Length) ' & 65535
+							Local model:= Self.modelInfo[i]
+							
+							ds.ReadAll(model, 0, model.Length) ' & 65535
+							
+							FlipBuffer_Shorts(model)
 						Next
 					Catch E:StreamError
 						' Nothing so far.

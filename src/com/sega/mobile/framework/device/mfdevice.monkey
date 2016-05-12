@@ -56,6 +56,8 @@ Private
 	Import monkey.stack
 	
 	Import regal.typetool
+	
+	Import regal.ioutil.endianstream
 	Import regal.ioutil.publicdatastream
 	
 	Import regal.autostream
@@ -192,7 +194,7 @@ Class MFDevice Final
 			EndIf
 			
 			'Local f:= FileStream.Open(path, mode)
-			Local f:= OpenAutoStream(path, mode)
+			Local f:= New BasicEndianStreamManager(OpenAutoStream(path, mode), True) ' False
 			
 			If (f = Null) Then ' mode <> "w"
 				DebugStop()
@@ -752,12 +754,12 @@ Class MFDevice Final
 				
 				records = New StringMap<DataBuffer>()
 				
-				Local dis:= New DataStream(openRecordStore(RECORD_NAME))
+				Local dis:= New EndianStreamManager<DataStream>(New DataStream(openRecordStore(RECORD_NAME)), True) ' Flase
 				
 				Local recordStoreNumber:= dis.ReadInt()
 				
 				For Local i:= 0 Until recordStoreNumber
-					Local nameLen:= NToHS(dis.ReadShort())
+					Local nameLen:= dis.ReadShort()
 					Local name:String = dis.ReadString(nameLen, "utf8") ' "ascii"
 					Local record:= readRecord(dis)
 					
@@ -773,7 +775,7 @@ Class MFDevice Final
 			Const DEFAULT_FILE_SIZE:= 1024 ' Bytes.
 			
 			' Local variable(s):
-			Local dos:= New PublicDataStream(DEFAULT_FILE_SIZE)
+			Local dos:= New PublicDataStream(DEFAULT_FILE_SIZE, True) ' False
 			
 			dos.WriteInt(records.Count())
 			

@@ -11,6 +11,8 @@ Private
 	Import com.sega.mobile.framework.device.mfimage
 	
 	Import regal.typetool
+	Import regal.sizeof
+	Import regal.byteorder
 Public
 
 ' Functions:
@@ -32,13 +34,36 @@ Function DSgn:Int(value:Bool)
 	Return 1
 End
 
-' Extensions:
 Function PickValue:Int(Toggle:Bool, A:Int, B:Int)
 	If (Toggle) Then
 		Return A
 	EndIf
 	
 	Return B
+End
+
+Function FlipBuffer_Shorts:Void(buffer:DataBuffer, length:Int, offset:Int=0)
+	For Local i:= offset Until (length / SizeOf_Short) Step SizeOf_Short ' 2
+		Local value:= buffer.PeekShort(i)
+		
+		buffer.PokeShort(i, NToHS(value))
+	Next
+End
+
+Function FlipBuffer_Shorts:Void(buffer:DataBuffer)
+	FlipBuffer_Shorts(buffer, buffer.Length)
+End
+
+Function FlipBuffer_Ints:Void(buffer:DataBuffer, length:Int, offset:Int=0)
+	For Local i:= offset Until (length / SizeOf_Integer) Step SizeOf_Integer ' 4
+		Local value:= buffer.PeekInt(i)
+		
+		buffer.PokeInt(i, NToHI(value)) ' NToHL
+	Next
+End
+
+Function FlipBuffer_Ints:Void(buffer:DataBuffer)
+	FlipBuffer_Ints(buffer, buffer.Length)
 End
 
 ' Classes:

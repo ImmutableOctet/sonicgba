@@ -783,7 +783,7 @@ Class SpecialStageState Extends State Implements BarWord ' SSDef
 				Const DEFAULT_FILE_SIZE:= 16 ' 7
 				
 				' Local variable(s):
-				Local ds:= New PublicDataStream(DEFAULT_FILE_SIZE)
+				Local ds:= New PublicDataStream(DEFAULT_FILE_SIZE, True) ' False
 				
 				For Local i:= 0 Until emeraldStatus.Length
 					ds.WriteByte(emeraldStatus[i])

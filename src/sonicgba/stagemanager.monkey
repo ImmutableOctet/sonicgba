@@ -504,7 +504,7 @@ Class StageManager ' Implements SonicDef
 			Local ds:PublicDataStream
 			
 			Try
-				ds = New PublicDataStream((timeModeScore.Length * SizeOf_Integer))
+				ds = New PublicDataStream((timeModeScore.Length * SizeOf_Integer), True) ' False
 				
 				For Local i:= 0 Until timeModeScore.Length
 					ds.WriteInt(timeModeScore[i])
@@ -630,7 +630,7 @@ Class StageManager ' Implements SonicDef
 			Local ds:PublicDataStream
 			
 			Try
-				ds = New PublicDataStream((timeModeScore.Length * SizeOf_Integer))
+				ds = New PublicDataStream((timeModeScore.Length * SizeOf_Integer), True) ' False
 				
 				ds.WriteByte(stageId)
 				

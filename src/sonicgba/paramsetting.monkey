@@ -22,6 +22,8 @@ Private
 	Import brl.datastream
 	
 	Import regal.sizeof
+	
+	Import regal.ioutil.endianstream
 	Import regal.ioutil.publicdatastream
 Public
 
@@ -56,7 +58,7 @@ Class ParamSetting ' Implements SonicDef
 			Local record:= Record.loadRecord(Record.PARAM_RECORD)
 			
 			If (record <> Null) Then
-				Local ds:= New DataStream(record)
+				Local ds:= New EndianStreamManager<DataStream>(New DataStream(record), True) ' False
 				
 				For Local i:= 0 Until paramArray.Length
 					paramArray[i] = ds.ReadInt()
@@ -143,7 +145,7 @@ Class ParamSetting ' Implements SonicDef
 			Local ds:PublicDataStream ' Stream
 			
 			Try
-				ds = New PublicDataStream(paramArray.Length * SizeOf_Integer)
+				ds = New PublicDataStream(paramArray.Length * SizeOf_Integer, True) ' False
 				
 				For Local i:= 0 Until paramArray.Length)
 					ds.WriteInt(paramArray[i])

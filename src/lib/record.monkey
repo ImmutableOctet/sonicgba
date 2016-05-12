@@ -11,6 +11,7 @@ Private
 	Import brl.datastream
 	'Import brl.filestream
 	
+	Import regal.ioutil.endianstream
 	Import regal.ioutil.publicdatastream
 Public
 
@@ -44,7 +45,7 @@ Class Record
 			Return MFDevice.loadRecord(recordId)
 		End
 		
-		Function loadRecordStream:DataStream(recordId:String)
+		Function loadRecordStream:Stream(recordId:String) ' DataStream
 			Local data:= loadRecord(recordId)
 			
 			If (data = Null) Then
@@ -53,7 +54,7 @@ Class Record
 				Return Null
 			EndIf
 			
-			Return (New DataStream(data))
+			Return New EndianStreamManager<DataStream>(New DataStream(data), True) ' False
 		End
 		
 		' This routine is considered "'Null' safe".

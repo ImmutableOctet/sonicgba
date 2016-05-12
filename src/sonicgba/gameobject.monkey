@@ -539,7 +539,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 					ds = MFDevice.getResourceAsStream(fileName)
 					
 					If (ds <> Null) Then
-						loadNum = NToHS(ds.ReadShort())
+						loadNum = ds.ReadShort()
 						
 						currentLoadIndex = 0
 					EndIf
@@ -609,8 +609,8 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		
 		Function loadGimmickByStream:Void(ds:Stream)
 			Try
-				Local x:= NToHS(ds.ReadShort())
-				Local y:= NToHS(ds.ReadShort())
+				Local x:= ds.ReadShort()
+				Local y:= ds.ReadShort()
 				
 				Local id:= ds.ReadByte()
 				
@@ -648,7 +648,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		
 		Function loadRingByStream:Void(ds:Stream)
 			Try
-				addGameObject(RingObject.getNewInstance(NToHS(ds.ReadShort()), NToHS(ds.ReadShort())))
+				addGameObject(RingObject.getNewInstance(ds.ReadShort(), ds.ReadShort()))
 			Catch err:StreamError
 				' Nothing so far.
 			End Try
@@ -657,8 +657,8 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		Function loadEnemyByStream:Void(ds:Stream)
 			Try
 				' Basically the same thing as the 'GimmickObject' version:
-				Local x:= NToHS(ds.ReadShort())
-				Local y:= NToHS(ds.ReadShort())
+				Local x:= ds.ReadShort()
+				Local y:= ds.ReadShort()
 				
 				Local id:= ds.ReadByte()
 				
@@ -696,7 +696,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		
 		Function loadItemByStream:Void(ds:Stream)
 			Try
-				addGameObject(ItemObject.getNewInstance(ds.ReadByte(), NToHS(ds.ReadShort()), NToHS(ds.ReadShort())))
+				addGameObject(ItemObject.getNewInstance(ds.ReadByte(), ds.ReadShort(), ds.ReadShort()))
 			Catch err:StreamError
 				' Nothing so far.
 			End Try

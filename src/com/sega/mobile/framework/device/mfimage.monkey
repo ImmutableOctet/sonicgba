@@ -165,7 +165,7 @@ Class MFImage
 		
 		#Rem
 		Function createImage:MFImage(data:DataBuffer) ' Final
-			Local bais:= New DataStream(data)
+			Local bais:= New EndianStreamManager<DataStream>(New DataStream(data), True) ' False
 			Local ret:= createImage(bais)
 			
 			bais.Close()
@@ -174,7 +174,7 @@ Class MFImage
 		End
 	
 		Function createImage:MFImage(data:DataBuffer, offset:Int, length:Int) ' Final
-			Local bais:= New DataStream(data, offset, length)
+			Local bais:= New EndianStreamManager<DataStream>(New DataStream(data, offset, length), True) ' False
 			Local ret:= createImage(bais)
 			
 			bais.Close()

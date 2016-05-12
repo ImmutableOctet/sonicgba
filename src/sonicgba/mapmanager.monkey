@@ -579,7 +579,7 @@ Class MapManager ' Implements SonicDef
 				Case LOAD_MODEL
 					Try
 						' Read the number of "chunks":
-						Local chunkNum:= NToHS(ds.ReadShort())
+						Local chunkNum:= ds.ReadShort()
 						
 						' Skip the next two bytes (I'm not sure if this is supposed to be an 'Int' or not):
 						'ds.ReadShort()
@@ -596,6 +596,8 @@ Class MapManager ' Implements SonicDef
 							' Read the "chunk data" (Tile information) from the input-stream.
 							ds.ReadAll(chunk, 0, MODE_CHUNK_SIZE) ' chunk.Length
 							
+							FlipBuffer_Shorts(chunk)
+							
 							' Store the "chunk" in our container.
 							mapModel[i] = chunk
 						Next
@@ -605,12 +607,16 @@ Class MapManager ' Implements SonicDef
 				Case LOAD_FRONT
 					Try
 						ds.ReadAll(mapFront, 0, mapFront.Length) ' (mapWidth*mapHeight*SizeOf_Short)
+						
+						FlipBuffer_Shorts(mapFront)
 					Catch E:StreamError
 						' Nothing so far.
 					End Try
 				Case LOAD_BACK
 					Try
 						ds.ReadAll(mapBack, 0, mapBack.Length) ' (mapWidth*mapHeight*SizeOf_Short)
+						
+						FlipBuffer_Shorts(mapBack)
 					Catch E:StreamError
 						' Nothing so far.
 					End Try
@@ -991,7 +997,19 @@ Class MapManager ' Implements SonicDef
 		End
 		
 		Function getTileId:Int(mapArray:DataBuffer, x:Int, y:Int)
-			Local chunk:= mapModel[getModelId(mapArray, x, y)]
+			Local model:= mapModel
+			
+			Local ___model_Length:= model.Length
+			
+			Local chunkID:= getModelId(mapArray, x, y)
+			
+			If (chunkID >= ___model_Length) Then
+				DebugStop()
+				
+				chunkID = getModelId(mapArray, x, y)
+			EndIf
+			
+			Local chunk:= model[chunkID]
 			
 			Return chunk.PeekShort(AsMapModelCoord(x Mod MODEL_WIDTH, y Mod MODEL_HEIGHT))
 		End
