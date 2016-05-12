@@ -181,8 +181,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
-        <Y>693</Y>
+        <X>5</X>
+        <Y>201</Y>
       </CursorPos>
       <DocGUID>1ab30066-841d-4541-9fff-0756a83bf152</DocGUID>
       <Bookmarks>
@@ -209,8 +209,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>4</X>
-        <Y>413</Y>
+        <X>16</X>
+        <Y>196</Y>
       </CursorPos>
       <DocGUID>cc3104be-d876-4714-b620-ecad9ddd697c</DocGUID>
       <Bookmarks />
@@ -423,8 +423,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\constutil.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>66</X>
-        <Y>45</Y>
+        <X>0</X>
+        <Y>46</Y>
       </CursorPos>
       <DocGUID>bc08cc41-924e-4692-9e56-0895597db7d7</DocGUID>
       <Bookmarks />
@@ -466,8 +466,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>37</X>
-        <Y>1187</Y>
+        <X>28</X>
+        <Y>1197</Y>
       </CursorPos>
       <DocGUID>3e42d162-f22b-4370-b6a1-440da29bcfe4</DocGUID>
       <Bookmarks />
@@ -1401,8 +1401,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\mapmanager.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>8</X>
-        <Y>616</Y>
+        <X>30</X>
+        <Y>1012</Y>
       </CursorPos>
       <DocGUID>9ee50406-4747-4817-8225-f64ef0fc1e98</DocGUID>
       <Bookmarks />

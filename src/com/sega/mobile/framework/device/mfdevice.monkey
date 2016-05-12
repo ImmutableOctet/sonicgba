@@ -194,17 +194,17 @@ Class MFDevice Final
 			EndIf
 			
 			'Local f:= FileStream.Open(path, mode)
-			Local f:= New BasicEndianStreamManager(OpenAutoStream(path, mode), True) ' False
+			Local f:= OpenAutoStream(path, mode)
 			
 			If (f = Null) Then ' mode <> "w"
-				DebugStop()
-				
 				Print("Unable to find file: " + path + " {'"+mode+"'}")
+				
+				'DebugStop()
 				
 				Throw New FileNotFoundException(f, path) ' Null
 			EndIf
 			
-			Return f
+			Return New BasicEndianStreamManager(f, True) ' False
 		End
 		
 		Function MakeFolderPath:Bool(folder:String)

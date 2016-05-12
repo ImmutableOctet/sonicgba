@@ -175,7 +175,7 @@ Class MapManager ' Implements SonicDef
 		End
 		
 		Function GetModelTileAt:Int(data:DataBuffer, x:Int, y:Int)
-			Return data.PeekShort(AsMapModelCoord(x, y))
+			Return data.PeekShort(AsMapModelCoord(x, y) * SizeOf_Short) ' 2 ' 0
 		End
 		
 		Function cameraLogic:Void()
@@ -999,15 +999,7 @@ Class MapManager ' Implements SonicDef
 		Function getTileId:Int(mapArray:DataBuffer, x:Int, y:Int)
 			Local model:= mapModel
 			
-			Local ___model_Length:= model.Length
-			
 			Local chunkID:= getModelId(mapArray, x, y)
-			
-			If (chunkID >= ___model_Length) Then
-				DebugStop()
-				
-				chunkID = getModelId(mapArray, x, y)
-			EndIf
 			
 			Local chunk:= model[chunkID]
 			
