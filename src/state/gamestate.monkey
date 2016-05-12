@@ -3528,11 +3528,16 @@ Class GameState Extends State
 			Self.loadingDrawer.draw(g, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2)) ' Shr 1
 			
 			If (tipsForShow.Length = 0) Then
-				' Magic number: 1200
-				tipsForShow = MyAPI.getStrings(Self.TIPS[MyRandom.nextInt(0, Self.TIPS.Length - 1)], 1200)
-				
-				MyAPI.initString()
-				
+				If (Self.TIPS.Length > 0) Then
+					Local tips:= Self.TIPS
+					Local tipIndex:= MyRandom.nextInt(0, Self.TIPS.Length - 1)
+					Local tip:= tips[tipIndex]
+					
+					' Magic number: 1200
+					tipsForShow = MyAPI.getStrings(tip, 1200)
+					
+					MyAPI.initString()
+				EndIf
 			Else
 				MyAPI.drawStrings(g, tipsForShow, (SCREEN_WIDTH / 2) - 72, ((SCREEN_HEIGHT / 2) - 50) - 2, 132, OPTION_MOVING_INTERVAL, 20, MapManager.END_COLOR, 4656650, 0) ' Shr 1
 			EndIf

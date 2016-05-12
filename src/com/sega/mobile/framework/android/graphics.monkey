@@ -36,7 +36,7 @@ Public
 	Import com.sega.mobile.framework.android.graphicsmacros
 
 ' Classes:
-Class Graphics ' _Graphics
+Class _Graphics ' Graphics
 	Protected
 		' Constant variable(s):
 		
@@ -172,7 +172,7 @@ Class Graphics ' _Graphics
 		
 		' Mojo 2 argument order is used here.
 		Method setInitialClip:Void(left:Int, right:Int, top:Int, bottom:Int)
-			mCanvas.SetProjection2d(Float(left), Float(right), Float(top), Float(bottom))
+			'mCanvas.SetProjection2d(Float(left), Float(right), Float(top), Float(bottom))
 			'mCanvas.SetScissor(0, 0, DeviceWidth(), DeviceHeight())
 		End
 		
@@ -373,8 +373,6 @@ Class Graphics ' _Graphics
 			
 			' Unimplemented method.
 			Print("[drawRGB]")
-			
-			DebugStop()
 		End
 		
 		Method getColor:Int()

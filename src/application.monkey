@@ -7,8 +7,8 @@ Public
 
 ' GLFW Configuration:
 #GLFW_WINDOW_TITLE = "Sonic Advance"
-#GLFW_WINDOW_WIDTH = 640 ' 1280 ' 360
-#GLFW_WINDOW_HEIGHT = 360 ' 720 ' 640
+#GLFW_WINDOW_WIDTH = 1280 ' 360
+#GLFW_WINDOW_HEIGHT = 720 ' 640
 #GLFW_WINDOW_SAMPLES = 0
 #GLFW_WINDOW_RESIZABLE = True
 #GLFW_WINDOW_DECORATED = True
@@ -16,6 +16,12 @@ Public
 #GLFW_WINDOW_FULLSCREEN = False
 
 #MOJO_AUTO_SUSPEND_ENABLED = False
+
+#TEXT_FILES+="*.txt|*.xml|*.json"
+#IMAGE_FILES+="*.png|*.jpg"
+#SOUND_FILES+="*.wav|*.ogg"
+#MUSIC_FILES+="*.wav|*.ogg"
+#BINARY_FILES+="*.bin|*.dat|*.ci|*.co|*.en|*.gi|*.it|*.pal|*.pm|*.pyx|*.ri"
 
 ' Imports:
 Private
@@ -128,9 +134,10 @@ Class Application Extends App ' Main Extends MFMain
 		End
 		
 		Method OnUpdate:Int()
-			HandleSystemKeys()
+			'HandleSystemKeys()
 			
-			MFDevice.handleInput()
+			'MFDevice.handleInput()
+			
 			MFDevice.Update()
 			
 			#If ALLOW_FORCE_EXIT

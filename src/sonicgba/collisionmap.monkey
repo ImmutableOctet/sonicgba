@@ -203,7 +203,16 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 					Local cell_id:= (tileId & 8191)
 					
 					' Magic numbers: 16384, 32768, 8192 (Flags?)
-					myBlock.setProperty(Self.collisionInfo, ToCollisionInfoPosition(cell_id), ((tileId & 16384) <> 0), ((32768 & tileId) <> 0), Self.directionInfo.PeekByte(cell_id), ((tileId & 8192) <> 0))
+					Local info:= Self.collisionInfo
+					Local infoOffset:= ToCollisionInfoPosition(cell_id)
+					
+					Local FLIP_X:= ((tileId & 16384) <> 0)
+					Local FLIP_Y:= ((32768 & tileId) <> 0)
+					
+					Local degree:= Self.directionInfo.PeekByte(cell_id)
+					Local attr:= ((tileId & 8192) <> 0)
+					
+					myBlock.setProperty(info, infoOffset, FLIP_X, FLIP_Y, degree, attr)
 				EndIf
 			EndIf
 		End

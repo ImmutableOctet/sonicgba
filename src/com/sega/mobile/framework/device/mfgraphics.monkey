@@ -212,24 +212,6 @@ Class MFGraphics
 			Self.context.PopMatrix()
 		End
 		
-		' This method may be removed in the future.
-		Method clipCanvas:Void(left:Int, top:Int, right:Int, bottom:Int)
-			If (MFDevice.preScaleZoomOutFlag) Then
-				left Shr= MFDevice.preScaleShift
-				top Shr= MFDevice.preScaleShift
-				right Shr= MFDevice.preScaleShift
-				bottom Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				left Shl= MFDevice.preScaleShift
-				top Shl= MFDevice.preScaleShift
-				right Shl= MFDevice.preScaleShift
-				bottom Shl= MFDevice.preScaleShift
-			EndIf
-			
-			Self.context.SetScissor(left, top, right-left, bottom-top)
-			'Self.context.SetScissor(left, top, right, bottom)
-		End
-		
 		Method rotateCanvas:Void(degrees:Float)
 			Self.context.Rotate(degrees)
 		End
@@ -299,9 +281,6 @@ Class MFGraphics
 			reset()
 			
 			setGraphics(graphics)
-			
-			'graphics.SetProjection2d(0, MFDevice.canvasWidth, 0, MFDevice.canvasHeight) ' clipCanvas(...)
-			graphics.SetProjection2d(0, width, 0, height) ' clipCanvas(...)
 		End
 		
 		Method reset:Void() Final
@@ -324,8 +303,6 @@ Class MFGraphics
 			
 			Self.clipWidth = screenWidth
 			Self.clipHeight = screenHeight
-			
-			Self.context.SetViewport(Self.clipX, Self.clipY, clipWidth, clipHeight)
 		End
 		
 		Method translate:Void(x:Int, y:Int) Final
@@ -411,7 +388,7 @@ Class MFGraphics
 			Self.clipHeight = height
 			
 			If (Self.enableExceed) Then
-				Self.context.SetViewport(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
+				Self.context.SetScissor(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
 				
 				Return
 			EndIf
@@ -434,7 +411,9 @@ Class MFGraphics
 				ty = Self.clipY + height
 			EndIf
 			
-			Self.context.SetViewport(cx, cy, tx - cx, ty - cy)
+			'Print("cx: " + cx + ", cy: " + cy + ", tx - cx: " + (tx - cx) + ", ty - cy: " + (ty - cy))
+			
+			'Self.context.SetScissor(cx, cy, tx - cx, ty - cy) ' SetViewport
 		End
 		
 		Method getClipX:Int() Final
@@ -728,66 +707,6 @@ Class MFGraphics
 				h Shl= MFDevice.preScaleShift
 			EndIf
 			
-			#Rem
-				If (Self.effectFlag) Then
-					Self.fillRectRGB[0] = Self.context.getColor() | -16777216
-					
-					If (Not (Self.alphaValue = 0 Or (Self.redValue = 0 And Self.greenValue = 0 And Self.blueValue = 0))) Then
-						Self.fillRectRGB[0] = caculateColorValue(Self.fillRectRGB[0])
-					EndIf
-					
-					If (Not (Self.alphaValue = 0 Or Self.grayValue = 0)) Then
-						Self.fillRectRGB[0] = caculateGray(Self.fillRectRGB[0])
-					EndIf
-					
-					If (Not (Self.alphaValue = 255 Or Self.alphaValue = 0)) Then
-						Self.fillRectRGB[0] = caculateAlpha(Self.fillRectRGB[0])
-					EndIf
-					
-					If (Self.alphaValue <> 0) Then
-						Local i:Int
-						
-						Local x1:Int
-						Local y1:Int
-						
-						Local i2:Int = 0
-						
-						For Local i2:= 0 Until Self.fillRectRGB.Length
-							Self.fillRectRGB[i2] = Self.fillRectRGB[0]
-						Next
-						
-						If (Self.transX + x < Self.clipX) Then
-							i = Self.clipX
-						Else
-							x1 = Self.transX + x
-						EndIf
-						
-						If (Self.transY + y < Self.clipY) Then
-							i = Self.clipY
-						Else
-							y1 = Self.transY + y
-						EndIf
-						
-						Local x2:= ((Self.transX + x) + w)
-						Local y2:= ((Self.transY + y) + h)
-						
-						Self.context.SetViewport(x1, y1, x2 - x1, y2 - y1)
-						
-						For Local i2:= 0 Until ((w / 10) + 1)
-							For Local j:= 0 Until ((h / 10) + 1)
-								Self.context.drawRGB(Self.fillRectRGB, 0, 10, (Self.transX + x) + (i2 * 10), (Self.transY + y) + (j * 10), 10, 10, True)
-							Next
-						Next
-						
-						Self.context.SetViewport(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
-						
-						Return
-					EndIf
-					
-					Return
-				EndIf
-			#End
-			
 			Self.context.DrawRect(Float(Self.transX + x), Float(Self.transY + y), Float(w), Float(h))
 		End
 		
@@ -963,6 +882,10 @@ Class MFGraphics
 		Method enableExceedBoundary:Void() Final
 			Self.enableExceed = True
 			
+			Print("enableExceedBoundary:")
+			Print("MFDevice.bufferWidth: " + MFDevice.bufferWidth)
+			Print("MFDevice.bufferHeight: " + MFDevice.bufferHeight)
+			
 			Self.context.SetViewport(-MFDevice.horizontalOffset, -MFDevice.verticvalOffset, MFDevice.bufferWidth, MFDevice.bufferHeight)
 		End
 		
@@ -1001,13 +924,20 @@ Class MFGraphics
 		Method disableExceedBoundary:Void() Final
 			Self.enableExceed = False
 			
+			Print("disableExceedBoundary:")
+			
+			Print("MFDevice.bufferWidth: " + MFDevice.bufferWidth)
+			Print("MFDevice.bufferHeight: " + MFDevice.bufferHeight)
+			Print("MFDevice.horizontalOffset: " + MFDevice.horizontalOffset)
+			Print("MFDevice.verticvalOffset: " + MFDevice.verticvalOffset)
+			
 			If (MFDevice.preScaleZoomOutFlag) Then
-				Self.context.SetViewport(0, 0, (MFDevice.bufferWidth - (MFDevice.horizontalOffset * 2)) Shl MFDevice.preScaleShift, (MFDevice.bufferHeight - (MFDevice.verticvalOffset * 2)) Shl MFDevice.preScaleShift) ' Shl 1
+				Self.context.SetScissor(0, 0, (MFDevice.bufferWidth - (MFDevice.horizontalOffset * 2)) Shl MFDevice.preScaleShift, (MFDevice.bufferHeight - (MFDevice.verticvalOffset * 2)) Shl MFDevice.preScaleShift) ' Shl 1
 			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				Self.context.SetViewport(0, 0, (MFDevice.bufferWidth - (MFDevice.horizontalOffset * 2)) Shr MFDevice.preScaleShift, (MFDevice.bufferHeight - (MFDevice.verticvalOffset * 2)) Shr MFDevice.preScaleShift) ' Shl 1
+				Self.context.SetScissor(0, 0, (MFDevice.bufferWidth - (MFDevice.horizontalOffset * 2)) Shr MFDevice.preScaleShift, (MFDevice.bufferHeight - (MFDevice.verticvalOffset * 2)) Shr MFDevice.preScaleShift) ' Shl 1
 			EndIf
 			
-			Self.context.SetViewport(0, 0, MFDevice.bufferWidth - (MFDevice.horizontalOffset * 2), MFDevice.bufferHeight - (MFDevice.verticvalOffset * 2)) ' Shl 1
+			Self.context.SetScissor(0, 0, MFDevice.bufferWidth - (MFDevice.horizontalOffset * 2), MFDevice.bufferHeight - (MFDevice.verticvalOffset * 2)) ' Shl 1
 		End
 		
 		Method clearScreen:Void(color:Int) Final

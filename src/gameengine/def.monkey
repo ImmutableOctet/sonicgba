@@ -7,13 +7,15 @@ Private
 	Import lib.myapi
 	'Import lib.constutil
 	
+	Import com.sega.mobile.define.mdphone
+	
 	Import com.sega.mobile.framework.device.mfdevice
 	Import com.sega.mobile.framework.device.mfgraphics
 Public
 
 ' Constant variable(s):
-Global SCREEN_WIDTH:Int = MyAPI.zoomIn(MFDevice.getScreenWidth(), True) ' Const
-Global SCREEN_HEIGHT:Int = MyAPI.zoomIn(MFDevice.getScreenHeight(), True) ' Const
+Global SCREEN_WIDTH:Int = MDPhone.SCREEN_WIDTH ' MyAPI.zoomIn(MFDevice.getScreenWidth(), True) ' Const
+Global SCREEN_HEIGHT:Int = MDPhone.SCREEN_HEIGHT ' MyAPI.zoomIn(MFDevice.getScreenHeight(), True) ' Const
 
 Global FONT_H:= MyAPI.zoomIn(MFGraphics.charHeight(FONT)) ' Const
 

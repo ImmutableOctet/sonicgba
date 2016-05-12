@@ -632,7 +632,8 @@ Class State Implements StringIndex Abstract ' SonicDef
 			EndIf
 			#End
 			
-			preFadeAlpha = fadeAlpha
+			'preFadeAlpha = fadeAlpha
+			fadeAlpha = fadeToValue
 		End
 		
 		Function drawLeftSoftKey:Void(g:MFGraphics)

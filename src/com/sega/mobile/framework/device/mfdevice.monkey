@@ -59,6 +59,9 @@ Private
 	Import regal.ioutil.publicdatastream
 	
 	Import regal.autostream
+	
+	' Debugging related:
+	Import gameengine.def
 Public
 
 ' Classes:
@@ -192,6 +195,10 @@ Class MFDevice Final
 			Local f:= OpenAutoStream(path, mode)
 			
 			If (f = Null) Then ' mode <> "w"
+				DebugStop()
+				
+				Print("Unable to find file: " + path + " {'"+mode+"'}")
+				
 				Throw New FileNotFoundException(f, path) ' Null
 			EndIf
 			
@@ -803,7 +810,7 @@ Class MFDevice Final
 		
 		' Extensions:
 		Function initializeScreen:Void(context:Canvas, width:Int, height:Int) ' Graphics
-			Local isSideways:Bool = False ' (MFMain.getInstance().getRequestedOrientation() = SCREEN_ORIENTATION_PORTRAIT)
+			Local isSideways:Bool = True ' False ' (MFMain.getInstance().getRequestedOrientation() = SCREEN_ORIENTATION_PORTRAIT)
 			
 			If (Not isSideways) Then
 				canvasWidth = MDPhone.SCREEN_WIDTH
@@ -1124,7 +1131,39 @@ Class MFDevice Final
 			horizontalOffset = ((drawRect.left * bufferWidth) / screenWidth)
 			verticvalOffset = ((drawRect.top * bufferHeight) / screenHeight)
 			
-			context.Translate(Float(horizontalOffset), Float(verticvalOffset)) ' graphics.getGraphics()
+			Print("vWidth: " + vWidth + ", vHeight: " + vHeight)
+			Print("bufferWidth: " + bufferWidth + ", bufferHeight: " + bufferHeight)
+			Print("screenWidth: " + screenWidth + ", screenHeight: " + screenHeight)
+			Print("canvasWidth: " + canvasWidth + ", canvasHeight: " + canvasHeight)
+			
+			Print("horizontalOffset: " + horizontalOffset + ", verticvalOffset: " + verticvalOffset)
+			
+			Print("drawRect: " + drawRect)
+			
+			Print("SCREEN_WIDTH: " + SCREEN_WIDTH)
+			Print("SCREEN_HEIGHT: " + SCREEN_HEIGHT)
+			
+			Local vx:= horizontalOffset
+			Local vy:= verticvalOffset
+			Local vw:= (screenWidth - (horizontalOffset * 2))
+			Local vh:= (screenHeight - (verticvalOffset * 2))
+			
+			Print("Viewport: " + vx + ", " + vy + " | " + vw + "x" + vh)
+			
+			'DebugStop()
+			
+			'SetProjection2d:Void( left:Float,right:Float,top:Float,bottom:Float,znear:Float=-1,zfar:Float=1 )
+			'context.SetProjection2d(horizontalOffset, screenWidth - (horizontalOffset * 2), verticvalOffset, screenHeight - (verticvalOffset * 2))
+			'context.SetProjection2d(vx, vw, vy, vh)
+			'(0, 0, 640, 480)
+			
+			''context.SetViewport(drawRect.left, drawRect.top, drawRect.right - drawRect.left, drawRect.bottom - drawRect.top) ' graphics.getSystemGraphics() ' (vx, vy, vWidth, vHeight)
+			
+			'graphics.disableExceedBoundary()
+			
+			context.SetProjection2d(0, vWidth, 0, vHeight) ' SCREEN_WIDTH ' SCREEN_HEIGHT
+			
+			context.Translate(Float(-horizontalOffset), Float(-verticvalOffset)) ' graphics.getGraphics()
 		End
 		
 		Function setPreScale:Void(zoomIn:Bool, zoomOut:Bool)

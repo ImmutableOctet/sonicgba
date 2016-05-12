@@ -434,7 +434,7 @@ Class SoundSystem
 			EndIf
 		End
 		
-		Private Method playBgmInInnormalSpeed:Void(index:Int, loop:Bool, speed:Float)
+		Method playBgmInInnormalSpeed:Void(index:Int, loop:Bool, speed:Float)
 			Self.bgmIndex = index
 			
 			Local fileName:= getBgmFileName(index)
@@ -466,7 +466,14 @@ Class SoundSystem
 		Method playSe:Void(index:Int, loop:Bool)
 			stopLoopSe()
 			
-			PlaySound(LoadSound(MFDevice.FixGlobalPath(getSoundEffectName(index))))
+			Local soundEffectName:= getSoundEffectName(index)
+			Local resPath:= MFDevice.FixResourcePath(soundEffectName)
+			
+			Local sound:= LoadSound(resPath)
+			
+			Print("SOUND: " + resPath)
+			
+			PlaySound(sound) ' FixGlobalPath
 			
 			'MFSound.playSe(getSoundEffectName(index), 1)
 		End

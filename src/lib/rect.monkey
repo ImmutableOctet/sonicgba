@@ -57,7 +57,7 @@ Class RectBase<T> Abstract
 		Method ToString:String()
 			Const separator:String = ", "
 			
-			Return "RectBase(" + String(left) + separator + String(top) + separator + String(right) + separator + String(bottom) + ")"
+			Return "RectBase(" + String(left) + separator + String(top) + separator + String(right) + separator + String(bottom) + ")" ' Rect(...)
 		End
 		
 		Method isEmpty:Bool()

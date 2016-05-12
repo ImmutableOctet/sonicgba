@@ -579,17 +579,17 @@ Class MapManager ' Implements SonicDef
 				Case LOAD_MODEL
 					Try
 						' Read the number of "chunks":
-						imageNum = ds.ReadShort()
+						Local chunkNum:= NToHS(ds.ReadShort())
 						
 						' Skip the next two bytes (I'm not sure if this is supposed to be an 'Int' or not):
 						'ds.ReadShort()
 						ds.Seek(ds.Position+2)
 						
 						' Allocate an array of "map chunks":
-						mapModel = New DataBuffer[imageNum]
+						mapModel = New DataBuffer[chunkNum]
 						
 						' Allocate the "chunks" we need:
-						For Local i:= 0 Until imageNum ' mapModel.Length
+						For Local i:= 0 Until chunkNum ' mapModel.Length
 							' Allocate a "chunk" using the pre-determined size.
 							Local chunk:= New DataBuffer(MODE_CHUNK_SIZE)
 							
@@ -679,10 +679,14 @@ Class MapManager ' Implements SonicDef
 			
 			mapModel = []
 			
-			mapFront.Discard()
-			mapBack.Discard()
+			If (mapFront <> Null) Then
+				mapFront.Discard()
+			EndIf
 			
-			mapModel = []
+			If (mapBack <> Null) Then
+				mapBack.Discard()
+			EndIf
+			
 			mapFront = Null
 			mapBack = Null
 			

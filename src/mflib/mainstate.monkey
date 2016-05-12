@@ -62,7 +62,7 @@ Class MainState Implements MFGameState ' Def
 			State.stateInit()
 			PlayerObject.setCharacter(CHARACTER_SONIC)
 			StageManager.setStageID(0)
-			State.setState(0)
+			State.setState(State.STATE_GAME) '''State.setState(State.STATE_TITLE)
 			
 			gameVersion = "ver: 1.0"
 			

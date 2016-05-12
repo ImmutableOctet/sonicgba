@@ -2367,8 +2367,6 @@ Class TitleState Extends State
 			Self.openingState = OPENING_STATE_EMERALD
 			
 			If (Self.openingAnimation.Length = 0) Then
-				DebugStop()
-				
 				Self.openingAnimation = Animation.getInstanceFromQi("/animation/opening/opening.dat")
 				
 				Self.openingDrawer = New AnimationDrawer[Self.openingAnimation.Length]
@@ -2469,7 +2467,6 @@ Class TitleState Extends State
 						EndIf
 					EndIf
 				Case STATE_START_GAME
-					
 					If (Self.openingDrawer[3].checkEnd()) Then
 						Self.openingDrawer[4].setActionId(0)
 						Self.openingDrawer[4].restart()

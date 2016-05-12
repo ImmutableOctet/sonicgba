@@ -94,7 +94,7 @@ Class ImageInfo
 					
 					Self.m_Clips[i][j] = coord
 					
-					Print("Self.m_Clips["+i+"]["+j+"]: " + coord)
+					'Print("Self.m_Clips["+i+"]["+j+"]: " + coord)
 				Next
 			Next
 		End

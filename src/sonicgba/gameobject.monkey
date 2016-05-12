@@ -158,7 +158,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		' this is used to draw our objects later on. This may be a major point
 		' of optimization later on, but for now, it's being left alone.
 		' The number of array elements corresponds to the number of layers defined above.
-		Global paintVec:Stack<GameObject>[] = New Stack<GameObject>[4]
+		Global paintVec:Stack<GameObject>[] = New Stack<GameObject>[PAINT_LAYER_NUM]
 		
 		' Rectangles:
 		Global screenRect:= New CollisionRect()
@@ -263,6 +263,8 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 					Next
 				Next
 			Else
+				allGameObject = New Stack<GameObject>[objVecWidth][]
+				
 				For Local X:= 0 Until objVecWidth
 					Local xArray:= New Stack<GameObject>[objVecHeight]
 					
@@ -345,7 +347,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			'systemClock = Millisecs()
 			
 			' Clear the layers' contents.
-			For Local I:= 0 Until PAINT_LAYER_NUM
+			For Local I:= 0 Until paintVec.Length ' PAINT_LAYER_NUM
 				paintVec[I].Clear()
 			Next
 			
@@ -534,10 +536,10 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			
 			Select loadStep
 				Case LOAD_OPEN_FILE
-					ds = MFDevice.OpenFileStream(fileName, "r")
+					ds = MFDevice.getResourceAsStream(fileName)
 					
 					If (ds <> Null) Then
-						loadNum = ds.ReadShort()
+						loadNum = NToHS(ds.ReadShort())
 						
 						currentLoadIndex = 0
 					EndIf
@@ -547,12 +549,28 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 							For Local I:= 0 Until loadNum
 								Select loadId
 									Case LOAD_INDEX_GIMMICK
+										#If SONICGBA_GAMEOBJECT_ANNOUNCE_LOAD_INDICES
+											Print("Loading gimmick.")
+										#End
+										
 										loadGimmickByStream(ds)
 									Case LOAD_INDEX_RING
+										#If SONICGBA_GAMEOBJECT_ANNOUNCE_LOAD_INDICES
+											Print("Loading ring.")
+										#End
+										
 										loadRingByStream(ds)
 									Case LOAD_INDEX_ENEMY
+										#If SONICGBA_GAMEOBJECT_ANNOUNCE_LOAD_INDICES
+											Print("Loading enemy.")
+										#End
+										
 										loadEnemyByStream(ds)
 									Case LOAD_INDEX_ITEM
+										#If SONICGBA_GAMEOBJECT_ANNOUNCE_LOAD_INDICES
+											Print("Loading item.")
+										#End
+										
 										loadItemByStream(ds)
 									Default
 										' Nothing so far.
@@ -591,8 +609,8 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		
 		Function loadGimmickByStream:Void(ds:Stream)
 			Try
-				Local x:= ds.ReadShort()
-				Local y:= ds.ReadShort()
+				Local x:= NToHS(ds.ReadShort())
+				Local y:= NToHS(ds.ReadShort())
 				
 				Local id:= ds.ReadByte()
 				
@@ -630,7 +648,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		
 		Function loadRingByStream:Void(ds:Stream)
 			Try
-				addGameObject(RingObject.getNewInstance(ds.ReadShort(), ds.ReadShort()))
+				addGameObject(RingObject.getNewInstance(NToHS(ds.ReadShort()), NToHS(ds.ReadShort())))
 			Catch err:StreamError
 				' Nothing so far.
 			End Try
@@ -639,8 +657,8 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		Function loadEnemyByStream:Void(ds:Stream)
 			Try
 				' Basically the same thing as the 'GimmickObject' version:
-				Local x:= ds.ReadShort()
-				Local y:= ds.ReadShort()
+				Local x:= NToHS(ds.ReadShort())
+				Local y:= NToHS(ds.ReadShort())
 				
 				Local id:= ds.ReadByte()
 				
@@ -678,7 +696,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		
 		Function loadItemByStream:Void(ds:Stream)
 			Try
-				addGameObject(ItemObject.getNewInstance(ds.ReadByte(), ds.ReadShort(), ds.ReadShort()))
+				addGameObject(ItemObject.getNewInstance(ds.ReadByte(), NToHS(ds.ReadShort()), NToHS(ds.ReadShort())))
 			Catch err:StreamError
 				' Nothing so far.
 			End Try
@@ -823,9 +841,11 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				allGameObject = []
 			EndIf
 			
-			For Local I:= 0 Until paintVec.Length
-				paintVec[I].Clear()
-			Next
+			If (paintVec.Length > 0 And paintVec[0] <> Null) Then
+				For Local I:= 0 Until paintVec.Length
+					paintVec[I].Clear()
+				Next
+			EndIf
 			
 			releaseSpecialObjects()
 		End
@@ -878,9 +898,11 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 						Next
 					EndIf
 				Case 2 ' LOAD_END (Clear draw-layers)
-					For Local I:= 0 Until paintVec.Length
-						paintVec[I].Clear()
-					Next
+					If (paintVec.Length > 0 And paintVec[0] <> Null) Then
+						For Local I:= 0 Until paintVec.Length
+							paintVec[I].Clear()
+						Next
+					EndIf
 				Case 3 ' <-- Release special objects. (Animals, bullets, etc)
 					releaseSpecialObjects()
 				Case 4 ' <-- Release resources.

@@ -1183,7 +1183,11 @@ Class MyAPI ' Implements Def
 		#End
 		
 		Function loadText:String[](fileName:String)
-			Local res:= getResource(fileName)
+			Local txtPath:= (fileName + ".txt")
+			
+			Print("Text resource: " + txtPath) 
+			
+			Local res:= getResource(txtPath)
 			
 			If (res = Null) Then
 				Return []

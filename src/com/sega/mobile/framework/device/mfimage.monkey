@@ -83,7 +83,7 @@ Class MFImage
 				
 				is.Close()
 				
-				Local pixMapPath:= (ExtractDir(paletteFileName) + "/" + imageName)
+				Local pixMapPath:= MFDevice.FixResourcePath(ExtractDir(paletteFileName) + "/" + imageName)
 				
 				' This behavior will change in the future:
 				#If TARGET <> "html5"
@@ -91,7 +91,7 @@ Class MFImage
 					
 					Local pixMap:= LoadImageData(pixMapPath, info)
 					
-					For Local i:= 0 Until palData.Length
+					For Local i:= 0 Until Min(palData.Length, (pixMap.Length-37))
 						pixMap.PokeByte((i + 37), palData.PeekByte(i))
 					Next
 					
