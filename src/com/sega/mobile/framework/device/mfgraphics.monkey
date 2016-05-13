@@ -252,7 +252,7 @@ Class MFGraphics
 			Self.clipHeight = screenHeight
 			
 			If (Self.context <> Null) Then
-				Self.context.SetScissor(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
+				'Self.context.SetScissor(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
 			EndIf
 		End
 		

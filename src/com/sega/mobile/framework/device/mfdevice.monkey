@@ -900,13 +900,14 @@ Class MFDevice Final
 		Function setFullscreenMode:Void(context:Canvas, b:Bool) ' DrawList
 			Local vWidth:Int, vHeight:Int
 			
+			DebugStop()
+			
 			If (b) Then
 				drawRect = New Rect(0, 0, screenWidth, screenHeight)
 				
 				vWidth = screenWidth
 				vHeight = screenHeight
 			ElseIf (Float(screenWidth) / Float(canvasWidth) > Float(screenHeight) / Float(canvasHeight)) Then
-				#Rem
 				Local tmpHeight:Int
 				
 				If (canvasHeight > screenHeight) Then
@@ -928,7 +929,6 @@ Class MFDevice Final
 						canvasHeight *= 2
 					Wend
 				EndIf
-				#End
 				
 				Local h:= screenHeight
 				Local w:= ((canvasWidth * h) / canvasHeight)
@@ -952,7 +952,6 @@ Class MFDevice Final
 				vWidth = ((canvasHeight * screenWidth) / screenHeight)
 				vHeight = canvasHeight
 			Else
-				#Rem
 				Local tmpWidth:Int
 				
 				If (canvasWidth > screenWidth) Then
@@ -964,9 +963,7 @@ Class MFDevice Final
 						canvasWidth /= 2
 						canvasHeight /= 2
 					Wend
-				EndIf
-				
-				If (canvasWidth < screenWidth) Then
+				ElseIf (canvasWidth < screenWidth) Then
 					tmpWidth = canvasWidth
 					
 					While (tmpWidth < screenWidth And screenWidth - tmpWidth < (tmpWidth * 2) - screenWidth)
@@ -976,7 +973,6 @@ Class MFDevice Final
 						canvasHeight *= 2
 					Wend
 				EndIf
-				#End
 				
 				Local w:= screenWidth
 				Local h:= ((canvasHeight * w) / canvasWidth)
@@ -1035,9 +1031,11 @@ Class MFDevice Final
 			'context.SetProjection2d(0, vWidth, 0, vHeight) ' vx, vw vy, vh
 			'(0, 0, 640, 480)
 			
-			''context.SetViewport(drawRect.left, drawRect.top, drawRect.right - drawRect.left, drawRect.bottom - drawRect.top) ' graphics.getSystemGraphics() ' (vx, vy, vWidth, vHeight)
+			context.SetViewport(drawRect.left, drawRect.top, drawRect.right - (drawRect.left * 2), drawRect.bottom - (drawRect.top * 2)) ' graphics.getSystemGraphics() ' (vx, vy, vWidth, vHeight)
 			
 			'graphics.disableExceedBoundary()
+			
+			'context.SetProjection2d(0, 284, 0, 160)
 			
 			'context.SetProjection2d(0, vWidth, 0, vHeight) ' SCREEN_WIDTH ' SCREEN_HEIGHT
 			context.SetProjection2d(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT)
