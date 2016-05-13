@@ -182,7 +182,7 @@
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>2</X>
-        <Y>154</Y>
+        <Y>1046</Y>
       </CursorPos>
       <DocGUID>1ab30066-841d-4541-9fff-0756a83bf152</DocGUID>
       <Bookmarks>
@@ -193,10 +193,6 @@
         <Point>
           <X>0</X>
           <Y>76</Y>
-        </Point>
-        <Point>
-          <X>0</X>
-          <Y>1096</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
@@ -210,8 +206,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>418</Y>
+        <X>17</X>
+        <Y>620</Y>
       </CursorPos>
       <DocGUID>cc3104be-d876-4714-b620-ecad9ddd697c</DocGUID>
       <Bookmarks />

@@ -152,10 +152,10 @@ Class MFDevice Final
 		'Global mainCanvas:MyGameCanvas = New MyGameCanvas(MFMain.getInstance())
 		
 		' Graphics:
-		Global preScaleShift:Int = 0
+		'Global preScaleShift:Int = 0
 		
-		Global preScaleZoomInFlag:Bool = False
-		Global preScaleZoomOutFlag:Bool = False
+		'Global preScaleZoomInFlag:Bool = False
+		'Global preScaleZoomOutFlag:Bool = False
 	Public
 		' Functions:
 		
@@ -382,14 +382,6 @@ Class MFDevice Final
 		End
 		
 		Function pointerDragged:Void(id:Int, x:Int, y:Int)
-			If (preScaleZoomOutFlag) Then
-				x Shl= preScaleShift
-				y Shl= preScaleShift
-			ElseIf (preScaleZoomInFlag) Then
-				x Shr= preScaleShift
-				y Shr= preScaleShift
-			EndIf
-			
 			x = ((x - drawRect.left) * canvasWidth) / drawRect.width()
 			y = ((y - drawRect.top) * canvasHeight) / drawRect.height()
 			
@@ -401,14 +393,6 @@ Class MFDevice Final
 		End
 		
 		Function pointerPressed:Void(id:Int, x:Int, y:Int)
-			If (preScaleZoomOutFlag) Then
-				x Shl= preScaleShift
-				y Shl= preScaleShift
-			ElseIf (preScaleZoomInFlag) Then
-				x Shr= preScaleShift
-				y Shr= preScaleShift
-			EndIf
-			
 			x = ((x - drawRect.left) * canvasWidth) / drawRect.width()
 			y = ((y - drawRect.top) * canvasHeight) / drawRect.height()
 			
@@ -420,14 +404,6 @@ Class MFDevice Final
 		End
 		
 		Function pointerReleased:Void(id:Int, x:Int, y:Int)
-			If (preScaleZoomOutFlag) Then
-				x Shl= preScaleShift
-				y Shl= preScaleShift
-			ElseIf (preScaleZoomInFlag) Then
-				x Shr= preScaleShift
-				y Shr= preScaleShift
-			EndIf
-			
 			x = ((x - drawRect.left) * canvasWidth) / drawRect.width()
 			y = ((y - drawRect.top) * canvasHeight) / drawRect.height()
 			
@@ -537,75 +513,27 @@ Class MFDevice Final
 		#End
 		
 		Function getNativeCanvasBottom:Int()
-			If (preScaleZoomOutFlag) Then
-				Return ((bufferHeight - verticvalOffset) Shl preScaleShift)
-			EndIf
-			
-			If (preScaleZoomInFlag) Then
-				Return ((bufferHeight - verticvalOffset) Shr preScaleShift)
-			EndIf
-			
 			Return (bufferHeight + verticvalOffset)
 		End
 		
 		Function getNativeCanvasHeight:Int()
-			If (preScaleZoomOutFlag) Then
-				Return (bufferHeight Shl preScaleShift)
-			EndIf
-			
-			If (preScaleZoomInFlag) Then
-				Return (bufferHeight Shr preScaleShift)
-			EndIf
-			
-			Return (bufferHeight)
+			Return bufferHeight
 		End
 		
 		Function getNativeCanvasLeft:Int()
-			If (preScaleZoomOutFlag) Then
-				Return -(horizontalOffset Shl preScaleShift)
-			EndIf
-			
-			If (preScaleZoomInFlag) Then
-				Return -(horizontalOffset Shr preScaleShift)
-			EndIf
-			
-			Return -(horizontalOffset)
+			Return -horizontalOffset
 		End
 		
 		Function getNativeCanvasRight:Int()
-			If (preScaleZoomOutFlag) Then
-				Return ((bufferWidth - horizontalOffset) Shl preScaleShift)
-			EndIf
-			
-			If (preScaleZoomInFlag) Then
-				Return ((bufferWidth - horizontalOffset) Shr preScaleShift)
-			EndIf
-			
 			Return (bufferWidth + horizontalOffset)
 		End
 		
 		Function getNativeCanvasTop:Int()
-			If (preScaleZoomOutFlag) Then
-				Return -(verticvalOffset Shl preScaleShift)
-			EndIf
-			
-			If (preScaleZoomInFlag) Then
-				Return -(verticvalOffset Shr preScaleShift)
-			EndIf
-			
-			Return -(verticvalOffset)
+			Return -verticvalOffset
 		End
 		
 		Function getNativeCanvasWidth:Int()
-			If (preScaleZoomOutFlag) Then
-				Return (bufferWidth Shl preScaleShift)
-			EndIf
-			
-			If (preScaleZoomInFlag) Then
-				Return (bufferWidth Shr preScaleShift)
-			EndIf
-			
-			Return (bufferWidth)
+			Return bufferWidth
 		End
 		
 		Function getPackageVersion:String()
@@ -641,26 +569,10 @@ Class MFDevice Final
 		End
 		
 		Function getScreenWidth:Int()
-			If (preScaleZoomOutFlag) Then
-				Return (canvasWidth Shl preScaleShift)
-			EndIf
-			
-			If (preScaleZoomInFlag) Then
-				Return (canvasWidth Shr preScaleShift)
-			EndIf
-			
 			Return canvasWidth
 		End
 		
 		Function getScreenHeight:Int()
-			If (preScaleZoomOutFlag) Then
-				Return (canvasHeight Shl preScaleShift)
-			EndIf
-			
-			If (preScaleZoomInFlag) Then
-				Return (canvasHeight Shr preScaleShift)
-			EndIf
-			
 			Return canvasHeight
 		End
 		
@@ -994,11 +906,10 @@ Class MFDevice Final
 				vWidth = screenWidth
 				vHeight = screenHeight
 			ElseIf (Float(screenWidth) / Float(canvasWidth) > Float(screenHeight) / Float(canvasHeight)) Then
+				#Rem
 				Local tmpHeight:Int
 				
-				If (preScaleZoomOutFlag And canvasHeight > screenHeight) Then
-					preScaleShift = 0
-					
+				If (canvasHeight > screenHeight) Then
 					tmpHeight = canvasHeight
 					
 					While (tmpHeight > screenHeight And tmpHeight - screenHeight > screenHeight - (tmpHeight / 2))
@@ -1006,20 +917,8 @@ Class MFDevice Final
 						
 						canvasWidth /= 2
 						canvasHeight /= 2
-						
-						preScaleShift += 1
 					Wend
-					
-					If (preScaleShift = 0) Then
-						preScaleZoomOutFlag = False
-					EndIf
-					
-					preScaleZoomInFlag = False
-				EndIf
-				
-				If (preScaleZoomInFlag And canvasHeight < screenHeight) Then
-					preScaleShift = 0
-					
+				ElseIf (canvasHeight < screenHeight) Then
 					tmpHeight = canvasHeight
 					
 					While (tmpHeight < screenHeight And screenHeight - tmpHeight > (tmpHeight * 2) - screenHeight)
@@ -1027,16 +926,9 @@ Class MFDevice Final
 						
 						canvasWidth *= 2
 						canvasHeight *= 2
-						
-						preScaleShift += 1
 					Wend
-					
-					If (preScaleShift = 0) Then
-						preScaleZoomInFlag = False
-					EndIf
-					
-					preScaleZoomOutFlag = False
 				EndIf
+				#End
 				
 				Local h:= screenHeight
 				Local w:= ((canvasWidth * h) / canvasHeight)
@@ -1047,9 +939,9 @@ Class MFDevice Final
 				
 				#Rem
 					If (preScaleZoomOutFlag) Then
-						bufferImage = MFImage.generateNativeImage(((canvasHeight * screenWidth) / screenHeight) Shl preScaleShift, canvasHeight Shl preScaleShift)
+						bufferImage = MFImage.generateNativeImage(((canvasHeight * screenWidth) / screenHeight), canvasHeight)
 					ElseIf (preScaleZoomInFlag) Then
-						bufferImage = MFImage.generateNativeImage(((canvasHeight * screenWidth) / screenHeight) Shr preScaleShift, canvasHeight Shr preScaleShift)
+						bufferImage = MFImage.generateNativeImage(((canvasHeight * screenWidth) / screenHeight), canvasHeight)
 					Else
 						bufferImage = MFImage.generateNativeImage((canvasHeight * screenWidth) / screenHeight, canvasHeight)
 					EndIf
@@ -1060,11 +952,10 @@ Class MFDevice Final
 				vWidth = ((canvasHeight * screenWidth) / screenHeight)
 				vHeight = canvasHeight
 			Else
+				#Rem
 				Local tmpWidth:Int
 				
-				If (preScaleZoomOutFlag And canvasWidth > screenWidth) Then
-					preScaleShift = 0
-					
+				If (canvasWidth > screenWidth) Then
 					tmpWidth = canvasWidth
 					
 					While (tmpWidth > screenWidth And Float(tmpWidth) - Float(screenWidth) > Float(screenWidth - (tmpWidth / 2)))
@@ -1072,20 +963,10 @@ Class MFDevice Final
 						
 						canvasWidth /= 2
 						canvasHeight /= 2
-						
-						preScaleShift += 1
 					Wend
-					
-					If (preScaleShift = 0) Then
-						preScaleZoomOutFlag = False
-					EndIf
-					
-					preScaleZoomInFlag = False
 				EndIf
 				
-				If (preScaleZoomInFlag And canvasWidth < screenWidth) Then
-					preScaleShift = 0
-					
+				If (canvasWidth < screenWidth) Then
 					tmpWidth = canvasWidth
 					
 					While (tmpWidth < screenWidth And screenWidth - tmpWidth < (tmpWidth * 2) - screenWidth)
@@ -1093,16 +974,9 @@ Class MFDevice Final
 						
 						canvasWidth *= 2
 						canvasHeight *= 2
-						
-						preScaleShift += 1
 					Wend
-					
-					If (preScaleShift = 0) Then
-						preScaleZoomInFlag = False
-					EndIf
-					
-					preScaleZoomOutFlag = False
 				EndIf
+				#End
 				
 				Local w:= screenWidth
 				Local h:= ((canvasHeight * w) / canvasWidth)
@@ -1129,8 +1003,8 @@ Class MFDevice Final
 			
 			graphics = MFGraphics.createMFGraphics(context, vWidth, vHeight)
 			
-			bufferWidth = (vWidth Shr preScaleShift)
-			bufferHeight = (vHeight Shr preScaleShift)
+			bufferWidth = vWidth
+			bufferHeight = vHeight
 			
 			horizontalOffset = ((drawRect.left * bufferWidth) / screenWidth)
 			verticvalOffset = ((drawRect.top * bufferHeight) / screenHeight)
@@ -1169,11 +1043,6 @@ Class MFDevice Final
 			context.SetProjection2d(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT)
 			
 			'context.Translate(Float(-horizontalOffset), Float(-verticvalOffset)) ' graphics.getGraphics()
-		End
-		
-		Function setPreScale:Void(zoomIn:Bool, zoomOut:Bool)
-			preScaleZoomInFlag = zoomIn
-			preScaleZoomOutFlag = zoomOut
 		End
 		
 		Function setResponseInterruptFlag:Void(flag:Bool)

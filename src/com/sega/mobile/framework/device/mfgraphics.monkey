@@ -81,19 +81,12 @@ Class MFGraphics
 		End
 		
 		Function createMFGraphics:MFGraphics(graphics:Canvas, width:Int, height:Int) ' Final
-			If (MFDevice.preScaleZoomOutFlag) Then
-				width Shr= MFDevice.preScaleShift
-				height Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				width Shl= MFDevice.preScaleShift
-				height Shl= MFDevice.preScaleShift
-			EndIf
-			
 			Print(String(width) + "x" + String(height))
 			
 			Local ret:= New MFGraphics()
 			
 			ret.setGraphics(graphics, width, height)
+			
 			ret.disableEffect()
 			
 			Return ret
@@ -105,12 +98,6 @@ Class MFGraphics
 		
 		Function charHeight:Int(var:Int)
 			'var = 30
-			
-			If (MFDevice.preScaleZoomOutFlag) Then
-				var Shl= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				var Shr= MFDevice.preScaleShift
-			EndIf
 			
 			Return var
 		End
@@ -217,14 +204,6 @@ Class MFGraphics
 		End
 		
 		Method rotateCanvas:Void(degrees:Float, px:Int, py:Int)
-			If (MFDevice.preScaleZoomOutFlag) Then
-				px Shr= MFDevice.preScaleShift
-				py Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				px Shl= MFDevice.preScaleShift
-				py Shl= MFDevice.preScaleShift
-			EndIf
-			
 			Self.context.TranslateRotate(px, py, degrees)
 		End
 		
@@ -233,26 +212,10 @@ Class MFGraphics
 		End
 		
 		Method scaleCanvas:Void(sx:Float, sy:Float, px:Int, py:Int)
-			If (MFDevice.preScaleZoomOutFlag) Then
-				px Shr= MFDevice.preScaleShift
-				py Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				px Shl= MFDevice.preScaleShift
-				py Shl= MFDevice.preScaleShift
-			EndIf
-			
 			Self.context.TranslateScale(Float(px), Float(py), sx, sy)
 		End
 		
 		Method translateCanvas:Void(dx:Int, dy:Int)
-			If (MFDevice.preScaleZoomOutFlag) Then
-				dx Shr= MFDevice.preScaleShift
-				dy Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				dx Shl= MFDevice.preScaleShift
-				dy Shl= MFDevice.preScaleShift
-			EndIf
-			
 			Self.context.Translate(Float(dx), Float(dy))
 		End
 		
@@ -270,14 +233,6 @@ Class MFGraphics
 		
 		' This method may behave differently in the future.
 		Method setGraphics:Void(graphics:Canvas, width:Int, height:Int) Final
-			If (MFDevice.preScaleZoomOutFlag) Then
-				width Shr= MFDevice.preScaleShift
-				height Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				width Shl= MFDevice.preScaleShift
-				height Shl= MFDevice.preScaleShift
-			EndIf
-			
 			reset()
 			
 			setGraphics(graphics)
@@ -286,14 +241,6 @@ Class MFGraphics
 		Method reset:Void() Final
 			Local screenWidth:= MFDevice.getScreenWidth()
 			Local screenHeight:= MFDevice.getScreenHeight()
-			
-			If (MFDevice.preScaleZoomOutFlag) Then
-				screenWidth Shr= MFDevice.preScaleShift
-				screenHeight Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				screenWidth Shl= MFDevice.preScaleShift
-				screenHeight Shl= MFDevice.preScaleShift
-			EndIf
 			
 			Self.transX = 0
 			Self.transY = 0
@@ -310,14 +257,6 @@ Class MFGraphics
 		End
 		
 		Method translate:Void(x:Int, y:Int) Final
-			If (MFDevice.preScaleZoomOutFlag) Then
-				x Shr= MFDevice.preScaleShift
-				y Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				x Shl= MFDevice.preScaleShift
-				y Shl= MFDevice.preScaleShift
-			EndIf
-			
 			Self.transX += x
 			Self.transY += y
 			
@@ -326,64 +265,20 @@ Class MFGraphics
 		End
 		
 		Method setTranslate:Void(x:Int, y:Int) Final
-			If (MFDevice.preScaleZoomOutFlag) Then
-				x Shr= MFDevice.preScaleShift
-				y Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				x Shl= MFDevice.preScaleShift
-				y Shl= MFDevice.preScaleShift
-			EndIf
-			
 			translate(x - Self.transX, y - Self.transY)
 		End
 		
 		Method getTranslateX:Int() Final
-			If (MFDevice.preScaleZoomOutFlag) Then
-				Return (Self.transX Shl MFDevice.preScaleShift)
-			EndIf
-			
-			If (MFDevice.preScaleZoomInFlag) Then
-				Return (Self.transX Shr MFDevice.preScaleShift)
-			EndIf
-			
 			Return Self.transX
 		End
 		
 		Method getTranslateY:Int() Final
-			If (MFDevice.preScaleZoomOutFlag) Then
-				Return (Self.transY Shl MFDevice.preScaleShift)
-			EndIf
-			
-			If (MFDevice.preScaleZoomInFlag) Then
-				Return (Self.transY Shr MFDevice.preScaleShift)
-			EndIf
-			
 			Return Self.transY
 		End
 		
 		Method setClip:Void(x:Int, y:Int, width:Int, height:Int) Final
 			Local screenWidth:= MFDevice.getScreenWidth()
 			Local screenHeight:= MFDevice.getScreenHeight()
-			
-			If (MFDevice.preScaleZoomOutFlag) Then
-				x Shr= MFDevice.preScaleShift
-				y Shr= MFDevice.preScaleShift
-				
-				width Shr= MFDevice.preScaleShift
-				height Shr= MFDevice.preScaleShift
-				
-				screenWidth Shr= MFDevice.preScaleShift
-				screenHeight Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				x Shl= MFDevice.preScaleShift
-				y Shl= MFDevice.preScaleShift
-				
-				width Shl= MFDevice.preScaleShift
-				height Shl= MFDevice.preScaleShift
-				
-				screenWidth Shl= MFDevice.preScaleShift
-				screenHeight Shl= MFDevice.preScaleShift
-			EndIf
 			
 			Self.clipX = (Self.transX + x)
 			Self.clipY = (Self.transY + y)
@@ -392,7 +287,7 @@ Class MFGraphics
 			Self.clipHeight = height
 			
 			If (Self.enableExceed) Then
-				Self.context.SetScissor(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
+				Self.context.SetViewport(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
 				
 				Return
 			EndIf
@@ -415,77 +310,30 @@ Class MFGraphics
 				ty = Self.clipY + height
 			EndIf
 			
-			'Print("MFDevice.preScaleShift: " + MFDevice.preScaleShift)
 			Print("cx: " + cx + ", cy: " + cy + ", tx - cx: " + (tx - cx) + ", ty - cy: " + (ty - cy))
 			
-			Self.context.SetScissor(cx, cy, tx - cx, ty - cy) ' SetViewport
+			Self.context.SetViewport(cx, cy, tx - cx, ty - cy) ' SetViewport
 		End
 		
 		Method getClipX:Int() Final
-			If (MFDevice.preScaleZoomOutFlag) Then
-				Return ((Self.clipX - Self.transX) Shl MFDevice.preScaleShift)
-			EndIf
-			
-			If (MFDevice.preScaleZoomInFlag) Then
-				Return ((Self.clipX - Self.transX) Shr MFDevice.preScaleShift)
-			EndIf
-			
 			Return (Self.clipX - Self.transX)
 		End
 		
 		Method getClipY:Int() Final
-			If (MFDevice.preScaleZoomOutFlag) Then
-				Return ((Self.clipY - Self.transY) Shl MFDevice.preScaleShift)
-			EndIf
-			
-			If (MFDevice.preScaleZoomInFlag) Then
-				Return ((Self.clipY - Self.transY) Shr MFDevice.preScaleShift)
-			EndIf
-			
 			Return (Self.clipY - Self.transY)
 		End
 		
 		Method getClipWidth:Int() Final
-			If (MFDevice.preScaleZoomOutFlag) Then
-				Return (Self.clipWidth Shl MFDevice.preScaleShift)
-			EndIf
-			
-			If (MFDevice.preScaleZoomInFlag) Then
-				Return (Self.clipWidth Shr MFDevice.preScaleShift)
-			EndIf
-			
 			Return Self.clipWidth
 		End
 		
 		Method getClipHeight:Int() Final
-			If (MFDevice.preScaleZoomOutFlag) Then
-				Return (Self.clipHeight Shl MFDevice.preScaleShift)
-			EndIf
-			
-			If (MFDevice.preScaleZoomInFlag) Then
-				Return (Self.clipHeight Shr MFDevice.preScaleShift)
-			EndIf
-			
 			Return Self.clipHeight
 		End
 		
 		Method drawImage:Void(image:MFImage, x:Int, y:Int, anchor:Int) Final
 			Local imageWidth:= image.getWidth()
 			Local imageHeight:= image.getHeight()
-			
-			If (MFDevice.preScaleZoomOutFlag) Then
-				x Shr= MFDevice.preScaleShift
-				y Shr= MFDevice.preScaleShift
-				
-				imageWidth Shr= MFDevice.preScaleShift
-				imageHeight Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				x Shl= MFDevice.preScaleShift
-				y Shl= MFDevice.preScaleShift
-				
-				imageWidth Shl= MFDevice.preScaleShift
-				imageHeight Shl= MFDevice.preScaleShift
-			EndIf
 			
 			caculateAnchorOffset(imageWidth, imageHeight, anchor)
 			
@@ -505,26 +353,6 @@ Class MFGraphics
 		End
 		
 		Method drawRegion:Void(img:MFImage, regionX:Int, regionY:Int, regionW:Int, regionH:Int, flipMode:Int, x:Int, y:Int, anchor:Int) Final
-			If (MFDevice.preScaleZoomOutFlag) Then
-				x Shr= MFDevice.preScaleShift
-				y Shr= MFDevice.preScaleShift
-				
-				regionX Shr= MFDevice.preScaleShift
-				regionY Shr= MFDevice.preScaleShift
-				
-				regionW Shr= MFDevice.preScaleShift
-				regionH Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				x Shl= MFDevice.preScaleShift
-				y Shl= MFDevice.preScaleShift
-				
-				regionX Shl= MFDevice.preScaleShift
-				regionY Shl= MFDevice.preScaleShift
-				
-				regionW Shl= MFDevice.preScaleShift
-				regionH Shl= MFDevice.preScaleShift
-			EndIf
-			
 			If (flipMode <= TRANS_ROT180) Then
 				caculateAnchorOffset(regionW, regionH, anchor)
 			Else
@@ -577,32 +405,10 @@ Class MFGraphics
 		End
 		
 		Method drawPixel:Void(x:Int, y:Int) Final
-			If (MFDevice.preScaleZoomOutFlag) Then
-				x Shr= MFDevice.preScaleShift
-				y Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				x Shl= MFDevice.preScaleShift
-				y Shl= MFDevice.preScaleShift
-			EndIf
-			
 			Self.context.DrawPoint(Float(x), Float(y))
 		End
 		
 		Method drawLine:Void(x1:Int, y1:Int, x2:Int, y2:Int) Final
-			If (MFDevice.preScaleZoomOutFlag) Then
-				x1 Shr= MFDevice.preScaleShift
-				y1 Shr= MFDevice.preScaleShift
-				
-				x2 Shr= MFDevice.preScaleShift
-				y2 Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				x1 Shl= MFDevice.preScaleShift
-				y1 Shl= MFDevice.preScaleShift
-				
-				x2 Shl= MFDevice.preScaleShift
-				y2 Shl= MFDevice.preScaleShift
-			EndIf
-			
 			#Rem
 				If (Self.effectFlag) Then
 					'drawLinePerPixel(Self.transX + x1, Self.transY + y1, Self.transX + x2, Self.transY + y2)
@@ -621,26 +427,6 @@ Class MFGraphics
 		End
 		
 		Method fillTriangle:Void(x1:Int, y1:Int, x2:Int, y2:Int, x3:Int, y3:Int) Final
-			If (MFDevice.preScaleZoomOutFlag) Then
-				x1 Shr= MFDevice.preScaleShift
-				y1 Shr= MFDevice.preScaleShift
-				
-				x2 Shr= MFDevice.preScaleShift
-				y2 Shr= MFDevice.preScaleShift
-				
-				x3 Shr= MFDevice.preScaleShift
-				y3 Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				x1 Shl= MFDevice.preScaleShift
-				y1 Shl= MFDevice.preScaleShift
-				
-				x2 Shl= MFDevice.preScaleShift
-				y2 Shl= MFDevice.preScaleShift
-				
-				x3 Shl= MFDevice.preScaleShift
-				y3 Shl= MFDevice.preScaleShift
-			EndIf
-			
 			Local fx1:= Float(Self.transX + x1)
 			Local fy1:= Float(Self.transY + y1)
 			Local fx2:= Float(Self.transX + x2)
@@ -654,20 +440,6 @@ Class MFGraphics
 		End
 		
 		Method drawRect:Void(x:Int, y:Int, w:Int, h:Int) Final
-			If (MFDevice.preScaleZoomOutFlag) Then
-				x Shr= MFDevice.preScaleShift
-				y Shr= MFDevice.preScaleShift
-				
-				w Shr= MFDevice.preScaleShift
-				h Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				x Shl= MFDevice.preScaleShift
-				y Shl= MFDevice.preScaleShift
-				
-				w Shl= MFDevice.preScaleShift
-				h Shl= MFDevice.preScaleShift
-			EndIf
-			
 			If (w >= 0 And h >= 0) Then
 				If (Self.effectFlag) Then
 					fillRect(x, y, w, 1)
@@ -698,78 +470,22 @@ Class MFGraphics
 		End
 		
 		Method fillRect:Void(x:Int, y:Int, w:Int, h:Int) Final
-			If (MFDevice.preScaleZoomOutFlag) Then
-				x Shr= MFDevice.preScaleShift
-				y Shr= MFDevice.preScaleShift
-				
-				w Shr= MFDevice.preScaleShift
-				h Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				x Shl= MFDevice.preScaleShift
-				y Shl= MFDevice.preScaleShift
-				
-				w Shl= MFDevice.preScaleShift
-				h Shl= MFDevice.preScaleShift
-			EndIf
-			
 			Self.context.DrawRect(Float(Self.transX + x), Float(Self.transY + y), Float(w), Float(h))
 		End
 		
 		Method drawArc:Void(x:Int, y:Int, width:Int, height:Int, startAngle:Int, arcAngle:Int) Final
-			If (MFDevice.preScaleZoomOutFlag) Then
-				x Shr= MFDevice.preScaleShift
-				y Shr= MFDevice.preScaleShift
-				
-				width Shr= MFDevice.preScaleShift
-				height Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				x Shl= MFDevice.preScaleShift
-				y Shl= MFDevice.preScaleShift
-				
-				width Shl= MFDevice.preScaleShift
-				height Shl= MFDevice.preScaleShift
-			EndIf
-			
 			'Self.context.drawArc(Self.transX + x, Self.transY + y, width, height, startAngle, arcAngle)
 			
 			' Unimplemented method.
 		End
 		
 		Method fillArc:Void(x:Int, y:Int, width:Int, height:Int, startAngle:Int, arcAngle:Int) Final
-			If (MFDevice.preScaleZoomOutFlag) Then
-				x Shr= MFDevice.preScaleShift
-				y Shr= MFDevice.preScaleShift
-				
-				width Shr= MFDevice.preScaleShift
-				height Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				x Shl= MFDevice.preScaleShift
-				y Shl= MFDevice.preScaleShift
-				
-				width Shl= MFDevice.preScaleShift
-				height Shl= MFDevice.preScaleShift
-			EndIf
-			
 			'Self.context.fillArc(Self.transX + x, Self.transY + y, width, height, startAngle, arcAngle)
 			
 			' Unimplemented method.
 		End
 		
 		Method drawRoundRect:Void(x:Int, y:Int, width:Int, height:Int, arcWidth:Int, arcHeight:Int) Final
-			If (MFDevice.preScaleZoomOutFlag) Then
-				x Shr= MFDevice.preScaleShift
-				y Shr= MFDevice.preScaleShift
-				
-				width Shr= MFDevice.preScaleShift
-				height Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				x Shl= MFDevice.preScaleShift
-				y Shl= MFDevice.preScaleShift
-				
-				width Shl= MFDevice.preScaleShift
-				height Shl= MFDevice.preScaleShift
-			EndIf
-			
 			'Self.context.drawRoundRect(Self.transX + x, Self.transY + y, width, height, arcWidth, arcWidth)
 			
 			' This behavior may change in the future.
@@ -777,20 +493,6 @@ Class MFGraphics
 		End
 		
 		Method fillRoundRect:Void(x:Int, y:Int, width:Int, height:Int, arcWidth:Int, arcHeight:Int) Final
-			If (MFDevice.preScaleZoomOutFlag) Then
-				x Shr= MFDevice.preScaleShift
-				y Shr= MFDevice.preScaleShift
-				
-				width Shr= MFDevice.preScaleShift
-				height Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				x Shl= MFDevice.preScaleShift
-				y Shl= MFDevice.preScaleShift
-				
-				width Shl= MFDevice.preScaleShift
-				height Shl= MFDevice.preScaleShift
-			EndIf
-			
 			'Self.context.fillRoundRect(Self.transX + x, Self.transY + y, width, height, arcWidth, arcWidth)
 			
 			' This behavior may change in the future.
@@ -798,12 +500,6 @@ Class MFGraphics
 		End
 		
 		Method setFont:Void(font:Int) Final
-			If (MFDevice.preScaleZoomOutFlag) Then
-				font Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				font Shl= MFDevice.preScaleShift
-			EndIf
-			
 			' Unimplemented method.
 		End
 		
@@ -815,20 +511,6 @@ Class MFGraphics
 		Method drawString:Void(str:String, x:Int, y:Int, anchor:Int) Final
 			Local stringWidth:= stringWidth(str)
 			Local charHeight:= charHeight()
-			
-			If (MFDevice.preScaleZoomOutFlag) Then
-				stringWidth Shr= MFDevice.preScaleShift
-				charHeight Shr= MFDevice.preScaleShift
-				
-				x Shr= MFDevice.preScaleShift
-				y Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				stringWidth Shl= MFDevice.preScaleShift
-				charHeight Shl= MFDevice.preScaleShift
-				
-				x Shl= MFDevice.preScaleShift
-				y Shl= MFDevice.preScaleShift
-			EndIf
 			
 			caculateAnchorOffset(stringWidth, charHeight, anchor)
 			
@@ -936,11 +618,11 @@ Class MFGraphics
 			Print("MFDevice.horizontalOffset: " + MFDevice.horizontalOffset)
 			Print("MFDevice.verticvalOffset: " + MFDevice.verticvalOffset)
 			
-			If (MFDevice.preScaleZoomOutFlag) Then
+			'If (MFDevice.preScaleZoomOutFlag) Then
 				'Self.context.SetScissor(0, 0, (MFDevice.bufferWidth - (MFDevice.horizontalOffset * 2)) Shl MFDevice.preScaleShift, (MFDevice.bufferHeight - (MFDevice.verticvalOffset * 2)) Shl MFDevice.preScaleShift) ' Shl 1
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
+			'ElseIf (MFDevice.preScaleZoomInFlag) Then
 				'Self.context.SetScissor(0, 0, (MFDevice.bufferWidth - (MFDevice.horizontalOffset * 2)) Shr MFDevice.preScaleShift, (MFDevice.bufferHeight - (MFDevice.verticvalOffset * 2)) Shr MFDevice.preScaleShift) ' Shl 1
-			EndIf
+			'EndIf
 			
 			'Self.context.SetScissor(0, 0, MFDevice.bufferWidth - (MFDevice.horizontalOffset * 2), MFDevice.bufferHeight - (MFDevice.verticvalOffset * 2)) ' Shl 1
 		End
@@ -958,38 +640,6 @@ Class MFGraphics
 		End
 		
 		Method drawRegion:Void(img:MFImage, x_src:Int, y_src:Int, width:Int, height:Int, rotate_x:Int, rotate_y:Int, degree:Int, scale_x:Int, scale_y:Int, x_dest:Int, y_dest:Int, anchor:Int)
-			If (MFDevice.preScaleZoomOutFlag) Then
-				x_src Shr= MFDevice.preScaleShift
-				y_src Shr= MFDevice.preScaleShift
-				
-				width Shr= MFDevice.preScaleShift
-				height Shr= MFDevice.preScaleShift
-				
-				rotate_x Shr= MFDevice.preScaleShift
-				rotate_y Shr= MFDevice.preScaleShift
-				
-				scale_x Shr= MFDevice.preScaleShift
-				scale_y Shr= MFDevice.preScaleShift
-				
-				x_dest Shr= MFDevice.preScaleShift
-				y_dest Shr= MFDevice.preScaleShift
-			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				x_src Shl= MFDevice.preScaleShift
-				y_src Shl= MFDevice.preScaleShift
-				
-				width Shl= MFDevice.preScaleShift
-				height Shl= MFDevice.preScaleShift
-				
-				rotate_x Shl= MFDevice.preScaleShift
-				rotate_y Shl= MFDevice.preScaleShift
-				
-				scale_x Shl= MFDevice.preScaleShift
-				scale_y Shl= MFDevice.preScaleShift
-				
-				x_dest Shl= MFDevice.preScaleShift
-				y_dest Shl= MFDevice.preScaleShift
-			EndIf
-			
 			drawRegionImpl(img.image, x_src, y_src, width, height, rotate_x, rotate_y, degree, scale_x, scale_y, x_dest, y_dest, anchor)
 		End
 	Private
