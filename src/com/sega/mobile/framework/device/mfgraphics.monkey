@@ -287,7 +287,7 @@ Class MFGraphics
 			Self.clipHeight = height
 			
 			If (Self.enableExceed) Then
-				Self.context.SetViewport(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
+				'Self.context.SetScissor(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
 				
 				Return
 			EndIf
@@ -312,7 +312,7 @@ Class MFGraphics
 			
 			Print("cx: " + cx + ", cy: " + cy + ", tx - cx: " + (tx - cx) + ", ty - cy: " + (ty - cy))
 			
-			Self.context.SetViewport(cx, cy, tx - cx, ty - cy) ' SetViewport
+			'Self.context.SetScissor(cx, cy, tx - cx, ty - cy) ' SetViewport
 		End
 		
 		Method getClipX:Int() Final

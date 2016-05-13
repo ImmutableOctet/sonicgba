@@ -1280,6 +1280,8 @@ Class MyAPI ' Implements Def
 		
 		' This implementation will be replaced eventually. (Software fade)
 		Function drawFadeRange:Void(g:MFGraphics, fadevalue:Int, x:Int, y:Int, type:Int)
+			Print("Unimplemented method: drawFadeRange")
+			
 			For Local i:= 0 Until rayRGB.Length ' RAY_WIDTH*RAY_HEIGHT
 				rayRGB[i] = 16777215
 			Next

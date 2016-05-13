@@ -182,8 +182,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>45</X>
-        <Y>1042</Y>
+        <X>11</X>
+        <Y>1033</Y>
       </CursorPos>
       <DocGUID>1ab30066-841d-4541-9fff-0756a83bf152</DocGUID>
       <Bookmarks>
@@ -207,8 +207,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>18</X>
-        <Y>254</Y>
+        <X>45</X>
+        <Y>300</Y>
       </CursorPos>
       <DocGUID>cc3104be-d876-4714-b620-ecad9ddd697c</DocGUID>
       <Bookmarks />
@@ -467,12 +467,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>8</X>
-        <Y>1098</Y>
+        <X>9</X>
+        <Y>1274</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>98a4aa09-5bd2-4d1b-9411-8886c2eb6d37</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\myrandom.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -2211,8 +2212,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>13</X>
-        <Y>1025</Y>
+        <X>27</X>
+        <Y>1193</Y>
       </CursorPos>
       <DocGUID>52ee7856-172e-46c1-9fe1-61f3f35ee6ab</DocGUID>
       <Bookmarks />
