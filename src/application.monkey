@@ -134,9 +134,7 @@ Class Application Extends App ' Main Extends MFMain
 		End
 		
 		Method OnUpdate:Int()
-			'HandleSystemKeys()
-			
-			'MFDevice.handleInput()
+			HandleSystemKeys()
 			
 			MFDevice.Update()
 			

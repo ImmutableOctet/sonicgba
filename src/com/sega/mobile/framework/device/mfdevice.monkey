@@ -261,7 +261,7 @@ Class MFDevice Final
 		End
 		
 		Function Update:Void()
-			MFGamePad.keyTick()
+			handleInput()
 			
 			For Local component:= EachIn componentVector 
 				component.tick()
@@ -287,6 +287,8 @@ Class MFDevice Final
 			If (Not interruptPauseFlag) Then
 				currentState.onTick()
 			EndIf
+			
+			MFGamePad.keyTick()
 		End
 		
 		Function Render:Void(graphics:MFGraphics) ' Canvas ' Graphics
@@ -1156,16 +1158,17 @@ Class MFDevice Final
 			
 			'SetProjection2d:Void( left:Float,right:Float,top:Float,bottom:Float,znear:Float=-1,zfar:Float=1 )
 			'context.SetProjection2d(horizontalOffset, screenWidth - (horizontalOffset * 2), verticvalOffset, screenHeight - (verticvalOffset * 2))
-			'context.SetProjection2d(vx, vw, vy, vh)
+			'context.SetProjection2d(0, vWidth, 0, vHeight) ' vx, vw vy, vh
 			'(0, 0, 640, 480)
 			
 			''context.SetViewport(drawRect.left, drawRect.top, drawRect.right - drawRect.left, drawRect.bottom - drawRect.top) ' graphics.getSystemGraphics() ' (vx, vy, vWidth, vHeight)
 			
 			'graphics.disableExceedBoundary()
 			
-			context.SetProjection2d(0, vWidth, 0, vHeight) ' SCREEN_WIDTH ' SCREEN_HEIGHT
+			'context.SetProjection2d(0, vWidth, 0, vHeight) ' SCREEN_WIDTH ' SCREEN_HEIGHT
+			context.SetProjection2d(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT)
 			
-			context.Translate(Float(-horizontalOffset), Float(-verticvalOffset)) ' graphics.getGraphics()
+			'context.Translate(Float(-horizontalOffset), Float(-verticvalOffset)) ' graphics.getGraphics()
 		End
 		
 		Function setPreScale:Void(zoomIn:Bool, zoomOut:Bool)

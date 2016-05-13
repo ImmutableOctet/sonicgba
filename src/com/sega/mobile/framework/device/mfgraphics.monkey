@@ -303,6 +303,10 @@ Class MFGraphics
 			
 			Self.clipWidth = screenWidth
 			Self.clipHeight = screenHeight
+			
+			If (Self.context <> Null) Then
+				Self.context.SetScissor(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
+			EndIf
 		End
 		
 		Method translate:Void(x:Int, y:Int) Final
@@ -411,9 +415,10 @@ Class MFGraphics
 				ty = Self.clipY + height
 			EndIf
 			
-			'Print("cx: " + cx + ", cy: " + cy + ", tx - cx: " + (tx - cx) + ", ty - cy: " + (ty - cy))
+			'Print("MFDevice.preScaleShift: " + MFDevice.preScaleShift)
+			Print("cx: " + cx + ", cy: " + cy + ", tx - cx: " + (tx - cx) + ", ty - cy: " + (ty - cy))
 			
-			'Self.context.SetScissor(cx, cy, tx - cx, ty - cy) ' SetViewport
+			Self.context.SetScissor(cx, cy, tx - cx, ty - cy) ' SetViewport
 		End
 		
 		Method getClipX:Int() Final
@@ -932,12 +937,12 @@ Class MFGraphics
 			Print("MFDevice.verticvalOffset: " + MFDevice.verticvalOffset)
 			
 			If (MFDevice.preScaleZoomOutFlag) Then
-				Self.context.SetScissor(0, 0, (MFDevice.bufferWidth - (MFDevice.horizontalOffset * 2)) Shl MFDevice.preScaleShift, (MFDevice.bufferHeight - (MFDevice.verticvalOffset * 2)) Shl MFDevice.preScaleShift) ' Shl 1
+				'Self.context.SetScissor(0, 0, (MFDevice.bufferWidth - (MFDevice.horizontalOffset * 2)) Shl MFDevice.preScaleShift, (MFDevice.bufferHeight - (MFDevice.verticvalOffset * 2)) Shl MFDevice.preScaleShift) ' Shl 1
 			ElseIf (MFDevice.preScaleZoomInFlag) Then
-				Self.context.SetScissor(0, 0, (MFDevice.bufferWidth - (MFDevice.horizontalOffset * 2)) Shr MFDevice.preScaleShift, (MFDevice.bufferHeight - (MFDevice.verticvalOffset * 2)) Shr MFDevice.preScaleShift) ' Shl 1
+				'Self.context.SetScissor(0, 0, (MFDevice.bufferWidth - (MFDevice.horizontalOffset * 2)) Shr MFDevice.preScaleShift, (MFDevice.bufferHeight - (MFDevice.verticvalOffset * 2)) Shr MFDevice.preScaleShift) ' Shl 1
 			EndIf
 			
-			Self.context.SetScissor(0, 0, MFDevice.bufferWidth - (MFDevice.horizontalOffset * 2), MFDevice.bufferHeight - (MFDevice.verticvalOffset * 2)) ' Shl 1
+			'Self.context.SetScissor(0, 0, MFDevice.bufferWidth - (MFDevice.horizontalOffset * 2), MFDevice.bufferHeight - (MFDevice.verticvalOffset * 2)) ' Shl 1
 		End
 		
 		Method clearScreen:Void(color:Int) Final

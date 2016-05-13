@@ -1092,11 +1092,11 @@ Class MyAPI ' Implements Def
 				dy -= sh / 2
 			EndIf
 			
-			g.setClip(Max(dx, 0), Max(dy, 0), Min(sw + dx, 0 + ssdef.PLAYER_MOVE_HEIGHT) - Max(dx, 0), Min(sh + dy, 0 + 320) - Max(dy, 0))
+			g.setClip(Max(dx, 0), Max(dy, 0), Min(sw + dx, 0 + 240) - Max(dx, 0), Min(sh + dy, 0 + 320) - Max(dy, 0))
 			
 			g.drawImage(image, dx - sx, dy - sy, 0)
 			
-			g.setClip(0, 0, ssdef.PLAYER_MOVE_HEIGHT, 320)
+			g.setClip(0, 0, 240, 320)
 		End
 		
 		#Rem

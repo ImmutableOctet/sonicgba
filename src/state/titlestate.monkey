@@ -1011,8 +1011,11 @@ Class TitleState Extends State
 					
 					If (Key.press(Key.B_BACK)) Then
 						changeStateWithFade(STATE_MOVING)
+						
 						menuInit(MAIN_MENU)
+						
 						mainMenuInit()
+						
 						Key.touchHelpClose()
 					EndIf
 				Case STATE_ABOUT
