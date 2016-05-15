@@ -48,7 +48,7 @@ Class ParamSetting ' Implements SonicDef
 		Global drawStart:Int = 0
 	Public
 		' Functions:
-		Function init:Void()
+		Function init:Void(bigEndian:Bool=True) ' False
 			cursol = 0
 			
 			For Local i:= 0 Until PARAM_RESET.Length
@@ -58,7 +58,7 @@ Class ParamSetting ' Implements SonicDef
 			Local record:= Record.loadRecord(Record.PARAM_RECORD)
 			
 			If (record <> Null) Then
-				Local ds:= New EndianStreamManager<DataStream>(New DataStream(record), True) ' False
+				Local ds:= New EndianStreamManager<DataStream>(New DataStream(record), bigEndian) ' False
 				
 				For Local i:= 0 Until paramArray.Length
 					paramArray[i] = ds.ReadInt()

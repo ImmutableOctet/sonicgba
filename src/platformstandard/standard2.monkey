@@ -2,6 +2,14 @@ Strict
 
 Public
 
+' Preprocessor related:
+#SONICGBA_STANDARD2_EXTRA_SOUNDS = True
+
+#If SONICGBA_STANDARD2_EXTRA_SOUNDS
+	#SONICGBA_STANDARD2_SEGA_SOUND = True
+	#SONICGBA_STANDARD2_SONICTEAM_CUSTOM_SOUNDS = True
+#End
+
 ' Imports:
 Private
 	Import gameengine.def
@@ -10,6 +18,7 @@ Private
 	Import lib.animation
 	Import lib.animationdrawer
 	Import lib.myapi
+	Import lib.myrandom
 	Import lib.soundsystem
 	Import lib.constutil
 	
@@ -113,6 +122,23 @@ Class Standard2 ' Implements Def ' Final
 		' Global variable(s):
 		Global keyCancel:Bool
 		Global keyConfirm:Bool
+		
+		' Functions:
+		
+		' Extensions:
+		Function onSEGASplash:Void(play:Bool)
+			#If SONICGBA_STANDARD2_SEGA_SOUND
+				If (play) Then
+					SoundSystem.getInstance().playSe(SoundSystem.SE_EX_01)
+				EndIf
+			#End
+			
+			Print("/\/\SEGA/\/\")
+		End
+		
+		Function onSONICTEAMSplash:Void()
+			Print("/-_Sonic Team_-\")
+		End
 	Public
 		' Functions:
 		Function splashinit:Void(isNeedSoundControl:Bool)
@@ -437,6 +463,8 @@ Class Standard2 ' Implements Def ' Final
 					If (count >= LOGO_TRANSITION_TIME) Then
 						state = STATE_SHOW
 						
+						onSEGASplash(True)
+						
 						count = 0
 					EndIf
 				Case STATE_SHOW
@@ -520,10 +548,24 @@ Class Standard2 ' Implements Def ' Final
 					
 					state = STATE_LOGO_IN
 					
-					SoundSystem.getInstance().preLoadSequenceSe(SoundSystem.SE_117) ' 12
+					#If SONICGBA_STANDARD2_SONICTEAM_CUSTOM_SOUNDS
+						#If Not SONICGBA_EASTEREGGS
+							If (MyRandom.nextInt(0, 100) < 50) Then
+								SoundSystem.getInstance().preLoadSequenceSe(SoundSystem.SE_117) ' 12
+							Else
+								SoundSystem.getInstance().preLoadSequenceSe(SoundSystem.SE_116) ' 11
+							EndIf
+						#Else
+							SoundSystem.getInstance().preLoadSequenceSe(SoundSystem.SE_166) ' SE_118
+						#End
+					#Else
+						SoundSystem.getInstance().preLoadSequenceSe(SoundSystem.SE_117) ' 12
+					#End
 				Case STATE_LOGO_IN
 					If (count = SPLASH_2_COME_IN_COUNT) Then
 						state = STATE_SHOW
+						
+						onSONICTEAMSplash()
 						
 						SoundSystem.getInstance().playSequenceSeSingle()
 						

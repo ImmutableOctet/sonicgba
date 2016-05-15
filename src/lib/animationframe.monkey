@@ -99,11 +99,11 @@ Class Frame
 		
 		Method LoadFrame:Void(in:Stream)
 			If (in <> Null) Then
-				For Local i:= 0 Until Self.rect1.Length
+				For Local i:= 0 Until Self.rect1.Length ' 4
 					Self.rect1[i] = in.ReadByte()
 				Next
 				
-				For Local i:= 0 Until Self.rect1.Length
+				For Local i:= 0 Until Self.rect2.Length ' 4
 					Self.rect2[i] = in.ReadByte()
 				Next
 				
@@ -228,7 +228,7 @@ Class Frame
 						' These values may be incorrect:
 						Self.color |= ((ds.ReadByte() Shl 16) & 16711680)
 						Self.color |= ((ds.ReadByte() Shl 8) & 65280)
-						Self.color |= ((ds.ReadByte() Shl 0) & 255)
+						Self.color |= ((ds.ReadByte()) & 255)
 						
 						clipInfo[0] = ds.ReadShort()
 						clipInfo[1] = ds.ReadShort()
@@ -245,6 +245,8 @@ Class Frame
 					Default
 						' Nothing so far.
 				End Select
+				
+				Print("clipInfo[0]: " + clipInfo[0] + ", clipInfo[1]: " + clipInfo[1] + ", clipInfo[2]: " + clipInfo[2] + ", clipInfo[3]: " + clipInfo[3])
 			Next
 		End
 
@@ -343,7 +345,7 @@ Class Frame
 							fillRect(g, i, x, y, attr)
 						Case 2
 							drawRect(g, i, x, y, attr)
-						Case 3
+						Case 6 ' 3
 							Local tmp_x:= Self.m_ClipInfo[i][0]
 							Local tmp_y:= Self.m_ClipInfo[i][1]
 							

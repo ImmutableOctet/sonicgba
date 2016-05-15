@@ -2,6 +2,10 @@ Strict
 
 Public
 
+' Preprocessor related:
+#SONICGBA_FORCE_DISABLE_SOUNDEFFECTS = True
+#SONICGBA_FORCE_DISABLE_MUSIC = True
+
 ' Imports:
 Private
 	Import sonicgba.globalresource
@@ -157,6 +161,9 @@ Class SoundSystem
 		Const SE_212:Byte = 76
 		Const SE_213:Byte = 77
 		Const SE_214:Byte = 78
+		
+		' Extensions:
+		Const SE_EX_01:Byte = 84
 	Private
 		' Constant variable(s):
 		Const SE_PATH:String = "/se/"
@@ -188,6 +195,8 @@ Class SoundSystem
 		Field seIndex:Int
 		'Field seplayer:MFPlayer
 		Field speed:Float
+		
+		Field __preload_se:Sound
 	Public
 		' Constructor(s):
 		Method New()
@@ -249,7 +258,7 @@ Class SoundSystem
 			Self.INTRO_MSEC = r
 			
 			Self.BgmType = ".ogg" ' ".mid"
-			Self.SE_NAME = ["se_103.ogg", "se_106.wav", "se_107.wav", "se_108.wav", "se_109.ogg", "se_110.ogg", "se_111.ogg", "se_112.ogg", "se_114_01.ogg", "se_114_02.ogg", "se_115.ogg", "se_116.ogg", "se_117.ogg", "se_118.ogg", "se_119.ogg", "se_120.ogg", "se_121.ogg", "se_123.ogg", "se_125.ogg", "se_126.ogg", "se_127.ogg", "se_128.ogg", "se_130.ogg", "se_131.ogg", "se_132.ogg", "se_133.ogg", "se_135.ogg", "se_136.ogg", "se_137.ogg", "se_138.ogg", "se_139.ogg", "se_140.ogg", "se_141.wav", "se_142.ogg", "se_143.ogg", "se_144.ogg", "se_145.ogg", "se_148.ogg", "se_149.ogg", "se_150.ogg", "se_166.ogg", "se_168.ogg", "se_169.ogg", "se_171.ogg", "se_172.ogg", "se_173.ogg", "se_174.ogg", "se_175.ogg", "se_176.ogg", "se_178.ogg", "se_180.ogg", "se_181_01.ogg", "se_181_02.ogg", "se_182.ogg", "se_183.ogg", "se_184.ogg", "se_185.ogg", "se_189.ogg", "se_190.ogg", "se_191.ogg", "se_192.ogg", "se_193.ogg", "se_194.ogg", "se_195.ogg", "se_198_01.ogg", "se_198_02.ogg", "se_199_01.ogg", "se_199_02.ogg", "se_200_01.ogg", "se_200_02.ogg", "se_201_01.ogg", "se_201_02.ogg", "se_206.ogg", "se_209.ogg", "se_210.ogg", "se_211.ogg", "se_212.ogg", "se_213.ogg", "se_214.ogg", "se_113.ogg", "op_patch.ogg", "se_162.ogg", "se_177.ogg", "se_179.ogg"]
+			Self.SE_NAME = ["se_103.ogg", "se_106.wav", "se_107.wav", "se_108.wav", "se_109.ogg", "se_110.ogg", "se_111.ogg", "se_112.ogg", "se_114_01.ogg", "se_114_02.ogg", "se_115.ogg", "se_116.ogg", "se_117.ogg", "se_118.ogg", "se_119.ogg", "se_120.ogg", "se_121.ogg", "se_123.ogg", "se_125.ogg", "se_126.ogg", "se_127.ogg", "se_128.ogg", "se_130.ogg", "se_131.ogg", "se_132.ogg", "se_133.ogg", "se_135.ogg", "se_136.ogg", "se_137.ogg", "se_138.ogg", "se_139.ogg", "se_140.ogg", "se_141.wav", "se_142.ogg", "se_143.ogg", "se_144.ogg", "se_145.ogg", "se_148.ogg", "se_149.ogg", "se_150.ogg", "se_166.ogg", "se_168.ogg", "se_169.ogg", "se_171.ogg", "se_172.ogg", "se_173.ogg", "se_174.ogg", "se_175.ogg", "se_176.ogg", "se_178.ogg", "se_180.ogg", "se_181_01.ogg", "se_181_02.ogg", "se_182.ogg", "se_183.ogg", "se_184.ogg", "se_185.ogg", "se_189.ogg", "se_190.ogg", "se_191.ogg", "se_192.ogg", "se_193.ogg", "se_194.ogg", "se_195.ogg", "se_198_01.ogg", "se_198_02.ogg", "se_199_01.ogg", "se_199_02.ogg", "se_200_01.ogg", "se_200_02.ogg", "se_201_01.ogg", "se_201_02.ogg", "se_206.ogg", "se_209.ogg", "se_210.ogg", "se_211.ogg", "se_212.ogg", "se_213.ogg", "se_214.ogg", "se_113.ogg", "op_patch.ogg", "se_162.ogg", "se_177.ogg", "se_179.ogg", "se_ex_01.ogg"]
 			Self.Path = "/ogg/" ' "/mid/"
 			Self.BgmPrefix = ""
 			
@@ -407,11 +416,15 @@ Class SoundSystem
 				loop = False
 			EndIf
 			
-			If (speed = 1.0 Or getSpeedyVersionBgm(index) < 0) Then
-				playBgmInNormalSpeed(index, loop)
-			Else
-				playBgmInInnormalSpeed(index, loop, speed)
-			EndIf
+			playBgmInNormalSpeed(index, loop)
+			
+			#Rem
+				If (speed = 1.0 Or getSpeedyVersionBgm(index) < 0) Then
+					playBgmInNormalSpeed(index, loop)
+				Else
+					playBgmInInnormalSpeed(index, loop, speed)
+				EndIf
+			#End
 		End
 	Private
 		Method playBgmInNormalSpeed:Void(index:Int, loop:Bool)
@@ -420,6 +433,12 @@ Class SoundSystem
 			Local fileName:= getBgmFileName(index)
 			
 			Print(fileName)
+			
+			Local resPath:= "monkey://" + MFDevice.FixResourcePath(fileName)
+			
+			#If Not SONICGBA_FORCE_DISABLE_MUSIC
+				PlayMusic(resPath, Int(loop))
+			#End
 			
 			'MFSound.playBgm(fileName, loop)
 			
@@ -453,6 +472,23 @@ Class SoundSystem
 			EndIf
 		End
 	Public
+		' Extensions:
+		Method loadSystemSound:Sound(index:Int)
+			Local soundEffectName:= getSoundEffectName(index)
+			Local resPath:= "monkey://" + MFDevice.FixResourcePath(soundEffectName)
+			
+			Print("SOUND: " + resPath)
+			
+			#If SONICGBA_FORCE_DISABLE_SOUNDEFFECTS
+				Return Null
+			#End
+			
+			Local sound:= LoadSound(resPath)
+			
+			Return sound
+		End
+		
+		' Methods:
 		Method stopBgm:Void(isDel:Bool)
 			'MFSound.stopBgm()
 			
@@ -462,18 +498,17 @@ Class SoundSystem
 		Method resumeBgm:Void()
 			'MFSound.resumeBgm()
 		End
-	
+		
 		Method playSe:Void(index:Int, loop:Bool)
 			stopLoopSe()
 			
-			Local soundEffectName:= getSoundEffectName(index)
-			Local resPath:= MFDevice.FixResourcePath(soundEffectName)
+			Local sound:= loadSystemSound(index)
 			
-			Local sound:= LoadSound(resPath)
+			If (sound = Null) Then
+				Return
+			EndIf
 			
-			Print("SOUND: " + resPath)
-			
-			PlaySound(sound) ' FixGlobalPath
+			PlaySound(sound, 0, 0) ' Int(loop)
 			
 			'MFSound.playSe(getSoundEffectName(index), 1)
 		End
@@ -561,6 +596,12 @@ Class SoundSystem
 		End
 		
 		Method preLoadSequenceSe:Void(index:Int)
+			If (__preload_se <> Null) Then
+				__preload_se.Discard() ' __preload_se = Null
+			EndIf
+			
+			__preload_se = loadSystemSound(index)
+			
 			#Rem
 			If (MFSound.getSeFlag() And Not isLoopSePlaying()) Then
 				Self.seplayer = Null
@@ -585,6 +626,10 @@ Class SoundSystem
 				Self.seplayer.start()
 			EndIf
 			#End
+			
+			If (__preload_se <> Null And Not isLoopSePlaying()) Then
+				PlaySound(__preload_se)
+			EndIf
 		End
 		
 		Method stopLoopSe:Void()
@@ -640,7 +685,7 @@ Class SoundSystem
 			#End
 			
 			' This behavior may change in the future.
-			Return True
+			Return False ' True
 		End
 		
 		Method setVolume:Void(vol:Int)
@@ -673,14 +718,14 @@ Class SoundSystem
 			'Return MFSound.isBgmPlaying()
 			
 			' This behavior may change in the future.
-			Return True
+			Return False ' True
 		End
 		
 		Method bgmPlaying2:Bool()
 			'Return MFSound.isBgmPlaying()
 			
 			' This behavior may change in the future.
-			Return True ' False
+			Return False ' True
 		End
 		
 		Method setVolumnState:Void(state:Int)

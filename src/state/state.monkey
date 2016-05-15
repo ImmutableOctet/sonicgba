@@ -482,7 +482,8 @@ Class State Implements StringIndex Abstract ' SonicDef
 				stateInst.draw(g)
 				
 				If (fading) Then
-					drawFade(g)
+					' This behavior will definitely change in the future.
+					'drawFade(g)
 				EndIf
 			EndIf
 		End
@@ -633,7 +634,6 @@ Class State Implements StringIndex Abstract ' SonicDef
 			#End
 			
 			'preFadeAlpha = fadeAlpha
-			fadeAlpha = fadeToValue
 		End
 		
 		Function drawLeftSoftKey:Void(g:MFGraphics)
@@ -686,6 +686,13 @@ Class State Implements StringIndex Abstract ' SonicDef
 		End
 		
 		Function fadeChangeOver:Bool()
+			' This behavior will change in the future:
+			setFadeOver()
+			
+			''Print("Manually overriding fade.")
+			
+			Return True
+			
 			Return (fadeAlpha = fadeToValue)
 		End
 		

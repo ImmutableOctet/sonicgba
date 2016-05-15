@@ -160,13 +160,19 @@ Class MFDevice Final
 		' Functions:
 		
 		' Extensions:
+		Function FixInvalidSymbolsInPath:String(path:String)
+			path = path.Replace("#", "_number_")
+			
+			Return path
+		End
+		
 		Function FixGlobalPath:String(path:String)
 			If (path.StartsWith("/")) Then
 				' Skip the first slash.
-				Return path[1..]
+				path = path[1..]
 			EndIf
 			
-			Return path
+			Return FixInvalidSymbolsInPath(path)
 		End
 		
 		Function FixResourcePath:String(path:String)
@@ -177,14 +183,14 @@ Class MFDevice Final
 				path = path[1..]
 			EndIf
 			
-			If (path.StartsWith( "." )) Then ' Or path.StartsWith( "/" )
-				Return path
+			If (Not path.StartsWith( "." )) Then ' And Not path.StartsWith( "/" )
+				path = ("data/" + path) ' "monkey://data/"
 			EndIf
 			
-			Return ("data/" + path) ' "monkey://data/"
+			Return FixInvalidSymbolsInPath(path)
 		End
 		
-		Function OpenFileStream:Stream(path:String, mode:String) ' FileStream
+		Function OpenFileStream:BasicEndianStreamManager(path:String, mode:String, bigEndian:Bool=True) ' Stream ' FileStream ' False
 			If (mode = "w") Then
 				#If SONICGBA_FILESYSTEM_ENABLED
 					If (Not MakeFolderPath(ExtractDir(path))) Then
@@ -204,7 +210,7 @@ Class MFDevice Final
 				Throw New FileNotFoundException(f, path) ' Null
 			EndIf
 			
-			Return New BasicEndianStreamManager(f, True) ' False
+			Return New BasicEndianStreamManager(f, bigEndian) ' False
 		End
 		
 		Function MakeFolderPath:Bool(folder:String)
@@ -546,10 +552,8 @@ Class MFDevice Final
 			Return getVersion() ' VERSION_INFO
 		End
 		
-		Function getResourceAsStream:Stream(url:String)
+		Function getResourceAsStream:Stream(url:String, bigEndian:Bool=True)
 			Try
-				Local substring:String
-				
 				Print("Attempting to load from URL: " + url)
 				
 				'Local assets:AssetManager = MFMain.getInstance().getAssets()
@@ -558,7 +562,7 @@ Class MFDevice Final
 				
 				'ret = assets.open(substring)
 				
-				Local f:= OpenFileStream(url, "r")
+				Local f:= OpenFileStream(url, "r", bigEndian)
 				
 				Return f
 			Catch E:StreamError
@@ -660,7 +664,7 @@ Class MFDevice Final
 			Return ret
 		End
 		
-		Function initRecords:Void(force:Bool=False)
+		Function initRecords:Void(force:Bool=False, bigEndian:Bool=True) ' False
 			Try
 				If (Not force And records <> Null) Then
 					Return
@@ -668,7 +672,7 @@ Class MFDevice Final
 				
 				records = New StringMap<DataBuffer>()
 				
-				Local dis:= New EndianStreamManager<DataStream>(New DataStream(openRecordStore(RECORD_NAME)), True) ' Flase
+				Local dis:= New EndianStreamManager<DataStream>(New DataStream(openRecordStore(RECORD_NAME)), bigEndian) ' Flase
 				
 				Local recordStoreNumber:= dis.ReadInt()
 				
@@ -900,7 +904,7 @@ Class MFDevice Final
 		Function setFullscreenMode:Void(context:Canvas, b:Bool) ' DrawList
 			Local vWidth:Int, vHeight:Int
 			
-			DebugStop()
+			'DebugStop()
 			
 			If (b) Then
 				drawRect = New Rect(0, 0, screenWidth, screenHeight)
@@ -1037,8 +1041,8 @@ Class MFDevice Final
 			
 			'context.SetProjection2d(0, 284, 0, 160)
 			
-			'context.SetProjection2d(0, vWidth, 0, vHeight) ' SCREEN_WIDTH ' SCREEN_HEIGHT
-			context.SetProjection2d(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT)
+			context.SetProjection2d(0, vWidth, 0, vHeight) ' SCREEN_WIDTH ' SCREEN_HEIGHT
+			'context.SetProjection2d(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT)
 			
 			'context.Translate(Float(-horizontalOffset), Float(-verticvalOffset)) ' graphics.getGraphics()
 		End

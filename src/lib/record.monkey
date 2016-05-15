@@ -45,7 +45,7 @@ Class Record
 			Return MFDevice.loadRecord(recordId)
 		End
 		
-		Function loadRecordStream:Stream(recordId:String) ' DataStream
+		Function loadRecordStream:Stream(recordId:String, bigEndian:Bool=True) ' DataStream ' False
 			Local data:= loadRecord(recordId)
 			
 			If (data = Null) Then
@@ -54,7 +54,7 @@ Class Record
 				Return Null
 			EndIf
 			
-			Return New EndianStreamManager<DataStream>(New DataStream(data), True) ' False
+			Return New EndianStreamManager<DataStream>(New DataStream(data), bigEndian) ' False
 		End
 		
 		' This routine is considered "'Null' safe".

@@ -239,14 +239,13 @@ Class TitleState Extends State
 		
 		Const ZONE_OFFSET:Int = -22
 		
-		' These values will eventually be assigned to constants:
-		Const OPENING_STATE_AMY:Byte = 5
 		Const OPENING_STATE_EMERALD:Byte = 0
 		Const OPENING_STATE_EMERALD_SHINING:Byte = 1
-		Const OPENING_STATE_END:Byte = 6
-		Const OPENING_STATE_KNUCKLES:Byte = 4
 		Const OPENING_STATE_SONIC:Byte = 2
 		Const OPENING_STATE_TAILS:Byte = 3
+		Const OPENING_STATE_KNUCKLES:Byte = 4
+		Const OPENING_STATE_AMY:Byte = 5
+		Const OPENING_STATE_END:Byte = 6
 		
 		Const PRESS_DELAY:Byte = 5
 		
@@ -947,7 +946,7 @@ Class TitleState Extends State
 						SoundSystem.getInstance().playBgm(0, False)
 					EndIf
 					
-					If (Self.titleFrame > STATE_START_GAME) Then
+					If (Self.titleFrame > 4) Then
 						If (Key.buttonPress(Key.B_SEL)) Then
 							SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 							
@@ -1634,7 +1633,7 @@ Class TitleState Extends State
 			EndIf
 			
 			If (Key.slidesensormenuoption.isSliding()) Then
-				If (Self.optionslide_y > STATE_START_GAME Or Self.optionslide_y < -4) Then
+				If (Self.optionslide_y > 4 Or Self.optionslide_y < -4) Then
 					Self.isOptionChange = True
 					Self.isSelectable = False
 					releaseOptionItemsTouchKey()
@@ -2367,6 +2366,7 @@ Class TitleState Extends State
 			close()
 			
 			Self.openingFrame = 0
+			
 			Self.openingState = OPENING_STATE_EMERALD
 			
 			If (Self.openingAnimation.Length = 0) Then
@@ -2418,6 +2418,8 @@ Class TitleState Extends State
 			EndIf
 			
 			If ((Key.touchopeningskip.IsButtonPress() Or Key.press(Key.B_S1)) And Not Self.openingDrawer[4].checkEnd()) Then
+				Print("Skipping the opening...")
+				
 				SoundSystem.getInstance().playSe(SoundSystem.SE_106)
 				SoundSystem.getInstance().stopBgm(False)
 				SoundSystem.getInstance().playBgm(SoundSystem.BGM_TITLE, False)
@@ -2430,32 +2432,35 @@ Class TitleState Extends State
 			EndIf
 			
 			Select (Self.openingState)
-				Case STATE_SEGA_LOGO
+				Case OPENING_STATE_EMERALD
 					If (Self.openingDrawer[0].checkEnd()) Then
 						Self.openingDrawer[0].setActionId(ZONE_NUM_OFFSET)
 						Self.openingState = OPENING_STATE_EMERALD_SHINING
 						
 						SoundSystem.getInstance().playSequenceSe(80)
 					EndIf
-				Case STATE_SELECT
+				Case OPENING_STATE_EMERALD_SHINING
 					If (Self.openingDrawer[0].checkEnd()) Then
 						Self.openingDrawer[1].setActionId(0)
 						Self.openingState = OPENING_STATE_SONIC
 					EndIf
-				Case STATE_MOVING
+				Case OPENING_STATE_SONIC
 					If (Self.openingDrawer[1].checkEnd()) Then
 						Self.openingDrawer[2].setActionId(0)
+						
+						DebugStop()
 						
 						If (Self.openingStateChanging And State.fadeChangeOver()) Then
 							Self.openingState = OPENING_STATE_TAILS
 							Self.openingStateChanging = False
 						Else
 							Self.openingStateChanging = True
+							
 							State.setFadeColor(MapManager.END_COLOR)
 							State.fadeInit(0, 255)
 						EndIf
 					EndIf
-				Case STATE_OPENING
+				Case OPENING_STATE_TAILS
 					If (Self.openingDrawer[2].checkEnd()) Then
 						Self.openingDrawer[3].setActionId(0)
 						
@@ -2469,14 +2474,14 @@ Class TitleState Extends State
 							State.fadeInit(0, 255)
 						EndIf
 					EndIf
-				Case STATE_START_GAME
+				Case OPENING_STATE_KNUCKLES
 					If (Self.openingDrawer[3].checkEnd()) Then
 						Self.openingDrawer[4].setActionId(0)
 						Self.openingDrawer[4].restart()
 						Self.openingEnding = False
 						
 						If (Self.openingStateChanging And State.fadeChangeOver()) Then
-							Self.openingState = PRESS_DELAY
+							Self.openingState = OPENING_STATE_AMY
 							Self.openingStateChanging = False
 						Else
 							Self.openingStateChanging = True
@@ -2485,11 +2490,11 @@ Class TitleState Extends State
 							State.fadeInit(0, 255)
 						EndIf
 					EndIf
-				Case STATE_GOTO_GAME
+				Case OPENING_STATE_AMY
 					If (Self.openingDrawer[4].checkEnd() And Self.openingEnding And State.fadeChangeOver()) Then
 						Self.openingState = OPENING_STATE_END
 					EndIf
-				Case STATE_RACE_MODE
+				Case OPENING_STATE_END
 					Self.openingFrame = 0
 					
 					Return True
@@ -2500,15 +2505,20 @@ Class TitleState Extends State
 		
 		Method openingDraw:Void(g:MFGraphics)
 			Select (Self.openingState)
-				Case STATE_SEGA_LOGO, STATE_SELECT
+				Case OPENING_STATE_EMERALD, OPENING_STATE_EMERALD_SHINING
+					'Print("Opening: Emerald")
 					Self.openingDrawer[0].draw(g, Self.openingOffsetX, Self.openingOffsetY)
-				Case STATE_MOVING
+				Case OPENING_STATE_SONIC
+					'Print("Opening: Sonic")
 					Self.openingDrawer[1].draw(g, Self.openingOffsetX, Self.openingOffsetY)
-				Case STATE_OPENING
+				Case OPENING_STATE_TAILS
+					'Print("Opening: Tails")
 					Self.openingDrawer[2].draw(g, Self.openingOffsetX, Self.openingOffsetY)
-				Case STATE_START_GAME
+				Case OPENING_STATE_KNUCKLES
+					'Print("Opening: Knuckles")
 					Self.openingDrawer[3].draw(g, Self.openingOffsetX, Self.openingOffsetY)
-				Case STATE_GOTO_GAME
+				Case OPENING_STATE_AMY
+					'Print("Opening: Amy")
 					Self.openingDrawer[4].draw(g, Self.openingOffsetX, Self.openingOffsetY)
 					
 					If (Not Self.openingEnding And Self.openingDrawer[4].checkEnd()) Then
@@ -2986,7 +2996,7 @@ Class TitleState Extends State
 			
 			Self.charSelAniDrawer.draw(g, SCREEN_WIDTH Shr 1, SCREEN_HEIGHT Shr 1)
 			
-			If (Self.character_sel_frame_cnt > STATE_START_GAME And Self.character_sel_frame_cnt <= STATE_INTERRUPT) Then
+			If (Self.character_sel_frame_cnt > 4 And Self.character_sel_frame_cnt <= STATE_INTERRUPT) Then
 				Self.charSelCaseDrawer.draw(g, SCREEN_WIDTH Shr 1, SCREEN_HEIGHT Shr 1)
 				
 				If (Self.character_sel_frame_cnt = STATE_INTERRUPT) Then
@@ -3369,7 +3379,7 @@ Class TitleState Extends State
 				If (Key.slidesensorstagesel.isSliding()) Then
 					Self.stage_select_press_state = STATE_PRESS_START
 					
-					If (Self.stageselectslide_y > STATE_START_GAME Or Self.stageselectslide_y < -4) Then
+					If (Self.stageselectslide_y > 4 Or Self.stageselectslide_y < -4) Then
 						Self.isStageSelectChange = True
 						Self.isSelectable = False
 						releaseAllStageSelectItemsTouchKey()
@@ -4228,10 +4238,13 @@ Class TitleState Extends State
 				Case STATE_MOVING
 					If (Self.quitFlag = ZONE_NUM_OFFSET) Then
 						state = STATE_PRESS_START
+						
 						Key.touchanykeyInit()
 					ElseIf (Self.quitFlag = 0) Then
 						gotoMainmenu()
+						
 						Key.clear()
+						
 						State.setFadeOver()
 					EndIf
 				Default
@@ -4543,7 +4556,7 @@ Class TitleState Extends State
 				If (Self.arrowframecnt <= STATE_START_GAME And Not Self.isArrowClicked) Then
 					MyAPI.logicString(False, True)
 					Self.isArrowClicked = True
-				ElseIf (Self.arrowframecnt > STATE_START_GAME And Self.arrowframecnt Mod STATE_MOVING = 0) Then
+				ElseIf (Self.arrowframecnt > 4 And Self.arrowframecnt Mod STATE_MOVING = 0) Then
 					MyAPI.logicString(False, True)
 				EndIf
 			ElseIf (Key.touchhelpdownarrow.Isin()) Then
@@ -4552,7 +4565,7 @@ Class TitleState Extends State
 				If (Self.arrowframecnt <= STATE_START_GAME And Not Self.isArrowClicked) Then
 					MyAPI.logicString(True, False)
 					Self.isArrowClicked = True
-				ElseIf (Self.arrowframecnt > STATE_START_GAME And Self.arrowframecnt Mod STATE_MOVING = 0) Then
+				ElseIf (Self.arrowframecnt > 4 And Self.arrowframecnt Mod STATE_MOVING = 0) Then
 					MyAPI.logicString(True, False)
 				EndIf
 			Else

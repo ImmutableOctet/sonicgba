@@ -518,7 +518,7 @@ Class _Graphics ' Graphics
 			End Select
 			
 			If (anchor = 0) Then
-				anchor = (TOP|RIGHT)
+				anchor = (TOP|LEFT)
 			EndIf
 			
 			If ((anchor & BOTTOM) <> 0) Then

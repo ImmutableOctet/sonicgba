@@ -252,6 +252,7 @@ Class MFGraphics
 			Self.clipHeight = screenHeight
 			
 			If (Self.context <> Null) Then
+				'Self.context.SetProjection2d(0, MFDevice.canvasWidth, 0, MFDevice.canvasWidth)
 				'Self.context.SetScissor(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
 			EndIf
 		End
@@ -310,9 +311,16 @@ Class MFGraphics
 				ty = Self.clipY + height
 			EndIf
 			
-			Print("cx: " + cx + ", cy: " + cy + ", tx - cx: " + (tx - cx) + ", ty - cy: " + (ty - cy))
+			'Print("cx: " + cx + ", cy: " + cy + ", tx - cx: " + (tx - cx) + ", ty - cy: " + (ty - cy))
 			
-			'Self.context.SetScissor(cx, cy, tx - cx, ty - cy) ' SetViewport
+			'Self.context.SetScissor(cx, cy, tx, ty) ' SetViewport
+			'Self.context.SetScissor(cx, cy, width - (tx - cx), height - (ty - cy)) ' SetViewport
+			
+			'Self.context.SetProjection2d(cx, tx, cy, ty)
+			'Self.context.SetScissor(cx, cy, tx - cx, ty - cy)
+			
+			'Self.transX = (width - (tx - cx))
+			'Self.transY = (height - (ty - cy))
 		End
 		
 		Method getClipX:Int() Final
@@ -335,13 +343,11 @@ Class MFGraphics
 			Local imageWidth:= image.getWidth()
 			Local imageHeight:= image.getHeight()
 			
-			caculateAnchorOffset(imageWidth, imageHeight, anchor)
-			
-			drawImageImpl(image, xOff + x, yOff + y)
+			drawImageImpl(image, x, y, anchor)
 		End
 		
 		Method drawImage:Void(image:MFImage, x:Int, y:Int) Final
-			drawImage(image, x, y, (TOP|RIGHT))
+			drawImage(image, x, y, (TOP|LEFT))
 		End
 		
 		Method drawImage:Void(image:MFImage, x:Int, y:Int, flipMode:Int, anchor:Int) Final
@@ -349,17 +355,11 @@ Class MFGraphics
 		End
 		
 		Method drawImage:Void(image:MFImage, x:Int, y:Int, regionX:Int, regionY:Int, regionW:Int, regionH:Int) Final
-			drawRegion(image, regionX, regionY, regionW, regionH, 0, x, y, (TOP|RIGHT))
+			drawRegion(image, regionX, regionY, regionW, regionH, 0, x, y, (TOP|LEFT))
 		End
 		
 		Method drawRegion:Void(img:MFImage, regionX:Int, regionY:Int, regionW:Int, regionH:Int, flipMode:Int, x:Int, y:Int, anchor:Int) Final
-			If (flipMode <= TRANS_ROT180) Then
-				caculateAnchorOffset(regionW, regionH, anchor)
-			Else
-				caculateAnchorOffset(regionH, regionW, anchor)
-			EndIf
-			
-			drawRegionImpl(img.image, regionX, regionY, regionW, regionH, flipMode, x + xOff, y + yOff)
+			drawRegionImpl(img.image, regionX, regionY, regionW, regionH, flipMode, x, y, anchor)
 		End
 	Private
 		' Methods:
@@ -367,7 +367,7 @@ Class MFGraphics
 			xOff = 0
 			yOff = 0
 			
-			If ((anchor & TRANS_MIRROR_ROT180) <> 0) Then
+			If ((anchor & HCENTER) <> 0) Then
 				xOff -= (width / 2) ' Shr 1
 			ElseIf ((anchor & RIGHT) <> 0) Then
 				xOff -= width
@@ -385,11 +385,15 @@ Class MFGraphics
 		Method drawRGB:Void(rgbData:Int[], offset:Int, scanlength:Int, x:Int, y:Int, width:Int, height:Int, processAlpha:Bool)
 			' Unimplemented method.
 			
-			Return
+			Print("Unimplemented method: drawRGB")
 		End
 		
 		Method setColor:Void(color:Int)
-			Self.context.SetColor(getRf(color), getGf(color), getBf(color)) ' getAf(color)
+			'Print("Color: " + color)
+			
+			'Print("R: " + getRf(color) + ", G: " + getGf(color) + ", B: " + getBf(color))
+			
+			'''Self.context.SetColor(getRf(color), getGf(color), getBf(color)) ' getAf(color)
 		End
 		
 		Method getColor:Int()
@@ -401,11 +405,11 @@ Class MFGraphics
 			
 			'Self.context.SetColor(getRf(color), getGf(color), getBf(color))
 			
-			Self.context.SetColor(colorToFloat(red), colorToFloat(green), colorToFloat(blue))
+			'''Self.context.SetColor(colorToFloat(red), colorToFloat(green), colorToFloat(blue))
 		End
 		
 		Method drawPixel:Void(x:Int, y:Int) Final
-			Self.context.DrawPoint(Float(x), Float(y))
+			Self.context.DrawPoint(Float(Self.transX + x), Float(Self.transY + y))
 		End
 		
 		Method drawLine:Void(x1:Int, y1:Int, x2:Int, y2:Int) Final
@@ -477,12 +481,15 @@ Class MFGraphics
 			'Self.context.drawArc(Self.transX + x, Self.transY + y, width, height, startAngle, arcAngle)
 			
 			' Unimplemented method.
+			
+			Print("Unimplemented method: drawArc")
 		End
 		
 		Method fillArc:Void(x:Int, y:Int, width:Int, height:Int, startAngle:Int, arcAngle:Int) Final
 			'Self.context.fillArc(Self.transX + x, Self.transY + y, width, height, startAngle, arcAngle)
 			
 			' Unimplemented method.
+			Print("Unimplemented method: fillArc")
 		End
 		
 		Method drawRoundRect:Void(x:Int, y:Int, width:Int, height:Int, arcWidth:Int, arcHeight:Int) Final
@@ -514,7 +521,7 @@ Class MFGraphics
 			
 			caculateAnchorOffset(stringWidth, charHeight, anchor)
 			
-			anchor = (TOP|RIGHT)
+			anchor = (TOP|LEFT)
 			
 			x = ((xOff + x) + Self.transX)
 			y = ((yOff + y) + Self.transY)
@@ -638,136 +645,123 @@ Class MFGraphics
 			
 			disableExceedBoundary()
 		End
-		
-		Method drawRegion:Void(img:MFImage, x_src:Int, y_src:Int, width:Int, height:Int, rotate_x:Int, rotate_y:Int, degree:Int, scale_x:Int, scale_y:Int, x_dest:Int, y_dest:Int, anchor:Int)
-			drawRegionImpl(img.image, x_src, y_src, width, height, rotate_x, rotate_y, degree, scale_x, scale_y, x_dest, y_dest, anchor)
-		End
 	Private
 		' Methods:
-		Method drawRegionImpl:Void(image:Image, x_src:Int, y_src:Int, width:Int, height:Int, rotate_x:Int, rotate_y:Int, degree:Int, scale_x:Int, scale_y:Int, x_dest:Int, y_dest:Int, anchor:Int)
-			saveCanvas()
-			
-			If ((anchor & BOTTOM) <> 0) Then
-				y_dest -= height
-			ElseIf ((anchor & VCENTER) <> 0) Then
-				y_dest -= (height / 2) ' Shr 1
+		Method drawRegionImpl:Void(image:Image, x_src:Int, y_src:Int, width:Int, height:Int, transform:Int, x_dest:Int, y_dest:Int, anchor:Int=(TOP|LEFT)) Final
+			If (transform <> TRANS_MIRROR_ROT180) Then
+				'transform = TRANS_NONE
+				
+				restoreCanvas()
+				
+				Return
 			EndIf
 			
-			If ((anchor & RIGHT) <> 0) Then
-				x_dest -= width
-			ElseIf ((anchor & TRANS_MIRROR_ROT180) <> 0) Then
-				x_dest -= (width / 2) ' Shr 1
-			EndIf
+			'Self.context.DrawImage(image, 0, 0)
+			'Self.context.SetColor(0.5, 0.2, 1.0)
 			
-			Self.context.Translate(Float(x_dest - x_src), Float(y_dest - y_src))
-			Self.context.TranslateRotate(Float(degree), Float(rotate_x + x_src), Float(rotate_y + y_src))
-			Self.context.TranslateScale(Float(scale_x), Float(scale_y), Float((width / 2) + x_src), Float((height / 2) + y_src))
+			Self.context.SetAlpha(0.5)
+			Self.context.DrawRect(0.0, 0.0, width, height, image, x_src, y_src, width, height)
+			Self.context.SetAlpha(1.0)
 			
-			Self.context.DrawRect(0.0, 0.0, Float(width), Float(height), image, x_src, y_src, width, height)
+			'Self.context.SetColor(1.0, 1.0, 1.0)
 			
-			restoreCanvas()
-		End
-		
-		Method drawRegionImpl:Void(image:Image, x_src:Int, y_src:Int, width:Int, height:Int, transform:Int, x_dest:Int, y_dest:Int, anchor:Int=(TOP|RIGHT)) Final
 			#Rem
 				If (Not Self.effectFlag) Then
 					Return
 				EndIf
 			#End
 			
+			'Print("Self.trans: " + Self.transX + ", " + Self.transY)
+			
 			x_dest += Self.transX
 			y_dest += Self.transY
 			
 			saveCanvas()
 			
-			Local drawWidth:= width
-			Local drawHeight:= height
+			Local drawWidth:Int
+			Local drawHeight:Int
 			
 			Local xOffset:= 0
 			Local yOffset:= 0
 			
 			Select (transform)
-				Case TRANS_NONE
-					xOffset = -x_src
-					yOffset = -y_src
-				Case TRANS_MIRROR_ROT180
-					Self.context.Scale(-1.0, 1.0)
-					Self.context.Rotate(-180.0)
-					
-					xOffset = -x_src
-					yOffset = drawHeight + y_src
-				Case TRANS_MIRROR
-					Self.context.Scale(-1.0, 1.0)
-					
-					xOffset = drawWidth + x_src
-					yOffset = -y_src
-				Case TRANS_ROT180
-					Self.context.Rotate(180.0)
-					
-					xOffset = drawWidth + x_src
-					yOffset = drawHeight + y_src
-				Case TRANS_MIRROR_ROT270
-					Self.context.Scale(-1.0, 1.0)
-					Self.context.Rotate(-270.0)
-					
+				Case TRANS_NONE, TRANS_MIRROR_ROT180, TRANS_MIRROR, TRANS_ROT180
+					drawWidth = width
+					drawHeight = height
+				Case TRANS_MIRROR_ROT270, TRANS_ROT90, TRANS_ROT270, TRANS_MIRROR_ROT90
 					drawWidth = height
 					drawHeight = width
-					
-					xOffset = -y_src
-					yOffset = -x_src
-				Case TRANS_ROT90
-					Self.context.Rotate(90.0)
-					
-					drawWidth = height
-					drawHeight = width
-					
-					xOffset = drawWidth + y_src
-					yOffset = -x_src
-				Case TRANS_ROT270
-					Self.context.Rotate(270.0)
-					
-					drawWidth = height
-					drawHeight = width
-					
-					xOffset = -y_src
-					yOffset = drawHeight + x_src
-				Case TRANS_MIRROR_ROT90
-					Self.context.Scale(-1.0, 1.0)
-					Self.context.Rotate(-90.0)
-					
-					drawWidth = height
-					drawHeight = width
-					
-					xOffset = drawWidth + y_src
-					yOffset = drawHeight + x_src
 			End Select
 			
-			If (anchor = 0) Then
-				anchor = (TOP|RIGHT)
-			EndIf
+			Local handleX:Int, handleY:Int
 			
 			If ((anchor & BOTTOM) <> 0) Then
-				y_dest -= drawHeight
+				handleY = drawHeight
 			ElseIf ((anchor & VCENTER) <> 0) Then
-				y_dest -= drawHeight Shr 1 ' >>> 1 ' / 2
+				handleY = (drawHeight / 2)
 			EndIf
 			
 			If ((anchor & RIGHT) <> 0) Then
-				x_dest -= drawWidth
-			ElseIf ((anchor & TRANS_MIRROR_ROT180) <> 0) Then
-				x_dest -= drawWidth Shr 1 ' >>> 1 ' / 2
+				handleX = drawWidth
+			ElseIf ((anchor & HCENTER) <> 0) Then
+				handleX = (drawWidth / 2)
 			EndIf
+			
+			Select (transform)
+				Case TRANS_MIRROR_ROT180
+					handleY -= drawHeight
+				Case TRANS_MIRROR
+					handleX -= drawWidth
+				Case TRANS_ROT180
+					handleX -= drawWidth
+					handleY -= drawHeight
+				Case TRANS_ROT90
+					handleX -= drawWidth
+				Case TRANS_ROT270
+					handleY -= drawHeight
+				Case TRANS_MIRROR_ROT90
+					handleX -= drawWidth
+					handleY -= drawHeight
+			End Select
+			
+			Self.context.Translate(handleX, handleY)
+			
+			Select (transform)
+				Case TRANS_NONE
+					'Self.context.Translate(-x_src, -y_src)
+				Case TRANS_MIRROR_ROT180
+					Self.context.Scale(-1.0, 1.0)
+					Self.context.Rotate(-180.0)
+				Case TRANS_MIRROR
+					Self.context.Scale(-1.0, 1.0)
+				Case TRANS_ROT180
+					Self.context.Rotate(180.0)
+				Case TRANS_MIRROR_ROT270
+					Self.context.Scale(-1.0, 1.0)
+					Self.context.Rotate(-270.0)
+				Case TRANS_ROT90
+					Self.context.Rotate(90.0)
+				Case TRANS_ROT270
+					Self.context.Rotate(270.0)
+				Case TRANS_MIRROR_ROT90
+					Self.context.Scale(-1.0, 1.0)
+					Self.context.Rotate(-90.0)
+			End Select
 			
 			If (KeyDown(KEY_X)) Then
 				DebugStop()
 			EndIf
 			
-			Self.context.DrawRect(Float(x_dest + xOffset), Float(y_dest + yOffset), drawWidth, drawHeight, image, x_src, y_src, width, height)
+			'Self.context.Translate(x_dest, y_dest)
+			
+			Self.context.Translate(-handleX, -handleY)
+			
+			Self.context.DrawRect(0.0, 0.0, drawWidth, drawHeight, image, x_src, y_src, width, height)
 			
 			restoreCanvas()
 		End
 		
-		Method drawImageImpl:Void(MFImg:MFImage, x:Int, y:Int, anchor:Int=(TOP|RIGHT)) Final
+		Method drawImageImpl:Void(MFImg:MFImage, x:Int, y:Int, anchor:Int=(TOP|LEFT)) Final
 			#Rem
 				If (Self.effectFlag) Then
 					Return

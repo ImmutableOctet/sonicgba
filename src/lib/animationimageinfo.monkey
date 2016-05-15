@@ -88,13 +88,11 @@ Class ImageInfo
 						coord += USHORT_MAX_POSITIVE_NUMBERS
 					EndIf
 					
-					If (flip_order) Then
-						'coord = NToHS(coord) ' Shr 6
-					EndIf
-					
 					Self.m_Clips[i][j] = coord
 					
-					'Print("Self.m_Clips["+i+"]["+j+"]: " + coord)
+					If (coord < 0 Or coord > 1000) Then
+						Print("Self.m_Clips["+i+"]["+j+"]: " + coord + " {"+Int(flip_order)+"}")
+					EndIf
 				Next
 			Next
 		End
@@ -127,7 +125,7 @@ Class ImageInfo
 				
 				Return
 			Else
-				loadInfo_loadClips(ds, Not allow_img)
+				loadInfo_loadClips(ds)
 			EndIf
 			
 			If (Not allow_img) Then

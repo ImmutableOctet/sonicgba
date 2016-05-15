@@ -355,7 +355,7 @@ Class Animation
 			Local ds:Stream = Null
 			
 			Try
-				Local ds2:= MFDevice.getResourceAsStream(fileName)
+				Local ds2:= MFDevice.getResourceAsStream(fileName, True) ' False
 				
 				ds = ds2
 				
@@ -370,6 +370,8 @@ Class Animation
 					
 					a.LoadAnimationG2(ds2) ' animationInstance[i]
 				Next
+				
+				DebugStop()
 				
 				Local imageNum:= ds2.ReadByte()
 				
@@ -418,7 +420,7 @@ Class Animation
 			Local fb_ds:Stream = Null
 			
 			Try
-				Local ds:= MFDevice.getResourceAsStream(fileName)
+				Local ds:= MFDevice.getResourceAsStream(fileName, True) ' False
 				
 				fb_ds = ds
 				
