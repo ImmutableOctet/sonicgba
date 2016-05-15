@@ -380,8 +380,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animation.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>4</X>
-        <Y>357</Y>
+        <X>2</X>
+        <Y>413</Y>
       </CursorPos>
       <DocGUID>30623047-e80e-46be-be69-a6e7be050de5</DocGUID>
       <Bookmarks />
@@ -523,8 +523,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\platformstandard\standard2.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>19</X>
-        <Y>636</Y>
+        <X>29</X>
+        <Y>626</Y>
       </CursorPos>
       <DocGUID>fc999610-9f2c-4e36-8c18-df3d24a76e38</DocGUID>
       <Bookmarks />
@@ -881,8 +881,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bossextra.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>43</X>
-        <Y>508</Y>
+        <X>34</X>
+        <Y>156</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
