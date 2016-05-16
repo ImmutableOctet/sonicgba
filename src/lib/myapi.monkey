@@ -166,7 +166,7 @@ Class MyAPI ' Implements Def
 			If (firstEntry.Length > 0) Then
 				Local firstChar:= firstEntry[0]
 				
-				If (firstChar = $3F Or firstChar = $FEFF Or firstChar = $FFFFFFFFFFFFFEFF) Then
+				If (firstChar = $3F Or firstChar = $FEFF Or firstChar = -257) Then ' $FFFFFFFFFFFFFEFF
 					re[0] = firstEntry[1..]
 				EndIf
 			EndIf

@@ -648,13 +648,15 @@ Class MFGraphics
 	Private
 		' Methods:
 		Method drawRegionImpl:Void(image:Image, x_src:Int, y_src:Int, width:Int, height:Int, transform:Int, x_dest:Int, y_dest:Int, anchor:Int=(TOP|LEFT)) Final
-			If (transform <> TRANS_MIRROR_ROT180) Then
+			If (transform <> TRANS_NONE) Then ' TRANS_MIRROR_ROT180
 				'transform = TRANS_NONE
 				
-				restoreCanvas()
+				'restoreCanvas()
 				
 				Return
 			EndIf
+			
+			'DebugStop()
 			
 			'Self.context.DrawImage(image, 0, 0)
 			'Self.context.SetColor(0.5, 0.2, 1.0)
@@ -709,52 +711,52 @@ Class MFGraphics
 			
 			Select (transform)
 				Case TRANS_MIRROR_ROT180
-					handleY -= drawHeight
+					handleY += drawHeight
 				Case TRANS_MIRROR
-					handleX -= drawWidth
+					handleX += drawWidth
 				Case TRANS_ROT180
-					handleX -= drawWidth
-					handleY -= drawHeight
+					handleX += drawWidth
+					handleY += drawHeight
 				Case TRANS_ROT90
-					handleX -= drawWidth
+					handleX += drawWidth
 				Case TRANS_ROT270
-					handleY -= drawHeight
+					handleY += drawHeight
 				Case TRANS_MIRROR_ROT90
-					handleX -= drawWidth
-					handleY -= drawHeight
+					handleX += drawWidth
+					handleY += drawHeight
 			End Select
 			
-			Self.context.Translate(handleX, handleY)
+			'Self.context.Translate(handleX, handleY)
 			
 			Select (transform)
 				Case TRANS_NONE
 					'Self.context.Translate(-x_src, -y_src)
 				Case TRANS_MIRROR_ROT180
-					Self.context.Scale(-1.0, 1.0)
-					Self.context.Rotate(-180.0)
+					'Self.context.Rotate(-180.0)
+					'Self.context.Scale(-1.0, 1.0)
 				Case TRANS_MIRROR
-					Self.context.Scale(-1.0, 1.0)
+					'Self.context.Scale(-1.0, 1.0)
 				Case TRANS_ROT180
-					Self.context.Rotate(180.0)
+					'Self.context.Rotate(180.0)
 				Case TRANS_MIRROR_ROT270
-					Self.context.Scale(-1.0, 1.0)
-					Self.context.Rotate(-270.0)
+					'Self.context.Rotate(-270.0)
+					'Self.context.Scale(-1.0, 1.0)
 				Case TRANS_ROT90
-					Self.context.Rotate(90.0)
+					'Self.context.Rotate(90.0)
 				Case TRANS_ROT270
-					Self.context.Rotate(270.0)
+					'Self.context.Rotate(270.0)
 				Case TRANS_MIRROR_ROT90
-					Self.context.Scale(-1.0, 1.0)
-					Self.context.Rotate(-90.0)
+					'Self.context.Rotate(-90.0)
+					'Self.context.Scale(-1.0, 1.0)
 			End Select
 			
 			If (KeyDown(KEY_X)) Then
 				DebugStop()
 			EndIf
 			
-			'Self.context.Translate(x_dest, y_dest)
+			'Self.context.Translate(-handleX, -handleY)
 			
-			Self.context.Translate(-handleX, -handleY)
+			Self.context.Translate(x_dest, y_dest)
 			
 			Self.context.DrawRect(0.0, 0.0, drawWidth, drawHeight, image, x_src, y_src, width, height)
 			

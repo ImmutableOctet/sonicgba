@@ -164,10 +164,6 @@ Class Frame
 		End
 		
 		Method loadFrameG2:Void(ds:Stream)
-			If (ds = Null) Then
-				Return
-			EndIf
-			
 			Self.m_nClips = ds.ReadByte() ' (ds.ReadByte() & 255)
 			
 			If (Self.m_nClips < 0) Then
@@ -201,6 +197,10 @@ Class Frame
 						
 						clipInfo[0] = ds.ReadShort()
 						clipInfo[1] = ds.ReadShort()
+						
+						If (clipInfo[0] < 0 Or clipInfo[1] < 0 Or clipInfo[0] > 20000 Or clipInfo[1] > 20000) Then
+							'DebugStop()
+						EndIf
 						
 						If (Animation.isFrameWanted) Then
 							Local j:= 0
@@ -246,7 +246,7 @@ Class Frame
 						' Nothing so far.
 				End Select
 				
-				Print("clipInfo[0]: " + clipInfo[0] + ", clipInfo[1]: " + clipInfo[1] + ", clipInfo[2]: " + clipInfo[2] + ", clipInfo[3]: " + clipInfo[3])
+				'Print("clipInfo[0]: " + clipInfo[0] + ", clipInfo[1]: " + clipInfo[1] + ", clipInfo[2]: " + clipInfo[2] + ", clipInfo[3]: " + clipInfo[3])
 			Next
 		End
 
@@ -464,7 +464,7 @@ Class Frame
 			g.fillRect(iX + x, iY + y, Self.m_ClipInfo[i][2], Self.m_ClipInfo[i][3])
 			g.setColor(colorBack)
 		End
-	
+		
 		Method getMIDPTransId:Int(tmp_attr:Int)
 			Local attr:Int = 0
 			

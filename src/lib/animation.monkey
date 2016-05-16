@@ -371,8 +371,6 @@ Class Animation
 					a.LoadAnimationG2(ds2) ' animationInstance[i]
 				Next
 				
-				DebugStop()
-				
 				Local imageNum:= ds2.ReadByte()
 				
 				Local imageInfo:= New ImageInfo[imageNum]

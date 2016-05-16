@@ -2448,8 +2448,6 @@ Class TitleState Extends State
 					If (Self.openingDrawer[1].checkEnd()) Then
 						Self.openingDrawer[2].setActionId(0)
 						
-						DebugStop()
-						
 						If (Self.openingStateChanging And State.fadeChangeOver()) Then
 							Self.openingState = OPENING_STATE_TAILS
 							Self.openingStateChanging = False
