@@ -83,7 +83,7 @@ Class ImageInfo
 					Local coord:= ds.ReadShort()
 					
 					If (Not regular_byteorder) Then
-						coord = NToHS(coord)
+						coord = NToHS_S(coord)
 					EndIf
 					
 					If (coord < 0) Then

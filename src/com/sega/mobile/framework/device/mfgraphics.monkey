@@ -252,7 +252,7 @@ Class MFGraphics
 			Self.clipHeight = screenHeight
 			
 			If (Self.context <> Null) Then
-				'Self.context.SetProjection2d(0, MFDevice.canvasWidth, 0, MFDevice.canvasWidth)
+				Self.context.SetProjection2d(0, screenWidth, 0, screenHeight) ' MFDevice.canvasWidth ' MFDevice.canvasHeight
 				'Self.context.SetScissor(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
 			EndIf
 		End
@@ -316,8 +316,8 @@ Class MFGraphics
 			'Self.context.SetScissor(cx, cy, tx, ty) ' SetViewport
 			'Self.context.SetScissor(cx, cy, width - (tx - cx), height - (ty - cy)) ' SetViewport
 			
-			'Self.context.SetProjection2d(cx, tx, cy, ty)
-			'Self.context.SetScissor(cx, cy, tx - cx, ty - cy)
+			'''Self.context.SetProjection2d(cx, tx, cy, ty)
+			'''Self.context.SetScissor(cx, cy, tx - cx, ty - cy)
 			
 			'Self.transX = (width - (tx - cx))
 			'Self.transY = (height - (ty - cy))
@@ -580,7 +580,7 @@ Class MFGraphics
 			Print("MFDevice.bufferWidth: " + MFDevice.bufferWidth)
 			Print("MFDevice.bufferHeight: " + MFDevice.bufferHeight)
 			
-			Self.context.SetViewport(-MFDevice.horizontalOffset, -MFDevice.verticvalOffset, MFDevice.bufferWidth, MFDevice.bufferHeight)
+			'Self.context.SetViewport(-MFDevice.horizontalOffset, -MFDevice.verticvalOffset, MFDevice.bufferWidth, MFDevice.bufferHeight)
 		End
 		
 		Method getExceedBoundaryFlag:Bool() Final
@@ -653,8 +653,11 @@ Class MFGraphics
 				
 				'restoreCanvas()
 				
-				Return
+				'Return
 			EndIf
+			
+			Local drawWidth:= width
+			Local drawHeight:= height
 			
 			'DebugStop()
 			
@@ -662,7 +665,7 @@ Class MFGraphics
 			'Self.context.SetColor(0.5, 0.2, 1.0)
 			
 			Self.context.SetAlpha(0.5)
-			Self.context.DrawRect(0.0, 0.0, width, height, image, x_src, y_src, width, height)
+			Self.context.DrawRect(0.0, 0.0, drawWidth, drawHeight, image, x_src, y_src, width, height)
 			Self.context.SetAlpha(1.0)
 			
 			'Self.context.SetColor(1.0, 1.0, 1.0)
@@ -673,29 +676,64 @@ Class MFGraphics
 				EndIf
 			#End
 			
-			'Print("Self.trans: " + Self.transX + ", " + Self.transY)
+			If (Self.transX <> 0 Or Self.transY <> 0) Then
+				Print("Self.trans: " + Self.transX + ", " + Self.transY)
+			EndIf
 			
 			x_dest += Self.transX
 			y_dest += Self.transY
 			
 			saveCanvas()
 			
-			Local drawWidth:Int
-			Local drawHeight:Int
-			
 			Local xOffset:= 0
 			Local yOffset:= 0
 			
 			Select (transform)
-				Case TRANS_NONE, TRANS_MIRROR_ROT180, TRANS_MIRROR, TRANS_ROT180
-					drawWidth = width
-					drawHeight = height
-				Case TRANS_MIRROR_ROT270, TRANS_ROT90, TRANS_ROT270, TRANS_MIRROR_ROT90
+				Case TRANS_NONE
+					'xOffset = -x_src
+					'yOffset = -y_src
+				Case TRANS_MIRROR_ROT180
+					xOffset = (drawWidth)
+					yOffset = (drawHeight)
+				Case TRANS_MIRROR
+					xOffset = (drawWidth)
+					'yOffset = -y_src
+				Case TRANS_ROT180
+					'xOffset = -x_src
+					yOffset = (drawHeight)
+				Case TRANS_MIRROR_ROT270
 					drawWidth = height
 					drawHeight = width
+					
+					xOffset = -y_src
+					yOffset = (drawHeight) ' + x_src
+				Case TRANS_ROT90
+					drawWidth = height
+					drawHeight = width
+					
+					xOffset = (drawWidth)
+					yOffset = (drawHeight)
+				Case TRANS_ROT270
+					drawWidth = height
+					drawHeight = width
+					
+					'xOffset = -y_src
+					'yOffset = -x_src
+				Case TRANS_MIRROR_ROT90
+					drawWidth = height
+					drawHeight = width
+					
+					xOffset = (drawWidth)
+					'yOffset = -x_src
 			End Select
 			
+			Self.context.Translate((x_dest), (y_dest))
+			
 			Local handleX:Int, handleY:Int
+			
+			If (anchor = 0) Then
+				anchor = (TOP|LEFT)
+			EndIf
 			
 			If ((anchor & BOTTOM) <> 0) Then
 				handleY = drawHeight
@@ -709,54 +747,35 @@ Class MFGraphics
 				handleX = (drawWidth / 2)
 			EndIf
 			
-			Select (transform)
-				Case TRANS_MIRROR_ROT180
-					handleY += drawHeight
-				Case TRANS_MIRROR
-					handleX += drawWidth
-				Case TRANS_ROT180
-					handleX += drawWidth
-					handleY += drawHeight
-				Case TRANS_ROT90
-					handleX += drawWidth
-				Case TRANS_ROT270
-					handleY += drawHeight
-				Case TRANS_MIRROR_ROT90
-					handleX += drawWidth
-					handleY += drawHeight
-			End Select
-			
-			'Self.context.Translate(handleX, handleY)
+			'x_dest -= handleX
+			'y_dest -= handleY
 			
 			Select (transform)
 				Case TRANS_NONE
-					'Self.context.Translate(-x_src, -y_src)
+					' Nothing so far.
 				Case TRANS_MIRROR_ROT180
-					'Self.context.Rotate(-180.0)
-					'Self.context.Scale(-1.0, 1.0)
+					Self.context.Rotate(-180.0)
+					Self.context.Scale(-1.0, 1.0)
 				Case TRANS_MIRROR
-					'Self.context.Scale(-1.0, 1.0)
+					Self.context.Scale(-1.0, 1.0)
 				Case TRANS_ROT180
-					'Self.context.Rotate(180.0)
+					Self.context.Rotate(180.0)
 				Case TRANS_MIRROR_ROT270
-					'Self.context.Rotate(-270.0)
-					'Self.context.Scale(-1.0, 1.0)
+					Self.context.Rotate(-270.0)
+					Self.context.Scale(-1.0, 1.0)
 				Case TRANS_ROT90
-					'Self.context.Rotate(90.0)
+					Self.context.Rotate(90.0)
 				Case TRANS_ROT270
-					'Self.context.Rotate(270.0)
+					Self.context.Rotate(270.0)
 				Case TRANS_MIRROR_ROT90
-					'Self.context.Rotate(-90.0)
-					'Self.context.Scale(-1.0, 1.0)
+					Self.context.Rotate(-90.0)
+					Self.context.Scale(-1.0, 1.0)
 			End Select
 			
-			If (KeyDown(KEY_X)) Then
-				DebugStop()
-			EndIf
+			Self.context.Translate(-handleX, -handleY)
+			Self.context.Translate((-xOffset), (-yOffset))
 			
-			'Self.context.Translate(-handleX, -handleY)
-			
-			Self.context.Translate(x_dest, y_dest)
+			'Self.context.Translate(x_dest, y_dest)
 			
 			Self.context.DrawRect(0.0, 0.0, drawWidth, drawHeight, image, x_src, y_src, width, height)
 			

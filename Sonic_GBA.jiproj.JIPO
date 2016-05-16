@@ -150,22 +150,23 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\define\mdphone.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>29</X>
+        <X>26</X>
         <Y>39</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphics.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>5</X>
-        <Y>170</Y>
+        <X>12</X>
+        <Y>174</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>6be5a292-dfe9-4215-82d5-6d574c205067</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphicsmacros.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>6</X>
-        <Y>16</Y>
+        <X>9</X>
+        <Y>12</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -178,18 +179,18 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>4</X>
-        <Y>1030</Y>
+        <X>7</X>
+        <Y>935</Y>
       </CursorPos>
       <DocGUID>ab21d9b9-bf97-41dc-b333-9b0289eba3ce</DocGUID>
       <Bookmarks>
         <Point>
           <X>0</X>
-          <Y>75</Y>
+          <Y>78</Y>
         </Point>
         <Point>
           <X>0</X>
-          <Y>76</Y>
+          <Y>79</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
@@ -202,16 +203,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>6</X>
-        <Y>737</Y>
+        <X>27</X>
+        <Y>586</Y>
       </CursorPos>
       <DocGUID>7f22b662-db9b-4668-90b0-4c450142cb4d</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfimage.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>18</X>
-        <Y>89</Y>
+        <X>10</X>
+        <Y>192</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -409,16 +410,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationimageinfo.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>30</X>
-        <Y>74</Y>
+        <X>21</X>
+        <Y>85</Y>
       </CursorPos>
       <DocGUID>07388b2f-2d6d-4159-a47e-61316c9b0926</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\constutil.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>26</X>
-        <Y>107</Y>
+        <X>14</X>
+        <Y>80</Y>
       </CursorPos>
       <DocGUID>20f920f2-f834-496a-9981-132191a6c01e</DocGUID>
       <Bookmarks />
@@ -502,8 +503,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>36</X>
-        <Y>66</Y>
+        <X>3</X>
+        <Y>62</Y>
       </CursorPos>
       <DocGUID>3d91f39d-9ed5-4956-ba8d-97c12b7236d1</DocGUID>
       <Bookmarks>
@@ -520,13 +521,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\platformstandard\standard2.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\platformstandard\standard2.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>37</X>
         <Y>626</Y>
       </CursorPos>
-      <DocGUID>fc999610-9f2c-4e36-8c18-df3d24a76e38</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\pyxeditor\pyxanimation.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1893,13 +1893,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\stagemanager.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\stagemanager.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>12</X>
         <Y>174</Y>
       </CursorPos>
-      <DocGUID>fe8ac358-dfc6-4e02-885d-eb6334327156</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\stareffect.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -2197,18 +2196,17 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>38</X>
         <Y>2554</Y>
       </CursorPos>
-      <DocGUID>963e71ef-3684-496b-a068-0b96f633e6b7</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\application.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>18</X>
-        <Y>108</Y>
+        <X>20</X>
+        <Y>162</Y>
       </CursorPos>
       <DocGUID>573df5ef-d48f-46ff-ab61-8c9f8a570862</DocGUID>
       <Bookmarks>
@@ -2218,7 +2216,7 @@
         </Point>
         <Point>
           <X>0</X>
-          <Y>221</Y>
+          <Y>231</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>

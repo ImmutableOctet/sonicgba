@@ -106,7 +106,7 @@ Class Application Extends App ' Main Extends MFMain
 	Public
 		' Methods:
 		Method OnCreate:Int()
-			SetUpdateRate(30) ' 0 ' 60
+			SetUpdateRate(60) ' 0 ' 60
 			
 			Seed = Millisecs()
 			
@@ -218,8 +218,18 @@ Class Application Extends App ' Main Extends MFMain
 		End
 		
 		Method getEntryGameState:MFGameState()
-			' Magic numbers:
-			MFDevice.setCanvasSize(Min(Max(240, (MFDevice.getDeviceWidth() * 160) / MFDevice.getDeviceHeight()), 284), 160) ' ssdef.PLAYER_MOVE_HEIGHT
+			Const GBA_WIDTH:= 240
+			Const GBA_HEIGHT:= 160
+			
+			Const GBA_EXT_WIDTH:= 284
+			
+			Local devWidth:= MFDevice.getDeviceWidth()
+			Local devHeight:= MFDevice.getDeviceHeight()
+			
+			Local width:= Max(GBA_WIDTH, (devWidth * GBA_HEIGHT) / devHeight)
+			Local height:= GBA_HEIGHT
+			
+			MFDevice.setCanvasSize(Min(width, GBA_EXT_WIDTH), height) ' ssdef.PLAYER_MOVE_HEIGHT
 			MFDevice.setEnableCustomBack(True)
 			
 			Return New MainState(Self)

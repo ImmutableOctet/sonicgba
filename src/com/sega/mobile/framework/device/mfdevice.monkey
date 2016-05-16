@@ -70,32 +70,39 @@ Public
 Class MFDevice Final
 	Public
 		' Global variable(s):
-		Global bufferWidth:Int
-		Global bufferHeight:Int
 		
+		' Virtual resolution.
+		Global bufferWidth:Int = MDPhone.SCREEN_WIDTH
+		Global bufferHeight:Int = MDPhone.SCREEN_HEIGHT
+		
+		' Inner screen area resolution.
 		Global canvasWidth:Int = MDPhone.SCREEN_WIDTH
 		Global canvasHeight:Int = MDPhone.SCREEN_HEIGHT
+		
+		' Device screen resolution.
+		Global screenWidth:Int
+		Global screenHeight:Int
+		
+		Global horizontalOffset:Int
+		Global verticvalOffset:Int
 		
 		Global clearBuffer:Bool = True
 		
 		'Global mainThread:Thread
-		
-		Global screenHeight:Int
-		Global screenWidth:Int
-		
-		Global horizontalOffset:Int
-		Global verticvalOffset:Int
 		
 		Global enableTrackBall:Bool = True ' False
 		Global shieldInput:Bool = True
 	Private
 		' Constant variable(s):
 		Const VERSION_INFO:String = "104_RELEASE" ' "100_RELEASE" ' "DEBUG"
+		
 		Const MAX_LAYER:Int = 1
+		
 		Const PER_VIBRATION_TIME:Int = 500
+		
 		Const RECORD_NAME:String = "rms"
 		
-		Global NULL_RECORD:DataBuffer = New DataBuffer(4) ' Const
+		Global NULL_RECORD:DataBuffer = New DataBuffer(4) ' Const ' Int(0)
 		
 		' Global variable(s):
 		
@@ -108,18 +115,24 @@ Class MFDevice Final
 		Global componentVector:Stack<MFComponent> ' Vector
 		
 		Global currentState:MFGameState
+		Global nextState:MFGameState
+		
 		Global currentSystemTime:Long ' Int
 		Global drawRect:Rect
 		
-		Global exitFlag:Bool
 		Global graphics:MFGraphics
+		
+		Global interruptConfirm:MFTouchKey
 		
 		Global inSuspendFlag:Bool
 		Global inVibrationFlag:Bool
-		Global interruptConfirm:MFTouchKey
+		
+		Global exitFlag:Bool
+		
 		Global interruptPauseFlag:Bool
-		Global lastSystemTime:Long
 		Global logicTrace:Bool
+		
+		Global lastSystemTime:Long
 		
 		Global vibraionFlag:Bool
 		Global vibrateStartTime:Long
@@ -130,7 +143,6 @@ Class MFDevice Final
 		
 		'Global methodCallTrace:Bool
 		
-		Global nextState:MFGameState
 		Global records:StringMap<DataBuffer>
 		Global responseInterrupt:Bool
 		
@@ -138,10 +150,10 @@ Class MFDevice Final
 		'Global bufferImage:Image ' <-- Used to be used to represent the screen.
 		
 		#Rem
-		Global postLayerGraphics:MFGraphics[] = New MFGraphics[MAX_LAYER]
-		Global postLayerImage:Image[] = New Image[MAX_LAYER]
-		Global preLayerGraphics:MFGraphics[] = New MFGraphics[MAX_LAYER]
-		Global preLayerImage:Image[] = New Image[MAX_LAYER]
+			Global postLayerGraphics:MFGraphics[] = New MFGraphics[MAX_LAYER]
+			Global postLayerImage:Image[] = New Image[MAX_LAYER]
+			Global preLayerGraphics:MFGraphics[] = New MFGraphics[MAX_LAYER]
+			Global preLayerImage:Image[] = New Image[MAX_LAYER]
 		#End
 		
 		Global postLayer:MFImage[] = New MFImage[MAX_LAYER]
@@ -267,11 +279,14 @@ Class MFDevice Final
 		End
 		
 		Function Update:Void()
-			handleInput()
+			'''handleInput()
 			
+			''' Update (Input) components:
+			#Rem
 			For Local component:= EachIn componentVector 
 				component.tick()
 			Next
+			#End
 			
 			'MFSound.tick()
 			
@@ -294,7 +309,7 @@ Class MFDevice Final
 				currentState.onTick()
 			EndIf
 			
-			MFGamePad.keyTick()
+			'''MFGamePad.keyTick()
 		End
 		
 		Function Render:Void(graphics:MFGraphics) ' Canvas ' Graphics
@@ -434,6 +449,10 @@ Class MFDevice Final
 		
 		Function flushScreen:Void()
 			deviceDraw(graphics)
+			
+			graphics.context.SetColor(0.8, 0.0, 0.0)
+			graphics.context.DrawRect(0, 0, 80, 10)
+			graphics.context.SetColor(1.0, 1.0, 1.0)
 			
 			graphics.flush()
 		End
@@ -730,6 +749,7 @@ Class MFDevice Final
 		
 		' Extensions:
 		Function initializeScreen:Void(context:Canvas, width:Int, height:Int) ' Graphics
+			#Rem
 			Local isSideways:Bool = True ' False ' (MFMain.getInstance().getRequestedOrientation() = SCREEN_ORIENTATION_PORTRAIT)
 			
 			If (Not isSideways) Then
@@ -755,6 +775,13 @@ Class MFDevice Final
 					screenHeight = height
 				EndIf
 			EndIf
+			#End
+			
+			canvasWidth = MDPhone.SCREEN_WIDTH
+			canvasHeight = MDPhone.SCREEN_HEIGHT
+			
+			screenWidth = width
+			screenHeight = height
 			
 			Print("screenwidth: " + screenWidth + ", screenheight: " + screenHeight)
 		End
@@ -1041,7 +1068,7 @@ Class MFDevice Final
 			
 			'context.SetProjection2d(0, 284, 0, 160)
 			
-			context.SetProjection2d(0, vWidth, 0, vHeight) ' SCREEN_WIDTH ' SCREEN_HEIGHT
+			'context.SetProjection2d(0, vWidth, 0, vHeight) ' SCREEN_WIDTH ' SCREEN_HEIGHT
 			'context.SetProjection2d(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT)
 			
 			'context.Translate(Float(-horizontalOffset), Float(-verticvalOffset)) ' graphics.getGraphics()
