@@ -788,21 +788,21 @@ Class MFGraphics
 				Case TRANS_NONE
 					' Nothing so far.
 				Case TRANS_MIRROR_ROT180
-					'Self.context.Rotate(-180.0)
+					Self.context.Rotate(-180.0)
 					Self.context.Scale(-1.0, 1.0)
 				Case TRANS_MIRROR
 					Self.context.Scale(-1.0, 1.0)
 				Case TRANS_ROT180
-					'Self.context.Rotate(180.0)
+					Self.context.Rotate(180.0)
 				Case TRANS_MIRROR_ROT270
-					'Self.context.Rotate(-270.0)
+					Self.context.Rotate(-270.0)
 					Self.context.Scale(-1.0, 1.0)
 				Case TRANS_ROT90
-					'Self.context.Rotate(90.0)
+					Self.context.Rotate(90.0)
 				Case TRANS_ROT270
-					'Self.context.Rotate(270.0)
+					Self.context.Rotate(270.0)
 				Case TRANS_MIRROR_ROT90
-					'Self.context.Rotate(-90.0)
+					Self.context.Rotate(-90.0)
 					Self.context.Scale(-1.0, 1.0)
 			End Select
 			

@@ -362,7 +362,13 @@ Class MFDevice Final
 		Function deviceDraw:Void(screen:Canvas, graphics:MFGraphics, vx:Float, vy:Float, vw:Float, vh:Float) ' Canvas ' Graphics
 			' For debugging purposes, we are scheduling this draw operation in advance.
 			' Draw the main graphics layer to the screen. (Game graphics, etc)
+			
 			screen.DrawRect(vx, vy, vw, vh, bufferImage.getNativeImage())
+			
+			' Testing related:
+			screen.SetAlpha(0.5)
+			screen.DrawImage(bufferImage.getNativeImage(), screen.Width / 2, screen.Height, 0.0, 1.0, -1.0)
+			screen.SetAlpha(1.0)
 			
 			MFDevice.Render(graphics)
 			
@@ -535,11 +541,11 @@ Class MFDevice Final
 		End
 		
 		Function getDeviceHeight:Int()
-			Return screenHeight
+			Return SCREEN_HEIGHT ' screenHeight
 		End
 		
 		Function getDeviceWidth:Int()
-			Return screenWidth
+			Return SCREEN_WIDTH ' screenWidth
 		End
 		
 		Function getEnableCustomBack:Bool()

@@ -1194,8 +1194,8 @@ Class TitleState Extends State
 			aboutStrings = MyAPI.loadText("/about")
 			
 			' These values may be changed at a later date:
-			Self.openingOffsetX = 0 ' (SCREEN_WIDTH / 2) ' ((SCREEN_WIDTH - GBA_EXT_WIDTH) / 2) ' Shr 1
-			Self.openingOffsetY = (SCREEN_HEIGHT / 2) ' ((SCREEN_HEIGHT - GBA_HEIGHT) / 2) ' Shr 1
+			Self.openingOffsetX = ((SCREEN_WIDTH - GBA_EXT_WIDTH) / 2) ' Shr 1 ' 0 ' (SCREEN_WIDTH / 2)
+			Self.openingOffsetY = ((SCREEN_HEIGHT - GBA_HEIGHT) / 2) ' Shr 1 ' 0 ' (SCREEN_HEIGHT / 2)
 			
 			Self.count = 50
 			
@@ -2431,6 +2431,9 @@ Class TitleState Extends State
 			If (Self.openingCount > 0) Then
 				Self.openingCount -= 1
 			EndIf
+			
+			'Self.openingState = OPENING_STATE_END
+			'Print("Force-skipping the opening sequence.")
 			
 			Select (Self.openingState)
 				Case OPENING_STATE_EMERALD
