@@ -17,6 +17,12 @@ Public
 Global SCREEN_WIDTH:Int = MDPhone.SCREEN_WIDTH ' 284 ' MyAPI.zoomIn(MFDevice.getScreenWidth(), True) ' Const
 Global SCREEN_HEIGHT:Int = MDPhone.SCREEN_HEIGHT ' 160 ' MyAPI.zoomIn(MFDevice.getScreenHeight(), True) ' Const
 
+Const GBA_WIDTH:= 240
+Const GBA_HEIGHT:= 160
+
+' This is the 16:9 equivalent of 'GBA_WIDTH'.
+Const GBA_EXT_WIDTH:= 284
+
 Global FONT_H:= MyAPI.zoomIn(MFGraphics.charHeight(FONT)) ' Const
 
 Global MOVING_TITLE_TOP:Bool = (SCREEN_WIDTH < SCREEN_HEIGHT) ' Const

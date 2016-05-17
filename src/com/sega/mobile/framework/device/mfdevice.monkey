@@ -25,7 +25,7 @@ Private
 	Import com.sega.mobile.define.mdphone
 	
 	Import com.sega.mobile.framework.mfgamestate
-	Import com.sega.mobile.framework.android.graphics
+	'Import com.sega.mobile.framework.android.graphics
 	Import com.sega.mobile.framework.device.mfcomponent
 	Import com.sega.mobile.framework.device.mfgamepad
 	Import com.sega.mobile.framework.device.mfgraphics
@@ -147,14 +147,7 @@ Class MFDevice Final
 		Global responseInterrupt:Bool
 		
 		' Graphis:
-		'Global bufferImage:Image ' <-- Used to be used to represent the screen.
-		
-		#Rem
-			Global postLayerGraphics:MFGraphics[] = New MFGraphics[MAX_LAYER]
-			Global postLayerImage:Image[] = New Image[MAX_LAYER]
-			Global preLayerGraphics:MFGraphics[] = New MFGraphics[MAX_LAYER]
-			Global preLayerImage:Image[] = New Image[MAX_LAYER]
-		#End
+		Global bufferImage:MFImage
 		
 		Global postLayer:MFImage[] = New MFImage[MAX_LAYER]
 		Global preLayer:MFImage[] = New MFImage[MAX_LAYER]
@@ -261,6 +254,17 @@ Class MFDevice Final
 			#End
 		End
 		
+		Function allocateLayer:MFImage(width:Int, height:Int)
+			Return MFImage.createImage(width, height)
+		End
+		
+		Function allocateLayer:MFImage()
+			Local width:= SCREEN_WIDTH ' canvasWidth
+			Local height:= SCREEN_HEIGHT ' canvasHeight
+			 
+			Return allocateLayer(width, height)
+		End
+		
 		Function CheckStates:MFGameState()
 			' Handle state changes:
 			If (nextState <> Null) Then
@@ -312,12 +316,11 @@ Class MFDevice Final
 			'''MFGamePad.keyTick()
 		End
 		
+		' This performs a raw render of the game without displaying
+		' layers or flushing draw operations to the GPU.
 		Function Render:Void(graphics:MFGraphics) ' Canvas ' Graphics
-			If (KeyDown(KEY_E)) Then
-				DebugStop()
-			EndIf
-			
-			graphics.reset()
+			' TODO: Add "safety resets" to the layers like we do here with 'graphics'.
+			graphics.reset(SCREEN_WIDTH, SCREEN_HEIGHT)
 			
 			If (Not interruptPauseFlag) Then
 				If (Not exitFlag) Then
@@ -325,7 +328,11 @@ Class MFDevice Final
 						Local layer:= preLayer[i - 1]
 						
 						If (layer <> Null) Then
-							currentState.onRender(layer.getGraphics(), -i)
+							Local g:= layer.getGraphics()
+							
+							g.reset(layer.getWidth(), layer.getHeight())
+							
+							currentState.onRender(g, -i)
 						EndIf
 					Next
 					
@@ -335,33 +342,65 @@ Class MFDevice Final
 						Local layer:= postLayer[i - MAX_LAYER]
 						
 						If (layer <> Null) Then
-							currentState.onRender(layer.getGraphics(), i)
+							Local g:= layer.getGraphics()
+							
+							g.reset(layer.getWidth(), layer.getHeight())
+							
+							currentState.onRender(g, i)
 						EndIf
 					Next
 				EndIf
 			EndIf
 		End
 		
-		Function deviceDraw:Void(g:MFGraphics) ' Canvas ' Graphics
-			Local canvas:= g.getGraphics()
+		' The 'screen' argument represents the device's screen/canvas.
+		' The 'graphics' argument represents the primary layer used to render the game.
+		' If unsure, use the other overload. (Automatically establishes a primary layer)
+		Function deviceDraw:Void(screen:Canvas, graphics:MFGraphics) ' Canvas ' Graphics
+			MFDevice.Render(graphics)
 			
+			' Execute the draw operations queued on the background layer(s):
 			For Local i:= preLayer.Length Until 0 Step -1 ' MAX_LAYER ' To 0
 				Local layer:= preLayer[i - preLayer.Length]
 				
 				If (layer <> Null) Then
-					canvas.DrawImage(layer.getNativeImage(), 0.0, 0.0)
+					' Execute commands to this layer.
+					layer.getGraphics().flush()
+					
+					' Draw this background layer to the screen.
+					screen.DrawImage(layer.getNativeImage(), 0.0, 0.0)
 				EndIf
 			Next
 			
-			MFDevice.Render(g)
+			' Debugging related:
+			'graphics.context.SetColor(0.8, 0.0, 0.0, 0.5)
+			'graphics.context.DrawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+			'graphics.context.SetColor(1.0, 1.0, 1.0)
 			
+			' Execute the draw operations queued up for the main graphics layer.
+			graphics.flush()
+			
+			' Draw the main graphics layer to the screen. (Game graphics, etc)
+			screen.DrawImage(bufferImage.getNativeImage(), 0.0, 0.0)
+			
+			' Execute the draw operations queued on the foreground layer(s):
 			For Local i:= postLayer.Length To postLayer.Length ' Until 0 Step -1 ' MAX_LAYER
 				Local layer:= postLayer[i - MAX_LAYER]
 				
 				If (layer <> Null) Then
-					canvas.DrawImage(layer.getNativeImage(), 0.0, 0.0)
+					' Execute commands to this layer.
+					layer.getGraphics().flush()
+					
+					' Draw this foreground/post layer to the screen.
+					screen.DrawImage(layer.getNativeImage(), 0.0, 0.0)
 				EndIf
 			Next
+		End
+		
+		' This overload calls the main implementation, but instead of leaving
+		' it up to the user, this passes 'graphics' as the primary layer.
+		Function deviceDraw:Void(screen:Canvas) ' Canvas ' Graphics
+			deviceDraw(screen, graphics)
 		End
 		
 		Function handleInput:Void()
@@ -447,16 +486,6 @@ Class MFDevice Final
 			nextState = gameState
 		End
 		
-		Function flushScreen:Void()
-			deviceDraw(graphics)
-			
-			graphics.context.SetColor(0.8, 0.0, 0.0)
-			graphics.context.DrawRect(0, 0, 80, 10)
-			graphics.context.SetColor(1.0, 1.0, 1.0)
-			
-			graphics.flush()
-		End
-		
 		Function clearScreen:Void()
 			For Local i:= preLayer.Length Until 0 Step -1 ' MAX_LAYER ' To 0
 				Local revIndex:= (i - MAX_LAYER) ' preLayerImage.Length
@@ -468,12 +497,6 @@ Class MFDevice Final
 					img.getGraphics().clear()
 				EndIf
 			Next
-			
-			#Rem
-				If (bufferImage <> Null) Then
-					bufferImage.earseColor(0)
-				EndIf
-			#End
 			
 			graphics.clear()
 			
@@ -748,7 +771,7 @@ Class MFDevice Final
 		' Functions:
 		
 		' Extensions:
-		Function initializeScreen:Void(context:Canvas, width:Int, height:Int) ' Graphics
+		Function initializeScreen:Void(context:Canvas, width:Int, height:Int, fullscreenMode:Bool) ' Graphics
 			#Rem
 			Local isSideways:Bool = True ' False ' (MFMain.getInstance().getRequestedOrientation() = SCREEN_ORIENTATION_PORTRAIT)
 			
@@ -777,13 +800,12 @@ Class MFDevice Final
 			EndIf
 			#End
 			
-			canvasWidth = MDPhone.SCREEN_WIDTH
-			canvasHeight = MDPhone.SCREEN_HEIGHT
-			
 			screenWidth = width
 			screenHeight = height
 			
 			Print("screenwidth: " + screenWidth + ", screenheight: " + screenHeight)
+			
+			setFullscreenMode(context, fullscreenMode) ' True
 		End
 		
 		' Record-related:
@@ -798,8 +820,6 @@ Class MFDevice Final
 			changeState(startState)
 			
 			CheckStates()
-			
-			setFullscreenMode(context, False) ' True
 			
 			'startThread()
 			'EndIf
@@ -909,17 +929,19 @@ Class MFDevice Final
 		Function enableLayer:Void(layer:Int)
 			If (layer <= 0 Or layer > MAX_LAYER) Then ' (layer <> MAX_LAYER)
 				If (layer < 0 And layer >= -MAX_LAYER And preLayer[(-layer) - MAX_LAYER] = Null) Then
-					preLayer[(-layer) - MAX_LAYER] = MFImage.createImage(screenWidth, screenHeight)
+					preLayer[(-layer) - MAX_LAYER] = allocateLayer() ' (screenWidth, screenHeight)
 				EndIf
 			ElseIf (postLayer[layer - MAX_LAYER] = Null) Then
-				postLayer[layer - MAX_LAYER] = MFImage.createImage(screenWidth, screenHeight)
+				postLayer[layer - MAX_LAYER] = allocateLayer() ' (screenWidth, screenHeight)
 			EndIf
 		End
 		
 		Function disableLayer:Void(layer:Int)
 			If (layer > 0 And layer <= MAX_LAYER) Then
+				postLayer[layer - MAX_LAYER].discard()
 				postLayer[layer - MAX_LAYER] = Null
 			ElseIf (layer < 0 And layer >= -MAX_LAYER) Then
+				preLayer[(-layer) - MAX_LAYER].discard()
 				preLayer[(-layer) - MAX_LAYER] = Null
 			EndIf
 		End
@@ -928,150 +950,15 @@ Class MFDevice Final
 			'mainCanvas.setFilterBitmap(b)
 		End
 		
-		Function setFullscreenMode:Void(context:Canvas, b:Bool) ' DrawList
-			Local vWidth:Int, vHeight:Int
+		Function setFullscreenMode:MFGraphics(context:Canvas, b:Bool) ' DrawList
+			' This may be replaced later with another 'Canvas' targeting the same thing as 'context':
+			bufferImage = allocateLayer()
 			
-			'DebugStop()
+			graphics = bufferImage.getGraphics()
 			
-			If (b) Then
-				drawRect = New Rect(0, 0, screenWidth, screenHeight)
-				
-				vWidth = screenWidth
-				vHeight = screenHeight
-			ElseIf (Float(screenWidth) / Float(canvasWidth) > Float(screenHeight) / Float(canvasHeight)) Then
-				Local tmpHeight:Int
-				
-				If (canvasHeight > screenHeight) Then
-					tmpHeight = canvasHeight
-					
-					While (tmpHeight > screenHeight And tmpHeight - screenHeight > screenHeight - (tmpHeight / 2))
-						tmpHeight /= 2
-						
-						canvasWidth /= 2
-						canvasHeight /= 2
-					Wend
-				ElseIf (canvasHeight < screenHeight) Then
-					tmpHeight = canvasHeight
-					
-					While (tmpHeight < screenHeight And screenHeight - tmpHeight > (tmpHeight * 2) - screenHeight)
-						tmpHeight *= 2
-						
-						canvasWidth *= 2
-						canvasHeight *= 2
-					Wend
-				EndIf
-				
-				Local h:= screenHeight
-				Local w:= ((canvasWidth * h) / canvasHeight)
-				
-				Local x:= ((screenWidth - w) / 2)
-				
-				drawRect = New Rect(x, 0, x + w, h)
-				
-				#Rem
-					If (preScaleZoomOutFlag) Then
-						bufferImage = MFImage.generateNativeImage(((canvasHeight * screenWidth) / screenHeight), canvasHeight)
-					ElseIf (preScaleZoomInFlag) Then
-						bufferImage = MFImage.generateNativeImage(((canvasHeight * screenWidth) / screenHeight), canvasHeight)
-					Else
-						bufferImage = MFImage.generateNativeImage((canvasHeight * screenWidth) / screenHeight, canvasHeight)
-					EndIf
-					
-					graphics = MFGraphics.createMFGraphics(bufferImage.getGraphics(), (canvasHeight * screenWidth) / screenHeight, canvasHeight)
-				#End
-				
-				vWidth = ((canvasHeight * screenWidth) / screenHeight)
-				vHeight = canvasHeight
-			Else
-				Local tmpWidth:Int
-				
-				If (canvasWidth > screenWidth) Then
-					tmpWidth = canvasWidth
-					
-					While (tmpWidth > screenWidth And Float(tmpWidth) - Float(screenWidth) > Float(screenWidth - (tmpWidth / 2)))
-						tmpWidth /= 2
-						
-						canvasWidth /= 2
-						canvasHeight /= 2
-					Wend
-				ElseIf (canvasWidth < screenWidth) Then
-					tmpWidth = canvasWidth
-					
-					While (tmpWidth < screenWidth And screenWidth - tmpWidth < (tmpWidth * 2) - screenWidth)
-						tmpWidth *= 2
-						
-						canvasWidth *= 2
-						canvasHeight *= 2
-					Wend
-				EndIf
-				
-				Local w:= screenWidth
-				Local h:= ((canvasHeight * w) / canvasWidth)
-				
-				Local y:= ((screenHeight - h) / 2)
-				
-				drawRect = New Rect(0, y, w, y + h)
-				
-				#Rem
-					If (preScaleZoomOutFlag) Then
-						bufferImage = MFImage.generateNativeImage(canvasWidth Shl preScaleShift, ((canvasWidth * screenHeight) / screenWidth) Shl preScaleShift)
-					ElseIf (preScaleZoomInFlag) Then
-						bufferImage = MFImage.generateNativeImage(canvasWidth Shr preScaleShift, ((canvasWidth * screenHeight) / screenWidth) Shr preScaleShift)
-					Else
-						bufferImage = MFImage.generateNativeImage(canvasWidth, (canvasWidth * screenHeight) / screenWidth)
-					EndIf
-					
-					graphics = MFGraphics.createMFGraphics(bufferImage.getGraphics(), canvasWidth, (canvasWidth * screenHeight) / screenWidth)
-				#End
-				
-				vWidth = canvasWidth
-				vHeight = ((canvasWidth * screenHeight) / screenWidth)
-			EndIf
+			'graphics.context.SetScissor(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
 			
-			graphics = MFGraphics.createMFGraphics(context, vWidth, vHeight)
-			
-			bufferWidth = vWidth
-			bufferHeight = vHeight
-			
-			horizontalOffset = ((drawRect.left * bufferWidth) / screenWidth)
-			verticvalOffset = ((drawRect.top * bufferHeight) / screenHeight)
-			
-			Print("vWidth: " + vWidth + ", vHeight: " + vHeight)
-			Print("bufferWidth: " + bufferWidth + ", bufferHeight: " + bufferHeight)
-			Print("screenWidth: " + screenWidth + ", screenHeight: " + screenHeight)
-			Print("canvasWidth: " + canvasWidth + ", canvasHeight: " + canvasHeight)
-			
-			Print("horizontalOffset: " + horizontalOffset + ", verticvalOffset: " + verticvalOffset)
-			
-			Print("drawRect: " + drawRect)
-			
-			Print("SCREEN_WIDTH: " + SCREEN_WIDTH)
-			Print("SCREEN_HEIGHT: " + SCREEN_HEIGHT)
-			
-			Local vx:= horizontalOffset
-			Local vy:= verticvalOffset
-			Local vw:= (screenWidth - (horizontalOffset * 2))
-			Local vh:= (screenHeight - (verticvalOffset * 2))
-			
-			Print("Viewport: " + vx + ", " + vy + " | " + vw + "x" + vh)
-			
-			'DebugStop()
-			
-			'SetProjection2d:Void( left:Float,right:Float,top:Float,bottom:Float,znear:Float=-1,zfar:Float=1 )
-			'context.SetProjection2d(horizontalOffset, screenWidth - (horizontalOffset * 2), verticvalOffset, screenHeight - (verticvalOffset * 2))
-			'context.SetProjection2d(0, vWidth, 0, vHeight) ' vx, vw vy, vh
-			'(0, 0, 640, 480)
-			
-			context.SetViewport(drawRect.left, drawRect.top, drawRect.right - (drawRect.left * 2), drawRect.bottom - (drawRect.top * 2)) ' graphics.getSystemGraphics() ' (vx, vy, vWidth, vHeight)
-			
-			'graphics.disableExceedBoundary()
-			
-			'context.SetProjection2d(0, 284, 0, 160)
-			
-			'context.SetProjection2d(0, vWidth, 0, vHeight) ' SCREEN_WIDTH ' SCREEN_HEIGHT
-			'context.SetProjection2d(0, SCREEN_WIDTH, 0, SCREEN_HEIGHT)
-			
-			'context.Translate(Float(-horizontalOffset), Float(-verticvalOffset)) ' graphics.getGraphics()
+			Return graphics
 		End
 		
 		Function setResponseInterruptFlag:Void(flag:Bool)

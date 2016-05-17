@@ -36,7 +36,7 @@ Private
 	Import com.sega.mobile.framework.device.mfdevice
 	Import com.sega.mobile.framework.device.mfgraphics
 	
-	Import com.sega.mobile.framework.android.graphics
+	'Import com.sega.mobile.framework.android.graphics
 	
 	#Rem
 		Import javax.crypto.Cipher
@@ -106,7 +106,7 @@ Class Application Extends App ' Main Extends MFMain
 	Public
 		' Methods:
 		Method OnCreate:Int()
-			SetUpdateRate(60) ' 0 ' 60
+			SetUpdateRate(30) ' 0 ' 60
 			
 			Seed = Millisecs()
 			
@@ -127,7 +127,7 @@ Class Application Extends App ' Main Extends MFMain
 			' Initialize the global "effect array".
 			Effect.effectArray = Effect.GenerateEffectArray()
 			
-			MFDevice.initializeScreen(graphics, DeviceWidth(), DeviceHeight())
+			MFDevice.initializeScreen(graphics, DeviceWidth(), DeviceHeight(), False)
 			MFDevice.notifyStart(graphics, getEntryGameState())
 			
 			Return 0
@@ -154,15 +154,20 @@ Class Application Extends App ' Main Extends MFMain
 				Return 0
 			EndIf
 			
-			'graphics.Clear()
+			' Clear the "real screen".
+			graphics.Clear()
 			
+			' Check if we should clear the graphics drawn by our device.
 			If (MFDevice.clearBuffer) Then
+				' Clear the game screen and associated layers.
 				MFDevice.clearScreen()
 			EndIf
 			
-			MFDevice.flushScreen()
+			' Render the game, then flush to the appropriate canvases.
+			MFDevice.deviceDraw(graphics)
 			
-			'graphics.Flush()
+			' Display the screen we rendered.
+			graphics.Flush()
 			
 			Return 0
 		End
@@ -218,18 +223,15 @@ Class Application Extends App ' Main Extends MFMain
 		End
 		
 		Method getEntryGameState:MFGameState()
-			Const GBA_WIDTH:= 240
-			Const GBA_HEIGHT:= 160
-			
-			Const GBA_EXT_WIDTH:= 284
-			
 			Local devWidth:= MFDevice.getDeviceWidth()
 			Local devHeight:= MFDevice.getDeviceHeight()
 			
 			Local width:= Max(GBA_WIDTH, (devWidth * GBA_HEIGHT) / devHeight)
 			Local height:= GBA_HEIGHT
 			
-			MFDevice.setCanvasSize(Min(width, GBA_EXT_WIDTH), height) ' ssdef.PLAYER_MOVE_HEIGHT
+			width = Min(width, GBA_EXT_WIDTH)
+			
+			MFDevice.setCanvasSize(width, height) ' ssdef.PLAYER_MOVE_HEIGHT
 			MFDevice.setEnableCustomBack(True)
 			
 			Return New MainState(Self)

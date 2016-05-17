@@ -36,7 +36,7 @@ Private
 	Import sonicgba.bossextrapacman
 	Import sonicgba.bossextrastone
 	
-	Import com.sega.mobile.framework.android.graphics
+	'Import com.sega.mobile.framework.android.graphics
 	Import com.sega.mobile.framework.device.mfgraphics
 Public
 

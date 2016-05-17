@@ -1193,8 +1193,9 @@ Class TitleState Extends State
 			helpStrings = MyAPI.loadText("/help")
 			aboutStrings = MyAPI.loadText("/about")
 			
-			Self.openingOffsetX = ((SCREEN_WIDTH - 284) / 2) ' Shr 1
-			Self.openingOffsetY = ((SCREEN_HEIGHT - 160) / 2) ' Shr 1
+			' These values may be changed at a later date:
+			Self.openingOffsetX = ((SCREEN_WIDTH - GBA_EXT_WIDTH) / 2) ' Shr 1
+			Self.openingOffsetY = ((SCREEN_HEIGHT - GBA_HEIGHT) / 2) ' Shr 1
 			
 			Self.count = 50
 			
@@ -1359,7 +1360,7 @@ Class TitleState Extends State
 			
 			g.saveCanvas()
 			
-			g.translateCanvas(SCREEN_WIDTH + Self.title_name_center_x, (SCREEN_HEIGHT Shr 1) + Self.title_name_center_y)
+			g.translateCanvas(SCREEN_WIDTH + Self.title_name_center_x, (SCREEN_HEIGHT / 2) + Self.title_name_center_y) ' Shr 1
 			g.scaleCanvas(Self.titleScale, Self.titleScale)
 			
 			Self.titleAniDrawer.setActionId(ZONE_NUM_OFFSET)

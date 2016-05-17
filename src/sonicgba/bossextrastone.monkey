@@ -23,7 +23,7 @@ Private
 	Import com.sega.engine.action.acmovecaluser
 	Import com.sega.engine.action.acmovecalculator
 	
-	Import com.sega.mobile.framework.android.graphics
+	'Import com.sega.mobile.framework.android.graphics
 	Import com.sega.mobile.framework.device.mfgraphics
 	
 	Import regal.typetool

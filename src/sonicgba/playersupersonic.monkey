@@ -25,7 +25,7 @@ Private
 	Import sonicgba.stareffect
 	
 	Import com.sega.engine.action.acmovecalculator
-	Import com.sega.mobile.framework.android.graphics
+	'Import com.sega.mobile.framework.android.graphics
 	Import com.sega.mobile.framework.device.mfgraphics
 	
 	Import monkey.stack

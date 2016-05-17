@@ -12,7 +12,7 @@ Private
 	Import sonicgba.globalresource
 	
 	Import com.sega.mobile.define.mdphone
-	Import com.sega.mobile.framework.android.graphics
+	'Import com.sega.mobile.framework.android.graphics
 	Import com.sega.mobile.framework.android.graphicsmacros
 	Import com.sega.mobile.framework.device.mfdevice
 	Import com.sega.mobile.framework.device.mfgraphics
@@ -69,7 +69,7 @@ Class MyAPI ' Implements Def
 		
 		Const FIXED_TWO_BASE:Int = 7
 		
-		Const ZOOM_OUT_MOVE:Int = 0
+		Const ZOOM_OUT_MOVE:Int = 0 ' 1 ' 0 ' Basically just "/ 2".
 		
 		Const NOKIA_DRAW:Bool = False
 		Const RGB_DRAW:Bool = False

@@ -2,6 +2,7 @@ etc
 *__test*
 *__backup*
 *__oldresource*
+*__removed*
 *.bak
 *.build*
 *.data

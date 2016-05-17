@@ -186,6 +186,10 @@ Class MFImage
 		' Methods:
 		
 		' Extensions:
+		Method discard:Void() Final
+			Self.image.Discard()
+		End
+		
 		Method getNativeImage:Image() Final
 			Return Self.image
 		End

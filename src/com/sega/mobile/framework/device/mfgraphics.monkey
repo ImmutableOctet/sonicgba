@@ -8,6 +8,8 @@ Friend com.sega.mobile.framework.device.mfimage
 
 ' Imports:
 Private
+	Import gameengine.def
+	
 	'Import com.sega.mobile.framework.android.font
 	'Import com.sega.mobile.framework.android.graphics
 	
@@ -69,10 +71,15 @@ Class MFGraphics
 	Protected
 		' Fields:
 		Field context:Canvas ' DrawList
+		
+		Field clipStack:IntStack ' Stack<Int>
+		'Field projStack:FloatStack ' Stack<Float>
 	Private
 		' Constructor(s):
 		Method New()
-			' Nothing so far.
+			Self.clipStack = New IntStack()
+			
+			'Self.projStack = New FloatStack()
 		End
 	Public
 		' Functions:
@@ -93,7 +100,7 @@ Class MFGraphics
 		End
 		
 		Function createMFGraphics:MFGraphics(surface:MFImage, width:Int, height:Int)
-			Return createMFGraphics(New Canvas(surface.image), width, height)
+			Return createMFGraphics(New Canvas(surface.getNativeImage()), width, height)
 		End
 		
 		Function charHeight:Int(var:Int)
@@ -192,9 +199,26 @@ Class MFGraphics
 		Method saveCanvas:Void()
 			Self.context.PushMatrix()
 			'Self.context.save()
+			
+			Local clips:= Self.clipStack
+			
+			Local currentClip:= Self.context.Scissor
+			
+			For Local i:= 0 Until currentClip.Length ' 4
+				clips.Push(currentClip[i])
+			Next
 		End
 		
 		Method restoreCanvas:Void()
+			Local clips:= Self.clipStack
+			
+			Local h:= clips.Pop()
+			Local w:= clips.Pop()
+			Local y:= clips.Pop()
+			Local x:= clips.Pop()
+			
+			Self.context.SetScissor(x, y, w, h)
+			
 			'Self.context.restore()
 			Self.context.PopMatrix()
 		End
@@ -233,28 +257,23 @@ Class MFGraphics
 		
 		' This method may behave differently in the future.
 		Method setGraphics:Void(graphics:Canvas, width:Int, height:Int) Final
-			reset()
-			
 			setGraphics(graphics)
+			
+			reset(width, height)
 		End
 		
-		Method reset:Void() Final
-			Local screenWidth:= MFDevice.getScreenWidth()
-			Local screenHeight:= MFDevice.getScreenHeight()
-			
+		Method reset:Void(width:Int, height:Int) Final
 			Self.transX = 0
 			Self.transY = 0
 			
 			Self.clipX = 0
 			Self.clipY = 0
 			
-			Self.clipWidth = screenWidth
-			Self.clipHeight = screenHeight
+			Self.clipWidth = width
+			Self.clipHeight = height
 			
-			If (Self.context <> Null) Then
-				Self.context.SetProjection2d(0, screenWidth, 0, screenHeight) ' MFDevice.canvasWidth ' MFDevice.canvasHeight
-				'Self.context.SetScissor(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
-			EndIf
+			Self.context.SetProjection2d(0, width, 0, height)
+			Self.context.SetScissor(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
 		End
 		
 		Method translate:Void(x:Int, y:Int) Final
@@ -316,7 +335,7 @@ Class MFGraphics
 			'Self.context.SetScissor(cx, cy, tx, ty) ' SetViewport
 			'Self.context.SetScissor(cx, cy, width - (tx - cx), height - (ty - cy)) ' SetViewport
 			
-			'''Self.context.SetProjection2d(cx, tx, cy, ty)
+			''Self.context.SetProjection2d(cx, tx, cy, ty)
 			'''Self.context.SetScissor(cx, cy, tx - cx, ty - cy)
 			
 			'Self.transX = (width - (tx - cx))
@@ -648,12 +667,12 @@ Class MFGraphics
 	Private
 		' Methods:
 		Method drawRegionImpl:Void(image:Image, x_src:Int, y_src:Int, width:Int, height:Int, transform:Int, x_dest:Int, y_dest:Int, anchor:Int=(TOP|LEFT)) Final
-			If (transform <> TRANS_NONE) Then ' TRANS_MIRROR_ROT180
+			If (transform <> TRANS_MIRROR_ROT180 And transform <> TRANS_ROT180 And transform <> TRANS_MIRROR And transform <> TRANS_NONE) Then ' TRANS_MIRROR_ROT180
 				'transform = TRANS_NONE
 				
 				'restoreCanvas()
 				
-				'Return
+				Return
 			EndIf
 			
 			Local drawWidth:= width
@@ -754,21 +773,21 @@ Class MFGraphics
 				Case TRANS_NONE
 					' Nothing so far.
 				Case TRANS_MIRROR_ROT180
-					Self.context.Rotate(-180.0)
+					'Self.context.Rotate(-180.0)
 					Self.context.Scale(-1.0, 1.0)
 				Case TRANS_MIRROR
 					Self.context.Scale(-1.0, 1.0)
 				Case TRANS_ROT180
-					Self.context.Rotate(180.0)
+					'Self.context.Rotate(180.0)
 				Case TRANS_MIRROR_ROT270
-					Self.context.Rotate(-270.0)
+					'Self.context.Rotate(-270.0)
 					Self.context.Scale(-1.0, 1.0)
 				Case TRANS_ROT90
-					Self.context.Rotate(90.0)
+					'Self.context.Rotate(90.0)
 				Case TRANS_ROT270
-					Self.context.Rotate(270.0)
+					'Self.context.Rotate(270.0)
 				Case TRANS_MIRROR_ROT90
-					Self.context.Rotate(-90.0)
+					'Self.context.Rotate(-90.0)
 					Self.context.Scale(-1.0, 1.0)
 			End Select
 			

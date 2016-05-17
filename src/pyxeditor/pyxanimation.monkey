@@ -9,7 +9,7 @@ Private
 	Import lib.myapi
 	
 	Import com.sega.mobile.define.mdphone
-	Import com.sega.mobile.framework.android.graphics
+	'Import com.sega.mobile.framework.android.graphics
 	Import com.sega.mobile.framework.device.mfdevice
 	Import com.sega.mobile.framework.device.mfgraphics
 	

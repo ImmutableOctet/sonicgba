@@ -27,7 +27,7 @@ Private
 	Import special.specialplayer
 	Import special.trickring
 	
-	Import com.sega.mobile.framework.android.graphics
+	'Import com.sega.mobile.framework.android.graphics
 	Import com.sega.mobile.framework.device.mfgraphics
 	
 	'Import java.util.vector
