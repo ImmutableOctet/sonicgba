@@ -17,6 +17,8 @@ Public
 	#SONICGBA_FILESYSTEM_ENABLED = True
 #End
 
+#MOJO_IMAGE_FILTERING_ENABLED = False ' True
+
 ' Imports:
 Import application
 

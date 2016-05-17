@@ -1194,8 +1194,8 @@ Class TitleState Extends State
 			aboutStrings = MyAPI.loadText("/about")
 			
 			' These values may be changed at a later date:
-			Self.openingOffsetX = ((SCREEN_WIDTH - GBA_EXT_WIDTH) / 2) ' Shr 1
-			Self.openingOffsetY = ((SCREEN_HEIGHT - GBA_HEIGHT) / 2) ' Shr 1
+			Self.openingOffsetX = 0 ' (SCREEN_WIDTH / 2) ' ((SCREEN_WIDTH - GBA_EXT_WIDTH) / 2) ' Shr 1
+			Self.openingOffsetY = (SCREEN_HEIGHT / 2) ' ((SCREEN_HEIGHT - GBA_HEIGHT) / 2) ' Shr 1
 			
 			Self.count = 50
 			

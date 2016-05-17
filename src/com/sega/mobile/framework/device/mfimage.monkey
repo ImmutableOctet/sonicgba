@@ -156,7 +156,7 @@ Class MFImage
 		Function createImage:MFImage(width:Int, height:Int) ' Final
 			Local ret:= New MFImage()
 			
-			ret.image = New Image(width, height, 0.0, 0.0)
+			ret.image = New Image(width, height, 0.0, 0.0, Image.Mipmap) ' | Image.Managed
 			ret.graphics = MFGraphics.createMFGraphics(ret, width, height)
 			ret.mutable = True
 			

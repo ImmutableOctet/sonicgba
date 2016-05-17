@@ -2,6 +2,13 @@ Strict
 
 Public
 
+' Preprocessor related:
+#SONICGBA_MFGRAPHICS_DEBUG_REGION_DRAW = True
+
+#If SONICGBA_MFGRAPHICS_DEBUG_REGION_DRAW
+	#SONICGBA_MFDEVICE_ALLOW_DEBUG_GRAPHICS = True
+#End
+
 ' Friends:
 Friend com.sega.mobile.framework.device.mfdevice
 Friend com.sega.mobile.framework.device.mfimage
@@ -274,6 +281,10 @@ Class MFGraphics
 			
 			Self.context.SetProjection2d(0, width, 0, height)
 			Self.context.SetScissor(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
+		End
+		
+		Method reset:Void() Final
+			reset(Self.context.Width, Self.context.Height)
 		End
 		
 		Method translate:Void(x:Int, y:Int) Final
@@ -683,9 +694,13 @@ Class MFGraphics
 			'Self.context.DrawImage(image, 0, 0)
 			'Self.context.SetColor(0.5, 0.2, 1.0)
 			
-			Self.context.SetAlpha(0.5)
-			Self.context.DrawRect(0.0, 0.0, drawWidth, drawHeight, image, x_src, y_src, width, height)
-			Self.context.SetAlpha(1.0)
+			#If SONICGBA_MFDEVICE_ALLOW_DEBUG_GRAPHICS
+				Local dbgctx:= MFDevice.__NATIVEGRAPHICS
+				
+				dbgctx.SetAlpha(0.5)
+				dbgctx.DrawRect(0.0, 0.0, drawWidth, drawHeight, image, x_src, y_src, width, height)
+				dbgctx.SetAlpha(1.0)
+			#End
 			
 			'Self.context.SetColor(1.0, 1.0, 1.0)
 			

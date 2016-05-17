@@ -161,6 +161,10 @@ Class MFDevice Final
 		
 		'Global preScaleZoomInFlag:Bool = False
 		'Global preScaleZoomOutFlag:Bool = False
+		
+		#If SONICGBA_MFDEVICE_ALLOW_DEBUG_GRAPHICS
+			Global __NATIVEGRAPHICS:Canvas = Null
+		#End
 	Public
 		' Functions:
 		
@@ -319,8 +323,7 @@ Class MFDevice Final
 		' This performs a raw render of the game without displaying
 		' layers or flushing draw operations to the GPU.
 		Function Render:Void(graphics:MFGraphics) ' Canvas ' Graphics
-			' TODO: Add "safety resets" to the layers like we do here with 'graphics'.
-			graphics.reset(SCREEN_WIDTH, SCREEN_HEIGHT)
+			graphics.reset()
 			
 			If (Not interruptPauseFlag) Then
 				If (Not exitFlag) Then
@@ -330,7 +333,7 @@ Class MFDevice Final
 						If (layer <> Null) Then
 							Local g:= layer.getGraphics()
 							
-							g.reset(layer.getWidth(), layer.getHeight())
+							g.reset() ' layer.getWidth(), layer.getHeight()
 							
 							currentState.onRender(g, -i)
 						EndIf
@@ -344,7 +347,7 @@ Class MFDevice Final
 						If (layer <> Null) Then
 							Local g:= layer.getGraphics()
 							
-							g.reset(layer.getWidth(), layer.getHeight())
+							g.reset() ' layer.getWidth(), layer.getHeight()
 							
 							currentState.onRender(g, i)
 						EndIf
@@ -356,7 +359,11 @@ Class MFDevice Final
 		' The 'screen' argument represents the device's screen/canvas.
 		' The 'graphics' argument represents the primary layer used to render the game.
 		' If unsure, use the other overload. (Automatically establishes a primary layer)
-		Function deviceDraw:Void(screen:Canvas, graphics:MFGraphics) ' Canvas ' Graphics
+		Function deviceDraw:Void(screen:Canvas, graphics:MFGraphics, vx:Float, vy:Float, vw:Float, vh:Float) ' Canvas ' Graphics
+			' For debugging purposes, we are scheduling this draw operation in advance.
+			' Draw the main graphics layer to the screen. (Game graphics, etc)
+			screen.DrawRect(vx, vy, vw, vh, bufferImage.getNativeImage())
+			
 			MFDevice.Render(graphics)
 			
 			' Execute the draw operations queued on the background layer(s):
@@ -368,7 +375,7 @@ Class MFDevice Final
 					layer.getGraphics().flush()
 					
 					' Draw this background layer to the screen.
-					screen.DrawImage(layer.getNativeImage(), 0.0, 0.0)
+					screen.DrawRect(vx, vy, vw, vh, layer.getNativeImage())
 				EndIf
 			Next
 			
@@ -380,9 +387,6 @@ Class MFDevice Final
 			' Execute the draw operations queued up for the main graphics layer.
 			graphics.flush()
 			
-			' Draw the main graphics layer to the screen. (Game graphics, etc)
-			screen.DrawImage(bufferImage.getNativeImage(), 0.0, 0.0)
-			
 			' Execute the draw operations queued on the foreground layer(s):
 			For Local i:= postLayer.Length To postLayer.Length ' Until 0 Step -1 ' MAX_LAYER
 				Local layer:= postLayer[i - MAX_LAYER]
@@ -392,15 +396,15 @@ Class MFDevice Final
 					layer.getGraphics().flush()
 					
 					' Draw this foreground/post layer to the screen.
-					screen.DrawImage(layer.getNativeImage(), 0.0, 0.0)
+					screen.DrawRect(vx, vy, vw, vh, layer.getNativeImage())
 				EndIf
 			Next
 		End
 		
 		' This overload calls the main implementation, but instead of leaving
 		' it up to the user, this passes 'graphics' as the primary layer.
-		Function deviceDraw:Void(screen:Canvas) ' Canvas ' Graphics
-			deviceDraw(screen, graphics)
+		Function deviceDraw:Void(screen:Canvas, vx:Float, vy:Float, vw:Float, vh:Float) ' Canvas ' Graphics
+			deviceDraw(screen, graphics, vx, vy, vw, vh)
 		End
 		
 		Function handleInput:Void()
@@ -955,8 +959,6 @@ Class MFDevice Final
 			bufferImage = allocateLayer()
 			
 			graphics = bufferImage.getGraphics()
-			
-			'graphics.context.SetScissor(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
 			
 			Return graphics
 		End

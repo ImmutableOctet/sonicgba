@@ -101,6 +101,10 @@ Class Application Extends App ' Main Extends MFMain
 		'Field graphics:Graphics
 		Field graphics:Canvas
 		
+		' Letterbox parameters:
+		Field screenX:Float, screenY:Float
+		Field screenWidth:Float, screenHeight:Float
+		
 		' Booleans / Flags:
 		Field isSuspended:Bool
 	Public
@@ -111,6 +115,10 @@ Class Application Extends App ' Main Extends MFMain
 			Seed = Millisecs()
 			
 			graphics = New Canvas(Null)
+			
+			#If SONICGBA_MFDEVICE_ALLOW_DEBUG_GRAPHICS
+				MFDevice.__NATIVEGRAPHICS = graphics
+			#End
 			
 			#Rem
 				Self.mScore = ""
@@ -129,6 +137,8 @@ Class Application Extends App ' Main Extends MFMain
 			
 			MFDevice.initializeScreen(graphics, DeviceWidth(), DeviceHeight(), False)
 			MFDevice.notifyStart(graphics, getEntryGameState())
+			
+			UpdateLetterBox(SCREEN_WIDTH, SCREEN_HEIGHT)
 			
 			Return 0
 		End
@@ -164,7 +174,7 @@ Class Application Extends App ' Main Extends MFMain
 			EndIf
 			
 			' Render the game, then flush to the appropriate canvases.
-			MFDevice.deviceDraw(graphics)
+			MFDevice.deviceDraw(graphics, Self.screenX, Self.screenX, Self.screenWidth, Self.screenHeight)
 			
 			' Display the screen we rendered.
 			graphics.Flush()
@@ -220,6 +230,49 @@ Class Application Extends App ' Main Extends MFMain
 			graphics.DrawText("Game Suspended", DeviceWidth() / 2, DeviceHeight() / 2, 0.5, 0.5)
 			
 			graphics.Flush()
+		End
+		
+		Method UpdateLetterBox:Void(virtualWidth:Int, virtualHeight:Int, X:Float=0.0, Y:Float=0.0)
+			Local VASPECT:= (Float(virtualWidth) / Float(virtualHeight))
+			
+			Local virtualAspectRatio:Float = VASPECT
+			Local deviceAspectRatio:Float = (Float(graphics.Width) / Float(graphics.Height))
+			
+			' These will represent our inner viewport.
+			Local vx:Float, vy:Float, vw:Float, vh:Float
+			
+			If (deviceAspectRatio > virtualAspectRatio) Then
+				' Grab the current device-height.
+				vh = Float(graphics.Height)
+				
+				' Calculate the scaled width.
+				vw = (vh * virtualAspectRatio) ' Float(graphics.Height)
+				
+				' Using our previously scaled width, subtract from the
+				' current device-width, then add our X-offset.
+				vx = (Float((graphics.Width - vw) / 2) + X)
+				
+				' Grab the Y-offset specified above.
+				vy = Y
+			Else ' Elseif (virtualAspectRatio < deviceAspectRatio) Then
+				' Grab the current device-width.
+				vw = Float(graphics.Width)
+				
+				' Calculate the scaled height.
+				vh = (vw / virtualAspectRatio) ' Float(graphics.Width)
+				
+				' Grab the X-offset specified above.
+				vx = X
+				
+				' Using our previously scaled height, subtract from the
+				' current device-height, then add our Y-offset.
+				vy = (Float((graphics.Height - vh) / 2) + Y)
+			Endif
+			
+			Self.screenX = vx
+			Self.screenY = vy
+			Self.screenWidth = vw
+			Self.screenHeight = vh
 		End
 		
 		Method getEntryGameState:MFGameState()
