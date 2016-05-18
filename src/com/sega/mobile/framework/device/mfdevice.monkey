@@ -71,20 +71,9 @@ Class MFDevice Final
 	Public
 		' Global variable(s):
 		
-		' Virtual resolution.
-		Global bufferWidth:Int = MDPhone.SCREEN_WIDTH
-		Global bufferHeight:Int = MDPhone.SCREEN_HEIGHT
-		
-		' Inner screen area resolution.
+		' The internal resolution.
 		Global canvasWidth:Int = MDPhone.SCREEN_WIDTH
 		Global canvasHeight:Int = MDPhone.SCREEN_HEIGHT
-		
-		' Device screen resolution.
-		Global screenWidth:Int
-		Global screenHeight:Int
-		
-		Global horizontalOffset:Int
-		Global verticvalOffset:Int
 		
 		Global clearBuffer:Bool = True
 		
@@ -263,8 +252,8 @@ Class MFDevice Final
 		End
 		
 		Function allocateLayer:MFImage()
-			Local width:= SCREEN_WIDTH ' canvasWidth
-			Local height:= SCREEN_HEIGHT ' canvasHeight
+			Local width:= canvasWidth ' SCREEN_WIDTH
+			Local height:= canvasHeight ' SCREEN_HEIGHT
 			 
 			Return allocateLayer(width, height)
 		End
@@ -540,12 +529,12 @@ Class MFDevice Final
 			graphics.enableExceedBoundary()
 		End
 		
-		Function getDeviceHeight:Int()
-			Return SCREEN_HEIGHT ' screenHeight
+		Function getDeviceWidth:Int()
+			Return canvasWidth ' SCREEN_WIDTH ' screenWidth
 		End
 		
-		Function getDeviceWidth:Int()
-			Return SCREEN_WIDTH ' screenWidth
+		Function getDeviceHeight:Int()
+			Return canvasHeight ' SCREEN_HEIGHT ' screenHeight
 		End
 		
 		Function getEnableCustomBack:Bool()
@@ -781,41 +770,13 @@ Class MFDevice Final
 		' Functions:
 		
 		' Extensions:
-		Function initializeScreen:Void(context:Canvas, width:Int, height:Int, fullscreenMode:Bool) ' Graphics
-			#Rem
-			Local isSideways:Bool = True ' False ' (MFMain.getInstance().getRequestedOrientation() = SCREEN_ORIENTATION_PORTRAIT)
+		Function initializeScreen:MFGraphics(context:Canvas)
+			' This may be replaced later with another 'Canvas' targeting the same thing as 'context':
+			bufferImage = allocateLayer()
 			
-			If (Not isSideways) Then
-				canvasWidth = MDPhone.SCREEN_WIDTH
-				canvasHeight = MDPhone.SCREEN_HEIGHT
-				
-				If (width > height) Then
-					screenWidth = height
-					screenHeight = width
-				Else
-					screenWidth = width
-					screenHeight = height
-				EndIf
-			Else
-				canvasHeight = MDPhone.SCREEN_WIDTH
-				canvasWidth = MDPhone.SCREEN_HEIGHT
-				
-				If (width < height) Then
-					screenWidth = height
-					screenHeight = width
-				Else
-					screenWidth = width
-					screenHeight = height
-				EndIf
-			EndIf
-			#End
+			graphics = bufferImage.getGraphics()
 			
-			screenWidth = width
-			screenHeight = height
-			
-			Print("screenwidth: " + screenWidth + ", screenheight: " + screenHeight)
-			
-			setFullscreenMode(context, fullscreenMode) ' True
+			Return graphics
 		End
 		
 		' Record-related:
@@ -958,15 +919,6 @@ Class MFDevice Final
 		
 		Function setFilterBitmap:Void(b:Bool)
 			'mainCanvas.setFilterBitmap(b)
-		End
-		
-		Function setFullscreenMode:MFGraphics(context:Canvas, b:Bool) ' DrawList
-			' This may be replaced later with another 'Canvas' targeting the same thing as 'context':
-			bufferImage = allocateLayer()
-			
-			graphics = bufferImage.getGraphics()
-			
-			Return graphics
 		End
 		
 		Function setResponseInterruptFlag:Void(flag:Bool)

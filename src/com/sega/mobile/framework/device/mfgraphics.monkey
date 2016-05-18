@@ -318,7 +318,7 @@ Class MFGraphics
 			Self.clipHeight = height
 			
 			If (Self.enableExceed) Then
-				'Self.context.SetScissor(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
+				Self.context.SetScissor(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
 				
 				Return
 			EndIf
@@ -341,13 +341,13 @@ Class MFGraphics
 				ty = Self.clipY + height
 			EndIf
 			
-			'Print("cx: " + cx + ", cy: " + cy + ", tx - cx: " + (tx - cx) + ", ty - cy: " + (ty - cy))
+			Print("cx: " + cx + ", cy: " + cy + ", tx - cx: " + (tx - cx) + ", ty - cy: " + (ty - cy))
 			
 			'Self.context.SetScissor(cx, cy, tx, ty) ' SetViewport
 			'Self.context.SetScissor(cx, cy, width - (tx - cx), height - (ty - cy)) ' SetViewport
 			
 			''Self.context.SetProjection2d(cx, tx, cy, ty)
-			'''Self.context.SetScissor(cx, cy, tx - cx, ty - cy)
+			Self.context.SetScissor(cx, cy, tx - cx, ty - cy)
 			
 			'Self.transX = (width - (tx - cx))
 			'Self.transY = (height - (ty - cy))
@@ -678,14 +678,6 @@ Class MFGraphics
 	Private
 		' Methods:
 		Method drawRegionImpl:Void(image:Image, x_src:Int, y_src:Int, width:Int, height:Int, transform:Int, x_dest:Int, y_dest:Int, anchor:Int=(TOP|LEFT)) Final
-			If (transform <> TRANS_MIRROR_ROT180 And transform <> TRANS_ROT180 And transform <> TRANS_MIRROR And transform <> TRANS_NONE) Then ' TRANS_MIRROR_ROT180
-				'transform = TRANS_NONE
-				
-				'restoreCanvas()
-				
-				Return
-			EndIf
-			
 			Local drawWidth:= width
 			Local drawHeight:= height
 			
@@ -788,26 +780,26 @@ Class MFGraphics
 				Case TRANS_NONE
 					' Nothing so far.
 				Case TRANS_MIRROR_ROT180
-					Self.context.Rotate(-180.0)
+					'Self.context.Rotate(-180.0)
 					Self.context.Scale(-1.0, 1.0)
 				Case TRANS_MIRROR
 					Self.context.Scale(-1.0, 1.0)
 				Case TRANS_ROT180
-					Self.context.Rotate(180.0)
+					'Self.context.Rotate(180.0)
 				Case TRANS_MIRROR_ROT270
-					Self.context.Rotate(-270.0)
+					'Self.context.Rotate(-270.0)
 					Self.context.Scale(-1.0, 1.0)
 				Case TRANS_ROT90
-					Self.context.Rotate(90.0)
+					'Self.context.Rotate(90.0)
 				Case TRANS_ROT270
-					Self.context.Rotate(270.0)
+					'Self.context.Rotate(270.0)
 				Case TRANS_MIRROR_ROT90
-					Self.context.Rotate(-90.0)
+					'Self.context.Rotate(-90.0)
 					Self.context.Scale(-1.0, 1.0)
 			End Select
 			
 			Self.context.Translate(-handleX, -handleY)
-			Self.context.Translate((-xOffset), (-yOffset))
+			'Self.context.Translate((-xOffset), (-yOffset))
 			
 			'Self.context.Translate(x_dest, y_dest)
 			

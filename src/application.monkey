@@ -110,7 +110,7 @@ Class Application Extends App ' Main Extends MFMain
 	Public
 		' Methods:
 		Method OnCreate:Int()
-			SetUpdateRate(60) ' 30 ' 60
+			SetUpdateRate(60) ' 0 ' 60
 			
 			Seed = Millisecs()
 			
@@ -135,10 +135,22 @@ Class Application Extends App ' Main Extends MFMain
 			' Initialize the global "effect array".
 			Effect.effectArray = Effect.GenerateEffectArray()
 			
-			MFDevice.initializeScreen(graphics, DeviceWidth(), DeviceHeight(), False)
+			Local devWidth:= DeviceWidth()
+			Local devHeight:= DeviceHeight()
+			
+			Local width:= Max(GBA_WIDTH, (devWidth * GBA_HEIGHT) / devHeight)
+			Local height:= GBA_HEIGHT
+			
+			width = Min(width, GBA_EXT_WIDTH)
+			
+			MFDevice.setCanvasSize(width, height)
+			MFDevice.setEnableCustomBack(True)
+			
+			MFDevice.initializeScreen(graphics)
+			
 			MFDevice.notifyStart(graphics, getEntryGameState())
 			
-			UpdateLetterBox(SCREEN_WIDTH, SCREEN_HEIGHT)
+			UpdateLetterBox(width, height) ' (SCREEN_WIDTH, SCREEN_HEIGHT)
 			
 			Return 0
 		End
@@ -276,17 +288,6 @@ Class Application Extends App ' Main Extends MFMain
 		End
 		
 		Method getEntryGameState:MFGameState()
-			Local devWidth:= MFDevice.getDeviceWidth()
-			Local devHeight:= MFDevice.getDeviceHeight()
-			
-			Local width:= Max(GBA_WIDTH, (devWidth * GBA_HEIGHT) / devHeight)
-			Local height:= GBA_HEIGHT
-			
-			width = Min(width, GBA_EXT_WIDTH)
-			
-			MFDevice.setCanvasSize(width, height) ' ssdef.PLAYER_MOVE_HEIGHT
-			MFDevice.setEnableCustomBack(True)
-			
 			Return New MainState(Self)
 		End
 		
