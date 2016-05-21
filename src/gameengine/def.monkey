@@ -12,16 +12,11 @@ Private
 	Import com.sega.mobile.framework.device.mfdevice
 	Import com.sega.mobile.framework.device.mfgraphics
 Public
+	Import gameengine.gbadef
 
 ' Constant variable(s):
 Global SCREEN_WIDTH:Int = MyAPI.zoomIn(MDPhone.SCREEN_WIDTH, True) ' 284 ' MyAPI.zoomIn(MFDevice.getScreenWidth(), True) ' Const
 Global SCREEN_HEIGHT:Int = MyAPI.zoomIn(MDPhone.SCREEN_HEIGHT, True) ' 160 ' MyAPI.zoomIn(MFDevice.getScreenHeight(), True) ' Const
-
-Const GBA_WIDTH:= 240
-Const GBA_HEIGHT:= 160
-
-' This is the 16:9 equivalent of 'GBA_WIDTH'.
-Const GBA_EXT_WIDTH:= 284
 
 Global FONT_H:= MyAPI.zoomIn(MFGraphics.charHeight(FONT)) ' Const
 

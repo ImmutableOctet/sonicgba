@@ -643,7 +643,7 @@ Class TitleState Extends State
 					PlayerObject.stageModeState = 0
 					
 					SoundSystem.getInstance().playBgm(STATE_OPENING)
-				Case VISIBLE_OPTION_ITEMS_NUM
+				Case STATE_OPTION
 					state = STATE_CHARACTER_SELECT
 					
 					Self.nextState = STATE_CHARACTER_SELECT

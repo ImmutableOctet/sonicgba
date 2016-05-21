@@ -150,8 +150,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\define\mdphone.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>41</X>
-        <Y>39</Y>
+        <X>55</X>
+        <Y>42</Y>
       </CursorPos>
       <DocGUID>db2f6b1e-b094-47ee-a895-9a78b9b6cafe</DocGUID>
       <Bookmarks />
@@ -344,11 +344,18 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\gameengine\def.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>39</X>
-        <Y>16</Y>
+        <X>53</X>
+        <Y>17</Y>
       </CursorPos>
       <DocGUID>933a7d8b-73d9-490b-99e3-da89c4bb5f5c</DocGUID>
       <Bookmarks />
+    </DocUserOptions>
+    <DocUserOptions Filename=".\src\gameengine\gbadef.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+      <CursorPos>
+        <X>21</X>
+        <Y>8</Y>
+      </CursorPos>
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\gameengine\key.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -494,8 +501,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>5</X>
-        <Y>58</Y>
+        <X>37</X>
+        <Y>68</Y>
       </CursorPos>
       <DocGUID>3d91f39d-9ed5-4956-ba8d-97c12b7236d1</DocGUID>
       <Bookmarks>
@@ -2180,8 +2187,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\state.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>5</X>
-        <Y>691</Y>
+        <X>28</X>
+        <Y>440</Y>
       </CursorPos>
       <DocGUID>59b6fd4a-07b2-4816-a055-51407fff5e21</DocGUID>
       <Bookmarks />
@@ -2195,11 +2202,15 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>23</X>
-        <Y>237</Y>
+        <X>10</X>
+        <Y>2995</Y>
       </CursorPos>
       <DocGUID>b2d10f7a-d015-46d9-b050-01cceae40edc</DocGUID>
       <Bookmarks>
+        <Point>
+          <X>0</X>
+          <Y>646</Y>
+        </Point>
         <Point>
           <X>0</X>
           <Y>1198</Y>

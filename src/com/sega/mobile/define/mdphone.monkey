@@ -3,7 +3,9 @@ Strict
 Public
 
 ' Imports:
-' Nothing so far.
+Private
+	Import gameengine.gbadef
+Public
 
 ' Interfaces:
 Interface MDPhone
@@ -37,8 +39,8 @@ Interface MDPhone
 	Const MEDIUM_FONT_HEIGHT:Int = 26
 	Const SMALL_FONT_HEIGHT:Int = 24
 	
-	Const SCREEN_WIDTH:Int = 640 ' 360 ' 284
-	Const SCREEN_HEIGHT:Int = 360 ' 640 ' 160
+	Const SCREEN_WIDTH:Int = GBA_EXT_WIDTH ' 640 ' 360 ' 284
+	Const SCREEN_HEIGHT:Int = GBA_HEIGHT ' 360 ' 640 ' 160
 	
 	Const SHIELD_NUMBER_KEY:Bool = True
 	Const SUPPORT_JOYSTICK:Bool = False
