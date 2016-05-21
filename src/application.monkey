@@ -132,12 +132,16 @@ Class Application Extends App ' Main Extends MFMain
 			
 			MFDevice.notifyStart(graphics, getEntryGameState())
 			
-			UpdateLetterBox(width, height) ' (SCREEN_WIDTH, SCREEN_HEIGHT)
+			UpdateLetterBox(devWidth, devHeight, width, height) ' (SCREEN_WIDTH, SCREEN_HEIGHT)
+			
+			'OnResize()
 			
 			Return 0
 		End
 		
 		Method OnUpdate:Int()
+			OnResize()
+			
 			HandleSystemKeys()
 			
 			MFDevice.Update()
@@ -159,7 +163,7 @@ Class Application Extends App ' Main Extends MFMain
 			EndIf
 			
 			' Clear the "real screen".
-			graphics.Clear(0.8, 0.4, 0.25)
+			graphics.Clear() ' (0.8, 0.4, 0.25)
 			
 			' Check if we should clear the graphics drawn by our device.
 			If (MFDevice.clearBuffer) Then
@@ -168,7 +172,7 @@ Class Application Extends App ' Main Extends MFMain
 			EndIf
 			
 			' Render the game, then flush to the appropriate canvases.
-			MFDevice.deviceDraw(graphics, Self.screenX, Self.screenX, Self.screenWidth, Self.screenHeight)
+			MFDevice.deviceDraw(graphics, Self.screenX, Self.screenY, Self.screenWidth, Self.screenHeight)
 			
 			' Display the screen we rendered.
 			graphics.Flush()
@@ -215,7 +219,16 @@ Class Application Extends App ' Main Extends MFMain
 		End
 		
 		Method OnResize:Int()
-			UpdateLetterBox(SCREEN_WIDTH, SCREEN_HEIGHT)
+			Local devWidth:= DeviceWidth()
+			Local devHeight:= DeviceHeight()
+			
+			graphics.SetViewport(0, 0, devWidth, devHeight)
+			graphics.SetProjection2d(0, devWidth, 0, devHeight)
+			
+			'Print("Device Size: " + devWidth + "x" + devHeight)
+			'Print("Canvas Size: " + graphics.Width + "x" + graphics.Height)
+			
+			UpdateLetterBox(devWidth, devHeight, SCREEN_WIDTH, SCREEN_HEIGHT)
 			
 			Return 0
 		End
@@ -230,41 +243,41 @@ Class Application Extends App ' Main Extends MFMain
 			graphics.Flush()
 		End
 		
-		Method UpdateLetterBox:Void(virtualWidth:Int, virtualHeight:Int, X:Float=0.0, Y:Float=0.0)
+		Method UpdateLetterBox:Void(deviceWidth:Int, deviceHeight:Int, virtualWidth:Int, virtualHeight:Int, X:Float=0.0, Y:Float=0.0)
 			Local VASPECT:= (Float(virtualWidth) / Float(virtualHeight))
 			
 			Local virtualAspectRatio:Float = VASPECT
-			Local deviceAspectRatio:Float = (Float(graphics.Width) / Float(graphics.Height))
+			Local deviceAspectRatio:Float = (Float(deviceWidth) / Float(deviceHeight))
 			
 			' These will represent our inner viewport.
 			Local vx:Float, vy:Float, vw:Float, vh:Float
 			
 			If (deviceAspectRatio > virtualAspectRatio) Then
 				' Grab the current device-height.
-				vh = Float(graphics.Height)
+				vh = Float(deviceHeight)
 				
 				' Calculate the scaled width.
-				vw = (vh * virtualAspectRatio) ' Float(graphics.Height)
+				vw = (vh * virtualAspectRatio) ' Float(deviceHeight)
 				
 				' Using our previously scaled width, subtract from the
 				' current device-width, then add our X-offset.
-				vx = (Float((graphics.Width - vw) / 2) + X)
+				vx = (Float((deviceWidth - vw) / 2) + X)
 				
 				' Grab the Y-offset specified above.
 				vy = Y
 			Else ' Elseif (virtualAspectRatio < deviceAspectRatio) Then
 				' Grab the current device-width.
-				vw = Float(graphics.Width)
+				vw = Float(deviceWidth)
 				
 				' Calculate the scaled height.
-				vh = (vw / virtualAspectRatio) ' Float(graphics.Width)
+				vh = (vw / virtualAspectRatio) ' Float(deviceWidth)
 				
 				' Grab the X-offset specified above.
 				vx = X
 				
 				' Using our previously scaled height, subtract from the
 				' current device-height, then add our Y-offset.
-				vy = (Float((graphics.Height - vh) / 2) + Y)
+				vy = (Float((deviceHeight - vh) / 2) + Y)
 			Endif
 			
 			Self.screenX = vx

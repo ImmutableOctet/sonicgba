@@ -150,8 +150,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\define\mdphone.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>55</X>
-        <Y>42</Y>
+        <X>36</X>
+        <Y>41</Y>
       </CursorPos>
       <DocGUID>db2f6b1e-b094-47ee-a895-9a78b9b6cafe</DocGUID>
       <Bookmarks />
@@ -172,18 +172,26 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>10</X>
-        <Y>997</Y>
+        <X>36</X>
+        <Y>337</Y>
       </CursorPos>
       <DocGUID>ab21d9b9-bf97-41dc-b333-9b0289eba3ce</DocGUID>
       <Bookmarks>
         <Point>
           <X>0</X>
-          <Y>74</Y>
+          <Y>77</Y>
         </Point>
         <Point>
           <X>0</X>
-          <Y>75</Y>
+          <Y>78</Y>
+        </Point>
+        <Point>
+          <X>0</X>
+          <Y>287</Y>
+        </Point>
+        <Point>
+          <X>0</X>
+          <Y>337</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
@@ -196,8 +204,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>12</X>
-        <Y>226</Y>
+        <X>18</X>
+        <Y>35</Y>
       </CursorPos>
       <DocGUID>7f22b662-db9b-4668-90b0-4c450142cb4d</DocGUID>
       <Bookmarks />
@@ -267,8 +275,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\mfgamestate.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>11</X>
-        <Y>11</Y>
+        <X>10</X>
+        <Y>22</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -344,7 +352,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\gameengine\def.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>53</X>
+        <X>8</X>
         <Y>17</Y>
       </CursorPos>
       <DocGUID>933a7d8b-73d9-490b-99e3-da89c4bb5f5c</DocGUID>
@@ -460,7 +468,7 @@
     <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>31</X>
-        <Y>1062</Y>
+        <Y>73</Y>
       </CursorPos>
       <DocGUID>52d9b5c2-852f-49e7-80b5-a97826cfbef3</DocGUID>
       <Bookmarks>
@@ -2202,8 +2210,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>10</X>
-        <Y>2995</Y>
+        <X>38</X>
+        <Y>3000</Y>
       </CursorPos>
       <DocGUID>b2d10f7a-d015-46d9-b050-01cceae40edc</DocGUID>
       <Bookmarks>
@@ -2223,21 +2231,21 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\application.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>19</X>
-        <Y>114</Y>
+        <X>4</X>
+        <Y>228</Y>
       </CursorPos>
       <DocGUID>573df5ef-d48f-46ff-ab61-8c9f8a570862</DocGUID>
       <Bookmarks>
         <Point>
           <X>0</X>
-          <Y>140</Y>
+          <Y>144</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
     <DocUserOptions Filename=".\src\config.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>31</X>
-        <Y>27</Y>
+        <X>28</X>
+        <Y>6</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>

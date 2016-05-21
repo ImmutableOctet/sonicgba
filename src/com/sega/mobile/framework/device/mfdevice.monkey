@@ -2,6 +2,9 @@ Strict
 
 Public
 
+' Preprocessor related:
+'#SONICGBA_MFDEVICE_ALLOW_LAYERS = True
+
 ' Friends:
 Friend application
 
@@ -85,7 +88,11 @@ Class MFDevice Final
 		' Constant variable(s):
 		Const VERSION_INFO:String = "104_RELEASE" ' "100_RELEASE" ' "DEBUG"
 		
-		Const MAX_LAYER:Int = 1
+		#If SONICGBA_MFDEVICE_ALLOW_LAYERS
+			Const MAX_LAYER:Int = 1
+		#Else
+			Const MAX_LAYER:Int = 0
+		#End
 		
 		Const PER_VIBRATION_TIME:Int = 500
 		
@@ -276,7 +283,7 @@ Class MFDevice Final
 		End
 		
 		Function Update:Void()
-			'''handleInput()
+			handleInput()
 			
 			''' Update (Input) components:
 			#Rem
@@ -351,13 +358,12 @@ Class MFDevice Final
 		Function deviceDraw:Void(screen:Canvas, graphics:MFGraphics, vx:Float, vy:Float, vw:Float, vh:Float) ' Canvas ' Graphics
 			' For debugging purposes, we are scheduling this draw operation in advance.
 			' Draw the main graphics layer to the screen. (Game graphics, etc)
-			
 			screen.DrawRect(vx, vy, vw, vh, bufferImage.getNativeImage())
 			
 			' Testing related:
-			screen.SetAlpha(0.5)
-			screen.DrawImage(bufferImage.getNativeImage(), screen.Width / 2, screen.Height, 0.0, 1.0, -1.0)
-			screen.SetAlpha(1.0)
+			'screen.SetAlpha(0.5)
+			'screen.DrawImage(bufferImage.getNativeImage(), screen.Width / 2, screen.Height, 0.0, 1.0, -1.0)
+			'screen.SetAlpha(1.0)
 			
 			MFDevice.Render(graphics)
 			
