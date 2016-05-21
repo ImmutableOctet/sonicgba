@@ -139,32 +139,41 @@ Class StageManager ' Implements SonicDef
 		Global ZOME_ID:Int[] = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 7] ' Const
 		
 		' If it wouldn't make the arrays huge, these would use the 'BGM constants' found in 'SoundSystem':
-		Global MUSIC_ID:Int[] = MUSIC_ID_HIGH ' Const
 		Global MUSIC_ID_HIGH:Int[] = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20] ' Const
 		Global MUSIC_ID_LOW:Int[] = [6, 7, 8, 9, 10, 11, 12, 13] ' Const
+		
+		Global MUSIC_ID:Int[] = MUSIC_ID_HIGH ' Const
 		
 		Global PLAYER_START:Int[][] = [[96, 448], [96, 690], [96, 146], [96, 1600], [96, 160], [96, 640], [100, 200], [80, 868], [96, 832], [96, 928], [106, 6988], [100, 1732], [100, 771], [56, 230]] ' Const
 		
 		' Global variable(s):
 		Global characterFromGame:Int = -1
+		
+		Global checkCameraUpX:Int
 		Global checkCameraDownX:Int
-		Global checkCameraEnable:Bool
 		Global checkCameraLeftX:Int
 		Global checkCameraRightX:Int
-		Global checkCameraUpX:Int
-		Global checkPointEnable:Bool
+		
 		Global checkPointTime:Int
+		
 		Global checkPointX:Int
 		Global checkPointY:Int
+		
+		Global checkCameraEnable:Bool
+		Global checkPointEnable:Bool
+		
 		Global IsCalculateScore:Bool = False
+		
 		Global isContinueGame:Bool
 		Global isNextGameStageDirectedly:Bool = False
 		Global isOnlyScoreCal:Bool = False
 		Global isOnlyStagePass:Bool = False
 		Global isSaveTimeModeScore:Bool = False
 		Global isScoreBarOutOfScreen:Bool = False
+		
 		Global specialStagePointX:Int = 0
 		Global specialStagePointY:Int = 0
+		
 		Global stageIDFromGame:Int = -1
 		
 		' Functions:

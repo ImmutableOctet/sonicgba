@@ -14,8 +14,8 @@ Private
 Public
 
 ' Constant variable(s):
-Global SCREEN_WIDTH:Int = MDPhone.SCREEN_WIDTH ' 284 ' MyAPI.zoomIn(MFDevice.getScreenWidth(), True) ' Const
-Global SCREEN_HEIGHT:Int = MDPhone.SCREEN_HEIGHT ' 160 ' MyAPI.zoomIn(MFDevice.getScreenHeight(), True) ' Const
+Global SCREEN_WIDTH:Int = MyAPI.zoomIn(MDPhone.SCREEN_WIDTH, True) ' 284 ' MyAPI.zoomIn(MFDevice.getScreenWidth(), True) ' Const
+Global SCREEN_HEIGHT:Int = MyAPI.zoomIn(MDPhone.SCREEN_HEIGHT, True) ' 160 ' MyAPI.zoomIn(MFDevice.getScreenHeight(), True) ' Const
 
 Const GBA_WIDTH:= 240
 Const GBA_HEIGHT:= 160

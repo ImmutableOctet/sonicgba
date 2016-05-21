@@ -54,6 +54,18 @@ Function FlipBuffer_Shorts:Void(buffer:DataBuffer)
 	FlipBuffer_Shorts(buffer, buffer.Length)
 End
 
+Function FlipBuffer_UShorts:Void(buffer:DataBuffer, length:Int, offset:Int=0)
+	For Local i:= offset Until (length / SizeOf_Short) Step SizeOf_Short ' 2
+		Local value:= buffer.PeekShort(i)
+		
+		buffer.PokeShort(i, NToHS(value)) ' NToHS
+	Next
+End
+
+Function FlipBuffer_UShorts:Void(buffer:DataBuffer)
+	FlipBuffer_UShorts(buffer, buffer.Length)
+End
+
 Function FlipBuffer_Ints:Void(buffer:DataBuffer, length:Int, offset:Int=0)
 	For Local i:= offset Until (length / SizeOf_Integer) Step SizeOf_Integer ' 4
 		Local value:= buffer.PeekInt(i)

@@ -5,24 +5,6 @@ Public
 ' Preprocessor related:
 #ALLOW_FORCE_EXIT = False ' True
 
-' GLFW Configuration:
-#GLFW_WINDOW_TITLE = "Sonic Advance"
-#GLFW_WINDOW_WIDTH = 1280 ' 360
-#GLFW_WINDOW_HEIGHT = 720 ' 640
-#GLFW_WINDOW_SAMPLES = 0
-#GLFW_WINDOW_RESIZABLE = True
-#GLFW_WINDOW_DECORATED = True
-#GLFW_WINDOW_FLOATING = False
-#GLFW_WINDOW_FULLSCREEN = False
-
-#MOJO_AUTO_SUSPEND_ENABLED = False
-
-#TEXT_FILES+="*.txt|*.xml|*.json"
-#IMAGE_FILES+="*.png|*.jpg"
-#SOUND_FILES+="*.wav|*.ogg"
-#MUSIC_FILES+="*.wav|*.ogg"
-#BINARY_FILES+="*.bin|*.dat|*.ci|*.co|*.en|*.gi|*.it|*.pal|*.pm|*.pyx|*.ri"
-
 ' Imports:
 Private
 	Import mflib.mainstate
@@ -177,7 +159,7 @@ Class Application Extends App ' Main Extends MFMain
 			EndIf
 			
 			' Clear the "real screen".
-			graphics.Clear()
+			graphics.Clear(0.8, 0.4, 0.25)
 			
 			' Check if we should clear the graphics drawn by our device.
 			If (MFDevice.clearBuffer) Then
@@ -232,10 +214,14 @@ Class Application Extends App ' Main Extends MFMain
 			Return 0
 		End
 		
+		Method OnResize:Int()
+			UpdateLetterBox(SCREEN_WIDTH, SCREEN_HEIGHT)
+			
+			Return 0
+		End
+		
 		Method OnRenderWhileSuspended:Void()
 			graphics.Clear()
-			
-			graphics.SetFont(Null)
 			
 			graphics.SetColor(0.0, 0.0, 0.0)
 			

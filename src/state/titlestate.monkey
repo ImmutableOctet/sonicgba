@@ -559,16 +559,16 @@ Class TitleState Extends State
 			
 			Local iArr:= New Int[12]
 			
-			iArr[0] = ZONE_NUM_OFFSET
-			iArr[1] = ZONE_NUM_OFFSET
+			iArr[0] = 1
+			iArr[1] = 1
 			iArr[2] = STATE_MOVING
 			iArr[3] = STATE_MOVING
 			iArr[4] = STATE_OPENING
 			iArr[5] = STATE_OPENING
 			iArr[6] = STATE_MOVING
 			iArr[7] = STATE_MOVING
-			iArr[8] = ZONE_NUM_OFFSET
-			iArr[9] = ZONE_NUM_OFFSET
+			iArr[8] = 1
+			iArr[9] = 1
 			
 			Self.recordArrowOffsetXArray = iArr
 			
@@ -604,7 +604,7 @@ Class TitleState Extends State
 					Self.nextState = STATE_PRESS_START
 					Self.logoY = LOGO_POSITION_Y
 					
-					SoundSystem.getInstance().playBgm(ZONE_NUM_OFFSET, False)
+					SoundSystem.getInstance().playBgm(1, False)
 				Case STATE_OPENING
 					state = STATE_STAGE_SELECT
 					
@@ -622,7 +622,7 @@ Class TitleState Extends State
 					
 					SoundSystem.getInstance().playBgm(STATE_OPENING)
 					
-					Self.stage_sel_key = ZONE_NUM_OFFSET
+					Self.stage_sel_key = 1
 				Case STATE_START_GAME
 					rankingInit()
 					
@@ -648,7 +648,7 @@ Class TitleState Extends State
 					
 					Self.nextState = STATE_CHARACTER_SELECT
 					Self.preCharaterSelectState = STATE_PRO_RACE_MODE
-					Self.stage_sel_key = ZONE_NUM_OFFSET
+					Self.stage_sel_key = 1
 					
 					initCharacterSelectRes()
 			End Select
@@ -769,7 +769,7 @@ Class TitleState Extends State
 					State.drawFade(g)
 					startGameDraw(g)
 				Case STATE_RACE_MODE
-					stageSelectDraw(g, ZONE_NUM_OFFSET)
+					stageSelectDraw(g, 1)
 					drawTouchKeySelectStage(g)
 					State.drawSoftKey(g, True, True)
 				Case STATE_MORE_GAME
@@ -818,7 +818,7 @@ Class TitleState Extends State
 					'drawTitle2(g)
 					
 					' This behavior may change in the future:
-					If (state <> ZONE_NUM_OFFSET Or (Millisecs() / 500) Mod 2 = 0) Then
+					If (state <> 1 Or (Millisecs() / 500) Mod 2 = 0) Then
 						drawTitle2(g)
 					Else
 						'drawTitle2(g)
@@ -881,7 +881,7 @@ Class TitleState Extends State
 					SecondEnsurePanelDraw(g, 105)
 			End Select
 			
-			If (isDrawTouchPad And state <> 0 And state <> ZONE_NUM_OFFSET And state <> STATE_QUIT) Then
+			If (isDrawTouchPad And state <> 0 And state <> 1 And state <> STATE_QUIT) Then
 				drawTouchKeyDirect(g)
 			EndIf
 		End
@@ -903,18 +903,18 @@ Class TitleState Extends State
 					
 					Select (Standard.execSplash())
 						Case STATE_SELECT
-							GlobalResource.soundSwitchConfig = ZONE_NUM_OFFSET
+							GlobalResource.soundSwitchConfig = 1
 							
 							If (GlobalResource.soundConfig = 0) Then
 								GlobalResource.soundConfig = VISIBLE_OPTION_ITEMS_NUM
 							EndIf
 							
-							GlobalResource.seConfig = ZONE_NUM_OFFSET
+							GlobalResource.seConfig = 1
 							
 							SoundSystem.getInstance().setSoundState(GlobalResource.soundConfig)
 							SoundSystem.getInstance().setSeState(GlobalResource.seConfig)
 						Case STATE_MOVING
-							GlobalResource.soundSwitchConfig = ZONE_NUM_OFFSET
+							GlobalResource.soundSwitchConfig = 1
 							GlobalResource.soundConfig = 0
 							GlobalResource.seConfig = 0
 							
@@ -922,14 +922,16 @@ Class TitleState Extends State
 							SoundSystem.getInstance().setSeState(0)
 						Case STATE_OPENING
 							changeStateWithFade(STATE_OPENING)
+							
 							Key.touchOpeningInit()
 							
 							If (Not SoundSystem.getInstance().bgmPlaying()) Then
-								SoundSystem.getInstance().playBgm(0, False)
+								SoundSystem.getInstance().playBgm(SoundSystem.BGM_OPENING, False)
 							EndIf
 							
 							Key.touchsoftkeyClose()
 							Key.touchanykeyInit()
+							
 							State.load_bp_string()
 						Default
 							' Nothing so far.
@@ -943,7 +945,7 @@ Class TitleState Extends State
 						openingInit()
 						Key.touchOpeningInit()
 						
-						SoundSystem.getInstance().playBgm(0, False)
+						SoundSystem.getInstance().playBgm(SoundSystem.BGM_OPENING, False)
 					EndIf
 					
 					If (Self.titleFrame > 4) Then
@@ -983,7 +985,7 @@ Class TitleState Extends State
 				Case STATE_START_GAME
 					startGameLogic()
 				Case STATE_GOTO_GAME
-					State.setState(ZONE_NUM_OFFSET)
+					State.setState(1)
 				Case STATE_MORE_GAME
 					Select (comfirmLogic())
 						Case STATE_SEGA_LOGO
@@ -1060,7 +1062,7 @@ Class TitleState Extends State
 							' Nothing so far.
 					End Select
 				Case STATE_START_TO_MENU_1
-					Self.logoX = MyAPI.calNextPositionReverse(Self.logoX, LOGO_POSITION_X, SCREEN_WIDTH + (SCREEN_WIDTH Shr 1), ZONE_NUM_OFFSET, 2)
+					Self.logoX = MyAPI.calNextPositionReverse(Self.logoX, LOGO_POSITION_X, SCREEN_WIDTH + (SCREEN_WIDTH Shr 1), 1, 2)
 					
 					If (Self.logoX = SCREEN_WIDTH + (SCREEN_WIDTH Shr 1)) Then
 						Self.logoX = -(SCREEN_WIDTH Shr 1)
@@ -1069,7 +1071,7 @@ Class TitleState Extends State
 						Self.logoY = LOGO_POSITION_Y_2
 					EndIf
 				Case STATE_START_TO_MENU_2
-					Self.logoX = MyAPI.calNextPosition(Double(Self.logoX), Double(LOGO_POSITION_X), ZONE_NUM_OFFSET, 2)
+					Self.logoX = MyAPI.calNextPosition(Double(Self.logoX), Double(LOGO_POSITION_X), 1, 2)
 					
 					If (Self.logoX = LOGO_POSITION_X) Then
 						state = STATE_MOVING
@@ -1077,7 +1079,7 @@ Class TitleState Extends State
 						Self.nextState = STATE_MOVING
 					EndIf
 				Case STATE_RETURN_TO_LOGO_1
-					Self.logoX = MyAPI.calNextPositionReverse(Self.logoX, LOGO_POSITION_X, SCREEN_WIDTH + (SCREEN_WIDTH Shr 1), ZONE_NUM_OFFSET, 2)
+					Self.logoX = MyAPI.calNextPositionReverse(Self.logoX, LOGO_POSITION_X, SCREEN_WIDTH + (SCREEN_WIDTH Shr 1), 1, 2)
 					
 					If (Self.logoX = SCREEN_WIDTH + (SCREEN_WIDTH Shr 1)) Then
 						Self.logoX = -(SCREEN_WIDTH Shr 1)
@@ -1092,7 +1094,7 @@ Class TitleState Extends State
 						Self.mainMenuBackFlag = False
 					EndIf
 				Case STATE_RETURN_TO_LOGO_2
-					Self.logoX = MyAPI.calNextPosition(Double(Self.logoX), Double(LOGO_POSITION_X), ZONE_NUM_OFFSET, 2)
+					Self.logoX = MyAPI.calNextPosition(Double(Self.logoX), Double(LOGO_POSITION_X), 1, 2)
 					
 					If (Self.logoX = LOGO_POSITION_X) Then
 						state = STATE_PRESS_START
@@ -1164,7 +1166,7 @@ Class TitleState Extends State
 							
 							state = STATE_OPTION
 						Case STATE_MOVING
-							GlobalResource.sensorConfig = ZONE_NUM_OFFSET
+							GlobalResource.sensorConfig = 1
 							
 							State.fadeInit(220, 0)
 							
@@ -1340,7 +1342,7 @@ Class TitleState Extends State
 				Self.titleScale = 4.0
 				Self.title_name_center_x = 216
 				Self.title_name_center_y = 152
-			ElseIf (Self.titleFrame = ZONE_NUM_OFFSET) Then
+			ElseIf (Self.titleFrame = 1) Then
 				Self.titleScale = 3.25
 				Self.title_name_center_x = 162
 				Self.title_name_center_y = 114
@@ -1363,7 +1365,7 @@ Class TitleState Extends State
 			g.translateCanvas(SCREEN_WIDTH + Self.title_name_center_x, (SCREEN_HEIGHT / 2) + Self.title_name_center_y) ' Shr 1
 			g.scaleCanvas(Self.titleScale, Self.titleScale)
 			
-			Self.titleAniDrawer.setActionId(ZONE_NUM_OFFSET)
+			Self.titleAniDrawer.setActionId(1)
 			
 			g.restoreCanvas()
 			
@@ -1405,9 +1407,9 @@ Class TitleState Extends State
 		
 		Method mainMenuDraw:Void(g:MFGraphics)
 			If (Self.mainMenuBackFlag) Then
-				Self.degree = MyAPI.calNextPositionReverse(Self.degree, 0, Self.degreeDes, ZONE_NUM_OFFSET, STATE_OPENING)
+				Self.degree = MyAPI.calNextPositionReverse(Self.degree, 0, Self.degreeDes, 1, STATE_OPENING)
 			Else
-				Self.degree = MyAPI.calNextPosition(Double(Self.degree), Double(Self.degreeDes), ZONE_NUM_OFFSET, STATE_OPENING)
+				Self.degree = MyAPI.calNextPosition(Double(Self.degree), Double(Self.degreeDes), 1, STATE_OPENING)
 			EndIf
 			
 			If (Self.degree = Self.degreeDes) Then
@@ -1449,7 +1451,7 @@ Class TitleState Extends State
 		Method mainMenuDraw2:Void(g:MFGraphics)
 			MENU_OFFSET_X = (SCREEN_WIDTH Shr 1) + STATE_INTERRUPT
 			
-			Self.degree = MyAPI.calNextPosition(Double(Self.degree), 0.0, ZONE_NUM_OFFSET, STATE_OPENING)
+			Self.degree = MyAPI.calNextPosition(Double(Self.degree), 0.0, 1, STATE_OPENING)
 			
 			If (Self.degree = 0) Then
 				Self.menuMoving = False
@@ -1473,7 +1475,7 @@ Class TitleState Extends State
 		End
 		
 		Method drawMenuSelection1:Void(g:MFGraphics, id:Int, x:Int, y:Int)
-			State.drawMenuBar(g, ZONE_NUM_OFFSET, 0, y)
+			State.drawMenuBar(g, 1, 0, y)
 			
 			Self.selectMenuOffsetX += STATE_RANKING
 			Self.selectMenuOffsetX Mod= MOVE_DIRECTION
@@ -1547,7 +1549,7 @@ Class TitleState Extends State
 			
 			For Local i:= 0 Until (Key.touchmenuoptionitems.Length / 2) ' Shr 1
 				Key.touchmenuoptionitems[i * 2].setStartY((((i * STATE_PRO_RACE_MODE) + STATE_OPTION_SOUND) + Self.optionDrawOffsetY) + Self.optionslide_y)
-				Key.touchmenuoptionitems[(i * 2) + ZONE_NUM_OFFSET].setStartY((((i * STATE_PRO_RACE_MODE) + STATE_OPTION_SOUND) + Self.optionDrawOffsetY) + Self.optionslide_y)
+				Key.touchmenuoptionitems[(i * 2) + 1].setStartY((((i * STATE_PRO_RACE_MODE) + STATE_OPTION_SOUND) + Self.optionDrawOffsetY) + Self.optionslide_y)
 			Next
 			
 			If (Self.isSelectable) Then
@@ -1661,7 +1663,7 @@ Class TitleState Extends State
 					Local speed:Int
 					
 					If (Self.optionDrawOffsetY > 0) Then
-						Self.optionYDirect = ZONE_NUM_OFFSET
+						Self.optionYDirect = 1
 						speed = (-Self.optionDrawOffsetY) Shr 1
 						
 						If (speed > TIME_ATTACK_SPEED_X) Then
@@ -1753,8 +1755,8 @@ Class TitleState Extends State
 			MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 			muiAniDrawer.setActionId(52)
 			
-			For Local i2:= 0 Until (SCREEN_WIDTH / CHARACTER_RECORD_BG_HEIGHT) + 1 ' ZONE_NUM_OFFSET
-				For Local j:= 0 Until (SCREEN_HEIGHT / CHARACTER_RECORD_BG_HEIGHT) + 1 ' ZONE_NUM_OFFSET
+			For Local i2:= 0 Until (SCREEN_WIDTH / CHARACTER_RECORD_BG_HEIGHT) + 1 ' 1
+				For Local j:= 0 Until (SCREEN_HEIGHT / CHARACTER_RECORD_BG_HEIGHT) + 1 ' 1
 					muiAniDrawer.draw(g, i2 * CHARACTER_RECORD_BG_HEIGHT, j * CHARACTER_RECORD_BG_HEIGHT)
 				Next
 			Next
@@ -1803,7 +1805,7 @@ Class TitleState Extends State
 			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + CHARACTER_RECORD_BG_HEIGHT) + Self.optionArrowDriveY)
 			
 			If (Key.touchmenuoptionitems[5].Isin() And Self.menuOptionCursor = STATE_MOVING And Self.isSelectable) Then
-				i = ZONE_NUM_OFFSET
+				i = 1
 			Else
 				i = 0
 			EndIf
@@ -1812,7 +1814,7 @@ Class TitleState Extends State
 			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + CHARACTER_RECORD_BG_HEIGHT) + Self.optionArrowDriveY)
 			
 			If (GlobalResource.vibrationConfig = 0) Then
-				i = ZONE_NUM_OFFSET
+				i = 1
 			Else
 				i = 0
 			EndIf
@@ -1874,7 +1876,7 @@ Class TitleState Extends State
 			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + intergradeRecordtoGamecnt_max, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + SONIC_BALL_SPACE) + Self.optionArrowDriveY)
 			
 			If (Key.touchmenuoptionitems[STATE_EXIT].Isin() And Self.menuOptionCursor = STATE_RACE_MODE And Self.isSelectable) Then
-				i = ZONE_NUM_OFFSET
+				i = 1
 			Else
 				i = 0
 			EndIf
@@ -1883,7 +1885,7 @@ Class TitleState Extends State
 			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + 144) + Self.optionArrowDriveY)
 			
 			If (Key.touchmenuoptionitems[STATE_STAGE_SELECT].Isin() And Self.menuOptionCursor = STATE_MORE_GAME And Self.isSelectable) Then
-				i = ZONE_NUM_OFFSET
+				i = 1
 			Else
 				i = 0
 			EndIf
@@ -1892,7 +1894,7 @@ Class TitleState Extends State
 			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 96, (((Self.optionDrawOffsetY + STATE_OPTION_SENSOR_SET) + Self.optionslide_y) + 168) + Self.optionArrowDriveY)
 			
 			If (Key.touchmenuoptionitems[STATE_INTERRUPT].Isin() And Self.menuOptionCursor = STATE_RANKING And Self.isSelectable) Then
-				i = ZONE_NUM_OFFSET
+				i = 1
 			Else
 				i = 0
 			EndIf
@@ -1993,7 +1995,7 @@ Class TitleState Extends State
 		Method stageSelectDraw:Void(g:MFGraphics, type:Int)
 			menuBgDraw(g)
 			
-			Self.stageDrawOffsetY = MyAPI.calNextPosition(Double(Self.stageDrawOffsetY), Double((-Self.stageStartIndex) * ITEM_SPACE), ZONE_NUM_OFFSET, 2)
+			Self.stageDrawOffsetY = MyAPI.calNextPosition(Double(Self.stageDrawOffsetY), Double((-Self.stageStartIndex) * ITEM_SPACE), 1, 2)
 			
 			If (Self.stageItemNumForShow <> StageManager.STAGE_NUM) Then
 				MyAPI.setClip(g, 0, Self.stageDrawStartY - (ITEM_SPACE Shr 1), SCREEN_WIDTH, Self.stageItemNumForShow * ITEM_SPACE)
@@ -2012,12 +2014,12 @@ Class TitleState Extends State
 			MyAPI.setClip(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
 			
 			If (type = 0) Then
-				For Local i:= 0 Until (SCREEN_HEIGHT / BACK_LINE_SPACE_TIME) + 1 ' ZONE_NUM_OFFSET
+				For Local i:= 0 Until (SCREEN_HEIGHT / BACK_LINE_SPACE_TIME) + 1 ' 1
 					State.drawMenuFontById(g, 104, 0, i * BACK_LINE_SPACE_TIME)
 				Next
 				
-				drawMenuTitle(g, ZONE_NUM_OFFSET, STATE_GOTO_GAME, 0)
-			ElseIf (type = ZONE_NUM_OFFSET) Then
+				drawMenuTitle(g, 1, STATE_GOTO_GAME, 0)
+			ElseIf (type = 1) Then
 				For Local i:= 0 Until (SCREEN_HEIGHT / BACK_LINE_SPACE_TIME) + 2
 					State.drawMenuFontById(g, 110, 0, i * BACK_LINE_SPACE_TIME)
 				Next
@@ -2125,7 +2127,7 @@ Class TitleState Extends State
 						
 						initTitleRes()
 						
-						SoundSystem.getInstance().playBgm(ZONE_NUM_OFFSET, False)
+						SoundSystem.getInstance().playBgm(1, False)
 					Case STATE_RACE_MODE, STATE_RANKING
 						SoundSystem.getInstance().playBgm(STATE_START_GAME)
 					Case VISIBLE_OPTION_ITEMS_NUM
@@ -2224,7 +2226,7 @@ Class TitleState Extends State
 		Method rankingDraw:Void(g:MFGraphics)
 			menuBgDraw(g)
 			
-			For Local i:= 0 Until (SCREEN_WIDTH / STATE_OPTION_SP_SET) + 1 ' ZONE_NUM_OFFSET
+			For Local i:= 0 Until (SCREEN_WIDTH / STATE_OPTION_SP_SET) + 1 ' 1
 				State.drawMenuFontById(g, 111, i * STATE_OPTION_SP_SET, 0)
 				State.drawMenuFontById(g, CREDIT_PAGE_BACKGROUND_WIDTH, (i * STATE_OPTION_SP_SET) - 1, SCREEN_HEIGHT)
 			Next
@@ -2251,7 +2253,7 @@ Class TitleState Extends State
 		Method gameover_rankingDraw:Void(g:MFGraphics)
 			menuBgDraw(g)
 			
-			For Local i:= 0 Until i < (SCREEN_WIDTH / STATE_OPTION_SP_SET) + 1 ' ZONE_NUM_OFFSET
+			For Local i:= 0 Until i < (SCREEN_WIDTH / STATE_OPTION_SP_SET) + 1 ' 1
 				State.drawMenuFontById(g, 111, i * STATE_OPTION_SP_SET, 0)
 				State.drawMenuFontById(g, CREDIT_PAGE_BACKGROUND_WIDTH, i * STATE_OPTION_SP_SET, SCREEN_HEIGHT)
 			Next
@@ -2270,7 +2272,7 @@ Class TitleState Extends State
 			Self.offsetY[0] = (SCREEN_HEIGHT Shr 1) - 72
 			Self.vY[0] = STATE_START_GAME
 			
-			For Local i:= ZONE_NUM_OFFSET Until  Self.STAGE_TOTAL_NUM
+			For Local i:= 1 Until  Self.STAGE_TOTAL_NUM
 				Self.offsetY[i] = Self.offsetY[i - 1] * 2
 				Self.vY[i] = Self.vY[i - 1] * 2
 			Next
@@ -2308,8 +2310,8 @@ Class TitleState Extends State
 		Method drawStageName:Void(g:MFGraphics, stageId:Int, type:Int, offsetX:Int, mOffsetY:Int)
 			State.drawMenuFontById(g, 109, COMFIRM_X, ((Self.stageDrawStartY + (ITEM_SPACE * stageId)) + Self.offsetY[stageId]) + mOffsetY)
 			State.drawMenuFontById(g, (type + 2) + (stageId Mod STATE_MOVING), (COMFIRM_X + ACTION_NUM_OFFSET) + offsetX, ((Self.stageDrawStartY + (ITEM_SPACE * stageId)) + Self.offsetY[stageId]) + mOffsetY)
-			State.drawMenuFontById(g, type + ZONE_NUM_OFFSET, (COMFIRM_X + STATE_INTERGRADE_RECORD) + offsetX, ((Self.stageDrawStartY + (ITEM_SPACE * stageId)) + Self.offsetY[stageId]) + mOffsetY)
-			State.drawMenuFontById(g, ((stageId Shr 1) + type) + 2, (COMFIRM_X + ZONE_NUM_OFFSET) + offsetX, ((Self.stageDrawStartY + (ITEM_SPACE * stageId)) + Self.offsetY[stageId]) + mOffsetY)
+			State.drawMenuFontById(g, type + 1, (COMFIRM_X + STATE_INTERGRADE_RECORD) + offsetX, ((Self.stageDrawStartY + (ITEM_SPACE * stageId)) + Self.offsetY[stageId]) + mOffsetY)
+			State.drawMenuFontById(g, ((stageId Shr 1) + type) + 2, (COMFIRM_X + 1) + offsetX, ((Self.stageDrawStartY + (ITEM_SPACE * stageId)) + Self.offsetY[stageId]) + mOffsetY)
 			State.drawMenuFontById(g, type, (COMFIRM_X + ZONE_OFFSET) + offsetX, ((Self.stageDrawStartY + (ITEM_SPACE * stageId)) + Self.offsetY[stageId]) + mOffsetY)
 		End
 		
@@ -2340,7 +2342,7 @@ Class TitleState Extends State
 		End
 		
 		Method drawTimeNum:Void(g:MFGraphics, num:Int, x:Int, y:Int, blockNum:Int)
-			Local divideNum:= 1 ' ZONE_NUM_OFFSET
+			Local divideNum:= 1 ' 1
 			
 			For Local i:= 1 Until blockNum
 				divideNum *= 10
@@ -2438,7 +2440,7 @@ Class TitleState Extends State
 			Select (Self.openingState)
 				Case OPENING_STATE_EMERALD
 					If (Self.openingDrawer[0].checkEnd()) Then
-						Self.openingDrawer[0].setActionId(ZONE_NUM_OFFSET)
+						Self.openingDrawer[0].setActionId(1)
 						Self.openingState = OPENING_STATE_EMERALD_SHINING
 						
 						SoundSystem.getInstance().playSequenceSe(80)
@@ -2588,7 +2590,7 @@ Class TitleState Extends State
 					Self.titleAniDrawer.setActionId(STATE_MOVING)
 					Self.titleAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + STATE_OPTION_LANGUAGE)
 				EndIf
-			ElseIf (state = STATE_EXIT And Self.quitFlag = ZONE_NUM_OFFSET) Then
+			ElseIf (state = STATE_EXIT And Self.quitFlag = 1) Then
 				Self.titleAniDrawer.setActionId(STATE_MOVING)
 				Self.titleAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + STATE_OPTION_LANGUAGE)
 			EndIf
@@ -2616,11 +2618,11 @@ Class TitleState Extends State
 			animationDrawer.setActionId(i + STATE_GOTO_GAME)
 			Self.titleAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + STATE_OPTION_SP_SET)
 			
-			i = PickValue(Self.isAtMainMenu, PickValue((Key.touchmainmenustart.Isin() And Self.cursor = 2), ZONE_NUM_OFFSET, 0), 0)
+			i = PickValue(Self.isAtMainMenu, PickValue((Key.touchmainmenustart.Isin() And Self.cursor = 2), 1, 0), 0)
 			animationDrawer.setActionId(i + STATE_MORE_GAME)
 			Self.titleAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + 52)
 			
-			i = PickValue(Self.isAtMainMenu, PickValue((Key.touchmainmenustart.Isin() And Self.cursor = 3), ZONE_NUM_OFFSET, 0), 0)
+			i = PickValue(Self.isAtMainMenu, PickValue((Key.touchmainmenustart.Isin() And Self.cursor = 3), 1, 0), 0)
 			animationDrawer.setActionId(i + VISIBLE_OPTION_ITEMS_NUM)
 			Self.titleAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + 72)
 			
@@ -2742,7 +2744,7 @@ Class TitleState Extends State
 		Method characterSelectLogic:Void()
 			Self.character_sel_frame_cnt += 1
 			
-			If (Self.character_sel_frame_cnt = ZONE_NUM_OFFSET) Then
+			If (Self.character_sel_frame_cnt = 1) Then
 				Self.charSelAniDrawer.setActionId(0)
 				Self.arrowPressState = 0
 				
@@ -2880,10 +2882,10 @@ Class TitleState Extends State
 						Self.character_offset_state = 0
 						
 						If (Self.arrowPressState = 0) Then
-							Self.character_sel_offset_x = MyAPI.calNextPosition(Double(Self.character_sel_offset_x), 0.0, ZONE_NUM_OFFSET, 2)
+							Self.character_sel_offset_x = MyAPI.calNextPosition(Double(Self.character_sel_offset_x), 0.0, 1, 2)
 						Else
 							If (Self.arrowPressState = STATE_PRESS_START) Then
-								Self.character_sel_offset_x = MyAPI.calNextPosition(Double(Self.character_sel_offset_x), 128.0, ZONE_NUM_OFFSET, 2)
+								Self.character_sel_offset_x = MyAPI.calNextPosition(Double(Self.character_sel_offset_x), 128.0, 1, 2)
 								
 								If (Self.character_sel_offset_x = TIME_ATTACK_WIDTH) Then
 									Self.character_id -= 1
@@ -2900,7 +2902,7 @@ Class TitleState Extends State
 							EndIf
 							
 							If (Self.arrowPressState = STATE_MOVING) Then
-								Self.character_sel_offset_x = MyAPI.calNextPosition(Double(Self.character_sel_offset_x), -128.0, ZONE_NUM_OFFSET, 2)
+								Self.character_sel_offset_x = MyAPI.calNextPosition(Double(Self.character_sel_offset_x), -128.0, 1, 2)
 								
 								If (Self.character_sel_offset_x = def.TOUCH_HELP_LEFT_X) Then
 									Self.character_id += 1
@@ -2929,7 +2931,7 @@ Class TitleState Extends State
 								animationDrawer.restart()
 							EndIf
 							
-							Self.charSelFilAniDrawer.setActionId(Self.character_id + ZONE_NUM_OFFSET)
+							Self.charSelFilAniDrawer.setActionId(Self.character_id + 1)
 							Self.character_idchangeFlag = False
 							
 							Key.touchcharsElselect.reset()
@@ -2976,7 +2978,7 @@ Class TitleState Extends State
 					If (StageManager.getStageID() = 0 And StageManager.getOpenedStageId() = 0 And GameObject.stageModeState = 0) Then
 						StageManager.setStageID(0)
 						StageManager.setStartStageID(0)
-						State.setState(ZONE_NUM_OFFSET)
+						State.setState(1)
 						PlayerObject.resetGameParam()
 						StageManager.saveStageRecord()
 					Else
@@ -3065,7 +3067,7 @@ Class TitleState Extends State
 				
 				If (Key.touchproracemodestart.IsButtonPress() And Self.cursor = 0 And Not Self.isRaceModeItemsSelected) Then
 					Self.isRaceModeItemsSelected = True
-					Self.stage_sel_key = ZONE_NUM_OFFSET
+					Self.stage_sel_key = 1
 					
 					changeStateWithFade(STATE_CHARACTER_SELECT)
 					
@@ -3117,7 +3119,7 @@ Class TitleState Extends State
 			
 			Self.timeAttAniDrawer.setActionId(0)
 			Self.timeAttAniDrawer.draw(g, 0, 0)
-			Self.timeAttAniDrawer.setActionId(ZONE_NUM_OFFSET)
+			Self.timeAttAniDrawer.setActionId(1)
 			Self.timeAttAniDrawer.draw(g, SCREEN_WIDTH, SCREEN_HEIGHT Shr 1)
 			
 			If ((Key.touchproracemodestart.Isin() Or Self.isRaceModeItemsSelected) And Self.cursor = 0) Then
@@ -3344,7 +3346,7 @@ Class TitleState Extends State
 				EndIf
 				
 				For i = 0 Until Key.touchstageselectitem.Length
-					Key.touchstageselectitem[i].setStartY((((Self.stageDrawStartY + ((i + ZONE_NUM_OFFSET) * STATE_PRO_RACE_MODE)) + Self.offsetY[i]) + Self.stageDrawOffsetY) + Self.stageselectslide_y)
+					Key.touchstageselectitem[i].setStartY((((Self.stageDrawStartY + ((i + 1) * STATE_PRO_RACE_MODE)) + Self.offsetY[i]) + Self.stageDrawOffsetY) + Self.stageselectslide_y)
 				Next
 				
 				If (Self.isSelectable And Self.stageYDirect = 0) Then
@@ -3368,7 +3370,7 @@ Class TitleState Extends State
 								Case STATE_MOVING
 									StageManager.setStageID(Self.optionMenuCursor)
 									StageManager.setStartStageID(Self.optionMenuCursor)
-									State.setState(ZONE_NUM_OFFSET)
+									State.setState(1)
 							End Select
 							
 							SoundSystem.getInstance().playSe(SoundSystem.SE_106)
@@ -3409,7 +3411,7 @@ Class TitleState Extends State
 						Local speed:Int
 						
 						If (Self.stageDrawOffsetY > 0) Then
-							Self.stageYDirect = ZONE_NUM_OFFSET
+							Self.stageYDirect = 1
 							
 							speed = (-Self.stageDrawOffsetY) Shr 1
 							
@@ -3512,24 +3514,24 @@ Class TitleState Extends State
 			
 			For i = 0 Until StageManager.STAGE_NAME.Length
 				If (i = Self.optionMenuCursor And Self.stage_select_state = STATE_PRESS_START And Self.isSelectable And Self.stageYDirect = 0) Then
-					drawStageName(g, ZONE_NUM_OFFSET, i, (Self.stageDrawOffsetY + Self.stageselectslide_y) + Self.stageSelectArrowDriveY)
+					drawStageName(g, 1, i, (Self.stageDrawOffsetY + Self.stageselectslide_y) + Self.stageSelectArrowDriveY)
 					drawStageName(g, STATE_OPTION_VIBRATION, i, (Self.stageDrawOffsetY + Self.stageselectslide_y) + Self.stageSelectArrowDriveY)
 				ElseIf (i <= StageManager.getOpenedStageId()) Then
 					drawStageName(g, STATE_GAMEOVER_RANKING, i, (Self.stageDrawOffsetY + Self.stageselectslide_y) + Self.stageSelectArrowDriveY)
 				ElseIf ((GameObject.stageModeState = 0 And i < STATE_QUIT) Or (GameObject.stageModeState = GameObject.STATE_RACE_MODE And i < STATE_EXIT)) Then
-					drawStageName(g, ZONE_NUM_OFFSET, i, (Self.stageDrawOffsetY + Self.stageselectslide_y) + Self.stageSelectArrowDriveY)
+					drawStageName(g, 1, i, (Self.stageDrawOffsetY + Self.stageselectslide_y) + Self.stageSelectArrowDriveY)
 				EndIf
 			Next
 			
 			i = 0
 			
 			While (i < (StageManager.STAGE_NAME.Length Shr 1) - 1 And i * 2 <= StageManager.getOpenedStageId())
-				Self.stageSelAniDrawer.draw(g, i + STATE_SCORE_UPDATE_ENSURE, SCREEN_WIDTH, Self.stageSelectArrowDriveY + ((((Self.stageDrawStartY + Self.offsetY[(i * 2) + ZONE_NUM_OFFSET]) + ((i + ZONE_NUM_OFFSET) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y), False, 0)
+				Self.stageSelAniDrawer.draw(g, i + STATE_SCORE_UPDATE_ENSURE, SCREEN_WIDTH, Self.stageSelectArrowDriveY + ((((Self.stageDrawStartY + Self.offsetY[(i * 2) + 1]) + ((i + 1) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y), False, 0)
 				
 				i += 1
 			Wend
 			
-			Local maxUnlockStage:= Min(((StageManager.getOpenedStageId() / STATE_MOVING) * 2) + ZONE_NUM_OFFSET, STATE_EXIT) + ZONE_NUM_OFFSET ' 1
+			Local maxUnlockStage:= Min(((StageManager.getOpenedStageId() / STATE_MOVING) * 2) + 1, STATE_EXIT) + 1 ' 1
 			
 			If (maxUnlockStage = STATE_MORE_GAME) Then
 				maxUnlockStage = STATE_RANKING
@@ -3571,34 +3573,34 @@ Class TitleState Extends State
 		End
 		
 		Method drawStageName:Void(g:MFGraphics, preid:Int, stageId:Int, mOffsetY:Int)
-			Self.stageSelAniDrawer.draw(g, preid + stageId, SCREEN_WIDTH Shr 1, ((Self.stageDrawStartY + ((stageId + ZONE_NUM_OFFSET) * STATE_PRO_RACE_MODE)) + Self.offsetY[stageId]) + mOffsetY, False, 0)
+			Self.stageSelAniDrawer.draw(g, preid + stageId, SCREEN_WIDTH Shr 1, ((Self.stageDrawStartY + ((stageId + 1) * STATE_PRO_RACE_MODE)) + Self.offsetY[stageId]) + mOffsetY, False, 0)
 		End
 		
 		Method drawStageEmerald:Void(g:MFGraphics, stageId:Int)
 			If (stageId <> 7) Then
 				Select (SpecialStageState.emeraldState(stageId))
 					Case EMERALD_STATE_SUCCESS
-						Self.stageSelEmeraldDrawer.draw(g, PickValue((stageId < 7), (stageId Shr 1) + 2, ((stageId Shr 1) + 2)) + 2, SCREEN_WIDTH, Self.stageSelectArrowDriveY + ((((Self.stageDrawStartY + Self.offsetY[((stageId Shr 1) * 2) + ZONE_NUM_OFFSET]) + (((stageId Shr 1) + ZONE_NUM_OFFSET) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y), False, 0)
+						Self.stageSelEmeraldDrawer.draw(g, PickValue((stageId < 7), (stageId Shr 1) + 2, ((stageId Shr 1) + 2)) + 2, SCREEN_WIDTH, Self.stageSelectArrowDriveY + ((((Self.stageDrawStartY + Self.offsetY[((stageId Shr 1) * 2) + 1]) + (((stageId Shr 1) + 1) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y), False, 0)
 					Case EMERALD_STATE_FAILD
-						Self.stageSelEmeraldDrawer.draw(g, 0, SCREEN_WIDTH, ((((Self.stageDrawStartY + Self.offsetY[((stageId Shr 1) * 2) + ZONE_NUM_OFFSET]) + (((stageId Shr 1) + ZONE_NUM_OFFSET) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y) + Self.stageSelectArrowDriveY, False, 0)
+						Self.stageSelEmeraldDrawer.draw(g, 0, SCREEN_WIDTH, ((((Self.stageDrawStartY + Self.offsetY[((stageId Shr 1) * 2) + 1]) + (((stageId Shr 1) + 1) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y) + Self.stageSelectArrowDriveY, False, 0)
 					Default
 						' Nothing so far.
 				End Select
 			ElseIf (SpecialStageState.emeraldState(stageId - 1) = 0) Then
 				Select (SpecialStageState.emeraldState(stageId))
 					Case EMERALD_STATE_SUCCESS
-						Self.stageSelEmeraldDrawer.draw(g, 6, SCREEN_WIDTH, Self.stageSelectArrowDriveY + ((((Self.stageDrawStartY + Self.offsetY[((stageId Shr 1) * 2) + ZONE_NUM_OFFSET]) + (((stageId Shr 1) + ZONE_NUM_OFFSET) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y), False, 0)
+						Self.stageSelEmeraldDrawer.draw(g, 6, SCREEN_WIDTH, Self.stageSelectArrowDriveY + ((((Self.stageDrawStartY + Self.offsetY[((stageId Shr 1) * 2) + 1]) + (((stageId Shr 1) + 1) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y), False, 0)
 					Case EMERALD_STATE_FAILD
-						Self.stageSelEmeraldDrawer.draw(g, 0, SCREEN_WIDTH, ((((Self.stageDrawStartY + Self.offsetY[((stageId Shr 1) * 2) + ZONE_NUM_OFFSET]) + (((stageId Shr 1) + ZONE_NUM_OFFSET) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y) + Self.stageSelectArrowDriveY, False, 0)
+						Self.stageSelEmeraldDrawer.draw(g, 0, SCREEN_WIDTH, ((((Self.stageDrawStartY + Self.offsetY[((stageId Shr 1) * 2) + 1]) + (((stageId Shr 1) + 1) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y) + Self.stageSelectArrowDriveY, False, 0)
 					Default
 						' Nothing so far.
 				End Select
 			Else
 				Select (SpecialStageState.emeraldState(stageId))
 					Case EMERALD_STATE_SUCCESS
-						Self.stageSelEmeraldDrawer.draw(g, 7, SCREEN_WIDTH, Self.stageSelectArrowDriveY + ((((Self.stageDrawStartY + Self.offsetY[((stageId Shr 1) * 2) + ZONE_NUM_OFFSET]) + (((stageId Shr 1) + ZONE_NUM_OFFSET) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y), False, 0)
+						Self.stageSelEmeraldDrawer.draw(g, 7, SCREEN_WIDTH, Self.stageSelectArrowDriveY + ((((Self.stageDrawStartY + Self.offsetY[((stageId Shr 1) * 2) + 1]) + (((stageId Shr 1) + 1) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y), False, 0)
 					Case EMERALD_STATE_FAILD
-						Self.stageSelEmeraldDrawer.draw(g, 1, SCREEN_WIDTH, ((((Self.stageDrawStartY + Self.offsetY[((stageId Shr 1) * 2) + ZONE_NUM_OFFSET]) + (((stageId Shr 1) + ZONE_NUM_OFFSET) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y) + Self.stageSelectArrowDriveY, False, 0) ' ZONE_NUM_OFFSET
+						Self.stageSelEmeraldDrawer.draw(g, 1, SCREEN_WIDTH, ((((Self.stageDrawStartY + Self.offsetY[((stageId Shr 1) * 2) + 1]) + (((stageId Shr 1) + 1) * CHARACTER_RECORD_BG_HEIGHT)) + Self.stageDrawOffsetY) + Self.stageselectslide_y) + Self.stageSelectArrowDriveY, False, 0) ' 1
 					Default
 						' Nothing so far.
 				End Select
@@ -3678,7 +3680,7 @@ Class TitleState Extends State
 			drawRecordArrow(g)
 			
 			drawRecordTime(g, StageManager.getTimeModeScore(Self.characterRecordID, Self.stage_characterRecord_ID, 0), (SCREEN_HEIGHT Shr 1) + STATE_EXIT)
-			drawRecordTime(g, StageManager.getTimeModeScore(Self.characterRecordID, Self.stage_characterRecord_ID, ZONE_NUM_OFFSET), ((SCREEN_HEIGHT Shr 1) + STATE_EXIT) + STATE_INTERRUPT)
+			drawRecordTime(g, StageManager.getTimeModeScore(Self.characterRecordID, Self.stage_characterRecord_ID, 1), ((SCREEN_HEIGHT Shr 1) + STATE_EXIT) + STATE_INTERRUPT)
 			drawRecordTime(g, StageManager.getTimeModeScore(Self.characterRecordID, Self.stage_characterRecord_ID, 2), ((SCREEN_HEIGHT Shr 1) + STATE_EXIT) + STATE_OPTION_SP_SET)
 			
 			If (muiAniDrawer = Null) Then
@@ -3772,7 +3774,7 @@ Class TitleState Extends State
 
 				SoundSystem.getInstance().stopBgm(False)
 				
-				State.setState(ZONE_NUM_OFFSET)
+				State.setState(1)
 				
 				Key.touchCharacterRecordClose()
 				Key.touchanykeyClose()
@@ -3783,7 +3785,7 @@ Class TitleState Extends State
 				
 				SoundSystem.getInstance().stopBgm(False)
 				
-				State.setState(ZONE_NUM_OFFSET)
+				State.setState(1)
 				Key.touchCharacterRecordClose()
 				
 				SoundSystem.getInstance().playSe(SoundSystem.SE_106)
@@ -3799,7 +3801,7 @@ Class TitleState Extends State
 			drawStageNameinIntergradeRecord(g)
 			
 			drawRecordTime(g, StageManager.getTimeModeScore(Self.characterRecordID, Self.stage_characterRecord_ID, 0), (SCREEN_HEIGHT Shr 1) + STATE_EXIT)
-			drawRecordTime(g, StageManager.getTimeModeScore(Self.characterRecordID, Self.stage_characterRecord_ID, ZONE_NUM_OFFSET), ((SCREEN_HEIGHT Shr 1) + STATE_EXIT) + STATE_INTERRUPT)
+			drawRecordTime(g, StageManager.getTimeModeScore(Self.characterRecordID, Self.stage_characterRecord_ID, 1), ((SCREEN_HEIGHT Shr 1) + STATE_EXIT) + STATE_INTERRUPT)
 			drawRecordTime(g, StageManager.getTimeModeScore(Self.characterRecordID, Self.stage_characterRecord_ID, 2), ((SCREEN_HEIGHT Shr 1) + STATE_EXIT) + STATE_OPTION_SP_SET)
 		End
 		
@@ -3839,7 +3841,7 @@ Class TitleState Extends State
 		End
 		
 		Method drawTitle1:Void(g:MFGraphics)
-			Self.copyOffsetX = MyAPI.calNextPosition(Double(Self.copyOffsetX), 0.0, ZONE_NUM_OFFSET, 2)
+			Self.copyOffsetX = MyAPI.calNextPosition(Double(Self.copyOffsetX), 0.0, 1, 2)
 			
 			MyAPI.drawImage(g, Self.sonicBigImage, Self.sonicBigX - Self.cameraX, SONIC_BIG_Y, STATE_RETURN_TO_LOGO_1)
 		End
@@ -4112,7 +4114,7 @@ Class TitleState Extends State
 				If (Self.startgamecursor = 0) Then
 					StageManager.isContinueGame = True
 					State.fadeInit(255, 0)
-					State.setState(ZONE_NUM_OFFSET)
+					State.setState(1)
 					
 					Print("continue")
 					
@@ -4201,7 +4203,7 @@ Class TitleState Extends State
 			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + STATE_START_TO_MENU_1)
 			muiAniDrawer.setActionId(0)
 			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - STATE_START_TO_MENU_1)
-			muiAniDrawer.setActionId(ZONE_NUM_OFFSET)
+			muiAniDrawer.setActionId(1)
 			muiAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + STATE_START_TO_MENU_1)
 			
 			If (Key.touchstartgamereturn.Isin()) Then
@@ -4238,7 +4240,7 @@ Class TitleState Extends State
 					Key.touchkeyboardClose()
 					Key.touchsoftkeyInit()
 				Case STATE_MOVING
-					If (Self.quitFlag = ZONE_NUM_OFFSET) Then
+					If (Self.quitFlag = 1) Then
 						state = STATE_PRESS_START
 						
 						Key.touchanykeyInit()
@@ -4309,7 +4311,7 @@ Class TitleState Extends State
 		Method menuOptionVibLogic:Void()
 			Select (itemsSelect2Logic())
 				Case STATE_SELECT
-					GlobalResource.vibrationConfig = ZONE_NUM_OFFSET
+					GlobalResource.vibrationConfig = 1
 					
 					State.fadeInit(220, 0)
 					
@@ -4340,7 +4342,7 @@ Class TitleState Extends State
 					
 					state = STATE_OPTION
 				Case STATE_MOVING
-					GlobalResource.timeLimit = ZONE_NUM_OFFSET
+					GlobalResource.timeLimit = 1
 					
 					State.fadeInit(220, 0)
 					
@@ -4363,7 +4365,7 @@ Class TitleState Extends State
 					
 					state = STATE_OPTION
 				Case STATE_MOVING
-					GlobalResource.spsetConfig = ZONE_NUM_OFFSET
+					GlobalResource.spsetConfig = 1
 					
 					State.fadeInit(220, 0)
 					

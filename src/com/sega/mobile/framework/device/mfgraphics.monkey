@@ -95,7 +95,7 @@ Class MFGraphics
 		End
 		
 		Function createMFGraphics:MFGraphics(graphics:Canvas, width:Int, height:Int) ' Final
-			Print(String(width) + "x" + String(height))
+			Print("MFGraphics: " + String(width) + "x" + String(height))
 			
 			Local ret:= New MFGraphics()
 			
@@ -224,6 +224,8 @@ Class MFGraphics
 			Local y:= clips.Pop()
 			Local x:= clips.Pop()
 			
+			'Print("Scissor: " + x + ", " + y + ", " + w + ", " + h)
+			
 			Self.context.SetScissor(x, y, w, h)
 			
 			'Self.context.restore()
@@ -341,7 +343,7 @@ Class MFGraphics
 				ty = Self.clipY + height
 			EndIf
 			
-			Print("cx: " + cx + ", cy: " + cy + ", tx - cx: " + (tx - cx) + ", ty - cy: " + (ty - cy))
+			'Print("cx: " + cx + ", cy: " + cy + ", tx - cx: " + (tx - cx) + ", ty - cy: " + (ty - cy))
 			
 			'Self.context.SetScissor(cx, cy, tx, ty) ' SetViewport
 			'Self.context.SetScissor(cx, cy, width - (tx - cx), height - (ty - cy)) ' SetViewport

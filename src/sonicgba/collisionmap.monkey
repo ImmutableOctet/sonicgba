@@ -129,7 +129,7 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 							
 							ds.ReadAll(model, 0, model.Length) ' & 65535
 							
-							FlipBuffer_Shorts(model)
+							FlipBuffer_UShorts(model)
 						Next
 					Catch E:StreamError
 						' Nothing so far.
