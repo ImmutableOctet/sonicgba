@@ -92,7 +92,7 @@ Class Application Extends App ' Main Extends MFMain
 	Public
 		' Methods:
 		Method OnCreate:Int()
-			SetUpdateRate(60) ' 0 ' 60
+			SetUpdateRate(20) ' 15 ' 30 ' 0 ' 60
 			
 			Seed = Millisecs()
 			
@@ -225,6 +225,9 @@ Class Application Extends App ' Main Extends MFMain
 			graphics.SetViewport(0, 0, devWidth, devHeight)
 			graphics.SetProjection2d(0, devWidth, 0, devHeight)
 			
+			' Inverted Y axis.
+			'graphics.SetProjection2d(0, devWidth, devHeight, 0)
+			
 			'Print("Device Size: " + devWidth + "x" + devHeight)
 			'Print("Canvas Size: " + graphics.Width + "x" + graphics.Height)
 			
@@ -322,7 +325,7 @@ Class Application Extends App ' Main Extends MFMain
 			
 			Print("~~mScore:" + Self.mScore)
 			
-			Self.mScoreStr = min + ":" + secStr + ":" + msecStr
+			Self.mScoreStr = (min + ":" + secStr + ":" + msecStr)
 			
 			Print("~~mScoreStr:" + Self.mScoreStr)
 		End

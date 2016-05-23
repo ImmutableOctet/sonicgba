@@ -285,12 +285,10 @@ Class MFDevice Final
 		Function Update:Void()
 			handleInput()
 			
-			''' Update (Input) components:
-			#Rem
+			' Update (Input) components:
 			For Local component:= EachIn componentVector 
 				component.tick()
 			Next
-			#End
 			
 			'MFSound.tick()
 			
@@ -359,6 +357,10 @@ Class MFDevice Final
 			' For debugging purposes, we are scheduling this draw operation in advance.
 			' Draw the main graphics layer to the screen. (Game graphics, etc)
 			screen.DrawRect(vx, vy, vw, vh, bufferImage.getNativeImage())
+			
+			bufferImage.getNativeImage().SetHandle(0.5, 0.5)
+			
+			'''screen.DrawImage(bufferImage.getNativeImage(), (screen.Width / 2), (screen.Height / 2), 0.0, 2.0, -2.0) ' screen.Width - (bufferImage.getWidth() / 2), screen.Height - (bufferImage.getHeight() / 2)
 			
 			' Testing related:
 			'screen.SetAlpha(0.5)

@@ -3,7 +3,7 @@ Strict
 Public
 
 ' Preprocessor related:
-'#SONICGBA_MFGRAPHICS_DEBUG_REGION_DRAW = True
+#SONICGBA_MFGRAPHICS_DEBUG_REGION_DRAW = True
 
 #If SONICGBA_MFGRAPHICS_DEBUG_REGION_DRAW
 	#SONICGBA_MFDEVICE_ALLOW_DEBUG_GRAPHICS = True
@@ -30,6 +30,8 @@ Private
 	
 	Import regal.typetool
 	Import regal.util
+	
+	Import regal.matrix2d
 	
 	' Debugging related:
 	Import mojo.app
@@ -72,6 +74,8 @@ Class MFGraphics
 		
 		Field transX:Int
 		Field transY:Int
+		
+		Field mMatrix:Matrix2D
 		
 		Field effectFlag:Bool
 		Field enableExceed:Bool
@@ -281,7 +285,12 @@ Class MFGraphics
 			Self.clipWidth = width
 			Self.clipHeight = height
 			
-			Self.context.SetProjection2d(0, width, 0, height)
+			' Regular Y axis.
+			'Self.context.SetProjection2d(0, width, 0, height)
+			
+			' Inverted Y axis.
+			Self.context.SetProjection2d(0, width, height, 0)
+			
 			Self.context.SetScissor(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
 		End
 		
@@ -680,6 +689,31 @@ Class MFGraphics
 	Private
 		' Methods:
 		Method drawRegionImpl:Void(image:Image, x_src:Int, y_src:Int, width:Int, height:Int, transform:Int, x_dest:Int, y_dest:Int, anchor:Int=(TOP|LEFT)) Final
+			'Print("transform: " + transform)
+			'Print("dest: " + x_dest + ", " + y_dest)
+			
+			Local _trans:= transform
+			
+			Select (transform) ' _trans
+				Case TRANS_NONE
+					_trans = TRANS_NONE
+				Case TRANS_MIRROR_ROT180
+					_trans = TRANS_MIRROR_ROT180 ' TRANS_ROT180 ' TRANS_NONE
+				Case TRANS_MIRROR
+					_trans = TRANS_MIRROR
+				Case TRANS_ROT180
+					_trans = TRANS_ROT180 ' TRANS_NONE ' TRANS_ROT180
+				
+				Case TRANS_MIRROR_ROT270
+					_trans = TRANS_NONE
+				Case TRANS_ROT90
+					_trans = TRANS_NONE
+				Case TRANS_ROT270
+					_trans = TRANS_NONE
+				Case TRANS_MIRROR_ROT90
+					_trans = TRANS_NONE
+			End Select
+			
 			Local drawWidth:= width
 			Local drawHeight:= height
 			
@@ -691,9 +725,11 @@ Class MFGraphics
 			#If SONICGBA_MFDEVICE_ALLOW_DEBUG_GRAPHICS
 				Local dbgctx:= MFDevice.__NATIVEGRAPHICS
 				
-				dbgctx.SetAlpha(0.5)
-				dbgctx.DrawRect(0.0, 0.0, drawWidth, drawHeight, image, x_src, y_src, width, height)
-				dbgctx.SetAlpha(1.0)
+				#If False ' SONICGBA_MFGRAPHICS_DEBUG_REGION_DRAW
+					dbgctx.SetAlpha(0.5)
+					dbgctx.DrawRect(0.0, 0.0, drawWidth, drawHeight, image, x_src, y_src, width, height)
+					dbgctx.SetAlpha(1.0)
+				#End
 			#End
 			
 			'Self.context.SetColor(1.0, 1.0, 1.0)
@@ -711,6 +747,9 @@ Class MFGraphics
 			x_dest += Self.transX
 			y_dest += Self.transY
 			
+			'x_dest = ((Self.context.Width / 2) - x_dest)
+			'y_dest = ((Self.context.Height / 2) - y_dest)
+			
 			saveCanvas()
 			
 			Local xOffset:= 0
@@ -721,19 +760,18 @@ Class MFGraphics
 					'xOffset = -x_src
 					'yOffset = -y_src
 				Case TRANS_MIRROR_ROT180
-					xOffset = (drawWidth)
+					'xOffset = (drawWidth)
 					yOffset = (drawHeight)
 				Case TRANS_MIRROR
 					xOffset = (drawWidth)
-					'yOffset = -y_src
 				Case TRANS_ROT180
-					'xOffset = -x_src
+					xOffset = (drawWidth)
 					yOffset = (drawHeight)
 				Case TRANS_MIRROR_ROT270
 					drawWidth = height
 					drawHeight = width
 					
-					xOffset = -y_src
+					'xOffset = -y_src
 					yOffset = (drawHeight) ' + x_src
 				Case TRANS_ROT90
 					drawWidth = height
@@ -778,34 +816,71 @@ Class MFGraphics
 			'x_dest -= handleX
 			'y_dest -= handleY
 			
-			Select (transform)
+			Select (_trans) ' (transform)
 				Case TRANS_NONE
 					' Nothing so far.
 				Case TRANS_MIRROR_ROT180
-					'Self.context.Rotate(-180.0)
+					Self.context.Rotate(-180.0)
 					Self.context.Scale(-1.0, 1.0)
 				Case TRANS_MIRROR
 					Self.context.Scale(-1.0, 1.0)
 				Case TRANS_ROT180
-					'Self.context.Rotate(180.0)
+					Self.context.Rotate(180.0)
 				Case TRANS_MIRROR_ROT270
-					'Self.context.Rotate(-270.0)
+					Self.context.Rotate(-270.0)
 					Self.context.Scale(-1.0, 1.0)
 				Case TRANS_ROT90
-					'Self.context.Rotate(90.0)
+					Self.context.Rotate(90.0)
 				Case TRANS_ROT270
-					'Self.context.Rotate(270.0)
+					Self.context.Rotate(270.0)
 				Case TRANS_MIRROR_ROT90
-					'Self.context.Rotate(-90.0)
+					Self.context.Rotate(-90.0)
 					Self.context.Scale(-1.0, 1.0)
 			End Select
 			
 			Self.context.Translate(-handleX, -handleY)
-			'Self.context.Translate((-xOffset), (-yOffset))
+			Self.context.Translate((-xOffset), (-yOffset))
 			
 			'Self.context.Translate(x_dest, y_dest)
 			
 			Self.context.DrawRect(0.0, 0.0, drawWidth, drawHeight, image, x_src, y_src, width, height)
+			
+			Local dbgcolor:Bool = False
+			
+			Select (transform) ' (_trans)
+				Case TRANS_NONE
+					'''Self.context.SetColor(1.0, 0.0, 0.0); dbgcolor = True
+				Case TRANS_MIRROR_ROT180
+					'''Self.context.SetColor(0.0, 1.0, 0.0); dbgcolor = True
+				Case TRANS_MIRROR
+					'''Self.context.SetColor(0.0, 0.0, 1.0); dbgcolor = True
+				Case TRANS_ROT180
+					'Self.context.SetColor(1.0, 1.0, 1.0); dbgcolor = True
+				Case TRANS_MIRROR_ROT270
+					Self.context.SetColor(0.0, 1.0, 0.0); dbgcolor = True ' Self.context.SetColor(1.0, 1.0, 1.0); dbgcolor = True
+				Case TRANS_ROT90
+					'Self.context.SetColor(1.0, 1.0, 1.0); dbgcolor = True
+				Case TRANS_ROT270
+					'Self.context.SetColor(1.0, 1.0, 1.0); dbgcolor = True
+				Case TRANS_MIRROR_ROT90
+					'Self.context.SetColor(1.0, 1.0, 1.0); dbgcolor = True
+			End Select
+			
+			If (dbgcolor) Then
+				#Rem
+				Self.context.SetAlpha(1.0)
+				
+				Self.context.DrawRect(0.0, 0.0, drawWidth / 4, drawHeight / 4)
+				#End
+				
+				Self.context.SetAlpha(0.5)
+				
+				Self.context.DrawRect(0.0, 0.0, drawWidth, drawHeight)
+				
+				Self.context.SetAlpha(1.0)
+				
+				Self.context.SetColor(1.0, 1.0, 1.0, 1.0)
+			EndIf
 			
 			restoreCanvas()
 		End
