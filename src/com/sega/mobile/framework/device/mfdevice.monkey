@@ -598,10 +598,6 @@ Class MFDevice Final
 			Try
 				Print("Attempting to load from URL: " + url)
 				
-				If (url = "/animation/animal.dat") Then
-					DebugStop()
-				EndIf
-				
 				'Local assets:AssetManager = MFMain.getInstance().getAssets()
 				
 				url = FixResourcePath(url)
