@@ -36,6 +36,8 @@ Private
 	
 	'Import android.os.message
 	
+	Import com.sega.mobile.define.mdphone
+	
 	Import com.sega.mobile.framework.device.mfdevice
 	Import com.sega.mobile.framework.device.mfgamepad
 	Import com.sega.mobile.framework.device.mfgraphics
@@ -1196,8 +1198,8 @@ Class TitleState Extends State
 			aboutStrings = MyAPI.loadText("/about")
 			
 			' These values may be changed at a later date:
-			Self.openingOffsetX = ((SCREEN_WIDTH - GBA_EXT_WIDTH) / 2) ' Shr 1 ' 0 ' (SCREEN_WIDTH / 2) ' (SCREEN_WIDTH / 2)
-			Self.openingOffsetY = ((SCREEN_HEIGHT - GBA_HEIGHT) / 2) ' Shr 1 ' 0 ' (SCREEN_HEIGHT / 2) ' (SCREEN_HEIGHT / 2)
+			Self.openingOffsetX = 0 ' ((MDPhone.SCREEN_WIDTH - GBA_EXT_WIDTH) / 2) ' Shr 1 ' 0 ' (SCREEN_WIDTH / 2) ' (SCREEN_WIDTH / 2) ' MDPhone.SCREEN_WIDTH
+			Self.openingOffsetY = SCREEN_HEIGHT ' ((MDPhone.SCREEN_HEIGHT - GBA_HEIGHT) / 2) ' Shr 1 ' 0 ' (SCREEN_HEIGHT / 2) ' (SCREEN_HEIGHT / 2) ' MDPhone.SCREEN_HEIGHT
 			
 			Self.count = 50
 			

@@ -2,9 +2,6 @@ Strict
 
 Public
 
-' Preprocessor related:
-'#SONICGBA_MFDEVICE_ALLOW_LAYERS = True
-
 ' Friends:
 Friend application
 
@@ -88,11 +85,7 @@ Class MFDevice Final
 		' Constant variable(s):
 		Const VERSION_INFO:String = "104_RELEASE" ' "100_RELEASE" ' "DEBUG"
 		
-		#If SONICGBA_MFDEVICE_ALLOW_LAYERS
-			Const MAX_LAYER:Int = 1
-		#Else
-			Const MAX_LAYER:Int = 0
-		#End
+		Const MAX_LAYER:Int = 1
 		
 		Const PER_VIBRATION_TIME:Int = 500
 		

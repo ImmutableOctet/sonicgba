@@ -75,7 +75,7 @@ Class MFGraphics
 		Field transX:Int
 		Field transY:Int
 		
-		Field mMatrix:Matrix2D
+		Field mMatrix:Matrix2D = New Matrix2D()
 		
 		Field effectFlag:Bool
 		Field enableExceed:Bool
@@ -286,10 +286,10 @@ Class MFGraphics
 			Self.clipHeight = height
 			
 			' Regular Y axis.
-			'Self.context.SetProjection2d(0, width, 0, height)
+			Self.context.SetProjection2d(0, width, 0, height)
 			
 			' Inverted Y axis.
-			Self.context.SetProjection2d(0, width, height, 0)
+			'Self.context.SetProjection2d(0, width, height, 0)
 			
 			Self.context.SetScissor(Self.clipX, Self.clipY, Self.clipWidth, Self.clipHeight)
 		End
@@ -692,28 +692,6 @@ Class MFGraphics
 			'Print("transform: " + transform)
 			'Print("dest: " + x_dest + ", " + y_dest)
 			
-			Local _trans:= transform
-			
-			Select (transform) ' _trans
-				Case TRANS_NONE
-					_trans = TRANS_NONE
-				Case TRANS_MIRROR_ROT180
-					_trans = TRANS_MIRROR_ROT180 ' TRANS_ROT180 ' TRANS_NONE
-				Case TRANS_MIRROR
-					_trans = TRANS_MIRROR
-				Case TRANS_ROT180
-					_trans = TRANS_ROT180 ' TRANS_NONE ' TRANS_ROT180
-				
-				Case TRANS_MIRROR_ROT270
-					_trans = TRANS_NONE
-				Case TRANS_ROT90
-					_trans = TRANS_NONE
-				Case TRANS_ROT270
-					_trans = TRANS_NONE
-				Case TRANS_MIRROR_ROT90
-					_trans = TRANS_NONE
-			End Select
-			
 			Local drawWidth:= width
 			Local drawHeight:= height
 			
@@ -793,7 +771,7 @@ Class MFGraphics
 					yOffset = (drawHeight)
 			End Select
 			
-			Self.context.Translate((x_dest), ((SCREEN_HEIGHT + y_dest))) ' 0 + y_dest
+			Self.context.Translate((x_dest), (y_dest))
 			
 			Local handleX:Int, handleY:Int
 			
@@ -816,7 +794,7 @@ Class MFGraphics
 			'x_dest -= handleX
 			'y_dest -= handleY
 			
-			Select (_trans) ' (transform)
+			Select (transform)
 				Case TRANS_NONE
 					' Nothing so far.
 				Case TRANS_MIRROR_ROT180
@@ -841,23 +819,21 @@ Class MFGraphics
 			Self.context.Translate(-handleX, -handleY)
 			Self.context.Translate((-xOffset), (-yOffset))
 			
-			'Self.context.Translate(x_dest, y_dest)
-			
 			Self.context.DrawRect(0.0, 0.0, drawWidth, drawHeight, image, x_src, y_src, width, height)
 			
 			Local dbgcolor:Bool = False
 			
-			Select (transform) ' (_trans)
+			Select (transform)
 				Case TRANS_NONE
 					'''Self.context.SetColor(1.0, 0.0, 0.0); dbgcolor = True
 				Case TRANS_MIRROR_ROT180
-					'''Self.context.SetColor(0.0, 1.0, 0.0); dbgcolor = True
+					Self.context.SetColor(1.0, 0.0, 0.25); dbgcolor = True
 				Case TRANS_MIRROR
 					'''Self.context.SetColor(0.0, 0.0, 1.0); dbgcolor = True
 				Case TRANS_ROT180
 					'Self.context.SetColor(1.0, 1.0, 1.0); dbgcolor = True
 				Case TRANS_MIRROR_ROT270
-					Self.context.SetColor(0.0, 1.0, 0.0); dbgcolor = True ' Self.context.SetColor(1.0, 1.0, 1.0); dbgcolor = True
+					'Self.context.SetColor(0.0, 1.0, 0.0); dbgcolor = True ' Self.context.SetColor(1.0, 1.0, 1.0); dbgcolor = True
 				Case TRANS_ROT90
 					'Self.context.SetColor(1.0, 1.0, 1.0); dbgcolor = True
 				Case TRANS_ROT270
@@ -892,9 +868,9 @@ Class MFGraphics
 				EndIf
 			#End
 			
-			drawRegion(MFImg, 0, 0, MFImg.getWidth(), MFImg.getHeight(), TRANS_MIRROR_ROT180, x, y, anchor)
+			'drawRegion(MFImg, 0, 0, MFImg.getWidth(), MFImg.getHeight(), TRANS_MIRROR_ROT180, x, y, anchor)
 			
-			#Rem
+			'#Rem
 			Local image:= MFImg.image
 			
 			x += Self.transX
@@ -913,7 +889,7 @@ Class MFGraphics
 			EndIf
 			
 			Self.context.DrawImage(image, Float(x), Float(y))
-			#End
+			'#End
 		End
 		
 		#Rem

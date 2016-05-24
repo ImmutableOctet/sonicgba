@@ -273,7 +273,7 @@ Class StageManager ' Implements SonicDef
 						nextStep = True
 					EndIf
 				Case LOAD_ITEM
-					nextStep = GameObject.loadObjectStep("/map/" + STAGE_NAME[stageIDArray[PlayerObject.getCharacterID()]] + ".it", RECORD_NUM)
+					nextStep = GameObject.loadObjectStep("/map/" + STAGE_NAME[stageIDArray[PlayerObject.getCharacterID()]] + ".it", 3)
 					
 					Key.clear()
 					

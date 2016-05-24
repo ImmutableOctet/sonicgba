@@ -96,7 +96,8 @@ Class MyAPI ' Implements Def
 		
 		' Extensions:
 		Function fixTransformation:Int(trans:Int)
-			'Return trans
+			Return trans
+			
 			' Mirror and rotate 180 degrees:
 			Select trans
 				Case TRANS_NONE

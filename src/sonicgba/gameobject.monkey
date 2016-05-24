@@ -696,7 +696,17 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		
 		Function loadItemByStream:Void(ds:Stream)
 			Try
-				addGameObject(ItemObject.getNewInstance(ds.ReadByte(), ds.ReadShort(), ds.ReadShort()))
+				Local x:= ds.ReadShort()
+				Local y:= ds.ReadShort()
+				
+				Local id:= ds.ReadByte()
+				
+				#If SONICGBA_GAMEOBJECT_ANNOUNCE_LOADED_INFO
+					Print("ID: " + id)
+					Print("Position: " + x + ", " + y)
+				#End
+				
+				addGameObject(ItemObject.getNewInstance(id, x, y))
 			Catch err:StreamError
 				' Nothing so far.
 			End Try
