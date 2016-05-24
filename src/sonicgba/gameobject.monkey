@@ -649,7 +649,10 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 					addGameObject(gimmick)
 				EndIf
 			Catch err:StreamError
-				' Nothing so far.
+				#If SONICGBA_GAMEOBJECT_ANNOUNCE_LOAD_EXCEPTIONS
+					Print("An exception was thrown while loading a gimmick:")
+					Print(err.ToString())
+				#End
 			End Try
 		End
 		
@@ -664,7 +667,10 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				
 				addGameObject(RingObject.getNewInstance(x, y))
 			Catch err:StreamError
-				' Nothing so far.
+				#If SONICGBA_GAMEOBJECT_ANNOUNCE_LOAD_EXCEPTIONS
+					Print("An exception was thrown while loading a ring:")
+					Print(err.ToString())
+				#End
 			End Try
 		End
 		
@@ -711,7 +717,10 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 					addGameObject(enemy)
 				EndIf
 			Catch err:StreamError
-				' Nothing so far.
+				#If SONICGBA_GAMEOBJECT_ANNOUNCE_LOAD_EXCEPTIONS
+					Print("An exception was thrown while loading an enemy:")
+					Print(err.ToString())
+				#End
 			End Try
 		End
 		
@@ -729,7 +738,10 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				
 				addGameObject(ItemObject.getNewInstance(id, x, y))
 			Catch err:StreamError
-				' Nothing so far.
+				#If SONICGBA_GAMEOBJECT_ANNOUNCE_LOAD_EXCEPTIONS
+					Print("An exception was thrown while loading an item:")
+					Print(err.ToString())
+				#End
 			End Try
 		End
 		
