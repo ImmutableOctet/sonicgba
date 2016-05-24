@@ -620,6 +620,13 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				Local left:= ds.ReadByte()
 				Local top:= ds.ReadByte()
 				
+				#If SONICGBA_GAMEOBJECT_ANNOUNCE_LOADED_INFO
+					Print("ID: " + id)
+					Print("Position: " + x + ", " + y)
+					Print("Size: " + width + ", " + height)
+					Print("Left: " + left + ", Top: " + top)
+				#End
+				
 				If (x < 0) Then
 					x += ROOM_WIDTH
 				EndIf
@@ -648,7 +655,14 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		
 		Function loadRingByStream:Void(ds:Stream)
 			Try
-				addGameObject(RingObject.getNewInstance(ds.ReadShort(), ds.ReadShort()))
+				Local x:= ds.ReadShort()
+				Local y:= ds.ReadShort()
+				
+				#If SONICGBA_GAMEOBJECT_ANNOUNCE_LOADED_INFO
+					Print("Position: " + x + ", " + y)
+				#End
+				
+				addGameObject(RingObject.getNewInstance(x, y))
 			Catch err:StreamError
 				' Nothing so far.
 			End Try
@@ -667,6 +681,13 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				
 				Local left:= ds.ReadByte()
 				Local top:= ds.ReadByte()
+				
+				#If SONICGBA_GAMEOBJECT_ANNOUNCE_LOADED_INFO
+					Print("ID: " + id)
+					Print("Position: " + x + ", " + y)
+					Print("Size: " + width + ", " + height)
+					Print("Left: " + left + ", Top: " + top)
+				#End
 				
 				If (x < 0) Then
 					x += ROOM_WIDTH
