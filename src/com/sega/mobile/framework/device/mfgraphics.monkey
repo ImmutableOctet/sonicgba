@@ -381,8 +381,8 @@ Class MFGraphics
 		End
 		
 		Method drawImage:Void(image:MFImage, x:Int, y:Int, anchor:Int) Final
-			Local imageWidth:= image.getWidth()
-			Local imageHeight:= image.getHeight()
+			'Local imageWidth:= image.getWidth()
+			'Local imageHeight:= image.getHeight()
 			
 			drawImageImpl(image, x, y, anchor)
 		End
@@ -767,33 +767,33 @@ Class MFGraphics
 				Case TRANS_ROT180
 					xOffset = (drawWidth)
 					yOffset = (drawHeight)
+				
+				
 				Case TRANS_MIRROR_ROT270
 					drawWidth = height
 					drawHeight = width
 					
-					'xOffset = -y_src
-					yOffset = (drawHeight) ' + x_src
 				Case TRANS_ROT90
 					drawWidth = height
 					drawHeight = width
 					
 					xOffset = (drawWidth)
-					yOffset = (drawHeight)
+				
 				Case TRANS_ROT270
 					drawWidth = height
 					drawHeight = width
 					
-					'xOffset = -y_src
-					'yOffset = -x_src
+					yOffset = (drawHeight)
+				
 				Case TRANS_MIRROR_ROT90
 					drawWidth = height
 					drawHeight = width
 					
 					xOffset = (drawWidth)
-					'yOffset = -x_src
+					yOffset = (drawHeight)
 			End Select
 			
-			Self.context.Translate((x_dest), (y_dest))
+			Self.context.Translate((x_dest), ((SCREEN_HEIGHT + y_dest))) ' 0 + y_dest
 			
 			Local handleX:Int, handleY:Int
 			
@@ -892,6 +892,9 @@ Class MFGraphics
 				EndIf
 			#End
 			
+			drawRegion(MFImg, 0, 0, MFImg.getWidth(), MFImg.getHeight(), TRANS_MIRROR_ROT180, x, y, anchor)
+			
+			#Rem
 			Local image:= MFImg.image
 			
 			x += Self.transX
@@ -910,6 +913,7 @@ Class MFGraphics
 			EndIf
 			
 			Self.context.DrawImage(image, Float(x), Float(y))
+			#End
 		End
 		
 		#Rem

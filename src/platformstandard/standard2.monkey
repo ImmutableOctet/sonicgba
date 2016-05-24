@@ -487,13 +487,13 @@ Class Standard2 ' Implements Def ' Final
 		Function splashDraw1:Void(g:MFGraphics, screenWidth:Int, screenHeight:Int)
 			g.setColor(MapManager.END_COLOR)
 			
-			g.fillRect(1, 1, screenWidth, screenHeight)
+			g.fillRect(0, 0, screenWidth, screenHeight) ' 1, 1
 			
 			Select (state)
 				Case STATE_LOGO_IN
 					drawSplashEffect1(g, splashImage1, (screenWidth / 2), (screenHeight / 2) - (splashImage1.getHeight() / 2), count) ' Shr 1
 				Case STATE_SHOW
-					MyAPI.drawImage(g, splashImage1, (screenWidth / 2), (screenHeight / 2) - (splashImage1.getHeight() / 2), 17) ' Shr 1
+					MyAPI.drawImage(g, splashImage1, (screenWidth / 2), (screenHeight / 2) - (splashImage1.getHeight() / 2), TOP|HCENTER) ' Shr 1
 				Case STATE_LOGO_OUT
 					drawSplashEffect2(g, splashImage1, (screenWidth / 2), (screenHeight / 2) - (splashImage1.getHeight() / 2), count, screenHeight) ' Shr 1
 				Default
@@ -513,10 +513,10 @@ Class Standard2 ' Implements Def ' Final
 			Local b:= ((count * h) / 16)
 			
 			For Local i:= 0 Until (a - b)
-				MyAPI.drawImage(g, image, 0, (h - b) - 1, w, 1, 0, x, i, 17)
+				MyAPI.drawImage(g, image, 0, (h - b) - 1, w, 1, TRANS_NONE, x, i, TOP|HCENTER)
 			Next
 			
-			MyAPI.drawImage(g, image, 0, (h - b), w, b, 0, x, a - b, 17)
+			MyAPI.drawImage(g, image, 0, (h - b), w, b, TRANS_NONE, x, a - b, TOP|HCENTER)
 		End
 		
 		Function drawSplashEffect2:Void(g:MFGraphics, image:MFImage, x:Int, y:Int, count:Int, screenHeight:Int)
@@ -527,10 +527,10 @@ Class Standard2 ' Implements Def ' Final
 			Local b:= ((count * h) / 16)
 			
 			For Local i:= (a - b) Until screenHeight
-				MyAPI.drawImage(g, image, 0, (h - b) - 1, w, 1, 0, x, i, 17)
+				MyAPI.drawImage(g, image, 0, (h - b) - 1, w, 1, TRANS_NONE, x, i, TOP|HCENTER)
 			Next
 			
-			MyAPI.drawImage(g, image, 1, 1, w, (h - b), 0, x, y, 17)
+			MyAPI.drawImage(g, image, 1, 1, w, (h - b), TRANS_NONE, x, y, TOP|HCENTER)
 		End
 		
 		Function splashInit2:Void()
@@ -585,13 +585,13 @@ Class Standard2 ' Implements Def ' Final
 		Function splashDraw2:Void(g:MFGraphics, screenWidth:Int, screenHeight:Int)
 			g.setColor(MapManager.END_COLOR)
 			
-			g.fillRect(1, 1, screenWidth, screenHeight)
+			g.fillRect(0, 0, screenWidth, screenHeight) ' 1, 1
 			
 			Select (state)
 				Case STATE_LOGO_IN
 					drawSplash2Effect(g, splashImage2, (screenWidth / 2), (screenHeight / 2) - (splashImage2.getHeight() / 2), count, screenWidth) ' Shr 1
 				Case STATE_SHOW, STATE_OVER
-					MyAPI.drawImage(g, splashImage2, (screenWidth / 2), (screenHeight / 2) - (splashImage2.getHeight() / 2), 17) ' Shr 1
+					MyAPI.drawImage(g, splashImage2, (screenWidth / 2), (screenHeight / 2) - (splashImage2.getHeight() / 2), TOP|HCENTER) ' Shr 1
 				Default
 					' Nothing so far.
 			End Select
@@ -618,8 +618,8 @@ Class Standard2 ' Implements Def ' Final
 					countDiff = countDiff2
 				EndIf
 				
-				MyAPI.drawImage(g, image, 0, i * space, image.getWidth(), clipHeight + 1, 0, x + ((((-screenWidth) - ((24 - i) * STATE_OVER)) * countDiff) / countBase), y + (i * space), 17)
-				MyAPI.drawImage(g, image, 0, (i * space) + clipHeight, image.getWidth(), clipHeight + 1, 0, x + (((((24 - i) * STATE_OVER) + screenWidth) * countDiff) / countBase), ((i * space) + y) + clipHeight, 17)
+				MyAPI.drawImage(g, image, 0, i * space, image.getWidth(), clipHeight + 1, 0, x + ((((-screenWidth) - ((24 - i) * STATE_OVER)) * countDiff) / countBase), y + (i * space), TOP|HCENTER)
+				MyAPI.drawImage(g, image, 0, (i * space) + clipHeight, image.getWidth(), clipHeight + 1, 0, x + (((((24 - i) * STATE_OVER) + screenWidth) * countDiff) / countBase), ((i * space) + y) + clipHeight, TOP|HCENTER)
 			Next
 		End
 		
