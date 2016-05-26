@@ -200,13 +200,13 @@
         <X>26</X>
         <Y>50</Y>
       </CursorPos>
-      <DocGUID>0bc1b55e-85c0-4367-b712-fe3765fee74c</DocGUID>
+      <DocGUID>79f6b4ca-4a52-4b9a-a9f7-7f25a253babd</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>38</X>
-        <Y>5</Y>
+        <X>21</X>
+        <Y>28</Y>
       </CursorPos>
       <DocGUID>a3048cf8-155d-4184-99a2-38b755f05ef4</DocGUID>
       <Bookmarks />
@@ -405,17 +405,17 @@
     <DocUserOptions Filename=".\src\lib\animationdrawer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>15</X>
-        <Y>176</Y>
+        <Y>185</Y>
       </CursorPos>
-      <DocGUID>78c89546-81ed-4114-81d7-83846090c50a</DocGUID>
+      <DocGUID>3e9b56c4-c631-47fa-8667-935005ca92fa</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationframe.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>5</X>
-        <Y>129</Y>
+        <X>42</X>
+        <Y>144</Y>
       </CursorPos>
-      <DocGUID>ab1003b0-1559-40f1-95c3-7bfdfc7bfd57</DocGUID>
+      <DocGUID>9692124c-c14c-48ee-a722-f9c99161c977</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationimageinfo.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
@@ -427,10 +427,10 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\constutil.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>40</X>
-        <Y>90</Y>
+        <X>31</X>
+        <Y>91</Y>
       </CursorPos>
-      <DocGUID>28bb5ed5-cd5b-470f-b39c-f8cdba25d676</DocGUID>
+      <DocGUID>9903e29f-715b-400a-aae4-6491b9e64fb7</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\coordinate.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
@@ -504,15 +504,15 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>19</X>
-        <Y>48</Y>
+        <X>0</X>
+        <Y>6</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>35</X>
-        <Y>67</Y>
+        <X>3</X>
+        <Y>68</Y>
       </CursorPos>
       <DocGUID>3d91f39d-9ed5-4956-ba8d-97c12b7236d1</DocGUID>
       <Bookmarks>
@@ -1633,13 +1633,12 @@
         </Point>
       </Bookmarks>
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\playersonic.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\playersonic.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>10</X>
         <Y>405</Y>
       </CursorPos>
-      <DocGUID>a83fcb8e-6de7-4bab-8c2d-5116ba27def7</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playersupersonic.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -2369,7 +2368,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\android" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\device" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\ui" Expanded="true" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\ui" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\utility" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\common" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\ending" Expanded="false" />

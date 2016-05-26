@@ -141,8 +141,8 @@ Class Frame
 					EndIf
 					
 					If (m_Ani.isDoubleScale) Then
-						sArr[0] = Short(sArr[0] Shl 1)
-						sArr[1] = Short(sArr[1] Shl 1)
+						sArr[0] = Short(sArr[0] Shl 1) ' * 2
+						sArr[1] = Short(sArr[1] Shl 1) ' * 2
 					Else
 						sArr[0] = sArr[0]
 						sArr[1] = sArr[1]
