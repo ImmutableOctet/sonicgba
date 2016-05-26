@@ -3,7 +3,7 @@ Strict
 Public
 
 ' Preprocessor related:
-#SONICGBA_MFGRAPHICS_DEBUG_REGION_DRAW = True
+'#SONICGBA_MFGRAPHICS_DEBUG_REGION_DRAW = True ' False
 
 #If SONICGBA_MFGRAPHICS_DEBUG_REGION_DRAW
 	#SONICGBA_MFDEVICE_ALLOW_DEBUG_GRAPHICS = True
@@ -703,7 +703,7 @@ Class MFGraphics
 			#If SONICGBA_MFDEVICE_ALLOW_DEBUG_GRAPHICS
 				Local dbgctx:= MFDevice.__NATIVEGRAPHICS
 				
-				#If False ' SONICGBA_MFGRAPHICS_DEBUG_REGION_DRAW
+				#If SONICGBA_MFGRAPHICS_DEBUG_REGION_DRAW
 					dbgctx.SetAlpha(0.5)
 					dbgctx.DrawRect(0.0, 0.0, drawWidth, drawHeight, image, x_src, y_src, width, height)
 					dbgctx.SetAlpha(1.0)
@@ -827,11 +827,11 @@ Class MFGraphics
 				Case TRANS_NONE
 					'''Self.context.SetColor(1.0, 0.0, 0.0); dbgcolor = True
 				Case TRANS_MIRROR_ROT180
-					Self.context.SetColor(1.0, 0.0, 0.25); dbgcolor = True
+					'''Self.context.SetColor(1.0, 0.0, 0.25); dbgcolor = True
 				Case TRANS_MIRROR
 					'''Self.context.SetColor(0.0, 0.0, 1.0); dbgcolor = True
 				Case TRANS_ROT180
-					'Self.context.SetColor(1.0, 1.0, 1.0); dbgcolor = True
+					'''Self.context.SetColor(0.0, 1.0, 0.0); dbgcolor = True
 				Case TRANS_MIRROR_ROT270
 					'Self.context.SetColor(0.0, 1.0, 0.0); dbgcolor = True ' Self.context.SetColor(1.0, 1.0, 1.0); dbgcolor = True
 				Case TRANS_ROT90

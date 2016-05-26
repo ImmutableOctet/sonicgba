@@ -99,6 +99,7 @@ Class MyAPI ' Implements Def
 			Return trans
 			
 			' Mirror and rotate 180 degrees:
+			#Rem
 			Select trans
 				Case TRANS_NONE
 					Return TRANS_MIRROR_ROT180
@@ -119,6 +120,7 @@ Class MyAPI ' Implements Def
 			End Select
 			
 			Return TRANS_NONE
+			#End
 		End
 		
 		Function drawRegionPrivate:Void(g2:MFGraphics, img:MFImage, sx:Int, sy:Int, sw:Int, sh:Int, trans:Int, dx:Int, dy:Int, anchor:Int)

@@ -83,10 +83,12 @@ Class MFImage
 				
 				is.Close()
 				
-				Local pixMapPath:= MFDevice.FixResourcePath(ExtractDir(paletteFileName) + "/" + imageName)
+				Local pixMapPath:= (ExtractDir(paletteFileName) + "/" + imageName)
 				
 				' This behavior will change in the future:
 				#If TARGET <> "html5"
+					pixMapPath = MFDevice.FixResourcePath(pixMapPath)
+					
 					Local info:= New Int[2]
 					
 					Local pixMap:= LoadImageData(pixMapPath, info)

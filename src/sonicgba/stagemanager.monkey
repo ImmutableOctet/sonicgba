@@ -144,6 +144,7 @@ Class StageManager ' Implements SonicDef
 		
 		Global MUSIC_ID:Int[] = MUSIC_ID_HIGH ' Const
 		
+		' Player start points for every level. (These may be moved into their own file(s) at some point)
 		Global PLAYER_START:Int[][] = [[96, 448], [96, 690], [96, 146], [96, 1600], [96, 160], [96, 640], [100, 200], [80, 868], [96, 832], [96, 928], [106, 6988], [100, 1732], [100, 771], [56, 230]] ' Const
 		
 		' Global variable(s):

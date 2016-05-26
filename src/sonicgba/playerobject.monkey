@@ -6530,7 +6530,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.collisionState = TER_STATE_RUN
 			Self.isSidePushed = 4
 			
-			Print("~~~~velx:" + (Self.velX Shr 6))
+			'''Print("~~~~velx:" + (Self.velX Shr 6))
 		End
 		
 		Method getMinDegreeToLeaveGround:Int()

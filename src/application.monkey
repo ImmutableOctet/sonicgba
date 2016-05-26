@@ -92,7 +92,7 @@ Class Application Extends App ' Main Extends MFMain
 	Public
 		' Methods:
 		Method OnCreate:Int()
-			SetUpdateRate(20) ' 20 ' 15 ' 30 ' 0 ' 60
+			SetUpdateRate(0) ' 20 ' 15 ' 30 ' 0 ' 60
 			
 			Seed = Millisecs()
 			

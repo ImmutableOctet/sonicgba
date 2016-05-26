@@ -119,7 +119,7 @@ Class MapManager ' Implements SonicDef
 		Global zone4TileLoopID:Int[] = [0, 1, 2, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 6, 7, 8, 9, 9, 9, 9, 9, 9, 9, 9, 10, 11, 12, 13, 14, 14, 14, 14, 14, 14, 14, 14, 15, 16, 17, 18, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19]
 	Protected
 		' Constant variable(s):
-		Const MODE_CHUNK_SIZE:= ((MODEL_WIDTH * MODEL_HEIGHT) * 2) ' SizeOf_Short
+		Const MODE_CHUNK_SIZE:= ((MODEL_WIDTH * MODEL_HEIGHT) * SizeOf_Short) ' 2
 	Public
 		' Constant variable(s):
 		Global CAMERA_WIDTH:Int = SCREEN_WIDTH ' Const
@@ -571,6 +571,8 @@ Class MapManager ' Implements SonicDef
 						
 						Local mapSize:= (mapWidth*mapHeight*SizeOf_Short)
 						
+						Print("MAP FRONT/BACK SIZE: " + mapSize)
+						
 						mapFront = New DataBuffer(mapSize)
 						mapBack = New DataBuffer(mapSize)
 					Catch E:StreamError
@@ -580,6 +582,9 @@ Class MapManager ' Implements SonicDef
 					Try
 						' Read the number of "chunks":
 						Local chunkNum:= ds.ReadShort()
+						
+						Print("MAP CHUNKS: " + chunkNum)
+						Print("SIZE OF MAP CHUNKS IN MEMORY: " + (chunkNum * MODE_CHUNK_SIZE) + " bytes")
 						
 						' Skip the next two bytes (I'm not sure if this is supposed to be an 'Int' or not):
 						'ds.ReadShort()
@@ -596,7 +601,13 @@ Class MapManager ' Implements SonicDef
 							' Read the "chunk data" (Tile information) from the input-stream.
 							ds.ReadAll(chunk, 0, MODE_CHUNK_SIZE) ' chunk.Length
 							
-							FlipBuffer_Shorts(chunk)
+							FlipBuffer_Shorts(chunk) ' FlipBuffer_Shorts
+							
+							#Rem
+							For Local addr:= 0 Until MODE_CHUNK_SIZE Step 2
+								chunk.PokeShort(addr, ds.ReadShort())
+							Next
+							#End
 							
 							' Store the "chunk" in our container.
 							mapModel[i] = chunk
@@ -609,6 +620,12 @@ Class MapManager ' Implements SonicDef
 						ds.ReadAll(mapFront, 0, mapFront.Length) ' (mapWidth*mapHeight*SizeOf_Short)
 						
 						FlipBuffer_Shorts(mapFront)
+						
+						#Rem
+						For Local addr:= 0 Until mapFront.Length Step 2
+							mapFront.PokeShort(addr, ds.ReadShort())
+						Next
+						#End
 					Catch E:StreamError
 						' Nothing so far.
 					End Try
@@ -617,6 +634,12 @@ Class MapManager ' Implements SonicDef
 						ds.ReadAll(mapBack, 0, mapBack.Length) ' (mapWidth*mapHeight*SizeOf_Short)
 						
 						FlipBuffer_Shorts(mapBack)
+						
+						#Rem
+						For Local addr:= 0 Until mapBack.Length Step 2
+							mapBack.PokeShort(addr, ds.ReadShort())
+						Next
+						#End
 					Catch E:StreamError
 						' Nothing so far.
 					End Try
@@ -1003,7 +1026,7 @@ Class MapManager ' Implements SonicDef
 			
 			Local chunk:= model[chunkID]
 			
-			Return chunk.PeekShort(AsMapModelCoord(x Mod MODEL_WIDTH, y Mod MODEL_HEIGHT))
+			Return GetModelTileAt(chunk, x Mod MODEL_WIDTH, y Mod MODEL_HEIGHT)
 		End
 		
 		Function getModelId:Int(mapArray:DataBuffer, x:Int, y:Int)
