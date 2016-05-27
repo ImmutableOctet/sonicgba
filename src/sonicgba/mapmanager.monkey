@@ -599,15 +599,16 @@ Class MapManager ' Implements SonicDef
 							Local chunk:= New DataBuffer(MODE_CHUNK_SIZE)
 							
 							' Read the "chunk data" (Tile information) from the input-stream.
-							ds.ReadAll(chunk, 0, MODE_CHUNK_SIZE) ' chunk.Length
+							'''ds.ReadAll(chunk, 0, MODE_CHUNK_SIZE) ' chunk.Length
 							
-							FlipBuffer_Shorts(chunk) ' FlipBuffer_Shorts
+							'''FlipBuffer_Shorts(chunk) ' FlipBuffer_Shorts
 							
-							#Rem
 							For Local addr:= 0 Until MODE_CHUNK_SIZE Step 2
-								chunk.PokeShort(addr, ds.ReadShort())
+								Local value:= ds.ReadShort()
+								'Local value:= ((ds.ReadByte() Shl 8) | (ds.ReadByte() & $FF))
+								
+								chunk.PokeShort(addr, value)
 							Next
-							#End
 							
 							' Store the "chunk" in our container.
 							mapModel[i] = chunk
@@ -617,29 +618,25 @@ Class MapManager ' Implements SonicDef
 					End Try
 				Case LOAD_FRONT
 					Try
-						ds.ReadAll(mapFront, 0, mapFront.Length) ' (mapWidth*mapHeight*SizeOf_Short)
+						'''ds.ReadAll(mapFront, 0, mapFront.Length) ' (mapWidth*mapHeight*SizeOf_Short)
 						
-						FlipBuffer_Shorts(mapFront)
+						'''FlipBuffer_Shorts(mapFront)
 						
-						#Rem
 						For Local addr:= 0 Until mapFront.Length Step 2
 							mapFront.PokeShort(addr, ds.ReadShort())
 						Next
-						#End
 					Catch E:StreamError
 						' Nothing so far.
 					End Try
 				Case LOAD_BACK
 					Try
-						ds.ReadAll(mapBack, 0, mapBack.Length) ' (mapWidth*mapHeight*SizeOf_Short)
+						'''ds.ReadAll(mapBack, 0, mapBack.Length) ' (mapWidth*mapHeight*SizeOf_Short)
 						
-						FlipBuffer_Shorts(mapBack)
+						'''FlipBuffer_Shorts(mapBack)
 						
-						#Rem
 						For Local addr:= 0 Until mapBack.Length Step 2
 							mapBack.PokeShort(addr, ds.ReadShort())
 						Next
-						#End
 					Catch E:StreamError
 						' Nothing so far.
 					End Try

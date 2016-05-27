@@ -211,8 +211,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>21</X>
-        <Y>201</Y>
+        <X>2</X>
+        <Y>208</Y>
       </CursorPos>
       <DocGUID>bc59c3be-f162-4352-a507-ac52055adf10</DocGUID>
       <Bookmarks>
@@ -525,7 +525,7 @@
     <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>3</X>
-        <Y>68</Y>
+        <Y>67</Y>
       </CursorPos>
       <DocGUID>3d91f39d-9ed5-4956-ba8d-97c12b7236d1</DocGUID>
       <Bookmarks>
@@ -1427,8 +1427,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\mapmanager.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>15</X>
-        <Y>177</Y>
+        <X>9</X>
+        <Y>632</Y>
       </CursorPos>
       <DocGUID>b19c18e9-9065-4741-8752-ba504daa4766</DocGUID>
       <Bookmarks>
@@ -1442,11 +1442,11 @@
         </Point>
         <Point>
           <X>0</X>
-          <Y>621</Y>
+          <Y>622</Y>
         </Point>
         <Point>
           <X>0</X>
-          <Y>635</Y>
+          <Y>634</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
@@ -2275,8 +2275,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\application.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>20</X>
-        <Y>170</Y>
+        <X>19</X>
+        <Y>94</Y>
       </CursorPos>
       <DocGUID>573df5ef-d48f-46ff-ab61-8c9f8a570862</DocGUID>
       <Bookmarks>
