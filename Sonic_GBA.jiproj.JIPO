@@ -136,8 +136,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\lib\myapi.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
-        <Y>43</Y>
+        <X>50</X>
+        <Y>12</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -173,8 +173,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>51</X>
-        <Y>915</Y>
+        <X>24</X>
+        <Y>514</Y>
       </CursorPos>
       <DocGUID>ab21d9b9-bf97-41dc-b333-9b0289eba3ce</DocGUID>
       <Bookmarks>
@@ -192,22 +192,27 @@
         </Point>
         <Point>
           <X>0</X>
-          <Y>338</Y>
+          <Y>336</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgamepad.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>26</X>
-        <Y>50</Y>
+        <X>20</X>
+        <Y>186</Y>
       </CursorPos>
-      <DocGUID>79f6b4ca-4a52-4b9a-a9f7-7f25a253babd</DocGUID>
-      <Bookmarks />
+      <DocGUID>e6951bd8-cc64-42a7-9ef2-56511c277380</DocGUID>
+      <Bookmarks>
+        <Point>
+          <X>0</X>
+          <Y>172</Y>
+        </Point>
+      </Bookmarks>
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>860</Y>
+        <X>21</X>
+        <Y>201</Y>
       </CursorPos>
       <DocGUID>bc59c3be-f162-4352-a507-ac52055adf10</DocGUID>
       <Bookmarks>
@@ -478,14 +483,14 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>23</X>
-        <Y>27</Y>
+        <X>29</X>
+        <Y>71</Y>
       </CursorPos>
       <DocGUID>52d9b5c2-852f-49e7-80b5-a97826cfbef3</DocGUID>
       <Bookmarks>
         <Point>
           <X>0</X>
-          <Y>1227</Y>
+          <Y>1197</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
@@ -503,13 +508,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\rect.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\lib\rect.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>7</X>
         <Y>316</Y>
       </CursorPos>
-      <DocGUID>5b11df4f-5c97-453d-9afe-e20e07823735</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -520,18 +524,14 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>70</Y>
+        <X>3</X>
+        <Y>68</Y>
       </CursorPos>
       <DocGUID>3d91f39d-9ed5-4956-ba8d-97c12b7236d1</DocGUID>
       <Bookmarks>
         <Point>
           <X>0</X>
           <Y>66</Y>
-        </Point>
-        <Point>
-          <X>0</X>
-          <Y>68</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
@@ -2250,29 +2250,33 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>19</X>
-        <Y>2556</Y>
+        <X>3</X>
+        <Y>1377</Y>
       </CursorPos>
       <DocGUID>b2d10f7a-d015-46d9-b050-01cceae40edc</DocGUID>
       <Bookmarks>
         <Point>
           <X>0</X>
-          <Y>648</Y>
+          <Y>657</Y>
         </Point>
         <Point>
           <X>0</X>
-          <Y>1200</Y>
+          <Y>1209</Y>
         </Point>
         <Point>
           <X>0</X>
-          <Y>2438</Y>
+          <Y>1220</Y>
+        </Point>
+        <Point>
+          <X>0</X>
+          <Y>2447</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
     <DocUserOptions Filename=".\src\application.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>18</X>
-        <Y>235</Y>
+        <X>20</X>
+        <Y>170</Y>
       </CursorPos>
       <DocGUID>573df5ef-d48f-46ff-ab61-8c9f8a570862</DocGUID>
       <Bookmarks>
@@ -2366,8 +2370,8 @@
     <FolderStatus NodePath="Sonic_GBA\src\__removed" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\action" Expanded="true" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\action" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\action\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\ext" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\lib" Expanded="false" />
@@ -2387,7 +2391,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\lib\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\mflib" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\platformstandard" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\platformstandard" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\pyxeditor" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\android_new" Expanded="false" />

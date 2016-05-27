@@ -93,36 +93,6 @@ Class MyAPI ' Implements Def
 		Global upPermit:Bool
 	Private
 		' Functions:
-		
-		' Extensions:
-		Function fixTransformation:Int(trans:Int)
-			Return trans
-			
-			' Mirror and rotate 180 degrees:
-			#Rem
-			Select trans
-				Case TRANS_NONE
-					Return TRANS_MIRROR_ROT180
-				Case TRANS_MIRROR_ROT180
-					Return TRANS_NONE
-				Case TRANS_MIRROR
-					Return TRANS_ROT180
-				Case TRANS_ROT180
-					Return TRANS_MIRROR
-				Case TRANS_MIRROR_ROT270
-					Return TRANS_ROT90
-				Case TRANS_ROT90
-					Return TRANS_MIRROR_ROT270
-				Case TRANS_ROT270
-					Return TRANS_MIRROR_ROT90
-				Case TRANS_MIRROR_ROT90
-					Return TRANS_ROT270
-			End Select
-			
-			Return TRANS_NONE
-			#End
-		End
-		
 		Function drawRegionPrivate:Void(g2:MFGraphics, img:MFImage, sx:Int, sy:Int, sw:Int, sh:Int, trans:Int, dx:Int, dy:Int, anchor:Int)
 			g2.drawRegion(img, sx, sy, sw, sh, trans, dx, dy, anchor)
 		End
@@ -210,7 +180,7 @@ Class MyAPI ' Implements Def
 		End
 		
 		Function drawImage:Void(g2:MFGraphics, img:MFImage, sx:Int, sy:Int, sw:Int, sh:Int, trans:Int, dx:Int, dy:Int, anchor:Int)
-			drawRegionPrivate(g2, img, zoomOut(sx), zoomOut(sy), zoomOut(sw), zoomOut(sh), fixTransformation(trans), zoomOut(dx), zoomOut(dy), anchor)
+			drawRegionPrivate(g2, img, zoomOut(sx), zoomOut(sy), zoomOut(sw), zoomOut(sh), trans, zoomOut(dx), zoomOut(dy), anchor)
 		End
 		
 		Function drawImageWithoutZoom:Void(g2:MFGraphics, img:MFImage, sx:Int, sy:Int, sw:Int, sh:Int, trans:Int, dx:Int, dy:Int, anchor:Int)

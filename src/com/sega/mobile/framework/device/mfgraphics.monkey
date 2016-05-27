@@ -200,7 +200,7 @@ Class MFGraphics
 		End
 		
 		Method clear:Void()
-			Self.context.Clear()
+			Self.context.Clear(0.0, 0.0, 0.0, 0.0) ' 1.0
 		End
 		
 		Method flush:Void()

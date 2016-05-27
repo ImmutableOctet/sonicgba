@@ -170,6 +170,8 @@ Class MFGamePad ' Final
 		
 		' This routine may change in the future:
 		Function decodeKey:Int(keyCode:Int)
+			Print("DECODING KEY: " + keyCode)
+			
 			' Magic numbers: 4, 19, 20, 21, 22, 52, 82 (Key-codes)
 			Select (keyCode)
 				Case keycodes.KEY_BACK ' 4 ' KEYCODE_BACK

@@ -504,21 +504,30 @@ Class TitleState Extends State
 		
 		Function drawTitle:Void(g:MFGraphics, layer:Int)
 			If (state = STATE_PRE_PRESS_START Or state = STATE_PRESS_START Or state = STATE_MOVING Or state = STATE_EXIT Or state = STATE_START_GAME Or state = STATE_SEGA_MORE) Then
-				Local scale:= (Float(MFDevice.getDeviceHeight()) / Float(titleLeftImage.getHeight())) ' (Float(MFDevice.getDeviceWidth()) / Float(titleLeftImage.getWidth()))
+				Local scale:= (Float(MFDevice.getDeviceWidth()) / Float(titleLeftImage.getWidth())) ' (Float(MFDevice.getDeviceHeight()) / Float(titleLeftImage.getHeight()))
 				
+				' Background image:
 				g.saveCanvas()
+				
 				g.scaleCanvas(scale, scale, 0, 0)
 				g.drawImage(titleLeftImage, 0, 0, STATE_RETURN_TO_LOGO_1)
+				
 				g.restoreCanvas()
 				
+				' Game title image:
 				g.saveCanvas()
+				
 				g.scaleCanvas(scale, scale, MFDevice.getDeviceWidth(), 0)
 				g.drawImage(titleRightImage, MFDevice.getDeviceWidth(), 0, STATE_PRO_RACE_MODE)
+				
 				g.restoreCanvas()
 				
+				' Copyright/company image:
 				g.saveCanvas()
+				
 				g.scaleCanvas(scale, scale, MFDevice.getDeviceWidth(), MFDevice.getDeviceHeight())
 				g.drawImage(titleSegaImage, MFDevice.getDeviceWidth(), MFDevice.getDeviceHeight(), STATE_OPTION_SENSOR_SET)
+				
 				g.restoreCanvas()
 			EndIf
 		End
@@ -2589,12 +2598,12 @@ Class TitleState Extends State
 			
 			If (state = STATE_PRESS_START) Then
 				If ((Millisecs() / 500) Mod 2 = 0) Then
-					Self.titleAniDrawer.setActionId(STATE_MOVING)
-					Self.titleAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + STATE_OPTION_LANGUAGE)
+					Self.titleAniDrawer.setActionId(2)
+					Self.titleAniDrawer.draw(g, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) + STATE_OPTION_LANGUAGE) ' 33
 				EndIf
 			ElseIf (state = STATE_EXIT And Self.quitFlag = 1) Then
-				Self.titleAniDrawer.setActionId(STATE_MOVING)
-				Self.titleAniDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) + STATE_OPTION_LANGUAGE)
+				Self.titleAniDrawer.setActionId(2)
+				Self.titleAniDrawer.draw(g, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) + STATE_OPTION_LANGUAGE) ' 33
 			EndIf
 			
 			drawSegaLogo(g)

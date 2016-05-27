@@ -287,11 +287,9 @@ Class MFDevice Final
 			handleInput()
 			
 			' Update (Input) components:
-			#Rem
 			For Local component:= EachIn componentVector 
 				component.tick()
 			Next
-			#End
 			
 			'MFSound.tick()
 			
@@ -357,10 +355,6 @@ Class MFDevice Final
 		' The 'graphics' argument represents the primary layer used to render the game.
 		' If unsure, use the other overload. (Automatically establishes a primary layer)
 		Function deviceDraw:Void(screen:Canvas, graphics:MFGraphics, vx:Float, vy:Float, vw:Float, vh:Float) ' Canvas ' Graphics
-			' For debugging purposes, we are scheduling this draw operation in advance.
-			' Draw the main graphics layer to the screen. (Game graphics, etc)
-			screen.DrawRect(vx, vy, vw, vh, bufferImage.getNativeImage())
-			
 			'bufferImage.getNativeImage().SetHandle(0.5, 0.5)
 			'screen.DrawImage(bufferImage.getNativeImage(), (screen.Width / 2), (screen.Height / 2), 0.0, 2.0, -2.0) ' screen.Width - (bufferImage.getWidth() / 2), screen.Height - (bufferImage.getHeight() / 2)
 			
@@ -391,6 +385,8 @@ Class MFDevice Final
 			
 			' Execute the draw operations queued up for the main graphics layer.
 			graphics.flush()
+			
+			screen.DrawRect(vx, vy, vw, vh, bufferImage.getNativeImage())
 			
 			' Execute the draw operations queued on the foreground layer(s):
 			For Local i:= postLayer.Length To postLayer.Length ' Until 0 Step -1 ' MAX_LAYER

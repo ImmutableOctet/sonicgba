@@ -64,9 +64,9 @@ Class MainState Implements MFGameState ' Def
 			PlayerObject.setCharacter(CHARACTER_SONIC)
 			StageManager.setStageID(0)
 			
-			State.setState(State.STATE_TITLE)
+			'''State.setState(State.STATE_TITLE)
 			'State.setState(State.STATE_GAME)
-			''State.setState(State.STATE_SELECT_CHARACTER)
+			State.setState(State.STATE_SELECT_CHARACTER)
 			'State.setState(State.STATE_NORMAL_ENDING)
 			'''State.setState(State.STATE_SPECIAL)
 			'State.setState(State.STATE_SELECT_NORMAL_STAGE)
