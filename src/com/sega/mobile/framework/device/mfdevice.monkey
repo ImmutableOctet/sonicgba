@@ -107,7 +107,7 @@ Class MFDevice Final
 		Global nextState:MFGameState
 		
 		Global currentSystemTime:Long ' Int
-		Global drawRect:Rect
+		Global drawRect:Rect = New Rect()
 		
 		Global graphics:MFGraphics
 		
@@ -247,6 +247,14 @@ Class MFDevice Final
 			#End
 		End
 		
+		Function updateDrawRect:Void(x:Int, y:Int, width:Int, height:Int)
+			drawRect.left = x
+			drawRect.top = y
+			
+			drawRect.right = (x + width)
+			drawRect.bottom = (y + height)
+		End
+		
 		Function allocateLayer:MFImage(width:Int, height:Int)
 			Return MFImage.createImage(width, height)
 		End
@@ -279,9 +287,11 @@ Class MFDevice Final
 			handleInput()
 			
 			' Update (Input) components:
+			#Rem
 			For Local component:= EachIn componentVector 
 				component.tick()
 			Next
+			#End
 			
 			'MFSound.tick()
 			
@@ -351,9 +361,8 @@ Class MFDevice Final
 			' Draw the main graphics layer to the screen. (Game graphics, etc)
 			screen.DrawRect(vx, vy, vw, vh, bufferImage.getNativeImage())
 			
-			bufferImage.getNativeImage().SetHandle(0.5, 0.5)
-			
-			'''screen.DrawImage(bufferImage.getNativeImage(), (screen.Width / 2), (screen.Height / 2), 0.0, 2.0, -2.0) ' screen.Width - (bufferImage.getWidth() / 2), screen.Height - (bufferImage.getHeight() / 2)
+			'bufferImage.getNativeImage().SetHandle(0.5, 0.5)
+			'screen.DrawImage(bufferImage.getNativeImage(), (screen.Width / 2), (screen.Height / 2), 0.0, 2.0, -2.0) ' screen.Width - (bufferImage.getWidth() / 2), screen.Height - (bufferImage.getHeight() / 2)
 			
 			' Testing related:
 			'screen.SetAlpha(0.5)
@@ -910,11 +919,15 @@ Class MFDevice Final
 		
 		Function disableLayer:Void(layer:Int)
 			If (layer > 0 And layer <= MAX_LAYER) Then
-				postLayer[layer - MAX_LAYER].discard()
-				postLayer[layer - MAX_LAYER] = Null
+				Local lNum:= (layer - MAX_LAYER)
+				
+				postLayer[lNum].discard()
+				postLayer[lNum] = Null
 			ElseIf (layer < 0 And layer >= -MAX_LAYER) Then
-				preLayer[(-layer) - MAX_LAYER].discard()
-				preLayer[(-layer) - MAX_LAYER] = Null
+				Local lNum:= ((-layer) - MAX_LAYER)
+				
+				preLayer[lNum].discard()
+				preLayer[lNum] = Null
 			EndIf
 		End
 		

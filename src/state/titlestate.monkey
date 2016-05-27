@@ -504,7 +504,7 @@ Class TitleState Extends State
 		
 		Function drawTitle:Void(g:MFGraphics, layer:Int)
 			If (state = STATE_PRE_PRESS_START Or state = STATE_PRESS_START Or state = STATE_MOVING Or state = STATE_EXIT Or state = STATE_START_GAME Or state = STATE_SEGA_MORE) Then
-				Local scale:= (Float(MFDevice.getDeviceHeight()) / Float(titleLeftImage.getHeight()))
+				Local scale:= (Float(MFDevice.getDeviceHeight()) / Float(titleLeftImage.getHeight())) ' (Float(MFDevice.getDeviceWidth()) / Float(titleLeftImage.getWidth()))
 				
 				g.saveCanvas()
 				g.scaleCanvas(scale, scale, 0, 0)
@@ -2554,7 +2554,7 @@ Class TitleState Extends State
 		
 		Method initTitleRes:Void()
 			If (titleLeftImage = Null) Then
-				MFDevice.enableLayer(ELEMENT_OFFSET)
+				MFDevice.enableLayer(-1) ' ELEMENT_OFFSET
 				
 				titleLeftImage = MFImage.createImage("/title/title_left.png")
 				titleRightImage = MFImage.createImage("/title/title_right.png")

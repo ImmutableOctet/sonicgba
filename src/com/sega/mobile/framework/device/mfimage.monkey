@@ -2,6 +2,11 @@ Strict
 
 Public
 
+' Preprocessor related:
+#If CONFIG = "debug" Or TARGET = "html5"
+	#SONICGBA_MFIMAGE_STOP_ON_NULL = True
+#End
+
 ' Friends:
 Friend com.sega.mobile.framework.device.mfgraphics
 
@@ -45,7 +50,15 @@ Class MFImage
 		End
 		
 		Function generateImage:Image(path:String)
-			Return Image.Load(MFDevice.FixGlobalPath(path), 0.0, 0.0, Image.Mipmap)
+			Local img:= Image.Load(MFDevice.FixGlobalPath(path), 0.0, 0.0, Image.Mipmap)
+			
+			#If SONICGBA_MFIMAGE_STOP_ON_NULL
+				If (img = Null) Then
+					DebugStop()
+				EndIf
+			#End
+			
+			Return img
 		End
 		
 		' Constructor(s):

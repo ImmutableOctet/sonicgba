@@ -2193,7 +2193,7 @@
       </CursorPos>
     </Document>
   </Files>
-  <CompilerConfig Configuration="release" BuildMode="run" Target="Desktop_Game_(Glfw3)" />
+  <CompilerConfig Configuration="release" BuildMode="run" Target="Html5_Game" />
   <Version Major="16" Minor="3" Revision="13" Build="65" ProductName="Untitled product" />
   <PreBuildCommands />
 </JiProj>

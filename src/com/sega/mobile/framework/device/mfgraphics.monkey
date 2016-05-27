@@ -3,7 +3,7 @@ Strict
 Public
 
 ' Preprocessor related:
-'#SONICGBA_MFGRAPHICS_DEBUG_REGION_DRAW = True ' False
+#SONICGBA_MFGRAPHICS_DEBUG_REGION_DRAW = True ' False
 
 #If SONICGBA_MFGRAPHICS_DEBUG_REGION_DRAW
 	#SONICGBA_MFDEVICE_ALLOW_DEBUG_GRAPHICS = True
@@ -75,7 +75,7 @@ Class MFGraphics
 		Field transX:Int
 		Field transY:Int
 		
-		Field mMatrix:Matrix2D = New Matrix2D()
+		'Field mMatrix:Matrix2D = New Matrix2D()
 		
 		Field effectFlag:Bool
 		Field enableExceed:Bool
@@ -728,7 +728,7 @@ Class MFGraphics
 			'x_dest = ((Self.context.Width / 2) - x_dest)
 			'y_dest = ((Self.context.Height / 2) - y_dest)
 			
-			saveCanvas()
+			saveCanvas() ' PushMatrix()
 			
 			Local xOffset:= 0
 			Local yOffset:= 0
@@ -858,7 +858,7 @@ Class MFGraphics
 				Self.context.SetColor(1.0, 1.0, 1.0, 1.0)
 			EndIf
 			
-			restoreCanvas()
+			restoreCanvas() ' PopMatrix()
 		End
 		
 		Method drawImageImpl:Void(MFImg:MFImage, x:Int, y:Int, anchor:Int=(TOP|LEFT)) Final

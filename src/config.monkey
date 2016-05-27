@@ -1,7 +1,7 @@
 ' Preprocessor related:
 #MONKEYLANG_EXTENSION_WIDECHARACTERS = True
 
-#GLFW_USE_MINGW = False
+'''#GLFW_USE_MINGW = False
 
 '#SONICGBA_EASTEREGGS = True
 
@@ -21,7 +21,10 @@
 #End
 
 #MOJO_IMAGE_FILTERING_ENABLED = False ' True
+
+'#If TARGET <> "html5"
 #MOJO_AUTO_SUSPEND_ENABLED = False
+'#End
 
 ' File formats:
 #TEXT_FILES+="*.txt|*.xml|*.json"

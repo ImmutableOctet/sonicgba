@@ -195,28 +195,30 @@ Class Application Extends App ' Main Extends MFMain
 			Return 1 ' 0
 		End
 		
-		Method OnSuspend:Int()
-			isSuspended = True
+		#Rem
+			Method OnSuspend:Int()
+				isSuspended = True
+				
+				MFDevice.inSuspendFlag = True
+				MFDevice.notifyPause()
+				
+				Return Super.OnSuspend()
+			End
 			
-			MFDevice.inSuspendFlag = True
-			MFDevice.notifyPause()
-			
-			Return 0
-		End
-		
-		Method OnResume:Int()
-			If (Self.resumeFromOtherActivityFlag) Then
-				Self.isResumeFromOtherActivity = True
-				Self.resumeFromOtherActivityFlag = False
-			EndIf
-			
-			isSuspended = False
-			
-			MFDevice.inSuspendFlag = False
-			MFDevice.notifyResume()
-			
-			Return 0
-		End
+			Method OnResume:Int()
+				If (Self.resumeFromOtherActivityFlag) Then
+					Self.isResumeFromOtherActivity = True
+					Self.resumeFromOtherActivityFlag = False
+				EndIf
+				
+				isSuspended = False
+				
+				MFDevice.inSuspendFlag = False
+				MFDevice.notifyResume()
+				
+				Return Super.OnResume()
+			End
+		#End
 		
 		Method OnResize:Int()
 			Local devWidth:= DeviceWidth()
@@ -233,7 +235,9 @@ Class Application Extends App ' Main Extends MFMain
 			
 			UpdateLetterBox(devWidth, devHeight, SCREEN_WIDTH, SCREEN_HEIGHT)
 			
-			Return 0
+			MFDevice.updateDrawRect(Self.screenX, Self.screenY, Self.screenWidth, Self.screenHeight)
+			
+			Return Super.OnResize()
 		End
 		
 		Method OnRenderWhileSuspended:Void()
