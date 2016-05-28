@@ -198,10 +198,6 @@ Class Frame
 						clipInfo[0] = ds.ReadShort()
 						clipInfo[1] = ds.ReadShort()
 						
-						If (clipInfo[0] < 0 Or clipInfo[1] < 0 Or clipInfo[0] > 20000 Or clipInfo[1] > 20000) Then
-							'DebugStop()
-						EndIf
-						
 						If (Animation.isFrameWanted) Then
 							Local j:= 0
 							
