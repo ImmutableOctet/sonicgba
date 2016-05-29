@@ -312,7 +312,7 @@ Class MFDevice Final
 				currentState.onTick()
 			EndIf
 			
-			'''MFGamePad.keyTick()
+			MFGamePad.keyTick()
 		End
 		
 		' This performs a raw render of the game without displaying
@@ -421,11 +421,14 @@ Class MFDevice Final
 			' Check if at least one character was pressed:
 			If (keyCode <> 0) Then
 				For Local key:= START_KEY_INDEX To LAST_KEY_INDEX
+					keyCode = key
+					
+					If (KeyDown(key)) Then
+						MFGamePad.keyPressed(keyCode)
+					EndIf
+					
 					If (KeyHit(key)) Then
-						MFGamePad.keyPressed(keyCode)
 						MFGamePad.keyReleased(keyCode)
-					ElseIf (KeyDown(key)) Then
-						MFGamePad.keyPressed(keyCode)
 					EndIf
 				Next
 			EndIf
@@ -439,12 +442,25 @@ Class MFDevice Final
 				If (TouchHit(index)) Then
 					pointerPressed(index, tx, ty)
 					pointerReleased(index, tx, ty)
-				ElseIf (TouchDown(index)) Then
-					pointerPressed(index, tx, ty)
-					'pointerDragged(index, tx, ty)
+				Else
+					If (TouchDown(index)) Then
+						If (Not mouseStates[index]) Then
+							mouseStates[index] = True
+							
+							pointerPressed(index, tx, ty)
+							
+							'pointerDragged(index, tx, ty)
+						EndIf
+					ElseIf (mouseStates[index]) Then
+						mouseStates[index] = False
+						
+						pointerReleased(index, tx, ty)
+					EndIf
 				EndIf
 			Next
 		End
+		
+		Global mouseStates:= New Bool[3]
 		
 		Function pointerDragged:Void(id:Int, x:Int, y:Int)
 			x = ((x - drawRect.left) * canvasWidth) / drawRect.width()
@@ -471,6 +487,8 @@ Class MFDevice Final
 		Function pointerReleased:Void(id:Int, x:Int, y:Int)
 			x = ((x - drawRect.left) * canvasWidth) / drawRect.width()
 			y = ((y - drawRect.top) * canvasHeight) / drawRect.height()
+			
+			Print("Pointer released: " + x + ", " + y)
 			
 			If (componentVector <> Null) Then
 				For Local component:= EachIn componentVector
@@ -904,6 +922,8 @@ Class MFDevice Final
 		End
 		
 		Function enableLayer:Void(layer:Int)
+			Print("enableLayer: " + layer)
+			
 			If (layer <= 0 Or layer > MAX_LAYER) Then ' (layer <> MAX_LAYER)
 				If (layer < 0 And layer >= -MAX_LAYER And preLayer[(-layer) - MAX_LAYER] = Null) Then
 					preLayer[(-layer) - MAX_LAYER] = allocateLayer() ' (screenWidth, screenHeight)
@@ -914,6 +934,8 @@ Class MFDevice Final
 		End
 		
 		Function disableLayer:Void(layer:Int)
+			Print("disableLayer: " + layer)
+			
 			If (layer > 0 And layer <= MAX_LAYER) Then
 				Local lNum:= (layer - MAX_LAYER)
 				

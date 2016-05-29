@@ -827,7 +827,7 @@ Class MFGraphics
 				Case TRANS_NONE
 					'''Self.context.SetColor(1.0, 0.0, 0.0); dbgcolor = True
 				Case TRANS_MIRROR_ROT180
-					'''Self.context.SetColor(1.0, 0.0, 0.25); dbgcolor = True
+					Self.context.SetColor(1.0, 0.0, 0.25); dbgcolor = True
 				Case TRANS_MIRROR
 					'''Self.context.SetColor(0.0, 0.0, 1.0); dbgcolor = True
 				Case TRANS_ROT180

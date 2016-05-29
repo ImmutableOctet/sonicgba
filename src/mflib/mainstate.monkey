@@ -51,7 +51,7 @@ Class MainState Implements MFGameState ' Def
 		
 		' Methods:
 		Method getFrameTime:Int()
-			If (Main.BULLET_TIME) Then
+			If (Application.BULLET_TIME) Then ' main
 				Return FRAME_SKIP * 16
 			EndIf
 			

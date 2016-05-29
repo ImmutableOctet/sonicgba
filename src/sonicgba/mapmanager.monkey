@@ -170,12 +170,24 @@ Class MapManager ' Implements SonicDef
 		' Functions:
 		
 		' Extensions:
-		Function AsMapModelCoord:Int(x:Int, y:Int)
-			Return ((y * MODEL_WIDTH) + x) ' x Mod MODEL_WIDTH ' MODEL_HEIGHT
+		Function CoordAsIndex:Int(x:Int, y:Int, width:Int, height:Int)
+			Return ((x) + (y * width)) ' height
+		End
+		
+		Function AsMapModelCoord:Int(x:Int, y:Int, width:Int, height:Int)
+			Return CoordAsIndex(x, y, MODEL_WIDTH, MODEL_HEIGHT)
+		End
+		
+		Function GetTileAt:Int(data:DataBuffer, x:Int, y:Int, width:Int, height:Int)
+			Return data.PeekShort(CoordAsIndex(x, y, width, height) * SizeOf_Short) ' 2 ' 0
 		End
 		
 		Function GetModelTileAt:Int(data:DataBuffer, x:Int, y:Int)
-			Return data.PeekShort(AsMapModelCoord(x, y) * SizeOf_Short) ' 2 ' 0
+			Return GetTileAt(data, x, y, MODEL_WIDTH, MODEL_HEIGHT)
+		End
+		
+		Function GetStandardTileAt:Int(mapData:DataBuffer, x:Int, y:Int)
+			Return GetTileAt(mapData, x, y, mapWidth, mapHeight)
 		End
 		
 		Function cameraLogic:Void()
@@ -603,12 +615,14 @@ Class MapManager ' Implements SonicDef
 							
 							'''FlipBuffer_Shorts(chunk) ' FlipBuffer_Shorts
 							
+							'#Rem
 							For Local addr:= 0 Until MODE_CHUNK_SIZE Step 2
 								Local value:= ds.ReadShort()
 								'Local value:= ((ds.ReadByte() Shl 8) | (ds.ReadByte() & $FF))
 								
 								chunk.PokeShort(addr, value)
 							Next
+							'#End
 							
 							' Store the "chunk" in our container.
 							mapModel[i] = chunk
@@ -622,9 +636,11 @@ Class MapManager ' Implements SonicDef
 						
 						'''FlipBuffer_Shorts(mapFront)
 						
+						'#Rem
 						For Local addr:= 0 Until mapFront.Length Step 2
 							mapFront.PokeShort(addr, ds.ReadShort())
 						Next
+						'#End
 					Catch E:StreamError
 						' Nothing so far.
 					End Try
@@ -634,9 +650,11 @@ Class MapManager ' Implements SonicDef
 						
 						'''FlipBuffer_Shorts(mapBack)
 						
+						'#Rem
 						For Local addr:= 0 Until mapBack.Length Step 2
 							mapBack.PokeShort(addr, ds.ReadShort())
 						Next
+						'#End
 					Catch E:StreamError
 						' Nothing so far.
 					End Try
@@ -897,6 +915,7 @@ Class MapManager ' Implements SonicDef
 			Next
 		End
 		
+		#Rem
 		Function drawMap:Void(g:MFGraphics, mapArray:DataBuffer)
 			Local startY:= (camera.y + CAMERA_OFFSET_Y) / TILE_HEIGHT
 			
@@ -998,7 +1017,9 @@ Class MapManager ' Implements SonicDef
 								preCheckModelX = (modelX | 1)
 							EndIf
 							
-							drawTile(g, (tileId & 16383), x, y, preCheckModelX)
+							Local tileData:= (tileId & 16383)
+							
+							drawTile(g, tileData, x, y, preCheckModelX)
 							
 							preCheckModelX = y
 						Else
@@ -1013,6 +1034,106 @@ Class MapManager ' Implements SonicDef
 				EndIf
 				
 				x = modelX + 1
+			Wend
+		End
+		#End
+		
+		Function drawMap:Void(var0:MFGraphics, var1:DataBuffer) ' Short[][]
+			Local var2:= (camera.x + CAMERA_OFFSET_X - mapOffsetX) / 16
+			Local var3:= (camera.y + CAMERA_OFFSET_Y) / 16
+			Local var4:= (16 + camera.x + CAMERA_WIDTH - 1 + CAMERA_OFFSET_X - mapOffsetX) / 16
+			Local var5:= (16 + camera.y + CAMERA_HEIGHT - 1 + CAMERA_OFFSET_Y) / 16
+			Local var6:= -1
+	
+			Local var17:Int
+			
+			Local var7:= var2
+			
+			While (var7 < var4)
+				Local continueOperations:Bool = True
+				
+				Local var8:= (var7 / 6)
+				
+				Local var9:Int
+				
+				If (var8 <> var6) Then
+					Local var18:Bool = True
+	
+					For Local var19:= (var3 / 6) Until ((var5 + 6 - 1) / 6)
+						If (getModelIdByIndex(var1, var8, var19) <> 0) Then
+							var18 = False
+							
+							Exit
+						EndIf
+					Next
+					
+					var9 = var7 / 6
+					
+					If (var18) Then
+						var17 = 6 * (var8 + 1) - 1
+						var6 = var9
+						
+						continueOperations = False
+					EndIf
+				Else
+					var9 = var6
+				EndIf
+				
+				If (continueOperations) Then
+					Local var16:Int
+					Local var10:= var3
+					
+					While (var10 < var5)
+						If (getModelId(var1, var7, var10) = 0) Then
+							var16 = 6 * (1 + var10 / 6) - 1
+						Else
+							Local var11:= getTileId(var1, var7, var10)
+							
+							Local var12:Bool
+							
+							If ((32768 & var11) <> 0) Then
+								var12 = True
+							Else
+								var12 = False
+							EndIf
+							
+							Local var13:Bool
+							
+							If ((var11 & 16384) <> 0) Then
+								var13 = True
+							Else
+								var13 = False
+							EndIf
+							
+							Local var14:Int
+							
+							If (var13) Then
+								var14 = 0 | 2
+							Else
+								var14 = 0
+							EndIf
+		
+							Local var15:Int
+							
+							If (var12) Then
+								var15 = var14 | 1
+							Else
+								var15 = var14
+							EndIf
+							
+							drawTile(var0, var11 & 16383, var7, var10, var15)
+							
+							var16 = var10
+						EndIf
+						
+						var10 = var16 + 1
+					Wend
+					
+					var17 = var7
+					var6 = var9
+				EndIf
+				
+				var7 = var17 + 1
 			Wend
 		End
 		
@@ -1031,13 +1152,13 @@ Class MapManager ' Implements SonicDef
 		End
 		
 		Function getModelIdByIndex:Int(mapArray:DataBuffer, x:Int, y:Int)
-			x = getConvertX(x)
+			Local convX:= getConvertX(x)
 			
-			If (y >= MODEL_HEIGHT) Then
+			If (y >= mapHeight) Then
 				Return 0
 			EndIf
 			
-			Return GetModelTileAt(mapArray, x, y)
+			Return GetStandardTileAt(mapArray, convX, y) ' GetModelTileAt
 		End
 		
 		Function drawTile:Void(g:MFGraphics, sy:Int, x:Int, y:Int, trans:Int)
@@ -1046,7 +1167,9 @@ Class MapManager ' Implements SonicDef
 				
 				sy /= IMAGE_TILE_WIDTH
 				
-				If (stageFlag) Then
+				If (Not stageFlag) Then
+					MyAPI.drawImage(g, image, (sx * TILE_WIDTH), (sy * TILE_HEIGHT), TILE_WIDTH, TILE_HEIGHT, trans, ((x * TILE_WIDTH) - camera.x) + mapOffsetX, ((y * TILE_HEIGHT) - camera.y) + PickValue((y >= brokePointY), brokeOffsetY, 0), COLOR_SPACE)
+				Else
 					mappaintframe = gameFrame
 					
 					Select (stage_id)
@@ -1061,11 +1184,7 @@ Class MapManager ' Implements SonicDef
 					EndIf
 					
 					MyAPI.drawImage(g, tileimage[mappaintframe], (sx * TILE_WIDTH), (sy * TILE_HEIGHT), TILE_WIDTH, TILE_HEIGHT, trans, ((x * TILE_WIDTH) - camera.x) + mapOffsetX, ((y * TILE_HEIGHT) - camera.y) + PickValue((y >= brokePointY), brokeOffsetY, 0), COLOR_SPACE)
-					
-					Return
 				EndIf
-				
-				MyAPI.drawImage(g, image, (sx * TILE_WIDTH), (sy * TILE_HEIGHT), TILE_WIDTH, TILE_HEIGHT, trans, ((x * TILE_WIDTH) - camera.x) + mapOffsetX, ((y * TILE_HEIGHT) - camera.y) + PickValue((y >= brokePointY), brokeOffsetY, 0), COLOR_SPACE)
 			EndIf
 		End
 End

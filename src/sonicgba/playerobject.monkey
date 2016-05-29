@@ -1901,7 +1901,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Method drawCharacter:Void(graphics:MFGraphics)
 			' Empty implementation.
 		End
-	
+		
 		Method draw2:Void(g:MFGraphics)
 			draw(g, (drawAtFront() And Self.visible))
 			drawCollisionRect(g)
@@ -6822,7 +6822,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Method drawDrawerByDegree:Void(g:MFGraphics, drawer:AnimationDrawer, aniID:Int, x:Int, y:Int, loop:Bool, degree:Int, mirror:Bool)
 			g.saveCanvas()
+			
 			g.translateCanvas(x, y)
+			
 			g.rotateCanvas(Float(degree))
 			
 			drawer.draw(g, aniID, 0, 0, loop, PickValue((Not mirror), 0, 2))
