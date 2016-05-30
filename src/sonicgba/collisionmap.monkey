@@ -52,7 +52,7 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 		
 		' Extensions:
 		Function AsModelCoord:Int(x:Int, y:Int)
-			Return ((x) + (y * GRID_NUM_PER_MODEL))
+			Return ((x * GRID_NUM_PER_MODEL) + y)
 		End
 		
 		Function GetModelTileAt:Int(data:DataBuffer, x:Int, y:Int)

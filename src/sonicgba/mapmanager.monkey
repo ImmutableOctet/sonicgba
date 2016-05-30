@@ -29,6 +29,9 @@ Private
 	
 	Import regal.typetool
 	Import regal.sizeof
+	
+	' Debugging related:
+	Import regal.byteorder
 Public
 
 ' Classes:
@@ -171,7 +174,7 @@ Class MapManager ' Implements SonicDef
 		
 		' Extensions:
 		Function CoordAsIndex:Int(x:Int, y:Int, width:Int, height:Int)
-			Return ((x) + (y * width)) ' height
+			Return ((x * height) + (y)) ' height
 		End
 		
 		Function AsMapModelCoord:Int(x:Int, y:Int, width:Int, height:Int)
@@ -595,12 +598,11 @@ Class MapManager ' Implements SonicDef
 						' Read the number of "chunks":
 						Local chunkNum:= ds.ReadShort()
 						
-						Print("MAP CHUNKS: " + chunkNum)
-						Print("SIZE OF MAP CHUNKS IN MEMORY: " + (chunkNum * MODE_CHUNK_SIZE) + " bytes")
+						Local __unknown:= ds.ReadShort()
 						
-						' Skip the next two bytes (I'm not sure if this is supposed to be an 'Int' or not):
-						'ds.ReadShort()
-						ds.Seek(ds.Position+2)
+						Print("MAP CHUNKS: " + chunkNum)
+						
+						Print("SIZE OF MAP CHUNKS IN MEMORY: " + (chunkNum * MODE_CHUNK_SIZE) + " bytes")
 						
 						' Allocate an array of "map chunks":
 						mapModel = New DataBuffer[chunkNum]
@@ -782,9 +784,9 @@ Class MapManager ' Implements SonicDef
 			Select (StageManager.getCurrentZoneId())
 				Case 8
 					Return (mapLoopLeft + ((x - mapLoopRight) Mod duration))
-				Default
-					Return (mapLoopLeft + ((x - mapLoopRight) Mod duration))
 			End Select
+			
+			Return (mapLoopLeft + ((x - mapLoopRight) Mod duration))
 		End
 	Private
 		' Functions:
@@ -915,130 +917,7 @@ Class MapManager ' Implements SonicDef
 			Next
 		End
 		
-		#Rem
-		Function drawMap:Void(g:MFGraphics, mapArray:DataBuffer)
-			Local startY:= (camera.y + CAMERA_OFFSET_Y) / TILE_HEIGHT
-			
-			Local endX:= (((((camera.x + CAMERA_WIDTH) + TILE_WIDTH) - 1) + CAMERA_OFFSET_X) - mapOffsetX) / TILE_WIDTH
-			Local endY:= ((((camera.y + CAMERA_HEIGHT) + TILE_HEIGHT) - 1) + CAMERA_OFFSET_Y) / TILE_HEIGHT
-			
-			Local preCheckModelX:= -1
-			
-			Local x:= (((camera.x + CAMERA_OFFSET_X) - mapOffsetX) / TILE_WIDTH)
-			
-			While (x < endX)
-				Local modelX:= (x / MODEL_WIDTH)
-				
-				Local my:Int
-				Local y:Int
-				
-				Local tileId:Int
-				
-				Local flipX:Bool
-				
-				If (modelX <> preCheckModelX) Then
-					preCheckModelX = 1
-					
-					For my = (startY / MODEL_HEIGHT) Until (((endY + MODEL_HEIGHT) - 1) / MODEL_HEIGHT)
-						If (getModelIdByIndex(mapArray, modelX, my) <> 0) Then
-							preCheckModelX = 0
-							
-							Exit
-						EndIf
-					Next
-					
-					my = (x / MODEL_HEIGHT) ' MODEL_WIDTH
-					
-					If (preCheckModelX <> 0) Then
-						modelX = ((modelX + 1) * MODEL_WIDTH) - 1
-						
-						preCheckModelX = my
-					EndIf
-					
-					y = startY
-					
-					While (y < endY)
-						If (getModelId(mapArray, x, y) <> 0) Then
-							preCheckModelX = (((y / MODEL_HEIGHT) + 1) * MODEL_HEIGHT) - 1
-						Else
-							tileId = getTileId(mapArray, x, y)
-							
-							flipX = ((32768 & tileId) = 0)
-							
-							If ((tileId & 16384) = 0) Then
-								modelX = 0
-							Else
-								modelX = 2 ' (0 | 2)
-							EndIf
-							
-							If (flipX) Then
-								preCheckModelX = modelX
-							Else
-								preCheckModelX = (modelX | 1)
-							EndIf
-							
-							drawTile(g, (tileId & 16383), x, y, preCheckModelX)
-							
-							preCheckModelX = y
-						EndIf
-						
-						y = (preCheckModelX + 1)
-					Wend
-					
-					modelX = x
-					preCheckModelX = my
-				Else
-					my = preCheckModelX
-					y = startY
-					
-					While (y < endY)
-						If (getModelId(mapArray, x, y) <> 0) Then
-							tileId = getTileId(mapArray, x, y)
-							
-							#Rem
-								If ((32768 & tileId) = 0) Then
-									' Nothing so far.
-								EndIf
-								
-								If ((tileId & 16384) = 0) Then
-									' Nothing so far.
-								EndIf
-							#End
-							
-							If ((tileId & 16384) = 0) Then
-								modelX = 0
-							Else
-								modelX = 2 ' (0 | 2)
-							EndIf
-							
-							If (flipX) Then
-								preCheckModelX = modelX
-							Else
-								preCheckModelX = (modelX | 1)
-							EndIf
-							
-							Local tileData:= (tileId & 16383)
-							
-							drawTile(g, tileData, x, y, preCheckModelX)
-							
-							preCheckModelX = y
-						Else
-							preCheckModelX = (((y / MODEL_HEIGHT) + 1) * MODEL_HEIGHT) - 1
-						EndIf
-						
-						y = (preCheckModelX + 1)
-					Wend
-					
-					modelX = x
-					preCheckModelX = my
-				EndIf
-				
-				x = modelX + 1
-			Wend
-		End
-		#End
-		
-		Function drawMap:Void(var0:MFGraphics, var1:DataBuffer) ' Short[][]
+		Function drawMap:Void(graphics:MFGraphics, mapArray:DataBuffer) ' Short[][]
 			Local var2:= (camera.x + CAMERA_OFFSET_X - mapOffsetX) / 16
 			Local var3:= (camera.y + CAMERA_OFFSET_Y) / 16
 			Local var4:= (16 + camera.x + CAMERA_WIDTH - 1 + CAMERA_OFFSET_X - mapOffsetX) / 16
@@ -1060,7 +939,7 @@ Class MapManager ' Implements SonicDef
 					Local var18:Bool = True
 	
 					For Local var19:= (var3 / 6) Until ((var5 + 6 - 1) / 6)
-						If (getModelIdByIndex(var1, var8, var19) <> 0) Then
+						If (getModelIdByIndex(mapArray, var8, var19) <> 0) Then
 							var18 = False
 							
 							Exit
@@ -1079,15 +958,19 @@ Class MapManager ' Implements SonicDef
 					var9 = var6
 				EndIf
 				
+				If (mapArray = mapFront) Then
+					DebugStop()
+				EndIf
+				
 				If (continueOperations) Then
 					Local var16:Int
 					Local var10:= var3
 					
 					While (var10 < var5)
-						If (getModelId(var1, var7, var10) = 0) Then
+						If (getModelId(mapArray, var7, var10) = 0) Then
 							var16 = 6 * (1 + var10 / 6) - 1
 						Else
-							Local var11:= getTileId(var1, var7, var10)
+							Local var11:= getTileId(mapArray, var7, var10)
 							
 							Local var12:Bool
 							
@@ -1121,7 +1004,7 @@ Class MapManager ' Implements SonicDef
 								var15 = var14
 							EndIf
 							
-							drawTile(var0, var11 & 16383, var7, var10, var15)
+							drawTile(graphics, var11 & 16383, var7, var10, var15)
 							
 							var16 = var10
 						EndIf
