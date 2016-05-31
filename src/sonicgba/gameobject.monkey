@@ -666,8 +666,6 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 					Print("Position: " + x + ", " + y)
 				#End
 				
-				x = 100; y = 200
-				
 				addGameObject(RingObject.getNewInstance(x, y))
 			Catch err:StreamError
 				#If SONICGBA_GAMEOBJECT_ANNOUNCE_LOAD_EXCEPTIONS

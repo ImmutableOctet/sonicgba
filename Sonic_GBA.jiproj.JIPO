@@ -213,8 +213,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>10</X>
-        <Y>431</Y>
+        <X>8</X>
+        <Y>829</Y>
       </CursorPos>
       <DocGUID>a675a643-121c-472f-b659-19d3b1ba252d</DocGUID>
       <Bookmarks>
@@ -405,8 +405,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animation.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>1</X>
-        <Y>189</Y>
+        <X>32</X>
+        <Y>186</Y>
       </CursorPos>
       <DocGUID>0d1d4660-0fff-4e16-bc7c-cfcb7286c2d6</DocGUID>
       <Bookmarks />
@@ -530,8 +530,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>35</X>
-        <Y>67</Y>
+        <X>29</X>
+        <Y>64</Y>
       </CursorPos>
       <DocGUID>3d91f39d-9ed5-4956-ba8d-97c12b7236d1</DocGUID>
       <Bookmarks>
@@ -1284,18 +1284,14 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>10</X>
-        <Y>668</Y>
+        <X>0</X>
+        <Y>0</Y>
       </CursorPos>
       <DocGUID>fbb5a165-574f-40dc-9193-2360f7f3a5ba</DocGUID>
       <Bookmarks>
         <Point>
           <X>0</X>
           <Y>160</Y>
-        </Point>
-        <Point>
-          <X>0</X>
-          <Y>668</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
@@ -1644,8 +1640,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>21</X>
-        <Y>953</Y>
+        <X>7</X>
+        <Y>1094</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -2227,8 +2223,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\gamestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>25</X>
-        <Y>1649</Y>
+        <X>17</X>
+        <Y>486</Y>
       </CursorPos>
       <DocGUID>1e0f91b6-9dc7-4521-9d07-d80bf3755ebf</DocGUID>
       <Bookmarks />
