@@ -367,7 +367,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			player.logic()
 			
 			' Check if the layer has control of the character:
-			If (player.outOfControl) Then
+			If (Not player.outOfControl) Then
 				' They don't, let the map manager control the camera.
 				MapManager.cameraLogic() ' <-- Used for automated sections and grinding.
 			EndIf
@@ -664,6 +664,8 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				#If SONICGBA_GAMEOBJECT_ANNOUNCE_LOADED_INFO
 					Print("Position: " + x + ", " + y)
 				#End
+				
+				'x = 0; y = 0
 				
 				addGameObject(RingObject.getNewInstance(x, y))
 			Catch err:StreamError

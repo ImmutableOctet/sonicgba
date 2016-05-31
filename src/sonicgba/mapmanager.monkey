@@ -153,10 +153,10 @@ Class MapManager ' Implements SonicDef
 		Global tileimage:MFImage[]
 		
 		' A collection of tile-maps.
-		Global mapModel:DataBuffer[] ' Short[][][]
+		Global mapModel:Short[][][] ' DataBuffer[]
 		
-		Global mapBack:DataBuffer ' Short[][]
-		Global mapFront:DataBuffer ' Short[][]
+		Global mapBack:Short[][] ' DataBuffer
+		Global mapFront:Short[][] ' DataBuffer
 		
 		Global mapWidth:Int
 		Global mapHeight:Int
@@ -181,16 +181,50 @@ Class MapManager ' Implements SonicDef
 			Return CoordAsIndex(x, y, MODEL_WIDTH, MODEL_HEIGHT)
 		End
 		
-		Function GetTileAt:Int(data:DataBuffer, x:Int, y:Int, width:Int, height:Int)
-			Return data.PeekShort(CoordAsIndex(x, y, width, height) * SizeOf_Short) ' 2 ' 0
+		Function GetTileAt:Int(data:Short[][], x:Int, y:Int, width:Int, height:Int)
+			Return data[x][y] ' data.PeekShort(CoordAsIndex(x, y, width, height) * SizeOf_Short) ' 2 ' 0
 		End
 		
-		Function GetModelTileAt:Int(data:DataBuffer, x:Int, y:Int)
+		Function GetModelTileAt:Int(data:Short[][], x:Int, y:Int)
 			Return GetTileAt(data, x, y, MODEL_WIDTH, MODEL_HEIGHT)
 		End
 		
-		Function GetStandardTileAt:Int(mapData:DataBuffer, x:Int, y:Int)
+		Function GetStandardTileAt:Int(mapData:Short[][], x:Int, y:Int)
 			Return GetTileAt(mapData, x, y, mapWidth, mapHeight)
+		End
+		
+		Function AllocateMap:Short[][](width:Int, height:Int)
+			Local map:= New Short[width][]
+			
+			For Local i:= 0 Until width ' map.Length
+				map[i] = New Short[height]
+			Next
+			
+			Return map
+		End
+		
+		Function ReadMap:Void(ds:Stream, map:Short[][], width:Int, height:Int) ' DataBuffer
+			For Local j:= 0 Until width
+				For Local i:= 0 Until height
+					Local tileInfo:= ds.ReadShort()
+					
+					map[j][i] = tileInfo
+				Next
+			Next
+			
+			' Read the "chunk data" (Tile information) from the input-stream:
+			'''ds.ReadAll(chunk, 0, chunk.Length)
+			
+			'''FlipBuffer_Shorts(chunk)
+			
+			#Rem
+			For Local addr:= 0 Until chunk.Length Step 2 ' MODE_CHUNK_SIZE
+				Local value:= ds.ReadShort()
+				'Local value:= ((ds.ReadByte() Shl 8) | (ds.ReadByte() & $FF))
+				
+				chunk.PokeShort(addr, value)
+			Next
+			#End
 		End
 		
 		Function cameraLogic:Void()
@@ -343,7 +377,7 @@ Class MapManager ' Implements SonicDef
 		End
 		
 		Function getPixelHeight:Int()
-			Return ((mapHeight * TILE_WIDTH) * MODEL_HEIGHT)
+			Return ((mapHeight * TILE_HEIGHT) * MODEL_HEIGHT)
 		End
 		
 		Function getMapWidth:Int()
@@ -588,8 +622,11 @@ Class MapManager ' Implements SonicDef
 						
 						Print("MAP FRONT/BACK SIZE: " + mapSize)
 						
-						mapFront = New DataBuffer(mapSize)
-						mapBack = New DataBuffer(mapSize)
+						mapFront = AllocateMap(mapWidth, mapHeight)
+						mapBack = AllocateMap(mapWidth, mapHeight)
+						
+						'mapFront = New DataBuffer(mapSize)
+						'mapBack = New DataBuffer(mapSize)
 					Catch E:StreamError
 						' Nothing so far.
 					End Try
@@ -605,26 +642,14 @@ Class MapManager ' Implements SonicDef
 						Print("SIZE OF MAP CHUNKS IN MEMORY: " + (chunkNum * MODE_CHUNK_SIZE) + " bytes")
 						
 						' Allocate an array of "map chunks":
-						mapModel = New DataBuffer[chunkNum]
+						mapModel = New Short[chunkNum][][] ' New DataBuffer[chunkNum]
 						
 						' Allocate the "chunks" we need:
 						For Local i:= 0 Until chunkNum ' mapModel.Length
 							' Allocate a "chunk" using the pre-determined size.
-							Local chunk:= New DataBuffer(MODE_CHUNK_SIZE)
+							Local chunk:= AllocateMap(MODEL_WIDTH, MODEL_HEIGHT) ' New DataBuffer(MODE_CHUNK_SIZE)
 							
-							' Read the "chunk data" (Tile information) from the input-stream.
-							'''ds.ReadAll(chunk, 0, MODE_CHUNK_SIZE) ' chunk.Length
-							
-							'''FlipBuffer_Shorts(chunk) ' FlipBuffer_Shorts
-							
-							'#Rem
-							For Local addr:= 0 Until MODE_CHUNK_SIZE Step 2
-								Local value:= ds.ReadShort()
-								'Local value:= ((ds.ReadByte() Shl 8) | (ds.ReadByte() & $FF))
-								
-								chunk.PokeShort(addr, value)
-							Next
-							'#End
+							ReadMap(ds, chunk, MODEL_WIDTH, MODEL_HEIGHT) ' ReadMap
 							
 							' Store the "chunk" in our container.
 							mapModel[i] = chunk
@@ -634,29 +659,13 @@ Class MapManager ' Implements SonicDef
 					End Try
 				Case LOAD_FRONT
 					Try
-						'''ds.ReadAll(mapFront, 0, mapFront.Length) ' (mapWidth*mapHeight*SizeOf_Short)
-						
-						'''FlipBuffer_Shorts(mapFront)
-						
-						'#Rem
-						For Local addr:= 0 Until mapFront.Length Step 2
-							mapFront.PokeShort(addr, ds.ReadShort())
-						Next
-						'#End
+						ReadMap(ds, mapFront, mapWidth, mapHeight)
 					Catch E:StreamError
 						' Nothing so far.
 					End Try
 				Case LOAD_BACK
 					Try
-						'''ds.ReadAll(mapBack, 0, mapBack.Length) ' (mapWidth*mapHeight*SizeOf_Short)
-						
-						'''FlipBuffer_Shorts(mapBack)
-						
-						'#Rem
-						For Local addr:= 0 Until mapBack.Length Step 2
-							mapBack.PokeShort(addr, ds.ReadShort())
-						Next
-						'#End
+						ReadMap(ds, mapBack, mapWidth, mapHeight)
 					Catch E:StreamError
 						' Nothing so far.
 					End Try
@@ -717,14 +726,17 @@ Class MapManager ' Implements SonicDef
 			
 			tileimage = []
 			
+			#Rem
 			For Local i:= 0 Until mapModel.Length
 				mapModel[i].Discard()
 				
 				mapModel[i] = Null
 			Next
+			#End
 			
 			mapModel = []
 			
+			#Rem
 			If (mapFront <> Null) Then
 				mapFront.Discard()
 			EndIf
@@ -732,9 +744,10 @@ Class MapManager ' Implements SonicDef
 			If (mapBack <> Null) Then
 				mapBack.Discard()
 			EndIf
+			#End
 			
-			mapFront = Null
-			mapBack = Null
+			mapFront = [] ' Null
+			mapBack = [] ' Null
 			
 			'windImage.Discard()
 			
@@ -781,12 +794,14 @@ Class MapManager ' Implements SonicDef
 			
 			Local duration:= (mapLoopRight - mapLoopLeft)
 			
-			Select (StageManager.getCurrentZoneId())
-				Case 8
-					Return (mapLoopLeft + ((x - mapLoopRight) Mod duration))
-			End Select
+			#Rem
+				Select (StageManager.getCurrentZoneId())
+					Case 8
+						Return (mapLoopLeft + (x - mapLoopRight) Mod duration)
+				End Select
+			#End
 			
-			Return (mapLoopLeft + ((x - mapLoopRight) Mod duration))
+			Return (mapLoopLeft + (x - mapLoopRight) Mod duration)
 		End
 	Private
 		' Functions:
@@ -917,39 +932,43 @@ Class MapManager ' Implements SonicDef
 			Next
 		End
 		
-		Function drawMap:Void(graphics:MFGraphics, mapArray:DataBuffer) ' Short[][]
-			Local var2:= (camera.x + CAMERA_OFFSET_X - mapOffsetX) / 16
-			Local var3:= (camera.y + CAMERA_OFFSET_Y) / 16
-			Local var4:= (16 + camera.x + CAMERA_WIDTH - 1 + CAMERA_OFFSET_X - mapOffsetX) / 16
-			Local var5:= (16 + camera.y + CAMERA_HEIGHT - 1 + CAMERA_OFFSET_Y) / 16
+		Function drawMap:Void(graphics:MFGraphics, mapArray:Short[][]) ' DataBuffer
+			Local x:= (camera.x + CAMERA_OFFSET_X - mapOffsetX) / TILE_WIDTH
+			
+			Local startY:= (camera.y + CAMERA_OFFSET_Y) / TILE_HEIGHT
+			
+			Local endX:= (TILE_WIDTH + camera.x + CAMERA_WIDTH - 1 + CAMERA_OFFSET_X - mapOffsetX) / TILE_WIDTH
+			Local endY:= (TILE_HEIGHT + camera.y + CAMERA_HEIGHT - 1 + CAMERA_OFFSET_Y) / TILE_HEIGHT
+			
 			Local var6:= -1
-	
-			Local var17:Int
 			
-			Local var7:= var2
+			Local xOff:Int
 			
-			While (var7 < var4)
+			Local currentX:= x
+			
+			While (currentX < endX)
 				Local continueOperations:Bool = True
 				
-				Local var8:= (var7 / 6)
+				Local xBlock:= (currentX / MODEL_WIDTH)
 				
 				Local var9:Int
 				
-				If (var8 <> var6) Then
-					Local var18:Bool = True
-	
-					For Local var19:= (var3 / 6) Until ((var5 + 6 - 1) / 6)
-						If (getModelIdByIndex(mapArray, var8, var19) <> 0) Then
-							var18 = False
+				If (xBlock <> var6) Then
+					Local blockResponse:Bool = True
+					
+					For Local yBlock:= (startY / MODEL_HEIGHT) Until ((endY + MODEL_HEIGHT - 1) / MODEL_HEIGHT)
+						If (getModelIdByIndex(mapArray, xBlock, yBlock) <> 0) Then
+							blockResponse = False
 							
 							Exit
 						EndIf
 					Next
 					
-					var9 = var7 / 6
+					var9 = currentX / MODEL_WIDTH
 					
-					If (var18) Then
-						var17 = 6 * (var8 + 1) - 1
+					If (blockResponse) Then
+						xOff = (MODEL_WIDTH * (xBlock + 1) - 1)
+						
 						var6 = var9
 						
 						continueOperations = False
@@ -958,86 +977,65 @@ Class MapManager ' Implements SonicDef
 					var9 = var6
 				EndIf
 				
-				If (mapArray = mapFront) Then
-					DebugStop()
-				EndIf
-				
 				If (continueOperations) Then
-					Local var16:Int
-					Local var10:= var3
+					Local yOff:Int
+					Local currentY:= startY
 					
-					While (var10 < var5)
-						If (getModelId(mapArray, var7, var10) = 0) Then
-							var16 = 6 * (1 + var10 / 6) - 1
+					While (currentY < endY)
+						If (getModelId(mapArray, currentX, currentY) = 0) Then
+							yOff = 6 * (1 + currentY / 6) - 1
 						Else
-							Local var11:= getTileId(mapArray, var7, var10)
+							Local tileInfo:= getTileId(mapArray, currentX, currentY)
 							
-							Local var12:Bool
+							Local var12:Bool = ((32768 & tileInfo) <> 0)
 							
-							If ((32768 & var11) <> 0) Then
-								var12 = True
-							Else
-								var12 = False
-							EndIf
+							Local var13:Bool = ((tileInfo & 16384) <> 0)
 							
-							Local var13:Bool
+							Local var14:Int = PickValue(var13, 0|2, 0)
 							
-							If ((var11 & 16384) <> 0) Then
-								var13 = True
-							Else
-								var13 = False
-							EndIf
-							
-							Local var14:Int
-							
-							If (var13) Then
-								var14 = 0 | 2
-							Else
-								var14 = 0
-							EndIf
-		
-							Local var15:Int
+							Local transform:Int
 							
 							If (var12) Then
-								var15 = var14 | 1
+								transform = var14 | 1
 							Else
-								var15 = var14
+								transform = var14
 							EndIf
 							
-							drawTile(graphics, var11 & 16383, var7, var10, var15)
+							drawTile(graphics, (tileInfo & 16383), currentX, currentY, transform)
+							'Function drawTile:Void(g:MFGraphics, sy:Int, x:Int, y:Int, trans:Int)
 							
-							var16 = var10
+							yOff = currentY
 						EndIf
 						
-						var10 = var16 + 1
+						currentY = yOff + 1
 					Wend
 					
-					var17 = var7
+					xOff = currentX
 					var6 = var9
 				EndIf
 				
-				var7 = var17 + 1
+				currentX = (xOff + 1)
 			Wend
 		End
 		
-		Function getTileId:Int(mapArray:DataBuffer, x:Int, y:Int)
+		Function getTileId:Int(mapArray:Short[][], x:Int, y:Int) ' DataBuffer
 			Local model:= mapModel
 			
 			Local chunkID:= getModelId(mapArray, x, y)
 			
 			Local chunk:= model[chunkID]
 			
-			Return GetModelTileAt(chunk, x Mod MODEL_WIDTH, y Mod MODEL_HEIGHT)
+			Return GetModelTileAt(chunk, (x Mod MODEL_WIDTH), (y Mod MODEL_HEIGHT))
 		End
 		
-		Function getModelId:Int(mapArray:DataBuffer, x:Int, y:Int)
+		Function getModelId:Int(mapArray:Short[][], x:Int, y:Int) ' DataBuffer
 			Return getModelIdByIndex(mapArray, (x / MODEL_WIDTH), (y / MODEL_HEIGHT))
 		End
 		
-		Function getModelIdByIndex:Int(mapArray:DataBuffer, x:Int, y:Int)
+		Function getModelIdByIndex:Int(mapArray:Short[][], x:Int, y:Int) ' DataBuffer
 			Local convX:= getConvertX(x)
 			
-			If (y >= mapHeight) Then
+			If (y >= mapArray[0].Length) Then ' mapHeight
 				Return 0
 			EndIf
 			
