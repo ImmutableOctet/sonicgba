@@ -410,6 +410,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 						ElseIf (currentObject.checkInit()) Then
 							' Remove the entry at this index, and try the index again:
 							currentVec.Remove(objIndex)
+							
 							objIndex -= 1
 						EndIf
 					EndIf
@@ -665,7 +666,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 					Print("Position: " + x + ", " + y)
 				#End
 				
-				'x = 0; y = 0
+				x = 100; y = 200
 				
 				addGameObject(RingObject.getNewInstance(x, y))
 			Catch err:StreamError
@@ -1178,8 +1179,8 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		Function getGameObjectVecArray:Void(currentObject:GameObject, objVec:Stack<Stack<GameObject>>)
 			objVec.Clear()
 			
-			Local centerX:Int = ((MapManager.getCamera().x + (MapManager.CAMERA_WIDTH/2)) / ROOM_WIDTH)
-			Local centerY:Int = ((MapManager.getCamera().y + (MapManager.CAMERA_HEIGHT/2)) / ROOM_HEIGHT)
+			Local centerX:Int = ((MapManager.getCamera().x + (MapManager.CAMERA_WIDTH / 2)) / ROOM_WIDTH)
+			Local centerY:Int = ((MapManager.getCamera().y + (MapManager.CAMERA_HEIGHT / 2)) / ROOM_HEIGHT)
 			
 			If (centerX >= 0 And centerX < objVecWidth And centerY >= 0 And centerY < objVecHeight) Then
 				Local startX:= Max(centerX - 1, 0)

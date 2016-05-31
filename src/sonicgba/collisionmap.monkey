@@ -52,7 +52,7 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 		
 		' Extensions:
 		Function AsModelCoord:Int(x:Int, y:Int)
-			Return (x + (y * GRID_NUM_PER_MODEL))
+			Return ((x) + (y * GRID_NUM_PER_MODEL))
 		End
 		
 		Function GetModelTileAt:Int(data:DataBuffer, x:Int, y:Int)
@@ -129,7 +129,7 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 							
 							ds.ReadAll(model, 0, model.Length) ' & 65535
 							
-							FlipBuffer_UShorts(model)
+							FlipBuffer_Shorts(model)
 						Next
 					Catch E:StreamError
 						' Nothing so far.
@@ -206,7 +206,7 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 				Else
 					Local tileId:= getBlockIndexWithBlock((MapManager.getConvertX(blockX / GRID_NUM_PER_MODEL) * GRID_NUM_PER_MODEL) + (blockX Mod GRID_NUM_PER_MODEL), blockY, layer)
 					
-					' Magic numbers: 8191 (Bit mask)
+					' Magic number: 8191 (Bit mask)
 					Local cell_id:= (tileId & 8191)
 					
 					' Magic numbers: 16384, 32768, 8192 (Flags?)

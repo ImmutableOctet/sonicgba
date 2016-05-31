@@ -194,12 +194,12 @@ Class Animation
 		
 		Method SetClipImg:Void(fn:String)
 			Self.imageInfo = New ImageInfo[1]
-			Self.imageInfo[0] = New ImageInfo(Null)
+			Self.imageInfo[0] = New ImageInfo(fn)
 		End
 		
 		Method SetClipImg:Void(img:MFImage)
 			Self.imageInfo = New ImageInfo[1]
-			Self.imageInfo[0] = New ImageInfo(Null)
+			Self.imageInfo[0] = New ImageInfo(img)
 		End
 		
 		Method LoadAnimation:Void(fileName:String)
