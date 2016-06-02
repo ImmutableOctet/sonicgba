@@ -3205,7 +3205,7 @@ Class TitleState Extends State
 			Self.optionMenuCursor = ELEMENT_OFFSET
 		End
 		
-		Private Method stageSelectLogic:Void()
+		Method stageSelectLogic:Void()
 			Local i:Int
 			
 			If (Self.stage_select_state = 0) Then
@@ -3466,16 +3466,14 @@ Class TitleState Extends State
 					EndIf
 					
 					If (Self.isSelectable) Then
-						i = 0
-						
-						While (i < Key.touchstageselectitem.Length)
+						For i = 0 Until Key.touchstageselectitem.Length
 							If (Key.touchstageselectitem[i].Isin() And Key.touchstageselect.IsClick() And i <= StageManager.getOpenedStageId()) Then
 								Self.optionMenuCursor = i
 								Self.title_returnCursor = 0
-							Else
-								i += 1
+								
+								Exit
 							EndIf
-						Wend
+						Next
 					EndIf
 				EndIf
 				

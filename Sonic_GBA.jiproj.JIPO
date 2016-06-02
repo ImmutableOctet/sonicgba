@@ -519,8 +519,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>63</X>
-        <Y>63</Y>
+        <X>27</X>
+        <Y>73</Y>
       </CursorPos>
       <DocGUID>3d91f39d-9ed5-4956-ba8d-97c12b7236d1</DocGUID>
       <Bookmarks>
@@ -2233,12 +2233,30 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>1377</Y>
+        <X>23</X>
+        <Y>3471</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>f7ebe4b5-aa9d-436e-8417-0a69acf1e81a</DocGUID>
+      <Bookmarks>
+        <Point>
+          <X>0</X>
+          <Y>657</Y>
+        </Point>
+        <Point>
+          <X>0</X>
+          <Y>1209</Y>
+        </Point>
+        <Point>
+          <X>0</X>
+          <Y>1220</Y>
+        </Point>
+        <Point>
+          <X>0</X>
+          <Y>2447</Y>
+        </Point>
+      </Bookmarks>
     </DocUserOptions>
     <DocUserOptions Filename=".\src\application.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
