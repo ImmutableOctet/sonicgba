@@ -1522,8 +1522,7 @@ Class State Implements StringIndex Abstract ' SonicDef
 			fadeInit(0, 192)
 		End
 		
-		Public Method itemsSelect2Logic:Int()
-			
+		Method itemsSelect2Logic:Int()
 			If (Key.touchitemsselect2_return.Isin() And Key.touchitemsselect2.IsClick()) Then
 				Self.itemsselectcursor = 2
 			EndIf

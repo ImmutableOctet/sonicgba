@@ -440,8 +440,11 @@ Class MFDevice Final
 			
 			For Local index:= START_MOUSE_INDEX To LAST_MOUSE_INDEX
 				If (TouchHit(index)) Then
-					pointerPressed(index, tx, ty)
-					pointerReleased(index, tx, ty)
+					If (Not mouseStates[index]) Then
+						pointerPressed(index, tx, ty)
+						
+						mouseStates[index] = True
+					EndIf
 				Else
 					If (TouchDown(index)) Then
 						If (Not mouseStates[index]) Then
@@ -449,7 +452,7 @@ Class MFDevice Final
 							
 							pointerPressed(index, tx, ty)
 						Else
-							'pointerDragged(index, tx, ty)
+							pointerDragged(index, tx, ty)
 						EndIf
 					ElseIf (mouseStates[index]) Then
 						mouseStates[index] = False

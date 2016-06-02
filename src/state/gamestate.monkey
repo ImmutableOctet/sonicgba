@@ -3502,7 +3502,7 @@ Class GameState Extends State
 			Self.IsActNumDrawable = False
 		End
 		
-		Private Method drawLoading:Void(g:MFGraphics)
+		Method drawLoading:Void(g:MFGraphics)
 			Select (loadingType)
 				Case LOADING_TYPE_BLACK
 					g.setColor(0)
@@ -3764,7 +3764,7 @@ Class GameState Extends State
 			Self.pause_returnFlag = False
 		End
 		
-		Private Method gamePauseLogic:Void()
+		Method gamePauseLogic:Void()
 			Self.pausecnt += 1
 			
 			If (Self.pausecnt >= PAUSE_RACE_INSTRUCTION And Self.pausecnt <= 7) Then

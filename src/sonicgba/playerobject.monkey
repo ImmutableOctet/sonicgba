@@ -3261,11 +3261,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 	Public
 		' Methods:
-		Public Method slipJumpOut:Void()
+		Method slipJumpOut:Void()
 			' Empty implementation.
 		End
 		
-		Public Method resetFlyCount:Void()
+		Method resetFlyCount:Void()
 			' Empty implementation.
 		End
 		

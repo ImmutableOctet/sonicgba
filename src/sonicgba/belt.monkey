@@ -86,7 +86,7 @@ Class Belt Extends GimmickObject
 		End
 		
 		' Methods:
-		Public Method draw:Void(g:MFGraphics)
+		Method draw:Void(g:MFGraphics)
 			Select (StageManager.getCurrentZoneId())
 				Case 4
 					' Nothing so far.

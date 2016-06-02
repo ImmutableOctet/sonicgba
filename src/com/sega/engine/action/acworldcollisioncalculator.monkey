@@ -311,8 +311,12 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 					Select (Self.actionState)
 						Case WALK_ACTION_STATE
 							checkInGround()
+							
+							'Print("Ground collision.")
 						Case JUMP_ACTION_STATE
 							checkInSky()
+							
+							'Print("Sky collision.")
 					End Select
 					
 					Self.acObj.posX = Self.footX - Self.footOffsetX
@@ -320,7 +324,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 					
 					Self.user_worldcal.didAfterEveryMove(Self.footX - preFootX, Self.footY - preFootY)
 				Else
-					Return
+					Exit
 				EndIf
 			Until (Not Self.isMoved)
 		End

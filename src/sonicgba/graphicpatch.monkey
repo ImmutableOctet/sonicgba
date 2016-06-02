@@ -280,7 +280,7 @@ Class GraphicPatch Extends GimmickObject
 			End Select
 		End
 		
-		Public Method getPaintLayer:Int()
+		Method getPaintLayer:Int()
 			Select (Self.iLeft)
 				Case 1, 6
 					Return 0

@@ -157,7 +157,7 @@ Class BreatheBubble Extends UpBubble
 			Return DRAW_AFTER_SONIC
 		End
 		
-		Public Method doWhileNoCollision:Void()
+		Method doWhileNoCollision:Void()
 			Self.isBeginPlayStageBGM = True
 		End
 		

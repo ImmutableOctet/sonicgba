@@ -145,15 +145,7 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 							
 							'''FlipBuffer_Shorts(model)
 							
-							'''MapManager.ReadMap(ds, model, GRID_NUM_PER_MODEL, GRID_NUM_PER_MODEL)
-							
-							For Local i:= 0 Until GRID_NUM_PER_MODEL
-								For Local j:= 0 Until GRID_NUM_PER_MODEL
-									Local tileInfo:= ds.ReadShort()
-									
-									model[i][j] = tileInfo
-								Next
-							Next
+							MapManager.ReadMap(ds, model, GRID_NUM_PER_MODEL, GRID_NUM_PER_MODEL)
 						Next
 					Catch E:StreamError
 						' Nothing so far.
