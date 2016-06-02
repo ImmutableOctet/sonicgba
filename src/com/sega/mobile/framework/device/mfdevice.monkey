@@ -455,7 +455,7 @@ Class MFDevice Final
 						mouseStates[index] = False
 						
 						pointerReleased(index, tx, ty)
-						pointerDragged(index, tx, ty)
+						'pointerDragged(index, tx, ty)
 					EndIf
 				EndIf
 			Next

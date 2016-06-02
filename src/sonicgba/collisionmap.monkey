@@ -85,9 +85,23 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 		End
 		
 		Method getTileId:Int(mapArray:Short[][], x:Int, y:Int) ' DataBuffer
-			Local chunk:= Self.modelInfo[MapManager.GetStandardTileAt(mapArray, (x / GRID_NUM_PER_MODEL), (y / GRID_NUM_PER_MODEL))] ' MapManager.GetModelTileAt
+			'Local chunk:= Self.modelInfo[MapManager.GetStandardTileAt(mapArray, (x / GRID_NUM_PER_MODEL), (y / GRID_NUM_PER_MODEL))] ' MapManager.GetModelTileAt
 			
-			Return GetModelTileAt(chunk, (x Mod GRID_NUM_PER_MODEL), (y Mod GRID_NUM_PER_MODEL))
+			'Return GetModelTileAt(chunk, (x Mod GRID_NUM_PER_MODEL), (y Mod GRID_NUM_PER_MODEL))
+			
+			#Rem
+			Local t:= x
+			
+			x = y
+			y = t
+			#End
+			
+			Local mapX:= (x / GRID_NUM_PER_MODEL)
+			Local mapY:= (y / GRID_NUM_PER_MODEL)
+			Local modelX:= (x Mod GRID_NUM_PER_MODEL)
+			Local modelY:= (y Mod GRID_NUM_PER_MODEL)
+			
+			Return Self.modelInfo[mapArray[mapX][mapY]][modelX][modelY]
 		End
 	Public
 		' Constant variable(s):
@@ -131,7 +145,15 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 							
 							'''FlipBuffer_Shorts(model)
 							
-							MapManager.ReadMap(ds, model, GRID_NUM_PER_MODEL, GRID_NUM_PER_MODEL)
+							'''MapManager.ReadMap(ds, model, GRID_NUM_PER_MODEL, GRID_NUM_PER_MODEL)
+							
+							For Local i:= 0 Until GRID_NUM_PER_MODEL
+								For Local j:= 0 Until GRID_NUM_PER_MODEL
+									Local tileInfo:= ds.ReadShort()
+									
+									model[i][j] = tileInfo
+								Next
+							Next
 						Next
 					Catch E:StreamError
 						' Nothing so far.

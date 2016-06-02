@@ -287,6 +287,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 			Return re
 		End
 	Private
+		' Methods:
 		Method checkInMap:Void()
 			If (Self.moveDistanceX = 0 And Self.moveDistanceY = 0 And Not Self.isMoved) Then
 				findTheFootPoint()

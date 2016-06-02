@@ -23,7 +23,7 @@ Public
 Class CollisionBlock Extends ACBlock ' Implements SonicDef
 	Protected
 		' Constant variable(s):
-		Global BLANK_COLLISION_INFO:DataBuffer = New DataBuffer(8) ' Const
+		Global BLANK_COLLISION_INFO:DataBuffer = New DataBuffer(COLLISION_INFO_STRIDE) ' Const ' 8
 	Private
 		' Fields:
 		Field collisionInfo:DataBuffer

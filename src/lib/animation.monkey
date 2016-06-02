@@ -115,8 +115,7 @@ Class Animation
 			
 			Self.fileName = fileName
 			
-			Self.imageInfo = New ImageInfo[1]
-			Self.imageInfo[0] = New ImageInfo(Null)
+			SetClipImg(image)
 			
 			LoadAnimation(fileName + ".dat")
 		End
