@@ -70,8 +70,8 @@ Class CollisionBlock Extends ACBlock ' Implements SonicDef
 			
 			Local allEight:Bool = True
 			
-			For Local i:= collisionInfoOffset Until (collisionInfoOffset + COLLISION_INFO_STRIDE)
-				Local value:= collisionInfo.PeekByte(i)
+			For Local i:= 0 Until (COLLISION_INFO_STRIDE) ' collisionInfoOffset + COLLISION_INFO_STRIDE
+				Local value:= getCollisionInfo(i) ' collisionInfo.PeekByte(i)
 				
 				If (((value & 240) Shr 4) <> 8 Or ((value & 15)) <> 8) Then ' Shr 0
 					allEight = False
@@ -386,8 +386,8 @@ Class CollisionBlock Extends ACBlock ' Implements SonicDef
 			
 			Local needJudge:Bool = True
 			
-			For Local i:= Self.collisionInfoOffset Until (Self.collisionInfoOffset + COLLISION_INFO_STRIDE)
-				If (((Self.collisionInfo.PeekByte(i) & 240) Shr 4) <> 8) Then
+			For Local i:= 0 Until COLLISION_INFO_STRIDE ' (Self.collisionInfoOffset + COLLISION_INFO_STRIDE)
+				If (((getCollisionInfo(i) & 240) Shr 4) <> 8) Then ' Self.collisionInfo.PeekByte(i)
 					needJudge = False
 					
 					Exit

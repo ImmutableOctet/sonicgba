@@ -448,13 +448,14 @@ Class MFDevice Final
 							mouseStates[index] = True
 							
 							pointerPressed(index, tx, ty)
-							
+						Else
 							'pointerDragged(index, tx, ty)
 						EndIf
 					ElseIf (mouseStates[index]) Then
 						mouseStates[index] = False
 						
 						pointerReleased(index, tx, ty)
+						pointerDragged(index, tx, ty)
 					EndIf
 				EndIf
 			Next

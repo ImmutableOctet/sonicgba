@@ -36,7 +36,7 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 		'Global FULL_BLOCK:Byte[] = [-120, -120, -120, -120, -120, -120, -120, -120] ' Const
 	Private
 		' Constant variable(s):
-		Const GRID_NUM_PER_MODEL:Int = 12
+		Const GRID_NUM_PER_MODEL:Int = 12 ' (MapManager.MODEL_WIDTH * 2)
 		
 		Const LOAD_OPEN_FILE:Int = 0
 		Const LOAD_MODEL_INFO:Int = 1
@@ -52,11 +52,11 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 		
 		' Extensions:
 		Function AsModelCoord:Int(x:Int, y:Int)
-			Return ((x) + (y * GRID_NUM_PER_MODEL))
+			Return ((x * GRID_NUM_PER_MODEL) + (y))
 		End
 		
-		Function GetModelTileAt:Int(data:DataBuffer, x:Int, y:Int)
-			Return data.PeekShort(AsModelCoord(x, y) * SizeOf_Short)
+		Function GetModelTileAt:Int(data:Short[][], x:Int, y:Int) ' DataBuffer
+			Return data[x][y] ' data.PeekShort(AsModelCoord(x, y) * SizeOf_Short)
 		End
 		
 		' Fields:
@@ -65,7 +65,7 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 		Field directionInfo:DataBuffer ' Byte[]
 		Field collisionInfo:DataBuffer ' DataBuffer[] ' Byte[][]
 		
-		Field modelInfo:DataBuffer[] ' Short[][][]
+		Field modelInfo:Short[][][] ' DataBuffer[]
 		
 		Field degreeGetter:MyDegreeGetter
 		
@@ -94,7 +94,7 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 		Const COLLISION_FILE_NAME:String = ".co"
 		Const MODEL_FILE_NAME:String = ".ci"
 		
-		Const MODEL_INFO_SIZE:= ((GRID_NUM_PER_MODEL*GRID_NUM_PER_MODEL) * 2) ' SizeOf_Short
+		Const MODEL_INFO_SIZE:= ((GRID_NUM_PER_MODEL*GRID_NUM_PER_MODEL) * SizeOf_Short)
 		Const COLLISION_INFO_STRIDE:= 8
 		
 		' Functions:
@@ -117,19 +117,21 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 				Case LOAD_OPEN_FILE
 					Self.ds = MFDevice.getResourceAsStream("/map/" + stageName + MODEL_FILE_NAME)
 				Case LOAD_MODEL_INFO
-					Self.modelInfo = New DataBuffer[MapManager.mapModel.Length]
+					Self.modelInfo = New Short[MapManager.mapModel.Length][][] ' New DataBuffer[MapManager.mapModel.Length]
 					
 					For Local i:= 0 Until Self.modelInfo.Length ' MapManager.mapModel.Length
-						Self.modelInfo[i] = New DataBuffer(MODEL_INFO_SIZE)
+						Self.modelInfo[i] = MapManager.AllocateMap(GRID_NUM_PER_MODEL, GRID_NUM_PER_MODEL) ' New DataBuffer(MODEL_INFO_SIZE)
 					Next
 					
 					Try
 						For Local i:= 0 Until Self.modelInfo.Length
 							Local model:= Self.modelInfo[i]
 							
-							ds.ReadAll(model, 0, model.Length) ' & 65535
+							'''ds.ReadAll(model, 0, model.Length) ' & 65535
 							
-							FlipBuffer_Shorts(model)
+							'''FlipBuffer_Shorts(model)
+							
+							MapManager.ReadMap(ds, model, GRID_NUM_PER_MODEL, GRID_NUM_PER_MODEL)
 						Next
 					Catch E:StreamError
 						' Nothing so far.
@@ -178,11 +180,13 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 			Self.collisionInfo = Null
 			Self.directionInfo = Null
 			
+			#Rem
 			For Local i:= 0 Until Self.modelInfo.Length
 				Self.modelInfo[i].Discard()
 				
 				Self.modelInfo[i] = Null
 			Next
+			#End
 			
 			Self.modelInfo = []
 		End
