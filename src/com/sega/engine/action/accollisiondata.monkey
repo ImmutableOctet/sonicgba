@@ -33,6 +33,6 @@ Class ACCollisionData Implements ACParam
 		End
 		
 		Method isNoCollision:Bool()
-			Return (Self.newPosX = ACParam.NO_COLLISION And Self.newPosY = ACParam.NO_COLLISION)
+			Return ((Self.newPosX = ACParam.NO_COLLISION) And (Self.newPosY = ACParam.NO_COLLISION))
 		End
 End

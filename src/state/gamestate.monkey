@@ -82,7 +82,9 @@ Class GameState Extends State
 		
 		Const FLOAT_RANGE:Int = 10
 		
-		Const LOADING_TIME_LIMIT:Int = 10
+		' This controls the minimum number of seconds the stage loading process must take.
+		' Normally, this is set to 10 seconds to allow the player to read the display tip.
+		Const LOADING_TIME_LIMIT:Int = 0 ' 10
 		
 		Const NUM:Byte = 6
 		
@@ -2403,7 +2405,7 @@ Class GameState Extends State
 			
 			MyAPI.drawImage(g, BP_wordsImg, 0, 0, BP_wordsWidth, BP_wordsHeight, 0, (SCREEN_WIDTH / 2), 40, 17) ' Shr 1
 			
-			MyAPI.drawBoldString(g, BPstrings[LOADING_TIME_LIMIT], (CASE_WIDTH / 4) + CASE_X, LINE_SPACE + 40, 17, MapManager.END_COLOR, 4656650) ' Shr 2
+			MyAPI.drawBoldString(g, BPstrings[10], (CASE_WIDTH / 4) + CASE_X, LINE_SPACE + 40, 17, MapManager.END_COLOR, 4656650) ' Shr 2
 			MyAPI.drawBoldString(g, BPstrings[11], ((CASE_WIDTH * 3) / 4) + CASE_X, LINE_SPACE + 40, 17, MapManager.END_COLOR, 4656650) ' Shr 2
 			
 			For Local i:= 0 Until currentBPItems.Length
