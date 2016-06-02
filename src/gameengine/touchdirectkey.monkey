@@ -244,6 +244,8 @@ Class TouchDirectKey Implements MFComponent
 			
 			Local degree:= ((CrlFP32.actTanDegree(reset_y, reset_x) + 360) Mod 360)
 			
+			'Print("Input degree: " + degree)
+			
 			If ((reset_x * reset_x) + (reset_y * reset_y) >= Self.OutCircleR * Self.OutCircleR) Then
 				Return MFGamePad.KEY_NULL
 			EndIf

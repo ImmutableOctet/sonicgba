@@ -430,9 +430,13 @@ Class MFGraphics
 		End
 		
 		Method setColor:Void(color:Int)
+			If (color = 0) Then
+				Return
+			EndIf
+			
 			'Print("Color: " + color)
 			
-			'Print("R: " + getRf(color) + ", G: " + getGf(color) + ", B: " + getBf(color))
+			'Print("R: " + getRf(color) + ", G: " + getGf(color) + ", B: " + getBf(color) + ", A: " + getAf(color))
 			
 			'''Self.context.SetColor(getRf(color), getGf(color), getBf(color)) ' getAf(color)
 		End

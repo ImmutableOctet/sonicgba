@@ -504,7 +504,7 @@ Class TitleState Extends State
 		
 		Function drawTitle:Void(g:MFGraphics, layer:Int)
 			If (state = STATE_PRE_PRESS_START Or state = STATE_PRESS_START Or state = STATE_MOVING Or state = STATE_EXIT Or state = STATE_START_GAME Or state = STATE_SEGA_MORE) Then
-				Local scale:= (Float(MFDevice.getDeviceWidth()) / Float(titleLeftImage.getWidth())) ' (Float(MFDevice.getDeviceHeight()) / Float(titleLeftImage.getHeight()))
+				Local scale:= (Float(MFDevice.getDeviceHeight()) / Float(titleLeftImage.getHeight())) ' (Float(MFDevice.getDeviceWidth()) / Float(titleLeftImage.getWidth()))
 				
 				' Background image:
 				g.saveCanvas()
@@ -1559,8 +1559,8 @@ Class TitleState Extends State
 			EndIf
 			
 			For Local i:= 0 Until (Key.touchmenuoptionitems.Length / 2) ' Shr 1
-				Key.touchmenuoptionitems[i * 2].setStartY((((i * STATE_PRO_RACE_MODE) + STATE_OPTION_SOUND) + Self.optionDrawOffsetY) + Self.optionslide_y)
-				Key.touchmenuoptionitems[(i * 2) + 1].setStartY((((i * STATE_PRO_RACE_MODE) + STATE_OPTION_SOUND) + Self.optionDrawOffsetY) + Self.optionslide_y)
+				Key.touchmenuoptionitems[i * 2].setStartY((((i * STATE_PRO_RACE_MODE) + 28) + Self.optionDrawOffsetY) + Self.optionslide_y)
+				Key.touchmenuoptionitems[(i * 2) + 1].setStartY((((i * STATE_PRO_RACE_MODE) + 28) + Self.optionDrawOffsetY) + Self.optionslide_y)
 			Next
 			
 			If (Self.isSelectable) Then
@@ -2738,7 +2738,7 @@ Class TitleState Extends State
 			Self.charSelTitleDrawer.restart()
 			Self.charSelFilAniDrawer.restart()
 			Self.character_sel_frame_cnt = 0
-			Self.character_id = 0
+			Self.character_id = CHARACTER_SONIC ' 0
 			Self.character_move = False
 			Self.character_arrow_display = True
 			Self.character_outer = False
@@ -2879,14 +2879,11 @@ Class TitleState Extends State
 								Self.character_id Mod= PlayerObject.CHARACTER_LIST.Length
 								
 								Self.charSelRoleDrawer.setLoop(False)
-								Self.charSelRoleDrawer.setActionId(Self.character_id + STATE_OPTION_SOUND)
+								Self.charSelRoleDrawer.setActionId(Self.character_id + 28)
+								
 								Self.character_idchangeFlag = True
 								
-								If (Self.character_id <> Self.character_preid) Then
-									Self.character_reback = True
-								Else
-									Self.character_reback = False
-								EndIf
+								Self.character_reback = (Self.character_id <> Self.character_preid)
 							EndIf
 						EndIf
 					Else
@@ -2900,14 +2897,21 @@ Class TitleState Extends State
 								
 								If (Self.character_sel_offset_x = TIME_ATTACK_WIDTH) Then
 									Self.character_id -= 1
+									
 									Self.character_circleturnright = False
+									
 									Self.character_id += PlayerObject.CHARACTER_LIST.Length
 									Self.character_id Mod= PlayerObject.CHARACTER_LIST.Length
+									
 									Self.charSelRoleDrawer.setLoop(False)
-									Self.charSelRoleDrawer.setActionId(Self.character_id + STATE_OPTION_SOUND)
+									Self.charSelRoleDrawer.setActionId(Self.character_id + 28)
+									
 									Self.character_idchangeFlag = True
+									
 									Self.arrowPressState = 0
+									
 									Self.character_reback = True
+									
 									Self.character_sel_offset_x = 0
 								EndIf
 							EndIf
@@ -2917,16 +2921,21 @@ Class TitleState Extends State
 								
 								If (Self.character_sel_offset_x = def.TOUCH_HELP_LEFT_X) Then
 									Self.character_id += 1
+									
 									Self.character_circleturnright = True
+									
 									Self.character_id += PlayerObject.CHARACTER_LIST.Length
 									Self.character_id Mod= PlayerObject.CHARACTER_LIST.Length
+									
 									Self.charSelRoleDrawer.setLoop(False)
-									Self.charSelRoleDrawer.setActionId(Self.character_id + STATE_OPTION_SOUND)
+									Self.charSelRoleDrawer.setActionId(Self.character_id + 28)
+									
 									Self.character_idchangeFlag = True
 									
 									Self.arrowPressState = 0
 									
 									Self.character_reback = True
+									
 									Self.character_sel_offset_x = 0
 								EndIf
 							EndIf
@@ -4740,14 +4749,14 @@ Class TitleState Extends State
 			PlayerObject.drawRecordTime(g, StageManager.getTimeModeScore(PlayerObject.getCharacterID()), (SCREEN_WIDTH Shr 1) + 54, (SCREEN_HEIGHT Shr 1) - 10, STATE_MOVING, 2)
 			
 			animationDrawer.setActionId(Int(Key.touchscoreupdateyes.Isin()) + 55)
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 60, (SCREEN_HEIGHT Shr 1) + STATE_OPTION_SOUND)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 60, (SCREEN_HEIGHT Shr 1) + 28)
 			animationDrawer.setActionId(StringIndex.BLUE_BACKGROUND_ID)
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 60, (SCREEN_HEIGHT Shr 1) + STATE_OPTION_SOUND)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 60, (SCREEN_HEIGHT Shr 1) + 28)
 			
 			animationDrawer.setActionId(Int(Key.touchscoreupdateno.Isin()) + 55)
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + STAGE_SELECT_SIDE_BAR_WIDTH, (SCREEN_HEIGHT Shr 1) + STATE_OPTION_SOUND)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + STAGE_SELECT_SIDE_BAR_WIDTH, (SCREEN_HEIGHT Shr 1) + 28)
 			animationDrawer.setActionId(104)
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + STAGE_SELECT_SIDE_BAR_WIDTH, (SCREEN_HEIGHT Shr 1) + STATE_OPTION_SOUND)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + STAGE_SELECT_SIDE_BAR_WIDTH, (SCREEN_HEIGHT Shr 1) + 28)
 			
 			animationDrawer.setActionId(PickValue(Key.touchscoreupdatereturn.Isin(), 5, 0) + 61)
 			

@@ -161,7 +161,9 @@ Class MFGamePad ' Final
 		Function trackballMoved:Void(keyCode:Int)
 			If (trackballAvailiable) Then
 				trackballAvailiable = False
+				
 				pressVisualKey(decodeKey(keyCode))
+				
 				trackballKey = keyCode
 			EndIf
 		End

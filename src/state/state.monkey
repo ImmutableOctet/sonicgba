@@ -910,15 +910,15 @@ Class State Implements StringIndex Abstract ' SonicDef
 			ElseIf (degree >= 292 And degree < 337) Then
 				id = 2
 			ElseIf ((degree >= 0 And degree < 22) Or (degree >= 337 And degree <= 360)) Then
-				id = STATE_SELECT_RACE_STAGE
+				id = 3
 			ElseIf (degree >= 22 And degree < 67) Then
-				id = STATE_SCORE_RANKING
+				id = 4
 			ElseIf (degree >= 67 And degree < 113) Then
-				id = STATE_SELECT_NORMAL_STAGE
+				id = 5
 			ElseIf (degree >= 113 And degree < 157) Then
-				id = STATE_SPECIAL
+				id = 6
 			ElseIf (degree >= 157 And degree < 202) Then
-				id = STATE_SPECIAL_TO_GMAE
+				id = 7
 			ElseIf (degree >= 202 And degree < 248) Then
 				id = 8
 			EndIf
@@ -1331,10 +1331,10 @@ Class State Implements StringIndex Abstract ' SonicDef
 			Else
 				var10000 = Key.touchdirectgamekey
 				
-				If (Not TouchDirectKey.IsKeyDragged()) Then
+				If (TouchDirectKey.IsKeyDragged()) Then
 					var10000 = Key.touchdirectgamekey
 					
-					If (Not TouchDirectKey.IsKeyPressed()) Then
+					If (TouchDirectKey.IsKeyPressed()) Then
 						drawTouchKeyDirectPad(var1)
 					EndIf
 				EndIf

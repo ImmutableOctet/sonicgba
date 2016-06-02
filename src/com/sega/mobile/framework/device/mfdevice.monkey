@@ -98,6 +98,11 @@ Class MFDevice Final
 		' Input related:
 		Global deviceKeyValue:Int = 0
 		
+		Global mouseStates:= New Bool[3]
+		
+		Global prevMouseX:Int
+		Global prevMouseY:Int
+		
 		Global enableCustomBack:Bool = False
 		Global enableVolumeKey:Bool = True ' False
 		
@@ -452,7 +457,9 @@ Class MFDevice Final
 							
 							pointerPressed(index, tx, ty)
 						Else
-							pointerDragged(index, tx, ty)
+							If (prevMouseX <> tx Or prevMouseY <> ty) Then
+								pointerDragged(index, tx, ty)
+							EndIf
 						EndIf
 					ElseIf (mouseStates[index]) Then
 						mouseStates[index] = False
@@ -462,9 +469,10 @@ Class MFDevice Final
 					EndIf
 				EndIf
 			Next
+			
+			prevMouseX = tx
+			prevMouseY = ty
 		End
-		
-		Global mouseStates:= New Bool[3]
 		
 		Function pointerDragged:Void(id:Int, x:Int, y:Int)
 			x = ((x - drawRect.left) * canvasWidth) / drawRect.width()
