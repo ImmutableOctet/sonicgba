@@ -473,18 +473,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>31</X>
         <Y>73</Y>
       </CursorPos>
-      <DocGUID>52d9b5c2-852f-49e7-80b5-a97826cfbef3</DocGUID>
-      <Bookmarks>
-        <Point>
-          <X>0</X>
-          <Y>1197</Y>
-        </Point>
-      </Bookmarks>
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\myrandom.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -2204,8 +2198,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\gamestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>89</Y>
+        <X>3</X>
+        <Y>386</Y>
       </CursorPos>
       <DocGUID>1e0f91b6-9dc7-4521-9d07-d80bf3755ebf</DocGUID>
       <Bookmarks>
@@ -2222,13 +2216,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\state\state.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\state\state.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>38</X>
-        <Y>571</Y>
+        <X>9</X>
+        <Y>189</Y>
       </CursorPos>
-      <DocGUID>0f6e2724-fbd2-4e68-b1a9-8b71863418f9</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\stringindex.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -2264,8 +2257,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\application.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>98</Y>
+        <X>20</X>
+        <Y>94</Y>
       </CursorPos>
       <DocGUID>573df5ef-d48f-46ff-ab61-8c9f8a570862</DocGUID>
       <Bookmarks>

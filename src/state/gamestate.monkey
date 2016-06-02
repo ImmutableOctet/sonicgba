@@ -2832,10 +2832,10 @@ Class GameState Extends State
 			Local stage_id:Int
 			
 			Self.selectMenuOffsetX -= 8
-			Self.selectMenuOffsetX Mod= STAGE_MOVE_DIRECTION
+			Self.selectMenuOffsetX Mod= STAGE_MOVE_DIRECTION ' 224
 			
 			If (stageid < 12) Then
-				stage_id = stageid Shr 1 ' / 2
+				stage_id = (stageid / 2) ' Shr 1
 			Else
 				stage_id = (stageid - 5)
 			EndIf
@@ -2844,8 +2844,8 @@ Class GameState Extends State
 				stage_id = 6
 			EndIf
 			
-			For Local x1:= (Self.selectMenuOffsetX - 294) Until (SCREEN_WIDTH * 2) Step STAGE_MOVE_DIRECTION
-				stageInfoAniDrawer.draw(g, stage_id + 6, x1, (y - FLOAT_RANGE) + 2, False, 0) ' (y - 10)
+			For Local x1:= (Self.selectMenuOffsetX - 294) Until (SCREEN_WIDTH * 2) Step STAGE_MOVE_DIRECTION ' 224
+				stageInfoAniDrawer.draw(g, stage_id + 5, x1, (y - FLOAT_RANGE) + 2, False, 0) ' (y - 10)
 			Next
 		End
 		
