@@ -509,8 +509,8 @@ Class TitleState Extends State
 				' Background image:
 				g.saveCanvas()
 				
-				g.scaleCanvas(scale, scale, 0, 0)
-				g.drawImage(titleLeftImage, 0, 0, STATE_RETURN_TO_LOGO_1)
+				g.scaleCanvas(scale, scale)
+				g.drawImage(titleLeftImage, 0, 0, TOP|LEFT)
 				
 				g.restoreCanvas()
 				
@@ -518,7 +518,7 @@ Class TitleState Extends State
 				g.saveCanvas()
 				
 				g.scaleCanvas(scale, scale, MFDevice.getDeviceWidth(), 0)
-				g.drawImage(titleRightImage, MFDevice.getDeviceWidth(), 0, STATE_PRO_RACE_MODE)
+				g.drawImage(titleRightImage, 0, 0, TOP|RIGHT)
 				
 				g.restoreCanvas()
 				
@@ -526,7 +526,7 @@ Class TitleState Extends State
 				g.saveCanvas()
 				
 				g.scaleCanvas(scale, scale, MFDevice.getDeviceWidth(), MFDevice.getDeviceHeight())
-				g.drawImage(titleSegaImage, MFDevice.getDeviceWidth(), MFDevice.getDeviceHeight(), STATE_OPTION_SENSOR_SET)
+				g.drawImage(titleSegaImage, 0, 0, BOTTOM|RIGHT)
 				
 				g.restoreCanvas()
 			EndIf

@@ -1627,8 +1627,9 @@ Class GameState Extends State
 					EndIf
 			End Select
 			
+			' Draw the virtual-input controls:
 			If (isDrawTouchPad) Then
-				If (Not (Self.state = STATE_STAGE_LOADING Or Self.state = STATE_ALL_CLEAR)) Then
+				If (Self.state <> STATE_STAGE_LOADING And Self.state <> STATE_ALL_CLEAR) Then
 					drawTouchKeyDirect(g)
 				EndIf
 				
