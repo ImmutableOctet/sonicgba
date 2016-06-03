@@ -572,25 +572,27 @@ Class TitleState Extends State
 			
 			iArr[0] = 1
 			iArr[1] = 1
-			iArr[2] = STATE_MOVING
-			iArr[3] = STATE_MOVING
-			iArr[4] = STATE_OPENING
-			iArr[5] = STATE_OPENING
-			iArr[6] = STATE_MOVING
-			iArr[7] = STATE_MOVING
+			iArr[2] = 2
+			iArr[3] = 2
+			iArr[4] = 3
+			iArr[5] = 3
+			iArr[6] = 2
+			iArr[7] = 2
 			iArr[8] = 1
 			iArr[9] = 1
 			
 			Self.recordArrowOffsetXArray = iArr
 			
 			Self.isTitleBGMPlay = False
+			
 			Self.debug_bgm_state = 0
 			Self.debug_bgm_id = 0
 			
-			state = 0
+			state = STATE_SEGA_LOGO ' 0
 			
 			Self.logoX = LOGO_POSITION_X
 			Self.logoY = LOGO_POSITION_Y
+			
 			Self.sonicBigX = 0
 		End
 	Public
@@ -2565,9 +2567,10 @@ Class TitleState Extends State
 			If (titleLeftImage = Null) Then
 				MFDevice.enableLayer(-1) ' ELEMENT_OFFSET
 				
-				titleLeftImage = MFImage.createImage("/title/title_left.png")
-				titleRightImage = MFImage.createImage("/title/title_right.png")
-				titleSegaImage = MFImage.createImage("/title/title_sega.png")
+				' Extension: Image.Filter
+				titleLeftImage = MFImage.createImage("/title/title_left.png", Image.Filter)
+				titleRightImage = MFImage.createImage("/title/title_right.png", Image.Filter)
+				titleSegaImage = MFImage.createImage("/title/title_sega.png", Image.Filter)
 				
 				If (Self.titleAni.Length = 0) Then
 					Self.titleAni = Animation.getInstanceFromQi("/animation/utl_res/title.dat")

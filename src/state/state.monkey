@@ -1772,7 +1772,7 @@ Class State Implements StringIndex Abstract ' SonicDef
 			
 			animationDrawer.setActionId(72)
 			
-			For Local i2:= 0 Until GlobalResource.soundConfig
+			For Local i2:= 1 To GlobalResource.soundConfig
 				animationDrawer.draw(g, ((SCREEN_WIDTH Shr 1) - PAGE_BACKGROUND_HEIGHT) + ((i2 - 1) * 8), (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
 			Next
 			

@@ -430,11 +430,13 @@ Class MFDevice Final
 					
 					If (KeyDown(key)) Then
 						MFGamePad.keyPressed(keyCode)
-					EndIf
-					
-					If (KeyHit(key)) Then
+					Else
 						MFGamePad.keyReleased(keyCode)
 					EndIf
+					
+					'If (KeyHit(key)) Then
+						'MFGamePad.keyPressed(keyCode)
+					'EndIf
 				Next
 			EndIf
 			
@@ -457,8 +459,17 @@ Class MFDevice Final
 							
 							pointerPressed(index, tx, ty)
 						Else
-							If (prevMouseX <> tx Or prevMouseY <> ty) Then
-								pointerDragged(index, tx, ty)
+							If (Abs(prevMouseX - tx) > 1 Or Abs(prevMouseY-ty) > 1) Then
+								'pointerDragged(index, tx-prevMouseX, ty-prevMouseY)
+								
+								If (KeyDown(KEY_SPACE)) Then
+									pointerDragged(index, tx, ty)
+									
+									Print("Drag.")
+								EndIf
+								
+								prevMouseX = tx
+								prevMouseY = ty
 							EndIf
 						EndIf
 					ElseIf (mouseStates[index]) Then
@@ -469,14 +480,11 @@ Class MFDevice Final
 					EndIf
 				EndIf
 			Next
-			
-			prevMouseX = tx
-			prevMouseY = ty
 		End
 		
 		Function pointerDragged:Void(id:Int, x:Int, y:Int)
-			x = ((x - drawRect.left) * canvasWidth) / drawRect.width()
-			y = ((y - drawRect.top) * canvasHeight) / drawRect.height()
+			x = (((x - drawRect.left) * canvasWidth) / drawRect.width())
+			y = (((y - drawRect.top) * canvasHeight) / drawRect.height())
 			
 			If (componentVector <> Null) Then
 				For Local component:= EachIn componentVector
@@ -486,8 +494,8 @@ Class MFDevice Final
 		End
 		
 		Function pointerPressed:Void(id:Int, x:Int, y:Int)
-			x = ((x - drawRect.left) * canvasWidth) / drawRect.width()
-			y = ((y - drawRect.top) * canvasHeight) / drawRect.height()
+			x = (((x - drawRect.left) * canvasWidth) / drawRect.width())
+			y = (((y - drawRect.top) * canvasHeight) / drawRect.height())
 			
 			If (componentVector <> Null) Then
 				For Local component:= EachIn componentVector
@@ -497,8 +505,8 @@ Class MFDevice Final
 		End
 		
 		Function pointerReleased:Void(id:Int, x:Int, y:Int)
-			x = ((x - drawRect.left) * canvasWidth) / drawRect.width()
-			y = ((y - drawRect.top) * canvasHeight) / drawRect.height()
+			x = (((x - drawRect.left) * canvasWidth) / drawRect.width())
+			y = (((y - drawRect.top) * canvasHeight) / drawRect.height())
 			
 			Print("Pointer released: " + x + ", " + y)
 			

@@ -38,7 +38,7 @@ Class CollisionBlock Extends ACBlock ' Implements SonicDef
 		
 		' Extensions:
 		Method getCollisionInfo:Byte(index:Int)
-			Return Self.collisionInfo.PeekByte(index + Self.collisionInfoOffset)
+			Return Self.collisionInfo.PeekByte(Self.collisionInfoOffset + index) ' & $FF
 		End
 	Public
 		' Constant variable(s):

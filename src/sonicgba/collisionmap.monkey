@@ -147,11 +147,13 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 							
 							'MapManager.ReadMap(ds, model, GRID_NUM_PER_MODEL, GRID_NUM_PER_MODEL)
 							
+							'#Rem
 							For Local y:= 0 Until GRID_NUM_PER_MODEL
 								For Local x:= 0 Until GRID_NUM_PER_MODEL
-									model[x][y] = Short(Self.ds.ReadShort() & 65535) ' ((ds.ReadByte() & $FF) | (ds.ReadByte() Shl 8)) & 65535
+									model[x][y] = (Self.ds.ReadShort() & $FFFF)
 								Next
 							Next
+							'#End
 						Next
 					Catch E:StreamError
 						' Nothing so far.
@@ -170,6 +172,14 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 						Self.directionInfo = New DataBuffer(collisionKindNum) ' * SizeOf_Byte
 						
 						For Local i:= 0 Until collisionKindNum ' Self.directionInfo.Length
+							#Rem
+							Local offset:= (i * COLLISION_INFO_STRIDE)
+							
+							For Local j:= 0 Until COLLISION_INFO_STRIDE
+								Self.collisionInfo.PokeByte(offset+j, Self.ds.ReadByte() & $FF)
+							Next
+							#End
+							
 							Self.ds.ReadAll(Self.collisionInfo, (i * COLLISION_INFO_STRIDE), COLLISION_INFO_STRIDE)
 							
 							Self.directionInfo.PokeByte(i, Self.ds.ReadByte())
@@ -230,7 +240,7 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 				Else
 					Local tileId:= getBlockIndexWithBlock((MapManager.getConvertX(blockX / GRID_NUM_PER_MODEL) * GRID_NUM_PER_MODEL) + (blockX Mod GRID_NUM_PER_MODEL), blockY, layer)
 					
-					' Magic number: 8191 (Bit mask)
+					' Magic number: 8191 (Bit mask?)
 					Local cell_id:= (tileId & 8191)
 					
 					' Magic numbers: 16384, 32768, 8192 (Flags?)

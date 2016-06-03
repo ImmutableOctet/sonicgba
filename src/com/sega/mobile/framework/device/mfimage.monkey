@@ -45,12 +45,12 @@ Class MFImage
 		' Extensions:
 		
 		' These generate native image handles:
-		Function generateImage:Image(width:Int, height:Int)
-			Return New Image(width, height, 0.0, 0.0, Image.Mipmap) ' Image.Managed
+		Function generateImage:Image(width:Int, height:Int, flags:Int=Image.Mipmap)
+			Return New Image(width, height, 0.0, 0.0, flags) ' Image.Managed
 		End
 		
-		Function generateImage:Image(path:String)
-			Local img:= Image.Load(MFDevice.FixGlobalPath(path), 0.0, 0.0, Image.Mipmap)
+		Function generateImage:Image(path:String, flags:Int=Image.Mipmap)
+			Local img:= Image.Load(MFDevice.FixGlobalPath(path), 0.0, 0.0, flags)
 			
 			#If SONICGBA_MFIMAGE_STOP_ON_NULL
 				If (img = Null) Then
@@ -128,8 +128,8 @@ Class MFImage
 			Return Null
 		End
 		
-		Function createImage:MFImage(url:String) ' Final
-			Return createImage(generateImage(url))
+		Function createImage:MFImage(url:String, flags:Int=Image.Mipmap) ' Final
+			Return createImage(generateImage(url, flags))
 		End
 		
 		#Rem
@@ -168,10 +168,10 @@ Class MFImage
 			Return ret
 		End
 		
-		Function createImage:MFImage(width:Int, height:Int) ' Final
+		Function createImage:MFImage(width:Int, height:Int, flags:Int=Image.Mipmap) ' Final
 			Local ret:= New MFImage()
 			
-			ret.image = New Image(width, height, 0.0, 0.0, Image.Mipmap) ' | Image.Managed
+			ret.image = New Image(width, height, 0.0, 0.0, flags) ' | Image.Managed
 			ret.graphics = MFGraphics.createMFGraphics(ret, width, height)
 			ret.mutable = True
 			
