@@ -100,16 +100,11 @@ Class ACMoveCalculator
 		End
 		
 		Method checkInSky:Void()
-			Local xFirst:Bool
-			
-			If (Abs(Self.moveDistanceX) > Abs(Self.moveDistanceY)) Then
-				xFirst = True
-			Else
-				xFirst = False
-			EndIf
+			Local xFirst:Bool = (Abs(Self.moveDistanceX) > Abs(Self.moveDistanceY))
 			
 			Local startPointX:= Self.chkPointX__mcalc
 			Local startPointY:= Self.chkPointY__mcalc
+			
 			Local i:Int
 			Local i2:Int
 			
@@ -129,7 +124,6 @@ Class ACMoveCalculator
 					Self.chkPointX__mcalc += Self.moveDistanceX
 					Self.chkPointY__mcalc += Self.moveDistanceY
 				EndIf
-				
 			ElseIf (Abs(Self.moveDistanceY) > Self.worldInstance.getTileHeight()) Then
 				i = Self.chkPointY__mcalc
 				

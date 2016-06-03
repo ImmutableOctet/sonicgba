@@ -67,7 +67,7 @@ Class ACWorld Implements ACParam Abstract
 			fullCollisionParam = (ACUtilities.getQuaParam(y, getTileHeight()) * getTileHeight()) + PickValue((direction = ACParam.DIRECTION_UP), 0, ACBlock.downSide)
 			
 			While (nextBlockPixY <> ACParam.NO_COLLISION And searchCount < MAX_SEARCH_BLOCK)
-				y += DSgn(direction = ACParam.DIRECTION_UP) * getTileHeight()
+				y += DSgn(direction <> ACParam.DIRECTION_UP) * getTileHeight()
 				
 				getCollisionBlock(Self.getBlock, x, y, z)
 				
@@ -83,7 +83,7 @@ Class ACWorld Implements ACParam Abstract
 			
 			If (blockPixY = ACParam.NO_COLLISION) Then
 				For Local i:= 0 Until 1
-					y -= DSgn(direction = ACParam.DIRECTION_UP) * getTileHeight()
+					y -= DSgn(direction <> ACParam.DIRECTION_UP) * getTileHeight()
 					
 					getCollisionBlock(Self.getBlock, x, y, z)
 					
@@ -141,11 +141,13 @@ Class ACWorld Implements ACParam Abstract
 				x += DSgn(direction <> ACParam.DIRECTION_LEFT) * getTileWidth()
 				
 				getCollisionBlock(Self.getBlock, x, y, z)
+				
 				blockPixX = Self.getBlock.getCollisionX(y, direction)
 				
 				searchCount += 1
 				
 				fullCollisionParam = (ACUtilities.getQuaParam(x, getTileWidth()) * getTileWidth()) + PickValue((direction = ACParam.DIRECTION_LEFT), 0, ACBlock.rightSide)
+				
 				getCollisionBlock(Self.nextBlock, (DSgn(direction <> ACParam.DIRECTION_LEFT) * getTileWidth()) + x, y, z)
 				
 				nextBlockPixX = Self.nextBlock.getCollisionX(y, direction)
@@ -156,6 +158,7 @@ Class ACWorld Implements ACParam Abstract
 					x -= DSgn(direction <> ACParam.DIRECTION_LEFT) * getTileWidth()
 					
 					getCollisionBlock(Self.getBlock, x, y, z)
+					
 					blockPixX = Self.getBlock.getCollisionX(y, direction)
 					
 					If (blockPixX <> ACParam.NO_COLLISION) Then
