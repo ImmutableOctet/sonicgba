@@ -823,7 +823,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			End Select
 			
 			terminalState = TER_STATE_RUN
-			terminalType = CHARACTER_SONIC
+			terminalType = TERMINAL_RUN_TO_RIGHT ' 0
 			
 			Return re
 		End
@@ -1588,41 +1588,34 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 										Default
 											' Nothing so far.
 									End Select
-								EndIf
-								
-								Local extraBehavior:Bool = False
-								
-								If (terminalType = TERMINAL_RUN_TO_RIGHT) Then
-									If (Self.animationID = ANI_CELEBRATE_1) Then
-										If (Self.drawer.checkEnd()) Then
-											Self.animationID = ANI_CELEBRATE_2
-										EndIf
-									EndIf
-									
-									If (Not (Self.animationID = ANI_JUMP Or Self.animationID = ANI_CELEBRATE_1 Or Self.animationID = ANI_CELEBRATE_2)) Then
-										Self.animationID = ANI_CELEBRATE_1
-									Else
-										extraBehavior = True
-									EndIf
-								ElseIf (terminalType = TERMINAL_RUN_TO_RIGHT_2) Then
-									extraBehavior = True
-								EndIf
-								
-								If (extraBehavior) Then
-									If (StageManager.getCurrentZoneId() <> 6) Then
-										If (Self.fading And fadeChangeOver()) Then
-											StageManager.setStagePass()
-										Else
-											setFadeColor(MapManager.END_COLOR)
-											fadeInit(0, 255)
+								Else
+									Select (terminalType)
+										Case TERMINAL_RUN_TO_RIGHT
+											If (Self.animationID = ANI_CELEBRATE_1) Then
+												If (Self.drawer.checkEnd()) Then
+													Self.animationID = ANI_CELEBRATE_2
+												EndIf
+											EndIf
 											
-											Self.fading = True
-										EndIf
-									Else
-										StageManager.setStagePass()
-									EndIf
-								ElseIf (terminalType = TERMINAL_SUPER_SONIC) Then
-									terminalLogic()
+											If (Self.animationID <> ANI_JUMP And Self.animationID <> ANI_CELEBRATE_1 And Self.animationID <> ANI_CELEBRATE_2) Then
+												Self.animationID = ANI_CELEBRATE_1
+											EndIf
+										Case TERMINAL_RUN_TO_RIGHT_2
+											If (StageManager.getCurrentZoneId() <> 6) Then
+												If (Self.fading And fadeChangeOver()) Then
+													StageManager.setStagePass()
+												Else
+													setFadeColor(MapManager.END_COLOR)
+													fadeInit(0, 255)
+													
+													Self.fading = True
+												EndIf
+											Else
+												StageManager.setStagePass()
+											EndIf
+										Case TERMINAL_SUPER_SONIC
+											terminalLogic()
+									End Select
 								EndIf
 								
 								If (Self.isCelebrate) Then

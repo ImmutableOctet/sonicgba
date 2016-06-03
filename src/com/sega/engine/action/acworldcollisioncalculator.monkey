@@ -808,8 +808,6 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 			EndIf
 			
 			calObjPositionFromFoot()
-			
-			Print("footCollision: " + Int(footCollision) + ", sideCollision: " + Int(sideCollision))
 		End
 
 		Method findTheFootPoint:Void()

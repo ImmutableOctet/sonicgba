@@ -53,8 +53,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acmovecalculator.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>101</Y>
+        <X>18</X>
+        <Y>94</Y>
       </CursorPos>
       <DocGUID>39324153-ce11-4fa9-919f-c6cf2ccc3a81</DocGUID>
       <Bookmarks />
@@ -73,18 +73,17 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\engine\action\acparam.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\engine\action\acparam.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>8</X>
         <Y>7</Y>
       </CursorPos>
-      <DocGUID>7a1b8b22-cc49-4364-9339-6c32344c8f30</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acutilities.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>58</X>
-        <Y>23</Y>
+        <X>11</X>
+        <Y>22</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -112,8 +111,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acworldcollisioncalculator.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>26</X>
-        <Y>1232</Y>
+        <X>5</X>
+        <Y>810</Y>
       </CursorPos>
       <DocGUID>8441d596-cd42-4898-9f14-b95dcb354757</DocGUID>
       <Bookmarks />
@@ -503,8 +502,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>48</X>
-        <Y>14</Y>
+        <X>20</X>
+        <Y>434</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -1615,14 +1614,14 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>23</X>
-        <Y>794</Y>
+        <X>29</X>
+        <Y>1608</Y>
       </CursorPos>
       <DocGUID>fc9766a3-6e59-4558-9412-a4c7539e7ebf</DocGUID>
       <Bookmarks>
         <Point>
           <X>0</X>
-          <Y>6532</Y>
+          <Y>6525</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
@@ -1930,8 +1929,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\stagemanager.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>63</X>
-        <Y>146</Y>
+        <X>2</X>
+        <Y>338</Y>
       </CursorPos>
       <DocGUID>f5edc474-71d8-49c1-899a-dc030f9e0479</DocGUID>
       <Bookmarks />
@@ -1992,12 +1991,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\terminal.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\terminal.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>32</X>
+        <Y>98</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>295e93f3-f368-424d-b267-cc536c02e514</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\togeshima.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -2204,8 +2204,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\gamestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>17</X>
-        <Y>1632</Y>
+        <X>28</X>
+        <Y>578</Y>
       </CursorPos>
       <DocGUID>4aebfe8b-7435-413b-bc92-9a5808479570</DocGUID>
       <Bookmarks>
@@ -2221,8 +2221,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\specialstagestate.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>649</Y>
+        <X>39</X>
+        <Y>411</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -2243,8 +2243,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>1515</Y>
+        <X>73</X>
+        <Y>1520</Y>
       </CursorPos>
       <DocGUID>6893106e-b5bd-43f0-9864-eeb1863ac051</DocGUID>
       <Bookmarks>
@@ -2268,8 +2268,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\application.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>37</X>
-        <Y>128</Y>
+        <X>42</X>
+        <Y>116</Y>
       </CursorPos>
       <DocGUID>573df5ef-d48f-46ff-ab61-8c9f8a570862</DocGUID>
       <Bookmarks>

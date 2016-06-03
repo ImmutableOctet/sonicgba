@@ -42,7 +42,7 @@ Class Terminal Extends GimmickObject
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
 			Super.New(id, x, y, left, top, width, height)
 			
-			Self.showDrawer = (Self.iLeft = COLLISION_HEIGHT_61 And (StageManager.getStageID() Mod 2 = 0) And StageManager.getStageID() <> 10)
+			Self.showDrawer = (Self.iLeft = 1 And (StageManager.getStageID() Mod 2 = 0) And StageManager.getStageID() <> 10) ' COLLISION_HEIGHT_61
 			
 			If (Self.showDrawer) Then
 				' This behavior may change in the future.

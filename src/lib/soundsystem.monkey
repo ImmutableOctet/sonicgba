@@ -432,7 +432,7 @@ Class SoundSystem
 			
 			Local fileName:= getBgmFileName(index)
 			
-			Print(fileName)
+			Print("BGM path: " + fileName)
 			
 			Local resPath:= "monkey://" + MFDevice.FixResourcePath(fileName)
 			
