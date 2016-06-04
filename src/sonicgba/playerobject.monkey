@@ -537,7 +537,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Global isTerminal:Bool = False
 		
 		Global JUMP_INWATER_START_VELOCITY:Int = (-1304 - GRAVITY)
-		Global JUMP_PROTECT:Int = ((-GRAVITY) * 2)
+		Global JUMP_PROTECT:Int = ((-GRAVITY) - GRAVITY) ' ((-GRAVITY) * 2)
 		Global JUMP_REVERSE_POWER:Int = 32
 		Global JUMP_RUSH_SPEED_PLUS:Int = 480
 		Global JUMP_START_VELOCITY:Int = (-1208 - GRAVITY)
@@ -1974,7 +1974,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				End Select
 				
 				Self.posZ = Self.currentLayer
+				
 				Self.worldCal.footDegree = Self.faceDegree
+				
 				Self.posX = Self.footPointX
 				Self.posY = Self.footPointY
 				
@@ -1990,6 +1992,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				Self.footPointX = Self.posX
 				Self.footPointY = Self.posY
+				
 				Self.faceDegree = Self.worldCal.footDegree
 			EndIf
 		End
@@ -2404,7 +2407,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				If (Self.totalVelocity < 0) Then
 					Self.totalVelocity = 0
 				EndIf
-				
 			ElseIf (Self.totalVelocity < 0) Then
 				Self.totalVelocity += resistance
 				
@@ -4854,6 +4856,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Method doAttackPose:Void(obj:GameObject, direction:Int)
 			If (Not Self.extraAttackFlag) Then
 				Local gravMultiplier:= DSgn(Not Self.isAntiGravity)
+				
 				Local newVelY:= gravMultiplier * getVelY()
 				
 				If (newVelY > 0) Then
@@ -4866,8 +4869,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					newVelY = MIN_ATTACK_JUMP
 				EndIf
 				
-				If (characterID <> CHARACTER_AMY Or Not IsInvincibility() Or Self.myAnimationID < ANI_POP_JUMP_UP Or Self.myAnimationID > ANI_BRAKE) Then
-					setVelY(gravMultiplier * newVelY)
+				If ((characterID <> CHARACTER_AMY) Or (Not IsInvincibility() Or Self.myAnimationID < ANI_POP_JUMP_UP Or Self.myAnimationID > ANI_BRAKE)) Then
+					setVelY((-gravMultiplier) * newVelY)
 				EndIf
 				
 				If (characterID <> CHARACTER_AMY) Then
@@ -4977,6 +4980,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 			
 			GameState.isThroughGame = True
+			
 			shieldType = 0
 			invincibleCount = 0
 			speedCount = 0
@@ -5007,7 +5011,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 	
 		Method setCollisionState:Void(state:Byte)
-			If (Self.collisionState = COLLISION_STATE_NONE) Then
+			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				calDivideVelocity()
 			EndIf
 			
@@ -5023,7 +5027,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method setSlip:Void()
-			If (Self.collisionState = COLLISION_STATE_NONE) Then
+			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				Self.slipFlag = True
 				Self.showWaterFlush = True
 				
@@ -6760,9 +6764,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 			
 			resetBreatheCount()
+			
 			Self.animationID = ANI_BREATHE
 			
 			If (characterID = CHARACTER_TAILS) Then
+				' Optimization potential; dynamic cast.
 				' Unsafe, but it works:
 				Local tails:= PlayerTails(player)
 				
@@ -6880,11 +6886,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			' Magic number: 96
 			stagePassResultOutOffsetX -= 96
 			
-			If (stagePassResultOutOffsetX < ACParam.NO_COLLISION) Then
-				Return True
-			EndIf
-			
-			Return False
+			Return (stagePassResultOutOffsetX < ACParam.NO_COLLISION)
 		End
 		
 		Method needRetPower:Bool()
@@ -6892,19 +6894,19 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method getRetPower:Int()
-			If (Self.animationID <> ANI_JUMP) Then
-				Return Self.movePower
+			If (Self.animationID = ANI_JUMP) Then
+				Return (Self.movePower / 2)
 			EndIf
 			
-			Return (Self.movePower / 2)
+			Return Self.movePower
 		End
 		
 		Method getSlopeGravity:Int()
-			If (Self.animationID <> ANI_JUMP) Then
-				Return FAKE_GRAVITY_ON_WALK
+			If (Self.animationID = ANI_JUMP) Then
+				Return FAKE_GRAVITY_ON_BALL
 			EndIf
 			
-			Return FAKE_GRAVITY_ON_BALL
+			Return FAKE_GRAVITY_ON_WALK
 		End
 		
 		Method noRotateDraw:Bool()

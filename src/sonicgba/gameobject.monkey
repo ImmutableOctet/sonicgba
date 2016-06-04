@@ -216,7 +216,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		' Fields:
 		Field needInit:Bool
 	Protected
-		Global GRAVITY:Int = 172
+		Global GRAVITY:Int = 86 ' 172
 		
 		' Animations:
 		Global rockBreakAnimation:Animation
@@ -975,9 +975,9 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		End
 		
 		Function setPlayerPosition:Void(x:Int, y:Int)
-			If (player <> Null) Then
-				Local playerObject:= player
-				
+			Local playerObject:= player
+			
+			If (playerObject <> Null) Then
 				playerObject.posX = (x Shl 6)
 				playerObject.posY = (y Shr 6)
 			EndIf
@@ -1020,11 +1020,13 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				Local xOffset:= (centerX - preCenterX)
 				Local yOffset:= (centerY - preCenterY)
 				
+				#Rem
 				realignObjects(False, xOffset, centerX, centerY, objVecWidth, objVecHeight, -2, 2)
 				realignObjects(False, xOffset, centerX, centerY, objVecWidth, objVecHeight, -1, 1, False)
 				
-				realignObjects(True, (centerY - preCenterY), centerY, centerX, objVecHeight, objVecWidth, -2, 2)
-				realignObjects(True, (centerY - preCenterY), centerY, centerX, objVecHeight, objVecWidth, -1, 1, False)
+				realignObjects(True, yOffset, centerY, centerX, objVecHeight, objVecWidth, -2, 2)
+				realignObjects(True, yOffset, centerY, centerX, objVecHeight, objVecWidth, -1, 1, False)
+				#End
 				
 				preCenterX = centerX
 				preCenterY = centerY
@@ -1044,8 +1046,8 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				
 				position += posOffset
 				
-				If (position >= 0 And (position < bounds)) Then
-					For Local opOffset:= -2 To 2
+				If (position >= 0 And position < bounds) Then
+					For Local opOffset:= -2 To 2 ' Low To High
 						Local opPos:= (seekOffset + opOffset)
 						
 						If ((opPos >= 0 And opPos < seekBounds)) Then
@@ -1060,33 +1062,51 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 							EndIf
 							
 							If (Not arrangement) Then
+								If (position > allGameObject.Length) Then
+									DebugStop()
+								EndIf
+								
+								If (accessOffset + opOffset > allGameObject[0].Length) Then
+									DebugStop()
+								EndIf
+								
 								current = allGameObject[position][accessOffset + opOffset]
 							Else
+								If (position > allGameObject[0].Length) Then
+									DebugStop()
+								EndIf
+								
+								If (accessOffset + opOffset > allGameObject.Length) Then
+									DebugStop()
+								EndIf
+								
 								current = allGameObject[accessOffset + opOffset][position]
 							EndIf
 							
-							For Local I:= 0 Until current.Length
-								Local obj:= current.Get(I)
-								
-								Local objBlockX:= ((obj.getCheckPositionX() Shr 6) / ROOM_WIDTH)
-								Local objBlockY:= ((obj.getCheckPositionY() Shr 6) / ROOM_HEIGHT) ' ROOM_WIDTH
-								
-								Local blockCheck:Bool
-								
-								If (Not arrangement) Then
-									blockCheck = (Not (objBlockX = position And objBlockY = (seekOffset + opOffset)))
-								Else
-									blockCheck = (Not (objBlockX = (seekOffset + opOffset) And objBlockY = position))
-								EndIf
-								
-								If (objBlockX >= 0 And objBlockX < objVecWidth And objBlockX >= 0 And objBlockX < objVecHeight And blockCheck) Then
-									current.Remove(I)
+							If (current <> Null) Then
+								For Local I:= 0 Until current.Length
+									Local obj:= current.Get(I)
 									
-									I -= 1
+									Local objBlockX:= ((obj.getCheckPositionX() Shr 6) / ROOM_WIDTH)
+									Local objBlockY:= ((obj.getCheckPositionY() Shr 6) / ROOM_HEIGHT) ' ROOM_WIDTH
 									
-									allGameObject[objBlockX][objBlockY].Push(obj)
-								EndIf
-							Next
+									Local blockCheck:Bool
+									
+									If (Not arrangement) Then
+										blockCheck = (Not (objBlockX = position And objBlockY = (seekOffset + opOffset)))
+									Else
+										blockCheck = (Not (objBlockX = (seekOffset + opOffset) And objBlockY = position))
+									EndIf
+									
+									If (objBlockX >= 0 And objBlockX < objVecWidth And objBlockX >= 0 And objBlockX < objVecHeight And blockCheck) Then
+										current.Remove(I)
+										
+										I -= 1
+										
+										allGameObject[objBlockX][objBlockY].Push(obj)
+									EndIf
+								Next
+							EndIf
 						EndIf
 					Next
 				EndIf

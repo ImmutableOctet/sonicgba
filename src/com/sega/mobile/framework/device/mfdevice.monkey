@@ -93,12 +93,16 @@ Class MFDevice Final
 		
 		Global NULL_RECORD:DataBuffer = New DataBuffer(4) ' Const ' Int(0)
 		
+		Const START_KEY_INDEX:= 0
+		Const LAST_KEY_INDEX:= 255 ' 256
+		
 		' Global variable(s):
 		
 		' Input related:
 		Global deviceKeyValue:Int = 0
 		
 		Global mouseStates:= New Bool[3]
+		Global keyStates:= New Bool[LAST_KEY_INDEX+1]
 		
 		Global prevMouseX:Int
 		Global prevMouseY:Int
@@ -418,27 +422,33 @@ Class MFDevice Final
 			Const START_MOUSE_INDEX:= MOUSE_LEFT
 			Const LAST_MOUSE_INDEX:= MOUSE_MIDDLE
 			
-			Const START_KEY_INDEX:= 0
-			Const LAST_KEY_INDEX:= 255 ' 256
-			
-			Local keyCode:= GetChar()
-			
-			' Check if at least one character was pressed:
-			If (keyCode <> 0) Then
-				For Local key:= START_KEY_INDEX To LAST_KEY_INDEX
-					keyCode = key
-					
-					If (KeyDown(key)) Then
+			For Local key:= START_KEY_INDEX To LAST_KEY_INDEX
+				Local keyCode:= key
+				
+				'If (KeyHit(key)) Then
+					'MFGamePad.keyPressed(keyCode)
+				'EndIf
+				
+				If (KeyHit(key)) Then
+					If (Not keyStates[key]) Then
 						MFGamePad.keyPressed(keyCode)
-					Else
+						
+						keyStates[key] = True
+					EndIf
+				Else
+					If (KeyDown(key)) Then
+						If (Not keyStates[key]) Then
+							keyStates[key] = True
+							
+							MFGamePad.keyPressed(keyCode)
+						EndIf
+					ElseIf (keyStates[key]) Then
+						keyStates[key] = False
+						
 						MFGamePad.keyReleased(keyCode)
 					EndIf
-					
-					'If (KeyHit(key)) Then
-						'MFGamePad.keyPressed(keyCode)
-					'EndIf
-				Next
-			EndIf
+				EndIf
+			Next
 			
 			'MFGamePad.trackballMoved(keyCode)
 			
