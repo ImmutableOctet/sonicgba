@@ -61,7 +61,7 @@ Class MainState Implements MFGameState ' Def
 		Method onEnter:Void()
 			State.stateInit()
 			
-			PlayerObject.setCharacter(CHARACTER_KNUCKLES) ' CHARACTER_SONIC
+			PlayerObject.setCharacter(CHARACTER_SONIC) ' CHARACTER_KNUCKLES
 			StageManager.setStageID(0)
 			
 			'''State.setState(State.STATE_TITLE)

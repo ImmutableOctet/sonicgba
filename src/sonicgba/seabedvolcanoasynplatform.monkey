@@ -135,8 +135,8 @@ Class SeabedVolcanoAsynPlatform Extends GimmickObject
 			Self.sb = Null
 		End
 		
-		Method collisionChkWithObject:Bool(object:PlayerObject)
-			Local objectRect:= object.getCollisionRect()
+		Method collisionChkWithObject:Bool(player:PlayerObject)
+			Local objectRect:= player.getCollisionRect()
 			Local thisRect:= getCollisionRect()
 			
 			rectV.setRect(objectRect.x0 + (COLLISION_WIDTH / 16), objectRect.y0, objectRect.getWidth() - (COLLISION_WIDTH / 8), objectRect.getHeight())

@@ -2260,12 +2260,22 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Return getTrans(Self.faceDegree)
 		End
 		
-		Method getNewPointX:Int(oriX:Int, xOffset:Int, yOffset:Int, degree:Int)
-			Return (((MyAPI.dCos(degree) * xOffset) / 100) + oriX) - ((MyAPI.dSin(degree) * yOffset) / 100)
+		#Rem
+			Method getNewPointX:Int(oriX:Int, xOffset:Int, yOffset:Int, degree:Int)
+				Return (((MyAPI.dCos(degree) * xOffset) / 100) + oriX) - ((MyAPI.dSin(degree) * yOffset) / 100)
+			End
+			
+			Method getNewPointY:Int(oriY:Int, xOffset:Int, yOffset:Int, degree:Int)
+				Return (((MyAPI.dSin(degree) * xOffset) / 100) + oriY) + ((MyAPI.dCos(degree) * yOffset) / 100)
+			End
+		#End
+		
+		Method getNewPointX:Int(x:Int, var2:Int, var3:Int, degree:Int)
+			Return x + var2 * MyAPI.dCos(degree) / 100 - var3 * MyAPI.dSin(degree) / 100
 		End
 		
-		Method getNewPointY:Int(oriY:Int, xOffset:Int, yOffset:Int, degree:Int)
-			Return (((MyAPI.dSin(degree) * xOffset) / 100) + oriY) + ((MyAPI.dCos(degree) * yOffset) / 100)
+		Method getNewPointY:Int(y:Int, var2:Int, var3:Int, var4:Int)
+			Return y + var2 * MyAPI.dSin(var4) / 100 + var3 * MyAPI.dCos(var4) / 100
 		End
 	Public
 		' Methods:
@@ -3430,7 +3440,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			refreshCollisionRectWrap()
 			
 			If (isAttracting()) Then
-				Self.attractRect.setRect(footX - (ATTRACT_EFFECT_WIDTH/2), (footY - (ATTRACT_EFFECT_HEIGHT/2)) - BODY_OFFSET, ATTRACT_EFFECT_WIDTH, ATTRACT_EFFECT_WIDTH)
+				Self.attractRect.setRect(footX - (ATTRACT_EFFECT_WIDTH / 2), (footY - (ATTRACT_EFFECT_HEIGHT / 2)) - BODY_OFFSET, ATTRACT_EFFECT_WIDTH, ATTRACT_EFFECT_WIDTH)
 			EndIf
 			
 			GameObject.collisionChkWithAllGameObject(Self)
@@ -3448,7 +3458,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.checkPositionX = getNewPointX(Self.footPointX, 0, (-RECT_HEIGHT) / 2, Self.faceDegree)
 			Self.checkPositionY = getNewPointY(Self.footPointY, 0, (-RECT_HEIGHT) / 2, Self.faceDegree)
 			
-			Self.preCollisionRect.setTwoPosition(Self.checkPositionX - RIGHT_WALK_COLLISION_CHECK_OFFSET_X, Self.checkPositionY - (RECT_HEIGHT / 2), Self.checkPositionX + RIGHT_WALK_COLLISION_CHECK_OFFSET_X, Self.checkPositionY + (RECT_HEIGHT / 2))
+			Self.preCollisionRect.setTwoPosition(Self.checkPositionX + LEFT_WALK_COLLISION_CHECK_OFFSET_X, Self.checkPositionY - (RECT_HEIGHT / 2), Self.checkPositionX + RIGHT_WALK_COLLISION_CHECK_OFFSET_X, Self.checkPositionY + (RECT_HEIGHT / 2))
 		End
 		
 		Method collisionCheckWithGameObject:Void()
@@ -3645,7 +3655,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Method beStop_Left_Right:Void(newPosition:Int, direction:Int, obj:GameObject, isDirectionDown:Bool, alt:Bool=False)
 			Local prex:Int
-			Local curx:Int
 			
 			Local isSomethingElse:Bool = False
 			
@@ -3655,17 +3664,15 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Self.footPointX = (obj.getCollisionRect().x0 - (Self.collisionRect.getWidth() / 2)) + 1
 				Self.footPointX = getNewPointX(Self.footPointX, 0, getCurrentHeight() / 2, Self.faceDegree)
 				
-				curx = Self.footPointX
-				
 				If (Not alt) Then
 					Self.bePushedFootX = (Self.footPointX - RIGHT_WALK_COLLISION_CHECK_OFFSET_X)
 				EndIf
 				
-				Self.movedSpeedX = (curx - prex)
+				Self.movedSpeedX = (Self.footPointX - prex)
 				
 				' Optimization potential; dynamic cast.
 				'If (DekaPlatform(obj) = Null) Then
-				If (obj.getObjectId() = GimmickObject.GIMMICK_BIG_FLOATING_ISLAND) Then
+				If (obj.getObjectId() <> GimmickObject.GIMMICK_BIG_FLOATING_ISLAND) Then
 					Self.movedSpeedX = 0
 					
 					isSomethingElse = True
@@ -3675,7 +3682,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.animationID = ANI_PUSH_WALL
 				EndIf
 				
-				If (getVelX() > 0) Then
+				' Magic number: 3
+				If (getVelX() > 0) Then ' If ((Not ((Not isSomethingElse And Hari(obj) <> Null) And obj.objId = 3 And canBeHurt())) And getVelX() > 0) Then
 					setVelX(0)
 					
 					Self.worldCal.stopMoveX()
@@ -3686,22 +3694,21 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				If (alt) Then
 					Self.faceDirection = Not Self.isAntiGravity
 				EndIf
-			Else
+			Else ' If (direction = DIRECTION_LEFT) Then
 				prex = Self.footPointX
 				
 				Self.footPointX = (obj.getCollisionRect().x1 + (Self.collisionRect.getWidth() / 2)) - 1
 				Self.footPointX = getNewPointX(Self.footPointX, 0, getCurrentHeight() / 2, Self.faceDegree)
 				
-				curx = Self.footPointX
-				
 				If (alt) Then
 					Self.bePushedFootX = Self.footPointX
 				EndIf
 				
-				Self.movedSpeedX = curx - prex
+				Self.movedSpeedX = (Self.footPointX - prex)
 				
 				' Optimization potential; dynamic cast.
-				If (DekaPlatform(obj) = Null) Then
+				'If (DekaPlatform(obj) = Null) Then
+				If (obj.getObjectId() <> GimmickObject.GIMMICK_BIG_FLOATING_ISLAND) Then
 					Self.movedSpeedX = 0
 					
 					isSomethingElse = True
@@ -3711,8 +3718,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.animationID = ANI_PUSH_WALL
 				EndIf
 				
-				If (getVelX() < 0) Then
+				' Magic number: 4
+				If (getVelX() < 0) Then ' If ((Not ((Not isSomethingElse And Hari(obj) <> Null) And obj.objId = 4 And canBeHurt())) And getVelX() < 0) Then
 					setVelX(0)
+					
 					Self.worldCal.stopMoveX()
 				EndIf
 				
@@ -3776,7 +3785,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Case DIRECTION_DOWN
 					beStop_Down(newPosition, obj, True, True) ' True
 				Case DIRECTION_LEFT, DIRECTION_RIGHT
-					beStop_Left_Right(newPosition, direction, obj, False)
+					beStop_Left_Right(newPosition, direction, obj, False) ' True...?
 			End Select
 			
 			Self.posX = Self.footPointX
@@ -4752,7 +4761,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			calTotalVelocity()
 			
-			Print("~~~~1velX:" + Self.velX + "|velY:" + Self.velY)
+			Print("~~velX: " + Self.velX + " | velY: " + Self.velY)
 			
 			Self.collisionChkBreak = True
 			
@@ -4781,7 +4790,15 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Local preCheckX:= preX
 			Local preCheckY:= preY
 			
-			For Local I:= 0 To moveDistance Step RIGHT_WALK_COLLISION_CHECK_OFFSET_X ' Until moveDistance
+			Local I:= WALK_COLLISION_CHECK_OFFSET_Y
+			
+			While (I < moveDistance)
+				I += RIGHT_WALK_COLLISION_CHECK_OFFSET_X
+				
+				If (I > moveDistance) Then ' >=
+					I = moveDistance
+				EndIf
+				
 				Local tmpCurrentX:= (preX + ((moveDistanceX * I) / moveDistance))
 				Local tmpCurrentY:= (preY + ((moveDistanceY * I) / moveDistance))
 				
@@ -4799,12 +4816,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Else
 					Exit
 				EndIf
-			Next
+			Wend
 		End
 		
 		Method cancelFootObject:Void(obj:GameObject)
 			If (Self.collisionState = COLLISION_STATE_ON_OBJECT And isFootOnObject(obj)) Then
 				Self.collisionState = COLLISION_STATE_JUMP
+				
 				Self.footOnObject = Null
 				
 				Self.onObjectContinue = False
@@ -4820,8 +4838,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Method doItemAttackPose:Void(obj:GameObject, direction:Int)
 			If (Not Self.extraAttackFlag) Then
+				Local gravMultiplier:= DSgn(Self.isAntiGravity)
+				
 				Local maxPower:= PickValue(Self.isPowerShoot, SHOOT_POWER, MIN_ATTACK_JUMP)
-				Local newVelY:= DSgn(Self.isAntiGravity) * getVelY()
+				
+				Local newVelY:= gravMultiplier * getVelY()
 				
 				If (newVelY > 0) Then
 					newVelY = -newVelY
@@ -4834,7 +4855,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				EndIf
 				
 				If (characterID <> CHARACTER_KNUCKLES Or Self.myAnimationID < ANI_ATTACK_2 Or Self.myAnimationID > ANI_BAR_ROLL_1) Then
-					setVelY(DSgn(Not Self.isAntiGravity) * newVelY)
+					setVelY(-gravMultiplier * newVelY)
 				EndIf
 				
 				If (characterID <> CHARACTER_AMY) Then

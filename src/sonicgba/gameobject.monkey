@@ -1468,7 +1468,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			EndIf
 		End
 		
-		Method doWhileCollisionWrapWithPlayer:Void()
+		Method doWhileCollisionWrapWithPlayer:Void() ' player:PlayerObject
 			If (player = Null Or player.isDead) Then
 				Return
 			EndIf
@@ -1740,7 +1740,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			rectH.setRect(colRect.x0, colRect.y0 + CHECK_OFFSET, colRect.getWidth(), colRect.getHeight() - (CHECK_OFFSET * 1)) ' AVAILABLE_RANGE
 			rectV.setRect(colRect.x0 + CHECK_OFFSET, colRect.y0, colRect.getWidth() - (CHECK_OFFSET * 2), colRect.getHeight()) ' (AVAILABLE_RANGE * 2)
 			
-			Local thisRect:= getCollisionRect() ' Self.collisionRect
+			Local thisRect:= Self.collisionRect ' getCollisionRect()
 			
 			Local rectH_and_thisRect:Bool = rectH.collisionChk(thisRect)
 			Local rectV_and_thisRect:Bool = rectV.collisionChk(thisRect)

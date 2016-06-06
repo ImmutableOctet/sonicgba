@@ -292,7 +292,7 @@ Class MapObject Extends GameObject Implements ACWorldCalUser, ACWorldCollisionLi
 		End
 		
 		Method doJump:Void(vx:Int, vy:Int, mustJump:Bool)
-			Print("do jump:" + Self.state)
+			'Print("do jump:" + Self.state)
 			
 			If (Self.state = STATE_GROUND Or mustJump) Then
 				Self.state = STATE_SKY

@@ -610,32 +610,24 @@ Class MyAPI ' Implements Def
 			g2.fillTriangle(x0, y0, x1, y1, x3, y3)
 		End
 		
-		Function dSin:Int(tDeg:Int)
-			While (tDeg < 0)
-				tDeg += 360
+		Function dSin:Int(value:Int)
+			While (value < 0)
+				value += 360
 			Wend
 			
-			''Return Int(Sin(Float(tDeg)))
+			Local var1:= (value Mod 360)
 			
-			Local tsh:= (tDeg Mod 360)
-			
-			If (tsh >= 0 And tsh <= 90) Then
-				Return sinData2[tsh] Shr FIXED_TWO_BASE ' >>>
+			If (var1 >= 0 And var1 <= 90) Then
+				Return (sinData2[var1] Shr FIXED_TWO_BASE) ' >>> FIXED_TWO_BASE
+			ElseIf (var1 > 90 And var1 <= 180) Then
+				Return (sinData2[90 - (var1 - 90)] Shr FIXED_TWO_BASE) ' >>> FIXED_TWO_BASE
+			ElseIf (var1 > 180 And var1 <= 270) Then
+				Return -(sinData2[var1 - 180] Shr FIXED_TWO_BASE) ' >>> FIXED_TWO_BASE
+			ElseIf (var1 > 270 And var1 <= 359) Then
+				Return -(sinData2[90 - (var1 - 270)] Shr FIXED_TWO_BASE) ' >>> FIXED_TWO_BASE
 			EndIf
 			
-			If (tsh > 90 And tsh <= 180) Then
-				Return sinData2[90 - (tsh - 90)] Shr FIXED_TWO_BASE ' >>>
-			EndIf
-			
-			If (tsh > 180 And tsh <= 270) Then
-				Return (sinData2[tsh - 180] Shr FIXED_TWO_BASE) * -1 ' >>>
-			EndIf
-			
-			If (tsh <= 270 Or tsh > 359) Then
-				Return BMF_COLOR_WHITE
-			EndIf
-			
-			Return (sinData2[90 - (tsh - 270)] Shr FIXED_TWO_BASE) * -1 ' >>>
+			Return 0
 		End
 		
 		Function dCos:Int(tDeg:Int)
