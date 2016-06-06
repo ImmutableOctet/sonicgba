@@ -3678,7 +3678,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					isSomethingElse = True
 				EndIf
 				
-				If (Key.repeated(Key.gRight) And ((Self.collisionState = COLLISION_STATE_NONE Or Self.collisionState = COLLISION_STATE_ON_OBJECT Or Self.collisionState = COLLISION_STATE_IN_SAND) And Not Self.isAttacking)) Then
+				If (Key.repeated(Key.gRight) And ((Self.collisionState = COLLISION_STATE_WALK Or Self.collisionState = COLLISION_STATE_ON_OBJECT Or Self.collisionState = COLLISION_STATE_IN_SAND) And Not Self.isAttacking)) Then
 					Self.animationID = ANI_PUSH_WALL
 				EndIf
 				
@@ -3714,7 +3714,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					isSomethingElse = True
 				EndIf
 				
-				If (Key.repeated(Key.gLeft) And ((Self.collisionState = COLLISION_STATE_NONE Or Self.collisionState = COLLISION_STATE_ON_OBJECT Or Self.collisionState = COLLISION_STATE_IN_SAND) And Not Self.isAttacking)) Then
+				If (Key.repeated(Key.gLeft) And ((Self.collisionState = COLLISION_STATE_WALK Or Self.collisionState = COLLISION_STATE_ON_OBJECT Or Self.collisionState = COLLISION_STATE_IN_SAND) And Not Self.isAttacking)) Then
 					Self.animationID = ANI_PUSH_WALL
 				EndIf
 				

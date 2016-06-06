@@ -18,6 +18,8 @@ Private
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
 	
+	Import com.sega.engine.lib.myapi
+	
 	Import brl.filepath
 	Import brl.stream
 	
@@ -29,7 +31,7 @@ Private
 Public
 
 ' Classes:
-Class MyAPI ' Implements Def
+Class MyAPI Extends myapi.MyAPI ' Implements Def
 	Private
 		' Constant variable(s):
 		Const ROTATE_90:Int = 1
@@ -66,8 +68,6 @@ Class MyAPI ' Implements Def
 		Const BMF_COLOR_YELLOW:Int = 1
 		Const BMF_COLOR_GREEN:Int = 2
 		Const BMF_COLOR_GRAY:Int = 3
-		
-		Const FIXED_TWO_BASE:Int = 7
 		
 		Const ZOOM_OUT_MOVE:Int = 0 ' 1 ' 0 ' Basically just "/ 2".
 		
@@ -608,31 +608,6 @@ Class MyAPI ' Implements Def
 			g2.fillTriangle(x0, y0, x1, y1, x2, y2)
 			g2.fillTriangle(x0, y0, x2, y2, x3, y3)
 			g2.fillTriangle(x0, y0, x1, y1, x3, y3)
-		End
-		
-		Function dSin:Int(value:Int)
-			While (value < 0)
-				value += 360
-			Wend
-			
-			Local var1:= (value Mod 360)
-			
-			If (var1 >= 0 And var1 <= 90) Then
-				Return (sinData2[var1] Shr FIXED_TWO_BASE) ' >>> FIXED_TWO_BASE
-			ElseIf (var1 > 90 And var1 <= 180) Then
-				Return (sinData2[90 - (var1 - 90)] Shr FIXED_TWO_BASE) ' >>> FIXED_TWO_BASE
-			ElseIf (var1 > 180 And var1 <= 270) Then
-				Return -(sinData2[var1 - 180] Shr FIXED_TWO_BASE) ' >>> FIXED_TWO_BASE
-			ElseIf (var1 > 270 And var1 <= 359) Then
-				Return -(sinData2[90 - (var1 - 270)] Shr FIXED_TWO_BASE) ' >>> FIXED_TWO_BASE
-			EndIf
-			
-			Return 0
-		End
-		
-		Function dCos:Int(tDeg:Int)
-			'Return Int(Cos(Float(tDeg)))
-			Return dSin(90 - tDeg)
 		End
 		
 		Function getTypeName:String(fileName:String, type:String)

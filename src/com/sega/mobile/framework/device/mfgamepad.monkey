@@ -176,7 +176,7 @@ Class MFGamePad ' Final
 			
 			' Magic numbers: 4, 19, 20, 21, 22, 52, 82 (Key-codes)
 			Select (keyCode)
-				Case keycodes.KEY_BACK ' 4 ' KEYCODE_BACK
+				Case keycodes.KEY_ENTER ' KEY_BACK ' 4 ' KEYCODE_BACK ' Pause
 					Return KEY_JOYSTICK_O ' $80000 ' KEY_JOYSTICK_SELECT
 				Case keycodes.KEY_UP ' 19 ' KEYCODE_DPAD_UP
 					Return KEY_PAD_UP
@@ -186,10 +186,10 @@ Class MFGamePad ' Final
 					Return KEY_PAD_LEFT
 				Case keycodes.KEY_RIGHT ' 22 ' KEYCODE_DPAD_RIGHT
 					Return KEY_PAD_RIGHT
-				Case keycodes.KEY_X ' 52 ' KEYCODE_X
-					Return KEY_S2
-				Case keycodes.KEY_MENU ' 82 ' MDPhone.KEY_CODE_MENU ' KEYCODE_MENU
-					Return KEY_JOYSTICK_MENU
+				Case keycodes.KEY_Z ' 52 ' KEYCODE_X
+					Return KEY_NUM_5 ' KEY_S2
+				Case keycodes.KEY_X ' KEY_MENU ' 82 ' MDPhone.KEY_CODE_MENU ' KEYCODE_MENU
+					Return KEY_NUM_2
 				Default
 					Return KEY_NULL
 			End Select
