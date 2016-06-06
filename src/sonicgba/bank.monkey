@@ -41,7 +41,7 @@ Class Bank Extends GimmickObject
 			If (player.onBank) Then
 				player.onBank = False
 				player.bankwalking = False
-			ElseIf ((Self.objId = 28 And direction = DIRECTION_RIGHT Or Self.objId = 29 And direction = DIRECTION_LEFT) And player.collisionState = 0) Then
+			ElseIf ((Self.objId = 28 And direction = DIRECTION_RIGHT Or Self.objId = 29 And direction = DIRECTION_LEFT) And player.collisionState = PlayerObject.COLLISION_STATE_WALK) Then
 				Self.touching = True
 				player.bankwalking = True
 			EndIf

@@ -1071,7 +1071,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.preFocusY = getNewPointY(Self.footPointY, 0, -BODY_OFFSET, Self.faceDegree) Shr 6
 			
 			If (Self.setNoMoving) Then
-				If (Self.collisionState = COLLISION_STATE_NONE) Then
+				If (Self.collisionState = COLLISION_STATE_WALK) Then
 					Self.footPointX = Self.noMovingPosition
 					
 					setVelX(0)
@@ -1082,12 +1082,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Return
 				ElseIf (Self.collisionState = COLLISION_STATE_JUMP) Then
 					Self.footPointX = Self.noMovingPosition
+					
 					Self.velX = 0
+					
 					setNoKey()
 				EndIf
 			EndIf
 			
-			If (Self.collisionState = COLLISION_STATE_NONE) Then
+			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				Self.deadPosX = Self.footPointX
 				Self.deadPosY = Self.footPointY
 			EndIf
@@ -1101,7 +1103,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					resetFlyCount()
 				EndIf
 				
-				If (Self.collisionState = COLLISION_STATE_NONE) Then
+				If (Self.collisionState = COLLISION_STATE_WALK) Then
 					If (soundInstance.getPlayingLoopSeIndex() = 15) Then
 						soundInstance.stopLoopSe()
 					EndIf
@@ -1147,8 +1149,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 					
 					Self.finishDeadStuff = True
-					
-					Return
 				EndIf
 				
 				Return
@@ -1230,7 +1230,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 							EndIf
 							
 							i = SoundSystem.getInstance().getPlayingBGMIndex()
-							SoundSystem.getInstance()
 							
 							If (i <> ANI_RAIL_ROLL) Then
 								Local startTime:= Long(((Self.breatheCount - BREATHE_TIME_COUNT) * 10000) / 10560)
@@ -1443,12 +1442,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						EndIf
 						
 						If (Self.isCelebrate) Then
-							If (Self.faceDirection) Then
-								If (Self.collisionState = COLLISION_STATE_NONE) Then
-									setVelX(0)
-								EndIf
-								
-							ElseIf (Self.collisionState = COLLISION_STATE_NONE) Then
+							If (Self.collisionState = COLLISION_STATE_WALK) Then
 								setVelX(0)
 							EndIf
 							
@@ -1487,11 +1481,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						If (StageManager.getCurrentZoneId() = 5) Then
 							If (Not isFirstTouchedSandSlip And Self.animationID = ANI_YELL) Then
 								isFirstTouchedSandSlip = True
+								
 								Self.frameCnt = 0
 							EndIf
 							
 							If (isFirstTouchedSandSlip) Then
-								If (Self.animationID = ANI_YELL And Self.collisionState = COLLISION_STATE_NONE) Then
+								If (Self.animationID = ANI_YELL And Self.collisionState = COLLISION_STATE_WALK) Then
 									Self.frameCnt += 1
 									
 									If (Self.frameCnt > 2 And Not IsGamePause) Then
@@ -1553,7 +1548,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						EndIf
 						
 						If (Self.slipFlag) Then
-							If (Self.collisionState = COLLISION_STATE_NONE) Then
+							If (Self.collisionState = COLLISION_STATE_WALK) Then
 								Self.animationID = ANI_YELL
 							EndIf
 							
@@ -2479,7 +2474,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						Self.animationID = ANI_STAND
 					EndIf
 					
-					If (Not ((Self.animationID = ANI_JUMP And Self.collisionState = COLLISION_STATE_NONE) Or doBrake())) Then
+					If (Not ((Self.animationID = ANI_JUMP And Self.collisionState = COLLISION_STATE_WALK) Or doBrake())) Then
 						Self.faceDirection = False
 					EndIf
 					
@@ -2530,7 +2525,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						Self.animationID = ANI_STAND
 					EndIf
 					
-					If (Not (Self.animationID = ANI_JUMP And Self.collisionState = COLLISION_STATE_NONE)) Then
+					If (Not (Self.animationID = ANI_JUMP And Self.collisionState = COLLISION_STATE_WALK)) Then
 						Self.faceDirection = True
 					EndIf
 					
@@ -2687,7 +2682,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				' Magic number: 1 ("Action state")
 				Self.worldCal.actionState = 1
 			ElseIf (Not Self.ducting) Then
-				If (needRetPower() And Self.collisionState = COLLISION_STATE_NONE) Then
+				If (needRetPower() And Self.collisionState = COLLISION_STATE_WALK) Then
 					preTotalVelocity = Self.totalVelocity
 					
 					Local resistance:= getRetPower()
@@ -3275,7 +3270,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method doJump:Void()
-			If (Self.collisionState = COLLISION_STATE_NONE) Then
+			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				calDivideVelocity()
 			EndIf
 			
@@ -3309,7 +3304,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method doJump:Void(vel:Int)
-			If (Self.collisionState = COLLISION_STATE_NONE) Then
+			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				calDivideVelocity()
 			EndIf
 			
@@ -3327,11 +3322,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method doJumpV:Void()
-			If (Self.collisionState = COLLISION_STATE_NONE) Then
+			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				calDivideVelocity()
 			EndIf
 			
 			setVelX(0)
+			
 			doJumpV(PickValue(Self.isInWater, JUMP_INWATER_START_VELOCITY, JUMP_START_VELOCITY))
 			
 			slipJumpOut()
@@ -3503,7 +3499,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 	
 		Method beSlide0:Void(obj:GameObject)
-			If (Self.collisionState = COLLISION_STATE_NONE) Then
+			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				calDivideVelocity()
 			EndIf
 			
@@ -3570,7 +3566,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Self.footPointY = obj.getCollisionRect().y1 + Self.collisionRect.getHeight()
 			EndIf
 			
-			If ((Self.collisionState = COLLISION_STATE_NONE Or Self.collisionState = COLLISION_STATE_ON_OBJECT) And Self.faceDegree = 0 And ItemObject(obj) = Null) Then
+			If ((Self.collisionState = COLLISION_STATE_WALK Or Self.collisionState = COLLISION_STATE_ON_OBJECT) And Self.faceDegree = 0 And ItemObject(obj) = Null) Then
 				setDie(False)
 				
 				Return False
@@ -3580,7 +3576,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method beStop_Down:Void(newPosition:Int, obj:GameObject, isDirectionDown:Bool, alt:Bool=False)
-			If (Self.collisionState = COLLISION_STATE_NONE) Then
+			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				calDivideVelocity()
 			EndIf
 			
@@ -3733,7 +3729,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 			
 			' Optimization potential; dynamic cast.
-			If (Self.collisionState = COLLISION_STATE_NONE And Self.animationID = ANI_JUMP And Not isSomethingElse And Hari(obj) <> Null) Then
+			If (Self.collisionState = COLLISION_STATE_WALK And Self.animationID = ANI_JUMP And Not isSomethingElse And Hari(obj) <> Null) Then
 				Self.animationID = ANI_STAND
 				
 				isSomethingElse = True
@@ -3846,7 +3842,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method getVelX:Int()
-			If (Self.collisionState = COLLISION_STATE_NONE) Then
+			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				Return ((Self.totalVelocity * MyAPI.dCos(Self.faceDegree)) / 100)
 			EndIf
 			
@@ -3854,7 +3850,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method getVelY:Int()
-			If (Self.collisionState = COLLISION_STATE_NONE) Then
+			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				Return ((Self.totalVelocity * MyAPI.dSin(Self.faceDegree)) / 100)
 			EndIf
 			
@@ -3862,7 +3858,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method setVelX:Void(mVelX:Int)
-			If (Self.collisionState = COLLISION_STATE_NONE) Then
+			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				Local tmpVelX:= ((Self.totalVelocity * MyAPI.dCos(Self.faceDegree)) / 100)
 				
 				tmpVelX = mVelX
@@ -3876,7 +3872,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method setVelY:Void(mVelY:Int)
-			If (Self.collisionState = COLLISION_STATE_NONE) Then
+			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				Local dSin:= ((Self.totalVelocity * MyAPI.dSin(Self.faceDegree)) / 100)
 				
 				Self.totalVelocity = (((MyAPI.dCos(Self.faceDegree) * ((Self.totalVelocity * MyAPI.dCos(Self.faceDegree)) / 100)) + (MyAPI.dSin(Self.faceDegree) * mVelY)) / 100)
@@ -3888,7 +3884,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method setVelXPercent:Void(percentage:Int)
-			If (Self.collisionState = COLLISION_STATE_NONE) Then
+			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				Local tmpVelX:= ((Self.totalVelocity * MyAPI.dCos(Self.faceDegree)) / 100)
 				
 				tmpVelX = ((Self.totalVelocity * percentage) / 100)
@@ -3902,7 +3898,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method setVelYPercent:Void(percentage:Int)
-			If (Self.collisionState = COLLISION_STATE_NONE) Then
+			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				Local tmpVelY:= ((Self.totalVelocity * MyAPI.dSin(Self.faceDegree)) / 100)
 				
 				Self.totalVelocity = (((MyAPI.dCos(Self.faceDegree) * ((Self.totalVelocity * MyAPI.dCos(Self.faceDegree)) / 100)) + (MyAPI.dSin(Self.faceDegree) * ((Self.totalVelocity * percentage) / 100))) / 100)
@@ -3914,7 +3910,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method beSpring:Void(springPower:Int, direction:Int)
-			If (Self.collisionState = COLLISION_STATE_NONE) Then
+			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				calDivideVelocity()
 			EndIf
 			
@@ -3939,7 +3935,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.worldCal.stopMoveX()
 			End Select
 			
-			If (Self.collisionState = COLLISION_STATE_NONE) Then
+			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				calTotalVelocity()
 			EndIf
 			
@@ -4347,7 +4343,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public
 		' Methods:
 		Method beAccelerate:Bool(power:Int, IsX:Bool, sender:GameObject)
-			If (Self.collisionState = COLLISION_STATE_NONE) Then
+			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				Self.totalVelocity = power
 				Self.faceDirection = (Self.totalVelocity > 0)
 				
@@ -4366,11 +4362,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method isOnGound:Bool() ' Property
-			Return (Self.collisionState = COLLISION_STATE_NONE) ' <> Null
+			Return (Self.collisionState = COLLISION_STATE_WALK)
 		End
 		
 		Method doPoalMotion:Bool(x:Int, y:Int, isLeft:Bool)
-			If (Self.collisionState = COLLISION_STATE_NONE) Then
+			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				Self.collisionState = COLLISION_STATE_JUMP
 			EndIf
 			
@@ -5059,7 +5055,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method beUnseenPop:Bool()
-			If (Self.collisionState <> COLLISION_STATE_WALK Or Abs(getVelX()) <= WIDTH) Then
+			If (Self.collisionState <> COLLISION_STATE_NONE Or Abs(getVelX()) <= WIDTH) Then
 				Return False
 			EndIf
 			
@@ -5086,7 +5082,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Method setBank:Void()
 			Self.onBank = Not Self.onBank
 			
-			If (Self.onBank And Self.collisionState = COLLISION_STATE_NONE) Then
+			If (Self.onBank And Self.collisionState = COLLISION_STATE_WALK) Then
 				calDivideVelocity()
 			EndIf
 		End
@@ -5160,7 +5156,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			Select (terminalType)
 				Case TERMINAL_RUN_TO_RIGHT, TERMINAL_RUN_TO_RIGHT_2
-					If (Self.collisionState = COLLISION_STATE_NONE) Then
+					If (Self.collisionState = COLLISION_STATE_WALK) Then
 						If (Self.animationID = ANI_JUMP) Then
 							land()
 						EndIf
@@ -6857,7 +6853,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method beSpSpring:Void(springPower:Int, direction:Int)
-			If (Self.collisionState = COLLISION_STATE_NONE) Then
+			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				calDivideVelocity()
 			EndIf
 			
@@ -6865,7 +6861,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			Self.worldCal.stopMoveY()
 			
-			If (Self.collisionState = COLLISION_STATE_NONE) Then
+			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				calTotalVelocity()
 			EndIf
 			

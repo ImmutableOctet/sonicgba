@@ -245,7 +245,7 @@ Class PlayerSonic Extends PlayerObject
 		End
 		
 		Method setSlip0:Void()
-			If (Self.collisionState = COLLISION_STATE_NONE) Then
+			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				Self.animationID = NO_ANIMATION
 				Self.myAnimationID = SONIC_ANI_SLIDE_D0
 			EndIf
@@ -426,9 +426,10 @@ Class PlayerSonic Extends PlayerObject
 						bodyCenterY = getNewPointY(Self.footPointY, 0, -512, Self.faceDegree)
 						
 						Local drawX:= getNewPointX(bodyCenterX, 0, (HINER_JUMP_LIMIT / 2), 0) ' (WIDTH / 2) ' 512
+						
 						drawY = getNewPointY(bodyCenterY, 0, (HINER_JUMP_LIMIT / 2), 0) ' (BALL_HEIGHT_OFFSET / 2) ' 512
 						
-						If (Self.collisionState = COLLISION_STATE_NONE) Then
+						If (Self.collisionState = COLLISION_STATE_WALK) Then
 							If (Self.isAntiGravity) Then
 								If (Self.faceDirection) Then
 									trans = PickValue((Self.totalVelocity >= 0), TRANS_MIRROR|TRANS_MIRROR_ROT180, TRANS_MIRROR_ROT180)
@@ -472,7 +473,7 @@ Class PlayerSonic Extends PlayerObject
 					Case EFFECT_JUMP
 						drawY = 0
 						
-						If (Self.collisionState = COLLISION_STATE_NONE) Then
+						If (Self.collisionState = COLLISION_STATE_WALK) Then
 							If (Not Self.faceDirection) Then
 								trans = PickValue((Self.totalVelocity > 0), TRANS_NONE, TRANS_MIRROR)
 							ElseIf (Self.totalVelocity >= 0) Then
@@ -841,7 +842,7 @@ Class PlayerSonic Extends PlayerObject
 						
 						v0 = PickValue(Self.isInWater, SONIC_ATTACK_LEVEL_2_V0_IN_WATER, SONIC_ATTACK_LEVEL_2_V0)
 						
-						If (Self.collisionState = COLLISION_STATE_NONE) Then
+						If (Self.collisionState = COLLISION_STATE_WALK) Then
 							If (Self.faceDirection) Then
 								startSpeedSet = getStartSpeed(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
@@ -869,7 +870,7 @@ Class PlayerSonic Extends PlayerObject
 						
 						v0 = PickValue(Self.isInWater, SONIC_ATTACK_LEVEL_3_V0_IN_WATER, SONIC_ATTACK_LEVEL_3_V0)
 						
-						If (Self.collisionState = COLLISION_STATE_NONE) Then
+						If (Self.collisionState = COLLISION_STATE_WALK) Then
 							If (Self.faceDirection) Then
 								startSpeedSet = getStartSpeed(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
@@ -959,7 +960,7 @@ Class PlayerSonic Extends PlayerObject
 						
 						v0 = PickValue(Self.isInWater, SONIC_ATTACK_LEVEL_1_V0_IN_WATER, PlayerObject.SONIC_ATTACK_LEVEL_1_V0)
 						
-						If (Self.collisionState = COLLISION_STATE_NONE) Then
+						If (Self.collisionState = COLLISION_STATE_WALK) Then
 							If (Self.faceDirection) Then
 								startSpeedSet = getStartSpeed(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
@@ -1030,7 +1031,7 @@ Class PlayerSonic Extends PlayerObject
 						
 						v0 = PickValue(Self.isInWater, SONIC_ATTACK_LEVEL_2_V0_IN_WATER, SONIC_ATTACK_LEVEL_2_V0)
 						
-						If (Self.collisionState = COLLISION_STATE_NONE) Then
+						If (Self.collisionState = COLLISION_STATE_WALK) Then
 							If ((Self.isAntiGravity ~ Self.faceDirection) <> 0) Then
 								startSpeedSet = getStartSpeed(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
@@ -1066,7 +1067,7 @@ Class PlayerSonic Extends PlayerObject
 						
 						v0 = PickValue(Self.isInWater, SONIC_ATTACK_LEVEL_3_V0_IN_WATER, SONIC_ATTACK_LEVEL_3_V0)
 						
-						If (Self.collisionState = COLLISION_STATE_NONE) Then
+						If (Self.collisionState = COLLISION_STATE_WALK) Then
 							If ((Self.isAntiGravity ~ Self.faceDirection) <> 0) Then
 								startSpeedSet = getStartSpeed(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
@@ -1115,7 +1116,7 @@ Class PlayerSonic Extends PlayerObject
 						
 						v0 = PickValue(Self.isInWater, SONIC_ATTACK_LEVEL_1_V0_IN_WATER, PlayerObject.SONIC_ATTACK_LEVEL_1_V0)
 						
-						If (Self.collisionState = COLLISION_STATE_NONE) Then
+						If (Self.collisionState = COLLISION_STATE_WALK) Then
 							If ((Self.isAntiGravity ~ Self.faceDirection) <> 0) Then
 								startSpeedSet = getStartSpeed(Self.isInSnow, v0, SNOW_DIVIDE_COUNT)
 							Else
