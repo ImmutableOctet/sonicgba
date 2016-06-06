@@ -5055,7 +5055,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method beUnseenPop:Bool()
-			If (Self.collisionState <> COLLISION_STATE_NONE Or Abs(getVelX()) <= WIDTH) Then
+			If (Self.collisionState <> COLLISION_STATE_WALK Or Abs(getVelX()) <= WIDTH) Then
 				Return False
 			EndIf
 			

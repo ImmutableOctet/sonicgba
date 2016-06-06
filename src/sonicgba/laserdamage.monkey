@@ -52,6 +52,7 @@ Class LaserDamage Extends BulletObject
 			Self.rect = Self.drawer.getARect()
 			
 			refreshCollisionRect(Self.posX, Self.posY)
+			
 			doWhileCollisionWrapWithPlayer()
 		End
 		
