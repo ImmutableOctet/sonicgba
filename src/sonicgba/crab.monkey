@@ -43,6 +43,7 @@ Class Crab Extends EnemyObject
 		' Functions:
 		Function releaseAllResource:Void()
 			Animation.closeAnimation(crabAnimation)
+			
 			crabAnimation = Null
 		End
 	Protected

@@ -438,7 +438,7 @@ Class MFGraphics
 			
 			'Print("R: " + getRf(color) + ", G: " + getGf(color) + ", B: " + getBf(color) + ", A: " + getAf(color))
 			
-			'''Self.context.SetColor(getRf(color), getGf(color), getBf(color)) ' getAf(color)
+			Self.context.SetColor(getRf(color), getGf(color), getBf(color)) ' getAf(color)
 		End
 		
 		Method getColor:Int()

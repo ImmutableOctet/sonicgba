@@ -25,7 +25,7 @@ Class AnimationDrawer
 		Global STANDARD_FRAME_SPEED:Int = (1 Shl ZOOM) ' Const
 		
 		' Global variable(s):
-		Global ZOOM:Int = PyxAnimation.ZOOM
+		Global ZOOM:Int = PyxAnimation.ZOOM ' 6
 		Global allPause:Bool = False
 		
 		' Fields:

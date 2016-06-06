@@ -1398,10 +1398,10 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		End
 		
 		Method getGroundY:Int(x:Int, y:Int, layer:Int)
-			For Local I:= 0 Until SEARCH_RANGE ' PlayerObject.TERMINAL_COUNT
-				y += worldInstance.getTileHeight() * AVAILABLE_RANGE
+			For Local I:= 0 Until SEARCH_RANGE
+				y += worldInstance.getTileHeight() * AVAILABLE_RANGE ' 1
 				
-				Local re:= worldInstance.getWorldY(x, y, layer, 1)
+				Local re:= worldInstance.getWorldY(x, y, layer, ACParam.DIRECTION_UP) ' 0 ' 1
 				
 				If (re <> ACParam.NO_COLLISION) Then
 					Return re

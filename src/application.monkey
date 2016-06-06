@@ -146,6 +146,8 @@ Class Application Extends App ' Main Extends MFMain
 			
 			MFDevice.Update()
 			
+			'RenderGame()
+			
 			#If ALLOW_FORCE_EXIT
 				If (MFDevice.exitFlag) Then
 					Return OnClose()
@@ -156,26 +158,7 @@ Class Application Extends App ' Main Extends MFMain
 		End
 		
 		Method OnRender:Int()
-			If (isSuspended) Then
-				OnRenderWhileSuspended()
-				
-				Return 0
-			EndIf
-			
-			' Clear the "real screen".
-			graphics.Clear() ' (0.8, 0.4, 0.25)
-			
-			' Check if we should clear the graphics drawn by our device.
-			If (MFDevice.clearBuffer) Then
-				' Clear the game screen and associated layers.
-				MFDevice.clearScreen()
-			EndIf
-			
-			' Render the game, then flush to the appropriate canvases.
-			MFDevice.deviceDraw(graphics, Self.screenX, Self.screenY, Self.screenWidth, Self.screenHeight)
-			
-			' Display the screen we rendered.
-			graphics.Flush()
+			RenderGame()
 			
 			Return 0
 		End
@@ -247,6 +230,29 @@ Class Application Extends App ' Main Extends MFMain
 			
 			graphics.DrawText("Game Suspended", DeviceWidth() / 2, DeviceHeight() / 2, 0.5, 0.5)
 			
+			graphics.Flush()
+		End
+		
+		Method RenderGame:Void()
+			If (isSuspended) Then
+				OnRenderWhileSuspended()
+				
+				Return
+			EndIf
+			
+			' Clear the "real screen".
+			graphics.Clear() ' (0.8, 0.4, 0.25)
+			
+			' Check if we should clear the graphics drawn by our device.
+			If (MFDevice.clearBuffer) Then
+				' Clear the game screen and associated layers.
+				MFDevice.clearScreen()
+			EndIf
+			
+			' Render the game, then flush to the appropriate canvases.
+			MFDevice.deviceDraw(graphics, Self.screenX, Self.screenY, Self.screenWidth, Self.screenHeight)
+			
+			' Display the screen we rendered.
 			graphics.Flush()
 		End
 		

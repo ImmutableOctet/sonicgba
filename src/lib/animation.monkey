@@ -95,6 +95,7 @@ Class Animation
 			Self.fileName = fileName
 			
 			SetClipImg(fileName + ".png")
+			
 			LoadAnimation(fileName + ".dat")
 		End
 		
