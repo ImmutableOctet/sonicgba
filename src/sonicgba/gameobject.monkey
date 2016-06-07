@@ -1020,13 +1020,15 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				Local xOffset:= (centerX - preCenterX)
 				Local yOffset:= (centerY - preCenterY)
 				
-				#Rem
+				'#Rem
 				realignObjects(False, xOffset, centerX, centerY, objVecWidth, objVecHeight, -2, 2)
-				realignObjects(False, xOffset, centerX, centerY, objVecWidth, objVecHeight, -1, 1, False)
+				'realignObjects(False, xOffset, centerX, centerY, objVecWidth, objVecHeight, -1, 1, False) ' <--
+				
+				realignObjects(False, xOffset, centerX, centerY, objVecWidth, objVecHeight, 1, -1, True)
 				
 				realignObjects(True, yOffset, centerY, centerX, objVecHeight, objVecWidth, -2, 2)
 				realignObjects(True, yOffset, centerY, centerX, objVecHeight, objVecWidth, -1, 1, False)
-				#End
+				'#End
 				
 				preCenterX = centerX
 				preCenterY = centerY

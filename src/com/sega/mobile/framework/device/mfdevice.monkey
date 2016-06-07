@@ -422,6 +422,9 @@ Class MFDevice Final
 			Const START_MOUSE_INDEX:= MOUSE_LEFT
 			Const LAST_MOUSE_INDEX:= MOUSE_MIDDLE
 			
+			' Debugging related:
+			MFGamePad.keyPressed(KEY_RIGHT)
+			
 			For Local key:= START_KEY_INDEX To LAST_KEY_INDEX
 				Local keyCode:= key
 				
