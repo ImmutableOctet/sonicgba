@@ -19,8 +19,8 @@ Public
 Class BatBullet Extends BulletObject
 	Private
 		' Constant variable(s):
-		Const COLLISION_HEIGHT:Int = 1536
 		Const COLLISION_WIDTH:Int = 1536
+		Const COLLISION_HEIGHT:Int = 1536
 		
 		' Fields:
 		Field isboom:Bool
@@ -45,8 +45,10 @@ Class BatBullet Extends BulletObject
 			Self.velY += GRAVITY
 			Self.posY += Self.velY
 			
-			If (Self.posY >= getGroundY(Self.posX, Self.posY) - RollPlatformSpeedC.DRAW_OFFSET_Y) Then
-				Self.posY = getGroundY(Self.posX, Self.posY) - RollPlatformSpeedC.DRAW_OFFSET_Y
+			Local groundY:= (getGroundY(Self.posX, Self.posY) - (COLLISION_HEIGHT / 2))
+			
+			If (Self.posY >= groundY) Then
+				Self.posY = groundY
 				
 				Self.drawer.setActionId(1)
 				Self.drawer.setLoop(False)

@@ -716,12 +716,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\basicrollplatformspeed.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\basicrollplatformspeed.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>2</X>
+        <Y>26</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>9f663fce-16ca-46bd-9fc2-98f0b31922fc</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bat.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -730,12 +731,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\batbullet.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\batbullet.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>40</Y>
+        <X>4</X>
+        <Y>51</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>3852ed88-7a46-48a0-b14c-d004a3be7cfb</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bee.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -984,8 +986,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bulletobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>11</X>
-        <Y>40</Y>
+        <X>24</X>
+        <Y>161</Y>
       </CursorPos>
       <DocGUID>7980d7c4-a467-4916-93cc-0e6fc5b94399</DocGUID>
       <Bookmarks />
@@ -1774,12 +1776,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\rollplatformspeedc.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\rollplatformspeedc.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>3</X>
+        <Y>36</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>f108df0b-e95f-4f9b-b917-7a0787545c4a</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ropeend.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>

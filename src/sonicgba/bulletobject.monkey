@@ -159,6 +159,8 @@ Class BulletObject Extends MoveObject Abstract
 			For Local I:= 0 Until bulletVec.Length
 				Local bullet:= bulletVec.Get(I)
 				
+				bullet.bulletLogic()
+				
 				If (bullet.chkDestroy()) Then
 					bulletVec.Remove(I)
 					
