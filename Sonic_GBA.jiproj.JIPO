@@ -52,8 +52,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acmovecalculator.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>18</X>
-        <Y>94</Y>
+        <X>10</X>
+        <Y>19</Y>
       </CursorPos>
       <DocGUID>39324153-ce11-4fa9-919f-c6cf2ccc3a81</DocGUID>
       <Bookmarks />
@@ -418,8 +418,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationdrawer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>51</X>
-        <Y>24</Y>
+        <X>2</X>
+        <Y>30</Y>
       </CursorPos>
       <DocGUID>4549b2b4-e2ae-4d1c-84b9-7b57ddc732ee</DocGUID>
       <Bookmarks />
@@ -518,7 +518,7 @@
     <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>3</X>
-        <Y>62</Y>
+        <Y>67</Y>
       </CursorPos>
       <DocGUID>3d91f39d-9ed5-4956-ba8d-97c12b7236d1</DocGUID>
       <Bookmarks>
@@ -2417,6 +2417,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\__oldresource\sonic.data\water" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\__oldresource\tip" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\__removed" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\__removed\ogg" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine" Expanded="true" />
@@ -2591,8 +2592,15 @@
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\android_new\assets\monkey\water" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\android_new\bin" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\android_new\bin\classes" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\android_new\bin\classes\com" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\android_new\bin\classes\com\monkey" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\android_new\bin\classes\com\monkeycoder" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\android_new\bin\classes\com\monkeycoder\monkeygame" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\android_new\bin\dexedLibs" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\android_new\bin\res" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\android_new\bin\res\drawable-hdpi" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\android_new\bin\res\drawable-ldpi" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\android_new\bin\res\drawable-mdpi" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\android_new\gen" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\android_new\gen\com" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\android_new\gen\com\monkeycoder" Expanded="false" />
@@ -2987,7 +2995,6 @@
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\map\stage6_2" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\map\stage6_bg_3" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\mid" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.data\ogg" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\se" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\special_res" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\standard" Expanded="false" />
