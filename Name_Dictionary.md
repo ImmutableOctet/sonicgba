@@ -15,6 +15,8 @@ This file contains a dictionary of internal names, and what they actually repres
 
 [![](http://info.sonicretro.org/images/0/0c/Slot-spr.png)](http://info.sonicretro.org/Slot) Slot = Bat
 
+[![](http://info.sonicretro.org/images/a/af/Pierrot-spr.png)](http://info.sonicretro.org/Pierrot) Pierrot = Clown
+
 ## Miscellaneous
 [![](http://vignette1.wikia.nocookie.net/sonic/images/4/44/Bumpers_Sonic_Advance.png/revision/latest?cb=20130217230354)](http://sonic.wikia.com/wiki/Bumper#Sonic_Advance) Bumper = Hobin/Horbin/Banper/Bamper
 
