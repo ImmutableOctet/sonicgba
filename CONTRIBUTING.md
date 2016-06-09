@@ -6,8 +6,13 @@ For example, sub-classes may be moved to separate files without much of an issue
 Similarly, common patterns can be mapped to a shared base-class,
 but you must follow the behavior as accurately as possible.
 
-* All names (Unless reserved by Monkey) will remain consistent with the decompiled source code.
+* All names (Unless reserved by Monkey) should remain consistent with the decompiled source code.
 This basically means bad translations and foreign names will stay no matter how bad they are.
+This does not cover foreign (Non-English) text, which should be translated.
+
+* All Japanese and/or Chinese text should be replaced with English equivalents.
+In addition, the original text should appear in a comment beside the updated text.
+This rule is in place to ensure the text is readable and displayable using English fonts.
 
 * Local variables should be reasonably descriptive, but this is not a requirement.
 If the decompiled source doesn't have descriptive names for something, but you
@@ -39,7 +44,7 @@ as accurately as possible, excluding manual uses of 'Final', unless reflected in
 * Resource paths and similar details will not be changed, unless absolutely necessary.
 
 * Uses of 'instanceof' in Java code should be replaced with
-dynamic casts or preliminary type checks. ('PlayerObject.getCharacterID', etc)
+dynamic casts and/or preliminary type checks. ('PlayerObject.getCharacterID', etc)
 
 * Constant and global variables may use type-inference, although this is sometimes not preferable.
 Local variables can, and usually *should* take full advantage of type-inference.
