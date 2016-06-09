@@ -22,10 +22,13 @@ Public
 Class AnimationDrawer
 	Private
 		' Constant variable(s):
-		Global STANDARD_FRAME_SPEED:Int = (1 Shl ZOOM) ' Const
+		Global STANDARD_FRAME_SPEED:Int = (1 Shl ZOOM) ' 16 ' (1000 Shr ZOOM) ' 33 ' (1 Shl ZOOM) ' Const ' 16
 		
 		' Global variable(s):
+		
+		' From what I understand, this is basically a frame-skip variable.
 		Global ZOOM:Int = PyxAnimation.ZOOM ' 6
+		
 		Global allPause:Bool = False
 		
 		' Fields:
