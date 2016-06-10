@@ -17,6 +17,7 @@ Kerokero | Frog | [![](http://info.sonicretro.org/images/9/9d/Kerokero-spr.png)]
 Senbon | Rabbit Fish | [![](http://info.sonicretro.org/images/c/c6/Senbon-spr.png)](http://info.sonicretro.org/Senbon)
 Rhinotank | Motor | [![](http://info.sonicretro.org/images/a/a2/Rhinotank-spr.png)](http://info.sonicretro.org/E-02_Rhinotank)
 Kiki | Monkey | [![](http://info.sonicretro.org/images/a/ad/Kiki-spr.png)](http://info.sonicretro.org/E-20_Kiki)
+Wamu | Caterpillar | [![](http://info.sonicretro.org/images/1/12/Wamu-spr.png)](http://info.sonicretro.org/Wamu)
 
 ## Miscellaneous
 Normal Name | Internal Name | Graphic
