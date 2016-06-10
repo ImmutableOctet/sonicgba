@@ -14,6 +14,8 @@ Pierrot | Clown | [![](http://info.sonicretro.org/images/a/af/Pierrot-spr.png)](
 Leon | Chameleon | [![](http://info.sonicretro.org/images/a/aa/Leon-spr.png)](http://info.sonicretro.org/Leon)
 Gamigami | Crab | [![](http://info.sonicretro.org/images/a/a1/Gamigami-spr.png)](http://info.sonicretro.org/Gamigami)
 Kerokero | Frog | [![](http://info.sonicretro.org/images/9/9d/Kerokero-spr.png)](http://info.sonicretro.org/Kerokero)
+Senbon | Rabbit Fish | [![](http://info.sonicretro.org/images/c/c6/Senbon-spr.png)](http://info.sonicretro.org/Senbon)
+Rhinotank | Motor | [![](http://info.sonicretro.org/images/a/a2/Rhinotank-spr.png)](http://info.sonicretro.org/E-02_Rhinotank)
 
 ## Miscellaneous
 Normal Name | Internal Name | Graphic
