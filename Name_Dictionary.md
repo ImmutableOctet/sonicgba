@@ -16,6 +16,7 @@ Gamigami | Crab | [![](http://info.sonicretro.org/images/a/a1/Gamigami-spr.png)]
 Kerokero | Frog | [![](http://info.sonicretro.org/images/9/9d/Kerokero-spr.png)](http://info.sonicretro.org/Kerokero)
 Senbon | Rabbit Fish | [![](http://info.sonicretro.org/images/c/c6/Senbon-spr.png)](http://info.sonicretro.org/Senbon)
 Rhinotank | Motor | [![](http://info.sonicretro.org/images/a/a2/Rhinotank-spr.png)](http://info.sonicretro.org/E-02_Rhinotank)
+Kiki | Monkey | [![](http://info.sonicretro.org/images/a/ad/Kiki-spr.png)](http://info.sonicretro.org/E-20_Kiki)
 
 ## Miscellaneous
 Normal Name | Internal Name | Graphic
