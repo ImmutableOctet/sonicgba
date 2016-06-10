@@ -97,7 +97,8 @@ Class ItemObject Extends GameObject
 			If (itemContentImage = Null) Then
 				itemContentImage = MFImage.createImage("/item/item_content.png")
 				
-				gridWidth = (MyAPI.zoomIn(itemContentImage.getWidth(), True) Shr 3) ' / 8
+				' Magic number: 8 (Number of icons)
+				gridWidth = (MyAPI.zoomIn(itemContentImage.getWidth(), True) / 8) ' Shr 3
 			EndIf
 			
 			If (itemHeadImage = Null) Then
@@ -111,7 +112,7 @@ Class ItemObject Extends GameObject
 		' Methods:
 		Method doWhileBeAttack:Void(player:PlayerObject, direction:Int, animationID:Int)
 			If (Not Self.used And Not player.piping) Then
-				doFunction(player, direction, animationID <> PlayerObject.ANI_HURT)
+				doFunction(player, direction, (animationID <> PlayerObject.ANI_HURT))
 				
 				Effect.showEffect(destroyEffectAnimation, 0, Self.posX Shr 6, (Self.posY - (Self.mHeight Shr 1)) Shr 6, 0)
 				
@@ -126,9 +127,9 @@ Class ItemObject Extends GameObject
 				If (direction <> DIRECTION_NONE) Then
 					Select (direction)
 						Case DIRECTION_UP
-							If (player.isAntiGravity And p = player And p.isAttackingItem() And Self.firstTouch And player.isAntiGravity And (Not (player.getCharacterID() = CHARACTER_KNUCKLES) Or player.animationID = PlayerObject.ANI_JUMP)) Then
+							If (Not player.isAntiGravity) Then
 								doFunction(p, direction)
-							Else
+							ElseIf (p = player And p.isAttackingItem() And Self.firstTouch And player.isAntiGravity And (Not (player.getCharacterID() = CHARACTER_KNUCKLES) Or player.animationID = PlayerObject.ANI_JUMP)) Then
 								Self.poping = True
 								
 								Self.velY = -(PlayerObject.HINER_JUMP_LIMIT / 2) ' -512
@@ -173,16 +174,19 @@ Class ItemObject Extends GameObject
 		Method draw:Void(g:MFGraphics)
 			If (Not Self.used Or Self.moveCount >= 0) Then
 				If (Self.itemID <> 0) Then
+					' Regular items:
 					' Magic number: 896
 					drawInMap(g, itemContentImage, Self.itemID * gridWidth, 0, gridWidth, gridWidth, 0, Self.posX, (Self.posY - 896) + PickValue(Self.poping, Self.posYoffset, 0), VCENTER|HCENTER)
 				ElseIf (PlayerObject.getCharacterID() = CHARACTER_SONIC) Then
+					' Sonic's life icon:
 					' Magic number: 896
 					drawInMap(g, itemContentImage, 0, 0, gridWidth, gridWidth, 0, Self.posX, (Self.posY - 896) + PickValue(Self.poping, Self.posYoffset, 0), VCENTER|HCENTER)
 				Else
-					Local characterID:= ((PlayerObject.getCharacterID() - 1) * gridWidth)
+					' Everyone else's life icon:
+					Local charOffset:= ((PlayerObject.getCharacterID() - 1) * gridWidth) ' {Tails, Knuckles, Amy}
 					
 					' Magic number: 896
-					drawInMap(g, itemHeadImage, characterID, 0, gridWidth, gridWidth, 0, Self.posX, (Self.posY - 896) + PickValue(Self.poping, Self.posYoffset, 0), VCENTER|HCENTER)
+					drawInMap(g, itemHeadImage, charOffset, 0, gridWidth, gridWidth, 0, Self.posX, (Self.posY - 896) + PickValue(Self.poping, Self.posYoffset, 0), VCENTER|HCENTER)
 				EndIf
 			EndIf
 			

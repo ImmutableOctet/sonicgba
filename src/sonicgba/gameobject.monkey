@@ -1024,7 +1024,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				realignObjects(False, xOffset, centerX, centerY, objVecWidth, objVecHeight, -2, 2)
 				'realignObjects(False, xOffset, centerX, centerY, objVecWidth, objVecHeight, -1, 1, False) ' <--
 				
-				realignObjects(False, xOffset, centerX, centerY, objVecWidth, objVecHeight, 1, -1, True)
+				'realignObjects(False, xOffset, centerX, centerY, objVecWidth, objVecHeight, 1, -1, True)
 				
 				realignObjects(True, yOffset, centerY, centerX, objVecHeight, objVecWidth, -2, 2)
 				realignObjects(True, yOffset, centerY, centerX, objVecHeight, objVecWidth, -1, 1, False)
