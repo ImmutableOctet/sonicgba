@@ -18,6 +18,8 @@ Senbon | Rabbit Fish | [![](http://info.sonicretro.org/images/c/c6/Senbon-spr.pn
 Rhinotank | Motor | [![](http://info.sonicretro.org/images/a/a2/Rhinotank-spr.png)](http://info.sonicretro.org/E-02_Rhinotank)
 Kiki | Monkey | [![](http://info.sonicretro.org/images/a/ad/Kiki-spr.png)](http://info.sonicretro.org/E-20_Kiki)
 Wamu | Caterpillar | [![](http://info.sonicretro.org/images/1/12/Wamu-spr.png)](http://info.sonicretro.org/Wamu)
+Mogu | Mole | [![](http://info.sonicretro.org/images/1/19/Mogu-spr.png)](http://info.sonicretro.org/Mogu)
+Pen | *Pen/Penguin* | [![](http://info.sonicretro.org/images/a/a4/Pen-spr.png)](http://info.sonicretro.org/Pen)
 
 ## Miscellaneous
 Normal Name | Internal Name | Graphic
