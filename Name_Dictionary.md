@@ -11,6 +11,8 @@ Hanabii | Lizard | [![](http://info.sonicretro.org/images/e/e5/Hanabii-spr.png)]
 Kuraa | Kura/Cement | [![](http://info.sonicretro.org/images/8/81/Kuraa-spr.png)](http://info.sonicretro.org/Kuraa)
 Slot | Bat | [![](http://info.sonicretro.org/images/0/0c/Slot-spr.png)](http://info.sonicretro.org/Slot)
 Pierrot | Clown | [![](http://info.sonicretro.org/images/a/af/Pierrot-spr.png)](http://info.sonicretro.org/Pierrot)
+Leon | Chameleon | [![](http://info.sonicretro.org/images/a/aa/Leon-spr.png)](http://info.sonicretro.org/Leon)
+Gamigami | Crab | [![](http://info.sonicretro.org/images/a/a1/Gamigami-spr.png)](http://info.sonicretro.org/Gamigami)
 
 ## Miscellaneous
 Normal Name | Internal Name | Graphic
