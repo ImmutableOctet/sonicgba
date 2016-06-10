@@ -20,3 +20,4 @@ Normal Name | Internal Name | Graphic
 ----------- | ------------- | -------
 Bumper | Hobin/Horbin/Banper/Bamper | [![](http://vignette1.wikia.nocookie.net/sonic/images/4/44/Bumpers_Sonic_Advance.png/revision/latest?cb=20130217230354)](http://sonic.wikia.com/wiki/Bumper#Sonic_Advance)
 Spikes | Hari | [![](http://vignette4.wikia.nocookie.net/sonic/images/8/83/Spikes_Advance.png/revision/latest?cb=20130304220052)](http://info.sonicretro.org/Spikes_(obstacle))
+Signpost | Terminal | [![](http://info.sonicretro.org/images/2/23/Sonicadvancesign.png)](http://info.sonicretro.org/Signpost)
