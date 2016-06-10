@@ -20,7 +20,8 @@ Kiki | Monkey | [![](http://info.sonicretro.org/images/a/ad/Kiki-spr.png)](http:
 Wamu | Caterpillar | [![](http://info.sonicretro.org/images/1/12/Wamu-spr.png)](http://info.sonicretro.org/Wamu)
 Mogu | Mole | [![](http://info.sonicretro.org/images/1/19/Mogu-spr.png)](http://info.sonicretro.org/Mogu)
 Pen | *Pen/Penguin* | [![](http://info.sonicretro.org/images/a/a4/Pen-spr.png)](http://info.sonicretro.org/Pen)
-Tentou | Lady Bug  | [![](http://info.sonicretro.org/images/9/9a/Tentou-spr.png)](http://info.sonicretro.org/Tentou)
+Tentou | Lady Bug | [![](http://info.sonicretro.org/images/9/9a/Tentou-spr.png)](http://info.sonicretro.org/Tentou)
+Drisame | Ice Fish | [![](http://info.sonicretro.org/images/f/fd/Drisame-spr.png)](http://info.sonicretro.org/Drisame)
 
 ## Miscellaneous
 Normal Name | Internal Name | Graphic
