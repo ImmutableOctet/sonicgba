@@ -13,6 +13,7 @@ Slot | Bat | [![](http://info.sonicretro.org/images/0/0c/Slot-spr.png)](http://i
 Pierrot | Clown | [![](http://info.sonicretro.org/images/a/af/Pierrot-spr.png)](http://info.sonicretro.org/Pierrot)
 Leon | Chameleon | [![](http://info.sonicretro.org/images/a/aa/Leon-spr.png)](http://info.sonicretro.org/Leon)
 Gamigami | Crab | [![](http://info.sonicretro.org/images/a/a1/Gamigami-spr.png)](http://info.sonicretro.org/Gamigami)
+Kerokero | Frog | [![](http://info.sonicretro.org/images/9/9d/Kerokero-spr.png)](http://info.sonicretro.org/Kerokero)
 
 ## Miscellaneous
 Normal Name | Internal Name | Graphic
