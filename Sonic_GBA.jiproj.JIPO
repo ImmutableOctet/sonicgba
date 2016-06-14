@@ -210,8 +210,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>5</X>
-        <Y>421</Y>
+        <X>44</X>
+        <Y>239</Y>
       </CursorPos>
       <DocGUID>1071a299-92ac-4048-84db-7149847b8ff2</DocGUID>
       <Bookmarks>
@@ -221,7 +221,7 @@
         </Point>
         <Point>
           <X>0</X>
-          <Y>777</Y>
+          <Y>778</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
@@ -2265,7 +2265,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\application.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>18</X>
+        <X>49</X>
         <Y>94</Y>
       </CursorPos>
       <DocGUID>573df5ef-d48f-46ff-ab61-8c9f8a570862</DocGUID>

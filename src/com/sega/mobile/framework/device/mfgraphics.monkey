@@ -237,7 +237,8 @@ Class MFGraphics
 		End
 		
 		Method rotateCanvas:Void(degrees:Float)
-			Self.context.Rotate(degrees)
+			' This behavior may change in the future.
+			Self.context.Rotate(-degrees)
 		End
 		
 		Method rotateCanvas:Void(degrees:Float, px:Int, py:Int)
