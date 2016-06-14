@@ -217,7 +217,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		' Fields:
 		Field needInit:Bool
 	Protected
-		Global GRAVITY:Int = 86 ' 172
+		Global GRAVITY:Int = 172 ' 86
 		
 		' Animations:
 		Global rockBreakAnimation:Animation

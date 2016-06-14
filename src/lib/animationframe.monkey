@@ -323,20 +323,18 @@ Class Frame
 				For Local i:= 0 Until Self.m_nClips
 					Select (Self.functionID[i])
 						Case 0
-							If (Not m_Ani.isDoubleScale) Then
-								DrawImage(g, i, x, y, attr)
+							If (m_Ani.isDoubleScale) Then
+								g.saveCanvas()
 								
-								Continue
+								g.translateCanvas(x, y)
+								g.scaleCanvas(0.5, 0.5)
+								
+								DrawImage(g, i, 0, 0, attr)
+								
+								g.restoreCanvas()
+							Else
+								DrawImage(g, i, x, y, attr)
 							EndIf
-							
-							g.saveCanvas()
-							
-							g.translateCanvas(x, y)
-							g.scaleCanvas(0.5, 0.5)
-							
-							DrawImage(g, i, 0, 0, attr)
-							
-							g.restoreCanvas()
 						Case 1
 							fillRect(g, i, x, y, attr)
 						Case 2
@@ -345,20 +343,20 @@ Class Frame
 							Local tmp_x:= Self.m_ClipInfo[i][0]
 							Local tmp_y:= Self.m_ClipInfo[i][1]
 							
-							If (Not m_Ani.isDoubleScale) Then
+							If (m_Ani.isDoubleScale) Then
+								g.saveCanvas()
+								
+								g.translateCanvas(x + tmp_x, y + tmp_y)
+								g.scaleCanvas(0.5, 0.5)
+								
+								m_Ani.qiAnimationArray[Self.m_ClipInfo[i][2]].m_Frames[Self.m_ClipInfo[i][3]].Draw(g, 0, 0, attr)
+								
+								g.restoreCanvas()
+							Else
 								m_Ani.qiAnimationArray[Self.m_ClipInfo[i][2]].m_Frames[Self.m_ClipInfo[i][3]].Draw(g, x + tmp_x, y + tmp_y, attr)
 								
 								Continue
 							EndIf
-							
-							g.saveCanvas()
-							
-							g.translateCanvas(x + tmp_x, y + tmp_y)
-							g.scaleCanvas(0.5, 0.5)
-							
-							m_Ani.qiAnimationArray[Self.m_ClipInfo[i][2]].m_Frames[Self.m_ClipInfo[i][3]].Draw(g, 0, 0, attr)
-							
-							g.restoreCanvas()
 					End Select
 				Next
 			EndIf
