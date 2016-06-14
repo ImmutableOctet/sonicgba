@@ -1095,6 +1095,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			Return ((obj.getCheckPositionY() Shr 6) / ROOM_HEIGHT)
 		End
 		
+		' From what I remember, this is actually unused.
 		Function initGetAvailableObject:Void(currentObject:GameObject)
 			objectCursor = 0
 			

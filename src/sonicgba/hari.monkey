@@ -22,6 +22,8 @@ Private
 Public
 
 ' Classes:
+
+' This class is used for most configurations of spikes.
 Class Hari Extends GimmickObject
 	Public
 		' Constant variable(s):
@@ -82,6 +84,7 @@ Class Hari Extends GimmickObject
 		End
 		
 		Method doWhileCollision:Void(p:PlayerObject, direction:Int)
+			' This isn't optimal, but it's what the original version did:
 			If (Self.firstCollisionDirection <> DIRECTION_NONE And direction = DIRECTION_NONE) Then
 				direction = Self.firstCollisionDirection
 			EndIf
@@ -91,14 +94,18 @@ Class Hari Extends GimmickObject
 			EndIf
 			
 			Select (Self.objId)
-				Case 5, 6
+				Case GIMMICK_HARI_MOVE_UP, GIMMICK_HARI_MOVE_DOWN
+					' Make sure this set of spikes has lifted from the ground before trying to stop the player.
+					' If we didn't perform this check, the player would float above the ground, or be unable to pass:
 					If (Self.drawer.getCurrentFrameHeight() <> 0) Then
 						p.beStop(Self.collisionRect.x0, direction, Self)
 					EndIf
 				Default
+					' Since we're a normal spike configuration, we should always be solid to the player.
 					p.beStop(Self.collisionRect.x0, direction, Self)
 			End Select
 			
+			' This is Knuckles specific behavior. From what I understand, it's here to account for gliding:
 			If ((p.getCharacterID() = CHARACTER_KNUCKLES) And direction = DIRECTION_NONE And p.canAttackByHari) Then
 				If (p.getRingNum() > 0) Then
 					playSound()
@@ -112,8 +119,9 @@ Class Hari Extends GimmickObject
 			
 			' This behavior may change in the future:
 			If (p = player And p.canBeHurt()) Then
+				' Apply different effects based on our configuration:
 				Select (Self.objId)
-					Case 1, 5
+					Case GIMMICK_HARI_UP, GIMMICK_HARI_MOVE_UP
 						If (direction = DIRECTION_DOWN And Self.drawer.getCurrentFrameHeight() <> 0) Then
 							If (p.getRingNum() > 0) Then
 								playSound()
@@ -123,7 +131,7 @@ Class Hari Extends GimmickObject
 							
 							p.beAttackByHari = True
 						EndIf
-					Case 2, 6
+					Case GIMMICK_HARI_DOWN, GIMMICK_HARI_MOVE_DOWN
 						If (direction = DIRECTION_UP And Self.drawer.getCurrentFrameHeight() <> 0) Then
 							If (p.getRingNum() > 0) Then
 								playSound()
@@ -133,41 +141,29 @@ Class Hari Extends GimmickObject
 							
 							p.beAttackByHari = True
 						EndIf
-					Case 3
-						If (direction = DIRECTION_RIGHT And p.velX > 0) Then
-							If (p.getRingNum() > 0) Then
-								playSound()
+					Case GIMMICK_HARI_LEFT
+						If (direction = DIRECTION_RIGHT) Then
+							If (p.velX > 0 Or p.getAnimationId() = 0) Then
+								If (p.getRingNum() > 0) Then
+									playSound()
+								EndIf
+								
+								p.beHurt()
+								
+								p.beAttackByHari = True
 							EndIf
-							
-							p.beHurt()
-							
-							p.beAttackByHari = True
-						ElseIf (direction = DIRECTION_RIGHT And p.getAnimationId() = 0) Then
-							If (p.getRingNum() > 0) Then
-								playSound()
-							EndIf
-							
-							p.beHurt()
-							
-							p.beAttackByHari = True
 						EndIf
-					Case 4
-						If (direction = DIRECTION_LEFT And p.velX < 0) Then
-							If (p.getRingNum() > 0) Then
-								playSound()
+					Case GIMMICK_HARI_RIGHT
+						If (direction = DIRECTION_LEFT) Then
+							If (p.velX < 0 Or p.getAnimationId() = 0) Then
+								If (p.getRingNum() > 0) Then
+									playSound()
+								EndIf
+								
+								p.beHurt()
+								
+								p.beAttackByHari = True
 							EndIf
-							
-							p.beHurt()
-							
-							p.beAttackByHari = True
-						ElseIf (direction = DIRECTION_LEFT And p.getAnimationId() = 0) Then
-							If (p.getRingNum() > 0) Then
-								playSound()
-							EndIf
-							
-							p.beHurt()
-							
-							p.beAttackByHari = True
 						EndIf
 					Default
 						' Nothing so far.
@@ -187,13 +183,13 @@ Class Hari Extends GimmickObject
 		
 		Method refreshCollisionRect:Void(x:Int, y:Int)
 			Select (Self.objId)
-				Case 1, 5
+				Case GIMMICK_HARI_UP, GIMMICK_HARI_MOVE_UP
 					Self.collisionRect.setRect(x - (Self.mWidth / 2), ((y + OFFFSET) - (Self.drawer.getCurrentFrameHeight() Shl 6)) + IMAGE_COLLISION_OFFSET, Self.mWidth, (Self.drawer.getCurrentFrameHeight() Shl 6) - IMAGE_COLLISION_OFFSET) ' Shr 1
-				Case 2, 6
+				Case GIMMICK_HARI_DOWN, GIMMICK_HARI_MOVE_DOWN
 					Self.collisionRect.setRect(x - (Self.mWidth / 2), y - OFFFSET, Self.mWidth, (Self.drawer.getCurrentFrameHeight() Shl 6) - IMAGE_COLLISION_OFFSET) ' Shr 1
-				Case 3
+				Case GIMMICK_HARI_LEFT
 					Self.collisionRect.setRect((x - (Self.drawer.getCurrentFrameWidth() Shl 6)) + OFFFSET, (y + OFFFSET) - (Self.drawer.getCurrentFrameHeight() Shl 6), Self.drawer.getCurrentFrameWidth() Shl 6, Self.drawer.getCurrentFrameHeight() Shl 6)
-				Case 4
+				Case GIMMICK_HARI_RIGHT
 					Self.collisionRect.setRect(x - OFFFSET, (y + OFFFSET) - (Self.drawer.getCurrentFrameHeight() Shl 6), Self.drawer.getCurrentFrameWidth() Shl 6, Self.drawer.getCurrentFrameHeight() Shl 6)
 				Default
 					' Nothing so far.
