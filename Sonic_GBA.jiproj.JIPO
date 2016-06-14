@@ -174,8 +174,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>1</X>
-        <Y>23</Y>
+        <X>4</X>
+        <Y>425</Y>
       </CursorPos>
       <DocGUID>ab21d9b9-bf97-41dc-b333-9b0289eba3ce</DocGUID>
       <Bookmarks>
@@ -718,13 +718,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\basicrollplatformspeed.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\basicrollplatformspeed.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>2</X>
         <Y>26</Y>
       </CursorPos>
-      <DocGUID>9f663fce-16ca-46bd-9fc2-98f0b31922fc</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bat.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -1084,12 +1083,13 @@
         </Point>
       </Bookmarks>
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\collisionrect.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\collisionrect.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>15</X>
-        <Y>189</Y>
+        <X>7</X>
+        <Y>21</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>97e668de-52e7-4604-be28-792cee005bd0</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\cornerhobin.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1275,22 +1275,18 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
-        <Y>54</Y>
+        <X>30</X>
+        <Y>996</Y>
       </CursorPos>
       <DocGUID>79793a17-8378-46b4-bc51-8f6113d0ba40</DocGUID>
       <Bookmarks>
         <Point>
           <X>0</X>
-          <Y>160</Y>
+          <Y>161</Y>
         </Point>
         <Point>
           <X>0</X>
-          <Y>218</Y>
-        </Point>
-        <Point>
-          <X>0</X>
-          <Y>1023</Y>
+          <Y>219</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
@@ -1371,13 +1367,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\itemobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\itemobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>12</X>
-        <Y>137</Y>
+        <X>25</X>
+        <Y>138</Y>
       </CursorPos>
-      <DocGUID>93f319a9-226a-40f2-9b4d-f86389bf6274</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ladybug.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1758,13 +1753,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\rollplatformspeedc.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\rollplatformspeedc.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>3</X>
         <Y>36</Y>
       </CursorPos>
-      <DocGUID>f108df0b-e95f-4f9b-b917-7a0787545c4a</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ropeend.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -2301,6 +2295,7 @@
   </Files>
   <Folders>
     <FolderStatus NodePath="Sonic_GBA\__backup" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\__removed" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\etc" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\etc\field_audit" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\etc\SAdv" Expanded="false" />
@@ -2944,7 +2939,6 @@
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\html5\data\map\stage6_2" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\html5\data\map\stage6_bg_3" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\html5\data\mid" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\html5\data\ogg" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\html5\data\se" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\html5\data\special_res" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\html5\data\standard" Expanded="false" />

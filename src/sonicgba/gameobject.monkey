@@ -20,6 +20,7 @@ Private
 	Import lib.myapi
 	Import lib.soundsystem
 	Import lib.coordinate
+	Import lib.constutil
 	
 	Import sonicgba.bulletobject
 	Import sonicgba.collisionmap
@@ -994,8 +995,8 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		End
 		
 		Function checkObjWhileMoving:Void(currentObject:GameObject)
-			Local centerX:Int = ((MapManager.getCamera().x + (MapManager.CAMERA_WIDTH/2)) / ROOM_WIDTH)
-			Local centerY:Int = ((MapManager.getCamera().y + (MapManager.CAMERA_HEIGHT/2)) / ROOM_HEIGHT)
+			Local centerX:Int = ((MapManager.getCamera().x + (MapManager.CAMERA_WIDTH / 2)) / ROOM_WIDTH)
+			Local centerY:Int = ((MapManager.getCamera().y + (MapManager.CAMERA_HEIGHT / 2)) / ROOM_HEIGHT)
 			
 			If (preCenterX = -1 And preCenterY = -1) Then
 				Local xo:= centerX - 1
@@ -1020,98 +1021,139 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				Local xOffset:= (centerX - preCenterX)
 				Local yOffset:= (centerY - preCenterY)
 				
-				'#Rem
-				realignObjects(False, xOffset, centerX, centerY, objVecWidth, objVecHeight, -2, 2)
-				'realignObjects(False, xOffset, centerX, centerY, objVecWidth, objVecHeight, -1, 1, False) ' <--
-				
-				'realignObjects(False, xOffset, centerX, centerY, objVecWidth, objVecHeight, 1, -1, True)
-				
-				realignObjects(True, yOffset, centerY, centerX, objVecHeight, objVecWidth, -2, 2)
-				realignObjects(True, yOffset, centerY, centerX, objVecHeight, objVecWidth, -1, 1, False)
-				'#End
+				If (xOffset <> 0) Then
+					updateObjectRoomsX((centerX + PickValue((xOffset > 0), -2, 2)), centerY, -2, 2)
+					
+					updateObjectRoomsX((centerX + PickValue((xOffset > 0), 1, -1)), centerY, -1, 1)
+				EndIf
+	
+				If (yOffset <> 0) Then
+					updateObjectRoomsY((centerY + PickValue((yOffset > 0), -2, 2)), centerX, -2, 2)
+					
+					updateObjectRoomsY((centerY + PickValue((yOffset > 0), 1, -1)), centerX, -1, 1)
+				EndIf
 				
 				preCenterX = centerX
 				preCenterY = centerY
 			EndIf
+		End
+		
+		Function updateObjectRoomsX:Void(x:Int, centerY:Int, y_min:Int, y_max:Int)
+			If (x >= 0 And x < objVecWidth) Then
+				For Local y:= (centerY + y_min) To (centerY + y_max)
+					If (y >= 0 And y < objVecHeight) Then
+						updateRoom(x, y)
+					EndIf
+				Next
+			EndIf
+		End
+		
+		Function updateObjectRoomsY:Void(y:Int, centerX:Int, x_min:Int, x_max:Int)
+			If (y >= 0 And y < objVecHeight) Then
+				For Local x:= (centerX + x_min) To (centerX + x_max)
+					If (x >= 0 And x < objVecWidth) Then
+						updateRoom(x, y)
+					EndIf
+				Next
+			EndIf
+		End
+		
+		' This updates the contents of the room at the position specified.
+		' Basically, it checks if the objects that are normally in the room are outside of it.
+		' If an object escapes the room, this will move it to the appropriate room.
+		Function updateRoom:Void(x:Int, y:Int)
+			Local room:= allGameObject[x][y]
+			
+			For Local entryIndex:= 0 Until room.Length
+				Local obj:= room.Get(entryIndex)
+				
+				Local objX:= checkPositionToRoomX(obj)
+				Local objY:= checkPositionToRoomY(obj)
+				
+				If (objX >= 0 And objX < objVecWidth And objY >= 0 And objY < objVecHeight And (objX <> x Or objY <> y)) Then
+					room.Remove(entryIndex)
+					
+					entryIndex -= 1
+					
+					Local nextRoom:= allGameObject[objX][objY]
+					
+					nextRoom.Push(obj)
+				EndIf
+			Next
+		End
+		
+		' These two functions convert object coordinates to "room" coordinates:
+		Function checkPositionToRoomX:Int(obj:GameObject)
+			Return ((obj.getCheckPositionX() Shr 6) / ROOM_WIDTH)
+		End
+		
+		Function checkPositionToRoomY:Int(obj:GameObject)
+			Return ((obj.getCheckPositionY() Shr 6) / ROOM_HEIGHT)
 		End
 	Private
 		' Extensions:
 		
 		' This updates which objects are in what segment of the map.
 		Function realignObjects:Void(arrangement:Bool, position:Int, posOffset:Int, seekOffset:Int, bounds:Int, seekBounds:Int, Low:Int=-2, High:Int=2, offsetOnAccess:Bool=True)
-			If (position <> 0) Then
-				If (position > 0) Then
-					position = Low
-				Else
-					position = High
-				EndIf
-				
-				position += posOffset
-				
-				If (position >= 0 And position < bounds) Then
-					For Local opOffset:= -2 To 2 ' Low To High
-						Local opPos:= (seekOffset + opOffset)
+			If (position = 0) Then
+				Return
+			EndIf
+			
+			If (position > 0) Then
+				position = Low
+			Else
+				position = High
+			EndIf
+			
+			position += posOffset
+			
+			If (position >= 0 And position < bounds) Then
+				For Local opOffset:= -2 To 2 ' Low To High
+					Local opPos:= (seekOffset + opOffset)
+					
+					If ((opPos >= 0 And opPos < seekBounds)) Then
+						Local current:Stack<GameObject>
 						
-						If ((opPos >= 0 And opPos < seekBounds)) Then
-							Local current:Stack<GameObject>
-							
-							Local accessOffset:Int
-							
-							If (offsetOnAccess) Then
-								accessOffset = seekOffset
-							Else
-								accessOffset = 0
-							EndIf
-							
-							If (Not arrangement) Then
-								If (position > allGameObject.Length) Then
-									DebugStop()
-								EndIf
-								
-								If (accessOffset + opOffset > allGameObject[0].Length) Then
-									DebugStop()
-								EndIf
-								
-								current = allGameObject[position][accessOffset + opOffset]
-							Else
-								If (position > allGameObject[0].Length) Then
-									DebugStop()
-								EndIf
-								
-								If (accessOffset + opOffset > allGameObject.Length) Then
-									DebugStop()
-								EndIf
-								
-								current = allGameObject[accessOffset + opOffset][position]
-							EndIf
-							
-							If (current <> Null) Then
-								For Local I:= 0 Until current.Length
-									Local obj:= current.Get(I)
-									
-									Local objBlockX:= ((obj.getCheckPositionX() Shr 6) / ROOM_WIDTH)
-									Local objBlockY:= ((obj.getCheckPositionY() Shr 6) / ROOM_HEIGHT) ' ROOM_WIDTH
-									
-									Local blockCheck:Bool
-									
-									If (Not arrangement) Then
-										blockCheck = (Not (objBlockX = position And objBlockY = (seekOffset + opOffset)))
-									Else
-										blockCheck = (Not (objBlockX = (seekOffset + opOffset) And objBlockY = position))
-									EndIf
-									
-									If (objBlockX >= 0 And objBlockX < objVecWidth And objBlockX >= 0 And objBlockX < objVecHeight And blockCheck) Then
-										current.Remove(I)
-										
-										I -= 1
-										
-										allGameObject[objBlockX][objBlockY].Push(obj)
-									EndIf
-								Next
-							EndIf
+						Local accessOffset:Int
+						
+						If (offsetOnAccess) Then
+							accessOffset = seekOffset
+						Else
+							accessOffset = 0
 						EndIf
-					Next
-				EndIf
+						
+						If (Not arrangement) Then
+							current = allGameObject[position][accessOffset + opOffset]
+						Else
+							current = allGameObject[accessOffset + opOffset][position]
+						EndIf
+						
+						If (current <> Null) Then
+							For Local I:= 0 Until current.Length
+								Local obj:= current.Get(I)
+								
+								Local objBlockX:= ((obj.getCheckPositionX() Shr 6) / ROOM_WIDTH)
+								Local objBlockY:= ((obj.getCheckPositionY() Shr 6) / ROOM_HEIGHT) ' ROOM_WIDTH
+								
+								Local blockCheck:Bool
+								
+								If (Not arrangement) Then
+									blockCheck = (Not (objBlockX = position And objBlockY = (seekOffset + opOffset)))
+								Else
+									blockCheck = (Not (objBlockX = (seekOffset + opOffset) And objBlockY = position))
+								EndIf
+								
+								If (blockCheck And objBlockX >= 0 And objBlockX < objVecWidth And objBlockX >= 0 And objBlockX < objVecHeight) Then
+									current.Remove(I)
+									
+									I -= 1
+									
+									allGameObject[objBlockX][objBlockY].Push(obj)
+								EndIf
+							Next
+						EndIf
+					EndIf
+				Next
 			EndIf
 		End
 		
