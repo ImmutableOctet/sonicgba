@@ -761,7 +761,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		' Functions:
 		Function setNewParam:Void(newParam:Int[])
 			MOVE_POWER = newParam[0]
-			MOVE_POWER_IN_AIR = MOVE_POWER / 2
+			MOVE_POWER_IN_AIR = (MOVE_POWER * 2)
 			MOVE_POWER_REVERSE = newParam[1]
 			MAX_VELOCITY = newParam[2]
 			MOVE_POWER_REVERSE_BALL = newParam[3]
@@ -888,8 +888,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.movePowerInAir = MOVE_POWER_IN_AIR
 			Self.movePowerReverse = MOVE_POWER_REVERSE
 			Self.movePowerReserseBall = MOVE_POWER_REVERSE_BALL
-			Self.movePowerReverseInSand = (MOVE_POWER_REVERSE / 2)
-			Self.movePowerReserseBallInSand = (MOVE_POWER_REVERSE / 2)
+			Self.movePowerReverseInSand = (MOVE_POWER_REVERSE * 2)
+			Self.movePowerReserseBallInSand = (MOVE_POWER_REVERSE * 2)
 			
 			Self.maxVelocity = MAX_VELOCITY
 			
@@ -1304,11 +1304,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				If (speedCount > 0) Then
 					speedCount -= 1
 					
-					Self.movePower = MOVE_POWER / 2
-					Self.movePowerInAir = MOVE_POWER_IN_AIR / 2
-					Self.movePowerReverse = MOVE_POWER_REVERSE / 2
-					Self.movePowerReserseBall = MOVE_POWER_REVERSE_BALL / 2
-					Self.maxVelocity = MAX_VELOCITY / 2
+					Self.movePower = (MOVE_POWER * 2)
+					Self.movePowerInAir = (MOVE_POWER_IN_AIR * 2)
+					Self.movePowerReverse = (MOVE_POWER_REVERSE * 2)
+					Self.movePowerReserseBall = (MOVE_POWER_REVERSE_BALL * 2)
+					Self.maxVelocity = (MAX_VELOCITY * 2)
 					
 					If (Not (speedCount <> 0 Or SoundSystem.getInstance().getPlayingBGMIndex() = ANI_POP_JUMP_UP_SLOW Or SoundSystem.getInstance().getPlayingBGMIndex() = ANI_DEAD Or SoundSystem.getInstance().getPlayingBGMIndex() = MOON_STAR_DES_Y_1)) Then
 						SoundSystem.getInstance().setSoundSpeed(1.0)
