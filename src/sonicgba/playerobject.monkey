@@ -1358,6 +1358,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					
 					If (Self.railLine = Null) Then
 						Self.velY += getGravity()
+						
 						checkWithObject(Self.footPointX, Self.footPointY, Self.footPointX + Self.velX, Self.footPointY + Self.velY)
 					Else
 						Local preFootPointX:= Self.footPointX
@@ -1807,6 +1808,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Method terminalLogic_SS_Change_1:Void()
 			Self.velY += getGravity()
+			
 			Self.collisionState = COLLISION_STATE_NONE
 			
 			If (Self.posY <= SUPER_SONIC_CHANGING_CENTER_Y) Then
@@ -2399,7 +2401,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method faceSlopeChk:Void()
-			'Local slopeVelocity:= (MyAPI.dSin(Self.faceDegree) * (getGravity() * DSgn(Self.isAntiGravity))) / 100
+			'Local slopeVelocity:= (MyAPI.dSin(Self.faceDegree) * (getGravity() * DSgn(Not Self.isAntiGravity))) / 100
 		End
 		
 		Method decelerate:Void()
@@ -2444,7 +2446,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				preTotalVelocity = Self.totalVelocity
 				
 				If (Self.slipFlag And Abs(velChange) < 100) Then
-					velChange = 100 * DSgn(velChange >= 0)
+					velChange = PickValue((velChange < 0), -100, 100)
 				EndIf
 				
 				If (Self.animationID = ANI_JUMP) Then
@@ -2460,8 +2462,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				Self.totalVelocity += velChange
 				
-				If (Self.totalVelocity * preTotalVelocity <= 0 And Self.animationID = ANI_JUMP) Then
+				If ((Self.totalVelocity * preTotalVelocity) <= 0 And Self.animationID = ANI_JUMP) Then
 					Self.animationID = ANI_STAND
+					
 					Self.faceDirection = (preTotalVelocity > 0)
 				EndIf
 			EndIf
@@ -2968,7 +2971,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					If (velX2 < 0) Then
 						velX2 = 0
 					EndIf
-					
 				ElseIf (velX2 < 0) Then
 					velX2 -= resistance
 					
@@ -2989,7 +2991,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.velY = newPointX + ((DSgn(Not Self.isAntiGravity)) * (getGravity() / 2))
 					newPointX = Self.velY
 					
-					Self.velY = newPointX + ((DSgn(Not Self.isAntiGravity)) * (getGravity() Shr 2))
+					Self.velY = newPointX + ((DSgn(Not Self.isAntiGravity)) * (getGravity() / 4))
 				EndIf
 			EndIf
 			
@@ -4523,14 +4525,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				If (Self.animationID = ANI_STAND) Then
 					Self.animationID = ANI_RUN_1
-					
-					Return
 				EndIf
 				
 				Return
 			EndIf
 			
-			If (Self.isAntiGravity Or Self.faceDegree < ANI_DEAD_PRE Or Self.faceDegree > 315) Then
+			If (Self.isAntiGravity Or Self.faceDegree < 45 Or Self.faceDegree > 315) Then
 				If (Not Self.isAntiGravity) Then
 					Return
 				EndIf
@@ -4544,7 +4544,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			If (Abs(Self.totalVelocity) < 474) Then
 				If (Self.totalVelocity = 0) Then
 					calDivideVelocity()
+					
 					Self.velY += getGravity()
+					
 					calTotalVelocity()
 				EndIf
 				
