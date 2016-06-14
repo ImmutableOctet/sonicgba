@@ -443,7 +443,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const ANI_WIND_JUMP:Int = 29
 		Const ANI_YELL:Int = 30
 		
-		Global ATTACK_POP_POWER:Int = (GRAVITY + 774) ' Const
+		Global ATTACK_POP_POWER:Int = (774 + GRAVITY) ' Const
 		
 		Const BALL_HEIGHT_OFFSET:Int = 1024
 		Const BANKING_MIN_SPEED:Int = 500
@@ -537,7 +537,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Global isTerminal:Bool = False
 		
 		Global JUMP_INWATER_START_VELOCITY:Int = (-1304 - GRAVITY)
-		Global JUMP_PROTECT:Int = ((-GRAVITY) - GRAVITY) ' ((-GRAVITY) * 2)
+		Global JUMP_PROTECT:Int = (-GRAVITY - GRAVITY) ' ((-GRAVITY) * 2)
 		Global JUMP_REVERSE_POWER:Int = 32
 		Global JUMP_RUSH_SPEED_PLUS:Int = 480
 		Global JUMP_START_VELOCITY:Int = (-1208 - GRAVITY)
@@ -4266,7 +4266,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Method beWaterFall:Void()
 			Self.waterFalling = True
 			
-			Self.velY += (GRAVITY / TERMINAL_COUNT)
+			Self.velY += (GRAVITY / 10)
 		End
 		
 		Method getWaterFallState:Bool()
@@ -6501,7 +6501,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method getPressToGround:Int()
-			Return (GRAVITY / 2)
+			Return (GRAVITY * 2)
 		End
 		
 		Method didAfterEveryMove:Void(x:Int, y:Int)

@@ -208,22 +208,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>44</X>
-        <Y>239</Y>
+        <X>45</X>
+        <Y>255</Y>
       </CursorPos>
-      <DocGUID>1071a299-92ac-4048-84db-7149847b8ff2</DocGUID>
-      <Bookmarks>
-        <Point>
-          <X>0</X>
-          <Y>5</Y>
-        </Point>
-        <Point>
-          <X>0</X>
-          <Y>778</Y>
-        </Point>
-      </Bookmarks>
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfimage.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1060,13 +1050,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\collisionblock.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\collisionblock.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>213</Y>
+        <X>24</X>
+        <Y>432</Y>
       </CursorPos>
-      <DocGUID>f5bd06e7-33aa-4988-89aa-5a3e06560981</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\collisionmap.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1631,12 +1620,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>408</Y>
+        <X>20</X>
+        <Y>6503</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>3278944e-e055-4c42-84f7-20c71dc94dd1</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playersonic.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -2265,8 +2255,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\application.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>49</X>
-        <Y>94</Y>
+        <X>3</X>
+        <Y>99</Y>
       </CursorPos>
       <DocGUID>573df5ef-d48f-46ff-ab61-8c9f8a570862</DocGUID>
       <Bookmarks>
