@@ -218,7 +218,11 @@ Class CollisionBlock Extends ACBlock ' Implements SonicDef
 				Return re
 			EndIf
 			
-			If (Self.FLIP_X Or Self.FLIP_Y) Then
+			If (Self.FLIP_X) Then
+				re = -re
+			EndIf
+			
+			If (Self.FLIP_Y) Then
 				re = -re
 			EndIf
 			
