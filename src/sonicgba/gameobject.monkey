@@ -994,6 +994,9 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			GRAVITY = newParam[10] ' SEARCH_RANGE
 		End
 		
+		' This handles the room placement and camera-related behavior of objects near 'currentObject'.
+		' This is normally how objects move between "rooms"; the segments of the
+		' level that are used to cull irrelevant (Far away) objects.
 		Function checkObjWhileMoving:Void(currentObject:GameObject)
 			Local centerX:Int = ((MapManager.getCamera().x + (MapManager.CAMERA_WIDTH / 2)) / ROOM_WIDTH)
 			Local centerY:Int = ((MapManager.getCamera().y + (MapManager.CAMERA_HEIGHT / 2)) / ROOM_HEIGHT)
@@ -1018,26 +1021,27 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				preCenterX = centerX
 				preCenterY = centerY
 			ElseIf (preCenterX <> centerX Or preCenterY <> centerY) Then
-				Local xOffset:= (centerX - preCenterX)
-				Local yOffset:= (centerY - preCenterY)
+				Local xDelta:= (centerX - preCenterX)
+				Local yDelta:= (centerY - preCenterY)
 				
-				If (xOffset <> 0) Then
-					updateObjectRoomsX((centerX + PickValue((xOffset > 0), -2, 2)), centerY, -2, 2)
+				If (xDelta <> 0) Then
+					updateObjectRoomsX((centerX + PickValue((xDelta > 0), -2, 2)), centerY, -2, 2)
 					
-					updateObjectRoomsX((centerX + PickValue((xOffset > 0), 1, -1)), centerY, -1, 1)
+					updateObjectRoomsX((centerX + PickValue((xDelta > 0), 1, -1)), centerY, -1, 1)
 				EndIf
 	
-				If (yOffset <> 0) Then
-					updateObjectRoomsY((centerY + PickValue((yOffset > 0), -2, 2)), centerX, -2, 2)
+				If (yDelta <> 0) Then
+					updateObjectRoomsY((centerY + PickValue((yDelta > 0), -2, 2)), centerX, -2, 2)
 					
-					updateObjectRoomsY((centerY + PickValue((yOffset > 0), 1, -1)), centerX, -1, 1)
+					updateObjectRoomsY((centerY + PickValue((yDelta > 0), 1, -1)), centerX, -1, 1)
 				EndIf
 				
 				preCenterX = centerX
 				preCenterY = centerY
 			EndIf
 		End
-		
+	Private
+		' Extensions:
 		Function updateObjectRoomsX:Void(x:Int, centerY:Int, y_min:Int, y_max:Int)
 			If (x >= 0 And x < objVecWidth) Then
 				For Local y:= (centerY + y_min) To (centerY + y_max)
@@ -1090,78 +1094,12 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		Function checkPositionToRoomY:Int(obj:GameObject)
 			Return ((obj.getCheckPositionY() Shr 6) / ROOM_HEIGHT)
 		End
-	Private
-		' Extensions:
-		
-		' This updates which objects are in what segment of the map.
-		Function realignObjects:Void(arrangement:Bool, position:Int, posOffset:Int, seekOffset:Int, bounds:Int, seekBounds:Int, Low:Int=-2, High:Int=2, offsetOnAccess:Bool=True)
-			If (position = 0) Then
-				Return
-			EndIf
-			
-			If (position > 0) Then
-				position = Low
-			Else
-				position = High
-			EndIf
-			
-			position += posOffset
-			
-			If (position >= 0 And position < bounds) Then
-				For Local opOffset:= -2 To 2 ' Low To High
-					Local opPos:= (seekOffset + opOffset)
-					
-					If ((opPos >= 0 And opPos < seekBounds)) Then
-						Local current:Stack<GameObject>
-						
-						Local accessOffset:Int
-						
-						If (offsetOnAccess) Then
-							accessOffset = seekOffset
-						Else
-							accessOffset = 0
-						EndIf
-						
-						If (Not arrangement) Then
-							current = allGameObject[position][accessOffset + opOffset]
-						Else
-							current = allGameObject[accessOffset + opOffset][position]
-						EndIf
-						
-						If (current <> Null) Then
-							For Local I:= 0 Until current.Length
-								Local obj:= current.Get(I)
-								
-								Local objBlockX:= ((obj.getCheckPositionX() Shr 6) / ROOM_WIDTH)
-								Local objBlockY:= ((obj.getCheckPositionY() Shr 6) / ROOM_HEIGHT) ' ROOM_WIDTH
-								
-								Local blockCheck:Bool
-								
-								If (Not arrangement) Then
-									blockCheck = (Not (objBlockX = position And objBlockY = (seekOffset + opOffset)))
-								Else
-									blockCheck = (Not (objBlockX = (seekOffset + opOffset) And objBlockY = position))
-								EndIf
-								
-								If (blockCheck And objBlockX >= 0 And objBlockX < objVecWidth And objBlockX >= 0 And objBlockX < objVecHeight) Then
-									current.Remove(I)
-									
-									I -= 1
-									
-									allGameObject[objBlockX][objBlockY].Push(obj)
-								EndIf
-							Next
-						EndIf
-					EndIf
-				Next
-			EndIf
-		End
 		
 		Function initGetAvailableObject:Void(currentObject:GameObject)
 			objectCursor = 0
 			
-			Local centerX:= ((currentObject.getCheckPositionX() Shr 6) / ROOM_WIDTH)
-			Local centerY:= ((currentObject.getCheckPositionY() Shr 6) / ROOM_HEIGHT) ' ROOM_WIDTH
+			Local centerX:= checkPositionToRoomX(currentObject)
+			Local centerY:= checkPositionToRoomY(currentObject)
 			
 			If (centerX < 0 Or centerX >= objVecWidth Or centerY < 0 Or centerY >= objVecHeight) Then
 				Return
@@ -1197,8 +1135,16 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				preCenterX = centerX
 				preCenterY = centerY
 			ElseIf (Not (preCenterX = centerX And preCenterY = centerY)) Then
-				realignObjects(False, (centerX - preCenterX), centerX, centerY, objVecWidth, objVecHeight, -2, 2)
-				realignObjects(True, (centerY - preCenterY), centerY, centerX, objVecHeight, objVecWidth, -2, 2)
+				Local xDelta:= (centerX - preCenterX)
+				Local yDelta:= (centerY - preCenterY)
+				
+				If (xDelta <> 0) Then
+					updateObjectRoomsX((centerX + PickValue((xDelta > 0), -2, 2)), centerY, -2, 2)
+				EndIf
+	
+				If (yDelta <> 0) Then
+					updateObjectRoomsY((centerY + PickValue((yDelta > 0), -2, 2)), centerX, -2, 2)
+				EndIf
 				
 				preCenterX = centerX
 				preCenterY = centerY
