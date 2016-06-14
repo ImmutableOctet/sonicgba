@@ -1062,8 +1062,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\collisionblock.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>12</X>
-        <Y>225</Y>
+        <X>9</X>
+        <Y>213</Y>
       </CursorPos>
       <DocGUID>f5bd06e7-33aa-4988-89aa-5a3e06560981</DocGUID>
       <Bookmarks />
