@@ -3291,7 +3291,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				If (Self.isAntiGravity) Then
 					velY = Max(velY, -JUMP_PROTECT)
 				Else
-					Self.velY = Min(Self.velY, JUMP_PROTECT)
+					velY = Min(velY, JUMP_PROTECT)
 				EndIf
 			EndIf
 			
@@ -3337,9 +3337,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Method doJumpV:Void(vel:Int)
 			Self.collisionState = COLLISION_STATE_JUMP
+			
+			' Magic number: 1
 			Self.worldCal.actionState = 1
 			
-			setVelY(vel)
+			setVelY(vel) ' Self.velY = vel
 			
 			Self.animationID = ANI_JUMP
 			

@@ -506,7 +506,7 @@
     <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>3</X>
-        <Y>79</Y>
+        <Y>72</Y>
       </CursorPos>
       <DocGUID>3d91f39d-9ed5-4956-ba8d-97c12b7236d1</DocGUID>
       <Bookmarks>
@@ -1262,7 +1262,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>31</X>
+        <X>27</X>
         <Y>219</Y>
       </CursorPos>
       <DocGUID>79793a17-8378-46b4-bc51-8f6113d0ba40</DocGUID>
@@ -1622,8 +1622,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>4</X>
-        <Y>3275</Y>
+        <X>3</X>
+        <Y>3356</Y>
       </CursorPos>
       <DocGUID>3278944e-e055-4c42-84f7-20c71dc94dd1</DocGUID>
       <Bookmarks />
@@ -2209,8 +2209,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\gamestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>33</X>
-        <Y>372</Y>
+        <X>0</X>
+        <Y>0</Y>
       </CursorPos>
       <DocGUID>4aebfe8b-7435-413b-bc92-9a5808479570</DocGUID>
       <Bookmarks>
@@ -2233,8 +2233,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\state.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
-        <Y>1746</Y>
+        <X>26</X>
+        <Y>431</Y>
       </CursorPos>
       <DocGUID>0cb90773-c9cd-459e-ae81-374e4b83d05d</DocGUID>
       <Bookmarks />
@@ -2255,7 +2255,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\application.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>19</X>
+        <X>18</X>
         <Y>94</Y>
       </CursorPos>
       <DocGUID>573df5ef-d48f-46ff-ab61-8c9f8a570862</DocGUID>
