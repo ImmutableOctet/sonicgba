@@ -44,7 +44,9 @@ Class Hari Extends GimmickObject
 	Protected
 		' Constructor(s):
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
-			Super.New(id, x, y, left, top, width, height)
+			Super.New(GIMMICK_HARI_LEFT, x, y, left, top, width, height) ' id
+			
+			id = GIMMICK_HARI_LEFT
 			
 			Self.firstCollisionDirection = DIRECTION_NONE
 			
@@ -78,6 +80,10 @@ Class Hari Extends GimmickObject
 		
 		' Methods:
 		Method draw:Void(g:MFGraphics)
+			If ((hariId = 2)) Then
+				DebugStop()
+			EndIf
+			
 			drawInMap(g, Self.drawer, Self.posX, Self.posY)
 			
 			drawCollisionRect(g)
@@ -117,6 +123,8 @@ Class Hari Extends GimmickObject
 				p.beAttackByHari = True
 			EndIf
 			
+			Print("direction: " + direction + ", at: " + Self.hariId)
+			
 			' This behavior may change in the future:
 			If (p = player And p.canBeHurt()) Then
 				' Apply different effects based on our configuration:
@@ -143,7 +151,7 @@ Class Hari Extends GimmickObject
 						EndIf
 					Case GIMMICK_HARI_LEFT
 						If (direction = DIRECTION_RIGHT) Then
-							If (p.velX > 0 Or p.getAnimationId() = 0) Then
+							If (p.velX > 0 Or p.getAnimationId() = PlayerObject.ANI_STAND) Then
 								If (p.getRingNum() > 0) Then
 									playSound()
 								EndIf
@@ -155,7 +163,7 @@ Class Hari Extends GimmickObject
 						EndIf
 					Case GIMMICK_HARI_RIGHT
 						If (direction = DIRECTION_LEFT) Then
-							If (p.velX < 0 Or p.getAnimationId() = 0) Then
+							If (p.velX < 0 Or p.getAnimationId() = PlayerObject.ANI_STAND) Then
 								If (p.getRingNum() > 0) Then
 									playSound()
 								EndIf

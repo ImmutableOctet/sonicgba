@@ -723,10 +723,6 @@ Class MFGraphics
 				EndIf
 			#End
 			
-			If (Self.transX <> 0 Or Self.transY <> 0) Then
-				Print("Self.trans: " + Self.transX + ", " + Self.transY)
-			EndIf
-			
 			x_dest += Self.transX
 			y_dest += Self.transY
 			
@@ -766,7 +762,8 @@ Class MFGraphics
 					drawWidth = height
 					drawHeight = width
 					
-					yOffset = (drawHeight)
+					xOffset = (drawWidth)
+					'yOffset = (drawHeight)
 				
 				Case TRANS_MIRROR_ROT90
 					drawWidth = height
@@ -815,7 +812,7 @@ Class MFGraphics
 				Case TRANS_ROT90
 					Self.context.Rotate(90.0)
 				Case TRANS_ROT270
-					Self.context.Rotate(270.0)
+					Self.context.Rotate(-270.0)
 				Case TRANS_MIRROR_ROT90
 					Self.context.Rotate(-90.0)
 					Self.context.Scale(-1.0, 1.0)
