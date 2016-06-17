@@ -159,7 +159,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\android\graphicsmacros.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>17</X>
+        <X>7</X>
         <Y>21</Y>
       </CursorPos>
       <DocGUID>60c63fde-6945-4c82-9689-9d234c36b7c6</DocGUID>
@@ -210,8 +210,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>4</X>
-        <Y>759</Y>
+        <X>5</X>
+        <Y>753</Y>
       </CursorPos>
       <DocGUID>f66e1023-9c77-4e35-9c93-3eac4d10a6eb</DocGUID>
       <Bookmarks>
@@ -221,7 +221,7 @@
         </Point>
         <Point>
           <X>0</X>
-          <Y>771</Y>
+          <Y>767</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
@@ -1313,8 +1313,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\hari.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>4</X>
-        <Y>119</Y>
+        <X>3</X>
+        <Y>47</Y>
       </CursorPos>
       <DocGUID>32a659dd-82b0-4093-b2b9-38539f9061d7</DocGUID>
       <Bookmarks />
