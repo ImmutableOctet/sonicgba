@@ -49,7 +49,7 @@ Class Accelerate Extends GimmickObject
 					accelerate2Animation = New Animation("/animation/accelerate2")
 				EndIf
 				
-				Self.drawer = accelerate2Animation.getDrawer(0, True, PickValue(Self.transMirror, 2, 0))
+				Self.drawer = accelerate2Animation.getDrawer(0, True, PickValue(Self.transMirror, TRANS_MIRROR, TRANS_NONE))
 				
 				' Magic number: 512
 				Self.posY += 512 ' (8 Shl 6)
@@ -58,13 +58,13 @@ Class Accelerate Extends GimmickObject
 					accelerateAnimation = New Animation("/animation/accelerate")
 				EndIf
 				
-				Self.drawer = accelerateAnimation.getDrawer(0, True, PickValue(Self.transMirror, 7, 6))
+				Self.drawer = accelerateAnimation.getDrawer(0, True, PickValue(Self.transMirror, TRANS_MIRROR_ROT90, TRANS_ROT270))
 			Else
 				If (accelerateAnimation = Null) Then
 					accelerateAnimation = New Animation("/animation/accelerate")
 				EndIf
 				
-				Self.drawer = accelerateAnimation.getDrawer((Self.objId - GIMMICK_ACCELERATOR_FORWARD), True, PickValue(Self.transMirror, 2, 0))
+				Self.drawer = accelerateAnimation.getDrawer((Self.objId - GIMMICK_ACCELERATOR_FORWARD), True, PickValue(Self.transMirror, TRANS_MIRROR, TRANS_NONE))
 			EndIf
 		End
 	Public
@@ -89,18 +89,10 @@ Class Accelerate Extends GimmickObject
 				Return
 			EndIf
 			
-			If (Self.objId <> GIMMICK_DASH_PANEL_TATE) Then
-				If (p.beAccelerate(DSgn(Not Self.transMirror) * ACCELERATE_POWER, True, Self)) Then
-					Self.touching = True
-					
-					soundInstance.playSe(SoundSystem.SE_172)
-				EndIf
-			Else
-				If (p.beAccelerate(DSgn(Not Self.transMirror) * ACCELERATE_POWER, False, Self)) Then
-					Self.touching = True
-					
-					soundInstance.playSe(SoundSystem.SE_172)
-				EndIf
+			If (p.beAccelerate(DSgn(Not Self.transMirror) * ACCELERATE_POWER, (Self.objId <> GIMMICK_DASH_PANEL_TATE), Self)) Then
+				Self.touching = True
+				
+				soundInstance.playSe(SoundSystem.SE_172)
 			EndIf
 		End
 		
