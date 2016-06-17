@@ -210,8 +210,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>21</X>
-        <Y>760</Y>
+        <X>4</X>
+        <Y>759</Y>
       </CursorPos>
       <DocGUID>f66e1023-9c77-4e35-9c93-3eac4d10a6eb</DocGUID>
       <Bookmarks>
@@ -221,7 +221,7 @@
         </Point>
         <Point>
           <X>0</X>
-          <Y>775</Y>
+          <Y>771</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
@@ -425,8 +425,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationframe.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>430</Y>
+        <X>5</X>
+        <Y>440</Y>
       </CursorPos>
       <DocGUID>d6bc4719-3686-4ba2-8fb6-5ca8a80e7a91</DocGUID>
       <Bookmarks />
@@ -1291,7 +1291,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>25</X>
+        <X>9</X>
         <Y>192</Y>
       </CursorPos>
       <DocGUID>0a6dacfa-3825-4bfb-a7d6-3ad2bb3f543b</DocGUID>
@@ -1313,8 +1313,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\hari.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>25</X>
-        <Y>48</Y>
+        <X>4</X>
+        <Y>119</Y>
       </CursorPos>
       <DocGUID>32a659dd-82b0-4093-b2b9-38539f9061d7</DocGUID>
       <Bookmarks />

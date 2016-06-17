@@ -759,11 +759,7 @@ Class MFGraphics
 					xOffset = (drawWidth)
 				
 				Case TRANS_ROT270
-					drawWidth = height
-					drawHeight = width
-					
 					xOffset = (drawWidth)
-					'yOffset = (drawHeight)
 				
 				Case TRANS_MIRROR_ROT90
 					drawWidth = height

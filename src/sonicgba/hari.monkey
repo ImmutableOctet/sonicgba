@@ -44,9 +44,7 @@ Class Hari Extends GimmickObject
 	Protected
 		' Constructor(s):
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
-			Super.New(GIMMICK_HARI_LEFT, x, y, left, top, width, height) ' id
-			
-			id = GIMMICK_HARI_LEFT
+			Super.New(id, x, y, left, top, width, height)
 			
 			Self.firstCollisionDirection = DIRECTION_NONE
 			
@@ -80,10 +78,6 @@ Class Hari Extends GimmickObject
 		
 		' Methods:
 		Method draw:Void(g:MFGraphics)
-			If ((hariId = 2)) Then
-				DebugStop()
-			EndIf
-			
 			drawInMap(g, Self.drawer, Self.posX, Self.posY)
 			
 			drawCollisionRect(g)
@@ -123,7 +117,7 @@ Class Hari Extends GimmickObject
 				p.beAttackByHari = True
 			EndIf
 			
-			Print("direction: " + direction + ", at: " + Self.hariId)
+			'Print("direction: " + direction + ", at: " + Self.hariId)
 			
 			' This behavior may change in the future:
 			If (p = player And p.canBeHurt()) Then
