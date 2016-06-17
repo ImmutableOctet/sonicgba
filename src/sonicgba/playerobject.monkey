@@ -2961,7 +2961,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				extraLogicJump()
 			EndIf
 			
-			If (Self.velY >= (-BODY_OFFSET - getGravity())) Then
+			If (Self.velY >= ((-BODY_OFFSET) - getGravity())) Then
 				Local velX2:= (Self.velX Shl 5)
 				Local resistance:= ((velX2 * 3) / JUMP_REVERSE_POWER)
 				
@@ -2989,6 +2989,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					newPointX = Self.velY
 					
 					Self.velY = newPointX + ((DSgn(Not Self.isAntiGravity)) * (getGravity() / 2))
+					
 					newPointX = Self.velY
 					
 					Self.velY = newPointX + ((DSgn(Not Self.isAntiGravity)) * (getGravity() / 4))
@@ -2997,13 +2998,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			newPointX = Self.velY
 			
-			If (Self.isAntiGravity) Then
-				i = -1
-			Else
-				i = 1
-			EndIf
-			
-			Self.velY = newPointX + (i * getGravity())
+			Self.velY = newPointX + (DSgn(Not Self.isAntiGravity) * getGravity())
 			
 			If (Self.animationID <> ANI_POP_JUMP_UP) Then
 				Return
@@ -4196,6 +4191,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			If (Self.spinCount > 0) Then
 				Self.spinCount -= 1
+				
 				Self.effectID = 1
 			Else
 				Self.effectID = 0
@@ -4259,12 +4255,15 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Self.isAfterSpinDash = True
 			EndIf
 			
-			' This behavior may change in the future:
-			If (Self.collisionState = COLLISION_STATE_WALK Or Self.collisionState = COLLISION_STATE_IN_SAND) Then
-				Self.velY = 100
-			EndIf
-			
-			Self.velY += (DSgn(Not Self.isAntiGravity) * getGravity())
+			Select (Self.collisionState)
+				Case COLLISION_STATE_IN_SAND
+					' Magic number: 100
+					Self.velY = 100
+				Case COLLISION_STATE_WALK
+					' Nothing so far.
+				Default
+					Self.velY += (DSgn(Not Self.isAntiGravity) * getGravity())
+			End Select
 		End
 		
 		Method beWaterFall:Void()

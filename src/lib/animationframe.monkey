@@ -274,7 +274,7 @@ Class Frame
 			Self.frameWidth = Abs(xRight - xLeft)
 			
 			If (m_Ani.isDoubleScale) Then
-				Self.frameWidth = Short(Self.frameWidth Shl 1)
+				Self.frameWidth = Short(Self.frameWidth Shl 1) ' * 2
 			EndIf
 			
 			Return Self.frameWidth
@@ -308,7 +308,7 @@ Class Frame
 			Self.frameHeight = Abs(yBottom - yTop)
 			
 			If (m_Ani.isDoubleScale) Then
-				Self.frameHeight = (Self.frameHeight Shl 1)
+				Self.frameHeight = (Self.frameHeight Shl 1) ' * 2
 			EndIf
 			
 			Return Self.frameHeight
