@@ -78,7 +78,14 @@ Class BulletObject Extends MoveObject Abstract
 		Global boss6bulletAnimation:Animation
 		Global bossf3bombAnimation:Animation
 		
+		' This represents the last "double-gravity flash-bullet animation".
+		' Basically, this will reference an animation
+		' object of type A or B, as described below:
 		Global doublegravityflashbulletAnimation:Animation
+		
+		Global doublegravityflashbulletAnimationA:Animation
+		Global doublegravityflashbulletAnimationB:Animation
+		
 		Global laserAnimation:Animation
 		Global lizardbulletAnimation:Animation
 		Global mirabulletAnimation:Animation
@@ -192,7 +199,6 @@ Class BulletObject Extends MoveObject Abstract
 		Function bulletClose:Void()
 			beebulletAnimation = Null
 			monkeybulletAnimation = Null
-			doublegravityflashbulletAnimation = Null
 			lizardbulletAnimation = Null
 			batbulletAnimation = Null
 			missileAnimation = Null
@@ -205,6 +211,10 @@ Class BulletObject Extends MoveObject Abstract
 			stoneAnimation = Null
 			laserAnimation = Null
 			pacmanAnimation = Null
+			
+			doublegravityflashbulletAnimation = Null
+			doublegravityflashbulletAnimationA = Null
+			doublegravityflashbulletAnimationB = Null
 			
 			For Local bullet:= EachIn bulletVec
 				bullet.close()

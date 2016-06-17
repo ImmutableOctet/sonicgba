@@ -31,14 +31,24 @@ Class DoubleGravityFlashBullet Extends BulletObject
 					Self.COLLISION_WIDTH = 256
 					Self.COLLISION_HEIGHT = 256
 					
-					doublegravityflashbulletAnimation = Null
-					doublegravityflashbulletAnimation = New Animation("/animation/dgfa_bullet")
+					If (doublegravityflashbulletAnimationA = Null) Then
+						doublegravityflashbulletAnimation = New Animation("/animation/dgfa_bullet")
+						
+						doublegravityflashbulletAnimationA = doublegravityflashbulletAnimation
+					Else
+						doublegravityflashbulletAnimation = doublegravityflashbulletAnimationA
+					EndIf
 				Case BULLET_NATURE
 					Self.COLLISION_WIDTH = 360
 					Self.COLLISION_HEIGHT = 360
 					
-					doublegravityflashbulletAnimation = Null
-					doublegravityflashbulletAnimation = New Animation("/animation/dgfn_bullet")
+					If (doublegravityflashbulletAnimationB = Null) Then
+						doublegravityflashbulletAnimation = New Animation("/animation/dgfn_bullet")
+						
+						doublegravityflashbulletAnimationB = doublegravityflashbulletAnimation
+					Else
+						doublegravityflashbulletAnimation = doublegravityflashbulletAnimationB
+					EndIf
 				Default
 					Self.COLLISION_WIDTH = 256
 					Self.COLLISION_HEIGHT = 256

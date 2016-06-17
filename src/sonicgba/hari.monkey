@@ -117,8 +117,6 @@ Class Hari Extends GimmickObject
 				p.beAttackByHari = True
 			EndIf
 			
-			'Print("direction: " + direction + ", at: " + Self.hariId)
-			
 			' This behavior may change in the future:
 			If (p = player And p.canBeHurt()) Then
 				' Apply different effects based on our configuration:

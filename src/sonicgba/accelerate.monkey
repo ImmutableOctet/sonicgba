@@ -22,7 +22,7 @@ Public
 Class Accelerate Extends GimmickObject
 	Private
 		' Constant variable(s):
-		Const ACCELERATE_POWER:Int = 3072
+		Const ACCELERATE_POWER:Int = 3072 ' (COLLISION_WIDTH * 2)
 		
 		Const COLLISION_WIDTH:Int = 1536
 		Const COLLISION_HEIGHT:Int = 640
@@ -52,7 +52,7 @@ Class Accelerate Extends GimmickObject
 				Self.drawer = accelerate2Animation.getDrawer(0, True, PickValue(Self.transMirror, 2, 0))
 				
 				' Magic number: 512
-				Self.posY += 512
+				Self.posY += 512 ' (8 Shl 6)
 			ElseIf (Self.objId = GIMMICK_DASH_PANEL_TATE) Then
 				If (accelerateAnimation = Null) Then
 					accelerateAnimation = New Animation("/animation/accelerate")
