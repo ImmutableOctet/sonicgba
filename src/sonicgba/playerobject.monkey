@@ -4349,12 +4349,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Method beAccelerate:Bool(power:Int, IsX:Bool, sender:GameObject)
 			If (Self.collisionState = COLLISION_STATE_WALK) Then
 				Self.totalVelocity = power
+				
 				Self.faceDirection = (Self.totalVelocity > 0)
 				
 				Return True
-			ElseIf (Self.collisionState <> COLLISION_STATE_ON_OBJECT Or (Accelerate(sender) <> Null)) Then
-				Return False
-			Else
+			' Optimization potential; dynamic cast.
+			ElseIf (Self.collisionState = COLLISION_STATE_ON_OBJECT And (Accelerate(sender) = Null)) Then
 				If (IsX) Then
 					Self.velX = power
 				Else
@@ -4363,6 +4363,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				Return True
 			EndIf
+			
+			Return False
 		End
 		
 		Method isOnGound:Bool() ' Property
