@@ -818,7 +818,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Return characterID
 		End
 	
-		Function getPlayer:PlayerObject()
+		Function getPlayer:PlayerObject(characterID:Int)
 			Local re:PlayerObject = Null
 			
 			Select (characterID)
@@ -840,10 +840,16 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					re = New PlayerSonic()
 			End Select
 			
+			Return re
+		End
+		
+		Function getPlayer:PlayerObject()
+			Local p:= getPlayer(characterID)
+			
 			terminalState = TER_STATE_RUN
 			terminalType = TERMINAL_RUN_TO_RIGHT ' 0
 			
-			Return re
+			return p
 		End
 		
 		' Methods (Implemented):
