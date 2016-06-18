@@ -826,6 +826,7 @@ Class PlayerKnuckles Extends PlayerObject
 				EndIf
 				
 				Self.velY -= getGravity()
+				
 				Self.flySpeed = FLY_MIN_SPEED
 				
 				' Magic number: 512

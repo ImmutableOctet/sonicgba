@@ -373,9 +373,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				MapManager.cameraLogic() ' <-- Used for automated sections and grinding.
 			EndIf
 			
-			' Handle collision and other related behavior for 'player'.
-			' This may still work if done before the camera-logic, but
-			' for the sake of safety, I'm not going to change it.
+			' Update the semantics of the objects around 'player'.
 			checkObjWhileMoving(player)
 			
 			' Update our objects:

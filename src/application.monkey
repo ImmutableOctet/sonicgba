@@ -140,11 +140,9 @@ Class Application Extends App ' Main Extends MFMain
 		End
 		
 		Method OnUpdate:Int()
-			OnResize()
-			
 			HandleSystemKeys()
 			
-			MFDevice.Update()
+			UpdateGame()
 			
 			'RenderGame()
 			
@@ -158,6 +156,9 @@ Class Application Extends App ' Main Extends MFMain
 		End
 		
 		Method OnRender:Int()
+			OnResize()
+			
+			'UpdateGame()
 			RenderGame()
 			
 			Return 0
@@ -231,6 +232,10 @@ Class Application Extends App ' Main Extends MFMain
 			graphics.DrawText("Game Suspended", DeviceWidth() / 2, DeviceHeight() / 2, 0.5, 0.5)
 			
 			graphics.Flush()
+		End
+		
+		Method UpdateGame:Void()
+			MFDevice.Update()
 		End
 		
 		Method RenderGame:Void()
