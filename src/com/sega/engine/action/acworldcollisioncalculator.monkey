@@ -80,8 +80,10 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 		Field user_worldcal:ACWorldCalUser
 	Public
 		' Constant variable(s):
-		Const JUMP_ACTION_STATE:Byte = 1
+		
+		' Action states:
 		Const WALK_ACTION_STATE:Byte = 0
+		Const JUMP_ACTION_STATE:Byte = 1
 		
 		' Fields:
 		Field actionState:Byte
@@ -139,19 +141,20 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 	Private
 		' Methods:
 		Method calPosition:Void(collisionWidth:Int, collisionHeight:Int, footOffset:Int, bodyOffset:Int)
-			Self.footCollisionPointOffsetX = New Int[DIRECTION_OFFSET_RIGHT] ' 3
-			Self.footCollisionPointResaultX = New Int[DIRECTION_OFFSET_RIGHT] ' 3
-			Self.footCollisionPointResaultY = New Int[DIRECTION_OFFSET_RIGHT] ' 3
+			Self.footCollisionPointOffsetX = New Int[3] ' DIRECTION_OFFSET_RIGHT
+			Self.footCollisionPointResaultX = New Int[3]
+			Self.footCollisionPointResaultY = New Int[3]
 			
-			Self.footCollisionPointOffsetX[DIRECTION_OFFSET_DOWN] = -((collisionWidth - (footOffset * 2)) Shr 1)
-			Self.footCollisionPointOffsetX[DIRECTION_OFFSET_RIGHT - DIRECTION_OFFSET_LEFT] = (collisionWidth - (footOffset * 2)) Shr 1
+			Self.footCollisionPointOffsetX[DIRECTION_OFFSET_DOWN] = -((collisionWidth - (footOffset * 2)) / 2) ' Shr 1
+			Self.footCollisionPointOffsetX[DIRECTION_OFFSET_RIGHT - DIRECTION_OFFSET_LEFT] = (collisionWidth - (footOffset * 2)) / 2 ' 3 - 1 ' Shr 1
+			
 			Self.priorityChkId = DIRECTION_OFFSET_LEFT ' 1
 			
-			If (DIRECTION_OFFSET_RIGHT > DIRECTION_OFFSET_UP) Then
+			If (DIRECTION_OFFSET_RIGHT > DIRECTION_OFFSET_UP) Then ' True
 				Local x:= ((collisionWidth - footOffset * 2) / (DIRECTION_OFFSET_RIGHT - DIRECTION_OFFSET_LEFT))
 				
 				For Local i:= DIRECTION_OFFSET_LEFT Until (DIRECTION_OFFSET_RIGHT - DIRECTION_OFFSET_LEFT)
-					Self.footCollisionPointOffsetX[i] = (x + Self.footCollisionPointOffsetX[i - DIRECTION_OFFSET_LEFT])
+					Self.footCollisionPointOffsetX[i] = (x + Self.footCollisionPointOffsetX[i - DIRECTION_OFFSET_LEFT]) ' 1
 				Next
 			EndIf
 			
@@ -160,19 +163,20 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 			Self.headCollisionPointOffsetX = Self.footCollisionPointOffsetX
 			Self.headCollisionPointOffsetY = -collisionHeight
 			
-			Self.bodyCollisionPointOffsetX = (collisionWidth Shr 1)
+			Self.bodyCollisionPointOffsetX = (collisionWidth / 2) ' Shr 1
 			
 			Local len:= (DIRECTION_OFFSET_UP + (collisionHeight - bodyOffset * DIRECTION_OFFSET_UP - DIRECTION_OFFSET_LEFT) / Self.worldInstance.getTileHeight())
 			
+			' Optimization potential; dynamic allocation.
 			Self.bodyCollisionPointOffsetY = New Int[len]
-			Self.bodyCollisionPointOffsetY[DIRECTION_OFFSET_DOWN] = -bodyOffset
-			Self.bodyCollisionPointOffsetY[len - 1] = bodyOffset + -collisionHeight
+			Self.bodyCollisionPointOffsetY[0] = -bodyOffset ' DIRECTION_OFFSET_DOWN
+			Self.bodyCollisionPointOffsetY[len - 1] = bodyOffset + -collisionHeight ' - DIRECTION_OFFSET_LEFT
 			
 			If (len > DIRECTION_OFFSET_UP) Then
 				Local y:= (collisionHeight - bodyOffset * 2) / (len - DIRECTION_OFFSET_LEFT)
 				
-				For Local i:= DIRECTION_OFFSET_LEFT Until (len - DIRECTION_OFFSET_LEFT)
-					Self.bodyCollisionPointOffsetY[i] = (Self.bodyCollisionPointOffsetY[i - DIRECTION_OFFSET_LEFT] - y)
+				For Local i:= 1 Until (len - 1) ' DIRECTION_OFFSET_LEFT
+					Self.bodyCollisionPointOffsetY[i] = (Self.bodyCollisionPointOffsetY[i - 1] - y) ' DIRECTION_OFFSET_LEFT
 				Next
 			EndIf
 		End
@@ -203,7 +207,13 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 		End
 
 		Method actionLogic:Void(moveDistanceX:Int, moveDistanceY:Int, totalVelocity:Int)
-			changeSize(Self.acObj.getObjWidth(), Self.acObj.getObjHeight(), Self.user_worldcal.getFootOffset(), Self.user_worldcal.getBodyOffset())
+			Local width:= Self.acObj.getObjWidth()
+			Local height:= Self.acObj.getObjHeight()
+			
+			Local footOffset:= Self.user_worldcal.getFootOffset()
+			Local bodyOffset:= Self.user_worldcal.getBodyOffset()
+			
+			changeSize(width, height, footOffset, bodyOffset)
 			
 			Self.footX = Self.user_worldcal.getFootX()
 			Self.footY = Self.user_worldcal.getFootY()
@@ -212,7 +222,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 			Self.moveDistanceY = moveDistanceY
 			
 			Select (Self.actionState)
-				Case DIRECTION_OFFSET_DOWN
+				Case WALK_ACTION_STATE
 					Self.totalDistance = totalVelocity
 			End Select
 			
@@ -292,40 +302,40 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 			If (Self.moveDistanceX = 0 And Self.moveDistanceY = 0 And Not Self.isMoved) Then
 				findTheFootPoint()
 				
-				Self.user_worldcal.didAfterEveryMove(DIRECTION_OFFSET_DOWN, DIRECTION_OFFSET_DOWN)
+				Self.user_worldcal.didAfterEveryMove(0, 0)
 			EndIf
 			
 			Repeat
-				If (Self.moveDistanceX <> 0 Or Self.moveDistanceY <> 0 Or Self.isMoved) Then
-					Self.footX = Self.user_worldcal.getFootX()
-					Self.footY = Self.user_worldcal.getFootY()
-					
-					Self.footOffsetX = Self.footX - Self.acObj.posX
-					Self.footOffsetY = Self.footY - Self.acObj.posY
-					
-					findTheFootPoint()
-					
-					Local preFootX:= Self.footX
-					Local preFootY:= Self.footY
-					
-					Select (Self.actionState)
-						Case WALK_ACTION_STATE
-							checkInGround()
-							
-							'Print("Ground collision.")
-						Case JUMP_ACTION_STATE
-							checkInSky()
-							
-							'Print("Sky collision.")
-					End Select
-					
-					Self.acObj.posX = Self.footX - Self.footOffsetX
-					Self.acObj.posY = Self.footY - Self.footOffsetY
-					
-					Self.user_worldcal.didAfterEveryMove(Self.footX - preFootX, Self.footY - preFootY)
-				Else
+				If (Self.moveDistanceX = 0 And Self.moveDistanceY = 0 And Not Self.isMoved) Then
 					Exit
 				EndIf
+				
+				Self.footX = Self.user_worldcal.getFootX()
+				Self.footY = Self.user_worldcal.getFootY()
+				
+				Self.footOffsetX = Self.footX - Self.acObj.posX
+				Self.footOffsetY = Self.footY - Self.acObj.posY
+				
+				findTheFootPoint()
+				
+				Local preFootX:= Self.footX
+				Local preFootY:= Self.footY
+				
+				Select (Self.actionState)
+					Case WALK_ACTION_STATE
+						checkInGround()
+						
+						'Print("Ground collision.")
+					Case JUMP_ACTION_STATE
+						checkInSky()
+						
+						'Print("Sky collision.")
+				End Select
+				
+				Self.acObj.posX = Self.footX - Self.footOffsetX
+				Self.acObj.posY = Self.footY - Self.footOffsetY
+				
+				Self.user_worldcal.didAfterEveryMove(Self.footX - preFootX, Self.footY - preFootY)
 			Until (Not Self.isMoved)
 		End
 		
@@ -820,9 +830,9 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				
 				Self.calChkOffset(Self.chkPointX, Self.chkPointY, Self.chkPointId, Self.chkPointDegree)
 			Else
-				Local var1:= Self.getDirectionByDegree(Self.footDegree)
+				Local direction:= Self.getDirectionByDegree(Self.footDegree)
 				
-				Select (var1)
+				Select (direction)
 					Case ACParam.DIRECTION_UP, ACParam.DIRECTION_DOWN
 						Local var10:= Self.footDegree
 						Local var11:= ACParam.NO_COLLISION
@@ -830,9 +840,9 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 						
 						For Local var13:= 0 Until Self.footCollisionPointOffsetX.Length
 							Self.footCollisionPointResaultX[var13] = ACUtilities.getRelativePointX(Self.footX, Self.footCollisionPointOffsetX[var13], Self.footCollisionPointOffsetY, var10)
-							Self.footCollisionPointResaultY[var13] = Self.getWorldY(Self.footCollisionPointResaultX[var13], ACUtilities.getRelativePointY(Self.footY, Self.footCollisionPointOffsetX[var13], Self.footCollisionPointOffsetY + Self.user_worldcal.getPressToGround(), var10), var1)
+							Self.footCollisionPointResaultY[var13] = Self.getWorldY(Self.footCollisionPointResaultX[var13], ACUtilities.getRelativePointY(Self.footY, Self.footCollisionPointOffsetX[var13], Self.footCollisionPointOffsetY + Self.user_worldcal.getPressToGround(), var10), direction)
 							
-							If (Self.footCollisionPointResaultY[var13] <> ACParam.NO_COLLISION And (var11 = ACParam.NO_COLLISION Or var1 = ACParam.DIRECTION_UP And Self.footCollisionPointResaultY[var13] < var11 Or var1 = ACParam.DIRECTION_DOWN And Self.footCollisionPointResaultY[var13] > var11 Or var13 = Self.priorityChkId)) Then
+							If (Self.footCollisionPointResaultY[var13] <> ACParam.NO_COLLISION And (var11 = ACParam.NO_COLLISION Or direction = ACParam.DIRECTION_UP And Self.footCollisionPointResaultY[var13] < var11 Or direction = ACParam.DIRECTION_DOWN And Self.footCollisionPointResaultY[var13] > var11 Or var13 = Self.priorityChkId)) Then
 								var12 = var13
 								var11 = Self.footCollisionPointResaultY[var13]
 								
@@ -905,9 +915,9 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 							Self.checkArrayForShowX[var5] = ACUtilities.getRelativePointX(Self.footX, Self.footCollisionPointOffsetX[var5], Self.footCollisionPointOffsetY + Self.user_worldcal.getPressToGround(), var3)
 							Self.checkArrayForShowY[var5] = Self.footCollisionPointResaultY[var5]
 							
-							Self.footCollisionPointResaultX[var5] = Self.getWorldX(ACUtilities.getRelativePointX(Self.footX, Self.footCollisionPointOffsetX[var5], Self.footCollisionPointOffsetY + Self.user_worldcal.getPressToGround(), var3), Self.footCollisionPointResaultY[var5], var1)
+							Self.footCollisionPointResaultX[var5] = Self.getWorldX(ACUtilities.getRelativePointX(Self.footX, Self.footCollisionPointOffsetX[var5], Self.footCollisionPointOffsetY + Self.user_worldcal.getPressToGround(), var3), Self.footCollisionPointResaultY[var5], direction)
 							
-							If (Self.footCollisionPointResaultX[var5] <> ACParam.NO_COLLISION And (var2 = ACParam.NO_COLLISION Or var1 = ACParam.DIRECTION_RIGHT And Self.footCollisionPointResaultX[var5] > var2 Or var1 = ACParam.DIRECTION_LEFT And Self.footCollisionPointResaultX[var5] < var2 Or var5 = Self.priorityChkId)) Then
+							If (Self.footCollisionPointResaultX[var5] <> ACParam.NO_COLLISION And (var2 = ACParam.NO_COLLISION Or direction = ACParam.DIRECTION_RIGHT And Self.footCollisionPointResaultX[var5] > var2 Or direction = ACParam.DIRECTION_LEFT And Self.footCollisionPointResaultX[var5] < var2 Or var5 = Self.priorityChkId)) Then
 								var4 = var5
 								var2 = Self.footCollisionPointResaultX[var5]
 								
@@ -960,11 +970,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 							Self.calChkOffset(Self.chkPointX, Self.chkPointY, Self.chkPointId, Self.chkPointDegree)
 							
 							Self.actionState = JUMP_ACTION_STATE
-							
-							Return
 						EndIf
-					Default
-						Return
 				End Select
 			EndIf
 		End

@@ -14,6 +14,8 @@ Class MyAPI
 	
 	' Functions:
 	Function dSin:Int(value:Int)
+		'Return Int(Sin(Float(value)) * 100.0)
+		
 		While (value < 0)
 			value += 360
 		Wend
@@ -34,6 +36,7 @@ Class MyAPI
 	End
 	
 	Function dCos:Int(tDeg:Int)
+		'Return Int(Cos(Float(tDeg)) * 100.0)
 		Return dSin(90 - tDeg)
 	End
 	

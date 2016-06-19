@@ -125,8 +125,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Const ASPIRATE_INTERVAL:Int = 3
 		
-		Const ATTRACT_EFFECT_HEIGHT:Int = 9600
 		Const ATTRACT_EFFECT_WIDTH:Int = 9600
+		Const ATTRACT_EFFECT_HEIGHT:Int = 9600
 		
 		Const BAR_COLOR:Int = 2
 		
@@ -3459,7 +3459,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			refreshCollisionRectWrap()
 			
 			If (isAttracting()) Then
-				Self.attractRect.setRect(footX - (ATTRACT_EFFECT_WIDTH / 2), (footY - (ATTRACT_EFFECT_HEIGHT / 2)) - BODY_OFFSET, ATTRACT_EFFECT_WIDTH, ATTRACT_EFFECT_WIDTH)
+				Self.attractRect.setRect(footX - (ATTRACT_EFFECT_WIDTH / 2), (footY - (ATTRACT_EFFECT_HEIGHT / 2)) - BODY_OFFSET, ATTRACT_EFFECT_WIDTH, ATTRACT_EFFECT_HEIGHT)
 			EndIf
 			
 			GameObject.collisionChkWithAllGameObject(Self)
@@ -3473,11 +3473,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Method calPreCollisionRect:Void()
 			Local RECT_HEIGHT:= getCollisionRectHeight()
+			Local HALF_RECT_HEIGHT:= (RECT_HEIGHT / 2)
+			Local N_HALF_RECT_HEIGHT:= -HALF_RECT_HEIGHT
 			
-			Self.checkPositionX = getNewPointX(Self.footPointX, 0, (-RECT_HEIGHT) / 2, Self.faceDegree)
-			Self.checkPositionY = getNewPointY(Self.footPointY, 0, (-RECT_HEIGHT) / 2, Self.faceDegree)
+			Self.checkPositionX = getNewPointX(Self.footPointX, 0, N_HALF_RECT_HEIGHT, Self.faceDegree)
+			Self.checkPositionY = getNewPointY(Self.footPointY, 0, N_HALF_RECT_HEIGHT, Self.faceDegree)
 			
-			Self.preCollisionRect.setTwoPosition(Self.checkPositionX + LEFT_WALK_COLLISION_CHECK_OFFSET_X, Self.checkPositionY - (RECT_HEIGHT / 2), Self.checkPositionX + RIGHT_WALK_COLLISION_CHECK_OFFSET_X, Self.checkPositionY + (RECT_HEIGHT / 2))
+			Self.preCollisionRect.setTwoPosition(Self.checkPositionX + LEFT_WALK_COLLISION_CHECK_OFFSET_X, Self.checkPositionY - HALF_RECT_HEIGHT, Self.checkPositionX + RIGHT_WALK_COLLISION_CHECK_OFFSET_X, Self.checkPositionY + HALF_RECT_HEIGHT)
 		End
 		
 		Method collisionCheckWithGameObject:Void()
@@ -3493,7 +3495,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Local moveDistanceY:= (newY - Self.footPointY)
 			
 			Self.posZ = Self.currentLayer
+			
 			Self.worldCal.footDegree = Self.faceDegree
+			
 			Self.posX = Self.footPointX
 			Self.posY = Self.footPointY
 			

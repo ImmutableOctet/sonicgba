@@ -176,13 +176,13 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 							Local offset:= (i * COLLISION_INFO_STRIDE)
 							
 							For Local j:= 0 Until COLLISION_INFO_STRIDE
-								Self.collisionInfo.PokeByte(offset+j, Self.ds.ReadByte() & $FF)
+								Self.collisionInfo.PokeByte(offset+j, Self.ds.ReadByte()) ' & $FF
 							Next
 							'#End
 							
 							'Self.ds.ReadAll(Self.collisionInfo, (i * COLLISION_INFO_STRIDE), COLLISION_INFO_STRIDE)
 							
-							Self.directionInfo.PokeByte(i, Self.ds.ReadByte() & $FF)
+							Self.directionInfo.PokeByte(i, Self.ds.ReadByte()) ' & $FF
 						Next
 					Catch E:StreamError
 						' Nothing so far.

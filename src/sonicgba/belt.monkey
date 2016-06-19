@@ -24,6 +24,8 @@ Private
 Public
 
 ' Classes:
+
+' 'Belt' objects are conveyor belt platforms.
 Class Belt Extends GimmickObject
 	Private
 		' Constant variable(s):
@@ -115,7 +117,7 @@ Class Belt Extends GimmickObject
 							ElseIf (player.getVelX() < -SNOW_MAX_SPEED) Then
 								player.setVelXPercent(SPIN_DASH_ATTENUATE_PERCENTAGE)
 							EndIf
-						ElseIf ((Not (player.getCharacterID() = CHARACTER_SONIC) Or player.getCharacterAnimationID() < PlayerSonic.SONIC_ANI_ATTACK_1 Or player.getCharacterAnimationID() > PlayerSonic.SONIC_ANI_ATTACK_3) And Not ((player.getCharacterID() = CHARACTER_AMY) And player.myAnimationID = PlayerAmy.AMY_ANI_DASH_4)) Then
+						ElseIf ((player.getCharacterID() <> CHARACTER_SONIC) Or (player.getCharacterAnimationID() < PlayerSonic.SONIC_ANI_ATTACK_1 Or player.getCharacterAnimationID() > PlayerSonic.SONIC_ANI_ATTACK_3) And Not ((player.getCharacterID() = CHARACTER_AMY) And player.myAnimationID = PlayerAmy.AMY_ANI_DASH_4)) Then
 							If (player.getVelX() > SNOW_MAX_SPEED) Then
 								player.setVelX(SNOW_MAX_SPEED)
 							ElseIf (player.getVelX() < -SNOW_MAX_SPEED) Then

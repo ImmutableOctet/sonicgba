@@ -17,6 +17,7 @@ End
 Class DegreeReturner
 	' Fields:
 	Field degree:Int
+	
 	Field newX:Int
 	Field newY:Int
 	

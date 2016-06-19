@@ -93,7 +93,7 @@ Class FreeFallBar Extends GimmickObject
 				
 				player.faceDirection = True
 				
-				Print("bar posX:" + (Self.posX Shr 6))
+				'Print("bar posX:" + (Self.posX Shr 6))
 			EndIf
 		End
 		

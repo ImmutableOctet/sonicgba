@@ -65,7 +65,7 @@ Class MoveCalculator
 			moveCount = (moveCount2 - HALF_MOVE_TIME)
 			
 			degree += DEGREE_VELOCITY
-			degree Mod= MDPhone.SCREEN_WIDTH
+			degree Mod= 360
 		End
 		
 		' Constructor(s):

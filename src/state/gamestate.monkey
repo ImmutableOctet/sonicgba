@@ -3358,7 +3358,7 @@ Class GameState Extends State
 				
 				bird[1] = (Self.planeY - (((BIRD_NUM / 2) - i) * BIRD_NUM)) - ((BIRD_SPACE_2+BIRD_Y) * 2) ' / BIRD_OFFSET
 				bird[0] = (((BIRD_NUM / 2) - i) * BIRD_NUM)
-				bird[2] = MyRandom.nextInt(360) ' MDPhone.SCREEN_WIDTH
+				bird[2] = MyRandom.nextInt(360)
 			Next
 			
 			For Local i:= (BIRD_NUM / 2) Until BIRD_NUM
@@ -3366,7 +3366,7 @@ Class GameState Extends State
 				
 				bird[i][1] = (Self.planeY - ((BIRD_NUM - i) * BIRD_SPACE_2)) - (BIRD_SPACE_2+BIRD_Y) ' 15
 				bird[i][0] = (BIRD_NUM - i) * -BIRD_SPACE_2
-				bird[i][2] = MyRandom.nextInt(360) ' MDPhone.SCREEN_WIDTH
+				bird[i][2] = MyRandom.nextInt(360)
 			Next
 			
 			Self.birdX = (SCREEN_WIDTH + 30) ' ((BIRD_SPACE_2+BIRD_Y) * 2)
