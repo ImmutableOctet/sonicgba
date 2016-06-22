@@ -1048,6 +1048,19 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				player.posY = py
 			EndIf
 		End
+		
+		Function instantTransmission:Void(px:Int, py:Int)
+			instantTransmission(player, px, py)
+		End
+		
+		Function instantTransmission:Void(player:PlayerObject, px:Int, py:Int)
+			Local camera:= MapManager.getCamera()
+			
+			camera.x = px
+			camera.y = py
+			
+			GameObject.setPlayerPosition(player, px, py)
+		End
 	Private
 		' Extensions:
 		Function updateObjectRoomsX:Void(x:Int, centerY:Int, y_min:Int, y_max:Int)

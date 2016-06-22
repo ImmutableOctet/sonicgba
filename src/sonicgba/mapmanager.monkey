@@ -240,7 +240,6 @@ Class MapManager ' Implements SonicDef
 						If (actualLeftCameraLimit < proposeLeftCameraLimit) Then
 							actualLeftCameraLimit = proposeLeftCameraLimit
 						EndIf
-						
 					ElseIf (actualLeftCameraLimit < proposeLeftCameraLimit) Then
 						actualLeftCameraLimit += CAMERA_SPEED
 						
@@ -255,7 +254,6 @@ Class MapManager ' Implements SonicDef
 						If (actualRightCameraLimit > proposeRightCameraLimit) Then
 							actualRightCameraLimit = proposeRightCameraLimit
 						EndIf
-						
 					ElseIf (actualRightCameraLimit > proposeRightCameraLimit) Then
 						actualRightCameraLimit -= CAMERA_SPEED
 						
@@ -295,7 +293,6 @@ Class MapManager ' Implements SonicDef
 							If (actualDownCameraLimit < proposeDownCameraLimit) Then
 								actualDownCameraLimit = proposeDownCameraLimit
 							EndIf
-							
 						ElseIf (actualDownCameraLimit < proposeDownCameraLimit) Then
 							actualDownCameraLimit += CAMERA_SPEED
 							
@@ -310,7 +307,6 @@ Class MapManager ' Implements SonicDef
 							If (actualUpCameraLimit > proposeUpCameraLimit) Then
 								actualUpCameraLimit = proposeUpCameraLimit
 							EndIf
-							
 						ElseIf (actualUpCameraLimit > proposeUpCameraLimit) Then
 							actualUpCameraLimit -= CAMERA_SPEED
 							
@@ -321,9 +317,11 @@ Class MapManager ' Implements SonicDef
 						
 						If (camera.y < actualUpCameraLimit - CAMERA_OFFSET_Y) Then
 							camera.y = actualUpCameraLimit - CAMERA_OFFSET_Y
+							
 							cameraActionY = 0
 						ElseIf (camera.y > (actualDownCameraLimit - CAMERA_HEIGHT) - CAMERA_OFFSET_Y) Then
 							camera.y = (actualDownCameraLimit - CAMERA_HEIGHT) - CAMERA_OFFSET_Y
+							
 							cameraActionY = 0
 						EndIf
 					EndIf

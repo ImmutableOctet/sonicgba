@@ -10,7 +10,7 @@ Friend sonicgba.ropeend
 Private
 	Import lib.myapi
 	Import lib.soundsystem
-	Import lib.crlfp32
+	Import lib.crlfp32 ' com.sega.engine.lib.crlfp32
 	
 	Import sonicgba.gimmickobject
 	Import sonicgba.playerobject
@@ -39,7 +39,7 @@ Class RopeStart Extends GimmickObject
 	    Global hookImage2:MFImage
 		
 		' This variable should be considered constant.
-		Global DEGREE:Int = ATan2(1, 2)
+		Global DEGREE:Int = CrlFP32.actTanDegree(1, 2) ' ATan2(1, 2)
 		
 		' Fields:
     	Field controlling:Bool

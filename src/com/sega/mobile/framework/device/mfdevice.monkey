@@ -38,6 +38,10 @@ Private
 	'Import com.sega.mobile.framework.android.canvas
 	'Import com.sega.mobile.framework.android.image
 	
+	' Debugging related:
+	Import sonicgba.gameobject
+	Import sonicgba.mapmanager
+	
 	Import mojo.app
 	Import mojo.input
 	
@@ -424,6 +428,10 @@ Class MFDevice Final
 			
 			' Debugging related:
 			'MFGamePad.keyPressed(KEY_RIGHT)
+			
+			If (KeyHit(KEY_F)) Then
+				GameObject.instantTransmission((9624 - 8), (748 - 8))
+			EndIf
 			
 			For Local key:= START_KEY_INDEX To LAST_KEY_INDEX
 				Local keyCode:= key
