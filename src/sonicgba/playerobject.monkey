@@ -2079,6 +2079,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					
 					If (Self.effectDrawer.checkEnd()) Then
 						Self.effectDrawer.restart()
+						
 						Self.effectID = -1
 					EndIf
 				EndIf

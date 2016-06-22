@@ -15,6 +15,7 @@ Private
 	Import lib.myapi
 	Import lib.constutil
 	
+	Import sonicgba.gameobject
 	Import sonicgba.backgroundmanager
 	Import sonicgba.focusable
 	Import sonicgba.sonicdef
@@ -79,7 +80,8 @@ Class MapManager ' Implements SonicDef
 		Global brokeOffsetY:Int
 		Global brokePointY:Int
 		
-		Global camera:Coordinate = New Coordinate()
+		'Global camera:Coordinate = New Coordinate()
+		
 		Global cameraActionX:Int = LINE_HEIGHT ' 2
 		Global cameraActionY:Int = LINE_HEIGHT ' 2
 		
@@ -168,7 +170,7 @@ Class MapManager ' Implements SonicDef
 		Global proposeRightCameraLimit:Int
 		Global proposeUpCameraLimit:Int
 		
-		Global reCamera:Coordinate = New Coordinate()
+		'Global reCamera:Coordinate = New Coordinate()
 		
 		' Functions:
 		
@@ -228,6 +230,8 @@ Class MapManager ' Implements SonicDef
 		End
 		
 		Function cameraLogic:Void()
+			Local camera:= getCamera()
+			
 			If (focusObj <> Null And Not cameraLocked) Then
 				If (getPixelWidth() < CAMERA_WIDTH) Then
 					camera.x = ((CAMERA_WIDTH - getPixelWidth()) / 2)
@@ -327,9 +331,7 @@ Class MapManager ' Implements SonicDef
 					EndIf
 				EndIf
 				
-				Local coordinate:= camera
-				
-				coordinate.x += shakePowerX
+				camera.x += shakePowerX
 				
 				shakePowerX = 0
 				
@@ -338,7 +340,7 @@ Class MapManager ' Implements SonicDef
 					
 					Local shakeRange:= ((shakeCount * shakePowerY) / shakeMaxCount)
 					
-					coordinate.y += PickValue(shakingUp, shakeRange, -shakeRange)
+					camera.y += PickValue(shakingUp, shakeRange, -shakeRange)
 					
 					shakingUp = (Not shakingUp)
 					
@@ -437,6 +439,8 @@ Class MapManager ' Implements SonicDef
 		End
 		
 		Function setCameraLeftLimit:Void(limit:Int)
+			Local camera:= getCamera()
+			
 			proposeLeftCameraLimit = limit
 			
 			If (proposeLeftCameraLimit <= camera.x) Then
@@ -447,6 +451,8 @@ Class MapManager ' Implements SonicDef
 		End
 		
 		Function setCameraRightLimit:Void(limit:Int)
+			Local camera:= getCamera()
+			
 			proposeRightCameraLimit = limit
 			
 			If (proposeRightCameraLimit >= (camera.x + CAMERA_WIDTH)) Then
@@ -457,12 +463,16 @@ Class MapManager ' Implements SonicDef
 		End
 		
 		Function setCameraDownLimit:Void(limit:Int)
+			Local camera:= getCamera()
+			
 			proposeDownCameraLimit = limit
 			
 			actualDownCameraLimit = (camera.y + CAMERA_HEIGHT)
 		End
 		
 		Function setCameraUpLimit:Void(limit:Int)
+			Local camera:= getCamera()
+			
 			proposeUpCameraLimit = limit
 			
 			If (camera.y < proposeUpCameraLimit) Then
@@ -508,7 +518,7 @@ Class MapManager ' Implements SonicDef
 		End
 		
 		Function getCamera:Coordinate()
-			Return camera
+			Return GameObject.camera
 		End
 		
 		Function setFocusObj:Void(obj:Focusable)
@@ -523,6 +533,8 @@ Class MapManager ' Implements SonicDef
 		End
 		
 		Function focusQuickLocation:Void()
+			Local camera:= getCamera()
+			
 			cameraActionX = 0
 			cameraActionY = 0
 			
@@ -804,6 +816,8 @@ Class MapManager ' Implements SonicDef
 	Private
 		' Functions:
 		Function handleCameraActionX:Void() ' Function cameraActionX:Void()
+			Local camera:= getCamera()
+			
 			Local desCamX:= (focusObj.getFocusX() - (CAMERA_WIDTH / 2)) - CAMERA_OFFSET_X ' Shr 1
 			
 			Select (cameraActionX)
@@ -846,6 +860,8 @@ Class MapManager ' Implements SonicDef
 		End
 		
 		Function handleCameraActionY:Void() ' Function cameraActionY:Void()
+			Local camera:= getCamera()
+			
 			Local desCamY:= (focusObj.getFocusY() - (CAMERA_HEIGHT / 2)) - CAMERA_OFFSET_Y ' Shr 1
 			
 			Select (cameraActionY)
@@ -888,6 +904,8 @@ Class MapManager ' Implements SonicDef
 		End
 		
 		Function drawWind:Void(g:MFGraphics)
+			Local camera:= getCamera()
+			
 			If (windImage = Null) Then
 				windImage = MFImage.createImage("/animation/bg_cloud_" + StageManager.getCurrentZoneId() + ".png")
 				
@@ -931,6 +949,8 @@ Class MapManager ' Implements SonicDef
 		End
 		
 		Function drawMap:Void(graphics:MFGraphics, mapArray:Short[][]) ' DataBuffer
+			Local camera:= getCamera()
+			
 			Local x:= (camera.x + CAMERA_OFFSET_X - mapOffsetX) / TILE_WIDTH
 			
 			Local startY:= (camera.y + CAMERA_OFFSET_Y) / TILE_HEIGHT
@@ -1041,6 +1061,8 @@ Class MapManager ' Implements SonicDef
 		End
 		
 		Function drawTile:Void(g:MFGraphics, sy:Int, x:Int, y:Int, trans:Int)
+			Local camera:= getCamera()
+			
 			If (sy <> 0) Then
 				Local sx:= (sy Mod IMAGE_TILE_WIDTH)
 				

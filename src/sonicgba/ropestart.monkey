@@ -88,32 +88,33 @@ Class RopeStart Extends GimmickObject
 		End
 		
 		Method draw:Void(graphics:MFGraphics)
-			If (Not initFlag) Then
+			If (Not Self.initFlag) Then
 				If (StageManager.getCurrentZoneId() = 4) Then
-					drawInMap(graphics, hookImage2, DEGREE, DEGREE, DRAW_WIDTH, DRAW_HEIGHT, DEGREE, posX, posY, 17)
+					drawInMap(graphics, hookImage2, DEGREE, DEGREE, DRAW_WIDTH, DRAW_HEIGHT, DEGREE, Self.posX, Self.posY, 17)
 					
 					Return
 				EndIf
 				
-				drawInMap(graphics, hookImage, DEGREE, DEGREE, DRAW_WIDTH, DRAW_HEIGHT, DEGREE, posX, posY, 17)
+				drawInMap(graphics, hookImage, DEGREE, DEGREE, DRAW_WIDTH, DRAW_HEIGHT, DEGREE, Self.posX, Self.posY, 17)
 			EndIf
 		End
 		
 		Method doWhileCollision:Void(player:PlayerObject, direction:Int)
-			If (Not initFlag) Then
-				If (Not used) Then
+			If (Not Self.initFlag) Then
+				If (Not Self.used) Then
 					velocity = Abs(player.getVelX())
 					
 					isGotRings = False
-					used = True
-					controlling = True
+					
+					Self.used = True
+					Self.controlling = True
 					
 					player.setOutOfControl(Self)
 					player.railing = True
 					player.setCollisionState(1)
 					player.faceDirection = True
 					
-					' Magic number: Not sure what this is.
+					' Magic number: 1408
 					player.doPullMotion(Self.posX, Self.posY + 1408)
 				EndIf
 			EndIf

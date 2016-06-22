@@ -168,7 +168,8 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		Global rectV:= New CollisionRect()
 		
 		Global bossID:Int
-		Global camera:Coordinate
+		
+		Global camera:Coordinate = New Coordinate() ' MapManager.camera
 		
 		' State:
 		Global stageModeState:Int
@@ -468,7 +469,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		End
 		
 		Function drawPlayer:Void(graphics:MFGraphics)
-			camera = MapManager.getCamera()
+			'camera = MapManager.getCamera()
 			
 			player.draw(graphics)
 		End
@@ -497,7 +498,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		End
 		
 		Function drawObjectAfterEveryThing:Void(graphics:MFGraphics)
-			camera = MapManager.getCamera()
+			'camera = MapManager.getCamera()
 			
 			Local layer:= paintVec[DRAW_AFTER_MAP]
 			
@@ -518,7 +519,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				ringDrawer.moveOn()
 			EndIf
 			
-			camera = MapManager.getCamera()
+			'camera = MapManager.getCamera()
 			
 			Local layer:= paintVec[DRAW_AFTER_SONIC]
 			
@@ -1057,7 +1058,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		End
 		
 		Function instantTransmission:Void(player:PlayerObject, px:Int, py:Int)
-			Local camera:= MapManager.getCamera()
+			'Local camera:= MapManager.getCamera()
 			
 			camera.x = px
 			camera.y = py
@@ -1292,7 +1293,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		End
 		
 		Method isInCamera:Bool(offset:Int)
-			Local camera:= MapManager.getCamera()
+			'Local camera:= MapManager.getCamera()
 			
 			updateScreenRect(camera)
 			
@@ -1309,7 +1310,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		End
 		
 		Method isInCamera:Bool(width:Int, height:Int)
-			Local camera:= MapManager.getCamera()
+			'Local camera:= MapManager.getCamera()
 			
 			updateScreenRect(camera)
 			
@@ -1389,7 +1390,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		End
 		
 		Method checkInit:Bool()
-			Local camera:= MapManager.getCamera()
+			'Local camera:= MapManager.getCamera()
 			
 			updateResetRect(camera)
 			
@@ -1730,6 +1731,14 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		
 		Method logic:Void(x:Int, y:Int)
 			logic()
+		End
+		
+		Method updateScreenRect:Void()
+			updateScreenRect(camera)
+		End
+		
+		Method updateResetRect:Void()
+			updateResetRect(camera)
 		End
 		
 		Method updateScreenRect:Void(camera:Coordinate)
