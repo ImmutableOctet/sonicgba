@@ -244,7 +244,9 @@ Class StageManager ' Implements SonicDef
 							
 							PlayerObject.timeCount = checkPointTime
 						Else
-							GameObject.setPlayerPosition(PLAYER_START[stageIDArray[PlayerObject.getCharacterID()]][0], PLAYER_START[stageIDArray[PlayerObject.getCharacterID()]][1])
+							Local pos:= PLAYER_START[stageIDArray[PlayerObject.getCharacterID()]]
+							
+							GameObject.setPlayerPosition(pos[0], pos[1])
 							
 							PlayerObject.doInitInNewStage()
 						EndIf
@@ -254,6 +256,7 @@ Class StageManager ' Implements SonicDef
 							MapManager.setCameraDownLimit(checkCameraDownX)
 							MapManager.setCameraLeftLimit(checkCameraLeftX)
 							MapManager.setCameraRightLimit(checkCameraRightX)
+							
 							MapManager.calCameraImmidiately()
 						EndIf
 					EndIf

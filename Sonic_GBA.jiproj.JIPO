@@ -175,8 +175,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>4</X>
-        <Y>425</Y>
+        <X>0</X>
+        <Y>1</Y>
       </CursorPos>
       <DocGUID>ab21d9b9-bf97-41dc-b333-9b0289eba3ce</DocGUID>
       <Bookmarks>
@@ -516,14 +516,14 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>44</X>
-        <Y>63</Y>
+        <X>28</X>
+        <Y>65</Y>
       </CursorPos>
       <DocGUID>3d91f39d-9ed5-4956-ba8d-97c12b7236d1</DocGUID>
       <Bookmarks>
         <Point>
           <X>0</X>
-          <Y>66</Y>
+          <Y>67</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
@@ -1232,8 +1232,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\freefallbar.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>4</X>
-        <Y>92</Y>
+        <X>5</X>
+        <Y>116</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -1274,8 +1274,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>27</X>
-        <Y>219</Y>
+        <X>5</X>
+        <Y>987</Y>
       </CursorPos>
       <DocGUID>79793a17-8378-46b4-bc51-8f6113d0ba40</DocGUID>
       <Bookmarks>
@@ -1623,8 +1623,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>23</X>
-        <Y>6536</Y>
+        <X>13</X>
+        <Y>846</Y>
       </CursorPos>
       <DocGUID>3278944e-e055-4c42-84f7-20c71dc94dd1</DocGUID>
       <Bookmarks>
@@ -1640,8 +1640,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playersonic.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>6</X>
-        <Y>2</Y>
+        <X>13</X>
+        <Y>173</Y>
       </CursorPos>
       <DocGUID>d1339c30-c896-4b3d-a485-9fb9ef92f903</DocGUID>
       <Bookmarks />
@@ -1758,12 +1758,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\ropeend.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\ropeend.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>6</X>
-        <Y>16</Y>
+        <X>4</X>
+        <Y>39</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>d5a4cd7a-c7d2-48a3-9f18-f71bd42954f9</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ropestart.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -1772,12 +1773,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\ropeturn.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\ropeturn.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>4</Y>
+        <X>5</X>
+        <Y>40</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>25f23af3-2c27-4a51-9beb-2ce6f16386ae</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\seabedvolcanoasynbase.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1944,7 +1946,7 @@
     <DocUserOptions Filename=".\src\sonicgba\stagemanager.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>28</X>
-        <Y>246</Y>
+        <Y>248</Y>
       </CursorPos>
       <DocGUID>f5edc474-71d8-49c1-899a-dc030f9e0479</DocGUID>
       <Bookmarks />
@@ -2219,8 +2221,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\gamestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>38</X>
-        <Y>3368</Y>
+        <X>3</X>
+        <Y>406</Y>
       </CursorPos>
       <DocGUID>29e7aad1-5d4a-486b-9c05-415870fe254d</DocGUID>
       <Bookmarks />

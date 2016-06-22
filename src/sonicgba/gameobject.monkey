@@ -974,12 +974,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		End
 		
 		Function setPlayerPosition:Void(x:Int, y:Int)
-			Local playerObject:= player
-			
-			If (playerObject <> Null) Then
-				playerObject.posX = (x Shl 6)
-				playerObject.posY = (y Shr 6)
-			EndIf
+			setPlayerPosition(player, x, y)
 		End
 		
 		Function checkPaintNecessary:Bool(obj:GameObject)
@@ -1036,6 +1031,21 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				
 				preCenterX = centerX
 				preCenterY = centerY
+			EndIf
+		End
+		
+		' Extensions:
+		Function setPlayerPosition:Void(player:PlayerObject, x:Int, y:Int)
+			If (player <> Null) Then
+				Local px:= (x Shl 6)
+				
+				player.footPointX = px
+				player.posX = px
+				
+				Local py:= (y Shl 6)
+				
+				player.footPointY = py
+				player.posY = py
 			EndIf
 		End
 	Private

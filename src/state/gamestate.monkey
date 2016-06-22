@@ -49,11 +49,13 @@ Class GameState Extends State
 		Const BAR_COLOR:Int = 2
 		
 		Const BIRD_NUM:Int = 10
-		Const BIRD_OFFSET:Int = 2
-		Const BIRD_SPACE_1:Int = 10
-		Const BIRD_SPACE_2:Int = 14
+		
 		Const BIRD_X:Int = 0
 		Const BIRD_Y:Int = 1
+		Const BIRD_OFFSET:Int = 2
+		
+		Const BIRD_SPACE_1:Int = 10
+		Const BIRD_SPACE_2:Int = 14
 		
 		Global BP_ITEMS_HIGH:Int[] = [0, 1, 3] ' Const
 		Global BP_ITEMS_HIGH_NORMAL_NUM:Int[] = [5, 3, 5] ' Const

@@ -114,7 +114,7 @@ Class FreeFallBar Extends GimmickObject
 						player.setAnimationId(23)
 					EndIf
 					
-					Print("player posX:" + (player.footPointX Shr 6))
+					'Print("player posX:" + (player.footPointX Shr 6))
 				Else
 					drawInMap(g, barImage, BOTTOM|HCENTER)
 				EndIf
