@@ -416,8 +416,11 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 					
 					' Check if we need to render this objData:
 					If (checkPaintNecessary(currentObject)) Then
-						' Get the objData's preferred layer, and add to it.
-						paintVec[currentObject.getPaintLayer()].Push(currentObject)
+						' Get the object's preferred layer, and add to it:
+						Local paintLayer:= currentObject.getPaintLayer()
+						Local paint:= paintVec[paintLayer]
+						
+						paint.Push(currentObject)
 					EndIf
 					
 					objIndex += 1

@@ -1274,8 +1274,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>30</X>
-        <Y>1055</Y>
+        <X>9</X>
+        <Y>61</Y>
       </CursorPos>
       <DocGUID>79793a17-8378-46b4-bc51-8f6113d0ba40</DocGUID>
       <Bookmarks>
@@ -1769,8 +1769,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ropestart.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>31</X>
-        <Y>59</Y>
+        <X>21</X>
+        <Y>86</Y>
       </CursorPos>
       <DocGUID>e644e1a7-d8cc-4ddf-a8a3-2fbd73862de6</DocGUID>
       <Bookmarks />

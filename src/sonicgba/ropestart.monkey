@@ -84,7 +84,7 @@ Class RopeStart Extends GimmickObject
 		
 		' Methods:
 		Method getPaintLayer:Int()
-			Return DEGREE
+			Return DRAW_BEFORE_SONIC ' DEGREE
 		End
 		
 		Method draw:Void(graphics:MFGraphics)
