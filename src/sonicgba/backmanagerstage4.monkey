@@ -55,6 +55,10 @@ Class BackManagerStage4 Extends BackGroundManager
 		End
 		
 		Method draw:Void(g:MFGraphics)
+			'Print("Skipping background.")
+			
+			Return
+			
 			Local camera:= MapManager.getCamera()
 			
 			Local cameraX:= camera.x

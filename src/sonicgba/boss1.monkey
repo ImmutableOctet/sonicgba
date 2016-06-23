@@ -666,7 +666,7 @@ Class Boss1 Extends BossObject
 		
 		Method draw:Void(g:MFGraphics)
 			If (Not Self.dead) Then
-				Print("draw boss~~!")
+				'Print("draw boss~~!")
 				
 				If (Self.state < STATE_BROKEN) Then
 					drawInMap(g, Self.cardrawer)

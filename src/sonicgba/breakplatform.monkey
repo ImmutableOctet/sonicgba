@@ -34,7 +34,7 @@ Class BreakPlatform Extends GimmickObject
 		Const REST_FRAME:Int = 3
 		
 		' Global variable(s):
-		Global platformImage:MFImage = Null
+		Global breakplatformImage:MFImage = Null
 		
 		' Fields:
 		Field breakFlag:Bool
@@ -53,18 +53,18 @@ Class BreakPlatform Extends GimmickObject
 			
 			Self.breakFlag = False
 			
-			If (platformImage = Null) Then
+			If (breakplatformImage = Null) Then
 				If (StageManager.getCurrentZoneId() <> 6) Then
-					platformImage = MFImage.createImage("/gimmick/break_platform_" + String(StageManager.getCurrentZoneId()) + ".png")
+					breakplatformImage = MFImage.createImage("/gimmick/break_platform_" + String(StageManager.getCurrentZoneId()) + ".png")
 				Else
-					platformImage = MFImage.createImage("/gimmick/break_platform_" + String(StageManager.getCurrentZoneId()) + String(StageManager.getStageID() - 9) + ".png")
+					breakplatformImage = MFImage.createImage("/gimmick/break_platform_" + String(StageManager.getCurrentZoneId()) + String(StageManager.getStageID() - 9) + ".png")
 				EndIf
 			EndIf
 		End
 	Public
 		' Functions:
 		Function releaseAllResource:Void()
-			platformImage = Null
+			breakplatformImage = Null
 		End
 		
 		' Methods:
@@ -77,7 +77,7 @@ Class BreakPlatform Extends GimmickObject
 						If (Not Self.used) Then
 							Self.used = True
 							
-							initialBreaking(platformImage)
+							initialBreaking(breakplatformImage)
 							
 							SoundSystem.getInstance().playSe(SoundSystem.SE_173)
 						EndIf
@@ -88,7 +88,7 @@ Class BreakPlatform Extends GimmickObject
 							If (Not Self.used) Then
 								Self.used = True
 								
-								initialBreaking(platformImage)
+								initialBreaking(breakplatformImage)
 								
 								SoundSystem.getInstance().playSe(SoundSystem.SE_173)
 							EndIf
@@ -118,7 +118,7 @@ Class BreakPlatform Extends GimmickObject
 			If (Self.breakFlag) Then
 				breakingDraw(g, camera)
 			Else
-				drawInMap(g, platformImage, 0, 0, MyAPI.zoomIn(platformImage.getWidth()), MyAPI.zoomIn(platformImage.getHeight()), PickValue((Self.iLeft = 0), TRANS_NONE, TRANS_MIRROR), Self.posX, Self.posY, (PickValue((Self.iLeft = 0), LEFT, RIGHT) | TOP))
+				drawInMap(g, breakplatformImage, 0, 0, MyAPI.zoomIn(breakplatformImage.getWidth()), MyAPI.zoomIn(breakplatformImage.getHeight()), PickValue((Self.iLeft = 0), TRANS_NONE, TRANS_MIRROR), Self.posX, Self.posY, (PickValue((Self.iLeft = 0), LEFT, RIGHT) | TOP))
 			EndIf
 		End
 		
@@ -189,7 +189,7 @@ Class BreakPlatform Extends GimmickObject
 					
 					Local anchor:= (PickValue((Self.iLeft = 0), LEFT, RIGHT) | TOP)
 					
-					drawInMap(g, platformImage, srcX, srcY, BREAK_WIDTH, BREAK_HEIGHT, PickValue((Self.iLeft = 0), TRANS_NONE, TRANS_MIRROR), x, y, anchor)
+					drawInMap(g, breakplatformImage, srcX, srcY, BREAK_WIDTH, BREAK_HEIGHT, PickValue((Self.iLeft = 0), TRANS_NONE, TRANS_MIRROR), x, y, anchor)
 				Next
 			EndIf
 		End

@@ -441,7 +441,7 @@ Class Boss1Arm Extends EnemyObject
 					context.PushMatrix()
 					
 					context.Translate(Float((Self.pos[5][0] Shr 6) - camera.x), Float((Self.pos[5][1] Shr 6) - camera.y))
-					context.Rotate(Float((-Self.degree) Shr 6))
+					context.Rotate(Float((Self.degree) Shr 6))
 					
 					Self.hammerdrawer.draw(g, 0, 0)
 					

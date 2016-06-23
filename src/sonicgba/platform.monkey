@@ -60,26 +60,13 @@ Class Platform Extends GimmickObject
 			Local moveDirection:Bool
 			
 			Self.COLLISION_HEIGHT_OFFSET = 0
+			
 			Self.offsetY = 0
 			Self.offsetY2 = 0
 			
 			Self.IsDisplay = True
 			
-			If (platformImage = Null) Then
-				Try
-					If (StageManager.getCurrentZoneId() <> 6) Then
-						platformImage = MFImage.createImage("/gimmick/platform" + StageManager.getCurrentZoneId() + ".png")
-					Else
-						platformImage = MFImage.createImage("/gimmick/platform" + StageManager.getCurrentZoneId() + (StageManager.getStageID() - 9) + ".png")
-					EndIf
-				Catch E:Throwable
-					' Nothing so far.
-				End Try
-				
-				If (platformImage = Null) Then
-					platformImage = MFImage.createImage("/gimmick/platform0.png")
-				EndIf
-			EndIf
+			loadPlatformImage()
 			
 			' Magic number: 5312
 			If (StageManager.getStageID() = 5 And left = 5312) Then

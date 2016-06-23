@@ -68,17 +68,7 @@ Class BasicRollPlatformSpeed Extends GimmickObject Abstract
 				rolllinkImage = MFImage.createImage("/gimmick/roll_ring.png")
 			EndIf
 			
-			If (platformImage = Null) Then
-				Try
-					If (StageManager.getCurrentZoneId() <> 6) Then
-						platformImage = MFImage.createImage("/gimmick/platform" + StageManager.getCurrentZoneId() + ".png")
-					Else
-						platformImage = MFImage.createImage("/gimmick/platform" + StageManager.getCurrentZoneId() + (StageManager.getStageID() - 9) + ".png")
-					EndIf
-				Catch E:Throwable
-					platformImage = MFImage.createImage("/gimmick/platform0.png")
-				End Try
-			EndIf
+			loadPlatformImage()
 		End
 		
 		' Methods:

@@ -705,6 +705,29 @@ Class GimmickObject Extends GameObject
 			Boss4Ice.releaseAllResource()
 			Boss6Block.releaseAllResource()
 		End
+		
+		' Extensions:
+		
+		' This returns the object referenced by 'platformImage' when loading is complete.
+		Function loadPlatformImage:MFImage()
+			If (platformImage = Null) Then
+				Try
+					If (StageManager.getCurrentZoneId() <> 6) Then
+						platformImage = MFImage.createImage("/gimmick/platform" + StageManager.getCurrentZoneId() + ".png")
+					Else
+						platformImage = MFImage.createImage("/gimmick/platform" + StageManager.getCurrentZoneId() + (StageManager.getStageID() - 9) + ".png")
+					EndIf
+				Catch E:Throwable
+					' Nothing so far.
+				End Try
+				
+				If (platformImage = Null) Then
+					platformImage = MFImage.createImage("/gimmick/platform0.png")
+				EndIf
+			EndIf
+			
+			Return platformImage
+		End
 	Protected
 		' Constructor(s):
 		Method New(id:Int, x:Int, y:Int, left:Int, top:Int, width:Int, height:Int)
