@@ -5072,7 +5072,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.faceDegree = Self.degreeStable
 					
 					' Magic number: 1 (Action-state)
-					Self.worldCal.actionState = 1
+					Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE ' 1
 			End Select
 			
 			Self.collisionState = state

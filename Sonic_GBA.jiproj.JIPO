@@ -109,8 +109,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acworldcollisioncalculator.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>4</X>
-        <Y>318</Y>
+        <X>9</X>
+        <Y>85</Y>
       </CursorPos>
       <DocGUID>8441d596-cd42-4898-9f14-b95dcb354757</DocGUID>
       <Bookmarks />
@@ -511,7 +511,7 @@
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>14</X>
-        <Y>91</Y>
+        <Y>134</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -1281,8 +1281,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>1686</Y>
+        <X>9</X>
+        <Y>61</Y>
       </CursorPos>
       <DocGUID>79793a17-8378-46b4-bc51-8f6113d0ba40</DocGUID>
       <Bookmarks>
@@ -1511,8 +1511,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\movecalculator.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>18</X>
-        <Y>67</Y>
+        <X>49</X>
+        <Y>90</Y>
       </CursorPos>
       <DocGUID>f069c8bc-e39b-4e5c-bb38-e70cf9d6de4d</DocGUID>
       <Bookmarks />
@@ -1632,8 +1632,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>49</X>
-        <Y>4932</Y>
+        <X>14</X>
+        <Y>2165</Y>
       </CursorPos>
       <DocGUID>3278944e-e055-4c42-84f7-20c71dc94dd1</DocGUID>
       <Bookmarks>
@@ -1649,8 +1649,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playersonic.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>13</X>
-        <Y>173</Y>
+        <X>31</X>
+        <Y>184</Y>
       </CursorPos>
       <DocGUID>d1339c30-c896-4b3d-a485-9fb9ef92f903</DocGUID>
       <Bookmarks />
@@ -1777,16 +1777,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ropestart.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>59</X>
-        <Y>210</Y>
+        <X>46</X>
+        <Y>200</Y>
       </CursorPos>
       <DocGUID>e644e1a7-d8cc-4ddf-a8a3-2fbd73862de6</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ropeturn.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>4</X>
-        <Y>50</Y>
+        <X>14</X>
+        <Y>15</Y>
       </CursorPos>
       <DocGUID>25f23af3-2c27-4a51-9beb-2ce6f16386ae</DocGUID>
       <Bookmarks />
@@ -1861,10 +1861,10 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\shipsystem.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\shipsystem.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>26</X>
+        <Y>32</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -2419,7 +2419,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\common" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\ending" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\gameengine" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\lib\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\mflib" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\platformstandard" Expanded="false" />
