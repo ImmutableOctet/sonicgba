@@ -3817,7 +3817,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method beStop:Void(newPosition:Int, direction:Int, obj:GameObject)
-			beStop(newPosition, direction, obj, (direction = DIRECTION_DOWN))
+			beStop(newPosition, direction, obj, (direction = DIRECTION_DOWN)) ' (resolveDirection(direction) = DIRECTION_DOWN)
 		End
 		
 		Method isAttackingEnemy:Bool()
@@ -3887,9 +3887,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Method setVelX:Void(mVelX:Int)
 			If (Self.collisionState = COLLISION_STATE_WALK) Then
-				Local tmpVelX:= ((Self.totalVelocity * MyAPI.dCos(Self.faceDegree)) / 100)
+				'Local tmpVelX:= ((Self.totalVelocity * MyAPI.dCos(Self.faceDegree)) / 100)
 				
-				tmpVelX = mVelX
+				Local tmpVelX:= mVelX
 				
 				Self.totalVelocity = (((MyAPI.dCos(Self.faceDegree) * tmpVelX) + (MyAPI.dSin(Self.faceDegree) * ((Self.totalVelocity * MyAPI.dSin(Self.faceDegree)) / 100))) / 100)
 				
@@ -4871,7 +4871,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			If (Not Self.extraAttackFlag) Then
 				Local gravMultiplier:= DSgn(Self.isAntiGravity)
 				
-				Local maxPower:= PickValue(Self.isPowerShoot, SHOOT_POWER, MIN_ATTACK_JUMP)
+				Local maxPower:= PickValue(Self.isPowerShoot, SHOOT_POWER, MIN_ATTACK_JUMP) ' (SHOOT_POWER / 2)
 				
 				Local newVelY:= gravMultiplier * getVelY()
 				
@@ -4885,7 +4885,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					newVelY = maxPower
 				EndIf
 				
-				If (characterID <> CHARACTER_KNUCKLES Or Self.myAnimationID < ANI_ATTACK_2 Or Self.myAnimationID > ANI_BAR_ROLL_1) Then
+				If (characterID <> CHARACTER_KNUCKLES Or (Self.myAnimationID < ANI_ATTACK_2 Or Self.myAnimationID > ANI_BAR_ROLL_1)) Then
 					setVelY(-gravMultiplier * newVelY)
 				EndIf
 				

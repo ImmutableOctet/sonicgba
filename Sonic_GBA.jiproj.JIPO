@@ -175,7 +175,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>8</X>
+        <X>38</X>
         <Y>432</Y>
       </CursorPos>
       <DocGUID>ab21d9b9-bf97-41dc-b333-9b0289eba3ce</DocGUID>
@@ -198,7 +198,7 @@
         </Point>
         <Point>
           <X>0</X>
-          <Y>436</Y>
+          <Y>439</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
@@ -517,8 +517,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>60</Y>
+        <X>26</X>
+        <Y>55</Y>
       </CursorPos>
       <DocGUID>3d91f39d-9ed5-4956-ba8d-97c12b7236d1</DocGUID>
       <Bookmarks>
@@ -616,8 +616,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\backmanagerstage4.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>60</Y>
+        <X>33</X>
+        <Y>57</Y>
       </CursorPos>
       <DocGUID>3c42b069-ef8a-48bc-b091-bd3f66fd076b</DocGUID>
       <Bookmarks />
@@ -722,8 +722,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\basicrollplatformspeed.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>70</Y>
+        <X>17</X>
+        <Y>120</Y>
       </CursorPos>
       <DocGUID>ad227c8d-24e8-4438-8deb-ef631316762e</DocGUID>
       <Bookmarks />
@@ -1298,8 +1298,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gimmickobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>28</X>
-        <Y>711</Y>
+        <X>9</X>
+        <Y>323</Y>
       </CursorPos>
       <DocGUID>0a6dacfa-3825-4bfb-a7d6-3ad2bb3f543b</DocGUID>
       <Bookmarks />
@@ -1440,8 +1440,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\mapmanager.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>161</Y>
+        <X>40</X>
+        <Y>129</Y>
       </CursorPos>
       <DocGUID>2fd84f88-e4c2-48e2-a98f-156e57c74477</DocGUID>
       <Bookmarks />
@@ -1632,8 +1632,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>6</X>
-        <Y>2081</Y>
+        <X>49</X>
+        <Y>4932</Y>
       </CursorPos>
       <DocGUID>3278944e-e055-4c42-84f7-20c71dc94dd1</DocGUID>
       <Bookmarks>
@@ -1777,16 +1777,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ropestart.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>39</X>
-        <Y>89</Y>
+        <X>59</X>
+        <Y>210</Y>
       </CursorPos>
       <DocGUID>e644e1a7-d8cc-4ddf-a8a3-2fbd73862de6</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ropeturn.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>5</X>
-        <Y>40</Y>
+        <X>4</X>
+        <Y>50</Y>
       </CursorPos>
       <DocGUID>25f23af3-2c27-4a51-9beb-2ce6f16386ae</DocGUID>
       <Bookmarks />

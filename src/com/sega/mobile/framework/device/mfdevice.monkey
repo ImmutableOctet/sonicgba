@@ -430,7 +430,10 @@ Class MFDevice Final
 			'MFGamePad.keyPressed(KEY_RIGHT)
 			
 			If (KeyHit(KEY_F)) Then
-				GameObject.instantTransmission((9624 - 8), (748 - 8))
+				Local px:= ((335792) Shr 6) ' 9624
+				Local py:= ((126208) Shr 6) ' 748
+				
+				GameObject.instantTransmission((px - 8), (py - 8))
 			EndIf
 			
 			For Local key:= START_KEY_INDEX To LAST_KEY_INDEX

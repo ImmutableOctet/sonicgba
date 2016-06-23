@@ -56,7 +56,7 @@ Class MapManager ' Implements SonicDef
 		Const LOAD_BACK:Int = 5
 		Const LOAD_CAMERA_RESET:Int = 6
 		
-		Global LOOP_COUNT:Int = (((960 + SCREEN_WIDTH) - 1) / 480) ' Const
+		Global LOOP_COUNT:Int = (((960 + SCREEN_WIDTH) - 1) / 480) ' Const ' 360
 		
 		Const MODEL_CACHE_DRAW:Bool = False
 		

@@ -30,25 +30,25 @@ Class RopeTurn Extends GimmickObject
 		End
 		
 		Method doWhileRail:Void(player:PlayerObject, direction:Int)
-			' Dynamic cast; potential performance hit.
-			Local start:= RopeStart(player.outOfControlObject)
-			
-			If (start <> Null) Then
-				If (start.degree > 90) Then
-					start.posX = Self.posX
-					start.posY = Self.posY
-					
-					start.turn()
-					
-					Self.used = True
-					
-					Return
+			If (Not Self.used And player.outOfControl) Then
+				' Optimization potential; dynamic cast.
+				Local start:= RopeStart(player.outOfControlObject)
+				
+				If (start <> Null) Then
+					If (start.degree > 90) Then
+						start.posX = Self.posX
+						start.posY = Self.posY
+						
+						start.turn()
+						
+						Self.used = True
+					EndIf
 				EndIf
 			EndIf
 		End
 		
 		Method refreshCollisionRect:Void(x:Int, y:Int)
-			collisionRect.setRect(x - (COLLISION_WIDTH/2), y, COLLISION_WIDTH, COLLISION_HEIGHT)
+			'collisionRect.setRect(x - (COLLISION_WIDTH/2), y, COLLISION_WIDTH, COLLISION_HEIGHT)
 			
 			Return
 		End

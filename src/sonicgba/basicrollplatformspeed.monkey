@@ -31,7 +31,7 @@ Class BasicRollPlatformSpeed Extends GimmickObject Abstract
 		Const RING_RANGE:Int = 16
 		
 		' Extensions:
-		Const MAX_DEGREE_SCALED:= 23040 ' (360 Shl 6)
+		Const MAX_DEGREE_SCALED:= (360 Shl 6) ' 23040
 		
 		' Fields:
 		Field direction:Bool
