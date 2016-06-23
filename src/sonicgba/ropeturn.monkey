@@ -48,7 +48,7 @@ Class RopeTurn Extends GimmickObject
 		End
 		
 		Method refreshCollisionRect:Void(x:Int, y:Int)
-			'collisionRect.setRect(x - (COLLISION_WIDTH/2), y, COLLISION_WIDTH, COLLISION_HEIGHT)
+			collisionRect.setRect(x - (COLLISION_WIDTH/2), y, COLLISION_WIDTH, COLLISION_HEIGHT)
 			
 			Return
 		End

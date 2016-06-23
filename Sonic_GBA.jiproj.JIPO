@@ -1777,16 +1777,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ropestart.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>46</X>
-        <Y>200</Y>
+        <X>25</X>
+        <Y>33</Y>
       </CursorPos>
       <DocGUID>e644e1a7-d8cc-4ddf-a8a3-2fbd73862de6</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ropeturn.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
-        <Y>15</Y>
+        <X>3</X>
+        <Y>50</Y>
       </CursorPos>
       <DocGUID>25f23af3-2c27-4a51-9beb-2ce6f16386ae</DocGUID>
       <Bookmarks />
