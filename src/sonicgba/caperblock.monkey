@@ -30,6 +30,9 @@ Class CaperBlock Extends GimmickObject
 		
 		Const COLLISION_Y_OFFSET:Int = 192
 		
+		' Extensions:
+		Const SPRING_FORCE:Int = 1350
+		
 		' Global variable(s):
 		Global blockImage:MFImage
 		
@@ -52,6 +55,27 @@ Class CaperBlock Extends GimmickObject
 			
 			Self.hobinCal = New HobinCal()
 		End
+		
+		' Methods:
+		
+		' Extensions:
+		Method playSound:Void()
+			soundInstance.playSe(SoundSystem.SE_148)
+		End
+		
+		Method shake:Void()
+			Self.hobinCal.startHobin(400, 90, 10)
+		End
+		
+		Method changePlayerDirection:Void(p:PlayerObject)
+			If (p.faceDirection) Then
+				p.degreeForDraw = 1
+				p.degreeRotateMode = PlayerObject.ROTATE_MODE_POSITIVE
+			Else
+				p.degreeForDraw = 359
+				p.degreeRotateMode = PlayerObject.ROTATE_MODE_NEGATIVE
+			EndIf
+		End
 	Public
 		' Functions:
 		Function releaseAllResource:Void()
@@ -62,6 +86,7 @@ Class CaperBlock Extends GimmickObject
 		Method draw:Void(g:MFGraphics)
 			drawInMap(g, blockImage, Self.posX + Self.hobinCal.getPosOffsetX(), Self.posY + Self.hobinCal.getPosOffsetY(), TOP|HCENTER)
 			
+			' This may be moved in the future.
 			Self.hobinCal.logic()
 		End
 		
@@ -75,47 +100,35 @@ Class CaperBlock Extends GimmickObject
 					p.faceDirection = True
 				EndIf
 				
-				' This behavior may change in the future (Forced usage of 'player'):
+				' This behavior may change in the future (Forced usage of 'player'; applies to all cases):
 				Select (direction)
 					Case DIRECTION_DOWN
 						If (p = player) Then
-							p.beSpring(1350, DIRECTION_DOWN) ' 1 ' direction
+							p.beSpring(SPRING_FORCE, DIRECTION_DOWN) ' 1 ' direction
 							
-							Self.hobinCal.startHobin(400, 90, 10)
+							shake()
 							
-							If ((p.getCharacterID() = CHARACTER_KNUCKLES) And (p.getCharacterAnimationID() = PlayerKnuckles.KNUCKLES_ANI_FLY_1 Or p.getCharacterAnimationID() = PlayerKnuckles.KNUCKLES_ANI_FLY_2 Or p.getCharacterAnimationID() = PlayerKnuckles.KNUCKLES_ANI_FLY_3 Or p.getCharacterAnimationID() = PlayerKnuckles.KNUCKLES_ANI_FLY_4)) Then
+							If ((p.getCharacterID() = CHARACTER_KNUCKLES) And (p.getCharacterAnimationID() >= PlayerKnuckles.KNUCKLES_ANI_FLY_1 And p.getCharacterAnimationID() <= PlayerKnuckles.KNUCKLES_ANI_FLY_4)) Then ' 1, 2, 3, 4
 								p.setAnimationId(PlayerKnuckles.KNUCKLES_ANI_WALK_1) ' 1
 							Else
 								p.setAnimationId(PlayerObject.ANI_RUN_1) ' 1
 							EndIf
 							
-							If (p.faceDirection) Then
-								p.degreeForDraw = 1
-								p.degreeRotateMode = 1
-							Else
-								p.degreeForDraw = 359
-								p.degreeRotateMode = 2
-							EndIf
+							changePlayerDirection(p)
 							
-							soundInstance.playSe(SoundSystem.SE_148)
+							playSound()
 						EndIf
 					Case DIRECTION_NONE
 						If (p.getMoveDistance().y > 0 And p.getCollisionRect().y1 < Self.collisionRect.y1 And p = player) Then
-							p.beSpring(1350, DIRECTION_DOWN) ' 1
+							p.beSpring(SPRING_FORCE, DIRECTION_DOWN) ' 1
 							
-							Self.hobinCal.startHobin(400, 90, 10)
+							shake()
 							
 							p.setAnimationId(PlayerObject.ANI_RUN_1)
 							
-							If (p.faceDirection) Then
-								p.degreeForDraw = 1
-								p.degreeRotateMode = 1
-							Else
-								p.degreeForDraw = 359
-								p.degreeRotateMode = 2
-							EndIf
+							changePlayerDirection(p)
 							
-							soundInstance.playSe(SoundSystem.SE_148)
+							playSound()
 						EndIf
 					Default
 						' Nothing so far.
@@ -124,7 +137,7 @@ Class CaperBlock Extends GimmickObject
 		End
 		
 		Method refreshCollisionRect:Void(x:Int, y:Int)
-			Self.collisionRect.setRect(x - (COLLISION_WIDTH / 2), y + COLLISION_Y_OFFSET, COLLISION_WIDTH, COLLISION_HEIGHT)
+			Self.collisionRect.setRect((x - (COLLISION_WIDTH / 2)), (y + COLLISION_Y_OFFSET), COLLISION_WIDTH, COLLISION_HEIGHT)
 		End
 		
 		Method close:Void()

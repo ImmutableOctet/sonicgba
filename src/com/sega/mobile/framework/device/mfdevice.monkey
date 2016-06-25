@@ -430,8 +430,11 @@ Class MFDevice Final
 			'MFGamePad.keyPressed(KEY_RIGHT)
 			
 			If (KeyHit(KEY_F)) Then
-				Local px:= ((335792) Shr 6) ' 9624
-				Local py:= ((126208) Shr 6) ' 748
+				Local x:= 615936 ' 335792
+				Local y:= 47872 ' 126208
+				
+				Local px:= ((x) Shr 6)
+				Local py:= ((y) Shr 6)
 				
 				GameObject.instantTransmission((px - 8), (py - 8))
 			EndIf

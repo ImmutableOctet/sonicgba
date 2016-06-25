@@ -283,6 +283,6 @@ Class CrlFP32 ' Final
 				re += 360
 			Wend
 			
-			Return (re Mod 360)
+			Return (re Mod 360) ' ATan2(x, y)
 		End
 End
