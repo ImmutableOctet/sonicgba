@@ -230,6 +230,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const SPIN_LV2_COUNT_CONF:Int = 36
 		
 		Const STAGE_PASS_STR_SPACE:Int = 182
+		
+		' TODO: Resolve foreign text.
 		Const STAGE_PASS_STR_SPACE_FONT:Int = MyAPI.zoomIn(MFGraphics.stringWidth(14, "索尼克完成行行")) + 20 ' "Sonic Completed the Level"
 		
 		Const SUPER_SONIC_CHANGING_CENTER_Y:Int = 25280
@@ -948,7 +950,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.justLeaveLand = False
 			Self.justLeaveCount = 2
 			Self.IsStandOnItems = False
-			Self.degreeRotateMode = 0
+			Self.degreeRotateMode = ROTATE_MODE_NEVER_MIND
 			Self.slipping = False
 			Self.doJumpForwardly = False
 			
@@ -2094,11 +2096,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 								Self.animationID = ANI_ROTATE_JUMP
 								
 								Self.drawer.restart()
-								
-								Return
+							Else
+								Self.animationID = ANI_FALLING
 							EndIf
-							
-							Self.animationID = TERMINAL_COUNT
 						Case ANI_JUMP_ROLL
 							Self.animationID = ANI_JUMP_RUSH
 						Case ANI_BAR_ROLL_1
@@ -2156,7 +2156,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Method drawSheildPrivate:Void(g:MFGraphics)
 			Local offset_x:Int
 			Local offset_y:Int
+			
 			Local drawDegree:= Self.faceDegree
+			
 			Local offset:= ((-(getCollisionRectHeight() + FOOT_OFFSET + (FOOT_OFFSET/2))) / 2)
 			
 			If (characterID = CHARACTER_KNUCKLES And Self.myAnimationID >= ANI_ATTACK_2 And Self.myAnimationID <= ANI_BAR_ROLL_1) Then
@@ -2755,7 +2757,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			Self.leavingBar = False
 			Self.doJumpForwardly = False
-			Self.degreeRotateMode = 0
+			Self.degreeRotateMode = ROTATE_MODE_NEVER_MIND
 			
 			Local tmpPower:= Self.movePower
 			Local tmpMaxVel:= Self.maxVelocity
@@ -2969,7 +2971,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						EndIf
 					EndIf
 					
-					If (Self.degreeRotateMode = 0) Then
+					If (Self.degreeRotateMode = ROTATE_MODE_NEVER_MIND) Then
 						Self.faceDirection = Self.isAntiGravity
 					EndIf
 				ElseIf ((Key.repeated(Key.gRight) Or isTerminal Or (Self.isCelebrate And Self.faceDirection)) And Not Self.ducting) Then
@@ -2981,7 +2983,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						EndIf
 					EndIf
 					
-					If (Self.degreeRotateMode = 0) Then
+					If (Self.degreeRotateMode = ROTATE_MODE_NEVER_MIND) Then
 						Self.faceDirection = Not Self.isAntiGravity
 					EndIf
 				EndIf
@@ -3035,7 +3037,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Method inputLogicSand:Void()
 			Self.leavingBar = False
 			Self.doJumpForwardly = False
-			Self.degreeRotateMode = 0
+			Self.degreeRotateMode = ROTATE_MODE_NEVER_MIND
 			
 			If (Self.velY > 0 And Not Self.sandStanding) Then
 				Self.sandStanding = True
@@ -3531,7 +3533,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				calDivideVelocity()
 			EndIf
 			
-			Self.degreeRotateMode = 0
+			Self.degreeRotateMode = ROTATE_MODE_NEVER_MIND
 			
 			' Magic number: 1 (Collision state)
 			If (Not Self.hurtNoControl Or Self.collisionState <> COLLISION_STATE_JUMP Or ((Self.velY >= 0 Or Self.isAntiGravity) And (Self.velY <= 0 Or Not Self.isAntiGravity))) Then
@@ -3608,7 +3610,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				calDivideVelocity()
 			EndIf
 			
-			Self.degreeRotateMode = 0
+			Self.degreeRotateMode = ROTATE_MODE_NEVER_MIND
 			
 			Local prey:= Self.footPointY
 			
@@ -4116,7 +4118,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			MyAPI.vibrate()
 			
-			Self.degreeRotateMode = 0
+			Self.degreeRotateMode = ROTATE_MODE_NEVER_MIND
 		End
 		
 		Method canBeHurt:Bool()
