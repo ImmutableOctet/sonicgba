@@ -774,6 +774,11 @@ Class MapManager ' Implements SonicDef
 			'windImage.Discard()
 			
 			windImage = Null
+			
+			' This invalidates any existing references to our "wind image", so if
+			' 'windImage' wasn't already 'Null', it would reference an invalid object.
+			windDrawer.close()
+			
 			windDrawer = Null
 		End
 		
@@ -921,7 +926,9 @@ Class MapManager ' Implements SonicDef
 			If (windImage = Null) Then
 				windImage = MFImage.createImage("/animation/bg_cloud_" + StageManager.getCurrentZoneId() + ".png")
 				
-				windDrawer = New Animation(windImage, "/animation/bg_cloud").getDrawer()
+				' Give the 'Animation' object control of 'windImage',
+				' so we can take care of it easily when the map closes.
+				windDrawer = New Animation(windImage, "/animation/bg_cloud", True).getDrawer()
 			EndIf
 			
 			If (windImage <> Null And windDrawer <> Null) Then
