@@ -37,6 +37,7 @@ Class ImageInfo
 		' Fields:
 		Field imageSeperate:MFImage[]
 		Field m_Clips:Short[][]
+		
 		Field m_nClips:Short
 	Protected
 		' Fields:
@@ -47,12 +48,12 @@ Class ImageInfo
 			' Nothing so far.
 		End
 		
-		Method New(image:MFImage)
-			Self.img_clip = image
+		Method New(image:MFImage, copy:Bool=False)
+			setImage(image, copy)
 		End
 		
 		Method New(imageFileName:String)
-			Self.img_clip = MFImage.createImage(imageFileName)
+			Self.img_clip = MFImage.createImage(imageFileName) ' setImage(...)
 		End
 		
 		' Methods:
@@ -64,6 +65,54 @@ Class ImageInfo
 			Next
 			
 			Return Self.m_Clips
+		End
+		
+		' Extensions:
+		Method setImage:Void(image:MFImage, copy:Bool=False)
+			If (copy) Then
+				Self.img_clip = MFImage.cloneImage(image)
+			Else
+				Self.img_clip = image
+			EndIf
+		End
+		
+		Method releaseImage:Bool()
+			If (MFImage.releaseImage(Self.img_clip)) Then
+				Self.img_clip = Null ' setImage(...)
+				
+				Return True
+			EndIf
+			
+			Return False
+		End
+		
+		Method releaseSeparatedImages:Void(clearArray:Bool=True) ' False
+			Local len:= Self.imageSeperate.Length
+			
+			If (len > 0) Then
+				For Local i:= 0 Until len
+					If (MFImage.releaseImage(Self.imageSeperate[i])) Then
+						If (clearArray) Then
+							Self.imageSeperate[i] = Null
+						EndIf
+					EndIf
+				Next
+				
+				Self.imageSeperate = []
+			EndIf
+		End
+	Protected
+		' Methods:
+		
+		' Extensions:
+		Method setImage_safe:Void(image:MFImage, copy:Bool=False)
+			If (releaseImage()) Then
+				setImage(image, copy)
+				
+				Return True
+			EndIf
+			
+			Return False
 		End
 	Public
 		' Methods:
@@ -96,13 +145,8 @@ Class ImageInfo
 		End
 		
 		Method close:Void()
-			Self.img_clip = Null
-			
-			For Local i:= 0 Until Self.imageSeperate.Length
-				Self.imageSeperate[i] = Null
-			Next
-			
-			Self.imageSeperate = []
+			releaseImage()
+			releaseSeparatedImages()
 		End
 
 		Method loadInfo:Void(ds:Stream, allow_img:Bool)
@@ -136,7 +180,7 @@ Class ImageInfo
 					
 					Local img:= MFImage.createImage(Animation.tmpPath + tmpFileName)
 					 
-					Self.img_clip = img
+					setImage_safe(img, False)
 					
 					Print("image fileName:" + tmpFileName)
 				EndIf
@@ -169,7 +213,7 @@ Class ImageInfo
 				Self.m_Clips[i][1] = 0
 			Next
 			
-			Self.img_clip = Null
+			releaseImage()
 		End
 		
 		Method getSeparateImage:MFImage(id:Int)

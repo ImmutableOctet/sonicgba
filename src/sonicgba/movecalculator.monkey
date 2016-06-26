@@ -16,7 +16,7 @@ Class MoveCalculator
 	Private
 		' Constant variable(s):
 		Const DEGREE_VELOCITY:Int = 5
-		Const HALF_MOVE_TIME:Int = 17
+		Const HALF_MOVE_TIME:Int = (MOVE_TIME / 2) ' 17
 		Const MOVE_TIME:Int = 34
 		
 		' Global variable(s):

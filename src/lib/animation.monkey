@@ -99,7 +99,7 @@ Class Animation
 			LoadAnimation(fileName + ".dat")
 		End
 		
-		Method New(image:MFImage, fileName:String)
+		Method New(image:MFImage, fileName:String, owns_image:Bool)
 			Self.isDoubleScale = False
 			Self.isAnimationQi = False
 			
@@ -116,7 +116,7 @@ Class Animation
 			
 			Self.fileName = fileName
 			
-			SetClipImg(image)
+			SetClipImg(image, owns_image)
 			
 			LoadAnimation(fileName + ".dat")
 		End
@@ -197,9 +197,9 @@ Class Animation
 			Self.imageInfo[0] = New ImageInfo(fn)
 		End
 		
-		Method SetClipImg:Void(img:MFImage)
+		Method SetClipImg:Void(img:MFImage, clone:Bool)
 			Self.imageInfo = New ImageInfo[1]
-			Self.imageInfo[0] = New ImageInfo(img)
+			Self.imageInfo[0] = New ImageInfo(img, clone)
 		End
 		
 		Method LoadAnimation:Void(fileName:String)
@@ -410,7 +410,7 @@ Class Animation
 			Return animationInstance
 		End
 		
-		Function closeAnimation:Void(animation:Animation)
+		Function closeAnimation:Void(animation:Animation) ' closeAnimation:Bool
 			If (animation <> Null) Then
 				animation.close()
 			EndIf

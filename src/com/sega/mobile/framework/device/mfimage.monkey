@@ -85,6 +85,12 @@ Class MFImage
 		End
 		
 		Function cloneImage:MFImage(img:MFImage)
+			If (img = Null) Then
+				' Throw New ImageNotClonedExeception(...)
+				
+				Return Null
+			EndIf
+			
 			Return createImage(img, 0, 0, img.getWidth(), img.getHeight())
 		End
 		

@@ -1962,6 +1962,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 					
 					MyAPI.drawRegion(g, mFImage, i2, 0, 16, 16, 0, i3, i, 33)
+					
 					Self.breatheNumY -= 1
 				EndIf
 			EndIf

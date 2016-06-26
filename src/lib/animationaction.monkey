@@ -33,17 +33,20 @@ Class Action
 		Const FRAME_DATA_SIZE:= 2
 		
 		' Fields:
-		Field img_clip:MFImage
 		Field m_CurFrame:Short
+		
+		'Field img_clip:MFImage
 		
 		' This may be replaced with a 'DataBuffer' at a later date.
 		Field m_FrameInfo:Byte[][]
 		
-		Field m_OldFrame:Byte
 		Field m_Timer:Short
+		Field m_nFrames:Short
+		
+		Field m_OldFrame:Byte
+		
 		Field m_bLoop:Bool
 		Field m_bPause:Bool
-		Field m_nFrames:Short
 		
 		' Methods:
 		Method InitializeFrameInfo:Byte[][](nFrames:Int) ' Void
