@@ -58,6 +58,11 @@ Class Animation
 	Protected
 		' Fields:
 		Field fileName:String
+		
+		' This is the internal reference counter for this object.
+		' Basically, when this hits zero during a call to 'release',
+		' the 'close' method will be called automatically.
+		' For some context, this is primarily set up for 'AnimationDrawer' objects.
 		Field refCount:Int
 	Public
 		' Global variable(s):
@@ -121,7 +126,7 @@ Class Animation
 			LoadAnimation(fileName + ".dat")
 		End
 	Protected
-		' Methods / Destructor(s):
+		' Methods:
 		Method close:Void()
 			If (imageInfo.Length > 0) Then
 				For Local I:= 0 Until imageInfo.Length
@@ -134,6 +139,24 @@ Class Animation
 			EndIf
 			
 			Self.imageInfo = []
+		End
+		
+		' Extensions:
+		
+		' The value of 'flag' is currently undefined.
+		Method release:Bool(parent:Object=Null, flag:Bool=False) ' parent:AnimationDrawer
+			If (Self.refCount <= 0) Then
+				close()
+				
+				Return True
+			EndIf
+			
+			Return False
+		End
+		
+		' Like 'release', the value of 'flag' is currently undefined.
+		Method retain:Void(parent:Object=Null, flag:Bool=False) ' parent:AnimationDrawer
+			Self.refCount += 1
 		End
 	Public
 		' Methods:
@@ -461,14 +484,10 @@ Class Animation
 		End
 
 		Method getDrawer:AnimationDrawer(actionId:Int, loop:Bool, trans:Int)
-			Self.refCount += 1
-			
 			Return New AnimationDrawer(Self, actionId, loop, trans)
 		End
 		
 		Method getDrawer:AnimationDrawer()
-			Self.refCount += 1
-			
 			Return New AnimationDrawer(Self)
 		End
 		

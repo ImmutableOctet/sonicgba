@@ -368,8 +368,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animation.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>69</X>
-        <Y>412</Y>
+        <X>10</X>
+        <Y>146</Y>
       </CursorPos>
       <DocGUID>7db5b541-bdb0-4607-be83-171465a4dc01</DocGUID>
       <Bookmarks />
@@ -383,8 +383,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationdrawer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>16</X>
-        <Y>114</Y>
+        <X>85</X>
+        <Y>134</Y>
       </CursorPos>
       <DocGUID>86279d7f-7e51-4613-8408-109410c0cca6</DocGUID>
       <Bookmarks />
@@ -1384,8 +1384,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\mapmanager.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>24</X>
-        <Y>923</Y>
+        <X>3</X>
+        <Y>780</Y>
       </CursorPos>
       <DocGUID>259c0bb8-ac6b-4cc8-a2d1-b469e4566755</DocGUID>
       <Bookmarks />

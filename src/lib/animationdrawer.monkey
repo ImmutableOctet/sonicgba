@@ -37,7 +37,7 @@ Class AnimationDrawer
 		Field loop:Bool
 		Field m_bPause:Bool
 		
-		Field ani:Animation
+		Field _ani:Animation
 		
 		Field actionId:Short
 		Field attr:Short
@@ -72,6 +72,17 @@ Class AnimationDrawer
 		End
 		
 		' Constructor(s):
+		
+		#Rem
+			Constructors automatically retain 'Animation' objects.
+			For details, please read the 'ani' property's documentation.
+			
+			This behavior was not present in the original source, and was
+			originally handled by the 'Animation' object itself.
+			
+			This system allows users to create 'AnimationDrawers' without potential memory leaks:
+		#End
+		
 		Method New(ani:Animation)
 			Self.speedMulti = 1
 			Self.speedDivide = 1
@@ -104,18 +115,51 @@ Class AnimationDrawer
 			Self.loop = loop
 		End
 	Protected
-		' Methods:
-		Method close:Void()
-			If (Self.ani <> Null) Then
-				Local animation:= Self.ani
-				
-				animation.refCount -= 1
-				
-				If (Self.ani.refCount <= 0) Then
-					Self.ani.close()
-				EndIf
+		' Properties:
+		
+		#Rem
+			This property handles the internal '_ani' reference.
+			
+			When constructing an 'AnimationDrawer', this is used to assign
+			the target-animation, meaning the constructors automatically
+			call the provided object's 'retain' method.
+			
+			This holds true for any object passed to this property.
+			
+			Likewise, if an 'Animation' is already referenced with '_ani',
+			this will replace that object with the input 'value'.
+			
+			When this replacement occurs, the original object will be released by calling its
+			'release' method, thus closing the 'Animation' if no other references exist.
+			
+			For more information, view the 'Animation.release' and 'Animation.retain' methods.
+			
+			When used as a method, this property returns 'True'
+			if the previous 'Animation' (If existent) was released.
+		#End
+		
+		Method ani:Bool(value:Animation) Property Final
+			Local prev_ani_result:Bool = False
+			
+			If (Self._ani <> Null) Then ' Self.ani
+				prev_ani_result = Self._ani.release(Self, (value <> Null))
 			EndIf
 			
+			Local prev_ani:= Self._ani
+			
+			Self._ani = value
+			
+			If (value <> Null) Then ' Self._ani ' Self.ani
+				value.retain(Self, ((prev_ani <> Null) And prev_ani_result))
+			EndIf
+			
+			Return prev_ani_result
+		End
+		
+		' Methods:
+		Method close:Void()
+			' This will automatically "release" our 'Animation' object.
+			' (This calls 'release' on it if necessary)
 			Self.ani = Null
 		End
 	Private
@@ -137,6 +181,14 @@ Class AnimationDrawer
 			EndIf
 		End
 	Public
+		' Properties:
+		
+		' This returns the 'Animation' object this is used to render.
+		' For details, please view the comments for the assignment overload.
+		Method ani:Animation() Property Final
+			Return Self._ani
+		End
+		
 		' Methods:
 		Method mustKeepFrameTime:Void(keepTime:Int)
 			Self.mustKeepTime = keepTime
