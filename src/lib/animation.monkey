@@ -125,7 +125,7 @@ Class Animation
 			
 			LoadAnimation(fileName + ".dat")
 		End
-	Protected
+		
 		' Methods:
 		Method close:Void()
 			If (imageInfo.Length > 0) Then
@@ -136,9 +136,9 @@ Class Animation
 						Self.imageInfo[I] = Null
 					EndIf
 				Next
+				
+				Self.imageInfo = []
 			EndIf
-			
-			Self.imageInfo = []
 		End
 		
 		' Extensions:
