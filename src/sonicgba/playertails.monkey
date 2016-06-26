@@ -124,14 +124,18 @@ Class PlayerTails Extends PlayerObject
 			
 			Local tailsImage:= MFImage.createImage("/animation/player/chr_tails.png")
 			
-			Local animation1:= New Animation(tailsImage, "/animation/player/chr_tails_01")
+			Local animation1:= New Animation(tailsImage, "/animation/player/chr_tails_01", False)
 			
 			Self.tailsDrawer1 = animation1.getDrawer()
 			Self.tailDrawer = animation1.getDrawer()
 			
 			Self.drawer = Self.tailsDrawer1
 			
-			Self.tailsDrawer2 = New Animation(tailsImage, "/animation/player/chr_tails_02").getDrawer()
+			Self.tailsDrawer2 = New Animation(tailsImage, "/animation/player/chr_tails_02", False).getDrawer()
+			
+			MFImage.releaseImage(tailsImage)
+			
+			'tailsImage = Null
 			
 			Self.attackRect = New PlayerAnimationCollisionRect(Self)
 		End

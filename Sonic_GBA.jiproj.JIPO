@@ -1577,8 +1577,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>80</X>
-        <Y>4351</Y>
+        <X>107</X>
+        <Y>4331</Y>
       </CursorPos>
       <DocGUID>86f991dd-fd07-40c9-a5da-1d445cb588db</DocGUID>
       <Bookmarks>
@@ -1610,12 +1610,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\playertails.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\playertails.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>10</X>
-        <Y>342</Y>
+        <X>21</X>
+        <Y>137</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>93188e88-21ca-4853-9dd7-957c5a806f1b</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\poal.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
