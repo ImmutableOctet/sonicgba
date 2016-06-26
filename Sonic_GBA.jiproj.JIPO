@@ -317,12 +317,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\ending\specialending.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\ending\specialending.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>8</X>
-        <Y>12</Y>
+        <X>0</X>
+        <Y>101</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>37d8cc3e-17a9-443f-aec9-6aeea3e37cdb</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\ending\supersonicending.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -368,8 +369,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animation.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>2</X>
-        <Y>127</Y>
+        <X>47</X>
+        <Y>163</Y>
       </CursorPos>
       <DocGUID>7db5b541-bdb0-4607-be83-171465a4dc01</DocGUID>
       <Bookmarks />
@@ -398,8 +399,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationimageinfo.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>46</X>
-        <Y>180</Y>
+        <X>58</X>
+        <Y>110</Y>
       </CursorPos>
       <DocGUID>4c565440-1f3e-44dc-ad31-426faa16e82d</DocGUID>
       <Bookmarks />

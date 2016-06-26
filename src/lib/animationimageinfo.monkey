@@ -68,6 +68,9 @@ Class ImageInfo
 		End
 		
 		' Extensions:
+		
+		' This method is unsafe if 'img_clip' already exists.
+		' Please call 'releaseImage' before using this, or call 'setImage_safe'.
 		Method setImage:Void(image:MFImage, copy:Bool=False)
 			If (copy) Then
 				Self.img_clip = MFImage.cloneImage(image)
@@ -105,7 +108,7 @@ Class ImageInfo
 		' Methods:
 		
 		' Extensions:
-		Method setImage_safe:Void(image:MFImage, copy:Bool=False)
+		Method setImage_safe:Bool(image:MFImage, copy:Bool=False)
 			If (releaseImage()) Then
 				setImage(image, copy)
 				

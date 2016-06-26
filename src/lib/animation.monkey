@@ -160,8 +160,8 @@ Class Animation
 		End
 	Public
 		' Methods:
-		Method setImage:Void(image:MFImage, id:Int)
-			Self.imageInfo[id].img_clip = image
+		Method setImage:Void(image:MFImage, id:Int, copy:Bool=False)
+			Self.imageInfo[id].setImage_safe(image, copy)
 		End
 		
 		Method SetCurAni:Void(no:Int)
