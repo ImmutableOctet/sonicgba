@@ -109,7 +109,7 @@ Class ImageInfo
 		
 		' Extensions:
 		Method setImage_safe:Bool(image:MFImage, copy:Bool=False)
-			If (releaseImage()) Then
+			If (Self.img_clip = Null Or releaseImage()) Then
 				setImage(image, copy)
 				
 				Return True

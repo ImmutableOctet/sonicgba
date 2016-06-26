@@ -399,8 +399,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationimageinfo.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>59</X>
+        <Y>110</Y>
       </CursorPos>
       <DocGUID>4c565440-1f3e-44dc-ad31-426faa16e82d</DocGUID>
       <Bookmarks />
@@ -1351,8 +1351,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\lightfont.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>137</X>
-        <Y>68</Y>
+        <X>82</X>
+        <Y>71</Y>
       </CursorPos>
       <DocGUID>c8322cbb-4aec-4200-a62b-3be8fb8e6c78</DocGUID>
       <Bookmarks />
@@ -2201,12 +2201,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>34</X>
+        <Y>2566</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>59e24381-5725-4f7f-af16-c35aae0ad9c1</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\application.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
