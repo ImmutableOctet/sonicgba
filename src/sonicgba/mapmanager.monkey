@@ -91,6 +91,9 @@ Class MapManager ' Implements SonicDef
 		
 		Global shakingUp:Bool
 		
+		' This specifies if the current map uses multiple tile-graphics.
+		' If this is 'False', the single tile-graphic will be held with 'image'.
+		' However, if this is 'True', the loaded tile-graphics will be stored in 'tileimage'.
 		Global stageFlag:Bool = False
 		
 		' Streams:
@@ -107,7 +110,7 @@ Class MapManager ' Implements SonicDef
 		
 		Global mappaintframe:Int = 0
 		
-		Global modelImageArray:MFImage[]
+		'Global modelImageArray:MFImage[]
 		'Global modelRGB:Int[] = ' New Int[9216]
 		
 		Global windDrawer:AnimationDrawer
@@ -150,8 +153,12 @@ Class MapManager ' Implements SonicDef
 		Global actualRightCameraLimit:Int
 		Global actualUpCameraLimit:Int
 		
+		' This holds the map's tile-graphic if it only uses one set.
+		' Behavior is explained by comments regarding 'stageFlag'.
 		Global image:MFImage
 		
+		' This holds the map's tile-graphics if it uses more than one.
+		' For details, please view the comments regarding 'stageFlag'.
 		Global tileimage:MFImage[]
 		
 		' A collection of tile-maps.
@@ -724,15 +731,20 @@ Class MapManager ' Implements SonicDef
 		End
 		
 		Function closeMap:Void()
-			image = Null
+			' If this stage only uses one tile-graphic, release it:
+			If (MFImage.releaseImage(image)) Then ' Not stageFlag And ...
+				image = Null
+			EndIf
 			
-			'#Rem
+			' If this stage uses multiple tile-graphics, release them:
+			'If (stageFlag) Then
 			For Local i:= 0 Until tileimage.Length
-				'tileimage[i].Discard()
-				
-				tileimage[i] = Null
+				If (MFImage.releaseImage(tileimage[i])) Then
+					' This behavior may change in the future.
+					tileimage[i] = Null
+				EndIf
 			Next
-			'#End
+			'EndIf
 			
 			tileimage = []
 			
