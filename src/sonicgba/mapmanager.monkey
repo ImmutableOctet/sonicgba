@@ -777,7 +777,7 @@ Class MapManager ' Implements SonicDef
 			
 			' This invalidates any existing references to our "wind image", so if
 			' 'windImage' wasn't already 'Null', it would reference an invalid object.
-			windDrawer.close()
+			Animation.closeAnimationDrawer(windDrawer)
 			
 			windDrawer = Null
 		End

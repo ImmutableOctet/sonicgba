@@ -99,7 +99,7 @@ Class SpecialEnding Extends PlainEnding
 			Self.cloudCount = 0
 			
 			If (emeraldID > 0) Then
-				Self.characterSpDrawer = New Animation(MFImage.createPaletteImage(ENDING_ANIMATION_PATH + PALETTE_IMAGE_NAME[characterID] + String(emeraldID + 1) + ".pal"), ENDING_ANIMATION_PATH + CHARACTER_SP_ANIMATION_NAME[characterID]).getDrawer()
+				Self.characterSpDrawer = New Animation(MFImage.createPaletteImage(ENDING_ANIMATION_PATH + PALETTE_IMAGE_NAME[characterID] + String(emeraldID + 1) + ".pal"), ENDING_ANIMATION_PATH + CHARACTER_SP_ANIMATION_NAME[characterID], True).getDrawer()
 			Else
 				Self.characterSpDrawer = New Animation(ENDING_ANIMATION_PATH + CHARACTER_SP_ANIMATION_NAME[characterID]).getDrawer()
 			EndIf

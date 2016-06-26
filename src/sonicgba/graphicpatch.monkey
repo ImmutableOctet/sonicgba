@@ -79,7 +79,7 @@ Class GraphicPatch Extends GimmickObject
 					EndIf
 				Case 3
 					If (mapPatchAnimation = Null) Then
-						mapPatchAnimation = New Animation(MapManager.image, "/animation/patch_st" + StageManager.getCurrentZoneId())
+						mapPatchAnimation = New Animation(MapManager.image, "/animation/patch_st" + StageManager.getCurrentZoneId(), False)
 					EndIf
 					
 					Self.drawer = mapPatchAnimation.getDrawer(Self.iTop, False, 0)

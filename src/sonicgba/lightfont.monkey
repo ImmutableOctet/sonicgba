@@ -66,7 +66,7 @@ Class LightFont Extends GimmickObject
 			EndIf
 			
 			If (lightFontAnimation[left] = Null) Then
-				lightFontAnimation[left] = New Animation(MFImage.createImage("/animation/light_font_" + left + ".png"), "/animation/light_font")
+				lightFontAnimation[left] = New Animation(MFImage.createImage("/animation/light_font_" + left + ".png"), "/animation/light_font", True)
 			EndIf
 			
 			Self.drawer = lightFontAnimation[left].getDrawer(1, False, 0) ' FONT_O ' FONT_S
