@@ -178,13 +178,18 @@ Class PlayerKnuckles Extends PlayerObject
 			Self.swimWaterEffectFlag = False
 			Self.Floating = False
 			
-			Local chaImage:= MFImage.createImage("/animation/player/chr_knuckles.png")
-			Local animation1:= New Animation(chaImage, "/animation/player/chr_knuckles_01")
+			Local knuxImage:= MFImage.createImage("/animation/player/chr_knuckles.png")
+			
+			Local animation1:= New Animation(knuxImage, "/animation/player/chr_knuckles_01", False)
 			
 			Self.knucklesDrawer1 = animation1.getDrawer()
 			Self.knuckles_effectDrawer = animation1.getDrawer()
 			
-			Self.knucklesDrawer2 = New Animation(chaImage, "/animation/player/chr_knuckles_02").getDrawer()
+			Self.knucklesDrawer2 = New Animation(knuxImage, "/animation/player/chr_knuckles_02", False).getDrawer()
+			
+			MFImage.releaseImage(knuxImage)
+			
+			'knuxImage = Null
 			
 			Self.drawer = Self.knucklesDrawer1
 			
