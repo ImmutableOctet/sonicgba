@@ -158,12 +158,17 @@ Class PlayerAmy Extends PlayerObject
 			
 			Local amyImage:= MFImage.createImage("/animation/player/chr_amy.png")
 			
-			Self.amyAnimation = New Animation(amyImage, "/animation/player/chr_amy_01")
+			' This is used internally, and therefore needs to be referenced.
+			Self.amyAnimation = New Animation(amyImage, "/animation/player/chr_amy_01", False)
 			
 			Self.amyDrawer1 = Self.amyAnimation.getDrawer()
 			Self.drawer = Self.amyDrawer1
 			
-			Self.amyDrawer2 = New Animation(amyImage, "/animation/player/chr_amy_02").getDrawer()
+			Self.amyDrawer2 = New Animation(amyImage, "/animation/player/chr_amy_02", False).getDrawer()
+			
+			MFImage.releaseImage(amyImage)
+			
+			'amyImage = Null
 			
 			Self.attackRect = New PlayerAnimationCollisionRect(Self)
 			
@@ -175,6 +180,7 @@ Class PlayerAmy Extends PlayerObject
 			Animation.closeAnimationDrawer(Self.amyDrawer1)
 			Self.amyDrawer1 = Null
 			
+			' Close 'amyAnimation', just in case. (Not actually unnecessary)
 			Animation.closeAnimation(Self.amyAnimation)
 			Self.amyAnimation = Null
 			
