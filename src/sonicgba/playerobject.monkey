@@ -4321,7 +4321,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				If (image = Null) Then
 					Self.waterFallDrawer = New Animation("/animation/water_fall").getDrawer(0, True, 0)
 				Else
-					Self.waterFallDrawer = New Animation(image, "/animation/water_fall").getDrawer(0, True, 0)
+					Self.waterFallDrawer = New Animation(image, "/animation/water_fall", True).getDrawer(0, True, 0)
 				EndIf
 			EndIf
 		End
@@ -4349,7 +4349,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				If (image = Null) Then
 					Self.waterFlushDrawer = New Animation("/animation/water_flush").getDrawer(0, True, 0)
 				Else
-					Self.waterFlushDrawer = New Animation(image, "/animation/water_flush").getDrawer(0, True, 0)
+					Self.waterFlushDrawer = New Animation(image, "/animation/water_flush", True).getDrawer(0, True, 0)
 				EndIf
 			EndIf
 			

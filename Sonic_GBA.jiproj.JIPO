@@ -1570,17 +1570,31 @@
     <DocUserOptions Filename=".\src\sonicgba\playerknuckles.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>43</X>
-        <Y>200</Y>
+        <Y>187</Y>
       </CursorPos>
       <DocGUID>e9e8a114-ceae-4207-a54e-1ab103da2eaf</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>80</X>
+        <Y>4351</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>86f991dd-fd07-40c9-a5da-1d445cb588db</DocGUID>
+      <Bookmarks>
+        <Point>
+          <X>0</X>
+          <Y>234</Y>
+        </Point>
+        <Point>
+          <X>0</X>
+          <Y>548</Y>
+        </Point>
+        <Point>
+          <X>0</X>
+          <Y>6807</Y>
+        </Point>
+      </Bookmarks>
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playersonic.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
