@@ -3,7 +3,9 @@ Strict
 Public
 
 ' Imports:
-' Nothing so far.
+Private
+	Import regal.hash.external
+Public
 
 ' Classes:
 Class MyAPI
@@ -23,13 +25,13 @@ Class MyAPI
 		Local var1:= (value Mod 360)
 		
 		If (var1 >= 0 And var1 <= 90) Then
-			Return (sinData2[var1] Shr FIXED_TWO_BASE) ' >>> FIXED_TWO_BASE
+			Return Lsr(sinData2[var1], FIXED_TWO_BASE) ' Shr FIXED_TWO_BASE
 		ElseIf (var1 > 90 And var1 <= 180) Then
-			Return (sinData2[90 - (var1 - 90)] Shr FIXED_TWO_BASE) ' >>> FIXED_TWO_BASE
+			Return Lsr(sinData2[90 - (var1 - 90)], FIXED_TWO_BASE) ' Shr FIXED_TWO_BASE
 		ElseIf (var1 > 180 And var1 <= 270) Then
-			Return -(sinData2[var1 - 180] Shr FIXED_TWO_BASE) ' >>> FIXED_TWO_BASE
+			Return -Lsr(sinData2[var1 - 180], FIXED_TWO_BASE) ' Shr FIXED_TWO_BASE
 		ElseIf (var1 > 270 And var1 <= 359) Then
-			Return -(sinData2[90 - (var1 - 270)] Shr FIXED_TWO_BASE) ' >>> FIXED_TWO_BASE
+			Return -Lsr(sinData2[90 - (var1 - 270)], FIXED_TWO_BASE) ' Shr FIXED_TWO_BASE
 		EndIf
 		
 		Return 0

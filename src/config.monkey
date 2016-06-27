@@ -1,7 +1,7 @@
 ' Preprocessor related:
 #MONKEYLANG_EXTENSION_WIDECHARACTERS = True
 
-#GLFW_USE_MINGW = False
+'#GLFW_USE_MINGW = False
 
 '#SONICGBA_EASTEREGGS = True
 
@@ -27,7 +27,7 @@
 '#End
 
 ' File formats:
-#TEXT_FILES+="*.txt|*.xml|*.json|*.ssm"
+#TEXT_FILES+="*.txt|*.xml|*.json|*.ssm|*.glsl"
 #IMAGE_FILES+="*.png|*.jpg"
 #SOUND_FILES+="*.wav|*.ogg"
 #MUSIC_FILES+="*.wav|*.ogg"
