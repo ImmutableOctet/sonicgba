@@ -111,7 +111,7 @@ Class SpecialObject Abstract ' Implements SSDef
 				EndIf
 			Next
 			
-			objectArray = tmpVector.ToArray()
+			objectArray = tmpVector.ToArray() ' Data
 		End
 		
 		Function closeObjects:Void()

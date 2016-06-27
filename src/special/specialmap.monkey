@@ -52,7 +52,7 @@ Class SpecialMap ' Implements SSDef
 			Local img:MFImage = Null
 			
 			If (specialStageID > 0) Then
-				img = MFImage.createPaletteImage("/special_res/sp_bg_" + (specialStageID + 1) + ".pal")
+				img = MFImage.createPaletteImage("/special_res/sp_bg_" + String(specialStageID + 1) + ".pal")
 			EndIf
 			
 			Local animation:= Animation.getInstanceFromQi("/special_res/sp_bg.dat")[0]
@@ -75,12 +75,16 @@ Class SpecialMap ' Implements SSDef
 			Animation.closeAnimationDrawer(mapBg1Drawer)
 			Animation.closeAnimationDrawer(mapBg2Drawer)
 			
-			starImage = Null
+			If (MFImage.releaseImage(starImage)) Then
+				starImage = Null
+			EndIf
 		End
 		
 		Function cameraLogic:Void()
+			' Magic number: 120
 			Local topPlayerY:= ((SpecialObject.player.posY Shr 6) + 120)
 			
+			' Magic number: 150
 			cameraX = ((CAMERA_MAX_X * ((SpecialObject.player.posX Shr 6) + 150)) / ssdef.PLAYER_MOVE_WIDTH)
 			cameraY = ((CAMERA_MAX_Y * topPlayerY) / ssdef.PLAYER_MOVE_HEIGHT)
 			

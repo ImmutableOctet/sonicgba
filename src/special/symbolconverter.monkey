@@ -12,11 +12,16 @@ Private
 Public
 
 ' Classes:
-Class SpecialStageArrayConverter Extends ArraySymbolConverter<Int, ObjectSymbolConverter> ' Alias
+
+' This is used to convert object entries from string-based array notation to actual arrays.
+Class SpecialArrayConverter Extends ArraySymbolConverter<Int, SpecialObjectSymbolConverter> ' Alias
 	' Nothing so far.
 End
 
-Class ObjectSymbolConverter Extends IntSymbolConverter
+Class SpecialOrderArrayConverter
+End
+
+Class SpecialObjectSymbolConverter Extends IntSymbolConverter
 	' Functions:
 	Function Value_To_Symbol:String(n:Int)
 		Select (n)

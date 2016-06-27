@@ -29,7 +29,12 @@ Class ArraySymbolConverter<ValueType, Converter>
 			last = data.Length
 		Endif
 		
-		Local entries:= data[first..last].Split(SeparatorSymbol)
+		If (first = 0 And last = 0) Then
+			Return []
+		EndIf
+		
+		Local csv:= data[first..last]
+		Local entries:= csv.Split(SeparatorSymbol)
 		
 		Local output:= New ValueType[entries.Length]
 		
@@ -41,6 +46,10 @@ Class ArraySymbolConverter<ValueType, Converter>
 	End
 	
 	Function Encode:String(data:ValueType[], padding:Bool=True)
+		If (data.Length = 0) Then
+			Return (BeginSymbol + EndSymbol)
+		EndIf
+		
 		Local output:String
 		
 		Local lastIndex:= (data.Length - 1)
