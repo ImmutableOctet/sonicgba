@@ -195,7 +195,11 @@ Class MFDevice Final
 			EndIf
 			
 			If (Not path.StartsWith( "." )) Then ' And Not path.StartsWith( "/" )
-				path = ("data/" + path) ' "monkey://data/"
+				#If TARGET = "html5"
+					path = ("monkey://data/" + path)
+				#Else
+					path = ("data/" + path) ' "monkey://data/"
+				#End
 			EndIf
 			
 			Return FixInvalidSymbolsInPath(path)

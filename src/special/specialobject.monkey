@@ -99,9 +99,11 @@ Class SpecialObject Abstract ' Implements SSDef
 			
 			Local tmpVector:= New Stack<SpecialObject>()
 			
+			STAGE_ID_TO_SPECIAL_ID = LoadSpecialStageOrder()
+			
 			Local ssIndex:= STAGE_ID_TO_SPECIAL_ID[StageManager.getStageID()]
 			
-			Local currentStage:= SSMapData.STAGE_LIST[ssIndex]
+			Local currentStage:= SSMapData.STAGE_LIST[ssIndex] ' LoadSpecialStageMap(ssIndex)
 			
 			For Local arguments:= EachIn currentStage
 				Local tmpObj:= getNewInstance(arguments[3], arguments[0], arguments[1], arguments[2])

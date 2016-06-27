@@ -5,6 +5,13 @@ Public
 ' Imports:
 Private
 	'Import special.specialobject
+	
+	Import special.ssdef
+	Import special.symbolconverter
+	
+	Import mojo.app
+	
+	Import com.sega.mobile.framework.device.mfdevice
 Public
 	Import special.ssmapdata2
 
@@ -960,4 +967,19 @@ Class SSMapData Extends SSMapData2 ' Interface
 								[0, 0, 35072, SSOBJ_GOAL]]
 	
 	Global STAGE_LIST:Int[][][] = [STAGE_1, STAGE_2, STAGE_3, STAGE_4, STAGE_5, STAGE_6, STAGE_7] ' Const
+End
+
+' Functions:
+Function LoadSpecialStageOrder:Int[]()
+	Return LoadSpecialStageOrder(SPECIAL_LAYOUT_FILE_PATH + "/ss_order.txt")
+End
+
+Function LoadSpecialStageOrder:Int[](Path:String)
+	Local str:= LoadString(MFDevice.FixResourcePath(Path))
+	
+	If (str.Length = 0) Then
+		Return STAGE_ID_TO_SPECIAL_ID
+	EndIf
+	
+	Return SpecialOrderArrayConverter.Decode(str)
 End

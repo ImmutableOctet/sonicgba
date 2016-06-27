@@ -18,7 +18,8 @@ Class SpecialArrayConverter Extends ArraySymbolConverter<Int, SpecialObjectSymbo
 	' Nothing so far.
 End
 
-Class SpecialOrderArrayConverter
+' This is used to convert the contents of the "special-stage order file" into a proper array for internal usage.
+Class SpecialOrderArrayConverter Extends ArraySymbolConverter<Int, IntSymbolConverter> ' Alias
 End
 
 Class SpecialObjectSymbolConverter Extends IntSymbolConverter

@@ -169,19 +169,21 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>29</X>
+        <Y>198</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>7a8b7481-4b65-4edf-b2d3-6251d5d4a72d</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgamepad.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgamepad.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>25</X>
-        <Y>187</Y>
+        <X>7</X>
+        <Y>9</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>b4f517f8-d24c-4c04-959c-f9a0dc7f8859</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -407,8 +409,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\arraysymbolconverter.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>21</X>
-        <Y>36</Y>
+        <X>27</X>
+        <Y>64</Y>
       </CursorPos>
       <DocGUID>7f33e352-1488-4338-8738-0ff188f6dfcb</DocGUID>
       <Bookmarks />
@@ -2078,7 +2080,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\specialobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>25</X>
+        <X>41</X>
         <Y>103</Y>
       </CursorPos>
       <DocGUID>4cc79e98-90ac-4bad-bb1b-544d83c7fc7e</DocGUID>
@@ -2105,13 +2107,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\special\ssdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\special\ssdef.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>52</X>
-        <Y>26</Y>
+        <X>30</X>
+        <Y>23</Y>
       </CursorPos>
-      <DocGUID>a29d2faf-418d-4828-bd4a-597db205d985</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssfollowring.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -2136,8 +2137,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssmapdata.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>40</X>
-        <Y>24</Y>
+        <X>41</X>
+        <Y>977</Y>
       </CursorPos>
       <DocGUID>2ffe1cb3-2579-4778-85de-392589bf256f</DocGUID>
       <Bookmarks />
@@ -2172,8 +2173,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\symbolconverter.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>91</X>
-        <Y>15</Y>
+        <X>56</X>
+        <Y>21</Y>
       </CursorPos>
       <DocGUID>b84e6b34-c2b9-4665-9c52-36c8d5f62320</DocGUID>
       <Bookmarks />
