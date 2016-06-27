@@ -22,6 +22,9 @@ Const PLAYER_VELOCITY_STANDARD:Int = 4
 Const SPECIAL_ANIMATION_PATH:String = "/animation/special"
 Const SPECIAL_FILE_PATH:String = "/special_res"
 
+' These represent types of objects in a special-stage.
+' To use these in an external map definition, corresponding
+' entries must be made in 'special.symbolconverter'.
 Const SSOBJ_RING_ID:Int = 0
 Const SSOBJ_TRIC_ID:Int = 1
 Const SSOBJ_BNBK_ID:Int = 2
