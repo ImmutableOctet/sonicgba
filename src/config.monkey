@@ -27,7 +27,7 @@
 '#End
 
 ' File formats:
-#TEXT_FILES+="*.txt|*.xml|*.json"
+#TEXT_FILES+="*.txt|*.xml|*.json|*.ssm"
 #IMAGE_FILES+="*.png|*.jpg"
 #SOUND_FILES+="*.wav|*.ogg"
 #MUSIC_FILES+="*.wav|*.ogg"

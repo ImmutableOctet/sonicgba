@@ -103,15 +103,19 @@ Class SpecialObject Abstract ' Implements SSDef
 			
 			Local ssIndex:= STAGE_ID_TO_SPECIAL_ID[StageManager.getStageID()]
 			
-			Local currentStage:= SSMapData.STAGE_LIST[ssIndex] ' LoadSpecialStageMap(ssIndex)
+			LoadSpecialStage(ssIndex, tmpVector)
 			
-			For Local arguments:= EachIn currentStage
-				Local tmpObj:= getNewInstance(arguments[3], arguments[0], arguments[1], arguments[2])
+			#Rem
+				Local currentStage:= SSMapData.STAGE_LIST[ssIndex]
 				
-				If (tmpObj <> Null) Then
-					tmpVector.Push(tmpObj)
-				EndIf
-			Next
+				For Local arguments:= EachIn currentStage
+					Local tmpObj:= getNewInstance(arguments[3], arguments[0], arguments[1], arguments[2])
+					
+					If (tmpObj <> Null) Then
+						tmpVector.Push(tmpObj)
+					EndIf
+				Next
+			#End
 			
 			objectArray = tmpVector.ToArray() ' Data
 		End

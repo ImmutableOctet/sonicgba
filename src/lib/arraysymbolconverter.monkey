@@ -16,10 +16,14 @@ Class ArraySymbolConverter<ValueType, Converter>
 	' Constant variable(s):
 	Const BeginSymbol:= Converter.BeginSymbol
 	Const EndSymbol:= Converter.EndSymbol
+	
 	Const SeparatorSymbol:= Converter.SeparatorSymbol
 	
+	Const SpaceSymbol:String = " "
+	Const TabSymbol:String = "~t"
+	
 	' Functions:
-	Function Decode:ValueType[](data:String, out:ValueType[]=[])
+	Function Decode:ValueType[](data:String, out:ValueType[]=[], cleanUpInput:Bool=True)
 		Const STRING_INVALID_LOCATION:= -1
 		
 		Local first:= (data.Find(BeginSymbol) + 1)
@@ -34,6 +38,11 @@ Class ArraySymbolConverter<ValueType, Converter>
 		EndIf
 		
 		Local csv:= data[first..last]
+		
+		If (cleanUpInput) Then
+			csv = csv.Replace(SpaceSymbol, "").Replace(TabSymbol, "")
+		EndIf
+		
 		Local entries:= csv.Split(SeparatorSymbol)
 		
 		Local output:ValueType[]
@@ -64,7 +73,7 @@ Class ArraySymbolConverter<ValueType, Converter>
 			output += Converter.Value_To_Symbol(data[I]) + SeparatorSymbol
 			
 			If (padding) Then
-				output += Space
+				output += SpaceSymbol
 			EndIf
 		Next
 		
