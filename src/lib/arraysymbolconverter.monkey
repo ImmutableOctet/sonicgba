@@ -19,7 +19,7 @@ Class ArraySymbolConverter<ValueType, Converter>
 	Const SeparatorSymbol:= Converter.SeparatorSymbol
 	
 	' Functions:
-	Function Decode:ValueType[](data:String)
+	Function Decode:ValueType[](data:String, out:ValueType[]=[])
 		Const STRING_INVALID_LOCATION:= -1
 		
 		Local first:= (data.Find(BeginSymbol) + 1)
@@ -36,7 +36,13 @@ Class ArraySymbolConverter<ValueType, Converter>
 		Local csv:= data[first..last]
 		Local entries:= csv.Split(SeparatorSymbol)
 		
-		Local output:= New ValueType[entries.Length]
+		Local output:ValueType[]
+		
+		If (out.Length = 0) Then
+			output = New ValueType[entries.Length]
+		Else
+			output = out
+		EndIf
 		
 		For Local I:= 0 Until output.Length
 			output[I] = Converter.Symbol_To_Value(entries[I])
