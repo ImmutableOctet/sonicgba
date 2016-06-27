@@ -39,7 +39,7 @@ Class ArraySymbolConverter<ValueType, Converter>
 		Local output:= New ValueType[entries.Length]
 		
 		For Local I:= 0 Until output.Length
-			output[I] = Symbol_To_Number(entries[I])
+			output[I] = Converter.Symbol_To_Value(entries[I])
 		Next
 		
 		Return output
@@ -55,16 +55,16 @@ Class ArraySymbolConverter<ValueType, Converter>
 		Local lastIndex:= (data.Length - 1)
 		
 		For Local I:= 0 Until lastIndex
-			output += Number_To_Symbol(data[I]) + SeparatorSymbol
+			output += Converter.Value_To_Symbol(data[I]) + SeparatorSymbol
 			
 			If (padding) Then
 				output += Space
 			EndIf
 		Next
 		
-		output += Number_To_Symbol(data[lastIndex])
+		output += Converter.Value_To_Symbol(data[lastIndex])
 		
-		Return BeginSymbol + output + EndSymbol
+		Return (BeginSymbol + output + EndSymbol)
 	End
 End
 
