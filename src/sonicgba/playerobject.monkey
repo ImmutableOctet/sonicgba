@@ -3008,7 +3008,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			If (Self.velY >= ((-BODY_OFFSET) - getGravity())) Then
 				Local velX2:= (Self.velX Shl 5)
-				Local resistance:= ((velX2 * 3) / JUMP_REVERSE_POWER)
+				Local resistance:= (velX2 * 3 / JUMP_REVERSE_POWER)
 				
 				If (velX2 > 0) Then
 					velX2 -= resistance
@@ -3030,13 +3030,15 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			If (Self.smallJumpCount > 0) Then
 				Self.smallJumpCount -= 1
 				
-				If (Not (Self.noVelMinus Or Key.repeated(Key.gUp | Key.B_HIGH_JUMP))) Then
-					Self.velY += ((DSgn(Not Self.isAntiGravity)) * (getGravity() / 2))
+				' From what I understand, this mainly happens when using the insta-shield:
+				If (Not Self.noVelMinus And Not Key.repeated(Key.gUp | Key.B_HIGH_JUMP)) Then
+					Self.velY += ((DSgn(Not Self.isAntiGravity)) * (getGravity() / 2)) ' Shr 1
 					
-					Self.velY += ((DSgn(Not Self.isAntiGravity)) * (getGravity() / 4))
+					Self.velY += ((DSgn(Not Self.isAntiGravity)) * (getGravity() / 4)) ' Shr 2
 				EndIf
 			EndIf
 			
+			' Apply regular gravity.
 			Self.velY += (DSgn(Not Self.isAntiGravity) * getGravity())
 			
 			If (Self.animationID = ANI_POP_JUMP_UP) Then

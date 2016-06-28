@@ -303,6 +303,8 @@ Class MFDevice Final
 		Function Update:Void()
 			handleInput()
 			
+			MFGamePad.keyTick()
+			
 			' Update (Input) components:
 			For Local component:= EachIn componentVector 
 				component.tick()
@@ -328,8 +330,6 @@ Class MFDevice Final
 			If (Not interruptPauseFlag) Then
 				currentState.onTick()
 			EndIf
-			
-			MFGamePad.keyTick()
 		End
 		
 		' This performs a raw render of the game without displaying

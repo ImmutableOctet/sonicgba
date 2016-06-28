@@ -75,26 +75,26 @@ Class Key
 		Const TYPE_SP_MODE:Int = 0
 		
 		' Global variable(s):
-		Global B_1:Int = MFGamePad.KEY_NUM_1
-		Global B_2:Int = MFGamePad.KEY_NUM_2
-		Global B_3:Int = MFGamePad.KEY_NUM_3
-		Global B_4:Int = MFGamePad.KEY_NUM_4
-		Global B_5:Int = MFGamePad.KEY_NUM_5
-		Global B_6:Int = MFGamePad.KEY_NUM_6
-		Global B_7:Int = MFGamePad.KEY_NUM_7
-		Global B_8:Int = MFGamePad.KEY_NUM_8
-		Global B_9:Int = MFGamePad.KEY_NUM_9
-		Global B_0:Int = MFGamePad.KEY_NUM_0
+		Global B_1:Int = 128 ' MFGamePad.KEY_NUM_1
+		Global B_2:Int = 256 ' MFGamePad.KEY_NUM_2
+		Global B_3:Int = 512 ' MFGamePad.KEY_NUM_3
+		Global B_4:Int = 1024 ' MFGamePad.KEY_NUM_4
+		Global B_5:Int = 2048 ' MFGamePad.KEY_NUM_5
+		Global B_6:Int = 4096 ' MFGamePad.KEY_NUM_6
+		Global B_7:Int = 8192 ' MFGamePad.KEY_NUM_7
+		Global B_8:Int = 16384 ' MFGamePad.KEY_NUM_8
+		Global B_9:Int = 32768 ' MFGamePad.KEY_NUM_9
+		Global B_0:Int = 131072 ' MFGamePad.KEY_NUM_0
 		
-		Global B_UP:Int = MFGamePad.KEY_PAD_UP
-		Global B_DOWN:Int = MFGamePad.KEY_PAD_DOWN
-		Global B_LEFT:Int = MFGamePad.KEY_PAD_LEFT
-		Global B_RIGHT:Int = MFGamePad.KEY_PAD_RIGHT
-		Global B_SEL:Int = MFGamePad.KEY_PAD_CONFIRM
+		Global B_UP:Int = 4 ' MFGamePad.KEY_PAD_UP
+		Global B_DOWN:Int = 8 ' MFGamePad.KEY_PAD_DOWN
+		Global B_LEFT:Int = 16 ' MFGamePad.KEY_PAD_LEFT
+		Global B_RIGHT:Int = 32 ' MFGamePad.KEY_PAD_RIGHT
+		Global B_SEL:Int = 64 ' MFGamePad.KEY_PAD_CONFIRM
 		
-		Global B_ST:Int = MFGamePad.KEY_NUM_STAR
-		Global B_PO:Int = MFGamePad.KEY_NUM_POUND
-		Global B_S1:Int = MFGamePad.KEY_S1
+		Global B_ST:Int = 65536 ' MFGamePad.KEY_NUM_STAR
+		Global B_PO:Int = 262144 ' MFGamePad.KEY_NUM_POUND
+		Global B_S1:Int = 1 ' MFGamePad.KEY_S1
 		
 		Global DIR_UP:Int = 1
 		Global DIR_DOWN:Int = 2

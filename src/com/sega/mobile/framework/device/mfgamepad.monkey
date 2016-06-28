@@ -13,6 +13,8 @@ Friend com.sega.mobile.framework.device.mfdevice
 Private
 	Import com.sega.mobile.define.mdphone
 	
+	Import gameengine.key
+	
 	Import mojo.keycodes
 Public
 
@@ -172,24 +174,25 @@ Class MFGamePad ' Final
 		
 		' This routine may change in the future:
 		Function decodeKey:Int(keyCode:Int)
-			'Print("DECODING KEY: " + keyCode)
-			
-			' Magic numbers: 4, 19, 20, 21, 22, 52, 82 (Key-codes)
 			Select (keyCode)
-				Case keycodes.KEY_ENTER ' KEY_BACK ' 4 ' KEYCODE_BACK ' Pause
-					Return KEY_JOYSTICK_O ' $80000 ' KEY_JOYSTICK_SELECT
-				Case keycodes.KEY_UP ' 19 ' KEYCODE_DPAD_UP
-					Return KEY_PAD_UP
-				Case keycodes.KEY_DOWN ' 20 ' KEYCODE_DPAD_DOWN
-					Return KEY_PAD_DOWN
-				Case keycodes.KEY_LEFT ' 21 ' KEYCODE_DPAD_LEFT
-					Return KEY_PAD_LEFT
-				Case keycodes.KEY_RIGHT ' 22 ' KEYCODE_DPAD_RIGHT
-					Return KEY_PAD_RIGHT
-				Case keycodes.KEY_Z ' 52 ' KEYCODE_X
-					Return KEY_NUM_5 ' KEY_S2
-				Case keycodes.KEY_X ' KEY_MENU ' 82 ' MDPhone.KEY_CODE_MENU ' KEYCODE_MENU
-					Return KEY_NUM_2
+				Case keycodes.KEY_ENTER
+					Return Key.B_BACK ' Pause
+				Case keycodes.KEY_UP
+					#If Not SONICGBA_MFGAMEPAD_AUTOJUMP
+						Return Key.B_LOOK ' gUp ' Look/Up
+					#Else
+						Return Key.B_HIGH_JUMP ' A/Jump
+					#End
+				Case keycodes.KEY_DOWN
+					Return Key.B_DOWN ' gDown ' Crouch/Down
+				Case keycodes.KEY_LEFT
+					Return Key.B_LEFT ' gLeft ' Move/Left
+				Case keycodes.KEY_RIGHT
+					Return Key.B_RIGHT ' gRight ' Move/Right
+				Case keycodes.KEY_Z
+					Return Key.B_SEL ' B/Somersault
+				Case keycodes.KEY_X
+					Return Key.B_HIGH_JUMP ' A/Jump
 				Default
 					Return KEY_NULL
 			End Select
