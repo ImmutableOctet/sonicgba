@@ -35,6 +35,8 @@ Private
 	
 	'Import month.monthcertificationstate
 	
+	Import common.resources
+	
 	Import mojo.app
 	
 	'Import mojo2.graphics
@@ -90,6 +92,15 @@ Class Application Extends App ' Main Extends MFMain
 		' Booleans / Flags:
 		Field isSuspended:Bool
 	Public
+		' Functions:
+		Function InitResources:Void()
+			InitCommonResources()
+		End
+		
+		Function DeinitResources:Void()
+			DeinitCommonResources()
+		End
+		
 		' Methods:
 		Method OnCreate:Int()
 			SetUpdateRate(30) ' 15 ' 20 ' 16 ' 30 ' 0 ' 60
@@ -136,6 +147,8 @@ Class Application Extends App ' Main Extends MFMain
 			
 			'OnResize()
 			
+			InitResources()
+			
 			Return 0
 		End
 		
@@ -172,6 +185,8 @@ Class Application Extends App ' Main Extends MFMain
 			If (Confirm("Sonic Advance", "Are you sure you want to exit the game?", False)) Then
 				' This call may be moved later.
 				MFDevice.currentState.onExit()
+				
+				DeinitResources()
 				
 				Return Super.OnClose() ' EndApp()
 			EndIf

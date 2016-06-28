@@ -2,6 +2,9 @@ Strict
 
 Public
 
+' Friends:
+Friend common.resources
+
 ' Imports:
 Private
 	Import lib.animation
@@ -35,7 +38,7 @@ Class NumberDrawer ' Implements SonicDef
 		Const TYPE_SMALL_YELLOW:Int = 1
 	Private
 		' Global variable(s):
-		Global numberDrawer:AnimationDrawer = New Animation("/animation/number").getDrawer()
+		Global numberDrawer:AnimationDrawer
 	Public
 		' Functions:
 		Function drawNum:Int(g:MFGraphics, numType:Int, num:Int, x:Int, y:Int, anchor:Int)

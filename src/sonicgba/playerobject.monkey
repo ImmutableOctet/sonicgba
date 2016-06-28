@@ -2116,7 +2116,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 							Self.animationID = ANI_ROPE_ROLL_1
 						Case ANI_POAL_PULL_2
 							Self.animationID = ANI_RUN_1
-						Case ANI_CELEBRATE_1, ANI_SMALL_ZERO_Y
+						Case ANI_CELEBRATE_1, ANI_CELEBRATE_3
 							StageManager.setStagePass()
 						Case ANI_POP_JUMP_UP_SLOW
 							Self.animationID = ANI_POP_JUMP_DOWN_SLOW
