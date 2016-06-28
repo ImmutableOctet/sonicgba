@@ -2318,7 +2318,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public
 		' Methods:
 		Method getFocusX:Int()
-			Return getNewPointX(Self.footPointX, 0, -BODY_OFFSET, Self.faceDegree) Shr 6
+			Return (getNewPointX(Self.footPointX, 0, -BODY_OFFSET, Self.faceDegree) Shr 6)
 		End
 	
 		Method getFocusY:Int()
@@ -2395,11 +2395,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				calTotalVelocity()
 				
-				If (Self.collisionState = TER_STATE_LOOK_MOON) Then
+				If (Self.collisionState = COLLISION_STATE_ON_OBJECT) Then
 					Self.collisionState = COLLISION_STATE_JUMP
+					
 					Self.worldCal.actionState = 1
 				EndIf
-			ElseIf (Self.collisionState = TER_STATE_LOOK_MOON And Not Self.piping) Then
+			ElseIf (Self.collisionState = COLLISION_STATE_ON_OBJECT And Not Self.piping) Then
 				Self.velY = 0
 			EndIf
 		End
@@ -3566,9 +3567,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				Self.worldCal.stopMoveY()
 				
-				If (Not (Self.collisionState = TER_STATE_LOOK_MOON And isFootOnObject(obj))) Then
+				If (Not (Self.collisionState = COLLISION_STATE_ON_OBJECT And isFootOnObject(obj))) Then
 					Self.footOnObject = obj
-					Self.collisionState = TER_STATE_LOOK_MOON
+					Self.collisionState = COLLISION_STATE_ON_OBJECT
 					Self.collisionChkBreak = True
 				EndIf
 			ElseIf (Self.isAntiGravity) Then
@@ -3646,7 +3647,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				If (Not (Self.collisionState = COLLISION_STATE_ON_OBJECT And isFootOnObject(obj))) Then
 					Self.footOnObject = obj
-					Self.collisionState = TER_STATE_LOOK_MOON
+					Self.collisionState = COLLISION_STATE_ON_OBJECT
 					Self.collisionChkBreak = True
 				EndIf
 				
@@ -6470,7 +6471,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			If (Self.worldCal.getActionState() = 0 Or Self.collisionState = COLLISION_STATE_ON_OBJECT) Then
 				Select (direction)
 					Case DIRECTION_UP
-						If (Self.collisionState = TER_STATE_LOOK_MOON And Self.movedSpeedY < 0) Then
+						If (Self.collisionState = COLLISION_STATE_ON_OBJECT And Self.movedSpeedY < 0) Then
 							setDie(False)
 							
 							Return
