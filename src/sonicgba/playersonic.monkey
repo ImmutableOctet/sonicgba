@@ -110,7 +110,7 @@ Class PlayerSonic Extends PlayerObject
 		Const EFFECT_SLIP:Int = 2
 		
 		Const LOOP:Int = -1
-		Const NO_ANIMATION:Int = -1
+		Const NO_ANIMATION:Int = -1 ' ANI_NONE
 		Const NO_LOOP:Int = -2
 		Const NO_LOOP_DEPAND:Int = -3
 		

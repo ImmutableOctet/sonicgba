@@ -870,7 +870,7 @@ Class PlayerKnuckles Extends PlayerObject
 				
 				If (Key.repeated(Key.B_LOOK)) Then
 					Self.myAnimationID = KNUCKLES_ANI_SWIM_3
-					Self.focusMovingState = 1
+					Self.focusMovingState = FOCUS_MOVING_UP
 				' Magic number: 320
 				ElseIf (bodyCenterY - 320 <= waterLevel) Then
 					Self.myAnimationID = KNUCKLES_ANI_SWIM_2

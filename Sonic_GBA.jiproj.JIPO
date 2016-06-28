@@ -361,7 +361,7 @@
     <DocUserOptions Filename=".\src\gameengine\key.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>9</X>
-        <Y>64</Y>
+        <Y>65</Y>
       </CursorPos>
       <DocGUID>a2503ce3-c3a3-42e5-81d9-c729f9d5429f</DocGUID>
       <Bookmarks />
@@ -498,8 +498,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>123</Y>
+        <X>14</X>
+        <Y>91</Y>
       </CursorPos>
       <DocGUID>a1d46011-cd5b-4707-8496-5c6c1e50f238</DocGUID>
       <Bookmarks />
@@ -1589,14 +1589,14 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>5</X>
-        <Y>2399</Y>
+        <X>3</X>
+        <Y>959</Y>
       </CursorPos>
       <DocGUID>df8b2180-9ad8-4775-ba4e-794da7c21987</DocGUID>
       <Bookmarks>
         <Point>
           <X>0</X>
-          <Y>234</Y>
+          <Y>231</Y>
         </Point>
         <Point>
           <X>0</X>
@@ -1604,14 +1604,14 @@
         </Point>
         <Point>
           <X>0</X>
-          <Y>6810</Y>
+          <Y>6813</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playersonic.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>28</X>
-        <Y>435</Y>
+        <X>40</X>
+        <Y>112</Y>
       </CursorPos>
       <DocGUID>bbcd58e7-d458-4b04-9389-2df0120b00c1</DocGUID>
       <Bookmarks />

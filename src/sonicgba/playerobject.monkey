@@ -162,9 +162,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Global FOCUS_MAX_OFFSET:Int = (MapManager.CAMERA_HEIGHT / 2) - 16 ' Const
 		
-		Const FOCUS_MOVE_SPEED:Int = 15
-		Const FOCUS_MOVING_NONE:Int = 0
-		
 		Const FONT_NUM:Int = 7
 		
 		Const FOOT_OFFSET:Int = 256
@@ -350,8 +347,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const EFFECT_SAND_1:Int = 0
 		Const EFFECT_SAND_2:Int = 1
 		
-		Const FOCUS_MOVING_DOWN:Int = 2
+		Const FOCUS_MOVING_NONE:Int = 0
 		Const FOCUS_MOVING_UP:Int = 1
+		Const FOCUS_MOVING_DOWN:Int = 2
+		
+		Const FOCUS_MOVE_SPEED:Int = 15
 		
 		Const PLAYER_ANIMATION_PATH:String = "/animation/player"
 		
@@ -948,7 +948,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.setNoMoving = False
 			Self.leftStopped = False
 			Self.rightStopped = False
-			Self.focusMovingState = 0
+			Self.focusMovingState = FOCUS_MOVING_NONE
 			Self.lookCount = LOOK_COUNT
 			Self.footOffsetX = 0
 			Self.justLeaveLand = False
@@ -1184,7 +1184,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Return
 			EndIf
 			
-			Self.focusMovingState = 0
+			Self.focusMovingState = FOCUS_MOVING_NONE
 			Self.controlObjectLogic = False
 			
 			If (Not Self.outOfControl) Then
@@ -2323,7 +2323,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	
 		Method getFocusY:Int()
 			If (FOCUS_MAX_OFFSET > TERMINAL_COUNT) Then
-				If (Self.focusMovingState = 0) Then
+				If (Self.focusMovingState = FOCUS_MOVING_NONE) Then
 					Self.lookCount = LOOK_COUNT
 				EndIf
 				
@@ -2422,6 +2422,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.totalVelocity = (((Self.velX * MyAPI.dCos(degree)) + (Self.velY * MyAPI.dSin(degree))) / 100)
 		End
 	Private
+		' Methods:
 		Method faceDirectionChk:Bool()
 			If (Self.totalVelocity > 0) Then
 				Return True
@@ -2464,7 +2465,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				EndIf
 			EndIf
 			
-			If (Self.totalVelocity * preTotalVelocity <= 0 And Self.animationID = ANI_JUMP) Then
+			If ((Self.totalVelocity * preTotalVelocity) <= 0 And Self.animationID = ANI_JUMP) Then
 				Self.animationID = ANI_STAND
 			EndIf
 		End
@@ -2485,7 +2486,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					fakeGravity *= 3
 				EndIf
 				
-				Local velChange:= ((MyAPI.dSin(Self.faceDegree) * fakeGravity) / 100)
+				Local velChange:= (fakeGravity * MyAPI.dSin(Self.faceDegree) / 100)
 				
 				preTotalVelocity = Self.totalVelocity
 				
@@ -2497,10 +2498,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				If (Self.animationID = ANI_JUMP) Then
 					If (Self.totalVelocity >= 0) Then
 						If (velChange < 0) Then
-							velChange Shr= 2
+							velChange Shr= 2 ' /= 4
 						EndIf
 					ElseIf (velChange > 0) Then
-						velChange Shr= 2
+						velChange Shr= 2 ' /= 4
 					EndIf
 				EndIf
 				
@@ -2538,23 +2539,22 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 							If (Self.totalVelocity < 0) Then
 								If (Self.onBank) Then
 									Self.totalVelocity = 0
+									
 									Self.onBank = False
 									Self.bankwalking = False
 								Else
-									Self.totalVelocity = (0 - reversePower) Shr 2
+									Self.totalVelocity = (-reversePower) Shr 2 ' / 4
 								EndIf
 							EndIf
 							
-							If (Not (Abs(Self.totalVelocity) <= BANK_BRAKE_SPEED_LIMIT Or Self.animationID = ANI_JUMP Or Self.animationID = ANI_BRAKE)) Then
-								' Magic number: 10 (Sound-effect ID)
-								soundInstance.playSe(10)
+							If (Abs(Self.totalVelocity) > BANK_BRAKE_SPEED_LIMIT And Self.animationID <> ANI_JUMP And Self.animationID <> ANI_BRAKE) Then
+								soundInstance.playSe(SoundSystem.SE_115)
 								
 								If (Self.onBank) Then
 									Self.onBank = False
 									Self.bankwalking = False
 								EndIf
 							EndIf
-							
 						ElseIf (Self.animationID <> ANI_JUMP) Then
 							Self.totalVelocity -= Self.movePower
 							
@@ -2589,16 +2589,16 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 							If (Self.totalVelocity > -1) Then
 								If (Self.onBank) Then
 									Self.totalVelocity = 0
+									
 									Self.onBank = False
 									Self.bankwalking = False
 								Else
-									Self.totalVelocity = (reversePower Shr 2)
+									Self.totalVelocity = (reversePower Shr 2) ' / 4
 								EndIf
 							EndIf
 							
 							If (Not (Abs(Self.totalVelocity) <= BANK_BRAKE_SPEED_LIMIT Or Self.animationID = ANI_JUMP Or Self.animationID = ANI_BRAKE)) Then
-								' Magic number: 10 (Sound-effect ID)
-								soundInstance.playSe(10)
+								soundInstance.playSe(SoundSystem.SE_115)
 								
 								If (Self.onBank) Then
 									Self.onBank = False
@@ -2622,13 +2622,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			If (Self.animationID <> ANI_NONE) Then
 				If (Abs(Self.totalVelocity) <= 0) Then
-					If (Not (Self.animationID = ANI_LOOK_UP_1 Or Self.animationID = ANI_LOOK_UP_2 Or Self.animationID = ANI_LOOK_UP_OVER Or Self.animationID = ANI_SQUAT Or Self.collisionState = COLLISION_STATE_JUMP)) Then
+					If (Self.animationID <> ANI_LOOK_UP_1 And Self.animationID <> ANI_LOOK_UP_2 And Self.animationID <> ANI_LOOK_UP_OVER And Self.animationID <> ANI_SQUAT And Self.collisionState <> COLLISION_STATE_JUMP) Then
 						Self.animationID = ANI_STAND
+						
 						Self.bankwalking = False
 						
 						checkCliffAnimation()
 					EndIf
-				ElseIf (Not (Self.animationID = ANI_JUMP Or Self.animationID = ANI_CELEBRATE_1 Or Self.animationID = ANI_CELEBRATE_2 Or Self.animationID = ANI_SQUAT Or Self.animationID = ANI_POAL_PULL_2)) Then
+				ElseIf (Self.animationID <> ANI_JUMP And Self.animationID <> ANI_CELEBRATE_1 And Self.animationID <> ANI_CELEBRATE_2 And Self.animationID <> ANI_SQUAT And Self.animationID <> ANI_POAL_PULL_2) Then
 					If (Abs(Self.totalVelocity) < SPEED_LIMIT_LEVEL_1) Then
 						Self.animationID = ANI_RUN_1
 					ElseIf (Abs(Self.totalVelocity) < SPEED_LIMIT_LEVEL_2) Then
@@ -2641,7 +2642,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			waitingChk()
 			
-			Local slopeVelocity:= (MyAPI.dSin(Self.faceDegree) * (getGravity() * DSgn(Not Self.isAntiGravity))) / 100
+			Local slopeVelocity:= (getGravity() * DSgn(Not Self.isAntiGravity) * MyAPI.dSin(Self.faceDegree) / 100)
 			
 			faceSlopeChk()
 			
@@ -2661,15 +2662,17 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				EndIf
 			EndIf
 			
-			If (Self.ducting And Abs(Self.totalVelocity) < (MAX_VELOCITY / 2)) Then
+			' Magic numbers: 640
+			If (Self.ducting And Abs(Self.totalVelocity) < 640) Then ' (MAX_VELOCITY / 2)
 				If (Self.totalVelocity > 0 And Self.pushOnce) Then
-					Self.totalVelocity += (MAX_VELOCITY / 2)
+					Self.totalVelocity += 640 ' (MAX_VELOCITY / 2)
 					
 					Self.pushOnce = False
 				EndIf
 				
 				If (Self.totalVelocity < 0 And Self.pushOnce) Then
-					Self.totalVelocity -= (MAX_VELOCITY / 2)
+					Self.totalVelocity -= 640 ' (MAX_VELOCITY / 2)
+					
 					Self.pushOnce = False
 				EndIf
 			EndIf
@@ -2689,7 +2692,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					EndIf
 					
 					If (Self.animationID = ANI_LOOK_UP_2) Then
-						Self.focusMovingState = 1
+						Self.focusMovingState = FOCUS_MOVING_UP
 					EndIf
 				Else
 					If (Self.animationID = ANI_LOOK_UP_OVER And Self.drawer.checkEnd()) Then

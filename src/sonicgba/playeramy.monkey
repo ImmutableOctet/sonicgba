@@ -671,7 +671,7 @@ Class PlayerAmy Extends PlayerObject
 						soundInstance.playSe(SoundSystem.SE_116)
 					ElseIf (Abs(getVelX()) <= SLIDING_BRAKE And getDegreeDiff(Self.faceDegree, Self.degreeStable) <= AMY_ANI_WIND) Then
 						' Magic number: 2
-						Self.focusMovingState = 2
+						Self.focusMovingState = FOCUS_MOVING_DOWN
 					EndIf
 				ElseIf (Self.animationID = AMY_ANI_DASH_2) Then
 					Self.animationID = AMY_ANI_BANK_1
