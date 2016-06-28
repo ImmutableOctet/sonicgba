@@ -422,8 +422,8 @@ Class PlayerSonic Extends PlayerObject
 						
 						drawDrawerByDegree(g, Self.drawer, Self.myAnimationID, (Self.footPointX Shr 6) - camera.x, (Self.footPointY Shr 6) - camera.y, loop, Self.degreeForDraw, (Not Self.faceDirection))
 					Else
-						bodyCenterX = getNewPointX(Self.footPointX, 0, -512, Self.faceDegree)
-						bodyCenterY = getNewPointY(Self.footPointY, 0, -512, Self.faceDegree)
+						bodyCenterX = getNewPointX(Self.footPointX, 0, LEFT_WALK_COLLISION_CHECK_OFFSET_X, Self.faceDegree) ' -512
+						bodyCenterY = getNewPointY(Self.footPointY, 0, LEFT_WALK_COLLISION_CHECK_OFFSET_Y, Self.faceDegree) ' -512
 						
 						Local drawX:= getNewPointX(bodyCenterX, 0, (HINER_JUMP_LIMIT / 2), 0) ' (WIDTH / 2) ' 512
 						
@@ -681,6 +681,7 @@ Class PlayerSonic Extends PlayerObject
 		' Methods:
 		Method extraLogicJump:Void()
 			If (Not Self.hurtNoControl) Then
+				' Magic numbers: 5
 				If (Not Self.slipping And Key.press(Key.gLeft)) Then
 					If (Not Self.jumpRollEnable) Then
 						Self.leftCount = 5
@@ -735,7 +736,7 @@ Class PlayerSonic Extends PlayerObject
 						Self.rightCount = 0
 						
 						Self.velY = 0
-						Self.velX += (Self.maxVelocity Shr 2) ' / 4
+						Self.velX += (Self.maxVelocity / 4) ' Shr 2
 						
 						soundInstance.playSe(SoundSystem.SE_112)
 						

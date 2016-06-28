@@ -803,23 +803,25 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			If (Key.press(Key.gLeft)) Then
 				characterID -= 1
+				characterID += CHARACTER_LIST.Length
 				characterID Mod= CHARACTER_LIST.Length
 			ElseIf (Key.press(Key.gRight)) Then
 				characterID += 1
+				characterID += CHARACTER_LIST.Length
 				characterID Mod= CHARACTER_LIST.Length
 			EndIf
 			
 			Return False
 		End
-	
+		
 		Function setCharacter:Void(ID:Int)
 			characterID = ID
 		End
-	
+		
 		Function getCharacterID:Int()
 			Return characterID
 		End
-	
+		
 		Function getPlayer:PlayerObject(characterID:Int)
 			Local re:PlayerObject = Null
 			
@@ -856,9 +858,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		' Methods (Implemented):
 		Method setMeetingBoss:Void(state:Bool)
-			Self.setNoMoving = state
+			Self.setNoMoving = (Not state)
 			Self.noMovingPosition = Self.footPointX
+			
 			Self.worldCal.stopMoveX()
+			
 			Self.collisionChkBreak = True
 		End
 	
@@ -1924,6 +1928,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Method draw2:Void(g:MFGraphics)
 			draw(g, (drawAtFront() And Self.visible))
+			
 			drawCollisionRect(g)
 			
 			' Magic number: 4 (Zone ID)
@@ -1948,8 +1953,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					updateFootPoint()
 				EndIf
 				
+				' Magic number: 6
 				If (Self.isInWater And Self.breatheNumCount >= 0 And Self.breatheNumCount < 6) Then
 					Local i:Int
+					
+					' Magic number: 16
 					Local i2:= Self.breatheNumCount * 16
 					Local i3:= (Self.posX Shr 6) - camera.x
 					
@@ -1968,25 +1976,25 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 			
 			If (Self.fading) Then
-				drawFadeBase(g, SPIN_LV2_COUNT)
+				drawFadeBase(g, 12) ' SPIN_LV2_COUNT
 			EndIf
 			
 			If (terminalType = TERMINAL_SUPER_SONIC) Then
-				If (terminalState < 2 Or terminalState >= 6) Then
+				If (terminalState < TER_STATE_LOOK_MOON Or terminalState >= TER_STATE_GO_AWAY) Then
 					Self.moonStarFrame1 = 0
 				Else
 					moonStarDrawer.draw(g, 0, (((MOON_STAR_DES_X_1 - MOON_STAR_ORI_X_1) * Self.moonStarFrame1) / MOON_STAR_FRAMES_1) + MOON_STAR_ORI_X_1, ((Self.moonStarFrame1 * ANI_PUSH_WALL) / MOON_STAR_FRAMES_1) + MOON_STAR_ORI_Y_1, True, 0)
+					
 					Self.moonStarFrame1 += 1
 				EndIf
 				
 				If (terminalState = TER_STATE_SHINING_2) Then
 					moonStarDrawer.draw(g, 1, (((MOON_STAR_DES_X_1 - MOON_STAR_ORI_X_1) * Self.moonStarFrame2) / MOON_STAR_FRAMES_2) + MOON_STAR_ORI_X_1, ((Self.moonStarFrame2 * ANI_PUSH_WALL) / MOON_STAR_FRAMES_2) + MOON_STAR_ORI_Y_1, True, 0)
-					Self.moonStarFrame2 += 1
 					
-					Return
+					Self.moonStarFrame2 += 1
+				Else
+					Self.moonStarFrame2 = 0
 				EndIf
-				
-				Self.moonStarFrame2 = 0
 			EndIf
 		End
 	
@@ -2031,7 +2039,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method draw:Void(graphics:MFGraphics)
-			draw(graphics, Not (drawAtFront() Or Not Self.visible))
+			draw(graphics, ((Not drawAtFront()) And Self.visible))
 		End
 	
 		Method draw:Void(g:MFGraphics, visible:Bool)
@@ -5253,16 +5261,16 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method setCelebrate:Void()
-			Self.isCelebrate = True
-			
 			timeStopped = True
+			
+			Self.isCelebrate = True
 			
 			MapManager.setCameraLeftLimit(MapManager.getCamera().x)
 			MapManager.setCameraRightLimit(MapManager.getCamera().x + MapManager.CAMERA_WIDTH)
 			
-			' Magic number: 3840
+			' Magic numbers: 3840
 			If (Self.faceDirection) Then
-				Self.moveLimit = Self.posX + 3840
+				Self.moveLimit = Self.posX + 3840 ' (SONIC_DRAW_HEIGHT * 2)
 			Else
 				Self.moveLimit = Self.posX - 3840
 			EndIf
@@ -5281,35 +5289,35 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Method getItem:Void(itemId:Int)
 			Select (itemId)
-				Case 0
+				Case ITEM_LIFE
 					addLife()
 					playerLifeUpBGM()
-				Case 1
+				Case ITEM_SHIELD
 					shieldType = 1
-					soundInstance.playSe(ANI_DEAD)
-				Case 2
+					soundInstance.playSe(SoundSystem.SE_168) ' 41
+				Case ITEM_SHIELD_2
 					shieldType = 2
-					soundInstance.playSe(ANI_DEAD)
-				Case 3
+					soundInstance.playSe(SoundSystem.SE_168) ' 41
+				Case ITEM_INVINCIBLE
 					invincibleCount = INVINCIBLE_COUNT
 					SoundSystem.getInstance().stopBgm(False)
 					SoundSystem.getInstance().playBgm(ANI_HURT_PRE)
-				Case 4
+				Case ITEM_SPEED
 					speedCount = INVINCIBLE_COUNT
 					SoundSystem.getInstance().setSoundSpeed(2.0)
 					
 					If (SoundSystem.getInstance().getPlayingBGMIndex() <> ANI_POP_JUMP_DOWN_SLOW) Then
 						SoundSystem.getInstance().restartBgm()
 					EndIf
-				Case 5
+				Case ITEM_RING_RANDOM
 					If (Self.hurtCount = 0) Then
 						getRing(ringRandomNum)
 					EndIf
-				Case 6
+				Case ITEM_RING_5
 					If (Self.hurtCount = 0) Then
 						getRing(5)
 					EndIf
-				Case 7
+				Case ITEM_RING_10
 					If (Self.hurtCount = 0) Then
 						getRing(TERMINAL_COUNT)
 					EndIf
@@ -5321,13 +5329,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		' Functions:
 		Function getTmpRing:Void(itemId:Int)
 			Select (itemId)
-				Case 5
+				Case ITEM_RING_RANDOM
 					ringTmpNum = RANDOM_RING_NUM[MyRandom.nextInt(RANDOM_RING_NUM.Length)]
 					ringRandomNum = ringTmpNum
-				Case 6
+				Case ITEM_RING_5
 					ringTmpNum = 5
-				Case 7
-					ringTmpNum = TERMINAL_COUNT
+				Case ITEM_RING_10
+					ringTmpNum = 10
 			End Select
 		End
 		
@@ -5338,7 +5346,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			' Magic numbers: 1, 8 (Stage-mode-state, Zone ID):
 			If (stageModeState <> STATE_RACE_MODE And StageManager.getCurrentZoneId() <> 8) Then
-				If (preRingNum / 100 <> ringNum / 100) Then
+				If ((preRingNum / 100) <> (ringNum / 100)) Then
 					addLife()
 					playerLifeUpBGM()
 				EndIf
@@ -5389,20 +5397,14 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Protected
 		' Methods:
 		Method isHeadCollision:Bool()
-			Local collision:Bool = False
-			
 			Local headBlockY:= Self.worldInstance.getWorldY(Self.footPointX, Self.footPointY - HEIGHT, 1, 2)
 			Local headBlockY2:= Self.worldInstance.getWorldY(Self.footPointX + WIDTH, Self.footPointY - HEIGHT, 1, 2)
 			
-			If (headBlockY >= 0) Then
-				collision = True
-			EndIf
-			
-			If (headBlockY2 >= 0) Then
+			If (headBlockY >= 0 Or headBlockY2 >= 0) Then
 				Return True
 			EndIf
 			
-			Return collision
+			Return False
 		End
 		
 		Method resetPlayer:Void()
@@ -6538,7 +6540,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method getPressToGround:Int()
-			Return (GRAVITY * 2)
+			Return (GRAVITY * 2) ' Shl 1
 		End
 		
 		Method didAfterEveryMove:Void(x:Int, y:Int)
