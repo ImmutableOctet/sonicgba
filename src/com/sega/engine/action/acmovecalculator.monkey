@@ -13,6 +13,8 @@ Private
 	import com.sega.engine.action.acmovecaluser
 	import com.sega.engine.action.acobject
 	import com.sega.engine.action.acworld
+	
+	Import lib.constutil
 Public
 
 ' Classes:
@@ -79,23 +81,19 @@ Class ACMoveCalculator
 				Self.user.didAfterEveryMove(0, 0)
 			EndIf
 			
-			While (True)
-				If (Self.moveDistanceX <> 0 Or Self.moveDistanceY <> 0) Then
-					Self.chkPointX__mcalc = Self.acObj.posX
-					Self.chkPointY__mcalc = Self.acObj.posY
-					
-					Local startPointX:= Self.chkPointX__mcalc
-					Local startPointY:= Self.chkPointY__mcalc
-					
-					checkInSky()
-					
-					Self.acObj.posX = Self.chkPointX__mcalc
-					Self.acObj.posY = Self.chkPointY__mcalc
-					
-					Self.user.didAfterEveryMove(Self.chkPointX__mcalc - startPointX, Self.chkPointY__mcalc - startPointY)
-				Else
-					Return
-				EndIf
+			While (Self.moveDistanceX <> 0 Or Self.moveDistanceY <> 0)
+				Self.chkPointX__mcalc = Self.acObj.posX
+				Self.chkPointY__mcalc = Self.acObj.posY
+				
+				Local startPointX:= Self.chkPointX__mcalc
+				Local startPointY:= Self.chkPointY__mcalc
+				
+				checkInSky()
+				
+				Self.acObj.posX = Self.chkPointX__mcalc
+				Self.acObj.posY = Self.chkPointY__mcalc
+				
+				Self.user.didAfterEveryMove(Self.chkPointX__mcalc - startPointX, Self.chkPointY__mcalc - startPointY)
 			Wend
 		End
 		
@@ -110,31 +108,15 @@ Class ACMoveCalculator
 			
 			If (xFirst) Then
 				If (Abs(Self.moveDistanceX) > Self.worldInstance.getTileWidth()) Then
-					i = Self.chkPointX__mcalc
-					
-					If (Self.moveDistanceX > 0) Then
-						i2 = 1
-					Else
-						i2 = -1
-					EndIf
-					
-					Self.chkPointX__mcalc = i + (i2 * Self.worldInstance.getTileWidth())
-					Self.chkPointY__mcalc += (Self.moveDistanceY * Self.worldInstance.getTileWidth()) / Abs(Self.moveDistanceX)
+					Self.chkPointX__mcalc += (DSgn((Self.moveDistanceX > 0)) * Self.worldInstance.getTileWidth())
+					Self.chkPointY__mcalc += ((Self.moveDistanceY * Self.worldInstance.getTileWidth()) / Abs(Self.moveDistanceX))
 				Else
 					Self.chkPointX__mcalc += Self.moveDistanceX
 					Self.chkPointY__mcalc += Self.moveDistanceY
 				EndIf
 			ElseIf (Abs(Self.moveDistanceY) > Self.worldInstance.getTileHeight()) Then
-				i = Self.chkPointY__mcalc
-				
-				If (Self.moveDistanceY > 0) Then
-					i2 = 1
-				Else
-					i2 = -1
-				EndIf
-				
-				Self.chkPointY__mcalc = i + (i2 * Self.worldInstance.getTileHeight())
-				Self.chkPointX__mcalc += (Self.moveDistanceX * Self.worldInstance.getTileHeight()) / Abs(Self.moveDistanceY)
+				Self.chkPointY__mcalc += (DSgn((Self.moveDistanceY > 0)) * Self.worldInstance.getTileHeight())
+				Self.chkPointX__mcalc += ((Self.moveDistanceX * Self.worldInstance.getTileHeight()) / Abs(Self.moveDistanceY))
 			Else
 				Self.chkPointX__mcalc += Self.moveDistanceX
 				Self.chkPointY__mcalc += Self.moveDistanceY
@@ -143,14 +125,14 @@ Class ACMoveCalculator
 			Local preMoveDistanceX:= Self.moveDistanceX
 			Local preMoveDistanceY:= Self.moveDistanceY
 			
-			Self.moveDistanceX -= Self.chkPointX__mcalc - startPointX
-			Self.moveDistanceY -= Self.chkPointY__mcalc - startPointY
+			Self.moveDistanceX -= (Self.chkPointX__mcalc - startPointX)
+			Self.moveDistanceY -= (Self.chkPointY__mcalc - startPointY)
 			
-			If (Self.moveDistanceX * preMoveDistanceX <= 0) Then
+			If ((Self.moveDistanceX * preMoveDistanceX) <= 0) Then
 				Self.moveDistanceX = 0
 			EndIf
 			
-			If (Self.moveDistanceY * preMoveDistanceY <= 0) Then
+			If ((Self.moveDistanceY * preMoveDistanceY) <= 0) Then
 				Self.moveDistanceY = 0
 			EndIf
 		End

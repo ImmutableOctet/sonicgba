@@ -3379,11 +3379,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			Self.animationID = ANI_JUMP
 			
-			' Magic number: 11 (Sound-effect ID)
-			soundInstance.playSe(11)
+			soundInstance.playSe(SoundSystem.SE_116)
 			
-			' Magic number: 4
-			Self.smallJumpCount = 4
+			Self.smallJumpCount = SMALL_JUMP_COUNT
 			
 			Self.attackAnimationID = ANI_STAND
 			Self.attackCount = 0
