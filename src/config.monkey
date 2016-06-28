@@ -1,7 +1,7 @@
 ' Preprocessor related:
 #MONKEYLANG_EXTENSION_WIDECHARACTERS = True
 
-'#GLFW_USE_MINGW = False
+#GLFW_USE_MINGW = False
 
 '#SONICGBA_EASTEREGGS = True
 
