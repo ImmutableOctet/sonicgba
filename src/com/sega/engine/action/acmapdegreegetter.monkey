@@ -53,7 +53,7 @@ Class ACMapDegreeGetter Extends ACDegreeGetter Implements ACParam
 
 		Method getDegreeFromCollisionByPosition:Void(re:DegreeReturner, obj:ACCollision, currentDegree:Int, x:Int, y:Int, z:Int)
 			Local groundDirection:= getDirectionByDegree(currentDegree)
-			Local upDownFirst:Bool = (groundDirection = 0 Or groundDirection = 2)
+			Local upDownFirst:Bool = (groundDirection = ACParam.DIRECTION_UP Or groundDirection = ACParam.DIRECTION_DOWN)
 			
 			If (upDownFirst) Then
 				getDegreeByPositionY(re, obj, currentDegree, x, y, z)
@@ -68,8 +68,8 @@ Class ACMapDegreeGetter Extends ACDegreeGetter Implements ACParam
 			If (Not re.degreeCalSuccess And Not upDownFirst) Then
 				getDegreeByPositionY(re, obj, currentDegree, x, y, z)
 				
-				If (Not re.degreeCalSuccess) Then
-					' Nothing so far.
+				If (re.degreeCalSuccess) Then
+					Return
 				EndIf
 			EndIf
 		End
@@ -83,18 +83,18 @@ Class ACMapDegreeGetter Extends ACDegreeGetter Implements ACParam
 			degree Mod= 360
 			
 			If (degree >= 315 Or degree <= 45) Then
-				Return DIRECTION_UP
+				Return ACParam.DIRECTION_UP
 			EndIf
 			
 			If (degree > 225 And degree < 315) Then
-				Return DIRECTION_LEFT
+				Return ACParam.DIRECTION_LEFT
 			EndIf
 			
 			If (degree < 135 Or degree > 225) Then
-				Return DIRECTION_RIGHT
+				Return ACParam.DIRECTION_RIGHT
 			EndIf
 			
-			Return DIRECTION_DOWN
+			Return ACParam.DIRECTION_DOWN
 		End
 		
 		Method getDegreeByTwoPoint:Int(px1:Int, py1:Int, px2:Int, py2:Int, degree:Int)
@@ -127,20 +127,20 @@ Class ACMapDegreeGetter Extends ACDegreeGetter Implements ACParam
 		End
 		
 		Method getDegreeByPositionY:Void(re:DegreeReturner, obj:ACCollision, currentDegree:Int, x:Int, y:Int, z:Int)
-			Local groundDirection:= DIRECTION_UP
+			Local groundDirection:= ACParam.DIRECTION_UP
 			
 			If (currentDegree > 90 And currentDegree < 270) Then
-				groundDirection = DIRECTION_DOWN
+				groundDirection = ACParam.DIRECTION_DOWN
 			EndIf
 			
 			getDegreeByPositionAndDirection(re, obj, currentDegree, x, y, z, groundDirection)
 		End
 		
 		Method getDegreeByPositionX:Void(re:DegreeReturner, obj:ACCollision, currentDegree:Int, x:Int, y:Int, z:Int)
-			Local groundDirection:= DIRECTION_LEFT
+			Local groundDirection:= ACParam.DIRECTION_LEFT
 			
 			If (currentDegree > 0 And currentDegree < 180) Then
-				groundDirection = DIRECTION_RIGHT
+				groundDirection = ACParam.DIRECTION_RIGHT
 			EndIf
 			
 			getDegreeByPositionAndDirection(re, obj, currentDegree, x, y, z, groundDirection)
@@ -159,7 +159,7 @@ Class ACMapDegreeGetter Extends ACDegreeGetter Implements ACParam
 			Local searchRightX:Int
 			
 			Select (direction)
-				Case DIRECTION_UP, DIRECTION_DOWN
+				Case ACParam.DIRECTION_UP, ACParam.DIRECTION_DOWN
 					Local directionV:Int
 					
 					If (direction = 0) Then
@@ -188,7 +188,7 @@ Class ACMapDegreeGetter Extends ACDegreeGetter Implements ACParam
 							
 							newY = getNewY(searchLeftX, searchLeftY, z, direction, obj)
 							
-							If (newY = NO_COLLISION Or ((direction <> DIRECTION_UP Or newY < searchLeftLimitY) And (direction <> DIRECTION_DOWN Or newY > searchLeftLimitY))) Then
+							If (newY = NO_COLLISION Or ((direction <> ACParam.DIRECTION_UP Or newY < searchLeftLimitY) And (direction <> ACParam.DIRECTION_DOWN Or newY > searchLeftLimitY))) Then
 								searchLeftX += 1 Shl Self.zoom
 							Else
 								findSearchPointLeft = True
@@ -210,7 +210,7 @@ Class ACMapDegreeGetter Extends ACDegreeGetter Implements ACParam
 									
 									newY = getNewY(searchRightX, searchRightY, z, direction, obj)
 									
-									If (newY <> NO_COLLISION Or ((direction <> DIRECTION_UP Or newY < searchRightLimitY) And (direction <> DIRECTION_DOWN Or newY > searchRightLimitY))) Then
+									If (newY <> NO_COLLISION Or ((direction <> ACParam.DIRECTION_UP Or newY < searchRightLimitY) And (direction <> ACParam.DIRECTION_DOWN Or newY > searchRightLimitY))) Then
 										searchRightX -= 1 Shl Self.zoom
 									Else
 										findSearchPointRight = True
@@ -274,10 +274,10 @@ Class ACMapDegreeGetter Extends ACDegreeGetter Implements ACParam
 						
 						re.degree = calDegreeByAllPoints(searchLeftX, searchLeftY, searchRightX, searchRightY, x, y, findSearchPointLeft, findSearchPointRight, currentDegree)
 					EndIf
-				Case DIRECTION_LEFT, DIRECTION_RIGHT
+				Case ACParam.DIRECTION_LEFT, ACParam.DIRECTION_RIGHT
 					Local directionH:Int
 					
-					If (direction = DIRECTION_LEFT) Then
+					If (direction = ACParam.DIRECTION_LEFT) Then
 						directionH = 1
 					Else
 						directionH = -1
@@ -305,7 +305,7 @@ Class ACMapDegreeGetter Extends ACDegreeGetter Implements ACParam
 							
 							newX = getNewX(searchLeftX, searchLeftY, z, direction, obj)
 							
-							If (newX = NO_COLLISION Or ((direction <> DIRECTION_LEFT Or newX < searchLeftLimitX) And (direction <> DIRECTION_RIGHT Or newX > searchLeftLimitX))) Then
+							If (newX = NO_COLLISION Or ((direction <> ACParam.DIRECTION_LEFT Or newX < searchLeftLimitX) And (direction <> ACParam.DIRECTION_RIGHT Or newX > searchLeftLimitX))) Then
 								searchLeftY += 1 Shl Self.zoom
 							Else
 								findSearchPointLeft = True
@@ -327,7 +327,7 @@ Class ACMapDegreeGetter Extends ACDegreeGetter Implements ACParam
 									
 									newX = getNewX(searchRightX, searchRightY, z, direction, obj)
 									
-									If (newX <> NO_COLLISION Or ((direction <> DIRECTION_LEFT Or newX < searchRightLimitX) And (direction <> DIRECTION_RIGHT Or newX > searchRightLimitX))) Then
+									If (newX <> NO_COLLISION Or ((direction <> ACParam.DIRECTION_LEFT Or newX < searchRightLimitX) And (direction <> ACParam.DIRECTION_RIGHT Or newX > searchRightLimitX))) Then
 										searchRightY -= 1 Shl Self.zoom
 									Else
 										findSearchPointRight = True
@@ -344,7 +344,7 @@ Class ACMapDegreeGetter Extends ACDegreeGetter Implements ACParam
 										
 										Return
 									EndIf
-								EndIf
+								Wend
 								
 								If (findSearchPointLeft) Then
 									' Nothing so far.
@@ -357,7 +357,7 @@ Class ACMapDegreeGetter Extends ACDegreeGetter Implements ACParam
 								
 								re.degree = calDegreeByAllPoints(searchLeftX, searchLeftY, searchRightX, searchRightY, x, y, findSearchPointLeft, findSearchPointRight, currentDegree)
 							EndIf
-						EndIf
+						Wend
 						
 						searchRightX = 0
 						

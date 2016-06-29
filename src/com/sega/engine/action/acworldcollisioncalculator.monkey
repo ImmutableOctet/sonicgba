@@ -141,6 +141,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 	Private
 		' Methods:
 		Method calPosition:Void(collisionWidth:Int, collisionHeight:Int, footOffset:Int, bodyOffset:Int)
+			' Optimization potential; dynamic allocation:
 			Self.footCollisionPointOffsetX = New Int[3] ' DIRECTION_OFFSET_RIGHT
 			Self.footCollisionPointResaultX = New Int[3]
 			Self.footCollisionPointResaultY = New Int[3]
