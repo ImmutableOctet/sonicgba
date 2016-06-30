@@ -199,7 +199,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const MOON_STAR_DES_X_1:Int = (MOON_STAR_ORI_X_1 - 22)
 		Const MOON_STAR_DES_Y_1:Int = 26
 		
-		Global NUM_DISTANCE:Int = PickValue(((NUM_SPACE[0] * 8) > 60), NUM_SPACE[0] * 7, 60)
+		Global NUM_DISTANCE:Int = PickValue(((NUM_SPACE[0] * 8) > 60), NUM_SPACE[0] * 7, 60) ' Const
 		
 		' Sizes of numbers found in "number.png":
 		Const NUM_PIC_WIDTH:Int = 7
@@ -1340,10 +1340,10 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Self.movePowerReserseBall = (MOVE_POWER_REVERSE_BALL * 2)
 					Self.maxVelocity = (MAX_VELOCITY * 2)
 					
-					If (Not (speedCount <> 0 Or SoundSystem.getInstance().getPlayingBGMIndex() = ANI_POP_JUMP_UP_SLOW Or SoundSystem.getInstance().getPlayingBGMIndex() = ANI_DEAD Or SoundSystem.getInstance().getPlayingBGMIndex() = MOON_STAR_DES_Y_1)) Then
+					If (Not (speedCount <> 0 Or SoundSystem.getInstance().getPlayingBGMIndex() = SoundSystem.BGM_TIMEATTACKGOAL Or SoundSystem.getInstance().getPlayingBGMIndex() = SoundSystem.BGM_NEWRECORD Or SoundSystem.getInstance().getPlayingBGMIndex() = SoundSystem.BGM_CLEAR_ACT1)) Then
 						SoundSystem.getInstance().setSoundSpeed(1.0)
 						
-						If (SoundSystem.getInstance().getPlayingBGMIndex() <> ANI_POP_JUMP_DOWN_SLOW) Then
+						If (SoundSystem.getInstance().getPlayingBGMIndex() <> SoundSystem.BGM_1UP) Then
 							SoundSystem.getInstance().restartBgm()
 						EndIf
 					EndIf
@@ -3006,7 +3006,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				extraLogicJump()
 			EndIf
 			
-			If (Self.velY >= ((-BODY_OFFSET) - getGravity())) Then
+			If (Self.velY >= ((-BODY_OFFSET) - getGravity())) Then ' (-768 - getGravity())
 				Local velX2:= (Self.velX Shl 5)
 				Local resistance:= (velX2 * 3 / JUMP_REVERSE_POWER)
 				
@@ -3907,49 +3907,39 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Local tmpVelX:= mVelX
 				
 				Self.totalVelocity = (((MyAPI.dCos(Self.faceDegree) * tmpVelX) + (MyAPI.dSin(Self.faceDegree) * ((Self.totalVelocity * MyAPI.dSin(Self.faceDegree)) / 100))) / 100)
-				
-				Return
+			Else
+				Super.setVelX(mVelX)
 			EndIf
-			
-			Super.setVelX(mVelX)
 		End
 		
 		Method setVelY:Void(mVelY:Int)
 			If (Self.collisionState = COLLISION_STATE_WALK) Then
-				Local dSin:= ((Self.totalVelocity * MyAPI.dSin(Self.faceDegree)) / 100)
-				
 				Self.totalVelocity = (((MyAPI.dCos(Self.faceDegree) * ((Self.totalVelocity * MyAPI.dCos(Self.faceDegree)) / 100)) + (MyAPI.dSin(Self.faceDegree) * mVelY)) / 100)
-				
-				Return
+			Else
+				Super.setVelY(mVelY)
 			EndIf
-			
-			Super.setVelY(mVelY)
 		End
 		
 		Method setVelXPercent:Void(percentage:Int)
 			If (Self.collisionState = COLLISION_STATE_WALK) Then
-				Local tmpVelX:= ((Self.totalVelocity * MyAPI.dCos(Self.faceDegree)) / 100)
+				'Local tmpVelX:= ((Self.totalVelocity * MyAPI.dCos(Self.faceDegree)) / 100)
 				
-				tmpVelX = ((Self.totalVelocity * percentage) / 100)
+				Local tmpVelX:= ((Self.totalVelocity * percentage) / 100)
 				
 				Self.totalVelocity = (((MyAPI.dCos(Self.faceDegree) * tmpVelX) + (MyAPI.dSin(Self.faceDegree) * ((Self.totalVelocity * MyAPI.dSin(Self.faceDegree)) / 100))) / 100)
-				
-				Return
+			Else
+				Super.setVelX((Self.totalVelocity * percentage) / 100)
 			EndIf
-			
-			Super.setVelX((Self.totalVelocity * percentage) / 100)
 		End
 		
 		Method setVelYPercent:Void(percentage:Int)
 			If (Self.collisionState = COLLISION_STATE_WALK) Then
-				Local tmpVelY:= ((Self.totalVelocity * MyAPI.dSin(Self.faceDegree)) / 100)
+				'Local tmpVelY:= ((Self.totalVelocity * MyAPI.dSin(Self.faceDegree)) / 100)
 				
 				Self.totalVelocity = (((MyAPI.dCos(Self.faceDegree) * ((Self.totalVelocity * MyAPI.dCos(Self.faceDegree)) / 100)) + (MyAPI.dSin(Self.faceDegree) * ((Self.totalVelocity * percentage) / 100))) / 100)
-				
-				Return
+			Else
+				Super.setVelY((Self.totalVelocity * percentage) / 100)
 			EndIf
-			
-			Super.setVelY((Self.totalVelocity * percentage) / 100)
 		End
 		
 		Method beSpring:Void(springPower:Int, direction:Int)
@@ -3998,6 +3988,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			EndIf
 			
 			If (characterID = CHARACTER_TAILS) Then
+				' Optimization potential; dynamic cast.
 				' Not safe, but it works:
 				Local tails:= PlayerTails(player)
 				
@@ -4026,9 +4017,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					'sType = 0
 					
 					If (Not Self.beAttackByHari) Then
-						' Magic number: 14 (Sound-effect ID)
-						' If it wasn't obvious, this is probably the "hurt sound".
-						soundInstance.playSe(14)
+						soundInstance.playSe(SoundSystem.SE_119)
 					EndIf
 					
 					If (Self.beAttackByHari) Then

@@ -5,6 +5,10 @@ Public
 ' Imports:
 Private
 	Import lib.myapi
+	Import lib.constutil
+	
+	Import gameengine.def
+	Import gameengine.gbadef
 	
 	Import sonicgba.backgroundmanager
 	Import sonicgba.mapmanager
@@ -17,29 +21,47 @@ Public
 Class BackManagerStageFinal Extends BackGroundManager
 	Private
 		' Global variable(s):
-		Global bgImage:MFImage ' Field
+		'Global bgImage:MFImage
 		
 		' Fields:
+		Field bgImage:MFImage
+		
 		Field height:Int
 	Public
 		' Constructor(s):
 		Method New()
-			If (bgImage = Null) Then
-				bgImage = MFImage.createImage("/map/final_bg.png")
-			EndIf
+			'If (bgImage = Null) Then
+			bgImage = MFImage.createImage("/map/final_bg.png")
+			'EndIf
 			
+			' Magic number: 20
 			Self.height = 20
 		End
 		
 		' Methods:
 		Method close:Void()
-			bgImage = Null ' Self.bgImage
+			If (MFImage.releaseImage(bgImage)) Then
+				bgImage = Null
+			EndIf
 		End
 		
-		' This method and similar behavior will likely be replaced with Mojo.
-		Method draw:Void(graphics:MFGraphics)
-			' DRAW 'bgImage' HERE.
+		Method draw:Void(g:MFGraphics)
+			g.setColor(0)
 			
-			Return
+			MyAPI.fillRect(g, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+			
+			Local cameraX:= MapManager.getCamera().x
+			Local cameraY:= MapManager.getCamera().y
+			
+			' Magic numbers: 43, -12
+			Local x:= (Max(((-cameraX) / 43), -12) - GBA_EXT_WIDTH + SCREEN_WIDTH) ' 284
+			
+			Local y:= ((-cameraY) / 18) + Self.height
+			
+			If (y > 0) Then
+				y = 0
+			EndIf
+			
+			MyAPI.drawImage(g, bgImage, x, y, 0)
 		End
 End

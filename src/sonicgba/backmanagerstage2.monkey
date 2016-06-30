@@ -33,6 +33,7 @@ Class BackManagerStage2 Extends BackGroundManager
 		
 		' Fields:
 		Field image1:MFImage
+		
 		Field imageBG2:MFImage[]
 	Public
 		' Constructor(s):
@@ -56,11 +57,15 @@ Class BackManagerStage2 Extends BackGroundManager
 		
 		' Methods:
 		Method close:Void()
-			Self.image1 = Null
+			If (MFImage.releaseImage(Self.image1)) Then
+				Self.image1 = Null
+			EndIf
 			
 			If (Self.imageBG2.Length > 0) Then
 				For Local i:= 0 Until Self.imageBG2.Length
-					Self.imageBG2[i] = Null
+					If (MFImage.releaseImage(Self.imageBG2[i])) Then
+						Self.imageBG2[i] = Null
+					EndIf
 				Next
 			EndIf
 			

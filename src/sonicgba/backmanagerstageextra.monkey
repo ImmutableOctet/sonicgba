@@ -22,9 +22,11 @@ Class BackManagerStageExtra Extends BackGroundManager
 		Global DIVIDE_VELOCITY:Int[] = [0, 15, 30, 60, 120, 240, 360, 480, 600, 720, 840, 960] ' Const
 		
 		' Global variable(s):
-		Global bgImage:MFImage ' Field
+		'Global bgImage:MFImage
 		
 		' Fields:
+		Field bgImage:MFImage
+		
 		Field xOffset:Int[]
 	Public
 		' Constructor(s):
@@ -36,7 +38,9 @@ Class BackManagerStageExtra Extends BackGroundManager
 		
 		' Methods:
 		Method close:Void()
-			bgImage = Null
+			If (MFImage.releaseImage(bgImage)) Then
+				bgImage = Null
+			EndIf
 			
 			Self.xOffset = []
 		End

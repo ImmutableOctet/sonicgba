@@ -112,9 +112,17 @@ Class BackManagerStage61 Extends BackGroundManager
 		End
 		
 		Method close:Void()
-			Self.image0 = Null
-			Self.image1 = Null
-			Self.image2 = Null
+			If (MFImage.releaseImage(Self.image0)) Then
+				Self.image0 = Null
+			EndIf
+			
+			If (MFImage.releaseImage(Self.image1)) Then
+				Self.image1 = Null
+			EndIf
+			
+			If (MFImage.releaseImage(Self.image2)) Then
+				Self.image2 = Null
+			EndIf
 		End
 		
 		Method nextState:Void()
@@ -154,9 +162,11 @@ Class BackManagerStage61 Extends BackGroundManager
 				Self.cloudY -= 30
 				Self.cloudY += 32768
 				Self.cloudY Mod= 32768
+				
 				Self.starY1 -= 120
 				Self.starY1 += 65536
 				Self.starY1 Mod= 65536
+				
 				Self.starY2 -= 15
 				Self.starY2 += 65536
 				Self.starY2 Mod= 65536

@@ -76,11 +76,17 @@ Class BackManagerStage3 Extends BackGroundManager
 		Method close:Void()
 			If (Self.imageBG.Length > 0) Then
 				For Local i:= 0 Until Self.imageBG.Length
-					Self.imageBG[i] = Null
+					If (MFImage.releaseImage(Self.imageBG[i])) Then
+						Self.imageBG[i] = Null
+					EndIf
 				Next
 			EndIf
 			
 			Self.imageBG = []
+			
+			Animation.closeAnimationDrawer(Self.firework)
+			
+			Self.firework = Null
 		End
 		
 		Method draw:Void(g:MFGraphics)

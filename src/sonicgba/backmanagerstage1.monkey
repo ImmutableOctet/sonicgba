@@ -37,8 +37,8 @@ Class BackManagerStage1 Extends BackGroundManager
 		Global POS_X_SPEED:Int[] = POS_X_SPEED_N
 		
 		' Fields:
-		Field image:MFImage
 		Field imageBG:MFImage[]
+		
 		Field posX:Int[]
 	Public
 		' Constructor(s):
@@ -62,7 +62,9 @@ Class BackManagerStage1 Extends BackGroundManager
 			
 			If (Self.imageBG.Length > 0) Then
 				For Local i:= 0 Until Self.imageBG.Length
-					Self.imageBG[i] = Null
+					If (MFImage.releaseImage(Self.imageBG[i])) Then
+						Self.imageBG[i] = Null
+					EndIf
 				Next
 			EndIf
 			

@@ -46,8 +46,13 @@ Class BackManagerStage5 Extends BackGroundManager
 		
 		' Methods:
 		Method close:Void()
-			Self.backImage = Null
-			Self.cloudImage = Null
+			If (MFImage.releaseImage(Self.backImage)) Then
+				Self.backImage = Null
+			EndIf
+			
+			If (MFImage.releaseImage(Self.cloudImage)) Then
+				Self.cloudImage = Null
+			EndIf
 		End
 		
 		Method draw:Void(graphics:MFGraphics)

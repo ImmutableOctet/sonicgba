@@ -41,17 +41,17 @@ Class BackManagerStage4 Extends BackGroundManager
 			If (subid = 0) Then
 				Self.speedx = 637
 				Self.speedy = 9
-				
-				Return
+			Else
+				Self.speedx = 535
+				Self.speedy = 7
 			EndIf
-			
-			Self.speedx = 535
-			Self.speedy = 7
 		End
 		
 		' Methods:
 		Method close:Void()
-			Self.image = Null
+			If (MFImage.releaseImage(Self.image)) Then
+				Self.image = Null
+			EndIf
 		End
 		
 		Method draw:Void(g:MFGraphics)

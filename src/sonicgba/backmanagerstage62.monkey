@@ -24,9 +24,11 @@ Class BackManagerStage62 Extends BackGroundManager
 		Global IMAGE_WIDTH:Int = 256
 		Global IMAGE_HEIGHT:Int = 232
 		
-		Global bgImage:MFImage[]
+		'Global bgImage:MFImage[]
 		
 		' Fields:
+		Field bgImage:MFImage[]
+		
 		Field lightX:Int[]
 	Public
 		' Constructor(s):
@@ -49,7 +51,9 @@ Class BackManagerStage62 Extends BackGroundManager
 		Method close:Void()
 			If (bgImage.Length > 0) Then
 				For Local i:= 0 Until bgImage.Length ' 4
-					bgImage[i] = Null
+					If (MFImage.releaseImage(bgImage[i])) Then
+						bgImage[i] = Null
+					EndIf
 				Next
 			EndIf
 			
@@ -59,6 +63,7 @@ Class BackManagerStage62 Extends BackGroundManager
 		Method draw:Void(g:MFGraphics)
 			Local cameraX:= MapManager.getCamera().x
 			Local cameraY:= MapManager.getCamera().y
+			
 			Local tmpframe:= ((frame Mod (bgImage.Length * 2)) / 2)
 			
 			MyAPI.drawImage(g, bgImage[tmpframe], 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, 0, (-cameraX) / 46, (-cameraY) / 33, 0)
