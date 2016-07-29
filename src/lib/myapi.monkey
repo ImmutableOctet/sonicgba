@@ -175,6 +175,24 @@ Class MyAPI Extends myapi.MyAPI ' Implements Def
 		End
 	Public
 		' Functions:
+		
+		' Extensions:
+		
+		' This fills an area of the screen with a rectangle of the color specified.
+		Function drawScreenRect:Void(g:MFGraphics, color:Int, width:Int, height:Int, x:Int=0, y:Int=0)
+			' Store the current color.
+			Local currentColor:= g.getColor()
+			
+			' Set the fade color.
+			g.setColor(fadeColor)
+			
+			' Draw the color over the screen.
+			g.fillRect(x, y, zoomOut(width), zoomOut(height))
+			
+			' Restore the original color.
+			g.setColor(currentColor)
+		End
+		
 		Function drawRegion:Void(g2:MFGraphics, img:MFImage, sx:Int, sy:Int, sw:Int, sh:Int, trans:Int, dx:Int, dy:Int, anchor:Int)
 			drawImage(g2, img, sx, sy, sw, sh, trans, dx, dy, anchor)
 		End

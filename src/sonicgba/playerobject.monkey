@@ -282,7 +282,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Global fadeAlpha:Int = FADE_FILL_WIDTH ' 40
 		Global fadeFromValue:Int
-		'Global fadeRGB:Int[] = New Int[1600]
+		'Global fadeRGB:Int[] = New Int[FADE_FILL_WIDTH*FADE_FILL_HEIGHT] ' 1600
 		Global fadeColor:Int
 		Global fadeToValue:Int
 		
@@ -6766,7 +6766,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					#End
 					
 					' Encode the current alpha value into the fade-color.
-					fadeColor = ((fadeAlpha Shl 24) & MFGraphics.COLOR_MASK_ALPHA) | (fadeColor & MapManager.END_COLOR)
+					fadeColor = MFGraphics.encodeAlpha(fadeColor, fadeAlpha)
 					
 					preFadeAlpha = fadeAlpha
 				EndIf
@@ -6779,17 +6779,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					Next
 				#End
 				
-				' Store the current color.
-				Local currentColor:= g.getColor()
-				
-				' Set the fade color.
-				g.setColor(fadeColor)
-				
-				' Draw the color over the screen.
-				g.fillRect(0, 0, MyAPI.zoomOut(SCREEN_WIDTH), MyAPI.zoomOut(SCREEN_HEIGHT))
-				
-				' Restore the original color.
-				g.setColor(currentColor)
+				MyAPI.drawScreenRect(g, fadeColor, SCREEN_WIDTH, SCREEN_HEIGHT)
 			EndIf
 		End
 		

@@ -124,8 +124,8 @@ Class NormalEnding Extends PlainEnding ' Final
 		Global fadeAlpha:Int = FADE_FILL_WIDTH
 		Global fadeFromValue:Int
 		
-		' This will be replaced eventually. (Software fading)
-		Global fadeRGB:Int[] = New Int[FADE_FILL_WIDTH*FADE_FILL_HEIGHT]
+		'Global fadeRGB:Int[] = New Int[FADE_FILL_WIDTH*FADE_FILL_HEIGHT]
+		Global fadeColor:Int
 		Global fadeToValue:Int
 		Global fading:Bool
 		
@@ -194,20 +194,29 @@ Class NormalEnding Extends PlainEnding ' Final
 			
 			If (fadeAlpha <> 0) Then
 				If (preFadeAlpha <> fadeAlpha) Then
-					For Local w:= 0 Until FADE_FILL_WIDTH
-						For Local h:= 0 Until FADE_FILL_HEIGHT
-							fadeRGB[(h * FADE_FILL_WIDTH) + w] = ((fadeAlpha Shl 24) & MFGraphics.COLOR_MASK_ALPHA) | (fadeRGB[(h * FADE_FILL_HEIGHT) + w] & MapManager.END_COLOR) ' FADE_FILL_WIDTH
+					#Rem
+						For Local w:= 0 Until FADE_FILL_WIDTH
+							For Local h:= 0 Until FADE_FILL_HEIGHT
+								fadeRGB[(h * FADE_FILL_WIDTH) + w] = ((fadeAlpha Shl 24) & MFGraphics.COLOR_MASK_ALPHA) | (fadeRGB[(h * FADE_FILL_HEIGHT) + w] & MapManager.END_COLOR) ' FADE_FILL_WIDTH
+							Next
 						Next
-					Next
+					#End
+					
+					' Encode the current alpha value into the fade-color.
+					fadeColor = MFGraphics.encodeAlpha(fadeColor, fadeAlpha)
 					
 					preFadeAlpha = fadeAlpha
 				EndIf
 				
-				For Local w:= 0 Until MyAPI.zoomOut(SCREEN_WIDTH) Step FADE_FILL_WIDTH
-					For Local h:= 0 Until MyAPI.zoomOut(SCREEN_HEIGHT) Step FADE_FILL_WIDTH
-						g.drawRGB(fadeRGB, 0, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_WIDTH, True)
+				#Rem
+					For Local w:= 0 Until MyAPI.zoomOut(SCREEN_WIDTH) Step FADE_FILL_WIDTH
+						For Local h:= 0 Until MyAPI.zoomOut(SCREEN_HEIGHT) Step FADE_FILL_WIDTH
+							g.drawRGB(fadeRGB, 0, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_WIDTH, True)
+						Next
 					Next
-				Next
+				#End
+				
+				MyAPI.drawScreenRect(g, fadeColor, SCREEN_WIDTH, SCREEN_HEIGHT)
 			EndIf
 		End
 		

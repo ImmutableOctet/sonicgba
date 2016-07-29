@@ -200,6 +200,13 @@ Class MFGraphics
 			Return colorToFloat(getB(color))
 		End
 		
+		' This encodes an alpha value (0-255) into a previously encoded RGB color.
+		' The result of this function is an RGBA color with a subtractive alpha value.
+		' This is useful for the color parameters defined by the API.
+		Function encodeAlpha:Int(color_state:Int, alpha:Int)
+			Return (((alpha Shl 24) & COLOR_MASK_ALPHA) | (color & COLOR_MASK))
+		End
+		
 		' Methods:
 		
 		' Extensions:
