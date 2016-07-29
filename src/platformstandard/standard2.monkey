@@ -306,7 +306,7 @@ Class Standard2 ' Implements Def ' Final
 				If (preFadeAlpha <> fadeAlpha) Then
 					For Local w:= 0 Until FADE_FILL_WIDTH
 						For Local h:= 0 Until FADE_FILL_HEIGHT
-							fadeRGB[(h * FADE_FILL_WIDTH) + w] = ((fadeAlpha Shl 24) & -16777216) | (fadeRGB[(h * FADE_FILL_WIDTH) + w] & MapManager.END_COLOR) ' FADE_FILL_HEIGHT
+							fadeRGB[(h * FADE_FILL_WIDTH) + w] = ((fadeAlpha Shl 24) & MFGraphics.COLOR_MASK_ALPHA) | (fadeRGB[(h * FADE_FILL_WIDTH) + w] & MapManager.END_COLOR) ' FADE_FILL_HEIGHT
 						Next
 					Next
 					

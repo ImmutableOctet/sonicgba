@@ -93,6 +93,14 @@ Class MFGraphics
 			'Self.projStack = New FloatStack()
 		End
 	Public
+		' Constant variable(s):
+		
+		' Extensions:
+		Const COLOR_WHITE:Int = 16777215 ' 2^24
+		
+		Const COLOR_MASK:= COLOR_WHITE
+		Const COLOR_MASK_ALPHA:= -(COLOR_WHITE + 1) ' -16777216
+		
 		' Functions:
 		Function init:Void() ' Final
 			' Nothing so far.
@@ -166,9 +174,9 @@ Class MFGraphics
 				a = floatToColor(colors[offset+3])
 			Endif
 			
-			Local out_a:= ((a Shl 24) & 16777215)
-			Local out_r:= ((r Shl 16) & 65535)
-			Local out_g:= ((g Shl 8) & 255)
+			Local out_a:= ((a Shl 24) & 16777215) ' 2^24
+			Local out_r:= ((r Shl 16) & 65535) ' 2^16
+			Local out_g:= ((g Shl 8) & 255) ' 2^8
 			Local out_b:= ((b))
 			
 			Return (out_r|out_g|out_b|out_a)
@@ -435,11 +443,7 @@ Class MFGraphics
 				Return
 			EndIf
 			
-			'Print("Color: " + color)
-			
-			'Print("R: " + getRf(color) + ", G: " + getGf(color) + ", B: " + getBf(color) + ", A: " + getAf(color))
-			
-			''Self.context.SetColor(getRf(color), getGf(color), getBf(color)) ' getAf(color)
+			Self.context.SetColor(getRf(color), getGf(color), getBf(color), 1.0 - getAf(color))
 		End
 		
 		Method getColor:Int()

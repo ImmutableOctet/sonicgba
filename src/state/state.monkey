@@ -618,7 +618,7 @@ Class State Implements StringIndex Abstract ' SonicDef
 				If (preFadeAlpha <> fadeAlpha) Then
 					For Local w:= 0 Until FADE_FILL_WIDTH
 						For Local h:= 0 Until FADE_FILL_HEIGHT
-							fadeRGB[(h * FADE_FILL_WIDTH) + w] = ((fadeAlpha Shl MENU_BG_OFFSET) & -16777216) | (fadeRGB[(h * FADE_FILL_WIDTH) + w] & MENU_BG_COLOR_1)
+							fadeRGB[(h * FADE_FILL_WIDTH) + w] = ((fadeAlpha Shl MENU_BG_OFFSET) & MFGraphics.COLOR_MASK_ALPHA) | (fadeRGB[(h * FADE_FILL_WIDTH) + w] & MENU_BG_COLOR_1)
 						Next
 					Next
 					

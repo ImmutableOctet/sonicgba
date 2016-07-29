@@ -282,7 +282,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Global fadeAlpha:Int = FADE_FILL_WIDTH ' 40
 		Global fadeFromValue:Int
-		Global fadeRGB:Int[] = New Int[1600]
+		'Global fadeRGB:Int[] = New Int[1600]
+		Global fadeColor:Int
 		Global fadeToValue:Int
 		
 		Global fastRunDrawer:AnimationDrawer
@@ -1460,7 +1461,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 								If (Self.totalVelocity < 0) Then
 									Self.totalVelocity = 0
 								EndIf
-								
 							ElseIf (Self.totalVelocity > MAX_VELOCITY) Then
 								Self.totalVelocity -= MOVE_POWER_REVERSE_BALL
 								
@@ -1483,23 +1483,22 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						' Magic number: 11 (Stage ID)
 						If (StageManager.getStageID() <> 11) Then
 							If (Not isFirstTouchedWind And Self.animationID = ANI_WIND_JUMP) Then
-								' Magic number: 68 (Sound-effect ID)
-								soundInstance.playSe(68)
+								soundInstance.playSe(SoundSystem.SE_200_01)
 								
 								isFirstTouchedWind = True
+								
 								Self.frameCnt = 0
 							EndIf
 							
 							If (isFirstTouchedWind) Then
-								' Magic number: 69 (Sound-effect ID):
 								If (Self.animationID = ANI_WIND_JUMP) Then
 									Self.frameCnt += 1
 									
 									If (Self.frameCnt > 4 And Not IsGamePause) Then
-										soundInstance.playLoopSe(69)
+										soundInstance.playLoopSe(SoundSystem.SE_200_02)
 									EndIf
 								Else
-									If (soundInstance.getPlayingLoopSeIndex() = 69) Then
+									If (soundInstance.getPlayingLoopSeIndex() = SoundSystem.SE_200_02) Then
 										soundInstance.stopLoopSe()
 									EndIf
 									
@@ -1632,6 +1631,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 													StageManager.setStagePass()
 												Else
 													setFadeColor(MapManager.END_COLOR)
+													
 													fadeInit(0, 255)
 													
 													Self.fading = True
@@ -3332,6 +3332,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			doJumpV(velY)
 			
 			If (StageManager.getWaterLevel() > 0 And characterID = CHARACTER_KNUCKLES) Then
+				' Optimization potential; dynamic cast:
 				' Unsafe, but it works.
 				Local knuckles:= PlayerKnuckles(player)
 				
@@ -6606,6 +6607,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 	Protected
 		' Methods:
+		
+		' This is normally used to implement special abilities, like Sonic's 'insta-shield'.
 		Method extraLogicJump:Void()
 			' Empty implementation.
 		End
@@ -6730,9 +6733,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Function setFadeColor:Void(color:Int)
-			For Local i:= 0 Until fadeRGB.Length
-				fadeRGB[i] = color
-			Next
+			#Rem
+				For Local i:= 0 Until fadeRGB.Length
+					fadeRGB[i] = color
+				Next
+			#End
+			
+			fadeColor = color
 		End
 		
 		Function fadeInit:Void(from:Int, dest:Int)
@@ -6743,28 +6750,46 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			preFadeAlpha = -1
 		End
 		
-		' This needs to be reimplemented.
 		Function drawFadeBase:Void(g:MFGraphics, vel2:Int)
 			fadeAlpha = MyAPI.calNextPosition(Double(fadeAlpha), Double(fadeToValue), 1, vel2, 3.0)
 			
 			If (fadeAlpha <> 0) Then
-				Local w:Int, h:Int
-				
 				If (preFadeAlpha <> fadeAlpha) Then
-					For Local w:= 0 Until FADE_FILL_WIDTH
-						For Local h:= 0 Until FADE_FILL_WIDTH
-							fadeRGB[(h * FADE_FILL_WIDTH) + w] = ((fadeAlpha Shl ANI_PULL) & -16777216) | (fadeRGB[(h * FADE_FILL_WIDTH) + w] & MapManager.END_COLOR)
+					#Rem
+						For Local w:= 0 Until FADE_FILL_WIDTH
+							For Local h:= 0 Until FADE_FILL_WIDTH
+								Local pixelIndex:= ((h * FADE_FILL_WIDTH) + w)
+								
+								fadeRGB[pixelIndex] = ((fadeAlpha Shl 24) & MFGraphics.COLOR_MASK_ALPHA) | (fadeRGB[pixelIndex] & MapManager.END_COLOR)
+							Next
 						Next
-					Next
+					#End
+					
+					' Encode the current alpha value into the fade-color.
+					fadeColor = ((fadeAlpha Shl 24) & MFGraphics.COLOR_MASK_ALPHA) | (fadeColor & MapManager.END_COLOR)
 					
 					preFadeAlpha = fadeAlpha
 				EndIf
 				
-				For Local w:= 0 Until MyAPI.zoomOut(SCREEN_WIDTH) Step FADE_FILL_WIDTH
-					For Local h:= 0 Until MyAPI.zoomOut(SCREEN_HEIGHT) Step FADE_FILL_WIDTH
-						g.drawRGB(fadeRGB, 0, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_WIDTH, True)
+				#Rem
+					For Local w:= 0 Until MyAPI.zoomOut(SCREEN_WIDTH) Step FADE_FILL_WIDTH
+						For Local h:= 0 Until MyAPI.zoomOut(SCREEN_HEIGHT) Step FADE_FILL_WIDTH
+							g.drawRGB(fadeRGB, 0, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_WIDTH, True)
+						Next
 					Next
-				Next
+				#End
+				
+				' Store the current color.
+				Local currentColor:= g.getColor()
+				
+				' Set the fade color.
+				g.setColor(fadeColor)
+				
+				' Draw the color over the screen.
+				g.fillRect(0, 0, MyAPI.zoomOut(SCREEN_WIDTH), MyAPI.zoomOut(SCREEN_HEIGHT))
+				
+				' Restore the original color.
+				g.setColor(currentColor)
 			EndIf
 		End
 		

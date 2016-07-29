@@ -415,7 +415,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				EndIf
 				
 				sideCollision = True
-				sideCollisionDirection = ACParam.DIRECTION_RIGHT ' ACParam.DIRECTION_RIGHT
+				sideCollisionDirection = ACParam.DIRECTION_RIGHT
 				sideCollisionDegree = getDegreeFromWorld((Self.footDegree + 270) Mod 360, Self.collisionData.collisionX, Self.collisionData.collisionY, Self.acObj.posZ)
 				
 				sideNewX = newX
@@ -990,10 +990,10 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 			Local startPointX:= Self.chkPointX
 			Local startPointY:= Self.chkPointY
 			
-			Self.moveDistanceX = ((Self.totalDistance * MyAPI.dCos(Self.user_worldcal.getBodyDegree())) / 100)
-			Self.moveDistanceY = ((Self.totalDistance * MyAPI.dSin(Self.user_worldcal.getBodyDegree())) / 100)
+			Self.moveDistanceX = ((Self.totalDistance * MyAPI.dCos(Self.user_worldcal.getBodyDegree())) / 100) ' preDegree
+			Self.moveDistanceY = ((Self.totalDistance * MyAPI.dSin(Self.user_worldcal.getBodyDegree())) / 100) ' preDegree
 			
-			Local direction:= getDirectionByDegree(Self.user_worldcal.getBodyDegree())
+			Local direction:= getDirectionByDegree(Self.user_worldcal.getBodyDegree()) ' preDegree
 			
 			Local preFootDegree:Int
 			
@@ -1156,8 +1156,8 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 					EndIf
 			End Select
 			
-			Local preMoveDistanceX:= Self.moveDistanceX
-			Local preMoveDistanceY:= Self.moveDistanceY
+			'Local preMoveDistanceX:= Self.moveDistanceX
+			'Local preMoveDistanceY:= Self.moveDistanceY
 			
 			Self.moveDistanceX -= Self.chkPointX - startPointX
 			Self.moveDistanceY -= Self.chkPointY - startPointY

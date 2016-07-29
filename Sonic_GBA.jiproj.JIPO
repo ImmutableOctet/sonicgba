@@ -31,8 +31,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acdegreegetter.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>1</X>
-        <Y>19</Y>
+        <X>9</X>
+        <Y>13</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -71,17 +71,17 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\engine\action\acparam.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\com\sega\engine\action\acparam.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>8</X>
+        <Y>7</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acutilities.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>21</X>
-        <Y>14</Y>
+        <X>11</X>
+        <Y>30</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -106,13 +106,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\engine\action\acworldcollisioncalculator.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\engine\action\acworldcollisioncalculator.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>10</X>
-        <Y>1684</Y>
+        <X>7</X>
+        <Y>467</Y>
       </CursorPos>
-      <DocGUID>ad3ae650-fcee-49f3-876b-a8e0b86f5690</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acworldcollisionlimit.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -187,16 +186,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>15</X>
-        <Y>977</Y>
+        <X>36</X>
+        <Y>1031</Y>
       </CursorPos>
       <DocGUID>7d73fc9b-7a15-4ff9-9c6f-063f8dfd6a6a</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfimage.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>22</X>
+        <Y>267</Y>
       </CursorPos>
       <DocGUID>c8485429-1a9a-4b90-98b6-8c35cd5fc509</DocGUID>
       <Bookmarks />
@@ -315,8 +314,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\ending\normalending.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>4</X>
-        <Y>245</Y>
+        <X>66</X>
+        <Y>198</Y>
       </CursorPos>
       <DocGUID>cf1a6797-b66e-4bd8-9167-b69618ccb00d</DocGUID>
       <Bookmarks />
@@ -379,13 +378,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\animation.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\lib\animation.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>13</X>
-        <Y>451</Y>
+        <X>20</X>
+        <Y>118</Y>
       </CursorPos>
-      <DocGUID>d11ecbdf-fe04-453f-82c5-4500554c43f6</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationaction.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -394,13 +392,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\animationdrawer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\lib\animationdrawer.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>10</X>
         <Y>159</Y>
       </CursorPos>
-      <DocGUID>86279d7f-7e51-4613-8408-109410c0cca6</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animationframe.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -467,12 +464,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>12</X>
-        <Y>181</Y>
+        <X>57</X>
+        <Y>1257</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>3c73ae9f-ffb9-4672-851b-f37632767144</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\myrandom.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -495,13 +493,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
-        <Y>95</Y>
+        <X>17</X>
+        <Y>152</Y>
       </CursorPos>
-      <DocGUID>5a749458-ecdb-432d-bf08-4bfd2ac7d736</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -518,12 +515,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\platformstandard\standard2.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\platformstandard\standard2.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>41</X>
-        <Y>253</Y>
+        <X>9</X>
+        <Y>85</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>e94d6a62-215f-4412-be13-241ed0c55fc7</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\pyxeditor\pyxanimation.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -574,26 +572,24 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\backmanagerstage1.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\backmanagerstage1.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>45</X>
+        <Y>79</Y>
       </CursorPos>
-      <DocGUID>8dfdf64d-8bb0-4a52-b536-2038f57e5022</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\backmanagerstage2.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\backmanagerstage2.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>8</X>
-        <Y>68</Y>
+        <X>11</X>
+        <Y>34</Y>
       </CursorPos>
-      <DocGUID>020854e1-c16f-41b9-8cb4-ea176b1d9109</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\backmanagerstage3.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>25</X>
-        <Y>86</Y>
+        <X>11</X>
+        <Y>39</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -632,13 +628,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\backmanagerstagefinal.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\backmanagerstagefinal.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>13</X>
-        <Y>58</Y>
+        <X>27</X>
+        <Y>20</Y>
       </CursorPos>
-      <DocGUID>f2d665c4-1b9d-4fd6-9563-47a79b8a8c0c</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ballhobin.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1251,8 +1246,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>10</X>
-        <Y>220</Y>
+        <X>37</X>
+        <Y>987</Y>
       </CursorPos>
       <DocGUID>f0c2fbb2-8fc9-4183-88d7-60ebced56d1e</DocGUID>
       <Bookmarks />
@@ -1399,12 +1394,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\mapmanager.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\mapmanager.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
-        <Y>587</Y>
+        <X>24</X>
+        <Y>139</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>6df339e5-69c6-4a00-a7af-1b25b7ce4679</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\mapobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1477,12 +1473,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\moveobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\moveobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
+        <X>32</X>
         <Y>13</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>6a6e6553-4f75-49fd-ae8b-27a07b75b97f</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\moveringobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1505,12 +1502,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\paramsetting.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\paramsetting.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>61</X>
-        <Y>138</Y>
+        <X>19</X>
+        <Y>42</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>a8a1f3c4-ef6c-46b8-9427-6c9484bcb1c1</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\patrolanimal.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -1533,12 +1531,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\pipein.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\pipein.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
+        <X>14</X>
         <Y>20</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>412cf526-227c-4f49-8813-c4da463286e3</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\pipeout.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1568,12 +1567,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\playeramy.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\playeramy.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>9</X>
-        <Y>154</Y>
+        <X>19</X>
+        <Y>113</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>ad728ba5-d642-4e2e-94f6-3de6e03a58a7</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playeranimationcollisionrect.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1582,17 +1582,18 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\playerknuckles.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\playerknuckles.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>43</X>
-        <Y>187</Y>
+        <X>19</X>
+        <Y>63</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>180f1a37-edad-47cc-ab89-5dffe76a491d</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>17</X>
-        <Y>6803</Y>
+        <X>52</X>
+        <Y>6762</Y>
       </CursorPos>
       <DocGUID>df8b2180-9ad8-4775-ba4e-794da7c21987</DocGUID>
       <Bookmarks>
@@ -1602,18 +1603,18 @@
         </Point>
         <Point>
           <X>0</X>
-          <Y>548</Y>
+          <Y>549</Y>
         </Point>
         <Point>
           <X>0</X>
-          <Y>6802</Y>
+          <Y>6827</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playersonic.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>47</X>
-        <Y>98</Y>
+        <X>22</X>
+        <Y>26</Y>
       </CursorPos>
       <DocGUID>bbcd58e7-d458-4b04-9389-2df0120b00c1</DocGUID>
       <Bookmarks />
@@ -1870,13 +1871,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\sonicdef.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>11</X>
         <Y>13</Y>
       </CursorPos>
-      <DocGUID>547d4604-54be-4683-bcb6-52d9b39cb48f</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\split.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1948,13 +1948,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\stone.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\stone.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>15</X>
         <Y>110</Y>
       </CursorPos>
-      <DocGUID>57519ccc-0ba7-4004-93c0-c19f3e2d4ec6</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\stoneball.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -2089,12 +2088,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\special\specialplayer.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\special\specialplayer.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>23</X>
-        <Y>542</Y>
+        <X>13</X>
+        <Y>607</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>5ba0124b-cc7e-4b77-a7c8-6ccbf078b687</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\ssbomb.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -2196,8 +2196,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\gamestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>8</X>
-        <Y>1650</Y>
+        <X>12</X>
+        <Y>569</Y>
       </CursorPos>
       <DocGUID>77c2e597-7f15-45e6-ac1d-ad9978d2c79e</DocGUID>
       <Bookmarks />
@@ -2210,12 +2210,13 @@
       <DocGUID>5111314f-5499-4465-ae52-79c9cab69da1</DocGUID>
       <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\state\state.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\state\state.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>12</X>
-        <Y>725</Y>
+        <X>78</X>
+        <Y>620</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>a9ecd927-64aa-4f2b-9aa4-e72e33fc87e2</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\stringindex.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -2233,8 +2234,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\application.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>108</Y>
+        <X>45</X>
+        <Y>15</Y>
       </CursorPos>
       <DocGUID>c5bdb081-0eb0-45e8-9779-68285f73b7e2</DocGUID>
       <Bookmarks />
@@ -2379,7 +2380,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\ui" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\mobile\framework\utility" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\common" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\ending" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\ending" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\gameengine" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\lib\__test" Expanded="false" />
@@ -2585,6 +2586,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3\msvc\Debug\data\mid" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3\msvc\Debug\data\se" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3\msvc\Debug\data\special_res" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3\msvc\Debug\data\special_res\sp_map" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3\msvc\Debug\data\standard" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3\msvc\Debug\data\tip" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3\msvc\Debug\data\title" Expanded="false" />
@@ -2602,44 +2604,45 @@
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\angle\lib" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\build" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\build\Release32" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\animation" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\animation\ending" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\animation\opening" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\animation\player" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\animation\special" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\animation\utl_res" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\gimmick" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\img" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\item" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\map" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\map\stage1_1" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\map\stage1_2" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\map\stage1_bg" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\map\stage2_bg_1" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\map\stage3_1" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\map\stage3_2" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\map\stage3_bg" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\map\stage4_1" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\map\stage4_2" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\map\stage5_1" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\map\stage5_2" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\map\stage6_1" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\map\stage6_2" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\map\stage6_bg_3" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\mid" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\se" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\special_res" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\special_res\sp_map" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\standard" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\tip" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\title" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\tuch" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\data\water" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\external" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Release32\internal" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\build\Debug32" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\animation" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\animation\ending" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\animation\opening" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\animation\player" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\animation\special" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\animation\utl_res" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\gimmick" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\img" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\item" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\map" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\map\stage1_1" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\map\stage1_2" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\map\stage1_bg" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\map\stage2_bg_1" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\map\stage3_1" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\map\stage3_2" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\map\stage3_bg" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\map\stage4_1" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\map\stage4_2" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\map\stage5_1" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\map\stage5_2" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\map\stage6_1" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\map\stage6_2" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\map\stage6_bg_3" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\mid" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\se" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\special_res" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\special_res\sp_map" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\standard" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\tip" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\title" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\tuch" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\data\water" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\external" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\internal" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\gcc_winnt\Debug32\records" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\glfw3" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\glfw3\deps" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\glfw3\deps\EGL" Expanded="false" />
@@ -2650,6 +2653,47 @@
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\glfw3\include\GLFW" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\glfw3\src" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\build" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\build\Debug" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\build\Debug\MonkeyGame.tlog" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\animation" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\animation\ending" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\animation\opening" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\animation\player" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\animation\special" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\animation\utl_res" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\gimmick" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\img" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\item" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\map" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\map\stage1_1" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\map\stage1_2" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\map\stage1_bg" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\map\stage2_bg_1" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\map\stage3_1" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\map\stage3_2" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\map\stage3_bg" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\map\stage4_1" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\map\stage4_2" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\map\stage5_1" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\map\stage5_2" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\map\stage6_1" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\map\stage6_2" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\map\stage6_bg_3" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\mid" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\se" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\special_res" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\special_res\sp_map" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\standard" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\tip" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\title" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\tuch" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\data\water" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\external" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\internal" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\msvc\Debug\records" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\openal" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\openal\include" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\glfw3_angle\openal\libs" Expanded="false" />

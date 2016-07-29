@@ -137,7 +137,7 @@ Class MapManager ' Implements SonicDef
 		Global CAMERA_OFFSET_Y:Int = ((SCREEN_HEIGHT - CAMERA_HEIGHT) / 2) ' Const
 		
 		Const COLOR_SPACE:Int = 20
-		Const END_COLOR:Int = 16777215
+		Const END_COLOR:Int = 16777215 ' White
 		
 		Const START_COLOR:Int = 6067452
 		Const START_COLOR_2:Int = 15964672

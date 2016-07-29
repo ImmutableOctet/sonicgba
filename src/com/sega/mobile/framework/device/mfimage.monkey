@@ -265,7 +265,7 @@ Class MFImage
 		End
 		
 		Method setAlphaColor:Void(color:Int)
-			Self.alphaColor = (-16777216 | color)
+			Self.alphaColor = (MFGraphics.COLOR_MASK_ALPHA | color)
 		End
 		
 		Method getAlphaColor:Int()

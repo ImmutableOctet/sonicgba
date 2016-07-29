@@ -1255,7 +1255,7 @@ Class MyAPI Extends myapi.MyAPI ' Implements Def
 			
 			For Local w:= 0 Until RAY_WIDTH
 				For Local h:= 0 Until RAY_HEIGHT
-					rayRGB[(h * RAY_WIDTH) + w] = ((fadevalue Shl 24) & -16777216) | (rayRGB[(h * RAY_WIDTH) + w] & 16777215)
+					rayRGB[(h * RAY_WIDTH) + w] = ((fadevalue Shl 24) & MFGraphics.COLOR_MASK_ALPHA) | (rayRGB[(h * RAY_WIDTH) + w] & 16777215)
 				Next
 			Next
 			
