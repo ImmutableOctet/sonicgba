@@ -184,7 +184,7 @@ Class MyAPI Extends myapi.MyAPI ' Implements Def
 			Local currentColor:= g.getColor()
 			
 			' Set the fade color.
-			g.setColor(fadeColor)
+			g.setColor(color)
 			
 			' Draw the color over the screen.
 			g.fillRect(x, y, zoomOut(width), zoomOut(height))

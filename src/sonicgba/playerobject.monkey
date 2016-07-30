@@ -157,8 +157,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const f23A:Int = 3072
 		Const f24C:Int = 3072
 		
-		Const FADE_FILL_HEIGHT:Int = 40
-		Const FADE_FILL_WIDTH:Int = 40
+		'Const FADE_FILL_WIDTH:Int = 40
+		'Const FADE_FILL_HEIGHT:Int = 40
 		
 		Global FOCUS_MAX_OFFSET:Int = (MapManager.CAMERA_HEIGHT / 2) - 16 ' Const
 		
@@ -280,10 +280,12 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Global currentPauseMenuItem:Int[]
 		
-		Global fadeAlpha:Int = FADE_FILL_WIDTH ' 40
+		Global fadeAlpha:Int = 40
 		Global fadeFromValue:Int
+		
 		'Global fadeRGB:Int[] = New Int[FADE_FILL_WIDTH*FADE_FILL_HEIGHT] ' 1600
 		Global fadeColor:Int
+		
 		Global fadeToValue:Int
 		
 		Global fastRunDrawer:AnimationDrawer
@@ -6773,8 +6775,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				#Rem
 					For Local w:= 0 Until MyAPI.zoomOut(SCREEN_WIDTH) Step FADE_FILL_WIDTH
-						For Local h:= 0 Until MyAPI.zoomOut(SCREEN_HEIGHT) Step FADE_FILL_WIDTH
-							g.drawRGB(fadeRGB, 0, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_WIDTH, True)
+						For Local h:= 0 Until MyAPI.zoomOut(SCREEN_HEIGHT) Step FADE_FILL_HEIGHT
+							g.drawRGB(fadeRGB, 0, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_HEIGHT, True)
 						Next
 					Next
 				#End

@@ -49,8 +49,8 @@ Class Standard2 ' Implements Def ' Final
 		' Constant variable(s):
 		Const CLIP_NUM:Int = 25
 		
-		Const FADE_FILL_WIDTH:Int = 40
-		Const FADE_FILL_HEIGHT:Int = 40
+		'Const FADE_FILL_WIDTH:Int = 40
+		'Const FADE_FILL_HEIGHT:Int = 40
 		
 		Const FRAME_DIFF:Int = 8
 		
@@ -79,11 +79,12 @@ Class Standard2 ' Implements Def ' Final
 		
 		Global count:Int = 0
 		
-		Global fadeAlpha:Int = FADE_FILL_WIDTH
+		Global fadeAlpha:Int = 40
 		Global fadeFromValue:Int = 0
 		
 		' This will eventually be replaced for hardware fading.
-		Global fadeRGB:Int[] = New Int[FADE_FILL_WIDTH*FADE_FILL_HEIGHT]
+		'Global fadeRGB:Int[] = New Int[FADE_FILL_WIDTH*FADE_FILL_HEIGHT]
+		Global fadeColor:Int
 		
 		Global fadeToValue:Int
 		Global preFadeAlpha:Int = 0 ' -1
@@ -298,26 +299,34 @@ Class Standard2 ' Implements Def ' Final
 			preFadeAlpha = -1
 		End
 		
-		' This behavior will change in the future. (Software fade)
 		Function drawFade:Void(g:MFGraphics)
 			fadeAlpha = MyAPI.calNextPosition(Double(fadeAlpha), Double(fadeToValue), 1, 3, 3.0)
 			
 			If (fadeAlpha <> 0) Then
 				If (preFadeAlpha <> fadeAlpha) Then
-					For Local w:= 0 Until FADE_FILL_WIDTH
-						For Local h:= 0 Until FADE_FILL_HEIGHT
-							fadeRGB[(h * FADE_FILL_WIDTH) + w] = ((fadeAlpha Shl 24) & MFGraphics.COLOR_MASK_ALPHA) | (fadeRGB[(h * FADE_FILL_WIDTH) + w] & MapManager.END_COLOR) ' FADE_FILL_HEIGHT
+					#Rem
+						For Local w:= 0 Until FADE_FILL_WIDTH
+							For Local h:= 0 Until FADE_FILL_HEIGHT
+								fadeRGB[(h * FADE_FILL_WIDTH) + w] = ((fadeAlpha Shl 24) & MFGraphics.COLOR_MASK_ALPHA) | (fadeRGB[(h * FADE_FILL_WIDTH) + w] & MapManager.END_COLOR) ' FADE_FILL_HEIGHT
+							Next
 						Next
-					Next
+					#End
+					
+					' Encode the current alpha value into the fade-color.
+					fadeColor = MFGraphics.encodeAlpha(fadeColor, fadeAlpha)
 					
 					preFadeAlpha = fadeAlpha
 				EndIf
 				
-				For Local w:= 0 Until MyAPI.zoomOut(SCREEN_WIDTH) Step FADE_FILL_WIDTH
-					For Local h:= 0 Until MyAPI.zoomOut(SCREEN_HEIGHT) Step FADE_FILL_HEIGHT
-						g.drawRGB(fadeRGB, 0, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_HEIGHT, True)
+				#Rem
+					For Local w:= 0 Until MyAPI.zoomOut(SCREEN_WIDTH) Step FADE_FILL_WIDTH
+						For Local h:= 0 Until MyAPI.zoomOut(SCREEN_HEIGHT) Step FADE_FILL_HEIGHT
+							g.drawRGB(fadeRGB, 0, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_HEIGHT, True)
+						Next
 					Next
-				Next
+				#End
+				
+				MyAPI.drawScreenRect(g, fadeColor, SCREEN_WIDTH, SCREEN_HEIGHT)
 			EndIf
 		End
 		
@@ -397,16 +406,16 @@ Class Standard2 ' Implements Def ' Final
 			animationDrawer.draw(g, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - 20) ' Shr 1
 			
 			animationDrawer.setActionId(Int(Key.touchsecondensureyes.Isin() And confirmcursor = 0) + 59)
-			animationDrawer.draw(g, (SCREEN_WIDTH / 2) - FADE_FILL_WIDTH, (SCREEN_HEIGHT / 2) + FADE_FILL_WIDTH) ' Shr 1
+			animationDrawer.draw(g, (SCREEN_WIDTH / 2) - 40, (SCREEN_HEIGHT / 2) + 40) ' Shr 1
 			
 			animationDrawer.setActionId(Int(Key.touchsecondensureno.Isin() And confirmcursor = 1) + 59)
-			animationDrawer.draw(g, (SCREEN_WIDTH / 2) + FADE_FILL_WIDTH, (SCREEN_HEIGHT / 2) + FADE_FILL_WIDTH) ' Shr 1
+			animationDrawer.draw(g, (SCREEN_WIDTH / 2) + 40, (SCREEN_HEIGHT / 2) + 40) ' Shr 1
 			
 			animationDrawer.setActionId(46)
-			animationDrawer.draw(g, (SCREEN_WIDTH / 2) - FADE_FILL_WIDTH, (SCREEN_HEIGHT / 2) + FADE_FILL_WIDTH) ' Shr 1
+			animationDrawer.draw(g, (SCREEN_WIDTH / 2) - 40, (SCREEN_HEIGHT / 2) + 40) ' Shr 1
 			
 			animationDrawer.setActionId(47)
-			animationDrawer.draw(g, (SCREEN_WIDTH / 2) + FADE_FILL_WIDTH, (SCREEN_HEIGHT / 2) + FADE_FILL_WIDTH) ' Shr 1
+			animationDrawer.draw(g, (SCREEN_WIDTH / 2) + 40, (SCREEN_HEIGHT / 2) + 40) ' Shr 1
 			
 			animationDrawer.setActionId(ani_id)
 			animationDrawer.draw(g, (SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - 20) ' Shr 1

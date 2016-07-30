@@ -46,8 +46,9 @@ Class NormalEnding Extends PlainEnding ' Final
 		Const END_DISPLAY_COUNT:Int = 45
 		
 		Const ENDING_NORMAL:Int = 0
-		Const FADE_FILL_HEIGHT:Int = 40
-		Const FADE_FILL_WIDTH:Int = 40
+		
+		'Const FADE_FILL_HEIGHT:Int = 40
+		'Const FADE_FILL_WIDTH:Int = 40
 		
 		Const FALL_COUNT:Int = 60
 		
@@ -121,11 +122,12 @@ Class NormalEnding Extends PlainEnding ' Final
 		
 		Global preFadeAlpha:Int
 		
-		Global fadeAlpha:Int = FADE_FILL_WIDTH
+		Global fadeAlpha:Int = 40
 		Global fadeFromValue:Int
 		
 		'Global fadeRGB:Int[] = New Int[FADE_FILL_WIDTH*FADE_FILL_HEIGHT]
 		Global fadeColor:Int
+		
 		Global fadeToValue:Int
 		Global fading:Bool
 		
@@ -211,7 +213,7 @@ Class NormalEnding Extends PlainEnding ' Final
 				#Rem
 					For Local w:= 0 Until MyAPI.zoomOut(SCREEN_WIDTH) Step FADE_FILL_WIDTH
 						For Local h:= 0 Until MyAPI.zoomOut(SCREEN_HEIGHT) Step FADE_FILL_WIDTH
-							g.drawRGB(fadeRGB, 0, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_WIDTH, True)
+							g.drawRGB(fadeRGB, 0, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_HEIGHT, True)
 						Next
 					Next
 				#End
@@ -837,7 +839,7 @@ Class NormalEnding Extends PlainEnding ' Final
 				
 				position[1] += CLOUD_UP_SPEED[i]
 				
-				If (position[1] > SCREEN_HEIGHT + FADE_FILL_WIDTH And Self.cloudAppearFlag) Then
+				If (position[1] > (SCREEN_HEIGHT + 40) And Self.cloudAppearFlag) Then
 					position[1] = -CLOUD_GROUP_VEL_Y
 					
 					position[0] = MyRandom.nextInt(0, SCREEN_WIDTH)

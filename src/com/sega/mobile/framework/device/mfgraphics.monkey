@@ -99,7 +99,7 @@ Class MFGraphics
 		Const COLOR_WHITE:Int = 16777215 ' 2^24
 		
 		Const COLOR_MASK:= COLOR_WHITE
-		Const COLOR_MASK_ALPHA:= -(COLOR_WHITE + 1) ' -16777216
+		Const COLOR_MASK_ALPHA:= -16777216 ' -(COLOR_MASK + 1)
 		
 		' Functions:
 		Function init:Void() ' Final
@@ -174,10 +174,10 @@ Class MFGraphics
 				a = floatToColor(colors[offset+3])
 			Endif
 			
-			Local out_a:= ((a Shl 24) & 16777215) ' 2^24
-			Local out_r:= ((r Shl 16) & 65535) ' 2^16
-			Local out_g:= ((g Shl 8) & 255) ' 2^8
-			Local out_b:= ((b))
+			Local out_r:= (r Shl 24) & $FFFFFFFF ' (2^32 - 1)
+			Local out_g:= (g Shl 16) & $00FFFFFF ' (2^24 - 1)
+			Local out_b:= (b Shl 8) & $0000FFFF ' (2^16 - 1)
+			Local out_a:= a & $000000FF ' (2^8 - 1) ' UOCTET_MAX
 			
 			Return (out_r|out_g|out_b|out_a)
 		End
@@ -203,8 +203,8 @@ Class MFGraphics
 		' This encodes an alpha value (0-255) into a previously encoded RGB color.
 		' The result of this function is an RGBA color with a subtractive alpha value.
 		' This is useful for the color parameters defined by the API.
-		Function encodeAlpha:Int(color_state:Int, alpha:Int)
-			Return (((alpha Shl 24) & COLOR_MASK_ALPHA) | (color & COLOR_MASK))
+		Function encodeAlpha:Int(color:Int, alpha:Int)
+			Return (((alpha Shl 24) & COLOR_MASK_ALPHA) | (color & COLOR_MASK)) ' <-- This is currently incorrect.
 		End
 		
 		' Methods:
@@ -450,19 +450,43 @@ Class MFGraphics
 				Return
 			EndIf
 			
-			Self.context.SetColor(getRf(color), getGf(color), getBf(color), 1.0 - getAf(color))
+			Local _r_raw:= getR(color)
+			Local _g_raw:= getG(color)
+			Local _b_raw:= getB(color)
+			Local _a_raw:= getA(color)
+			
+			'Print("RAW | Red: " + _r_raw + ", Green: " + _g_raw + ", Blue: " + _b_raw + ", Alpha: " + _a_raw)
+			
+			'color |= COLOR_MASK_ALPHA
+			
+			Local r_raw:= getR(color)
+			Local g_raw:= getG(color)
+			Local b_raw:= getB(color)
+			Local a_raw:= getA(color)
+			
+			Local r:= colorToFloat(r_raw)
+			Local g:= colorToFloat(g_raw)
+			Local b:= colorToFloat(b_raw)
+			Local a:= colorToFloat(a_raw)
+			
+			Print("Red: " + r_raw + ", Green: " + g_raw + ", Blue: " + b_raw + ", Alpha: " + a_raw)
+			
+			Self.context.SetColor(r, g, b, 1.0 - a)
 		End
 		
 		Method getColor:Int()
-			Return toColor(Self.context.Color)
-		End
-		
-		Method setColor:Void(red:Int, green:Int, blue:Int)
-			'Local color:= (((red Shl 16) | (green Shl 8)) | blue)
+			Local color:= toColor(Self.context.Color)
 			
-			'Self.context.SetColor(getRf(color), getGf(color), getBf(color))
+			#Rem
+				Local r_raw:= getR(color)
+				Local g_raw:= getG(color)
+				Local b_raw:= getB(color)
+				Local a_raw:= getA(color)
+				
+				Print("GET | " + "Red: " + r_raw + ", Green: " + g_raw + ", Blue: " + b_raw + ", Alpha: " + a_raw)
+			#End
 			
-			'''Self.context.SetColor(colorToFloat(red), colorToFloat(green), colorToFloat(blue))
+			Return color
 		End
 		
 		Method drawPixel:Void(x:Int, y:Int) Final

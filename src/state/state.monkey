@@ -56,8 +56,8 @@ Class State Implements StringIndex Abstract ' SonicDef
 		Const CONFIRM_OFFSET_X:Int = WARNING_HEIGHT
 		Const CONFIRM_STR_OFFSET_X:Int = 44
 		
-		Const FADE_FILL_WIDTH:Int = 40
-		Const FADE_FILL_HEIGHT:Int = 40
+		'Const FADE_FILL_WIDTH:Int = 40
+		'Const FADE_FILL_HEIGHT:Int = 40
 		
 		Const FRAME_DOWN:Int = 117
 		Const FRAME_MIDDLE:Int = 116
@@ -88,16 +88,17 @@ Class State Implements StringIndex Abstract ' SonicDef
 		' Global variable(s):
 		Global stateInst:State
 		
-		Global fadeAlpha:Int = FADE_FILL_WIDTH
+		Global fadeAlpha:Int = 40
 		Global fadeToValue:Int
 		Global fadeFromValue:Int
 		
-		Global fadeRGB:Int[] = New Int[1600] ' <-- This should be removed in the future.
+		'Global fadeRGB:Int[] = New Int[FADE_FILL_WIDTH*FADE_FILL_HEIGHT]
+		Global fadeColor:Int
 		
 		Global helpTitleString:String
 		
-		Global pause_x:Int = (SCREEN_WIDTH - FADE_FILL_WIDTH)
-		Global pause_y:Int = 17 ' (SCREEN_HEIGHT - FADE_FILL_HEIGHT)
+		Global pause_x:Int = (SCREEN_WIDTH - 40)
+		Global pause_y:Int = (SCREEN_HEIGHT - 40) ' 17
 		
 		Global preFadeAlpha:Int
 		
@@ -216,7 +217,7 @@ Class State Implements StringIndex Abstract ' SonicDef
 		Global WARNING_WIDTH:Int = (SCREEN_WIDTH - (WARNING_X * 2)) ' Const
 		Global WARNING_X:Int = PickValue(SCREEN_WIDTH > SCREEN_HEIGHT, 50, 26) ' Const
 		Global WARNING_Y_DES:Int = (SCREEN_HEIGHT - WARNING_HEIGHT) ' Const
-		Global WARNING_Y_DES_2:Int = (SCREEN_HEIGHT + FADE_FILL_WIDTH) ' Const
+		Global WARNING_Y_DES_2:Int = (SCREEN_HEIGHT + 40) ' Const
 		
 		Const BP_ITEM_BLUE_SHELTER:Byte = 1
 		Const BP_ITEM_GREEN_SHELTER:Byte = 2
@@ -529,10 +530,13 @@ Class State Implements StringIndex Abstract ' SonicDef
 		End
 		
 		Function setFadeColor:Void(color:Int)
-			' This should be replaced in the future:
-			For Local i:= 0 Until fadeRGB.Length
-				fadeRGB[i] = color
-			Next
+			#Rem
+				For Local i:= 0 Until fadeRGB.Length
+					fadeRGB[i] = color
+				Next
+			#End
+			
+			fadeColor = color
 		End
 		
 		Function fadeInit:Void(from:Int, dest:Int)
@@ -612,28 +616,32 @@ Class State Implements StringIndex Abstract ' SonicDef
 		End
 		
 		Function drawFadeCore:Void(g:MFGraphics)
-			' This implementation will need to be replaced:
-			#Rem
 			If (fadeAlpha <> 0) Then
 				If (preFadeAlpha <> fadeAlpha) Then
-					For Local w:= 0 Until FADE_FILL_WIDTH
-						For Local h:= 0 Until FADE_FILL_HEIGHT
-							fadeRGB[(h * FADE_FILL_WIDTH) + w] = ((fadeAlpha Shl MENU_BG_OFFSET) & MFGraphics.COLOR_MASK_ALPHA) | (fadeRGB[(h * FADE_FILL_WIDTH) + w] & MENU_BG_COLOR_1)
+					#Rem
+						For Local w:= 0 Until FADE_FILL_WIDTH
+							For Local h:= 0 Until FADE_FILL_HEIGHT
+								fadeRGB[(h * FADE_FILL_WIDTH) + w] = ((fadeAlpha Shl 24) & MFGraphics.COLOR_MASK_ALPHA) | (fadeRGB[(h * FADE_FILL_WIDTH) + w] & MFGraphics.COLOR_MASK)
+							Next
 						Next
-					Next
+					#End
+					
+					' Encode the current alpha value into the fade-color.
+					fadeColor = MFGraphics.encodeAlpha(fadeColor, fadeAlpha)
 					
 					preFadeAlpha = fadeAlpha
 				EndIf
 				
-				For Local h:= 0 Until MyAPI.zoomOut(SCREEN_HEIGHT) Step FADE_FILL_HEIGHT
-					For Local w:= 0 Until MyAPI.zoomOut(SCREEN_WIDTH) Step FADE_FILL_WIDTH
-						g.drawRGB(fadeRGB, 0, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_WIDTH, True)
+				#Rem
+					For Local h:= 0 Until MyAPI.zoomOut(SCREEN_HEIGHT) Step FADE_FILL_HEIGHT
+						For Local w:= 0 Until MyAPI.zoomOut(SCREEN_WIDTH) Step FADE_FILL_WIDTH
+							g.drawRGB(fadeRGB, 0, FADE_FILL_WIDTH, w, h, FADE_FILL_WIDTH, FADE_FILL_HEIGHT, True)
+						Next
 					Next
-				Next
+				#End
+				
+				MyAPI.drawScreenRect(g, fadeColor, SCREEN_WIDTH, SCREEN_HEIGHT)
 			EndIf
-			#End
-			
-			'preFadeAlpha = fadeAlpha
 		End
 		
 		Function drawLeftSoftKey:Void(g:MFGraphics)
@@ -977,14 +985,14 @@ Class State Implements StringIndex Abstract ' SonicDef
 		Method comfirmDraw:Void(g:MFGraphics, id:Int)
 			drawMenuFontById(g, 100, COMFIRM_X, COMFIRM_Y)
 			drawMenuFontById(g, id, COMFIRM_X, COMFIRM_Y - (MENU_SPACE Shr 1))
-			drawMenuFontById(g, 101, ((Self.cursor * FADE_FILL_WIDTH) + COMFIRM_X) - BAR_HEIGHT, COMFIRM_Y + (MENU_SPACE Shr 1))
+			drawMenuFontById(g, 101, ((Self.cursor * 40) + COMFIRM_X) - BAR_HEIGHT, COMFIRM_Y + (MENU_SPACE Shr 1))
 			drawMenuFontById(g, 10, COMFIRM_X, COMFIRM_Y + (MENU_SPACE Shr 1))
 		End
 		
 		Method confirmDraw:Void(g:MFGraphics, title:String)
 			drawMenuFontById(g, 100, COMFIRM_X, COMFIRM_Y)
 			MyAPI.drawBoldString(g, title, COMFIRM_X, ((COMFIRM_Y - CONFIRM_FRAME_OFFSET_Y) + 10) + LINE_SPACE, 17, MENU_BG_COLOR_1, 4656650)
-			drawMenuFontById(g, 101, ((Self.cursor * FADE_FILL_WIDTH) + COMFIRM_X) - BAR_HEIGHT, COMFIRM_Y + (MENU_SPACE Shr 1))
+			drawMenuFontById(g, 101, ((Self.cursor * 40) + COMFIRM_X) - BAR_HEIGHT, COMFIRM_Y + (MENU_SPACE Shr 1))
 			drawMenuFontById(g, 10, COMFIRM_X, COMFIRM_Y + (MENU_SPACE Shr 1))
 		End
 		
@@ -1196,7 +1204,7 @@ Class State Implements StringIndex Abstract ' SonicDef
 			
 			MyAPI.drawBoldString(g, "And connect to the network", SCREEN_WIDTH Shr 1, i, 17, MENU_BG_COLOR_1, 0) ' "~u5e76~u8fde~u63a5~u7f51~u7edc"
 			
-			drawMenuFontById(g, 101, ((Self.cursor * FADE_FILL_WIDTH) + COMFIRM_X) - BAR_HEIGHT, ((Self.MORE_GAME_START_Y + 10) + (MENU_SPACE * 3)) + FONT_H_HALF)
+			drawMenuFontById(g, 101, ((Self.cursor * 40) + COMFIRM_X) - BAR_HEIGHT, ((Self.MORE_GAME_START_Y + 10) + (MENU_SPACE * 3)) + FONT_H_HALF)
 			drawMenuFontById(g, 10, COMFIRM_X, ((Self.MORE_GAME_START_Y + 10) + (MENU_SPACE * 3)) + FONT_H_HALF)
 		End
 		
@@ -1480,19 +1488,19 @@ Class State Implements StringIndex Abstract ' SonicDef
 			
 			animationDrawer.setActionId(i + 59)
 			
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 40, (SCREEN_HEIGHT Shr 1) + 40)
 			
 			i = Int(Key.touchsecondensureno.Isin() And Self.confirmcursor = 1)
 			
 			animationDrawer.setActionId(i + 59)
 			
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 40, (SCREEN_HEIGHT Shr 1) + 40)
 			
 			animationDrawer.setActionId(46)
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 40, (SCREEN_HEIGHT Shr 1) + 40)
 			
 			animationDrawer.setActionId(47)
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 40, (SCREEN_HEIGHT Shr 1) + 40)
 			
 			animationDrawer.setActionId(ani_id)
 			animationDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
@@ -1754,18 +1762,18 @@ Class State Implements StringIndex Abstract ' SonicDef
 			i = Int(Key.touchsecondensureyes.Isin() And Self.confirmcursor = 0)
 			
 			animationDrawer.setActionId(i + 59)
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 40, (SCREEN_HEIGHT Shr 1) + 40)
 			
 			i = Int(Key.touchsecondensureno.Isin() And Self.confirmcursor = 1)
 			
 			animationDrawer.setActionId(i + 59)
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 40, (SCREEN_HEIGHT Shr 1) + 40)
 			
 			animationDrawer.setActionId(89)
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) - 40, (SCREEN_HEIGHT Shr 1) + 40)
 			
 			animationDrawer.setActionId(90)
-			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + FADE_FILL_WIDTH, (SCREEN_HEIGHT Shr 1) + FADE_FILL_WIDTH)
+			animationDrawer.draw(g, (SCREEN_WIDTH Shr 1) + 40, (SCREEN_HEIGHT Shr 1) + 40)
 			
 			animationDrawer.setActionId(71)
 			animationDrawer.draw(g, SCREEN_WIDTH Shr 1, (SCREEN_HEIGHT Shr 1) - BAR_HEIGHT)
