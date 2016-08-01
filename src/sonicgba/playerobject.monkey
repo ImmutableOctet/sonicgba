@@ -2412,8 +2412,8 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		End
 		
 		Method calDivideVelocity:Void(degree:Int)
-			Self.velX = (Self.totalVelocity * MyAPI.dCos(degree)) / 100
-			Self.velY = (Self.totalVelocity * MyAPI.dSin(degree)) / 100
+			Self.velX = (Self.totalVelocity * MyAPI.dCos(degree) / 100)
+			Self.velY = (Self.totalVelocity * MyAPI.dSin(degree) / 100)
 		End
 		
 		Method calTotalVelocity:Void()
@@ -2422,6 +2422,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Method calTotalVelocity:Void(degree:Int)
 			Self.totalVelocity = (((Self.velX * MyAPI.dCos(degree)) + (Self.velY * MyAPI.dSin(degree))) / 100)
+			'Self.totalVelocity = (Self.velX * MyAPI.dCos(degree) + Self.velY * MyAPI.dSin(degree)) / 100
 		End
 	Private
 		' Methods:

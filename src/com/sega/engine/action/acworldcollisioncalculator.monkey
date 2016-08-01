@@ -241,7 +241,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 		Method stopMoveX:Void()
 			Super.stopMoveX()
 			
-			If (Self.actionState = 0) Then
+			If (Self.actionState = WALK_ACTION_STATE) Then
 				Local tmpMoveDistanceX:= ((Self.totalDistance * MyAPI.dCos(Self.user_worldcal.getBodyDegree())) / 100)
 				
 				Self.totalDistance = ACUtilities.getTotalFromDegree(0, (Self.totalDistance * MyAPI.dSin(Self.user_worldcal.getBodyDegree())) / 100, Self.user_worldcal.getBodyDegree())
@@ -251,7 +251,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 		Method stopMoveY:Void()
 			Super.stopMoveY()
 			
-			If (Self.actionState = 0) Then
+			If (Self.actionState = WALK_ACTION_STATE) Then
 				Local dSin:= ((Self.totalDistance * MyAPI.dSin(Self.user_worldcal.getBodyDegree())) / 100)
 				
 				Self.totalDistance = ACUtilities.getTotalFromDegree(((Self.totalDistance * MyAPI.dCos(Self.user_worldcal.getBodyDegree())) / 100), 0, Self.user_worldcal.getBodyDegree())
@@ -783,7 +783,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 							Self.moveDistanceY = 0
 						EndIf
 						
-						If (Self.actionState = 0) Then
+						If (Self.actionState = WALK_ACTION_STATE) Then
 							Self.totalDistance = ACUtilities.getTotalFromDegree(Self.moveDistanceX, Self.moveDistanceY, landDegree)
 							
 							Self.footDegree = landDegree
@@ -810,7 +810,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				Self.moveDistanceY = 0
 			EndIf
 			
-			If (Self.actionState = 0) Then
+			If (Self.actionState = WALK_ACTION_STATE) Then
 				Self.totalDistance = ACUtilities.getTotalFromDegree(Self.moveDistanceX, Self.moveDistanceY, landDegree)
 				
 				Self.footDegree = landDegree

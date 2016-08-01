@@ -109,8 +109,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acworldcollisioncalculator.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>8</X>
-        <Y>88</Y>
+        <X>25</X>
+        <Y>240</Y>
       </CursorPos>
       <DocGUID>bc8c2adc-a7d8-4073-bcda-895124ce327a</DocGUID>
       <Bookmarks />
@@ -1592,8 +1592,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>41</X>
-        <Y>1843</Y>
+        <X>16</X>
+        <Y>2438</Y>
       </CursorPos>
       <DocGUID>df8b2180-9ad8-4775-ba4e-794da7c21987</DocGUID>
       <Bookmarks>
@@ -1607,7 +1607,7 @@
         </Point>
         <Point>
           <X>0</X>
-          <Y>6811</Y>
+          <Y>6812</Y>
         </Point>
       </Bookmarks>
     </DocUserOptions>
@@ -1621,8 +1621,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playersupersonic.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>23</X>
-        <Y>499</Y>
+        <X>19</X>
+        <Y>150</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -1689,10 +1689,10 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\rocketseparateeffect.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\sonicgba\rocketseparateeffect.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>30</X>
+        <Y>40</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -1948,12 +1948,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\stone.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\stone.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>15</X>
         <Y>110</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>1e55f61b-ed03-4eeb-aa0c-f39eadc3fe5b</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\stoneball.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -2382,9 +2383,9 @@
     <FolderStatus NodePath="Sonic_GBA\src\gameengine" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\lib\__test" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\mflib" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\platformstandard" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\pyxeditor" Expanded="true" />
+    <FolderStatus NodePath="Sonic_GBA\src\mflib" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\platformstandard" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\pyxeditor" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\android_new" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e\android_new\assets" Expanded="false" />
@@ -2773,7 +2774,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\sonic.data\water" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\sonicgba" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\sonicgba\__test" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\special" Expanded="true" />
+    <FolderStatus NodePath="Sonic_GBA\src\special" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\state" Expanded="true" />
   </Folders>
 </JiProjUserOptions>
