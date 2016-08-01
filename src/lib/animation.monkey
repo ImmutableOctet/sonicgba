@@ -121,7 +121,7 @@ Class Animation
 			
 			Self.fileName = fileName
 			
-			SetClipImg(image, owns_image)
+			SetClipImg(image, Not owns_image)
 			
 			LoadAnimation(fileName + ".dat")
 		End
