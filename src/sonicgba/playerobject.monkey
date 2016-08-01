@@ -468,7 +468,11 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Const ANI_WIND_JUMP:Int = 29
 		Const ANI_YELL:Int = 30
 		
-		Const LIFE_NUM_RESET:Int = 2 ' 3 (Zero counts)
+		#If Not SONICGBA_FORCE_MAX_LIVES
+			Const LIFE_NUM_RESET:Int = 2 ' 3 (Zero counts)
+		#Else
+			Const LIFE_NUM_RESET:Int = 999' 9
+		#End
 		
 		Global ATTACK_POP_POWER:Int = (774 + GRAVITY) ' Const
 		
