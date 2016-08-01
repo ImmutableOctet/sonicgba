@@ -10,9 +10,9 @@ Friend com.sega.engine.action.acobject
 Private
 	Import com.sega.engine.lib.myapi
 	
-	import com.sega.engine.action.acmovecaluser
-	import com.sega.engine.action.acobject
-	import com.sega.engine.action.acworld
+	Import com.sega.engine.action.acmovecaluser
+	Import com.sega.engine.action.acobject
+	Import com.sega.engine.action.acworld
 	
 	Import lib.constutil
 Public

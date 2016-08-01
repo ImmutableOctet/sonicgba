@@ -10,7 +10,7 @@ Friend sonicgba.bossf1
 ' Imports:
 Private
 	Import sonicgba.enemyobject
-	import sonicgba.playerobject
+	Import sonicgba.playerobject
 	
 	Import com.sega.mobile.framework.device.mfgraphics
 Public

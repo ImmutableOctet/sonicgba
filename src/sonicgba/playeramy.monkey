@@ -470,17 +470,15 @@ Class PlayerAmy Extends PlayerObject
 			Self.slipping = True
 			Self.slideSoundStart = True
 			
-			' Magic numbers: 1
 			Self.collisionState = COLLISION_STATE_JUMP
-			Self.worldCal.actionState = 1
+			Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE ' 1
 			
 			setMinSlipSpeed()
 		End
 		
 		Method slipJumpOut:Void()
 			If (Self.slipping) Then
-				' Magic numbers: 1
-				
+				' Magic number: 1
 				Self.currentLayer = 1
 				
 				Self.slipping = False
@@ -490,7 +488,7 @@ Class PlayerAmy Extends PlayerObject
 				setVelY(PickValue(Self.isInWater, JUMP_INWATER_START_VELOCITY, JUMP_START_VELOCITY))
 				
 				Self.collisionState = COLLISION_STATE_JUMP
-				Self.worldCal.actionState = 1
+				Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE ' 1
 				
 				Self.collisionChkBreak = True
 				
@@ -500,8 +498,7 @@ Class PlayerAmy Extends PlayerObject
 		
 		Method slipEnd:Void()
 			If (Self.slipping) Then
-				' Magic numbers: 1
-				
+				' Magic number: 1
 				Self.currentLayer = 1
 				
 				Self.slipping = False
@@ -509,7 +506,7 @@ Class PlayerAmy Extends PlayerObject
 				calDivideVelocity()
 				
 				Self.collisionState = COLLISION_STATE_JUMP
-				Self.worldCal.actionState = 1
+				Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE ' 1
 				
 				' Magic number: -1540
 				Self.velY = -1540
@@ -631,9 +628,8 @@ Class PlayerAmy Extends PlayerObject
 						Self.animationID = NO_ANIMATION
 						Self.myAnimationID = AMY_ANI_DASH_1
 						
-						' Magic numbers: 1
 						Self.collisionState = COLLISION_STATE_JUMP
-						Self.worldCal.actionState = 1
+						Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE ' 1
 						
 						Local jump_x:= PickValue(Self.isInWater, STEP_JUMP_INWATER_X, STEP_JUMP_X)
 						
@@ -659,9 +655,8 @@ Class PlayerAmy Extends PlayerObject
 						
 						Self.isinBigJumpAttack = True
 						
-						' Magic numbers: 1
 						Self.collisionState = COLLISION_STATE_JUMP
-						Self.worldCal.actionState = 1
+						Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE ' 1
 						
 						jump = PickValue(Self.isInWater, BIG_JUMP_INWATER_POWER, BIG_JUMP_POWER)
 						

@@ -14,16 +14,17 @@ Private
 	Import lib.soundsystem
 	Import lib.constutil
 	
-	import sonicgba.effect
-	import sonicgba.gameobject
-	import sonicgba.mapmanager
-	import sonicgba.playeranimationcollisionrect
-	import sonicgba.playerobject
-	import sonicgba.sonicdebug
-	import sonicgba.stagemanager
+	Import sonicgba.effect
+	Import sonicgba.gameobject
+	Import sonicgba.mapmanager
+	Import sonicgba.playeranimationcollisionrect
+	Import sonicgba.playerobject
+	Import sonicgba.sonicdebug
+	Import sonicgba.stagemanager
 	
 	Import com.sega.engine.action.acparam
 	Import com.sega.engine.action.acworld
+	Import com.sega.engine.action.acworldcollisioncalculator
 	
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
@@ -409,8 +410,7 @@ Class PlayerKnuckles Extends PlayerObject
 									
 									Self.collisionState = COLLISION_STATE_JUMP
 									
-									' Magic number: 1
-									Self.worldCal.actionState = 1
+									Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE ' 1
 							End Select
 							
 							Self.myAnimationID = LOOP_INDEX[Self.myAnimationID]
@@ -995,8 +995,7 @@ Class PlayerKnuckles Extends PlayerObject
 								Self.animationID = NO_ANIMATION
 								Self.myAnimationID = KNUCKLES_ANI_ATTACK_3
 								
-								' Magic number: 1
-								Self.worldCal.actionState = 1
+								Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE ' 1
 								
 								Self.collisionState = COLLISION_STATE_JUMP
 								
@@ -1116,8 +1115,7 @@ Class PlayerKnuckles Extends PlayerObject
 								Self.animationID = NO_ANIMATION
 								Self.myAnimationID = KNUCKLES_ANI_ATTACK_3
 								
-								' Magic number: 1
-								Self.worldCal.actionState = 1
+								Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE ' 1
 								
 								Self.collisionState = COLLISION_STATE_JUMP
 								

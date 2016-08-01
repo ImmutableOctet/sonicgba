@@ -1835,7 +1835,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				Self.velX = 0
 				
-				Self.worldCal.actionState = 1
+				Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE
 				
 				MapManager.setCameraUpLimit(MapManager.getCamera().y)
 			EndIf
@@ -2377,7 +2377,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.checkedObject = False
 			Self.footObjectLogic = False
 			
-			Self.worldCal.actionState = 1
+			Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE
 			
 			If (Self.isInWater) Then
 				Self.worldCal.actionLogic(Self.velX / 2, Self.velY)
@@ -2385,7 +2385,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Self.worldCal.actionLogic(Self.velX, Self.velY)
 			EndIf
 			
-			If (Self.worldCal.actionState = 0) Then
+			If (Self.worldCal.actionState = ACWorldCollisionCalculator.WALK_ACTION_STATE) Then
 				Self.onObjectContinue = False
 			ElseIf (Not (Self.checkedObject Or Self.footOnObject = Null Or Not Self.footOnObject.onObjectChk(Self))) Then
 				Self.footOnObject.doWhileCollisionWrap(Self)
@@ -2400,7 +2400,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				If (Self.collisionState = COLLISION_STATE_ON_OBJECT) Then
 					Self.collisionState = COLLISION_STATE_JUMP
 					
-					Self.worldCal.actionState = 1
+					Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE
 				EndIf
 			ElseIf (Self.collisionState = COLLISION_STATE_ON_OBJECT And Not Self.piping) Then
 				Self.velY = 0
@@ -2730,8 +2730,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				Self.collisionState = COLLISION_STATE_JUMP
 				
-				' Magic number: 1 ("Action state")
-				Self.worldCal.actionState = 1
+				Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE
 			ElseIf (Not Self.ducting) Then
 				If (needRetPower() And Self.collisionState = COLLISION_STATE_WALK) Then
 					preTotalVelocity = Self.totalVelocity
@@ -3375,8 +3374,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Method doJumpV:Void(vel:Int)
 			Self.collisionState = COLLISION_STATE_JUMP
 			
-			' Magic number: 1
-			Self.worldCal.actionState = 1
+			Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE
 			
 			setVelY(vel) ' Self.velY = vel
 			
@@ -3952,7 +3950,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			If (Self.isInWater) Then
 				' Magic number: 185
-				springPower = ((springPower * 185) / 100)
+				springPower = (springPower * 185 / 100)
 			EndIf
 			
 			' This behavior may change in the future:
@@ -3982,8 +3980,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Self.animationID = ANI_ROTATE_JUMP
 				Self.collisionState = COLLISION_STATE_JUMP
 				
-				' Magic number: 1 (Action-state)
-				Self.worldCal.actionState = 1
+				Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE
 				
 				Self.collisionChkBreak = True
 				
@@ -4007,8 +4004,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Self.animationID = ANI_POP_JUMP_UP
 				Self.collisionState = COLLISION_STATE_JUMP
 				
-				' Magic number: 1 (Action-state)
-				Self.worldCal.actionState = 1
+				Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE
 			EndIf
 		End
 		
@@ -4103,8 +4099,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			
 			Self.collisionState = COLLISION_STATE_JUMP
 			
-			' Magic number: 1 (Action-state)
-			Self.worldCal.actionState = 1
+			Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE
 			
 			Self.collisionChkBreak = True
 			
@@ -4716,8 +4711,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				
 				Self.collisionState = COLLISION_STATE_JUMP
 				
-				' Magic number: 1 (Action-state)
-				Self.worldCal.actionState = 1
+				Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE
 			EndIf
 		End
 		
@@ -5078,8 +5072,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Case COLLISION_STATE_JUMP
 					Self.faceDegree = Self.degreeStable
 					
-					' Magic number: 1 (Action-state)
-					Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE ' 1
+					Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE
 			End Select
 			
 			Self.collisionState = state
@@ -5150,7 +5143,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					
 					Local velX:= Self.getVelX()
 					
-					' Magic numbers: 400, 200, 1 (Action-state):
+					' Magic numbers: 400, 200:
 					If (Abs(velX) > BANKING_MIN_SPEED) Then
 						Self.setFootPositionY(Max(yLimit, Self.getFootPositionY() - ((Abs(velX) * 400) / BANKING_MIN_SPEED)))
 					Else
@@ -5160,7 +5153,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 							Self.onBank = False
 							Self.collisionState = COLLISION_STATE_JUMP
 							
-							Self.worldCal.actionState = 1
+							Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE
 							Self.bankwalking = False
 						EndIf
 					EndIf
@@ -5168,8 +5161,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					If (Self.animationID <> ANI_JUMP) Then
 						If (Abs(velX) <= BANKING_MIN_SPEED) Then
 							Self.onBank = False
+							
 							Self.collisionState = COLLISION_STATE_JUMP
-							Self.worldCal.actionState = 1
+							Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE
 							
 							doDripInAir()
 						ElseIf (Self.footPointY < 61184) Then ' BANK_BRAKE_SPEED_LIMIT
@@ -6390,8 +6384,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		Method setAntiGravity:Void()
 			Self.isAntiGravity = Not Self.isAntiGravity
 			
-			' Magic number: 1 (Action-state)
-			Self.worldCal.actionState = 1
+			Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE
 			
 			Self.collisionState = COLLISION_STATE_JUMP
 			
@@ -6418,8 +6411,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			Self.isAntiGravity = GraFlag
 			
 			If (Self.orgGravity <> Self.isAntiGravity) Then
-				' Magic number: 1 (Action-state)
-				Self.worldCal.actionState = 1
+				Self.worldCal.actionState = ACWorldCollisionCalculator.JUMP_ACTION_STATE
 				
 				Self.collisionState = COLLISION_STATE_JUMP
 				Self.faceDirection = Not Self.faceDirection
