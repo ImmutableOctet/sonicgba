@@ -109,8 +109,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acworldcollisioncalculator.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>25</X>
-        <Y>240</Y>
+        <X>10</X>
+        <Y>339</Y>
       </CursorPos>
       <DocGUID>bc8c2adc-a7d8-4073-bcda-895124ce327a</DocGUID>
       <Bookmarks />

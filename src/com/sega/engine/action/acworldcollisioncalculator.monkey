@@ -337,7 +337,7 @@ Class ACWorldCollisionCalculator Extends ACMoveCalculator Implements ACParam
 				Self.acObj.posY = Self.footY - Self.footOffsetY
 				
 				Self.user_worldcal.didAfterEveryMove(Self.footX - preFootX, Self.footY - preFootY)
-			Until (Not Self.isMoved)
+			Until (Self.isMoved)
 		End
 		
 		Method checkInGround:Void()
