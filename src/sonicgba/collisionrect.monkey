@@ -194,9 +194,16 @@ Class CollisionRect
 		End
 		
 		Method draw:Void(g:MFGraphics, camera:Coordinate)
-			g.setColor(16711680)
-			
-			g.drawRect(Self.x0 - camera.x, Self.y0 - camera.y, Self.x1 - Self.x0, Self.y1 - Self.y0)
+			' Currently disabled.
+			#If False ' CONFIG = "debug"
+				Local color:= g.getColor()
+				
+				g.setColor(16711680)
+				
+				g.drawRect(Self.x0 - camera.x, Self.y0 - camera.y, Self.x1 - Self.x0, Self.y1 - Self.y0)
+				
+				g.setColor(color)
+			#End
 		End
 		
 		Method getWidth:Int()
