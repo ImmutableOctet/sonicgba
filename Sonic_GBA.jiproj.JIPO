@@ -66,8 +66,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acobject.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
-        <Y>16</Y>
+        <X>9</X>
+        <Y>32</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -173,8 +173,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>19</X>
-        <Y>439</Y>
+        <X>2</X>
+        <Y>607</Y>
       </CursorPos>
       <DocGUID>d580acc8-2fba-4603-a892-57a781f08979</DocGUID>
       <Bookmarks />
@@ -494,8 +494,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>1</X>
-        <Y>5</Y>
+        <X>8</X>
+        <Y>433</Y>
       </CursorPos>
       <DocGUID>52433690-7061-4a55-a37a-ddb3bd6e2993</DocGUID>
       <Bookmarks />
@@ -503,7 +503,7 @@
     <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>3</X>
-        <Y>73</Y>
+        <Y>68</Y>
       </CursorPos>
       <DocGUID>6d40ac73-e097-4731-aa43-385aebdd4a6b</DocGUID>
       <Bookmarks />
@@ -1259,8 +1259,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>10</X>
-        <Y>1498</Y>
+        <X>30</X>
+        <Y>1053</Y>
       </CursorPos>
       <DocGUID>3d108acb-9719-4b87-b556-b2a9b6838223</DocGUID>
       <Bookmarks />
@@ -1409,8 +1409,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\mapmanager.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>75</X>
-        <Y>1102</Y>
+        <X>30</X>
+        <Y>370</Y>
       </CursorPos>
       <DocGUID>c2cbbf8c-c2c0-4022-8a8e-7901a19a11f8</DocGUID>
       <Bookmarks />
@@ -1909,8 +1909,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\stagemanager.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>12</X>
-        <Y>424</Y>
+        <X>44</X>
+        <Y>344</Y>
       </CursorPos>
       <DocGUID>24b0efcd-e6f9-4c2b-83bc-4de6bc57c307</DocGUID>
       <Bookmarks />
@@ -2236,7 +2236,7 @@
     <DocUserOptions Filename=".\src\config.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>1</X>
-        <Y>5</Y>
+        <Y>26</Y>
       </CursorPos>
       <DocGUID>85931b13-6e06-4759-83d6-5e3b29d57812</DocGUID>
       <Bookmarks />
@@ -2357,7 +2357,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\__removed\ogg" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\action" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\action\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\ext" Expanded="false" />

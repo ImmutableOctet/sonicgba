@@ -427,9 +427,11 @@ Class SoundSystem Implements IOnLoadSoundComplete
 			
 			#If Not SONICGBA_FORCE_DISABLE_SOUNDEFFECTS
 				' This behavior may change in the future:
-				For Local channel:= 0 Until getAvailableChannels()
-					SetChannelRate(channel, speed)
-				Next
+				#Rem
+					For Local channel:= 0 Until getAvailableChannels()
+						SetChannelRate(channel, speed)
+					Next
+				#End
 			#End
 		End
 		

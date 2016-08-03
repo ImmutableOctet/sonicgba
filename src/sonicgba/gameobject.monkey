@@ -1046,14 +1046,12 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		Function setPlayerPosition:Void(player:PlayerObject, x:Int, y:Int)
 			If (player <> Null) Then
 				Local px:= (x Shl 6)
-				
-				player.footPointX = px
-				player.posX = px
-				
 				Local py:= (y Shl 6)
 				
+				player.footPointX = px
 				player.footPointY = py
-				player.posY = py
+				
+				player.transportTo(px, py)
 			EndIf
 		End
 		

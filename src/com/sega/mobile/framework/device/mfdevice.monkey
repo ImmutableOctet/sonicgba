@@ -41,6 +41,7 @@ Private
 	' Debugging related:
 	Import sonicgba.gameobject
 	Import sonicgba.mapmanager
+	Import sonicgba.stagemanager
 	
 	Import mojo.app
 	Import mojo.input
@@ -436,17 +437,30 @@ Class MFDevice Final
 			'MFGamePad.keyPressed(KEY_RIGHT)
 			
 			If (KeyHit(KEY_F)) Then
-				Local x:= 88869
-				Local y:= 55808
+				Local x:Int
+				Local y:Int
 				
-				' 1-1: 335792, 126208
-				' 1-2: 615936, 47872
-				' 3-2: 88869, 55808
+				Local allowMove:Bool = True
 				
-				Local px:= ((x) Shr 6)
-				Local py:= ((y) Shr 6)
+				Select (StageManager.getCurrentZoneId())
+					Case 0 ' 1-1
+						x = 335792; y = 126208
+					Case 1 ' 1-2
+						x = 615936; y = 47872
+					Case 4 ' 3-1
+						x = 88869; y = 55808
+					Default
+						Print("Unable to find test position.")
+						
+						allowMove = False
+				End Select
 				
-				GameObject.instantTransmission((px - 8), (py - 8))
+				If (allowMove) Then
+					Local px:= ((x) Shr 6)
+					Local py:= ((y) Shr 6)
+					
+					GameObject.instantTransmission((px - 8), (py - 8))
+				EndIf
 			EndIf
 			
 			For Local key:= START_KEY_INDEX To LAST_KEY_INDEX
