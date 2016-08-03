@@ -3,8 +3,8 @@ Strict
 Public
 
 ' Preprocessor related:
-'#SONICGBA_FORCE_DISABLE_SOUNDEFFECTS = True
-'#SONICGBA_FORCE_DISABLE_MUSIC = True
+#SONICGBA_FORCE_DISABLE_SOUNDEFFECTS = True
+#SONICGBA_FORCE_DISABLE_MUSIC = True
 
 '#HTML5_WEBAUDIO_ENABLED = True
 
@@ -286,24 +286,26 @@ Class SoundSystem Implements IOnLoadSoundComplete
 		
 		' This method's behavior will likely change in the future.
 		Method OnLoadSoundComplete:Void(sound:Sound, path:String, source:IAsyncEventSource)
-			#If SONICGBA_ASYNC_SOUND_HACK
-				'Print("Attempting to play sound asynchronously...")
-			#End
-			
-			If (sound = Null) Then
-				If (path.Length > 0) Then
-					Print("Unable to load or play sound asynchronously: " + path)
+			#If Not SONICGBA_FORCE_DISABLE_SOUNDEFFECTS
+				#If SONICGBA_ASYNC_SOUND_HACK
+					'Print("Attempting to play sound asynchronously...")
+				#End
+				
+				If (sound = Null) Then
+					If (path.Length > 0) Then
+						Print("Unable to load or play sound asynchronously: " + path)
+					EndIf
+					
+					Return
 				EndIf
 				
-				Return
-			EndIf
-			
-			#If SONICGBA_ASYNC_SOUND_HACK
-				' For now, play the sound as we get it:
-				PlaySound(sound)
-				
-				' Terrible mono audio hack.
-				SetChannelPan(0, 0.0)
+				#If SONICGBA_ASYNC_SOUND_HACK
+					' For now, play the sound as we get it:
+					PlaySound(sound)
+					
+					' Terrible mono audio hack.
+					SetChannelPan(0, 0.0)
+				#End
 			#End
 		End
 		
@@ -423,10 +425,12 @@ Class SoundSystem Implements IOnLoadSoundComplete
 			Self.preSpeed = Self.speed
 			Self.speed = speed
 			
-			' This behavior may change in the future:
-			For Local channel:= 0 Until getAvailableChannels()
-				SetChannelRate(channel, speed)
-			Next
+			#If Not SONICGBA_FORCE_DISABLE_SOUNDEFFECTS
+				' This behavior may change in the future:
+				For Local channel:= 0 Until getAvailableChannels()
+					SetChannelRate(channel, speed)
+				Next
+			#End
 		End
 		
 		Method playBgm:Void(index:Int, loop:Bool)
@@ -435,15 +439,15 @@ Class SoundSystem Implements IOnLoadSoundComplete
 		
 		Method restartBgm:Void()
 			#Rem
-			Self.mediaTime = MFSound.getBgmMediaTime()
-			
-			Print("mediaTime get:" + Self.mediaTime)
-			
-			Self.mediaTime = Long((Float(Self.mediaTime) * Self.preSpeed) / Self.speed)
-			
-			MFSound.stopBgm()
-			
-			playBgm(Self.bgmIndex, True)
+				Self.mediaTime = MFSound.getBgmMediaTime()
+				
+				Print("mediaTime get:" + Self.mediaTime)
+				
+				Self.mediaTime = Long((Float(Self.mediaTime) * Self.preSpeed) / Self.speed)
+				
+				MFSound.stopBgm()
+				
+				playBgm(Self.bgmIndex, True)
 			#End
 		End
 		
@@ -548,30 +552,36 @@ Class SoundSystem Implements IOnLoadSoundComplete
 		Method loadSystemSound:Sound(index:Int)
 			Local resPath:= getSoundEffectPath(index)
 			
-			Print("Attempting to load sound effect: " + resPath)
-			
-			#If SONICGBA_FORCE_DISABLE_SOUNDEFFECTS
+			#If Not SONICGBA_FORCE_DISABLE_SOUNDEFFECTS
+				Print("Attempting to load sound effect: " + resPath)
+				
+				#If SONICGBA_FORCE_DISABLE_SOUNDEFFECTS
+					Return Null
+				#End
+				
+				Local sound:= LoadSound(resPath)
+				
+				IF (sound = Null) Then
+					Print("Unable to load sound.")
+				EndIf
+				
+				Return sound
+			#Else
 				Return Null
 			#End
-			
-			Local sound:= LoadSound(resPath)
-			
-			IF (sound = Null) Then
-				Print("Unable to load sound.")
-			EndIf
-			
-			Return sound
 		End
 		
-		#If SONICGBA_ASYNC_SOUND_HACK
-			Method __handleSystemSoundAsync:Void(index:Int)
-				Local resPath:= getSoundEffectPath(index)
-				
-				'Print("Attempting to load sound effect asynchronously: " + resPath)
-				
-				' Async sound hack.
-				LoadSoundAsync(resPath, Self)
-			End
+		#If Not SONICGBA_FORCE_DISABLE_SOUNDEFFECTS
+			#If SONICGBA_ASYNC_SOUND_HACK
+				Method __handleSystemSoundAsync:Void(index:Int)
+					Local resPath:= getSoundEffectPath(index)
+					
+					'Print("Attempting to load sound effect asynchronously: " + resPath)
+					
+					' Async sound hack.
+					LoadSoundAsync(resPath, Self)
+				End
+			#End
 		#End
 		
 		Method stopBgm:Void(isDel:Bool)
@@ -579,40 +589,46 @@ Class SoundSystem Implements IOnLoadSoundComplete
 			
 			Self.nextBgmWaiting = False
 			
-			'PauseMusic()
-			
-			If (Not isDel) Then ' isDel
-				PauseMusic()
-			Else
-				StopMusic()
-			EndIf
+			#If Not SONICGBA_FORCE_DISABLE_MUSIC
+				'PauseMusic()
+				
+				If (Not isDel) Then ' isDel
+					PauseMusic()
+				Else
+					StopMusic()
+				EndIf
+			#End
 		End
 		
 		Method resumeBgm:Void()
 			'MFSound.resumeBgm()
 			
-			ResumeMusic()
+			#If Not SONICGBA_FORCE_DISABLE_MUSIC
+				ResumeMusic()
+			#End
 		End
 		
 		Method playSe:Void(index:Int, loop:Bool)
 			stopLoopSe()
 			
-			#If Not SONICGBA_ASYNC_SOUND_HACK
-				Local sound:= loadSystemSound(index)
+			#If Not SONICGBA_FORCE_DISABLE_SOUNDEFFECTS
+				#If Not SONICGBA_ASYNC_SOUND_HACK
+					Local sound:= loadSystemSound(index)
+					
+					If (sound = Null) Then
+						Return
+					EndIf
+					
+					PlaySound(sound) ' Int(loop)
+					
+					' This behavior will likely change in the future.
+					SetChannelVolume(0, volume)
+				#Else
+					__handleSystemSoundAsync(index)
+				#End
 				
-				If (sound = Null) Then
-					Return
-				EndIf
-				
-				PlaySound(sound) ' Int(loop)
-				
-				' This behavior will likely change in the future.
-				SetChannelVolume(0, volume)
-			#Else
-				__handleSystemSoundAsync(index)
+				'MFSound.playSe(getSoundEffectName(index), 1)
 			#End
-			
-			'MFSound.playSe(getSoundEffectName(index), 1)
 		End
 		
 		Method playSe:Void(index:Int)
@@ -621,20 +637,20 @@ Class SoundSystem Implements IOnLoadSoundComplete
 		
 		Method playLongSe:Void(index:Int)
 			#Rem
-			If (MFSound.getSeFlag()) Then
-				Self.longSeplayer = MFPlayer.createMFPlayer(getSoundEffectName(index))
-				Self.longSeplayer.realize()
-				Self.longSeplayer.prefetch()
-				Self.longSeplayer.setLoop(False)
-				
-				If (volume = 0) Then
-					Self.longSeplayer.setVolume(0)
-				Else
-					Self.longSeplayer.setVolume(100)
+				If (MFSound.getSeFlag()) Then
+					Self.longSeplayer = MFPlayer.createMFPlayer(getSoundEffectName(index))
+					Self.longSeplayer.realize()
+					Self.longSeplayer.prefetch()
+					Self.longSeplayer.setLoop(False)
+					
+					If (volume = 0) Then
+						Self.longSeplayer.setVolume(0)
+					Else
+						Self.longSeplayer.setVolume(100)
+					EndIf
+					
+					Self.longSeplayer.start()
 				EndIf
-				
-				Self.longSeplayer.start()
-			EndIf
 			#End
 		End
 		
@@ -673,95 +689,99 @@ Class SoundSystem Implements IOnLoadSoundComplete
 		
 		Method playSequenceSe:Void(index:Int)
 			#Rem
-			If (MFSound.getSeFlag() And Not isLoopSePlaying()) Then
-				If (Self.seplayer <> Null) Then
-					Self.seplayer.stop()
-					Self.seplayer.close()
+				If (MFSound.getSeFlag() And Not isLoopSePlaying()) Then
+					If (Self.seplayer <> Null) Then
+						Self.seplayer.stop()
+						Self.seplayer.close()
+					EndIf
+					
+					Self.seplayer = Null
+					Self.seplayer = MFPlayer.createMFPlayer(getSoundEffectName(index))
+					Self.seIndex = index
+					Self.seplayer.realize()
+					Self.seplayer.prefetch()
+					Self.seplayer.setLoop(False)
+					
+					If (volume = 0) Then
+						Self.seplayer.setVolume(0)
+					Else
+						Self.seplayer.setVolume(100)
+					EndIf
+					
+					Self.seplayer.start()
 				EndIf
-				
-				Self.seplayer = Null
-				Self.seplayer = MFPlayer.createMFPlayer(getSoundEffectName(index))
-				Self.seIndex = index
-				Self.seplayer.realize()
-				Self.seplayer.prefetch()
-				Self.seplayer.setLoop(False)
-				
-				If (volume = 0) Then
-					Self.seplayer.setVolume(0)
-				Else
-					Self.seplayer.setVolume(100)
-				EndIf
-				
-				Self.seplayer.start()
-			EndIf
 			#End
 		End
 		
 		Method preLoadSequenceSe:Void(index:Int)
-			If (__preload_se <> Null) Then
-				__preload_se.Discard() ' __preload_se = Null
-			EndIf
-			
-			__preload_se = loadSystemSound(index)
+			#If Not SONICGBA_FORCE_DISABLE_SOUNDEFFECTS
+				If (__preload_se <> Null) Then
+					__preload_se.Discard() ' __preload_se = Null
+				EndIf
+				
+				__preload_se = loadSystemSound(index)
+			#End
 			
 			#Rem
-			If (MFSound.getSeFlag() And Not isLoopSePlaying()) Then
-				Self.seplayer = Null
-				Self.seplayer = MFPlayer.createMFPlayer(getSoundEffectName(index))
-				Self.seIndex = index
-				Self.seplayer.realize()
-				Self.seplayer.prefetch()
-				Self.seplayer.setLoop(False)
-				
-				If (volume = 0) Then
-					Self.seplayer.setVolume(0)
-				Else
-					Self.seplayer.setVolume(100)
+				If (MFSound.getSeFlag() And Not isLoopSePlaying()) Then
+					Self.seplayer = Null
+					Self.seplayer = MFPlayer.createMFPlayer(getSoundEffectName(index))
+					Self.seIndex = index
+					Self.seplayer.realize()
+					Self.seplayer.prefetch()
+					Self.seplayer.setLoop(False)
+					
+					If (volume = 0) Then
+						Self.seplayer.setVolume(0)
+					Else
+						Self.seplayer.setVolume(100)
+					EndIf
 				EndIf
-			EndIf
 			#End
 		End
 		
 		Method playSequenceSeSingle:Void()
 			#Rem
-			If (MFSound.getSeFlag() And Not isLoopSePlaying()) Then
-				Self.seplayer.start()
-			EndIf
+				If (MFSound.getSeFlag() And Not isLoopSePlaying()) Then
+					Self.seplayer.start()
+				EndIf
 			#End
 			
 			If (__preload_se <> Null And Not isLoopSePlaying()) Then
-				PlaySound(__preload_se)
+				#If Not SONICGBA_FORCE_DISABLE_SOUNDEFFECTS
+					PlaySound(__preload_se)
+				#End
 			EndIf
 		End
 		
 		Method stopLoopSe:Void()
 			#Rem
-			If (MFSound.getSeFlag() And isLoopSePlaying()) Then
-				Self.seplayer.stop()
-				Self.seplayer.deallocate()
-				Self.seplayer.close()
-				Self.seplayer = Null
-			EndIf
+				If (MFSound.getSeFlag() And isLoopSePlaying()) Then
+					Self.seplayer.stop()
+					Self.seplayer.deallocate()
+					Self.seplayer.close()
+					Self.seplayer = Null
+				EndIf
 			#End
 		End
 		
 		Method resumeLoopSe:Void()
 			#Rem
-			If (MFSound.getSeFlag()) Then
-				Self.seplayer = Null
-				Self.seplayer = MFPlayer.createMFPlayer(getSoundEffectName(Self.seIndex))
-				Self.seplayer.realize()
-				Self.seplayer.prefetch()
-				Self.seplayer.setLoop(True)
-				
-				If (volume = 0) Then
-					Self.seplayer.setVolume(0)
-				Else
-					Self.seplayer.setVolume(100)
+				If (MFSound.getSeFlag()) Then
+					Self.seplayer = Null
+					Self.seplayer = MFPlayer.createMFPlayer(getSoundEffectName(Self.seIndex))
+					Self.seplayer.realize()
+					Self.seplayer.prefetch()
+					Self.seplayer.setLoop(True)
+					
+					If (volume = 0) Then
+						Self.seplayer.setVolume(0)
+					Else
+						Self.seplayer.setVolume(100)
+					EndIf
+					
+					Self.seplayer.start()
 				EndIf
-				
-				Self.seplayer.start()
-			EndIf
 			#End
 		End
 		
@@ -771,19 +791,19 @@ Class SoundSystem Implements IOnLoadSoundComplete
 		
 		Method isLoopSePlaying:Bool()
 			#Rem
-			If (Not MFSound.getSeFlag()) Then
+				If (Not MFSound.getSeFlag()) Then
+					Return False
+				EndIf
+				
+				If (Self.seplayer = Null) Then
+					Return False
+				EndIf
+				
+				If (Self.seplayer.getState() = 3) Then
+					Return True
+				EndIf
+				
 				Return False
-			EndIf
-			
-			If (Self.seplayer = Null) Then
-				Return False
-			EndIf
-			
-			If (Self.seplayer.getState() = 3) Then
-				Return True
-			EndIf
-			
-			Return False
 			#End
 			
 			' This behavior may change in the future.
@@ -797,23 +817,31 @@ Class SoundSystem Implements IOnLoadSoundComplete
 			
 			Local fVol:= volumeToFloat(vol)
 			
-			If (music) Then
-				SetMusicVolume(fVol)
-			EndIf
+			#If Not SONICGBA_FORCE_DISABLE_MUSIC
+				If (music) Then
+					SetMusicVolume(fVol)
+				EndIf
+			#End
 			
-			If (sounds) Then
-				For Local channel:= 0 Until getAvailableChannels()
-					SetChannelVolume(channel, fVol)
-				Next
-			EndIf
+			#If Not SONICGBA_FORCE_DISABLE_SOUNDEFFECTS
+				If (sounds) Then
+					For Local channel:= 0 Until getAvailableChannels()
+						SetChannelVolume(channel, fVol)
+					Next
+				EndIf
+			#End
 		End
 		
 		' The BGM flag dictates if music should be played:
 		Method getBgmFlag:Bool()
 			'Return MFSound.getBgmFlag()
 			
-			' This behavior may change in the future.
-			Return True ' False
+			#If Not SONICGBA_FORCE_DISABLE_SOUNDEFFECTS
+				' This behavior may change in the future.
+				Return True ' False
+			#Else
+				Return False
+			#End
 		End
 		
 		Method setBgmFlag:Void(flag:Bool)
@@ -824,8 +852,12 @@ Class SoundSystem Implements IOnLoadSoundComplete
 		Method getSeFlag:Bool()
 			'Return MFSound.getSeFlag()
 			
-			' This behavior may change in the future.
-			Return True ' False
+			#If Not SONICGBA_FORCE_DISABLE_SOUNDEFFECTS
+				' This behavior may change in the future.
+				Return True ' False
+			#Else
+				Return False
+			#End
 		End
 	
 		Method setSeFlag:Void(flag:Bool)
@@ -835,8 +867,12 @@ Class SoundSystem Implements IOnLoadSoundComplete
 		Method bgmPlaying:Bool()
 			'Return MFSound.isBgmPlaying()
 			
-			' This behavior may change in the future.
-			Return (MusicState() = 1) ' False ' True
+			#If Not SONICGBA_FORCE_DISABLE_MUSIC
+				' This behavior may change in the future.
+				Return (MusicState() = 1)
+			#Else
+				Return False ' True
+			#End
 		End
 		
 		Method bgmPlaying2:Bool()
