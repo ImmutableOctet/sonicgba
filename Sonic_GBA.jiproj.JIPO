@@ -188,8 +188,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>28</X>
-        <Y>771</Y>
+        <X>10</X>
+        <Y>184</Y>
       </CursorPos>
       <DocGUID>2b107249-9bd0-49e2-bbcd-77d51c591e21</DocGUID>
       <Bookmarks />
@@ -258,13 +258,12 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\mobile\framework\mfgamestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\mfgamestate.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>1</X>
         <Y>14</Y>
       </CursorPos>
-      <DocGUID>5df17e16-0bd2-489b-96a4-4d1c71eb47e6</DocGUID>
-      <Bookmarks />
+      <DocGUID />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\mdversion.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -381,8 +380,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\animation.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>22</X>
-        <Y>48</Y>
+        <X>38</X>
+        <Y>63</Y>
       </CursorPos>
       <DocGUID>cdce0ee1-b1ae-4a69-8259-c462da45ac58</DocGUID>
       <Bookmarks />
@@ -495,16 +494,16 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\soundsystem.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>4</X>
-        <Y>12</Y>
+        <X>1</X>
+        <Y>5</Y>
       </CursorPos>
       <DocGUID>52433690-7061-4a55-a37a-ddb3bd6e2993</DocGUID>
       <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>28</X>
-        <Y>77</Y>
+        <X>3</X>
+        <Y>73</Y>
       </CursorPos>
       <DocGUID>6d40ac73-e097-4731-aa43-385aebdd4a6b</DocGUID>
       <Bookmarks />
@@ -1260,8 +1259,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>4</X>
-        <Y>1686</Y>
+        <X>10</X>
+        <Y>1498</Y>
       </CursorPos>
       <DocGUID>3d108acb-9719-4b87-b556-b2a9b6838223</DocGUID>
       <Bookmarks />
@@ -1288,12 +1287,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\hari.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\hari.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>9</X>
+        <Y>85</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>8811b048-4bae-4518-be76-71f19bfdedd8</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\hariisland.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -1600,7 +1600,7 @@
     <DocUserOptions Filename=".\src\sonicgba\playerobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>10</X>
-        <Y>2378</Y>
+        <Y>4963</Y>
       </CursorPos>
       <DocGUID>6848c63d-668c-459f-9ae8-cb46b9cfb744</DocGUID>
       <Bookmarks />
@@ -1619,12 +1619,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\sonicgba\playertails.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\sonicgba\playertails.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>23</X>
-        <Y>133</Y>
+        <X>22</X>
+        <Y>412</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>1121b422-09b0-46d6-a258-0c198e076877</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\poal.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -1908,8 +1909,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\stagemanager.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>12</X>
+        <Y>424</Y>
       </CursorPos>
       <DocGUID>24b0efcd-e6f9-4c2b-83bc-4de6bc57c307</DocGUID>
       <Bookmarks />
@@ -2234,8 +2235,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\config.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>46</X>
-        <Y>16</Y>
+        <X>1</X>
+        <Y>5</Y>
       </CursorPos>
       <DocGUID>85931b13-6e06-4759-83d6-5e3b29d57812</DocGUID>
       <Bookmarks />

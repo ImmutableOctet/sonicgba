@@ -6980,7 +6980,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 			' This behavior may change in the future. (Currently related to spin-dashing)
 			Return (Self.animationID <> ANI_SQUAT)
 		End
-
+		
 		Method isBodyCenterOutOfWater:Bool()
 			Return (getNewPointY(Self.posY, 0, -Self.collisionRect.getHeight(), Self.faceDegree) < (StageManager.getWaterLevel() Shl 6))
 		End

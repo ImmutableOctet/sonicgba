@@ -1479,13 +1479,16 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		End
 		
 		Method doWhileCollisionWrap:Void(player:PlayerObject)
-			Local direction:= updateDirection(player)
+			Local direction:= updateDirection(player, False)
 			
 			If (player.inRailState()) Then
 				doWhileRail(player, direction)
 			Else
 				doWhileCollision(player, direction)
 			EndIf
+			
+			'Local moveDistanceX:= player.getMoveDistance().x
+			'Local moveDistanceY:= player.getMoveDistance().y
 		End
 		
 		Method doWhileCollisionWrapWithPlayer:Void() ' player:PlayerObject
@@ -1493,14 +1496,20 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				Return
 			EndIf
 			
-			Local moveDistanceX:= player.getMoveDistance().x
-			'Local moveDistanceY:= player.getMoveDistance().y
+			Local moveDistanceX:= (Self.collisionRect.x0 - Self.preCollisionRect.x0)
+			'Local moveDistanceY:= (Self.collisionRect.y0 - Self.preCollisionRect.y0)
 			
-			player.refreshCollisionRectWrap()
+			Local direction:= updateDirection(player, True)
 			
-			Local direction:= updateDirection(player)
-			
-			If (player.isFootOnObject(Self)) Then
+			If (Not player.isFootOnObject(Self)) Then
+				If (collisionChkWithObject(player)) Then
+					If (player.railing) Then
+						doWhileRail(player, direction)
+					Else
+						doWhileCollision(player, direction)
+					EndIf
+				EndIf
+			Else
 				Local y:Int
 				
 				If (player.isAntiGravity) Then
@@ -1510,12 +1519,6 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 				EndIf
 				
 				player.moveOnObject(player.footPointX + moveDistanceX, y)
-			ElseIf (collisionChkWithObject(player)) Then
-				If (player.railing) Then
-					doWhileRail(player, direction)
-				Else
-					doWhileCollision(player, direction)
-				EndIf
 			EndIf
 			
 			Self.preCollisionRect.setTwoPosition(Self.collisionRect.x0, Self.collisionRect.y0, Self.collisionRect.x1, Self.collisionRect.y1)
@@ -1761,7 +1764,7 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			' Empty implementation.
 		End
 		
-		Method updateDirection:Int(player:PlayerObject)
+		Method updateDirection:Int(player:PlayerObject, updateWrap:Bool)
 			Local xFirst:Bool
 			
 			Local colRect:= player.getCollisionRect()
@@ -1769,7 +1772,11 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 			
 			xFirst = (Abs(colRect.x0 - prevColRect.x0) >= Abs(colRect.y0 - prevColRect.y0))
 			
-			rectH.setRect(colRect.x0, colRect.y0 + CHECK_OFFSET, colRect.getWidth(), colRect.getHeight() - (CHECK_OFFSET * 1)) ' AVAILABLE_RANGE
+			If (updateWrap) Then
+				player.refreshCollisionRectWrap()
+			EndIf
+			
+			rectH.setRect(colRect.x0, colRect.y0 + CHECK_OFFSET, colRect.getWidth(), colRect.getHeight() - (CHECK_OFFSET * 2)) ' AVAILABLE_RANGE
 			rectV.setRect(colRect.x0 + CHECK_OFFSET, colRect.y0, colRect.getWidth() - (CHECK_OFFSET * 2), colRect.getHeight()) ' (AVAILABLE_RANGE * 2)
 			
 			Local thisRect:= Self.collisionRect ' getCollisionRect()
