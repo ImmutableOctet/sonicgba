@@ -580,7 +580,7 @@ Class MapManager ' Implements SonicDef
 				Case LOAD_MAP_IMAGE
 					stage_id = stageId
 					
-					If (stageId = 0 Or stageId = 1 Or stageId = 5 Or stageId = 5 Or stageId = 6 Or stageId = 7 Or stageId = 8 Or stageId = 9 Or stageId = 10 Or stageId = 11) Then
+					If (stageId = 0 Or stageId = 1 Or stageId = 4 Or stageId = 5 Or stageId = 6 Or stageId = 7 Or stageId = 8 Or stageId = 9 Or stageId = 10 Or stageId = 11) Then
 						stageFlag = True
 					Else
 						stageFlag = False
@@ -606,7 +606,7 @@ Class MapManager ' Implements SonicDef
 						
 						tileimage = New MFImage[imageNum]
 						
-						If (stageId = 0 Or stageId = 1 Or stageId = 5 Or stageId = 5 Or stageId = 10 Or stageId = 11) Then
+						If (stageId = 0 Or stageId = 1 Or stageId = 4 Or stageId = 5 Or stageId = 10 Or stageId = 11) Then
 							For stageId = 0 Until imageNum
 								tileimage[stageId] = MFImage.createImage("/map/stage" + stageName + "/#" + String(stageId + 1) + ".png")
 							Next
