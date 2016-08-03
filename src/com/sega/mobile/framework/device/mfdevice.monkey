@@ -436,8 +436,12 @@ Class MFDevice Final
 			'MFGamePad.keyPressed(KEY_RIGHT)
 			
 			If (KeyHit(KEY_F)) Then
-				Local x:= 615936 ' 335792
-				Local y:= 47872 ' 126208
+				Local x:= 88869
+				Local y:= 55808
+				
+				' 1-1: 335792, 126208
+				' 1-2: 615936, 47872
+				' 3-2: 88869, 55808
 				
 				Local px:= ((x) Shr 6)
 				Local py:= ((y) Shr 6)

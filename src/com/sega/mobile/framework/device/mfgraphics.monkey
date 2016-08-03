@@ -769,11 +769,9 @@ Class MFGraphics
 				Case TRANS_ROT180
 					xOffset = (drawWidth)
 					yOffset = (drawHeight)
-				
-				
 				Case TRANS_MIRROR_ROT270
-					drawWidth = height
-					drawHeight = width
+					xOffset = (drawWidth)
+					yOffset = (drawHeight)
 					
 				Case TRANS_ROT90
 					yOffset = (drawHeight)
@@ -822,8 +820,8 @@ Class MFGraphics
 				Case TRANS_ROT180
 					Self.context.Rotate(180.0) ' -180.0
 				Case TRANS_MIRROR_ROT270
-					Self.context.Rotate(-270.0)
 					Self.context.Scale(-1.0, 1.0)
+					Self.context.Rotate(-270.0)
 				Case TRANS_ROT90
 					'Self.context.Rotate(90.0)
 					Self.context.Rotate(-90.0)

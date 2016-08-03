@@ -173,8 +173,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>5</X>
-        <Y>224</Y>
+        <X>19</X>
+        <Y>439</Y>
       </CursorPos>
       <DocGUID>d580acc8-2fba-4603-a892-57a781f08979</DocGUID>
       <Bookmarks />
@@ -188,8 +188,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfgraphics.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>5</X>
-        <Y>775</Y>
+        <X>28</X>
+        <Y>771</Y>
       </CursorPos>
       <DocGUID>2b107249-9bd0-49e2-bbcd-77d51c591e21</DocGUID>
       <Bookmarks />
@@ -215,12 +215,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\com\sega\mobile\framework\ui\mfjoystick.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\com\sega\mobile\framework\ui\mfjoystick.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>5</X>
-        <Y>147</Y>
+        <X>9</X>
+        <Y>22</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>ca3c4ebd-3d72-471b-ab53-d2bff97e662e</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\ui\mfsliderbar.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
