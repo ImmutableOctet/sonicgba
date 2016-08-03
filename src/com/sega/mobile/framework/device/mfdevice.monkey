@@ -195,10 +195,10 @@ Class MFDevice Final
 			EndIf
 			
 			If (Not path.StartsWith( "." )) Then ' And Not path.StartsWith( "/" )
-				#If TARGET = "html5" Or TARGET = "android"
+				#If TARGET = "html5" Or TARGET = "android" Or TARGET = "glfw"
 					path = ("monkey://data/" + path)
-				#ElseIf TARGET = "glfw"
-					path = ("data/" + path) ' "monkey://data/"
+				'#ElseIf TARGET = "glfw"
+					'path = ("data/" + path) ' "monkey://data/"
 				#Else
 					#Error "Unable to determine proper path name."
 				#End

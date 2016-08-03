@@ -3,8 +3,14 @@ Strict
 Public
 
 ' Preprocessor related:
-#SONICGBA_FORCE_DISABLE_SOUNDEFFECTS = True
+'#SONICGBA_FORCE_DISABLE_SOUNDEFFECTS = True
 #SONICGBA_FORCE_DISABLE_MUSIC = True
+
+'#HTML5_WEBAUDIO_ENABLED = True
+
+#If TARGET = "html5"
+	#SONICGBA_ASYNC_SOUND_HACK = True
+#End
 
 ' Imports:
 Private
@@ -17,12 +23,13 @@ Private
 	Import com.sega.mobile.framework.device.mfdevice
 	
 	Import mojo.audio
+	Import mojo.asyncloaders
 	
 	Import regal.typetool
 Public
 
 ' Classes:
-Class SoundSystem
+Class SoundSystem Implements IOnLoadSoundComplete
 	Public
 		' Constant variable(s):
 		Const BGM_1UP:Byte = 43
@@ -273,6 +280,33 @@ Class SoundSystem
 			Self.VOLUME_OPTION = [0, 25, 60, 95] ' 100
 		End
 		
+		' Methods:
+		
+		' Extensions:
+		
+		' This method's behavior will likely change in the future.
+		Method OnLoadSoundComplete:Void(sound:Sound, path:String, source:IAsyncEventSource)
+			#If SONICGBA_ASYNC_SOUND_HACK
+				'Print("Attempting to play sound asynchronously...")
+			#End
+			
+			If (sound = Null) Then
+				If (path.Length > 0) Then
+					Print("Unable to load or play sound asynchronously: " + path)
+				EndIf
+				
+				Return
+			EndIf
+			
+			#If SONICGBA_ASYNC_SOUND_HACK
+				' For now, play the sound as we get it:
+				PlaySound(sound)
+				
+				' Terrible mono audio hack.
+				SetChannelPan(0, 0.0)
+			#End
+		End
+		
 		' Functions:
 		Function open:Void()
 			instance = New SoundSystem()
@@ -472,12 +506,20 @@ Class SoundSystem
 			EndIf
 		End
 	Public
+		' Methods:
+		
 		' Extensions:
-		Method loadSystemSound:Sound(index:Int)
+		Method getSoundEffectPath:String(index:Int)
 			Local soundEffectName:= getSoundEffectName(index)
-			Local resPath:= "monkey://" + MFDevice.FixResourcePath(soundEffectName)
+			Local resPath:= MFDevice.FixResourcePath(soundEffectName) ' "monkey://" + soundEffectName
 			
-			Print("SOUND: " + resPath)
+			Return resPath
+		End
+		
+		Method loadSystemSound:Sound(index:Int)
+			Local resPath:= getSoundEffectPath(index)
+			
+			Print("Attempting to load sound effect: " + resPath)
 			
 			#If SONICGBA_FORCE_DISABLE_SOUNDEFFECTS
 				Return Null
@@ -485,10 +527,24 @@ Class SoundSystem
 			
 			Local sound:= LoadSound(resPath)
 			
+			IF (sound = Null) Then
+				Print("Unable to load sound.")
+			EndIf
+			
 			Return sound
 		End
 		
-		' Methods:
+		#If SONICGBA_ASYNC_SOUND_HACK
+			Method __handleSystemSoundAsync:Void(index:Int)
+				Local resPath:= getSoundEffectPath(index)
+				
+				'Print("Attempting to load sound effect asynchronously: " + resPath)
+				
+				' Async sound hack.
+				LoadSoundAsync(resPath, Self)
+			End
+		#End
+		
 		Method stopBgm:Void(isDel:Bool)
 			'MFSound.stopBgm()
 			
@@ -502,13 +558,17 @@ Class SoundSystem
 		Method playSe:Void(index:Int, loop:Bool)
 			stopLoopSe()
 			
-			Local sound:= loadSystemSound(index)
-			
-			If (sound = Null) Then
-				Return
-			EndIf
-			
-			PlaySound(sound, 0, 0) ' Int(loop)
+			#If Not SONICGBA_ASYNC_SOUND_HACK
+				Local sound:= loadSystemSound(index)
+				
+				If (sound = Null) Then
+					Return
+				EndIf
+				
+				PlaySound(sound) ' Int(loop)
+			#Else
+				__handleSystemSoundAsync(index)
+			#End
 			
 			'MFSound.playSe(getSoundEffectName(index), 1)
 		End

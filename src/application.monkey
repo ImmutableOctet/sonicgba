@@ -5,6 +5,8 @@ Public
 ' Preprocessor related:
 #ALLOW_FORCE_EXIT = False ' True
 
+#SONICGBA_ALLOW_ASYNC_LOADERS = True
+
 ' Imports:
 Private
 	Import mflib.mainstate
@@ -38,6 +40,10 @@ Private
 	Import common.resources
 	
 	Import mojo.app
+	
+	#If SONICGBA_ALLOW_ASYNC_LOADERS
+		Import mojo.asyncloaders
+	#End
 	
 	'Import mojo2.graphics
 	
@@ -103,7 +109,7 @@ Class Application Extends App ' Main Extends MFMain
 		
 		' Methods:
 		Method OnCreate:Int()
-			SetUpdateRate(16) ' 15 ' 20 ' 16 ' 30 ' 0 ' 60
+			SetUpdateRate(32) ' 16 ' 15 ' 20 ' 16 ' 30 ' 0 ' 60
 			
 			Seed = Millisecs()
 			
@@ -153,6 +159,10 @@ Class Application Extends App ' Main Extends MFMain
 		End
 		
 		Method OnUpdate:Int()
+			#If SONICGBA_ALLOW_ASYNC_LOADERS
+				UpdateAsyncEvents()
+			#End
+			
 			HandleSystemKeys()
 			
 			UpdateGame()
