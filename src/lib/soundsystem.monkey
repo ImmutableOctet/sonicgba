@@ -4,7 +4,7 @@ Public
 
 ' Preprocessor related:
 '#SONICGBA_FORCE_DISABLE_SOUNDEFFECTS = True
-#SONICGBA_FORCE_DISABLE_MUSIC = True
+'#SONICGBA_FORCE_DISABLE_MUSIC = True
 
 '#HTML5_WEBAUDIO_ENABLED = True
 
@@ -32,15 +32,14 @@ Public
 Class SoundSystem Implements IOnLoadSoundComplete
 	Public
 		' Constant variable(s):
+		Const BGM_TITLE:Byte = 1
+		Const BGM_ZONESELECT:Byte = 3
 		Const BGM_1UP:Byte = 43
 		Const BGM_ASPHYXY:Byte = 21
 		Const BGM_BOSS_01:Byte = 22
 		Const BGM_BOSS_02:Byte = 23
 		Const BGM_BOSS_03:Byte = 24
 		Const BGM_BOSS_04:Byte = 25
-		Const BGM_BOSS_F1:Byte = 46
-		Const BGM_BOSS_F2:Byte = 47
-		Const BGM_BOSS_FINAL3:Byte = 19
 		Const BGM_CLEAR_ACT1:Byte = 26
 		Const BGM_CLEAR_ACT2:Byte = 27
 		Const BGM_CLEAR_EX:Byte = 29
@@ -75,11 +74,12 @@ Class SoundSystem Implements IOnLoadSoundComplete
 		Const BGM_ST5_2:Byte = 15
 		Const BGM_ST6_1:Byte = 16
 		Const BGM_ST6_2:Byte = 17
-		Const BGM_ST_EX:Byte = 20
 		Const BGM_ST_FINAL:Byte = 18
+		Const BGM_BOSS_F1:Byte = 46
+		Const BGM_BOSS_F2:Byte = 47
+		Const BGM_BOSS_FINAL3:Byte = 19
+		Const BGM_ST_EX:Byte = 20
 		Const BGM_TIMEATTACKGOAL:Byte = 42
-		Const BGM_TITLE:Byte = 1
-		Const BGM_ZONESELECT:Byte = 3
 		
 		Const OP_PATCH:Byte = 80
 		Const HAS_SE:Bool = False
@@ -177,7 +177,7 @@ Class SoundSystem Implements IOnLoadSoundComplete
 		
 		' Global variable(s):
 		Global instance:SoundSystem
-		Global volume:Int = 46 ' 50
+		Global volume:Int = 9 ' 15 ' 46 ' 50
 		
 		' Fields:
 		Field BgmName:String[]
@@ -422,6 +422,11 @@ Class SoundSystem Implements IOnLoadSoundComplete
 		Method setSoundSpeed:Void(speed:Float)
 			Self.preSpeed = Self.speed
 			Self.speed = speed
+			
+			' This behavior may change in the future:
+			For Local channel:= 0 Until getAvailableChannels()
+				SetChannelRate(channel, speed)
+			Next
 		End
 		
 		Method playBgm:Void(index:Int, loop:Bool)
@@ -461,22 +466,38 @@ Class SoundSystem Implements IOnLoadSoundComplete
 			#End
 		End
 	Private
+		' Constant variable(s):
+		
+		' Extensions:
+		Const CHANNEL_COUNT:= 32
+		
+		' Methods:
 		Method playBgmInNormalSpeed:Void(index:Int, loop:Bool)
+			If (Self.bgmIndex = index) Then
+				resumeBgm()
+				
+				Return
+			Else
+				Self.bgmIndex = index
+			EndIf
+			
 			Self.bgmIndex = index
 			
 			Local fileName:= getBgmFileName(index)
 			
 			Print("BGM path: " + fileName)
 			
-			Local resPath:= "monkey://" + MFDevice.FixResourcePath(fileName)
+			Local resPath:= MFDevice.FixResourcePath(fileName) ' "monkey://" + fileName
 			
 			#If Not SONICGBA_FORCE_DISABLE_MUSIC
 				PlayMusic(resPath, Int(loop))
+				
+				setVolume(volume, True, False)
 			#End
 			
 			'MFSound.playBgm(fileName, loop)
 			
-			Print("play bgm")
+			'Print("play bgm")
 			
 			If (Self.mediaTime > 0) Then
 				'MFSound.getCurrentBgm().setMediaTime(Int(Self.mediaTime))
@@ -509,6 +530,14 @@ Class SoundSystem Implements IOnLoadSoundComplete
 		' Methods:
 		
 		' Extensions:
+		Function volumeToFloat:Float(vol:Int)
+			Return (Float(volume) / 15.0) ' / 100.0
+		End
+		
+		Function getAvailableChannels:Int()
+			Return CHANNEL_COUNT
+		End
+		
 		Method getSoundEffectPath:String(index:Int)
 			Local soundEffectName:= getSoundEffectName(index)
 			Local resPath:= MFDevice.FixResourcePath(soundEffectName) ' "monkey://" + soundEffectName
@@ -549,10 +578,20 @@ Class SoundSystem Implements IOnLoadSoundComplete
 			'MFSound.stopBgm()
 			
 			Self.nextBgmWaiting = False
+			
+			'PauseMusic()
+			
+			If (Not isDel) Then ' isDel
+				PauseMusic()
+			Else
+				StopMusic()
+			EndIf
 		End
 		
 		Method resumeBgm:Void()
 			'MFSound.resumeBgm()
+			
+			ResumeMusic()
 		End
 		
 		Method playSe:Void(index:Int, loop:Bool)
@@ -566,6 +605,9 @@ Class SoundSystem Implements IOnLoadSoundComplete
 				EndIf
 				
 				PlaySound(sound) ' Int(loop)
+				
+				' This behavior will likely change in the future.
+				SetChannelVolume(0, volume)
 			#Else
 				__handleSystemSoundAsync(index)
 			#End
@@ -748,26 +790,42 @@ Class SoundSystem Implements IOnLoadSoundComplete
 			Return False ' True
 		End
 		
-		Method setVolume:Void(vol:Int)
+		Method setVolume:Void(vol:Int, music:Bool=True, sounds:Bool=True)
 			'MFSound.setLevel(vol)
+			
+			'volume = vol
+			
+			Local fVol:= volumeToFloat(vol)
+			
+			If (music) Then
+				SetMusicVolume(fVol)
+			EndIf
+			
+			If (sounds) Then
+				For Local channel:= 0 Until getAvailableChannels()
+					SetChannelVolume(channel, fVol)
+				Next
+			EndIf
 		End
 		
+		' The BGM flag dictates if music should be played:
 		Method getBgmFlag:Bool()
 			'Return MFSound.getBgmFlag()
 			
 			' This behavior may change in the future.
-			Return False
+			Return True ' False
 		End
 		
 		Method setBgmFlag:Void(flag:Bool)
 			'MFSound.setBgmFlag(flag)
 		End
-	
+		
+		' The SE flag dictates if sounds should be played:
 		Method getSeFlag:Bool()
 			'Return MFSound.getSeFlag()
 			
 			' This behavior may change in the future.
-			Return False
+			Return True ' False
 		End
 	
 		Method setSeFlag:Void(flag:Bool)
@@ -778,14 +836,14 @@ Class SoundSystem Implements IOnLoadSoundComplete
 			'Return MFSound.isBgmPlaying()
 			
 			' This behavior may change in the future.
-			Return False ' True
+			Return (MusicState() = 1) ' False ' True
 		End
 		
 		Method bgmPlaying2:Bool()
 			'Return MFSound.isBgmPlaying()
 			
 			' This behavior may change in the future.
-			Return False ' True
+			Return bgmPlaying() ' False ' True
 		End
 		
 		Method setVolumnState:Void(state:Int)
@@ -805,14 +863,14 @@ Class SoundSystem Implements IOnLoadSoundComplete
 		
 		Method updateVolumeState:Void()
 			#Rem
-			GlobalResource.soundConfig = MFSound.getLevel()
-			
-			If (GlobalResource.soundConfig = 0) Then
-				GlobalResource.seConfig = 0
-			EndIf
-			
-			getInstance().setSoundState(GlobalResource.soundConfig)
-			getInstance().setSeState(GlobalResource.seConfig)
+				GlobalResource.soundConfig = MFSound.getLevel()
+				
+				If (GlobalResource.soundConfig = 0) Then
+					GlobalResource.seConfig = 0
+				EndIf
+				
+				getInstance().setSoundState(GlobalResource.soundConfig)
+				getInstance().setSeState(GlobalResource.seConfig)
 			#End
 		End
 		
@@ -826,6 +884,7 @@ Class SoundSystem Implements IOnLoadSoundComplete
 			
 			If (state >= 0 And state <= 15) Then
 				setBgmFlag(True)
+				
 				setVolume(state)
 			EndIf
 			
@@ -845,11 +904,11 @@ Class SoundSystem Implements IOnLoadSoundComplete
 		
 		Method preLoadAllSe:Void()
 			#Rem
-			MFSound.releaseAllSound()
-			
-			For Local append:= EachIn Self.SE_NAME
-				MFSound.preloadSound(SE_PATH + append)
-			Next
+				MFSound.releaseAllSound()
+				
+				For Local append:= EachIn Self.SE_NAME
+					MFSound.preloadSound(SE_PATH + append)
+				Next
 			#End
 		End
 End

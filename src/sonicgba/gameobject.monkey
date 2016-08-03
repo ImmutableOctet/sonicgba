@@ -1678,10 +1678,14 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		
 		Method drawCollisionRect:Void(g:MFGraphics)
 			If (SonicDebug.showCollisionRect) Then
+				Local color:= g.getColor()
+				
 				g.setColor(16711680)
 				
 				g.drawRect((Self.collisionRect.x0 Shr 6) - camera.x, (Self.collisionRect.y0 Shr 6) - camera.y, Self.collisionRect.getWidth() Shr 6, Self.collisionRect.getHeight() Shr 6)
 				g.drawRect(((Self.collisionRect.x0 Shr 6) - camera.x) + 1, ((Self.collisionRect.y0 Shr 6) - camera.y) + 1, (Self.collisionRect.getWidth() Shr 6) - 2, (Self.collisionRect.getHeight() Shr 6) - 2)
+				
+				g.setColor(color)
 			EndIf
 		End
 		
