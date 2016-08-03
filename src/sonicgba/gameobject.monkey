@@ -995,6 +995,10 @@ Class GameObject Extends ACObject Abstract ' Implements SonicDef
 		' This is normally how objects move between "rooms"; the segments of the
 		' level that are used to cull irrelevant (Far away) objects.
 		Function checkObjWhileMoving:Void(currentObject:GameObject)
+			#If SONICGBA_DISABLE_ROOM_UPDATES
+				Return
+			#End
+			
 			Local centerX:Int = ((MapManager.getCamera().x + (MapManager.CAMERA_WIDTH / 2)) / ROOM_WIDTH)
 			Local centerY:Int = ((MapManager.getCamera().y + (MapManager.CAMERA_HEIGHT / 2)) / ROOM_HEIGHT)
 			

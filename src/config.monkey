@@ -6,8 +6,15 @@
 '#SONICGBA_EASTEREGGS = True
 
 ' Debugging related:
+
+' This enables the user to have an abnormal number of lives.
 #SONICGBA_FORCE_MAX_LIVES = True
+
+' This enables a higher internal resolution. (Unfinished behavior)
 #SONICGBA_RESOLUTION_TEST = True
+
+' This disables scheduled room updates.
+'#SONICGBA_DISABLE_ROOM_UPDATES = True ' False
 
 '#SONICGBA_GAMEOBJECT_ANNOUNCE_LOAD_INDICES = True
 

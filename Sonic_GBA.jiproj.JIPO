@@ -496,8 +496,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>3</X>
-        <Y>63</Y>
+        <X>35</X>
+        <Y>68</Y>
       </CursorPos>
       <DocGUID>6d40ac73-e097-4731-aa43-385aebdd4a6b</DocGUID>
       <Bookmarks />
@@ -1059,8 +1059,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\collisionrect.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>15</X>
-        <Y>197</Y>
+        <X>4</X>
+        <Y>203</Y>
       </CursorPos>
       <DocGUID>b0b124e6-9562-40a4-ae2f-a6c94ce06856</DocGUID>
       <Bookmarks />
@@ -1251,8 +1251,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>28</X>
-        <Y>185</Y>
+        <X>36</X>
+        <Y>997</Y>
       </CursorPos>
       <DocGUID>3d108acb-9719-4b87-b556-b2a9b6838223</DocGUID>
       <Bookmarks />
@@ -2223,7 +2223,7 @@
     <DocUserOptions Filename=".\src\config.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>1</X>
-        <Y>9</Y>
+        <Y>16</Y>
       </CursorPos>
       <DocGUID>85931b13-6e06-4759-83d6-5e3b29d57812</DocGUID>
       <Bookmarks />
