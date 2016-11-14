@@ -25,6 +25,8 @@ Private
 	
 	Import mojo2.graphics
 	
+	Import regal.png
+	
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfdevice
 Public
@@ -49,7 +51,7 @@ Class MFImage
 		' Extensions:
 		
 		' These generate native image handles:
-		Function generateImage:Image(width:Int, height:Int, flags:Int=Image.Mipmap)
+		Function generateImage:Image(width:Int, height:Int, flags:Int=Image.Managed) ' Image.Mipmap
 			Return New Image(width, height, 0.0, 0.0, flags) ' Image.Managed
 		End
 		
@@ -103,49 +105,124 @@ Class MFImage
 			Return generateImage(path)
 		End
 		
+		Function readByteSafely:Int(is:Stream) ' Byte
+			If (is.Eof()) Then
+				Return 0
+			EndIf
+			
+			Return is.ReadByte()
+		End
+		
+		Function readRGBColor:Int(is:Stream, a:Int=255) ' 0
+			Local r:= 0
+			Local g:= 0
+			Local b:= 0
+			
+			r = readByteSafely(is)
+			g = readByteSafely(is)
+			b = readByteSafely(is)
+			
+			' Read red, green, and blue values from the input-stream.
+			Return MFGraphics.valuesToColor(r, g, b, a)
+		End
+		
+		' I/O routines:
+		Function seekForward:Int(is:Stream, forward_bytes:Int)
+			Local new_position:= (is.Position() + forward_bytes)
+			
+			is.Seek(new_position)
+			
+			Return new_position
+		End
+		
+		' These functions read a PLTE chunks from PNG files, then output a color-table.
+		' Each color channel is 8-bit, encoded using 'MFGraphics':
+		
+		' This implementation expects the first four bytes to be the PLTE tag.
+		Function readPalette:Int[](is:Stream) ' Stack<Int> ' length:Int
+			Local x:= is.Position
+			
+			seekForward(is, 4) ' PLTE
+			
+			Local remainingBytes:= (is.Length - is.Position)
+			Local palette:= New Int[(remainingBytes / 3)]
+			
+			PNG.ReadPaletteData(is, palette, palette.Length)
+			
+			Return palette
+		End
+		
+		' This returns the index at which 'pixel' was found.
+		' If nothing was found, this will return -1.
+		Function getPaletteEntry:Int(palette:Int[], pixel:Int)
+			For Local I:= 0 Until palette.Length
+				If (palette[I] = pixel) Then
+					Return I
+				EndIf
+			Next
+			
+			Return -1
+		End
+		
+		' This loads a palette descriptor file.
+		' These files describe a local image name,
+		' and a set of bytes to patch it with.
 		Function createPaletteImage:MFImage(paletteFileName:String) ' Final
+			Local is:Stream
+			
 			Try
 				Local data:Int
-				
-				Local is:Stream
 				
 				is = MFDevice.getResourceAsStream(paletteFileName)
 				
 				Local imageName:= is.ReadString(is.ReadByte(), "ascii")
 				
-				#If TARGET <> "html5"
-					Local palData:= is.ReadAll()
-				#End
+				Local customPalette:= readPalette(is)
 				
 				is.Close()
 				
 				Local pixMapPath:= (ExtractDir(paletteFileName) + "/" + imageName)
 				
-				' This behavior will change in the future:
-				#If TARGET <> "html5"
-					pixMapPath = MFDevice.FixResourcePath(pixMapPath)
+				is = MFDevice.getResourceAsStream(pixMapPath)
+				
+				Local state:= New PNGDecodeState()
+				
+				' Manually assign a custom color-palette.
+				state.Palette = customPalette
+				
+				' Begin loading from the PNG data-stream.
+				Local png:= New PNG(is)
+				
+				While (Not is.Eof())
+					If (Not png.Decode(is, state, True, True)) Then
+						Exit
+					Endif
+				Wend
+				
+				is.Close()
+				
+				Local header:= png.Header
+				
+				Local width:= header.width
+				Local height:= header.height
+				
+				Local imageData:= png.ImageData
+				
+				Local img:= generateImage(width, height)
+				
+				img.WritePixels(0, 0, width, height, imageData)
+				
+				Return createImage(img)
+			Catch E:Throwable
+				If (is <> Null) Then
+					is.Close()
+				EndIf
+				
+				#If CONFIG = "debug"
+					Print(E.ToString())
 					
-					Local info:= New Int[2]
-					
-					Local pixMap:= LoadImageData(pixMapPath, info)
-					
-					For Local i:= 0 Until Min(palData.Length, (pixMap.Length-37))
-						pixMap.PokeByte((i + 37), palData.PeekByte(i))
-					Next
-					
-					Local width:= info[0]
-					Local height:= info[1]
-					
-					Local img:= generateImage(width, height)
-					
-					img.WritePixels(0, 0, width, height, pixMap)
-					
-					Return createImage(img)
-				#Else
-					Return createImage(pixMapPath)
+					DebugStop()
 				#End
-			Catch E:StreamError ' E:Throwable
-				' Nothing so far.
 			End Try
 			
 			Return Null

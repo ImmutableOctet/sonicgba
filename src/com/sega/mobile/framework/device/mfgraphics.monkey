@@ -162,6 +162,16 @@ Class MFGraphics
 			Return Int(colorChannel * Float(UOCTET_MAX))
 		End
 		
+		' This encodes the specified color values into a formatted integer.
+		Function valuesToColor:Int(r:Int, g:Int, b:Int, a:Int=255) ' 0
+			Local out_a:= (a Shl 24) & $FFFFFFFF ' (2^32 - 1)
+			Local out_r:= (r Shl 16) & $00FFFFFF ' (2^24 - 1)
+			Local out_g:= (g Shl 8) & $0000FFFF ' (2^16 - 1)
+			Local out_b:= b & $000000FF ' (2^8 - 1) ' UOCTET_MAX
+			
+			Return (out_r|out_g|out_b|out_a)
+		End
+		
 		' This converts floating-point color data to an RGB(A) integer.
 		Function toColor:Int(colors:Float[], offset:Int=0, alpha:Bool=True, default_alpha:Int=0) ' 255
 			Local r:= floatToColor(colors[offset])
@@ -174,12 +184,7 @@ Class MFGraphics
 				a = floatToColor(colors[offset+3])
 			Endif
 			
-			Local out_a:= (a Shl 24) & $FFFFFFFF ' (2^32 - 1)
-			Local out_r:= (r Shl 16) & $00FFFFFF ' (2^24 - 1)
-			Local out_g:= (g Shl 8) & $0000FFFF ' (2^16 - 1)
-			Local out_b:= b & $000000FF ' (2^8 - 1) ' UOCTET_MAX
-			
-			Return (out_r|out_g|out_b|out_a)
+			Return valuesToColor(r, g, b, a)
 		End
 		
 		' These automatically retrieve and convert color data
