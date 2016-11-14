@@ -50,11 +50,18 @@
 '#End
 
 ' File formats:
-#TEXT_FILES+="*.txt|*.xml|*.json|*.ssm|*.glsl"
-#IMAGE_FILES+="*.png|*.jpg"
-#SOUND_FILES+="*.wav|*.ogg"
-#MUSIC_FILES+="*.wav|*.ogg"
-#BINARY_FILES+="*.bin|*.dat|*.ci|*.co|*.en|*.gi|*.it|*.pal|*.pm|*.pyx|*.ri"
+#TEXT_FILES += "*.txt|*.xml|*.json|*.ssm|*.glsl"
+#IMAGE_FILES += "*.png|*.jpg"
+
+#If Not SONICGBA_FORCE_DISABLE_SOUNDEFFECTS
+	#SOUND_FILES+="*.wav|*.ogg"
+#End
+
+#If Not SONICGBA_FORCE_DISABLE_MUSIC
+	#MUSIC_FILES += "*.wav|*.ogg"
+#End
+
+#BINARY_FILES += "*.bin|*.dat|*.ci|*.co|*.en|*.gi|*.it|*.pal|*.pm|*.pyx|*.ri"
 
 ' GLFW Configuration:
 #GLFW_WINDOW_TITLE = "Sonic Advance"
