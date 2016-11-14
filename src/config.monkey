@@ -13,6 +13,16 @@
 ' This enables a higher internal resolution. (Unfinished behavior)
 #SONICGBA_RESOLUTION_TEST = True
 
+' Audio related:
+#SONICGBA_FORCE_DISABLE_SOUNDEFFECTS = True
+#SONICGBA_FORCE_DISABLE_MUSIC = True
+
+'#HTML5_WEBAUDIO_ENABLED = True
+
+#If TARGET = "html5"
+	#SONICGBA_ASYNC_SOUND_HACK = True
+#End
+
 ' This disables scheduled room updates.
 '#SONICGBA_DISABLE_ROOM_UPDATES = True ' False
 

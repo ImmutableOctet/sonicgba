@@ -219,9 +219,7 @@ Class MFImage
 				EndIf
 				
 				#If CONFIG = "debug"
-					Print(E.ToString())
-					
-					DebugStop()
+					'Print(E.ToString())
 				#End
 			End Try
 			

@@ -3,14 +3,7 @@ Strict
 Public
 
 ' Preprocessor related:
-#SONICGBA_FORCE_DISABLE_SOUNDEFFECTS = True
-#SONICGBA_FORCE_DISABLE_MUSIC = True
-
-'#HTML5_WEBAUDIO_ENABLED = True
-
-#If TARGET = "html5"
-	#SONICGBA_ASYNC_SOUND_HACK = True
-#End
+' Nothing so far.
 
 ' Imports:
 Private
