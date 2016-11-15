@@ -25,36 +25,71 @@ Public
 Class SoundSystem Implements IOnLoadSoundComplete
 	Public
 		' Constant variable(s):
+		
+		' Title Screen.
 		Const BGM_TITLE:Byte = 1
+		
+		' Level Select.
 		Const BGM_ZONESELECT:Byte = 3
+		
+		' Extra Life.
 		Const BGM_1UP:Byte = 43
+		
+		' Drowning/Asphyxiation.
 		Const BGM_ASPHYXY:Byte = 21
+		
+		' Bosses:
 		Const BGM_BOSS_01:Byte = 22
 		Const BGM_BOSS_02:Byte = 23
 		Const BGM_BOSS_03:Byte = 24
 		Const BGM_BOSS_04:Byte = 25
+		
+		' Act Clear:
 		Const BGM_CLEAR_ACT1:Byte = 26
 		Const BGM_CLEAR_ACT2:Byte = 27
 		Const BGM_CLEAR_EX:Byte = 29
 		Const BGM_CLEAR_FINAL:Byte = 28
+		
+		' Continue Screen.
 		Const BGM_CONTINUE:Byte = 5
+		
+		' Credits.
 		Const BGM_CREDIT:Byte = 33
+		
+		' Ending Scenes:
 		Const BGM_ENDING_EX_01:Byte = 32
 		Const BGM_ENDING_EX_02:Byte = 45
 		Const BGM_ENDING_FINAL:Byte = 31
+		
+		' Game Over.
 		Const BGM_GAMEOVER:Byte = 30
+		
+		' Invincibility Music.
 		Const BGM_INVINCIBILITY:Byte = 44
+		
+		' New Record Jingle.
 		Const BGM_NEWRECORD:Byte = 41
+		
+		' Opening Cutscene.
 		Const BGM_OPENING:Byte = 0
+		
+		' Character Select.
 		Const BGM_PLAYER_SELECT:Byte = 2
+		
+		' Ranking / Time Attack:
 		Const BGM_RANKING:Byte = 4
+		Const BGM_TIMEATTACKGOAL:Byte = 42
+		
+		' Special Stage:
+		Const BGM_SP_INTRO:Byte = 34
 		Const BGM_SP:Byte = 35
+		Const BGM_SP_TRICK:Byte = 36
 		Const BGM_SP_CLEAR:Byte = 37
 		Const BGM_SP_EMERALD:Byte = 38
-		Const BGM_SP_INTRO:Byte = 34
-		Const BGM_SP_TOTAL_CLEAR:Byte = 40
 		Const BGM_SP_TOTAL_MISS:Byte = 39
-		Const BGM_SP_TRICK:Byte = 36
+		Const BGM_SP_TOTAL_CLEAR:Byte = 40
+		
+		' Level Background Music:
 		Const BGM_ST1_1:Byte = 6
 		Const BGM_ST1_2:Byte = 7
 		Const BGM_ST2_1:Byte = 8
@@ -68,15 +103,12 @@ Class SoundSystem Implements IOnLoadSoundComplete
 		Const BGM_ST6_1:Byte = 16
 		Const BGM_ST6_2:Byte = 17
 		Const BGM_ST_FINAL:Byte = 18
+		Const BGM_ST_EX:Byte = 20
+		
+		' Boss Music:
 		Const BGM_BOSS_F1:Byte = 46
 		Const BGM_BOSS_F2:Byte = 47
 		Const BGM_BOSS_FINAL3:Byte = 19
-		Const BGM_ST_EX:Byte = 20
-		Const BGM_TIMEATTACKGOAL:Byte = 42
-		
-		Const OP_PATCH:Byte = 80
-		Const HAS_SE:Bool = False
-		Const PRE_LOAD_SE:Bool = False
 		
 		Const SE_103:Byte = 0
 		Const SE_106:Byte = 1
@@ -164,6 +196,11 @@ Class SoundSystem Implements IOnLoadSoundComplete
 		
 		' Extensions:
 		Const SE_EX_01:Byte = 84
+		
+		' Other:
+		Const OP_PATCH:Byte = 80
+		Const HAS_SE:Bool = False
+		Const PRE_LOAD_SE:Bool = False
 	Private
 		' Constant variable(s):
 		Const SE_PATH:String = "/se/"
