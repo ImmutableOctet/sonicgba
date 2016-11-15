@@ -1042,8 +1042,6 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 	Public
 		' Methods
 		Method logic:Void()
-			Local i:Int
-			
 			For Local i2:= 0 Until MAX_ITEM
 				If (itemVec[i2][0] >= 0) Then
 					If (itemVec[i2][1] > 0) Then
@@ -1060,13 +1058,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				EndIf
 			Next
 			
-			If (Self.isAntiGravity) Then
-				i = 180
-			Else
-				i = 0
-			EndIf
-			
-			Self.degreeStable = i
+			Self.degreeStable = PickValue(Self.isAntiGravity, 180, 0)
 			Self.leftStopped = False
 			Self.rightStopped = False
 			
@@ -1086,9 +1078,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				invincibleCount -= 1
 				
 				If (invincibleCount = 0) Then
-					i = SoundSystem.getInstance().getPlayingBGMIndex()
+					Local bgm:= SoundSystem.getInstance().getPlayingBGMIndex()
 					
-					If (i = ANI_HURT_PRE) Then
+					If (bgm = SoundSystem.BGM_INVINCIBILITY) Then
 						SoundSystem.getInstance().stopBgm(False)
 						
 						If (Not isTerminal) Then
@@ -1096,9 +1088,9 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						EndIf
 					EndIf
 					
-					i = SoundSystem.getInstance().getPlayingBGMIndex()
+					bgm = SoundSystem.getInstance().getPlayingBGMIndex()
 					
-					If (i = ANI_POP_JUMP_DOWN_SLOW) Then
+					If (bgm = SoundSystem.BGM_1UP) Then
 						SoundSystem.getInstance().playNextBgm(StageManager.getBgmId())
 					EndIf
 				EndIf
@@ -1226,15 +1218,15 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 							If (getNewPointY(Self.posY, 0, -Self.collisionRect.getHeight(), Self.faceDegree) + SIDE_FOOT_FROM_CENTER < (waterLevel Shl 6)) Then
 								Self.breatheCount = 0
 								
-								i = SoundSystem.getInstance().getPlayingBGMIndex()
+								Local bgm:= SoundSystem.getInstance().getPlayingBGMIndex()
 								
-								If (i = ANI_RAIL_ROLL) Then
+								If (bgm = SoundSystem.BGM_ASPHYXY) Then
 									SoundSystem.getInstance().stopBgm(False)
 									
 									If (IsInvincibility()) Then
-										SoundSystem.getInstance().playBgm(ANI_HURT_PRE)
+										SoundSystem.getInstance().playBgm(SoundSystem.BGM_INVINCIBILITY)
 									ElseIf (Self.isAttackBoss4) Then
-										SoundSystem.getInstance().playBgm(ANI_BAR_ROLL_1)
+										SoundSystem.getInstance().playBgm(SoundSystem.BGM_BOSS_01)
 									Else
 										SoundSystem.getInstance().playBgm(StageManager.getBgmId())
 									EndIf
@@ -1246,14 +1238,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 							Self.breatheNumCount = (Self.breatheCount - BREATHE_TIME_COUNT) / BREATHE_TO_DIE_PER_COUNT
 							
 							If (Self.breatheCount = 0) Then
-								i = SoundSystem.getInstance().getPlayingBGMIndex()
-								SoundSystem.getInstance()
+								Local bgm:= SoundSystem.getInstance().getPlayingBGMIndex()
 								
-								If (i <> ANI_RAIL_ROLL) Then
+								If (bgm <> SoundSystem.BGM_ASPHYXY) Then
 									If (Self.isAttackBoss4) Then
-										soundInstance.playBgm(ANI_RAIL_ROLL)
+										soundInstance.playBgm(SoundSystem.BGM_ASPHYXY)
 									Else
-										soundInstance.playBgm(ANI_RAIL_ROLL)
+										soundInstance.playBgm(SoundSystem.BGM_ASPHYXY)
 									EndIf
 									
 									If (Self.breatheNumCount < 6 And canBeHurt()) Then
@@ -1266,15 +1257,15 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 								EndIf
 							EndIf
 							
-							i = SoundSystem.getInstance().getPlayingBGMIndex()
+							Local bgm:= SoundSystem.getInstance().getPlayingBGMIndex()
 							
-							If (i <> ANI_RAIL_ROLL) Then
+							If (bgm <> SoundSystem.BGM_ASPHYXY) Then
 								Local startTime:= Long(((Self.breatheCount - BREATHE_TIME_COUNT) * 10000) / 10560)
 								
 								If (Self.isAttackBoss4) Then
-									soundInstance.playBgmFromTime(startTime, ANI_RAIL_ROLL)
+									soundInstance.playBgmFromTime(startTime, SoundSystem.BGM_ASPHYXY)
 								Else
-									soundInstance.playBgmFromTime(startTime, ANI_RAIL_ROLL)
+									soundInstance.playBgmFromTime(startTime, SoundSystem.BGM_ASPHYXY)
 								EndIf
 							EndIf
 							
@@ -1300,13 +1291,13 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 						If (bodyCenterY + SIDE_FOOT_FROM_CENTER <= (waterLevel Shl 6)) Then
 							Self.isInWater = False
 							
-							If (Self.breatheNumCount >= 0 And SoundSystem.getInstance().getPlayingBGMIndex() = ANI_RAIL_ROLL) Then
+							If (Self.breatheNumCount >= 0 And SoundSystem.getInstance().getPlayingBGMIndex() = SoundSystem.BGM_ASPHYXY) Then
 								SoundSystem.getInstance().stopBgm(False)
 								
 								If (IsInvincibility()) Then
-									SoundSystem.getInstance().playBgm(ANI_HURT_PRE)
+									SoundSystem.getInstance().playBgm(SoundSystem.BGM_INVINCIBILITY)
 								ElseIf (Self.isAttackBoss4) Then
-									SoundSystem.getInstance().playBgm(ANI_BAR_ROLL_1)
+									SoundSystem.getInstance().playBgm(SoundSystem.BGM_BOSS_01)
 								Else
 									SoundSystem.getInstance().playBgm(StageManager.getBgmId())
 								EndIf
@@ -5296,7 +5287,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 				Case ITEM_INVINCIBLE
 					invincibleCount = INVINCIBLE_COUNT
 					SoundSystem.getInstance().stopBgm(False)
-					SoundSystem.getInstance().playBgm(ANI_HURT_PRE)
+					SoundSystem.getInstance().playBgm(SoundSystem.BGM_INVINCIBILITY)
 				Case ITEM_SPEED
 					speedCount = INVINCIBLE_COUNT
 					SoundSystem.getInstance().setSoundSpeed(2.0)
