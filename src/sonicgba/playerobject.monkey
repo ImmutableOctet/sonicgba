@@ -4913,7 +4913,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 		
 		Method doAttackPose:Void(obj:GameObject, direction:Int)
 			If (Not Self.extraAttackFlag) Then
-				Local gravMultiplier:= DSgn(Not Self.isAntiGravity)
+				Local gravMultiplier:= DSgn(Self.isAntiGravity)
 				
 				Local newVelY:= gravMultiplier * getVelY()
 				
@@ -4927,7 +4927,7 @@ Class PlayerObject Extends MoveObject Implements Focusable, ACWorldCalUser Abstr
 					newVelY = MIN_ATTACK_JUMP
 				EndIf
 				
-				If ((characterID <> CHARACTER_AMY) Or (Not IsInvincibility() Or Self.myAnimationID < ANI_POP_JUMP_UP Or Self.myAnimationID > ANI_BRAKE)) Then
+				If ((characterID <> CHARACTER_AMY) Or (Not IsInvincibility() Or Self.myAnimationID < PlayerAmy.AMY_ANI_SPRING_2 Or Self.myAnimationID > PlayerAmy.AMY_ANI_SPRING_5)) Then
 					setVelY((-gravMultiplier) * newVelY)
 				EndIf
 				

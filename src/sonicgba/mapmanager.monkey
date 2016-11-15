@@ -934,7 +934,7 @@ Class MapManager ' Implements SonicDef
 			If (windImage <> Null And windDrawer <> Null) Then
 				Local offsetX:= ((camera.x / 8) Mod WIND_LOOP_WIDTH)
 				
-				For Local i:= -1 Until 0
+				For Local i:= -1 Until LOOP_COUNT ' 0
 					For Local j:= 0 Until WIND_POSITION.Length
 						Local wind:= WIND_POSITION[j]
 						
