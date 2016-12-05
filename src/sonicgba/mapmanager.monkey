@@ -220,7 +220,7 @@ Class MapManager ' Implements SonicDef
 		Function ReadMap:Void(ds:Stream, map:MapView, width:Int, height:Int) ' Short[][] ' DataBuffer
 			For Local j:= 0 Until width
 				For Local i:= 0 Until height
-					Local tileInfo:= ds.ReadShort()
+					Local tileInfo:= (ds.ReadShort() & $FFFF)
 					
 					'map[j][i] = tileInfo
 					map.SetAt(j, i, tileInfo)
@@ -1047,7 +1047,6 @@ Class MapManager ' Implements SonicDef
 							EndIf
 							
 							drawTile(graphics, (tileInfo & 16383), currentX, currentY, transform)
-							'Function drawTile:Void(g:MFGraphics, sy:Int, x:Int, y:Int, trans:Int)
 							
 							yOff = currentY
 						EndIf

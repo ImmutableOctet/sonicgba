@@ -44,6 +44,9 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 		Const LOAD_COLLISION_INFO:Int = 2
 		Const LOAD_OVER:Int = 3
 		
+		' Extensions:
+		Const GRID_MODEL_SIZE:= (GRID_NUM_PER_MODEL * GRID_NUM_PER_MODEL * SizeOf_Short)
+		
 		' Global variable(s):
 		Global instance:CollisionMap
 		
@@ -58,6 +61,16 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 		
 		Function GetModelTileAt:Int(data:MapView, x:Int, y:Int) ' Short[][] ' DataBuffer
 			Return data.GetAt(x, y) ' data[x][y] ' data.PeekShort(AsModelCoord(x, y) * SizeOf_Short)
+		End
+		
+		Function ReadModelInfo:Void(input:Stream, model:MapView)
+			Local rawData:= model.Data
+			
+			'ReadMap(ds, model, GRID_NUM_PER_MODEL, GRID_NUM_PER_MODEL)
+			
+			input.ReadAll(rawData, model.Offset, GRID_MODEL_SIZE)
+			
+			FlipBuffer_UShorts(rawData)
 		End
 		
 		' Fields:
@@ -142,24 +155,7 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 					
 					Try
 						For Local i:= 0 Until Self.modelInfo.Length
-							Local model:= Self.modelInfo[i]
-							
-							'''ds.ReadAll(model, 0, model.Length) ' & 65535
-							
-							'''FlipBuffer_Shorts(model)
-							
-							'MapManager.ReadMap(ds, model, GRID_NUM_PER_MODEL, GRID_NUM_PER_MODEL)
-							
-							'#Rem
-							For Local y:= 0 Until GRID_NUM_PER_MODEL
-								For Local x:= 0 Until GRID_NUM_PER_MODEL
-									Local value:= (Self.ds.ReadShort() & $FFFF)
-									
-									'model[x][y] = value
-									model.SetAt(x, y, value)
-								Next
-							Next
-							'#End
+							ReadModelInfo(Self.ds, Self.modelInfo[i])
 						Next
 					Catch E:StreamError
 						' Nothing so far.
@@ -172,23 +168,27 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 					Self.ds = MFDevice.getResourceAsStream("/map/" + stageName + COLLISION_FILE_NAME)
 					
 					Try
-						Local collisionKindNum:= Self.ds.ReadShort()
+						Local collisionKindNum:= Self.ds.ReadShort() ' & $FFFF
 						
 						Self.collisionInfo = New DataBuffer(collisionKindNum * COLLISION_INFO_STRIDE) ' * SizeOf_Byte
 						Self.directionInfo = New DataBuffer(collisionKindNum) ' * SizeOf_Byte
 						
+						Local offset:= 0
+						
 						For Local i:= 0 Until collisionKindNum ' Self.directionInfo.Length
-							'#Rem
-							Local offset:= (i * COLLISION_INFO_STRIDE)
-							
+							#Rem
 							For Local j:= 0 Until COLLISION_INFO_STRIDE
 								Self.collisionInfo.PokeByte(offset+j, Self.ds.ReadByte()) ' & $FF
 							Next
-							'#End
+							#End
 							
-							'Self.ds.ReadAll(Self.collisionInfo, (i * COLLISION_INFO_STRIDE), COLLISION_INFO_STRIDE)
+							Self.ds.ReadAll(Self.collisionInfo, offset, COLLISION_INFO_STRIDE)
 							
-							Self.directionInfo.PokeByte(i, Self.ds.ReadByte()) ' & $FF
+							Local direction:= Self.ds.ReadByte() ' & $FF
+							
+							Self.directionInfo.PokeByte(i, direction)
+							
+							offset += COLLISION_INFO_STRIDE
 						Next
 					Catch E:StreamError
 						' Nothing so far.

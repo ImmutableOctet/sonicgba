@@ -94,8 +94,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acworld.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>94</X>
-        <Y>172</Y>
+        <X>7</X>
+        <Y>15</Y>
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
@@ -418,8 +418,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\constutil.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>37</X>
-        <Y>68</Y>
+        <X>25</X>
+        <Y>60</Y>
       </CursorPos>
       <DocGUID>f0ffd7e0-27b5-4591-98fa-53588fb77785</DocGUID>
       <Bookmarks />
@@ -461,8 +461,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\mapview.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>61</X>
-        <Y>70</Y>
+        <X>5</X>
+        <Y>89</Y>
       </CursorPos>
       <DocGUID>a78159bc-34f4-4a92-8f80-9e275bb14afe</DocGUID>
       <Bookmarks />
@@ -1055,8 +1055,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\collisionmap.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>32</X>
-        <Y>158</Y>
+        <X>33</X>
+        <Y>117</Y>
       </CursorPos>
       <DocGUID>058e35e8-0115-4913-9d83-b84067e26fca</DocGUID>
       <Bookmarks />
@@ -1399,8 +1399,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\mapmanager.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>26</X>
-        <Y>1082</Y>
+        <X>10</X>
+        <Y>1031</Y>
       </CursorPos>
       <DocGUID>34f1bbf9-856f-4d74-bd88-a3e04dad1f89</DocGUID>
       <Bookmarks>
@@ -2417,7 +2417,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\com" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine" Expanded="true" />
-    <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\action" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\action" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\action\__test" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\ext" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\com\sega\engine\lib" Expanded="false" />

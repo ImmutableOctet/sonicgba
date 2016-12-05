@@ -43,7 +43,7 @@ Function PickValue:Int(Toggle:Bool, A:Int, B:Int)
 End
 
 Function FlipBuffer_Shorts:Void(buffer:DataBuffer, length:Int, offset:Int=0)
-	For Local i:= offset Until (length / SizeOf_Short) Step SizeOf_Short ' 2
+	For Local i:= offset Until length Step SizeOf_Short ' 2
 		Local value:= buffer.PeekShort(i)
 		
 		buffer.PokeShort(i, NToHS_S(value)) ' NToHS
@@ -55,7 +55,7 @@ Function FlipBuffer_Shorts:Void(buffer:DataBuffer)
 End
 
 Function FlipBuffer_UShorts:Void(buffer:DataBuffer, length:Int, offset:Int=0)
-	For Local i:= offset Until (length / SizeOf_Short) Step SizeOf_Short ' 2
+	For Local i:= offset Until length Step SizeOf_Short ' 2
 		Local value:= buffer.PeekShort(i)
 		
 		buffer.PokeShort(i, NToHS(value)) ' NToHS
@@ -67,7 +67,7 @@ Function FlipBuffer_UShorts:Void(buffer:DataBuffer)
 End
 
 Function FlipBuffer_Ints:Void(buffer:DataBuffer, length:Int, offset:Int=0)
-	For Local i:= offset Until (length / SizeOf_Integer) Step SizeOf_Integer ' 4
+	For Local i:= offset Until length Step SizeOf_Integer ' 4
 		Local value:= buffer.PeekInt(i)
 		
 		buffer.PokeInt(i, NToHI(value)) ' NToHL ' NToHI_S
