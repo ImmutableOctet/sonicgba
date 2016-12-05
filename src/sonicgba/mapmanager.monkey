@@ -14,6 +14,7 @@ Private
 	Import lib.coordinate
 	Import lib.myapi
 	Import lib.constutil
+	Import lib.mapview
 	
 	Import sonicgba.gameobject
 	Import sonicgba.backgroundmanager
@@ -162,10 +163,10 @@ Class MapManager ' Implements SonicDef
 		Global tileimage:MFImage[]
 		
 		' A collection of tile-maps.
-		Global mapModel:Short[][][] ' DataBuffer[]
+		Global mapModel:MapView[] ' Short[][][] ' DataBuffer[]
 		
-		Global mapBack:Short[][] ' DataBuffer
-		Global mapFront:Short[][] ' DataBuffer
+		Global mapBack:MapView ' Short[][] ' DataBuffer
+		Global mapFront:MapView ' Short[][] ' DataBuffer
 		
 		Global mapWidth:Int
 		Global mapHeight:Int
@@ -190,34 +191,39 @@ Class MapManager ' Implements SonicDef
 			Return CoordAsIndex(x, y, MODEL_WIDTH, MODEL_HEIGHT)
 		End
 		
-		Function GetTileAt:Int(data:Short[][], x:Int, y:Int, width:Int, height:Int)
-			Return data[x][y] ' data.PeekShort(CoordAsIndex(x, y, width, height) * SizeOf_Short) ' 2 ' 0
+		Function GetTileAt:Int(data:MapView, x:Int, y:Int, width:Int, height:Int) ' Short[][]
+			Return data.GetAt(x, y) ' (..., width, height) ' data[x][y] ' data.PeekShort(CoordAsIndex(x, y, width, height) * SizeOf_Short) ' 2 ' 0
 		End
 		
-		Function GetModelTileAt:Int(data:Short[][], x:Int, y:Int)
+		Function GetModelTileAt:Int(data:MapView, x:Int, y:Int) ' Short[][]
 			Return GetTileAt(data, x, y, MODEL_WIDTH, MODEL_HEIGHT)
 		End
 		
-		Function GetStandardTileAt:Int(mapData:Short[][], x:Int, y:Int)
+		Function GetStandardTileAt:Int(mapData:MapView, x:Int, y:Int) ' Short[][]
 			Return GetTileAt(mapData, x, y, mapWidth, mapHeight)
 		End
 		
-		Function AllocateMap:Short[][](width:Int, height:Int)
+		Function AllocateMap:MapView(width:Int, height:Int) ' Short[][]
+			#Rem
 			Local map:= New Short[width][]
 			
 			For Local i:= 0 Until width ' map.Length
 				map[i] = New Short[height]
 			Next
+			#End
+			
+			Local map:= New MapView(width, height)
 			
 			Return map
 		End
 		
-		Function ReadMap:Void(ds:Stream, map:Short[][], width:Int, height:Int) ' DataBuffer
+		Function ReadMap:Void(ds:Stream, map:MapView, width:Int, height:Int) ' Short[][] ' DataBuffer
 			For Local j:= 0 Until width
 				For Local i:= 0 Until height
 					Local tileInfo:= ds.ReadShort()
 					
-					map[j][i] = tileInfo
+					'map[j][i] = tileInfo
+					map.SetAt(j, i, tileInfo)
 				Next
 			Next
 			
@@ -635,9 +641,9 @@ Class MapManager ' Implements SonicDef
 							mapHeight += 256
 						EndIf
 						
-						Local mapSize:= (mapWidth*mapHeight*SizeOf_Short)
+						'Local mapSize:= (mapWidth*mapHeight*SizeOf_Short)
 						
-						Print("MAP FRONT/BACK SIZE: " + mapSize)
+						'Print("MAP FRONT/BACK SIZE: " + mapSize)
 						
 						mapFront = AllocateMap(mapWidth, mapHeight)
 						mapBack = AllocateMap(mapWidth, mapHeight)
@@ -650,6 +656,8 @@ Class MapManager ' Implements SonicDef
 				Case LOAD_MODEL
 					Try
 						' Read the number of "chunks":
+						
+						'Local chunkNum:= ds.ReadInt()
 						Local chunkNum:= ds.ReadShort()
 						
 						Local __unknown:= ds.ReadShort()
@@ -659,7 +667,7 @@ Class MapManager ' Implements SonicDef
 						Print("SIZE OF MAP CHUNKS IN MEMORY: " + (chunkNum * MODE_CHUNK_SIZE) + " bytes")
 						
 						' Allocate an array of "map chunks":
-						mapModel = New Short[chunkNum][][] ' New DataBuffer[chunkNum]
+						mapModel = New MapView[chunkNum] ' New Short[chunkNum][][] ' New DataBuffer[chunkNum]
 						
 						' Allocate the "chunks" we need:
 						For Local i:= 0 Until chunkNum ' mapModel.Length
@@ -768,8 +776,8 @@ Class MapManager ' Implements SonicDef
 			EndIf
 			#End
 			
-			mapFront = [] ' Null
-			mapBack = [] ' Null
+			mapFront = Null ' []
+			mapBack = Null ' []
 			
 			'windImage.Discard()
 			
@@ -967,7 +975,7 @@ Class MapManager ' Implements SonicDef
 			Next
 		End
 		
-		Function drawMap:Void(graphics:MFGraphics, mapArray:Short[][]) ' DataBuffer
+		Function drawMap:Void(graphics:MFGraphics, mapArray:MapView) ' Short[][] ' DataBuffer
 			Local camera:= getCamera()
 			
 			Local x:= (camera.x + CAMERA_OFFSET_X - mapOffsetX) / TILE_WIDTH
@@ -1055,7 +1063,7 @@ Class MapManager ' Implements SonicDef
 			Wend
 		End
 		
-		Function getTileId:Int(mapArray:Short[][], x:Int, y:Int) ' DataBuffer
+		Function getTileId:Int(mapArray:MapView, x:Int, y:Int) ' Short[][] ' DataBuffer
 			Local model:= mapModel
 			
 			Local chunkID:= getModelId(mapArray, x, y)
@@ -1065,14 +1073,14 @@ Class MapManager ' Implements SonicDef
 			Return GetModelTileAt(chunk, (x Mod MODEL_WIDTH), (y Mod MODEL_HEIGHT))
 		End
 		
-		Function getModelId:Int(mapArray:Short[][], x:Int, y:Int) ' DataBuffer
+		Function getModelId:Int(mapArray:MapView, x:Int, y:Int) ' Short[][] ' DataBuffer
 			Return getModelIdByIndex(mapArray, (x / MODEL_WIDTH), (y / MODEL_HEIGHT))
 		End
 		
-		Function getModelIdByIndex:Int(mapArray:Short[][], x:Int, y:Int) ' DataBuffer
+		Function getModelIdByIndex:Int(mapArray:MapView, x:Int, y:Int) ' Short[][] ' DataBuffer
 			Local convX:= getConvertX(x)
 			
-			If (y >= mapArray[0].Length) Then ' mapHeight
+			If (y >= mapArray.Width) Then ' mapArray[0].Length ' mapHeight
 				Return 0
 			EndIf
 			

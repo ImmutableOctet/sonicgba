@@ -11,6 +11,7 @@ Private
 	Import sonicgba.sonicdef
 	
 	Import lib.constutil
+	Import lib.mapview
 	
 	Import com.sega.engine.action.acblock
 	Import com.sega.engine.action.acdegreegetter
@@ -55,8 +56,8 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 			Return ((x * GRID_NUM_PER_MODEL) + (y))
 		End
 		
-		Function GetModelTileAt:Int(data:Short[][], x:Int, y:Int) ' DataBuffer
-			Return data[x][y] ' data.PeekShort(AsModelCoord(x, y) * SizeOf_Short)
+		Function GetModelTileAt:Int(data:MapView, x:Int, y:Int) ' Short[][] ' DataBuffer
+			Return data.GetAt(x, y) ' data[x][y] ' data.PeekShort(AsModelCoord(x, y) * SizeOf_Short)
 		End
 		
 		' Fields:
@@ -65,7 +66,7 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 		Field directionInfo:DataBuffer ' Byte[]
 		Field collisionInfo:DataBuffer ' DataBuffer[] ' Byte[][]
 		
-		Field modelInfo:Short[][][] ' DataBuffer[]
+		Field modelInfo:MapView[] ' Short[][][] ' DataBuffer[]
 		
 		Field degreeGetter:MyDegreeGetter
 		
@@ -84,7 +85,7 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 			Return getTileId(MapManager.mapFront, blockX, blockY)
 		End
 		
-		Method getTileId:Int(mapArray:Short[][], x:Int, y:Int) ' DataBuffer
+		Method getTileId:Int(mapArray:MapView, x:Int, y:Int) ' Short[][] ' DataBuffer
 			'Local chunk:= Self.modelInfo[MapManager.GetStandardTileAt(mapArray, (x / GRID_NUM_PER_MODEL), (y / GRID_NUM_PER_MODEL))] ' MapManager.GetModelTileAt
 			
 			'Return GetModelTileAt(chunk, (x Mod GRID_NUM_PER_MODEL), (y Mod GRID_NUM_PER_MODEL))
@@ -101,7 +102,9 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 			Local modelX:= (x Mod GRID_NUM_PER_MODEL)
 			Local modelY:= (y Mod GRID_NUM_PER_MODEL)
 			
-			Return Self.modelInfo[mapArray[mapX][mapY]][modelX][modelY]
+			Local modelIndex:= GetModelTileAt(mapArray, mapX, mapY) ' mapArray[mapX][mapY]
+			
+			Return GetModelTileAt(Self.modelInfo[modelIndex], modelX, modelY) ' Self.modelInfo[modelIndex][modelX][modelY]
 		End
 	Public
 		' Constant variable(s):
@@ -131,7 +134,7 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 				Case LOAD_OPEN_FILE
 					Self.ds = MFDevice.getResourceAsStream("/map/" + stageName + MODEL_FILE_NAME)
 				Case LOAD_MODEL_INFO
-					Self.modelInfo = New Short[MapManager.mapModel.Length][][] ' New DataBuffer[MapManager.mapModel.Length]
+					Self.modelInfo = New MapView[MapManager.mapModel.Length] ' New Short[MapManager.mapModel.Length][][] ' New DataBuffer[MapManager.mapModel.Length]
 					
 					For Local i:= 0 Until Self.modelInfo.Length ' MapManager.mapModel.Length
 						Self.modelInfo[i] = MapManager.AllocateMap(GRID_NUM_PER_MODEL, GRID_NUM_PER_MODEL) ' New DataBuffer(MODEL_INFO_SIZE)
@@ -150,7 +153,10 @@ Class CollisionMap Extends ACWorld ' Implements SonicDef
 							'#Rem
 							For Local y:= 0 Until GRID_NUM_PER_MODEL
 								For Local x:= 0 Until GRID_NUM_PER_MODEL
-									model[x][y] = (Self.ds.ReadShort() & $FFFF)
+									Local value:= (Self.ds.ReadShort() & $FFFF)
+									
+									'model[x][y] = value
+									model.SetAt(x, y, value)
 								Next
 							Next
 							'#End
