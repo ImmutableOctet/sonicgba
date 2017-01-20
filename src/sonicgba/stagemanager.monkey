@@ -732,6 +732,7 @@ Class StageManager ' Implements SonicDef
 				Else
 					State.drawMenuFontById(g, 48, (((SCREEN_WIDTH / 2) - 45) + rankingOffsetX[i]), HIGH_SCORE_Y + (MENU_SPACE * i)) ' Shr 1
 					State.drawMenuFontById(g, i + 28, (((SCREEN_WIDTH / 2) - 45) + rankingOffsetX[i]), HIGH_SCORE_Y + (MENU_SPACE * i)) ' Shr 1
+					
 					PlayerObject.drawNum(g, highScore[i], ((((SCREEN_WIDTH / 2) + 20) + 48) + rankingOffsetX[i]), (MENU_SPACE * i) + HIGH_SCORE_Y, 2, 0) ' Shr 1
 				EndIf
 			Next

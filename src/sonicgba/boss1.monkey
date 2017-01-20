@@ -320,7 +320,7 @@ Class Boss1 Extends BossObject
 				If (Self.HP = 1) Then
 					' Magic numbers: 3, 4 (Arm states)
 					If (Self.state = STATE_ATTACK_1) Then
-						Self.state = STATE_BROKEN
+						Self.state = STATE_ATTACK_3
 					ElseIf (Self.arm.getArmState() = Boss1Arm.STATE_ATTACK_2 And Not Self.arm.getTurnState()) Then
 						Self.state = STATE_ATTACK_2
 						
@@ -329,7 +329,7 @@ Class Boss1 Extends BossObject
 						Self.arm.setTurnState(True)
 						Self.arm.setDegreeSpeed(Self.dg_plus)
 					ElseIf (Self.arm.getArmState() = Boss1Arm.STATE_ATTACK_3 And Not Self.arm.getTurnState()) Then
-						Self.state = STATE_BROKEN
+						Self.state = STATE_ATTACK_3
 					EndIf
 				ElseIf (Self.HP = 0 And Not Self.IsBreaking) Then
 					Self.state = STATE_BROKEN
@@ -652,11 +652,13 @@ Class Boss1 Extends BossObject
 						EndIf
 						
 						If (Self.posX > (Self.side_right Shl 6) And Self.WaitCnt = 3) Then
+							DebugStop()
+							
 							GameObject.addGameObject(New Cage((MapManager.getCamera().x + (MapManager.CAMERA_WIDTH / 2)) Shl 6, MapManager.getCamera().y Shl 6)) ' Shr 1
 							
 							MapManager.lockCamera(True)
 							
-							Self.WaitCnt = (cnt_max / 2) ' 8
+							Self.WaitCnt = 4 ' (cnt_max / 2) ' 8
 						EndIf
 				End Select
 				
