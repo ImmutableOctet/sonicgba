@@ -671,7 +671,7 @@ Class TitleState Extends State
 		
 		' Methods:
 		Method close:Void()
-			MFDevice.disableLayer(ELEMENT_OFFSET)
+			MFDevice.disableLayer(-1)
 			
 			titleLeftImage = Null
 			titleRightImage = Null

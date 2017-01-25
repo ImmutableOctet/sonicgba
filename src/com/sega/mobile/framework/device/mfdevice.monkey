@@ -1010,13 +1010,15 @@ Class MFDevice Final
 			If (layer > 0 And layer <= MAX_LAYER) Then
 				Local lNum:= (layer - MAX_LAYER)
 				
-				postLayer[lNum].discard()
-				postLayer[lNum] = Null
+				If (MFImage.releaseImage(postLayer[lNum])) Then
+					postLayer[lNum] = Null
+				EndIf
 			ElseIf (layer < 0 And layer >= -MAX_LAYER) Then
 				Local lNum:= ((-layer) - MAX_LAYER)
 				
-				preLayer[lNum].discard()
-				preLayer[lNum] = Null
+				If (MFImage.releaseImage(preLayer[lNum])) Then
+					preLayer[lNum] = Null
+				EndIf
 			EndIf
 		End
 		

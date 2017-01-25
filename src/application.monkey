@@ -3,7 +3,9 @@
 Public
 
 ' Preprocessor related:
-#ALLOW_FORCE_EXIT = False ' True
+#If TARGET = "glfw"
+	#SONICGBA_ALLOW_FORCE_EXIT = True
+#End
 
 #SONICGBA_ALLOW_ASYNC_LOADERS = True
 
@@ -169,9 +171,9 @@ Class Application Extends App ' Main Extends MFMain
 			
 			'RenderGame()
 			
-			#If ALLOW_FORCE_EXIT
+			#If SONICGBA_ALLOW_FORCE_EXIT
 				If (MFDevice.exitFlag) Then
-					Return OnClose()
+					Return OnEnd()
 				EndIf
 			#End
 			
@@ -193,12 +195,7 @@ Class Application Extends App ' Main Extends MFMain
 			'setExitConfirmStr("Sonic Advance", "Are you sure you want to exit the game?", "Yes", "Cancel")
 			
 			If (Confirm("Sonic Advance", "Are you sure you want to exit the game?", False)) Then
-				' This call may be moved later.
-				MFDevice.currentState.onExit()
-				
-				DeinitResources()
-				
-				Return Super.OnClose() ' EndApp()
+				Return OnEnd()
 			EndIf
 			
 			Return 1 ' 0
@@ -247,6 +244,15 @@ Class Application Extends App ' Main Extends MFMain
 			MFDevice.updateDrawRect(Self.screenX, Self.screenY, Self.screenWidth, Self.screenHeight)
 			
 			Return Super.OnResize()
+		End
+		
+		Method OnEnd:Int()
+			' This call may be moved later.
+			MFDevice.currentState.onExit()
+			
+			DeinitResources()
+			
+			Return Super.OnClose() ' EndApp()
 		End
 		
 		Method OnRenderWhileSuspended:Void()

@@ -171,8 +171,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>15</X>
-        <Y>439</Y>
+        <X>17</X>
+        <Y>899</Y>
       </CursorPos>
       <DocGUID>685eabf8-2ba3-4144-adab-302ad0014b16</DocGUID>
       <Bookmarks />
@@ -193,8 +193,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfimage.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>36</X>
-        <Y>285</Y>
+        <X>12</X>
+        <Y>78</Y>
       </CursorPos>
       <DocGUID>78756216-9717-45fa-90eb-0a9ab769abde</DocGUID>
       <Bookmarks />
@@ -504,12 +504,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\mflib\mainstate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
         <X>0</X>
-        <Y>0</Y>
+        <Y>101</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>7811a28b-96fa-4501-a1f7-d29dbf4848da</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\platformstandard\standard.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
       <CursorPos>
@@ -765,8 +766,8 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\boss1.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>7</X>
-        <Y>657</Y>
+        <X>25</X>
+        <Y>17</Y>
       </CursorPos>
       <DocGUID>1b09b4a4-6481-49d8-b6a8-38d19ed2d3bd</DocGUID>
       <Bookmarks />
@@ -2198,12 +2199,13 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\state\state.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\state\state.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>26</X>
+        <Y>501</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>8b40aa9f-0a80-450b-bd73-c67ad8e7424a</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\stringindex.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -2212,26 +2214,29 @@
       </CursorPos>
       <DocGUID />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\state\titlestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>998</Y>
+        <X>28</X>
+        <Y>673</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>655bd587-e623-447a-9c41-b8c1b817a698</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\application.monkey" Open="false" SplitView="false" SplitIsVertical="true" SplitSize="0">
+    <DocUserOptions Filename=".\src\application.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>0</X>
-        <Y>0</Y>
+        <X>19</X>
+        <Y>175</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>6b681bce-ef45-4de4-82e9-04bb0d97b831</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
-    <DocUserOptions Filename=".\src\config.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
+    <DocUserOptions Filename=".\src\config.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>4</X>
-        <Y>61</Y>
+        <X>18</X>
+        <Y>3</Y>
       </CursorPos>
-      <DocGUID />
+      <DocGUID>1a2cadf1-f5d0-472c-a3e2-4015f287491c</DocGUID>
+      <Bookmarks />
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonic.monkey" Open="false" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
@@ -2439,7 +2444,7 @@
     <FolderStatus NodePath="Sonic_GBA\src\gameengine" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\lib" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\lib\__test" Expanded="false" />
-    <FolderStatus NodePath="Sonic_GBA\src\mflib" Expanded="false" />
+    <FolderStatus NodePath="Sonic_GBA\src\mflib" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\platformstandard" Expanded="false" />
     <FolderStatus NodePath="Sonic_GBA\src\pyxeditor" Expanded="true" />
     <FolderStatus NodePath="Sonic_GBA\src\sonic.buildv86e" Expanded="false" />
