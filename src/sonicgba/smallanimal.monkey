@@ -22,7 +22,7 @@ Private
 	
 	Import com.sega.mobile.framework.device.mfgraphics
 	
-	Import monkey.stack
+	Import cerberus.stack
 Public
 
 ' Classes:

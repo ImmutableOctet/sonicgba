@@ -6,7 +6,7 @@ Public
 Private
 	Import com.sega.engine.lib.myapi
 	
-	Import monkey.math
+	Import cerberus.math
 Public
 
 ' Classes:

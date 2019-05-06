@@ -9,7 +9,7 @@ Public
 
 ' Imports:
 Private
-	Import monkey.math
+	Import cerberus.math
 	
 	Import brl.stream
 Public

@@ -10,7 +10,7 @@ Private
 	Import com.sega.engine.action.accollision
 	Import com.sega.engine.action.acobject
 	
-	Import monkey.stack
+	Import cerberus.stack
 	
 	Import sonicgba.moveobject
 	Import sonicgba.playerobject

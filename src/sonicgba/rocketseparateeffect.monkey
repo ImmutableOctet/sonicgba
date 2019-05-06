@@ -19,7 +19,7 @@ Private
 	
 	Import com.sega.mobile.framework.device.mfgraphics
 	
-	Import monkey.stack
+	Import cerberus.stack
 Public
 
 Class RocketSeparateEffect ' Implements SonicDef

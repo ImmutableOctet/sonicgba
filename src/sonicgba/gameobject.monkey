@@ -49,7 +49,7 @@ Private
 	Import brl.stream
 	'Import brl.filestream
 	
-	Import monkey.stack
+	Import cerberus.stack
 Public
 
 ' Classes:

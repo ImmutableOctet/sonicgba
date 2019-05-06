@@ -23,8 +23,8 @@ Private
 	Import brl.filepath
 	Import brl.stream
 	
-	Import monkey.stack
-	Import monkey.boxes
+	Import cerberus.stack
+	Import cerberus.boxes
 	
 	Import regal.typetool
 	Import regal.byteorder

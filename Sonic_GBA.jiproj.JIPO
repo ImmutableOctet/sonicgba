@@ -80,7 +80,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\engine\action\acutilities.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>8</Y>
       </CursorPos>
       <DocGUID>acb39a5f-a369-447e-817b-bde4e6832a21</DocGUID>
@@ -172,7 +172,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\device\mfdevice.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>59</Y>
       </CursorPos>
       <DocGUID>685eabf8-2ba3-4144-adab-302ad0014b16</DocGUID>
@@ -243,7 +243,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\utility\mfmath.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>14</Y>
       </CursorPos>
       <DocGUID>8f6f0513-7e2e-4379-afa1-c9358294c95c</DocGUID>
@@ -251,7 +251,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\com\sega\mobile\framework\utility\mfutility.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>8</Y>
       </CursorPos>
       <DocGUID>879413f8-4dde-4aea-bf6a-37755383b3b1</DocGUID>
@@ -294,7 +294,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\common\waveinverteffect.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>11</Y>
       </CursorPos>
       <DocGUID>9020ff88-250f-434a-99ad-3ff78b70dd46</DocGUID>
@@ -414,7 +414,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\arraysymbolconverter.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>6</Y>
       </CursorPos>
       <DocGUID>7e0112f4-8ccb-4249-a5c0-166539f4a923</DocGUID>
@@ -472,7 +472,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\myapi.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>25</Y>
       </CursorPos>
       <DocGUID>30a6d521-2871-4477-9524-88817b997706</DocGUID>
@@ -480,7 +480,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\myrandom.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>6</Y>
       </CursorPos>
       <DocGUID>8308c3d6-1c8d-45aa-b45e-2d873f3c098d</DocGUID>
@@ -496,7 +496,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\lib\rect.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>11</Y>
       </CursorPos>
       <DocGUID>d4fe3396-e520-45be-bf67-1b3233bef50f</DocGUID>
@@ -533,7 +533,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\pyxeditor\pyxanimation.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>18</Y>
       </CursorPos>
       <DocGUID>fa4568d6-4025-42c9-ac9d-e402162a2ee7</DocGUID>
@@ -979,7 +979,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\bulletobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>12</Y>
       </CursorPos>
       <DocGUID>ed842e92-210c-45ab-abfc-bcd0cbb3fcd6</DocGUID>
@@ -1072,7 +1072,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\collisionrect.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>13</Y>
       </CursorPos>
       <DocGUID>be583178-60a0-444f-b8cc-aca292ec66f8</DocGUID>
@@ -1129,7 +1129,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\drownbubble.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>19</Y>
       </CursorPos>
       <DocGUID>bc82f5b6-a0cd-4139-8141-5da2405e2633</DocGUID>
@@ -1264,7 +1264,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\gameobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>51</Y>
       </CursorPos>
       <DocGUID>0f6f65b9-641b-46ce-a6a1-19939dd13ddf</DocGUID>
@@ -1621,7 +1621,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\playersupersonic.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>30</Y>
       </CursorPos>
       <DocGUID>24d7d924-8465-46c8-8b81-454ed119e3e4</DocGUID>
@@ -1678,7 +1678,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\ringobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>22</Y>
       </CursorPos>
       <DocGUID>c21d067a-f738-4c1a-8154-39b81b9a509d</DocGUID>
@@ -1693,7 +1693,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\rocketseparateeffect.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>21</Y>
       </CursorPos>
       <DocGUID>d5b1879f-fa64-4095-869a-1a9e7cc518b9</DocGUID>
@@ -1764,7 +1764,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\seabedvolcanoasynhurt.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>18</Y>
       </CursorPos>
       <DocGUID>bad71ca6-277f-47c2-8935-c24fe5de50f4</DocGUID>
@@ -1786,7 +1786,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\seabedvolcanohurt.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>22</Y>
       </CursorPos>
       <DocGUID>3b2092dd-f73c-41a9-9668-6c04de83bc06</DocGUID>
@@ -1843,7 +1843,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\smallanimal.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>24</Y>
       </CursorPos>
       <DocGUID>1d17a21c-c096-4987-9048-8185d1bf8b6b</DocGUID>
@@ -1943,7 +1943,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\sonicgba\steamhurt.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>11</Y>
       </CursorPos>
       <DocGUID>1fc4c10a-502f-4276-a3ee-8dab30f44536</DocGUID>
@@ -2091,7 +2091,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\specialobject.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>34</Y>
       </CursorPos>
       <DocGUID>96b1990d-3c61-4639-b60c-dff200c9d520</DocGUID>
@@ -2183,7 +2183,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\special\symbolconverter.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>6</Y>
       </CursorPos>
       <DocGUID>e42eb991-ef0a-48ce-b4e1-4c1ce25805d1</DocGUID>
@@ -2212,7 +2212,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\state\specialstagestate.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>52</Y>
       </CursorPos>
       <DocGUID>3433c906-5d3f-44db-8c6b-e33cd3260c5e</DocGUID>
@@ -2242,7 +2242,7 @@
     </DocUserOptions>
     <DocUserOptions Filename=".\src\application.monkey" Open="true" SplitView="false" SplitIsVertical="false" SplitSize="179">
       <CursorPos>
-        <X>14</X>
+        <X>17</X>
         <Y>55</Y>
       </CursorPos>
       <DocGUID>9e33bcba-2d1b-4869-96df-850aacb19638</DocGUID>

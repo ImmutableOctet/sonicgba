@@ -16,7 +16,7 @@ Private
 	Import brl.stream
 	'Import brl.databuffer
 	
-	Import monkey.stack
+	Import cerberus.stack
 	
 	Import regal.byteorder
 Public

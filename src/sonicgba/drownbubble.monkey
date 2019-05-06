@@ -17,7 +17,7 @@ Private
 	
 	Import com.sega.mobile.framework.device.mfgraphics
 	
-	Import monkey.random
+	Import cerberus.random
 Public
 
 ' Classes:

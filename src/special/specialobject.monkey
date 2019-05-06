@@ -32,7 +32,7 @@ Private
 	
 	'Import java.util.vector
 	
-	Import monkey.stack
+	Import cerberus.stack
 Public
 	Import special.ssdef
 

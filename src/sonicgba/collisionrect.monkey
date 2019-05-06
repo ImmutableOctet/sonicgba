@@ -11,7 +11,7 @@ Private
 	
 	Import com.sega.mobile.framework.device.mfgraphics
 	
-	Import monkey.math
+	Import cerberus.math
 Public
 
 ' Classes:

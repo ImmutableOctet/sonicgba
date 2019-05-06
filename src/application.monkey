@@ -53,7 +53,7 @@ Private
 		Import brl.requesters
 	#End
 	
-	Import monkey.random
+	Import cerberus.random
 Public
 
 ' Functions:

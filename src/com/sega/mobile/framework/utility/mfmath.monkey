@@ -12,7 +12,7 @@ Public
 Private
 	Import lib.constutil
 	
-	Import monkey.math
+	Import cerberus.math
 	
 	Import regal.typetool
 Public

@@ -4,7 +4,7 @@ Public
 
 ' Imports:
 Private
-	Import monkey.random
+	Import cerberus.random
 	
 	Import regal.typetool
 Public

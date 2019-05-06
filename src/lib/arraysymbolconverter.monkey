@@ -4,7 +4,7 @@ Public
 
 ' Imports:
 Private
-	Import monkey.lang
+	Import cerberus.lang
 	
 	'Import regal.stringutil
 Public

@@ -20,7 +20,7 @@ Friend sonicgba.seabedvolcanoplatform
 
 ' Imports:
 Private
-	Import monkey.math
+	Import cerberus.math
 	
 	Import sonicgba.gimmickobject
 	Import sonicgba.playerobject

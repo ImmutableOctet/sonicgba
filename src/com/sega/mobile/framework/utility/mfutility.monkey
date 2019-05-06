@@ -6,8 +6,8 @@ Public
 Private
 	Import lib.myrandom
 	
-	Import monkey.random
-	Import monkey.stack
+	Import cerberus.random
+	Import cerberus.stack
 	
 	Import regal.typetool
 Public

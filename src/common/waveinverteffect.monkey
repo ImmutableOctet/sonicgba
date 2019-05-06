@@ -9,7 +9,7 @@ Private
 	Import com.sega.mobile.framework.device.mfgraphics
 	Import com.sega.mobile.framework.device.mfimage
 	
-	Import monkey.math
+	Import cerberus.math
 	
 	Import regal.typetool
 Public

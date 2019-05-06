@@ -57,8 +57,8 @@ Private
 	Import brl.datastream
 	'Import brl.filestream
 	
-	Import monkey.map
-	Import monkey.stack
+	Import cerberus.map
+	Import cerberus.stack
 	
 	Import regal.typetool
 	
