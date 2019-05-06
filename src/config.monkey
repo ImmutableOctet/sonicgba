@@ -11,7 +11,7 @@
 #SONICGBA_FORCE_MAX_LIVES = True
 
 ' This enables a higher internal resolution. (Unfinished behavior)
-''#SONICGBA_RESOLUTION_TEST = True
+#SONICGBA_RESOLUTION_TEST = True
 
 ' Audio related:
 #SONICGBA_FORCE_DISABLE_SOUNDEFFECTS = True

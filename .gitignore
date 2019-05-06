@@ -6,3 +6,4 @@ etc
 *.bak
 *.build*
 *.data
+*mx2_src*

@@ -72,7 +72,7 @@ Class MainState Implements MFGameState ' Def
 			'State.setState(State.STATE_SPECIAL)
 			'State.setState(State.STATE_SELECT_NORMAL_STAGE)
 			
-			gameVersion = "ver: 1.0"
+			gameVersion = "ver: 1.0" ' 1.1
 			
 			MFDevice.setUseMultitouch(True)
 			MFDevice.setAntiAlias(False)

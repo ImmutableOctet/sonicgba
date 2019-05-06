@@ -324,7 +324,7 @@ Class Boss1 Extends BossObject
 					ElseIf (Self.arm.getArmState() = Boss1Arm.STATE_ATTACK_2 And Not Self.arm.getTurnState()) Then
 						Self.state = STATE_ATTACK_2
 						
-						Self.dg_plus = 914 ' (14 Shl 6)
+						Self.dg_plus = 896 ' 914 ' (14 Shl 6)
 						
 						Self.arm.setTurnState(True)
 						Self.arm.setDegreeSpeed(Self.dg_plus)

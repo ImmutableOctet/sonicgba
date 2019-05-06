@@ -245,7 +245,7 @@ Class MFImage
 			Return createImage(New Image(srcImg, x, y, width, height, srcImg.HandleX, srcImg.HandleY), mutable)
 		End
 		
-		Function createImage:MFImage(width:Int, height:Int, flags:Int=Image.Mipmap) ' Final
+		Function createImage:MFImage(width:Int, height:Int, flags:Int=Image.Managed) ' Image.Mipmap ' Final
 			Local ret:= New MFImage(True)
 			
 			ret.image = New Image(width, height, 0.0, 0.0, flags) ' | Image.Managed
