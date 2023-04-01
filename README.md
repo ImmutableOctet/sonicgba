@@ -2,10 +2,11 @@
 
 Sonic GBA is a fan developed reinterpretation of decompiled Java output from the Android version of Sonic Advance.
 
+[![YouTube video of this project](https://img.youtube.com/vi/Xq-3us3xgBg/0.jpg)](https://www.youtube.com/watch?v=Xq-3us3xgBg)
+
 All software is developed using the [Monkey programming language](https://github.com/blitz-research/monkey).
 
-This project aims to maintain a codebase that resembles the original decompiled output,
-without making any claim to parody the original behavior in any way.
+This project aims to maintain a codebase that resembles the original decompiled output, but does not make any guarantee of 1:1 behavior to the original codebase.
 
 ## TODO
 
